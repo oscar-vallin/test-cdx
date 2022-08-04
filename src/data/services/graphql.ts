@@ -20,6 +20,36 @@ export type Scalars = {
 
 
 
+export type AccessGroupUsage = {
+  __typename?: 'AccessGroupUsage';
+  group?: Maybe<AccessPolicyGroup>;
+  organization?: Maybe<Organization>;
+  commands?: Maybe<Array<WebCommand>>;
+};
+
+export type AccessGroupUsageConnection = {
+  __typename?: 'AccessGroupUsageConnection';
+  paginationInfo: PaginationInfo;
+  nodes?: Maybe<Array<AccessGroupUsage>>;
+};
+
+export type AccessMember = {
+  __typename?: 'AccessMember';
+  userAccountSid: Scalars['ID'];
+  firstNm: Scalars['String'];
+  lastNm?: Maybe<Scalars['String']>;
+  email: Scalars['String'];
+  organization: Organization;
+  accessPolicyGroups?: Maybe<Array<AccessPolicyGroup>>;
+  commands?: Maybe<Array<WebCommand>>;
+};
+
+export type AccessMemberConnection = {
+  __typename?: 'AccessMemberConnection';
+  paginationInfo: PaginationInfo;
+  nodes?: Maybe<Array<AccessMember>>;
+};
+
 export type AccessPolicy = {
   __typename?: 'AccessPolicy';
   sid?: Maybe<Scalars['ID']>;
@@ -28,6 +58,8 @@ export type AccessPolicy = {
   tmpl?: Maybe<Scalars['Boolean']>;
   tmplUseAsIs?: Maybe<Scalars['Boolean']>;
   applicableOrgTypes?: Maybe<Array<OrgType>>;
+  members?: Maybe<Scalars['Int']>;
+  groupUsages?: Maybe<Scalars['Int']>;
 };
 
 export type AccessPolicyConnection = {
@@ -63,6 +95,7 @@ export type AccessPolicyGroup = {
   tmplUseAsIs?: Maybe<Scalars['Boolean']>;
   applicableOrgTypes?: Maybe<Array<OrgType>>;
   policies?: Maybe<Array<AccessPolicy>>;
+  members: Scalars['Int'];
 };
 
 export type AccessPolicyGroupConnection = {
@@ -100,6 +133,8 @@ export type AccessSpecialization = {
   sid: Scalars['ID'];
   name: Scalars['String'];
   filters?: Maybe<Array<SpecializationFilter>>;
+  members?: Maybe<Scalars['Int']>;
+  groupUsages?: Maybe<Scalars['Int']>;
 };
 
 export type AccessSpecializationConnection = {
@@ -168,7 +203,8 @@ export enum CdxWebCommandType {
   Audit = 'AUDIT',
   History = 'HISTORY',
   Migrate = 'MIGRATE',
-  Upload = 'UPLOAD'
+  Upload = 'UPLOAD',
+  View = 'VIEW'
 }
 
 export enum CdxWebPage {
@@ -1670,10 +1706,15 @@ export type Query = {
   externalUserForOrg?: Maybe<UserAccountForm>;
   accessPolicy?: Maybe<AccessPolicy>;
   accessPoliciesForOrg?: Maybe<AccessPolicyConnection>;
+  accessPolicyMembers?: Maybe<AccessMemberConnection>;
+  accessPolicyUsages?: Maybe<AccessGroupUsageConnection>;
   accessPolicyTemplates?: Maybe<Array<UiOption>>;
   accessSpecializationsForOrg?: Maybe<AccessSpecializationConnection>;
+  accessSpecializationMembers?: Maybe<AccessMemberConnection>;
+  accessSpecializationUsages?: Maybe<AccessGroupUsageConnection>;
   accessPolicyGroupsForOrg?: Maybe<AccessPolicyGroupConnection>;
   accessPolicyGroupTemplates?: Maybe<Array<UiOption>>;
+  accessPolicyGroupMembers?: Maybe<AccessMemberConnection>;
   accessPolicyForm?: Maybe<AccessPolicyForm>;
   findAccessPolicy?: Maybe<AccessPolicyForm>;
   accessSpecializationForm?: Maybe<AccessSpecializationForm>;
@@ -1903,6 +1944,18 @@ export type QueryAccessPoliciesForOrgArgs = {
 };
 
 
+export type QueryAccessPolicyMembersArgs = {
+  policySid: Scalars['ID'];
+  pageableInput?: Maybe<PageableInput>;
+};
+
+
+export type QueryAccessPolicyUsagesArgs = {
+  policySid: Scalars['ID'];
+  pageableInput?: Maybe<PageableInput>;
+};
+
+
 export type QueryAccessPolicyTemplatesArgs = {
   orgSid: Scalars['ID'];
 };
@@ -1910,6 +1963,18 @@ export type QueryAccessPolicyTemplatesArgs = {
 
 export type QueryAccessSpecializationsForOrgArgs = {
   orgSid: Scalars['ID'];
+  pageableInput?: Maybe<PageableInput>;
+};
+
+
+export type QueryAccessSpecializationMembersArgs = {
+  specializationSid: Scalars['ID'];
+  pageableInput?: Maybe<PageableInput>;
+};
+
+
+export type QueryAccessSpecializationUsagesArgs = {
+  specializationSid: Scalars['ID'];
   pageableInput?: Maybe<PageableInput>;
 };
 
@@ -1922,6 +1987,12 @@ export type QueryAccessPolicyGroupsForOrgArgs = {
 
 export type QueryAccessPolicyGroupTemplatesArgs = {
   orgSid: Scalars['ID'];
+};
+
+
+export type QueryAccessPolicyGroupMembersArgs = {
+  policyGroupSid: Scalars['ID'];
+  pageableInput?: Maybe<PageableInput>;
 };
 
 
@@ -3608,7 +3679,7 @@ export type UnionNvpFragment = UnionNvp_NvpStr_Fragment | UnionNvp_NvpId_Fragmen
 
 export type FragmentAccessPolicyFragment = (
   { __typename?: 'AccessPolicy' }
-  & Pick<AccessPolicy, 'sid' | 'name' | 'permissions' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
+  & Pick<AccessPolicy, 'sid' | 'name' | 'permissions' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes' | 'members' | 'groupUsages'>
 );
 
 export type FragmentListPageInfoFragment = (
@@ -4440,7 +4511,7 @@ export type FindUserByEmailQuery = (
       & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
     )>, accessPolicyGroups?: Maybe<Array<(
       { __typename?: 'AccessPolicyGroup' }
-      & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
+      & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes' | 'members'>
       & { policies?: Maybe<Array<(
         { __typename?: 'AccessPolicy' }
         & FragmentAccessPolicyFragment
@@ -4603,7 +4674,7 @@ export type UserQuickSearchQuery = (
       & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
     )>, accessPolicyGroups?: Maybe<Array<(
       { __typename?: 'AccessPolicyGroup' }
-      & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
+      & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes' | 'members'>
       & { policies?: Maybe<Array<(
         { __typename?: 'AccessPolicy' }
         & FragmentAccessPolicyFragment
@@ -4627,7 +4698,7 @@ export type FindExternalUsersQuery = (
       & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
     )>, accessPolicyGroups?: Maybe<Array<(
       { __typename?: 'AccessPolicyGroup' }
-      & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
+      & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes' | 'members'>
       & { policies?: Maybe<Array<(
         { __typename?: 'AccessPolicy' }
         & FragmentAccessPolicyFragment
@@ -4685,7 +4756,7 @@ export type ExternalUsersForOrgQuery = (
           & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
         )>, accessPolicyGroups?: Maybe<Array<(
           { __typename?: 'AccessPolicyGroup' }
-          & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
+          & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes' | 'members'>
           & { policies?: Maybe<Array<(
             { __typename?: 'AccessPolicy' }
             & FragmentAccessPolicyFragment
@@ -4758,7 +4829,7 @@ export type AccessPolicyQuery = (
   { __typename?: 'Query' }
   & { accessPolicy?: Maybe<(
     { __typename?: 'AccessPolicy' }
-    & Pick<AccessPolicy, 'sid' | 'name' | 'permissions' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
+    & Pick<AccessPolicy, 'sid' | 'name' | 'permissions' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes' | 'members' | 'groupUsages'>
   )> }
 );
 
@@ -4781,6 +4852,73 @@ export type AccessPoliciesForOrgQuery = (
     )>, nodes?: Maybe<Array<(
       { __typename?: 'AccessPolicy' }
       & FragmentAccessPolicyFragment
+    )>> }
+  )> }
+);
+
+export type AccessPolicyMembersQueryVariables = Exact<{
+  policySid: Scalars['ID'];
+  pageableInput?: Maybe<PageableInput>;
+}>;
+
+
+export type AccessPolicyMembersQuery = (
+  { __typename?: 'Query' }
+  & { accessPolicyMembers?: Maybe<(
+    { __typename?: 'AccessMemberConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), nodes?: Maybe<Array<(
+      { __typename?: 'AccessMember' }
+      & Pick<AccessMember, 'userAccountSid' | 'firstNm' | 'lastNm' | 'email'>
+      & { organization: (
+        { __typename?: 'Organization' }
+        & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
+      ), accessPolicyGroups?: Maybe<Array<(
+        { __typename?: 'AccessPolicyGroup' }
+        & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes' | 'members'>
+        & { policies?: Maybe<Array<(
+          { __typename?: 'AccessPolicy' }
+          & FragmentAccessPolicyFragment
+        )>> }
+      )>>, commands?: Maybe<Array<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>> }
+    )>> }
+  )> }
+);
+
+export type AccessPolicyUsagesQueryVariables = Exact<{
+  policySid: Scalars['ID'];
+  pageableInput?: Maybe<PageableInput>;
+}>;
+
+
+export type AccessPolicyUsagesQuery = (
+  { __typename?: 'Query' }
+  & { accessPolicyUsages?: Maybe<(
+    { __typename?: 'AccessGroupUsageConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), nodes?: Maybe<Array<(
+      { __typename?: 'AccessGroupUsage' }
+      & { group?: Maybe<(
+        { __typename?: 'AccessPolicyGroup' }
+        & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes' | 'members'>
+        & { policies?: Maybe<Array<(
+          { __typename?: 'AccessPolicy' }
+          & FragmentAccessPolicyFragment
+        )>> }
+      )>, organization?: Maybe<(
+        { __typename?: 'Organization' }
+        & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
+      )>, commands?: Maybe<Array<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>> }
     )>> }
   )> }
 );
@@ -4816,10 +4954,77 @@ export type AccessSpecializationsForOrgQuery = (
       & FragmentListPageInfoFragment
     )>, nodes?: Maybe<Array<(
       { __typename?: 'AccessSpecialization' }
-      & Pick<AccessSpecialization, 'sid' | 'name'>
+      & Pick<AccessSpecialization, 'sid' | 'name' | 'members' | 'groupUsages'>
       & { filters?: Maybe<Array<(
         { __typename?: 'SpecializationFilter' }
         & Pick<SpecializationFilter, 'sid' | 'permission' | 'orgSids'>
+      )>> }
+    )>> }
+  )> }
+);
+
+export type AccessSpecializationMembersQueryVariables = Exact<{
+  specializationSid: Scalars['ID'];
+  pageableInput?: Maybe<PageableInput>;
+}>;
+
+
+export type AccessSpecializationMembersQuery = (
+  { __typename?: 'Query' }
+  & { accessSpecializationMembers?: Maybe<(
+    { __typename?: 'AccessMemberConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), nodes?: Maybe<Array<(
+      { __typename?: 'AccessMember' }
+      & Pick<AccessMember, 'userAccountSid' | 'firstNm' | 'lastNm' | 'email'>
+      & { organization: (
+        { __typename?: 'Organization' }
+        & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
+      ), accessPolicyGroups?: Maybe<Array<(
+        { __typename?: 'AccessPolicyGroup' }
+        & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes' | 'members'>
+        & { policies?: Maybe<Array<(
+          { __typename?: 'AccessPolicy' }
+          & FragmentAccessPolicyFragment
+        )>> }
+      )>>, commands?: Maybe<Array<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>> }
+    )>> }
+  )> }
+);
+
+export type AccessSpecializationUsagesQueryVariables = Exact<{
+  specializationSid: Scalars['ID'];
+  pageableInput?: Maybe<PageableInput>;
+}>;
+
+
+export type AccessSpecializationUsagesQuery = (
+  { __typename?: 'Query' }
+  & { accessSpecializationUsages?: Maybe<(
+    { __typename?: 'AccessGroupUsageConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), nodes?: Maybe<Array<(
+      { __typename?: 'AccessGroupUsage' }
+      & { group?: Maybe<(
+        { __typename?: 'AccessPolicyGroup' }
+        & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes' | 'members'>
+        & { policies?: Maybe<Array<(
+          { __typename?: 'AccessPolicy' }
+          & FragmentAccessPolicyFragment
+        )>> }
+      )>, organization?: Maybe<(
+        { __typename?: 'Organization' }
+        & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
+      )>, commands?: Maybe<Array<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
       )>> }
     )>> }
   )> }
@@ -4843,7 +5048,7 @@ export type AccessPolicyGroupsForOrgQuery = (
       & FragmentListPageInfoFragment
     )>, nodes?: Maybe<Array<(
       { __typename?: 'AccessPolicyGroup' }
-      & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
+      & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes' | 'members'>
       & { policies?: Maybe<Array<(
         { __typename?: 'AccessPolicy' }
         & FragmentAccessPolicyFragment
@@ -4863,6 +5068,40 @@ export type AccessPolicyGroupTemplatesQuery = (
     { __typename?: 'UIOption' }
     & Pick<UiOption, 'label' | 'value' | 'info' | 'category'>
   )>> }
+);
+
+export type AccessPolicyGroupMembersQueryVariables = Exact<{
+  policyGroupSid: Scalars['ID'];
+  pageableInput?: Maybe<PageableInput>;
+}>;
+
+
+export type AccessPolicyGroupMembersQuery = (
+  { __typename?: 'Query' }
+  & { accessPolicyGroupMembers?: Maybe<(
+    { __typename?: 'AccessMemberConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), nodes?: Maybe<Array<(
+      { __typename?: 'AccessMember' }
+      & Pick<AccessMember, 'userAccountSid' | 'firstNm' | 'lastNm' | 'email'>
+      & { organization: (
+        { __typename?: 'Organization' }
+        & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
+      ), accessPolicyGroups?: Maybe<Array<(
+        { __typename?: 'AccessPolicyGroup' }
+        & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes' | 'members'>
+        & { policies?: Maybe<Array<(
+          { __typename?: 'AccessPolicy' }
+          & FragmentAccessPolicyFragment
+        )>> }
+      )>>, commands?: Maybe<Array<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>> }
+    )>> }
+  )> }
 );
 
 export type AccessPolicyFormQueryVariables = Exact<{
@@ -8721,6 +8960,8 @@ export const FragmentAccessPolicyFragmentDoc = gql`
   tmpl
   tmplUseAsIs
   applicableOrgTypes
+  members
+  groupUsages
 }
     `;
 export const FragmentWebCommandFragmentDoc = gql`
@@ -10342,6 +10583,7 @@ export const FindUserByEmailDocument = gql`
       policies {
         ...fragmentAccessPolicy
       }
+      members
     }
   }
 }
@@ -10627,6 +10869,7 @@ export const UserQuickSearchDocument = gql`
       policies {
         ...fragmentAccessPolicy
       }
+      members
     }
   }
 }
@@ -10678,6 +10921,7 @@ export const FindExternalUsersDocument = gql`
       policies {
         ...fragmentAccessPolicy
       }
+      members
     }
   }
 }
@@ -10763,6 +11007,7 @@ export const ExternalUsersForOrgDocument = gql`
           policies {
             ...fragmentAccessPolicy
           }
+          members
         }
       }
       accountLocked
@@ -10900,6 +11145,8 @@ export const AccessPolicyDocument = gql`
     tmpl
     tmplUseAsIs
     applicableOrgTypes
+    members
+    groupUsages
   }
 }
     `;
@@ -10974,6 +11221,134 @@ export function useAccessPoliciesForOrgLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type AccessPoliciesForOrgQueryHookResult = ReturnType<typeof useAccessPoliciesForOrgQuery>;
 export type AccessPoliciesForOrgLazyQueryHookResult = ReturnType<typeof useAccessPoliciesForOrgLazyQuery>;
 export type AccessPoliciesForOrgQueryResult = Apollo.QueryResult<AccessPoliciesForOrgQuery, AccessPoliciesForOrgQueryVariables>;
+export const AccessPolicyMembersDocument = gql`
+    query AccessPolicyMembers($policySid: ID!, $pageableInput: PageableInput) {
+  accessPolicyMembers(policySid: $policySid, pageableInput: $pageableInput) {
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    nodes {
+      userAccountSid
+      firstNm
+      lastNm
+      email
+      organization {
+        sid
+        name
+        orgId
+        orgType
+        orgTypeLabel
+      }
+      accessPolicyGroups {
+        sid
+        name
+        description
+        tmpl
+        tmplUseAsIs
+        applicableOrgTypes
+        policies {
+          ...fragmentAccessPolicy
+        }
+        members
+      }
+      commands {
+        ...fragmentWebCommand
+      }
+    }
+  }
+}
+    ${FragmentPaginationInfoFragmentDoc}
+${FragmentAccessPolicyFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+
+/**
+ * __useAccessPolicyMembersQuery__
+ *
+ * To run a query within a React component, call `useAccessPolicyMembersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccessPolicyMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAccessPolicyMembersQuery({
+ *   variables: {
+ *      policySid: // value for 'policySid'
+ *      pageableInput: // value for 'pageableInput'
+ *   },
+ * });
+ */
+export function useAccessPolicyMembersQuery(baseOptions: Apollo.QueryHookOptions<AccessPolicyMembersQuery, AccessPolicyMembersQueryVariables>) {
+        return Apollo.useQuery<AccessPolicyMembersQuery, AccessPolicyMembersQueryVariables>(AccessPolicyMembersDocument, baseOptions);
+      }
+export function useAccessPolicyMembersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccessPolicyMembersQuery, AccessPolicyMembersQueryVariables>) {
+          return Apollo.useLazyQuery<AccessPolicyMembersQuery, AccessPolicyMembersQueryVariables>(AccessPolicyMembersDocument, baseOptions);
+        }
+export type AccessPolicyMembersQueryHookResult = ReturnType<typeof useAccessPolicyMembersQuery>;
+export type AccessPolicyMembersLazyQueryHookResult = ReturnType<typeof useAccessPolicyMembersLazyQuery>;
+export type AccessPolicyMembersQueryResult = Apollo.QueryResult<AccessPolicyMembersQuery, AccessPolicyMembersQueryVariables>;
+export const AccessPolicyUsagesDocument = gql`
+    query AccessPolicyUsages($policySid: ID!, $pageableInput: PageableInput) {
+  accessPolicyUsages(policySid: $policySid, pageableInput: $pageableInput) {
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    nodes {
+      group {
+        sid
+        name
+        description
+        tmpl
+        tmplUseAsIs
+        applicableOrgTypes
+        policies {
+          ...fragmentAccessPolicy
+        }
+        members
+      }
+      organization {
+        sid
+        name
+        orgId
+        orgType
+        orgTypeLabel
+      }
+      commands {
+        ...fragmentWebCommand
+      }
+    }
+  }
+}
+    ${FragmentPaginationInfoFragmentDoc}
+${FragmentAccessPolicyFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+
+/**
+ * __useAccessPolicyUsagesQuery__
+ *
+ * To run a query within a React component, call `useAccessPolicyUsagesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccessPolicyUsagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAccessPolicyUsagesQuery({
+ *   variables: {
+ *      policySid: // value for 'policySid'
+ *      pageableInput: // value for 'pageableInput'
+ *   },
+ * });
+ */
+export function useAccessPolicyUsagesQuery(baseOptions: Apollo.QueryHookOptions<AccessPolicyUsagesQuery, AccessPolicyUsagesQueryVariables>) {
+        return Apollo.useQuery<AccessPolicyUsagesQuery, AccessPolicyUsagesQueryVariables>(AccessPolicyUsagesDocument, baseOptions);
+      }
+export function useAccessPolicyUsagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccessPolicyUsagesQuery, AccessPolicyUsagesQueryVariables>) {
+          return Apollo.useLazyQuery<AccessPolicyUsagesQuery, AccessPolicyUsagesQueryVariables>(AccessPolicyUsagesDocument, baseOptions);
+        }
+export type AccessPolicyUsagesQueryHookResult = ReturnType<typeof useAccessPolicyUsagesQuery>;
+export type AccessPolicyUsagesLazyQueryHookResult = ReturnType<typeof useAccessPolicyUsagesLazyQuery>;
+export type AccessPolicyUsagesQueryResult = Apollo.QueryResult<AccessPolicyUsagesQuery, AccessPolicyUsagesQueryVariables>;
 export const AccessPolicyTemplatesDocument = gql`
     query AccessPolicyTemplates($orgSid: ID!) {
   accessPolicyTemplates(orgSid: $orgSid) {
@@ -11027,6 +11402,8 @@ export const AccessSpecializationsForOrgDocument = gql`
         permission
         orgSids
       }
+      members
+      groupUsages
     }
   }
 }
@@ -11059,6 +11436,140 @@ export function useAccessSpecializationsForOrgLazyQuery(baseOptions?: Apollo.Laz
 export type AccessSpecializationsForOrgQueryHookResult = ReturnType<typeof useAccessSpecializationsForOrgQuery>;
 export type AccessSpecializationsForOrgLazyQueryHookResult = ReturnType<typeof useAccessSpecializationsForOrgLazyQuery>;
 export type AccessSpecializationsForOrgQueryResult = Apollo.QueryResult<AccessSpecializationsForOrgQuery, AccessSpecializationsForOrgQueryVariables>;
+export const AccessSpecializationMembersDocument = gql`
+    query AccessSpecializationMembers($specializationSid: ID!, $pageableInput: PageableInput) {
+  accessSpecializationMembers(
+    specializationSid: $specializationSid
+    pageableInput: $pageableInput
+  ) {
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    nodes {
+      userAccountSid
+      firstNm
+      lastNm
+      email
+      organization {
+        sid
+        name
+        orgId
+        orgType
+        orgTypeLabel
+      }
+      accessPolicyGroups {
+        sid
+        name
+        description
+        tmpl
+        tmplUseAsIs
+        applicableOrgTypes
+        policies {
+          ...fragmentAccessPolicy
+        }
+        members
+      }
+      commands {
+        ...fragmentWebCommand
+      }
+    }
+  }
+}
+    ${FragmentPaginationInfoFragmentDoc}
+${FragmentAccessPolicyFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+
+/**
+ * __useAccessSpecializationMembersQuery__
+ *
+ * To run a query within a React component, call `useAccessSpecializationMembersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccessSpecializationMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAccessSpecializationMembersQuery({
+ *   variables: {
+ *      specializationSid: // value for 'specializationSid'
+ *      pageableInput: // value for 'pageableInput'
+ *   },
+ * });
+ */
+export function useAccessSpecializationMembersQuery(baseOptions: Apollo.QueryHookOptions<AccessSpecializationMembersQuery, AccessSpecializationMembersQueryVariables>) {
+        return Apollo.useQuery<AccessSpecializationMembersQuery, AccessSpecializationMembersQueryVariables>(AccessSpecializationMembersDocument, baseOptions);
+      }
+export function useAccessSpecializationMembersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccessSpecializationMembersQuery, AccessSpecializationMembersQueryVariables>) {
+          return Apollo.useLazyQuery<AccessSpecializationMembersQuery, AccessSpecializationMembersQueryVariables>(AccessSpecializationMembersDocument, baseOptions);
+        }
+export type AccessSpecializationMembersQueryHookResult = ReturnType<typeof useAccessSpecializationMembersQuery>;
+export type AccessSpecializationMembersLazyQueryHookResult = ReturnType<typeof useAccessSpecializationMembersLazyQuery>;
+export type AccessSpecializationMembersQueryResult = Apollo.QueryResult<AccessSpecializationMembersQuery, AccessSpecializationMembersQueryVariables>;
+export const AccessSpecializationUsagesDocument = gql`
+    query AccessSpecializationUsages($specializationSid: ID!, $pageableInput: PageableInput) {
+  accessSpecializationUsages(
+    specializationSid: $specializationSid
+    pageableInput: $pageableInput
+  ) {
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    nodes {
+      group {
+        sid
+        name
+        description
+        tmpl
+        tmplUseAsIs
+        applicableOrgTypes
+        policies {
+          ...fragmentAccessPolicy
+        }
+        members
+      }
+      organization {
+        sid
+        name
+        orgId
+        orgType
+        orgTypeLabel
+      }
+      commands {
+        ...fragmentWebCommand
+      }
+    }
+  }
+}
+    ${FragmentPaginationInfoFragmentDoc}
+${FragmentAccessPolicyFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+
+/**
+ * __useAccessSpecializationUsagesQuery__
+ *
+ * To run a query within a React component, call `useAccessSpecializationUsagesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccessSpecializationUsagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAccessSpecializationUsagesQuery({
+ *   variables: {
+ *      specializationSid: // value for 'specializationSid'
+ *      pageableInput: // value for 'pageableInput'
+ *   },
+ * });
+ */
+export function useAccessSpecializationUsagesQuery(baseOptions: Apollo.QueryHookOptions<AccessSpecializationUsagesQuery, AccessSpecializationUsagesQueryVariables>) {
+        return Apollo.useQuery<AccessSpecializationUsagesQuery, AccessSpecializationUsagesQueryVariables>(AccessSpecializationUsagesDocument, baseOptions);
+      }
+export function useAccessSpecializationUsagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccessSpecializationUsagesQuery, AccessSpecializationUsagesQueryVariables>) {
+          return Apollo.useLazyQuery<AccessSpecializationUsagesQuery, AccessSpecializationUsagesQueryVariables>(AccessSpecializationUsagesDocument, baseOptions);
+        }
+export type AccessSpecializationUsagesQueryHookResult = ReturnType<typeof useAccessSpecializationUsagesQuery>;
+export type AccessSpecializationUsagesLazyQueryHookResult = ReturnType<typeof useAccessSpecializationUsagesLazyQuery>;
+export type AccessSpecializationUsagesQueryResult = Apollo.QueryResult<AccessSpecializationUsagesQuery, AccessSpecializationUsagesQueryVariables>;
 export const AccessPolicyGroupsForOrgDocument = gql`
     query AccessPolicyGroupsForOrg($orgSid: ID!, $pageableInput: PageableInput) {
   accessPolicyGroupsForOrg(orgSid: $orgSid, pageableInput: $pageableInput) {
@@ -11078,6 +11589,7 @@ export const AccessPolicyGroupsForOrgDocument = gql`
       policies {
         ...fragmentAccessPolicy
       }
+      members
     }
   }
 }
@@ -11147,6 +11659,75 @@ export function useAccessPolicyGroupTemplatesLazyQuery(baseOptions?: Apollo.Lazy
 export type AccessPolicyGroupTemplatesQueryHookResult = ReturnType<typeof useAccessPolicyGroupTemplatesQuery>;
 export type AccessPolicyGroupTemplatesLazyQueryHookResult = ReturnType<typeof useAccessPolicyGroupTemplatesLazyQuery>;
 export type AccessPolicyGroupTemplatesQueryResult = Apollo.QueryResult<AccessPolicyGroupTemplatesQuery, AccessPolicyGroupTemplatesQueryVariables>;
+export const AccessPolicyGroupMembersDocument = gql`
+    query AccessPolicyGroupMembers($policyGroupSid: ID!, $pageableInput: PageableInput) {
+  accessPolicyGroupMembers(
+    policyGroupSid: $policyGroupSid
+    pageableInput: $pageableInput
+  ) {
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    nodes {
+      userAccountSid
+      firstNm
+      lastNm
+      email
+      organization {
+        sid
+        name
+        orgId
+        orgType
+        orgTypeLabel
+      }
+      accessPolicyGroups {
+        sid
+        name
+        description
+        tmpl
+        tmplUseAsIs
+        applicableOrgTypes
+        policies {
+          ...fragmentAccessPolicy
+        }
+        members
+      }
+      commands {
+        ...fragmentWebCommand
+      }
+    }
+  }
+}
+    ${FragmentPaginationInfoFragmentDoc}
+${FragmentAccessPolicyFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+
+/**
+ * __useAccessPolicyGroupMembersQuery__
+ *
+ * To run a query within a React component, call `useAccessPolicyGroupMembersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccessPolicyGroupMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAccessPolicyGroupMembersQuery({
+ *   variables: {
+ *      policyGroupSid: // value for 'policyGroupSid'
+ *      pageableInput: // value for 'pageableInput'
+ *   },
+ * });
+ */
+export function useAccessPolicyGroupMembersQuery(baseOptions: Apollo.QueryHookOptions<AccessPolicyGroupMembersQuery, AccessPolicyGroupMembersQueryVariables>) {
+        return Apollo.useQuery<AccessPolicyGroupMembersQuery, AccessPolicyGroupMembersQueryVariables>(AccessPolicyGroupMembersDocument, baseOptions);
+      }
+export function useAccessPolicyGroupMembersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccessPolicyGroupMembersQuery, AccessPolicyGroupMembersQueryVariables>) {
+          return Apollo.useLazyQuery<AccessPolicyGroupMembersQuery, AccessPolicyGroupMembersQueryVariables>(AccessPolicyGroupMembersDocument, baseOptions);
+        }
+export type AccessPolicyGroupMembersQueryHookResult = ReturnType<typeof useAccessPolicyGroupMembersQuery>;
+export type AccessPolicyGroupMembersLazyQueryHookResult = ReturnType<typeof useAccessPolicyGroupMembersLazyQuery>;
+export type AccessPolicyGroupMembersQueryResult = Apollo.QueryResult<AccessPolicyGroupMembersQuery, AccessPolicyGroupMembersQueryVariables>;
 export const AccessPolicyFormDocument = gql`
     query AccessPolicyForm($orgSid: ID!, $templatePolicySid: ID) {
   accessPolicyForm(orgSid: $orgSid, templatePolicySid: $templatePolicySid) {

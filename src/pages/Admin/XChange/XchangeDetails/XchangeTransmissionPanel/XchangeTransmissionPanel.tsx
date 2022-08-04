@@ -841,6 +841,8 @@ const XchangeTransmissionPanel = ({
 
   useEffect(() => {
     if (!loadingFileTransmissionForm && dataFileTransmissionForm) {
+      console.log(optionXchangeTransmission);
+      setOptionXchangeTransmission('update');
       setXchangeFileTransmission(dataFileTransmissionForm.xchangeFileTransmissionForm);
       if (
         dataFileTransmissionForm.xchangeFileTransmissionForm?.filenameQualifiers.value &&

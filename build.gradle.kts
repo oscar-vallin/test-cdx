@@ -20,8 +20,8 @@ java {
 
 node {
     download.set(true)
-    version.set("14.18.0")
-    yarnVersion.set("1.22.11")
+    version.set("14.20.0")
+    yarnVersion.set("1.22.19")
 
 }
 task<YarnTask>("yarnInstall") {

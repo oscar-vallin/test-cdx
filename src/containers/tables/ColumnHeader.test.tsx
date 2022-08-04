@@ -168,7 +168,7 @@ describe('Column Header Testing', () => {
       sortable: true,
       filterable: true,
     };
-    const wrapper = mountWithTheme(<ColumnHeader id="ColHeader" col={col} onFilter={onFilter} filterValue="HOLD"/>);
+    const wrapper = mountWithTheme(<ColumnHeader id="ColHeader" col={col} onFilter={onFilter} filterValue="HOLD" />);
     const button = wrapper.find('button[id="ColHeader"]');
     button.simulate('click');
     // Menu should show
