@@ -1,5 +1,15 @@
 import { useEffect, useState } from 'react';
-import { DefaultButton, PanelType, PrimaryButton, Spinner, SpinnerSize, Stack, Text } from '@fluentui/react';
+import {
+  DefaultButton,
+  DirectionalHint,
+  PanelType,
+  PrimaryButton,
+  Spinner,
+  SpinnerSize,
+  Stack,
+  Text,
+  TooltipHost,
+} from '@fluentui/react';
 import { PanelBody, PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
 import {
   useCopyXchangeFileTransmissionLazyQuery,
@@ -23,6 +33,8 @@ import { UIInputCheck } from 'src/components/inputs/InputCheck';
 import { ButtonLink } from 'src/components/buttons';
 import { TestFileTransmissionModal } from 'src/containers/modals/TestFileTransmissionModal';
 import { theme } from 'src/styles/themes/theme';
+import { Comment20Filled } from '@fluentui/react-icons';
+import { UIInputTextArea } from 'src/components/inputs/InputTextArea';
 
 type XchangeTransmissionPanelProps = {
   isPanelOpen: boolean;
@@ -106,6 +118,8 @@ const XchangeTransmissionPanel = ({
   const [stepWise, setStepWise] = useState(true);
   const [encryptionKeyName, setEncryptionKeyName] = useState('');
   const [comments, setComments] = useState('');
+  const [openUpdateComments, setOpenUpdateComments] = useState(false);
+  const [closeTooltipHost, setCloseTooltipHost] = useState(true);
   const [copyCmd, setCopyCmd] = useState<WebCommand | null>();
   const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
@@ -341,16 +355,97 @@ const XchangeTransmissionPanel = ({
     }
   };
 
+  const tooltipHostComments = () => {
+    if (!openUpdateComments && xchangeFileTransmission) {
+      return (
+        <>
+          {closeTooltipHost ? (
+            <TooltipHost
+              directionalHint={DirectionalHint['rightBottomEdge']}
+              content={comments ? 'This File Transmission has comments. Click to see them.' : 'Click to add a comment'}
+            >
+              <Comment20Filled
+                style={comments ? { color: '#cdcd00', cursor: 'pointer' } : { color: 'gray', cursor: 'pointer' }}
+                onClick={() => {
+                  setOpenUpdateComments(true);
+                }}
+              />
+            </TooltipHost>
+          ) : (
+            <Comment20Filled
+              style={comments ? { color: '#cdcd00', cursor: 'pointer' } : { color: 'gray', cursor: 'pointer' }}
+              onClick={() => {
+                setOpenUpdateComments(true);
+              }}
+            />
+          )}
+        </>
+      );
+    }
+
+    const updateComment = () => (
+      <UIInputTextArea
+        id="FileTransmissionComment"
+        uiField={xchangeFileTransmission?.comments}
+        value={comments}
+        onChange={(event, newValue: any) => {
+          setComments(newValue ?? '');
+          if (!xchangeFileTransmission?.comments.value) {
+            if (newValue.trim() !== '') {
+              setUnsavedChanges(true);
+            } else {
+              setUnsavedChanges(false);
+            }
+          } else if (xchangeFileTransmission.comments.value?.trim() !== newValue?.trim()) {
+            setUnsavedChanges(true);
+          } else {
+            setUnsavedChanges(false);
+          }
+        }}
+        resizable={false}
+        rows={12}
+      />
+    );
+
+    if (openUpdateComments) {
+      return (
+        <TooltipHost
+          directionalHintForRTL={DirectionalHint['bottomAutoEdge']}
+          closeDelay={5000000}
+          style={{ background: '#cdcd00', width: '400px', padding: '0 10px 10px 10px' }}
+          tooltipProps={{
+            calloutProps: {
+              styles: {
+                beak: { background: '#cdcd00' },
+                beakCurtain: { background: '#cdcd00' },
+                calloutMain: { background: '#cdcd00' },
+              },
+            },
+          }}
+          content={updateComment()}
+        >
+          <Comment20Filled
+            style={comments ? { color: '#cdcd00', cursor: 'pointer' } : { color: 'gray', cursor: 'pointer' }}
+          />
+        </TooltipHost>
+      );
+    }
+    return null;
+  };
+
   const renderPanelHeader = () => (
     <PanelHeader id="__PanelHeader">
       <Container>
         <Row>
-          <Column lg="12">
-            <Stack horizontal styles={{ root: { height: 44 } }}>
+          <Column lg="4">
+            <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
               <PanelTitle id="__CreateGroup_Panel_Title" variant="bold" size="large">
                 File transmission
               </PanelTitle>
             </Stack>
+          </Column>
+          <Column lg="8">
+            <Spacing margin={{ top: 'normal' }}>{tooltipHostComments()}</Spacing>
           </Column>
         </Row>
       </Container>
@@ -827,6 +922,15 @@ const XchangeTransmissionPanel = ({
 
   return (
     <ThemedPanel
+      onClick={() => {
+        if (openUpdateComments) {
+          setOpenUpdateComments(false);
+          setCloseTooltipHost(false);
+          setTimeout(() => {
+            setCloseTooltipHost(true);
+          }, 0.001);
+        }
+      }}
       closeButtonAriaLabel="Close"
       onRenderHeader={renderPanelHeader}
       type={PanelType.medium}
