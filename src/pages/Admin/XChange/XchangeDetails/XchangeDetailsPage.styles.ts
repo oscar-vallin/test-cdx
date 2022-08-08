@@ -85,9 +85,9 @@ export const StyledQualifier = styled.div<StyledQualifierProps>`
   border-bottom-right-radius: 5em 5em;
   border-bottom-left-radius: 5em 5em;
   border: solid 1px ${({ color }) => color};
-  position: absolute;
-  top: 43px;
-  left: 180px;
+  position: ${({ position }) => (position ? 'absolute' : null)};
+  top: ${({ top }) => (top ? '43px' : null)};
+  left: ${({ left }) => (left ? '180px' : null)};
   text-align: center;
   color: ${({ color }) => color};
   font-size: 12px;
@@ -97,6 +97,9 @@ export const StyledQualifier = styled.div<StyledQualifierProps>`
 type StyledQualifierProps = {
   width?: string;
   color?: string;
+  position?: boolean;
+  top?: boolean;
+  left?: boolean;
 };
 
 export const StyledButtonAction = styled(ButtonAction)<StyledButtonActionProps>`

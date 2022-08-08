@@ -182,7 +182,7 @@ const DataNodeTransmissions = ({ data, id }) => {
           </Row>
         </Container>
         {qualifier && (
-          <StyledQualifier color={color} width={width}>
+          <StyledQualifier position={true} left={true} top={true} color={color} width={width}>
             {qualifier}
           </StyledQualifier>
         )}

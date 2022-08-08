@@ -298,7 +298,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
         </Container>
         {hanldeSourcePosition()}
         {qualifier && (
-          <StyledQualifier width={width} color={color}>
+          <StyledQualifier position={true} left={true} top={true} width={width} color={color}>
             {qualifier}
           </StyledQualifier>
         )}
