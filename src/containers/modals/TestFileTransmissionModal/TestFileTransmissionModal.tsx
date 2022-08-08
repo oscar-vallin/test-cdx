@@ -302,7 +302,7 @@ const TestFileTransmissionModal = ({ isOpen, open }: TestFileTransmissionModalPr
       );
     }
 
-    if (!ftpTestData && !loadingForm) {
+    if (dataForm && !loadingForm) {
       return (
         <Container>
           <Row>
