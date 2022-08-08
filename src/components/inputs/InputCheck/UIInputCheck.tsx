@@ -3,6 +3,8 @@ import React from 'react';
 import { InfoIcon } from 'src/components/badges/InfoIcon';
 import { ErrorIcon } from 'src/components/badges/ErrorIcon';
 import { CheckBoxAlignBottom, InlineLabel } from 'src/components/inputs/InputCheck/UIInputCheck.styles';
+import { InheritedFromIcon } from 'src/components/badges/InheritedFromIcon';
+import { InheritedByIcon } from 'src/components/badges/InheritedByIcon';
 
 type UIInputCheckType = {
   id: string;
@@ -18,6 +20,8 @@ export const UIInputCheck = ({ id, uiField, onChange, value, alignBottom }: UIIn
         <InlineLabel required={uiField?.required}>{uiField?.label}</InlineLabel>
         <InfoIcon id={`${id}_Info`} tooltip={uiField?.info} />
         <ErrorIcon id={`${id}-ErrorMsg`} errorMessage={uiField?.errMsg} />
+        <InheritedFromIcon id={`${id}-inheritedFrom`} tooltip={uiField?.inheritedFrom} />
+        <InheritedByIcon id={`${id}-inheritedBy`} tooltip={uiField?.inheritedBy && uiField?.inheritedBy[0]} />
       </span>
     );
   };
