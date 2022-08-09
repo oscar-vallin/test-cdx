@@ -188,7 +188,7 @@ const XchangeAlertsPage = () => {
               </Spacing>
               {xchangeAlerts?.individualXchangeAlerts?.map((individualAlerts) => (
                 <>
-                  <Spacing margin={{ bottom: 'normal' }}>
+                  <Spacing margin={{ bottom: 'normal', top: 'normal' }}>
                     <Row>
                       <Column lg="3">
                         <ButtonLink>{individualAlerts.coreFilename}</ButtonLink>
