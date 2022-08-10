@@ -90,11 +90,11 @@ const TestFileTransmissionModal = ({ isOpen, open }: TestFileTransmissionModalPr
     const { data, errors } = await callFtpTest({
       variables: {
         xpsftp: {
-          host: 'files.known2u.com',
-          user: 'guestfiles',
-          password: 'w=A.Q2[#qP]4XpKq',
+          host: ftpTestForm?.host?.value ?? '',
+          user: ftpTestForm?.user?.value ?? '',
+          password: ftpTestForm?.password?.value ?? '',
           port: ftpTestForm?.port?.value,
-          folder: 'test/inbox',
+          folder: ftpTestForm?.folder?.value ?? '',
           stepWise: ftpTestForm?.stepWise?.value,
           sshKeyPath: ftpTestForm?.sshKeyPath?.value?.value,
         },
