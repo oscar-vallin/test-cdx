@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Column, Container, Row } from 'src/components/layouts';
@@ -11,16 +11,28 @@ import {
   XchangeAlert,
   XchangeFileProcessForm,
   XchangeDiagram,
+  useUpdateXchangeConfigCommentMutation,
 } from 'src/data/services/graphql';
 import { UIInputText } from 'src/components/inputs/InputText';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { IconButton, PrimaryButton, Spinner, SpinnerSize, Text } from '@fluentui/react';
+import {
+  DirectionalHint,
+  IconButton,
+  PrimaryButton,
+  Spinner,
+  SpinnerSize,
+  Stack,
+  Text,
+  TooltipHost,
+} from '@fluentui/react';
 import { UIInputMultiSelect } from 'src/components/inputs/InputDropdown';
 import { PageBody } from 'src/components/layouts/Column';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { FileUploadDialog } from 'src/pages/Admin/XChange/XchangeDetails/FileUpload/FileUploadDialog';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { ROUTE_XCHANGE_DETAILS } from 'src/data/constants/RouteConstants';
+import { Comment20Filled } from '@fluentui/react-icons';
+import { UIInputTextArea } from 'src/components/inputs/InputTextArea';
 import {
   CardStyled,
   StyledColumTabs,
@@ -45,9 +57,13 @@ const XchangeDetailsPage = () => {
   const [fileProcess, setFileProcess] = useState<XchangeFileProcessForm>();
   const [dataDiagram, setDataDiagram] = useState<XchangeDiagram>();
   const [refreshXchangeDetails, setRefreshXchangeDetails] = useState(false);
+  const [comments, setComments] = useState('');
+  const [openUpdateComments, setOpenUpdateComments] = useState(false);
+  const [closeTooltipHost, setCloseTooltipHost] = useState(true);
 
   const [callXchangeDetails, { data: detailsData, loading: detailsLoading, error: detailsError }] =
     useXchangeConfigLazyQuery();
+  const [updateXchangeComment, { data: commentData }] = useUpdateXchangeConfigCommentMutation();
   const [showFileUpload, setShowFileUpload] = useState(false);
   const handleError = ErrorHandler();
 
@@ -61,6 +77,15 @@ const XchangeDetailsPage = () => {
       variables: {
         orgSid,
         coreFilename: coreFilename ?? '',
+      },
+    });
+  };
+
+  const updateComments = () => {
+    updateXchangeComment({
+      variables: {
+        sid: xchangeDataDetails?.sid ?? '',
+        comment: comments,
       },
     });
   };
@@ -193,8 +218,40 @@ const XchangeDetailsPage = () => {
       if (xchangeConfig.alerts) {
         setXchangesAlerts(xchangeConfig?.alerts);
       }
+
+      if (xchangeConfig.comments) {
+        setComments(xchangeConfig.comments.value ?? '');
+      }
     }
   }, [detailsData, detailsLoading]);
+
+  function useOutsideAlerter(ref) {
+    useEffect(() => {
+      function handleClickOutside(event) {
+        if (ref.current && !ref.current.contains(event.target)) {
+          if (!openUpdateComments) {
+            setOpenUpdateComments(false);
+            setCloseTooltipHost(false);
+            setTimeout(() => {
+              setCloseTooltipHost(true);
+            }, 0.001);
+          }
+        }
+      }
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }, [ref]);
+  }
+  const wrapperRef = useRef(null);
+  useOutsideAlerter(wrapperRef);
+
+  useEffect(() => {
+    if (!commentData && xchangeDataDetails) {
+      updateComments();
+    }
+  }, [closeTooltipHost, commentData]);
 
   const renderFileUploadDialog = () => {
     const xchangeConfigSid = xchangeDataDetails?.sid;
@@ -240,13 +297,92 @@ const XchangeDetailsPage = () => {
     return null;
   };
 
+  const tooltipHostComments = () => {
+    const styles = {
+      cursor: 'pointer',
+      marginLeft: '10px',
+      color: '',
+    };
+    if (comments) {
+      styles.color = '#cdcd00';
+    } else {
+      styles.color = 'gray';
+    }
+    if (!openUpdateComments && detailsData) {
+      return (
+        <>
+          {closeTooltipHost && (
+            <TooltipHost
+              directionalHint={DirectionalHint['topCenter']}
+              content={comments ? 'This File Transmission has comments. Click to see them.' : 'Click to add a comment'}
+            >
+              <Comment20Filled
+                style={styles}
+                onClick={() => {
+                  setOpenUpdateComments(true);
+                }}
+              />
+            </TooltipHost>
+          )}
+          {!closeTooltipHost && (
+            <Comment20Filled
+              style={styles}
+              onClick={() => {
+                setOpenUpdateComments(true);
+              }}
+            />
+          )}
+        </>
+      );
+    }
+
+    const updateComment = () => (
+      <UIInputTextArea
+        id="FileTransmissionComment"
+        uiField={detailsData?.xchangeConfig?.comments}
+        value={comments}
+        onChange={(event, newValue: any) => {
+          setComments(newValue ?? '');
+        }}
+        resizable={false}
+        rows={12}
+      />
+    );
+
+    if (openUpdateComments) {
+      return (
+        <TooltipHost
+          directionalHintForRTL={DirectionalHint['bottomAutoEdge']}
+          closeDelay={5000000}
+          style={{ background: '#cdcd00', width: '400px', padding: '0 10px 10px 10px' }}
+          tooltipProps={{
+            calloutProps: {
+              styles: {
+                beak: { background: '#cdcd00' },
+                beakCurtain: { background: '#cdcd00' },
+                calloutMain: { background: '#cdcd00' },
+              },
+            },
+          }}
+          content={updateComment()}
+        >
+          <Comment20Filled style={styles} />
+        </TooltipHost>
+      );
+    }
+    return null;
+  };
+
   return (
     <LayoutDashboard id="XchangeDetailsPage" menuOptionSelected={ROUTE_XCHANGE_DETAILS.API_ID}>
       <PageHeader id="__XchangeDetailsPage">
         <Container>
           <Row>
             <Column lg="6">
-              <PageTitle id="__Page__Title__Details" title="Xchange Details" />
+              <Stack horizontal={true} horizontalAlign="space-between">
+                <PageTitle id="__Page__Title__Details" title="Xchange Details" />
+                <div ref={wrapperRef}>{tooltipHostComments()}</div>
+              </Stack>
             </Column>
             <Column lg="6" right>
               {renderUploadButton()}
