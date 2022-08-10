@@ -63,7 +63,7 @@ const XchangeDetailsPage = () => {
 
   const [callXchangeDetails, { data: detailsData, loading: detailsLoading, error: detailsError }] =
     useXchangeConfigLazyQuery();
-  const [updateXchangeComment, { data: commentData }] = useUpdateXchangeConfigCommentMutation();
+  const [updateXchangeComment, { data: commentData, loading: commentLoadin }] = useUpdateXchangeConfigCommentMutation();
   const [showFileUpload, setShowFileUpload] = useState(false);
   const handleError = ErrorHandler();
 
@@ -82,6 +82,7 @@ const XchangeDetailsPage = () => {
   };
 
   const updateComments = () => {
+    setCloseTooltipHost(false);
     updateXchangeComment({
       variables: {
         sid: xchangeDataDetails?.sid ?? '',
@@ -252,6 +253,12 @@ const XchangeDetailsPage = () => {
       updateComments();
     }
   }, [closeTooltipHost, commentData]);
+
+  useEffect(() => {
+    if (!commentLoadin && commentData) {
+      console.log(commentData);
+    }
+  }, [commentData, commentLoadin]);
 
   const renderFileUploadDialog = () => {
     const xchangeConfigSid = xchangeDataDetails?.sid;
