@@ -2,12 +2,12 @@
 import React, { ReactElement, useState } from 'react';
 import {
   Checkbox,
+  DetailsList,
   DetailsListLayoutMode,
+  ICheckboxProps,
   IColumn,
   SelectionMode,
   Stack,
-  ICheckboxProps,
-  DetailsList,
 } from '@fluentui/react';
 
 import { useThemeStore } from 'src/store/ThemeStore';
@@ -23,16 +23,15 @@ import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { Text } from 'src/components/typography';
 import { EmptyState } from 'src/containers/states';
 import { SuperScript, WhiteButton } from '../FileStatusDetails.styles';
+import { QualityCheckMessage } from './QualityCheckMessage';
 
 const COLUMNS: IColumn[] = [
   { key: 'status', name: 'Status', fieldName: 'status', minWidth: 80, maxWidth: 80 },
   { key: 'employeeId', name: 'Employee ID', fieldName: 'employeeId', minWidth: 100, maxWidth: 100 },
   { key: 'employee', name: 'Employee', fieldName: 'employee', minWidth: 100, maxWidth: 150 },
   { key: 'dependent', name: 'Dependent', fieldName: 'dependent', minWidth: 100, maxWidth: 150 },
-  { key: 'message', name: 'Message', fieldName: 'message', minWidth: 150, grow: 1 },
-  { key: 'field', name: 'Field', fieldName: 'field', minWidth: 150, grow: 1 },
-  { key: 'value', name: 'Value', fieldName: 'value', minWidth: 150, grow: 1 },
-  { key: 'transformedValue', name: 'Transform value', fieldName: 'transformedValue', minWidth: 150, grow: 1 },
+  { key: 'field', name: 'Field', fieldName: 'field', minWidth: 100, maxWidth: 150 },
+  { key: 'message', name: 'Message', fieldName: 'message', minWidth: 200, flexGrow: 1 },
 ].map((col) => ({ ...col, data: 'string', isPadded: true }));
 
 type RowType = {
@@ -67,13 +66,12 @@ const onRenderItemColumn = (item: RowType, index?: number, column?: IColumn) => 
       return <span title={item.dependent}>{item.dependent}</span>;
     case 'message':
       return (
-        <>
-          {item?.messages?.map((message, _index) => (
-            <div key={_index} title={message ?? undefined}>
-              {message}
-            </div>
-          ))}
-        </>
+        <QualityCheckMessage
+          rowIndex={index}
+          messages={item.messages}
+          value={item.value}
+          transformedValue={item.transformValue}
+        />
       );
     case 'field':
       return <span title={item.field}>{item.field}</span>;
