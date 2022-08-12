@@ -24,7 +24,7 @@ const INITIAL_STATE: LoginState = {
 export const useLoginUseCase = () => {
   const SessionStore = useSessionStore();
   const ActiveDomainStore = useActiveDomainStore();
-  const { callCSRFController } = useCSRFToken();
+  const { callCSRFController, setCSRFToken } = useCSRFToken();
 
   const [retries, setRetries] = useState(0);
   const [state, setState] = useState({ ...INITIAL_STATE });
@@ -74,10 +74,12 @@ export const useLoginUseCase = () => {
         // prevent an infinite loop of calls
         if (retries < 3) {
           // This means the CSRF Token has expired and we need to retrieve it
-          callCSRFController();
-          // retry
-          performUserIdVerification({ userId });
-          setRetries(retries + 1);
+          setCSRFToken('');
+          callCSRFController().then(() => {
+            // retry
+            performUserIdVerification({ userId });
+            setRetries(retries + 1);
+          });
         } else {
           // Just refresh the page
           window.location.reload();

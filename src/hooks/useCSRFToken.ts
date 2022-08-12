@@ -23,7 +23,7 @@ export const useCSRFToken = () => {
     window.sessionStorage.setItem('_initSession', token);
   };
 
-  const callCSRFController = () => {
+  const callCSRFController = async () => {
     const currentToken = getCSRFToken() || '';
     if (currentToken.trim().length === 0) {
       const authToken = SessionStore.user?.token || getAuthToken() || '';
@@ -36,7 +36,7 @@ export const useCSRFToken = () => {
 
       // A CSRF token is tied to the session which is denoted by session ID
       // which is managed by the x-auth-token. So we need to send them in pairs.
-      fetch(serverUrl, opts)
+      await fetch(serverUrl, opts)
         .then((res) => res.json())
         .then((result) => {
           setCSRFToken(result.csrfToken);
