@@ -2,7 +2,6 @@ import { ReactElement, ReactNode, useEffect, useState } from 'react';
 import { AppHeader } from 'src/containers/headers/AppHeader';
 
 import { StyleConstants } from 'src/data/constants/StyleConstants';
-import { ROUTE_EXTERNAL_ORGS } from 'src/data/constants/RouteConstants';
 import { LeftNav } from 'src/containers/menus/LeftNav';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { DashboardContainer, DashboardBody } from './LayoutDashboard.styles';
@@ -28,14 +27,14 @@ export const LayoutDashboard = ({
   const ActiveDomainStore = useActiveDomainStore();
   const [menuOpen, setMenuOpen] = useState<boolean>(ActiveDomainStore.nav.admin.length > 0);
 
-  const notShowLeftMenu = ActiveDomainStore.domainOrg.origin.destination !== ROUTE_EXTERNAL_ORGS.API_ID;
+  const isShowLeftMenu = ActiveDomainStore.nav.admin.length > 0;
 
   useEffect(() => {
     setMenuOpen(ActiveDomainStore.nav.admin.length > 0);
   }, []);
 
   const showLeftMenu = () => {
-    if (notShowLeftMenu) {
+    if (isShowLeftMenu) {
       return <LeftNav menuOptionSelected={menuOptionSelected} isOpen={menuOpen} />;
     }
   };
@@ -48,9 +47,10 @@ export const LayoutDashboard = ({
             setMenuOpen(!menuOpen);
           }
         }}
+        hasLeftMenu={isShowLeftMenu}
       />
       {showLeftMenu()}
-      <DashboardBody id="__DashboardBody" isMenuOpen={menuOpen && notShowLeftMenu}>
+      <DashboardBody id="__DashboardBody" isMenuOpen={menuOpen && isShowLeftMenu}>
         <OrgBreadcrumbs />
         {children}
       </DashboardBody>

@@ -12,7 +12,7 @@ import {
   DetailsList,
 } from '@fluentui/react';
 
-import { useExternalOrgsLazyQuery, SortDirection, Organization, OrgType } from 'src/data/services/graphql';
+import { useExternalOrgsLazyQuery, SortDirection, Organization } from 'src/data/services/graphql';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
@@ -51,11 +51,6 @@ const ExternalOrgsPage = () => {
   const changeActiveOrg = (org?: Organization) => {
     ActiveDomainStore.setCurrentOrg({
       orgSid: org?.sid,
-      destination: org?.orgType
-        ? [OrgType.IntegrationSponsor, OrgType.IntegrationAdminCombined].includes(org?.orgType)
-          ? 'FILE_STATUS'
-          : 'ORG_ACTIVITY'
-        : 'ORG_ACTIVITY',
     });
   };
 
@@ -142,7 +137,7 @@ const ExternalOrgsPage = () => {
     );
   };
   return (
-    <LayoutDashboard id="PageActiveOrgs" menuOptionSelected={ROUTE_EXTERNAL_ORGS.API_ID}>
+    <LayoutDashboard id="PageActiveOrgs" menuOptionSelected={ROUTE_EXTERNAL_ORGS.API_ID} showMenu={false}>
       <PageHeader id="__ActiveOrgsHeader">
         <Container>
           <Row>

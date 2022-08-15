@@ -3,7 +3,7 @@ import { useHistory, useLocation } from 'react-router';
 import { Icon, IContextualMenuItem } from '@fluentui/react';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { ProfileMenu } from 'src/containers/menus/ProfileMenu';
-import { getRouteByApiId, ROUTE_EXTERNAL_ORGS, ROUTE_USER_SETTINGS } from 'src/data/constants/RouteConstants';
+import { getRouteByApiId, ROUTE_USER_SETTINGS } from 'src/data/constants/RouteConstants';
 import { useCurrentUserTheme } from 'src/hooks/useCurrentUserTheme';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { useSessionStore } from 'src/store/SessionStore';
@@ -24,9 +24,10 @@ import {
 
 type AppHeaderProps = {
   onMenuButtonClick: () => void;
+  hasLeftMenu?: boolean;
 };
 
-const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
+const AppHeader = ({ onMenuButtonClick, hasLeftMenu = true }: AppHeaderProps): ReactElement => {
   const history = useHistory();
   const location = useLocation();
   const { orgSid, startDate, endDate } = useOrgSid();
@@ -35,8 +36,6 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
   const ActiveDomainStore = useActiveDomainStore();
 
   const { setFontSize } = useCurrentUserTheme();
-
-  const originDestination = ActiveDomainStore.domainOrg.origin.destination !== ROUTE_EXTERNAL_ORGS.API_ID;
 
   const updateThemeFontSize = (fontSize: ThemeFontSize) => {
     setFontSize(fontSize);
@@ -67,43 +66,40 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
   ];
 
   const renderTopNavButtons = () => {
-    if (originDestination) {
-      return ActiveDomainStore.nav.dashboard.map((menuOption: { label: string; destination: string }) => {
-        const opt:
-          | {
-              ID?: string;
-              TITLE?: string;
-              URL?: string;
-              MAIN_MENU?: boolean;
-              API_ID?: string;
+    return ActiveDomainStore.nav.dashboard.map((menuOption: { label: string; destination: string }) => {
+      const opt:
+        | {
+            ID?: string;
+            TITLE?: string;
+            URL?: string;
+            MAIN_MENU?: boolean;
+            API_ID?: string;
+          }
+        | any = getRouteByApiId(menuOption.label !== 'Admin' ? menuOption.destination : 'ADMIN');
+
+      return opt.MAIN_MENU ? (
+        <StyledNavButton
+          id={`__${menuOption.destination}_Tab`}
+          key={menuOption.destination}
+          data-e2e={menuOption.destination}
+          selected={location.pathname === opt.URL}
+          onClick={() => {
+            let dest = `${opt.URL}?orgSid=${orgSid}`;
+            if (startDate) {
+              dest += `&startDate=${startDate}`;
             }
-          | any = getRouteByApiId(menuOption.label !== 'Admin' ? menuOption.destination : 'ADMIN');
+            if (endDate) {
+              dest += `&endDate=${endDate}`;
+            }
+            history.push(dest);
 
-        return opt.MAIN_MENU ? (
-          <StyledNavButton
-            id={`__${menuOption.destination}_Tab`}
-            key={menuOption.destination}
-            data-e2e={menuOption.destination}
-            selected={location.pathname === opt.URL}
-            onClick={() => {
-              let dest = `${opt.URL}?orgSid=${orgSid}`;
-              if (startDate) {
-                dest += `&startDate=${startDate}`;
-              }
-              if (endDate) {
-                dest += `&endDate=${endDate}`;
-              }
-              history.push(dest);
-
-              return null;
-            }}
-          >
-            {menuOption.label}
-          </StyledNavButton>
-        ) : null;
-      });
-    }
-    return null;
+            return null;
+          }}
+        >
+          {menuOption.label}
+        </StyledNavButton>
+      ) : null;
+    });
   };
 
   const renderOrgName = () => {
@@ -120,7 +116,7 @@ const AppHeader = ({ onMenuButtonClick }: AppHeaderProps): ReactElement => {
   };
 
   const showStyledNavIcon = () => {
-    if (originDestination) {
+    if (hasLeftMenu) {
       return (
         <NavButton id="__AdminNavBtn" onClick={onMenuButtonClick} data-e2e="AdminNavBtn">
           <StyledNavIcon iconName="GlobalNavButton" />
