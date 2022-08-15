@@ -30,6 +30,7 @@ const EnrollmentStatsTab = ({ packet }: EnrollmentStatsTabProps): ReactElement =
                   <Stack.Item>
                     <PlanInsuredStatsTable
                       header="Included Subscribers / Enrollments"
+                      caption="These are the numbers of Subscribers and Dependents sent in the inbound file for each Plan"
                       planInsuredStats={includedStats}
                     />
                   </Stack.Item>
@@ -38,6 +39,7 @@ const EnrollmentStatsTab = ({ packet }: EnrollmentStatsTabProps): ReactElement =
                   <Stack.Item>
                     <PlanInsuredStatsTable
                       header="Excluded Subscribers / Enrollments"
+                      caption="These are the numbers of Subscribers and Dependents included on the inbound file, but NOT included on the outbound file"
                       planInsuredStats={excludedPlanInsuredStat}
                     />
                   </Stack.Item>
@@ -48,6 +50,7 @@ const EnrollmentStatsTab = ({ packet }: EnrollmentStatsTabProps): ReactElement =
               <PivotItem headerText="Outbound">
                 <PlanInsuredStatsTable
                   header="Outbound Subscribers / Enrollments"
+                  caption="These are the numbers of Subscribers and Dependents included on the outbound file for each Plan"
                   planInsuredStats={outboundEnrollmentStats}
                 />
               </PivotItem>
@@ -56,6 +59,7 @@ const EnrollmentStatsTab = ({ packet }: EnrollmentStatsTabProps): ReactElement =
               <PivotItem headerText="Inbound">
                 <PlanInsuredStatsTable
                   header="Inbound Subscribers / Enrollments"
+                  caption="These are the numbers of Subscribers and Dependents sent in the inbound file for each Plan"
                   planInsuredStats={inboundEnrollmentStats}
                 />
               </PivotItem>

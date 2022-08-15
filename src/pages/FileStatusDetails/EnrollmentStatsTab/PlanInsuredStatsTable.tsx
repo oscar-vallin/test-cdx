@@ -35,12 +35,14 @@ const COLUMNS: IColumn[] = [
 
 type PlanInsuredStatsTableType = {
   header: string;
+  caption?: string;
   planInsuredStats: EnrollmentStatType[];
 };
 
-export const PlanInsuredStatsTable = ({ header, planInsuredStats }: PlanInsuredStatsTableType) => {
+export const PlanInsuredStatsTable = ({ header, caption, planInsuredStats }: PlanInsuredStatsTableType) => {
   return (
     <Card>
+      <Text variant="muted">{caption}</Text>
       <Stack horizontal tokens={{ childrenGap: 10, padding: 10 }}>
         <Stack.Item grow>
           <Text>{header}</Text>
