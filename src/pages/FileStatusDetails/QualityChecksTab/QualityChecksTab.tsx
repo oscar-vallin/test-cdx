@@ -189,10 +189,10 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
     if (details?.qualityChecks?.hasMoreEvents === true) {
       return (
         <>
-          <Spacing margin={{bottom: 'normal'}}/>
+          <Spacing margin={{ bottom: 'normal' }} />
           <MessageBar messageBarType={MessageBarType.warning}>
-            There are a large number of quality check messages. Not all messages are displayed here.
-            Please click the Download button to see the full list of quality check messages.
+            There are a large number of quality check messages. Not all messages are displayed here. Please click the
+            Download button to see the full list of quality check messages.
           </MessageBar>
         </>
       );

@@ -71,7 +71,7 @@ export const useWorkPacketColumns = (
     overflow: 'visible',
     textOverflow: 'unset !important',
     whiteSpace: 'pre-wrap !important',
-    wordWrap: 'wrap !important'
+    wordWrap: 'wrap !important',
   });
 
   const columnOptions: DataColumn[] = [
