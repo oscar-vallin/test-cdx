@@ -19,9 +19,13 @@ import { IconButton, Spinner, SpinnerSize } from '@fluentui/react';
 import { ButtonLink } from 'src/components/buttons';
 import { StyledEnvironment, StyledAlertTypes } from './XchangeAlertsPage.style';
 import { StyledQualifier } from '../XchangeDetails/XchangeDetailsPage.styles';
+import { XchangeAlertsPanel } from './XchangeAlertsPanel/XchangeAlertsPanel';
 
 const XchangeAlertsPage = () => {
   const { orgSid } = useOrgSid();
+  const [openAlertsPanel, setOpenAlertsPanel] = useState(false);
+  const [sid, setSid] = useState('');
+  const [refreshXchangeDetails, setRefreshXchangeDetails] = useState(false);
   const [xchangeProfileAlerts, { data: dataXchangeAlerts, loading: loadingXchangeAlerts }] = useQueryHandler(
     useXchangeProfileAlertsLazyQuery
   );
@@ -37,8 +41,9 @@ const XchangeAlertsPage = () => {
   };
 
   useEffect(() => {
+    setRefreshXchangeDetails(false);
     fetchData();
-  }, [useOrgSid]);
+  }, [refreshXchangeDetails]);
 
   useEffect(() => {
     if (!loadingXchangeAlerts && dataXchangeAlerts) {
@@ -110,7 +115,7 @@ const XchangeAlertsPage = () => {
     return null;
   };
 
-  const userPermissionsIcons = (commands: WebCommand[]) => {
+  const userPermissionsIcons = (commands: WebCommand[], currentSid: string) => {
     const _updateCmd = commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
     const _deleteCmd = commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Delete);
 
@@ -118,7 +123,14 @@ const XchangeAlertsPage = () => {
       <>
         {_updateCmd && (
           <Column lg="1">
-            <IconButton iconProps={{ iconName: 'EditSolid12' }} style={{ paddingBottom: '10px' }} />
+            <IconButton
+              iconProps={{ iconName: 'EditSolid12' }}
+              style={{ paddingBottom: '10px' }}
+              onClick={() => {
+                setSid(currentSid);
+                setOpenAlertsPanel(true);
+              }}
+            />
           </Column>
         )}
         {_deleteCmd && (
@@ -159,7 +171,7 @@ const XchangeAlertsPage = () => {
                           <StyledEnvironment>{globalAlerts?.filenameQualifier}</StyledEnvironment>
                         )}
                       </Column>
-                      {userPermissionsIcons(globalAlerts?.commands ?? [])}
+                      {userPermissionsIcons(globalAlerts?.commands ?? [], globalAlerts?.sid ?? '')}
                     </Row>
                   </Spacing>
                   {typesAlertsRender(globalAlerts?.alertTypes ?? [])}
@@ -168,10 +180,10 @@ const XchangeAlertsPage = () => {
                   </Spacing>
                   {globalAlerts?.subscribers?.map((subscriber) => (
                     <Row>
-                      <Column lg="4">
+                      <Column lg="6">
                         <ButtonLink>{subscriber.email}</ButtonLink>
                       </Column>
-                      <Column lg="4">
+                      <Column lg="6">
                         <ButtonLink>{subscriber.firstNm}</ButtonLink>
                       </Column>
                     </Row>
@@ -193,7 +205,7 @@ const XchangeAlertsPage = () => {
                       <Column lg="3">
                         <ButtonLink>{individualAlerts.coreFilename}</ButtonLink>
                       </Column>
-                      {userPermissionsIcons(individualAlerts?.commands ?? [])}
+                      {userPermissionsIcons(individualAlerts?.commands ?? [], individualAlerts?.sid ?? '')}
                     </Row>
                   </Spacing>
                   {filenameQualifier(individualAlerts.filenameQualifier ?? '')}
@@ -203,10 +215,10 @@ const XchangeAlertsPage = () => {
                   </Spacing>
                   {individualAlerts?.subscribers?.map((subscriber, index) => (
                     <Row key={index}>
-                      <Column lg="3">
+                      <Column lg="6">
                         <ButtonLink>{subscriber.firstNm}</ButtonLink>
                       </Column>
-                      <Column lg="4">
+                      <Column lg="6">
                         <ButtonLink>{subscriber.email}</ButtonLink>
                       </Column>
                     </Row>
@@ -232,6 +244,12 @@ const XchangeAlertsPage = () => {
         </Container>
       </PageHeader>
       <PageBody>{renderAlerts()}</PageBody>
+      <XchangeAlertsPanel
+        isPanelOpen={openAlertsPanel}
+        closePanel={setOpenAlertsPanel}
+        sid={sid}
+        refreshXchangeDetails={setRefreshXchangeDetails}
+      />
     </LayoutDashboard>
   );
 };
