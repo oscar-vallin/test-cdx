@@ -1,11 +1,11 @@
-import { ChoiceGroup, IconButton } from '@fluentui/react';
-import { ButtonLink } from 'src/components/buttons';
+import { ChoiceGroup } from '@fluentui/react';
 import { UIInputText } from 'src/components/inputs/InputText';
-import { UIInputTextArea } from 'src/components/inputs/InputTextArea';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { Text } from 'src/components/typography';
+
 import { TestFileStrategy } from 'src/data/services/graphql';
-import { StyledSelectedFile } from 'src/pages/Admin/FtpTest/FtpTestPage.styles';
+import { UploadFile } from './UploadFile/UploadFile';
+import { CancelTestFile } from './CancelTestFile/CancelTestFile';
+import { GenerateFiles } from './GenerateFiles/GenerateFiles';
 
 const SendTestFile = ({
   genTestFileForm,
@@ -44,25 +44,9 @@ const SendTestFile = ({
                 return (
                   <Spacing margin={{ left: 'double' }}>
                     {testFile ? (
-                      <StyledSelectedFile>
-                        <Text variant="normal">{testFile.name}</Text>
-                        <IconButton iconProps={{ iconName: 'Cancel' }} onClick={() => setTestFile(undefined)} />
-                      </StyledSelectedFile>
+                      <CancelTestFile setTestFile={setTestFile} testFile={testFile} />
                     ) : (
-                      <ButtonLink
-                        id="__Upload_File"
-                        underline
-                        target="_new"
-                        onClick={() => {
-                          inputFileRef.current.value = '';
-                          inputFileRef.current.click();
-                        }}
-                        disabled={!props?.checked}
-                        title="Upload File"
-                        style={{ cursor: 'pointer' }}
-                      >
-                        Upload File...
-                      </ButtonLink>
+                      <UploadFile props={props} inputFileRef={inputFileRef} />
                     )}
                   </Spacing>
                 );
@@ -97,32 +81,13 @@ const SendTestFile = ({
                   <>
                     {render!(props)}
                     {props?.checked && (
-                      <>
-                        {genTestFileForm?.fileName?.visible && (
-                          <Spacing margin={{ bottom: 'normal', top: 'normal' }}>
-                            <UIInputText
-                              id="fileName"
-                              uiField={genTestFileForm?.fileName}
-                              value={vendorFileName}
-                              onChange={(event, newValue) => setVendorFileName(newValue ?? '')}
-                            />
-                          </Spacing>
-                        )}
-                        {genTestFileForm?.fileBody?.visible && (
-                          <Spacing margin={{ bottom: 'normal' }}>
-                            <UIInputTextArea
-                              id="textFileContent"
-                              uiField={genTestFileForm?.fileBody}
-                              value={textFileContent}
-                              multiline={true}
-                              onChange={(event, newValue: any) => setTextFileContent(newValue ?? '')}
-                              placeholder="Put the text you want in the file here, if you leave blank the text 'Connection Test' will be used for the file's contents."
-                              resizable={false}
-                              rows={10}
-                            />
-                          </Spacing>
-                        )}
-                      </>
+                      <GenerateFiles
+                        genTestFileForm={genTestFileForm}
+                        vendorFileName={vendorFileName}
+                        setVendorFileName={setVendorFileName}
+                        textFileContent={textFileContent}
+                        setTextFileContent={setTextFileContent}
+                      />
                     )}
                   </>
                 );
