@@ -6,6 +6,8 @@ import {
   DetailsListLayoutMode,
   ICheckboxProps,
   IColumn,
+  MessageBar,
+  MessageBarType,
   SelectionMode,
   Stack,
 } from '@fluentui/react';
@@ -183,6 +185,21 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
 
   const renderCheckboxLabel = (props?: ICheckboxProps) => <Text>{props?.label}</Text>;
 
+  const renderQualityChecksTruncation = () => {
+    if (details?.qualityChecks?.hasMoreEvents === true) {
+      return (
+        <>
+          <Spacing margin={{bottom: 'normal'}}/>
+          <MessageBar messageBarType={MessageBarType.warning}>
+            There are a large number of quality check messages. Not all messages are displayed here.
+            Please click the Download button to see the full list of quality check messages.
+          </MessageBar>
+        </>
+      );
+    }
+    return null;
+  };
+
   const renderBody = () => (
     <Spacing padding="normal">
       {(hasQualityCheckStats || hasErrors) && (
@@ -344,6 +361,7 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
             onRenderItemColumn={onRenderItemColumn}
             isHeaderVisible
           />
+          {renderQualityChecksTruncation()}
         </Card>
       </FormRow>
     </Spacing>
