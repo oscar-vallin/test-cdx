@@ -1,5 +1,5 @@
 import React from 'react';
-import { IColumn, Link } from '@fluentui/react';
+import { IColumn, Link, mergeStyles } from '@fluentui/react';
 import { format } from 'date-fns';
 import {
   Maybe,
@@ -67,6 +67,13 @@ export const useWorkPacketColumns = (
     return <span>{filename}</span>;
   };
 
+  const columnWrapStyle = mergeStyles({
+    overflow: 'visible',
+    textOverflow: 'unset !important',
+    whiteSpace: 'pre-wrap !important',
+    wordWrap: 'wrap !important'
+  });
+
   const columnOptions: DataColumn[] = [
     {
       key: 'timestamp',
@@ -124,10 +131,12 @@ export const useWorkPacketColumns = (
     {
       key: 'deliveredOn',
       name: 'Delivered On',
-      className: 'Datetime',
+      className: columnWrapStyle,
+      headerClassName: columnWrapStyle,
       targetWidthProportion: 1,
-      minWidth: 140,
+      minWidth: 80,
       maxWidth: 150,
+      flexGrow: 1,
       fieldName: 'deliveredOn',
       isSorted: true,
       isSortedDescending: true,
@@ -172,9 +181,11 @@ export const useWorkPacketColumns = (
     {
       key: 'vendorId',
       name: 'Vendor',
+      className: columnWrapStyle,
       targetWidthProportion: 1,
-      minWidth: 80,
+      minWidth: 60,
       maxWidth: 150,
+      flexGrow: 1,
       fieldName: 'vendorId',
       sortAscendingAriaLabel: 'Sorted A to Z',
       sortDescendingAriaLabel: 'Sorted Z to A',
@@ -187,9 +198,11 @@ export const useWorkPacketColumns = (
     {
       key: 'planSponsorId',
       name: 'Sponsor',
+      className: columnWrapStyle,
       targetWidthProportion: 1,
-      minWidth: 80,
+      minWidth: 60,
       maxWidth: 120,
+      flexGrow: 1,
       fieldName: 'planSponsorId',
       sortAscendingAriaLabel: 'Sorted A to Z',
       sortDescendingAriaLabel: 'Sorted Z to A',
@@ -203,8 +216,9 @@ export const useWorkPacketColumns = (
       key: 'orgId',
       name: 'Sponsor',
       targetWidthProportion: 1,
-      minWidth: 80,
+      minWidth: 60,
       maxWidth: 120,
+      flexGrow: 1,
       fieldName: 'orgId',
       sortAscendingAriaLabel: 'Sorted A to Z',
       sortDescendingAriaLabel: 'Sorted Z to A',
@@ -216,10 +230,13 @@ export const useWorkPacketColumns = (
     },
     {
       key: 'inboundFilename',
-      name: 'Extract Name',
+      name: 'File In',
+      className: columnWrapStyle,
+      headerClassName: columnWrapStyle,
       targetWidthProportion: 2,
       minWidth: 100,
-      maxWidth: 450,
+      maxWidth: 400,
+      flexGrow: 2,
       fieldName: 'inboundFilename',
       sortAscendingAriaLabel: 'Sorted A to Z',
       sortDescendingAriaLabel: 'Sorted Z to A',
@@ -231,10 +248,13 @@ export const useWorkPacketColumns = (
     },
     {
       key: 'outboundFilename',
-      name: 'Vendor File',
+      name: 'File Out',
+      className: columnWrapStyle,
+      headerClassName: columnWrapStyle,
       targetWidthProportion: 2,
       minWidth: 100,
-      maxWidth: 500,
+      maxWidth: 400,
+      flexGrow: 2,
       fieldName: 'outboundFilename',
       sortAscendingAriaLabel: 'Sorted A to Z',
       sortDescendingAriaLabel: 'Sorted Z to A',
@@ -246,10 +266,13 @@ export const useWorkPacketColumns = (
     },
     {
       key: 'outboundFilesize',
-      name: 'Outbound File Size',
+      name: 'File Out Size',
+      className: columnWrapStyle,
+      headerClassName: columnWrapStyle,
       targetWidthProportion: 1,
-      minWidth: 80,
+      minWidth: 60,
       maxWidth: 120,
+      flexGrow: 1,
       fieldName: 'outboundFilesize',
       sortAscendingAriaLabel: 'Sorted Smallest to Largest',
       sortDescendingAriaLabel: 'Sorted Largest to Smallest',
@@ -262,9 +285,11 @@ export const useWorkPacketColumns = (
     {
       key: 'specId',
       name: 'Spec',
+      className: columnWrapStyle,
       targetWidthProportion: 1,
-      minWidth: 80,
+      minWidth: 60,
       maxWidth: 120,
+      flexGrow: 1,
       fieldName: 'specId',
       sortAscendingAriaLabel: 'Sorted A to Z',
       sortDescendingAriaLabel: 'Sorted Z to A',
@@ -277,9 +302,11 @@ export const useWorkPacketColumns = (
     {
       key: 'implementation',
       name: 'Implementation',
+      className: columnWrapStyle,
       targetWidthProportion: 1,
-      minWidth: 80,
+      minWidth: 60,
       maxWidth: 120,
+      flexGrow: 1,
       fieldName: 'implementation',
       sortAscendingAriaLabel: 'Sorted A to Z',
       sortDescendingAriaLabel: 'Sorted Z to A',
@@ -292,9 +319,12 @@ export const useWorkPacketColumns = (
     {
       key: 'billingCount',
       name: 'Billing Unit Count',
+      className: columnWrapStyle,
+      headerClassName: columnWrapStyle,
       targetWidthProportion: 1,
-      minWidth: 80,
+      minWidth: 40,
       maxWidth: 120,
+      flexGrow: 1,
       fieldName: 'billingCount',
       sortAscendingAriaLabel: 'Sorted Smallest to Largest',
       sortDescendingAriaLabel: 'Sorted Largest to Smallest',
@@ -386,10 +416,11 @@ export const useWorkPacketColumns = (
     },
     {
       key: 'inboundFilename',
-      name: 'Client File',
+      name: 'File In',
       targetWidthProportion: 1,
       minWidth: 100,
       maxWidth: 300,
+      flexGrow: 2,
       fieldName: 'inboundFilename',
       isSorted: false,
       isSortedDescending: false,
@@ -404,10 +435,11 @@ export const useWorkPacketColumns = (
     },
     {
       key: 'vendorFilename',
-      name: 'Vendor File',
+      name: 'File Out',
       targetWidthProportion: 1,
       minWidth: 100,
       maxWidth: 300,
+      flexGrow: 2,
       fieldName: 'vendorFilename',
       isSorted: false,
       isSortedDescending: false,
@@ -423,9 +455,12 @@ export const useWorkPacketColumns = (
     {
       key: 'totalRecords',
       name: 'Total Records',
+      className: columnWrapStyle,
+      headerClassName: columnWrapStyle,
       targetWidthProportion: 1,
-      minWidth: 80,
+      minWidth: 40,
       maxWidth: 120,
+      flexGrow: 1,
       fieldName: 'totalRecords',
       sortAscendingAriaLabel: 'Sorted Smallest to Largest',
       sortDescendingAriaLabel: 'Sorted Largest to Smallest',
@@ -438,9 +473,12 @@ export const useWorkPacketColumns = (
     {
       key: 'extractType',
       name: 'Feed',
+      className: columnWrapStyle,
+      headerClassName: columnWrapStyle,
       targetWidthProportion: 1,
-      minWidth: 80,
+      minWidth: 40,
       maxWidth: 120,
+      flexGrow: 1,
       fieldName: 'extractType',
       sortAscendingAriaLabel: 'Sorted A to Z',
       sortDescendingAriaLabel: 'Sorted Z to A',
@@ -453,9 +491,12 @@ export const useWorkPacketColumns = (
     {
       key: 'extractVersion',
       name: 'Version',
+      className: columnWrapStyle,
+      headerClassName: columnWrapStyle,
       targetWidthProportion: 1,
-      minWidth: 80,
+      minWidth: 40,
       maxWidth: 120,
+      flexGrow: 1,
       fieldName: 'extractVersion',
       sortAscendingAriaLabel: 'Sorted A to Z',
       sortDescendingAriaLabel: 'Sorted Z to A',

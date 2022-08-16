@@ -37,7 +37,7 @@ export const ApolloContextProvider = ({ bypassLoading, children }: ApolloContext
   const { csrfTokenRetrieved } = useWatchCSRFToken();
 
   useEffect(() => {
-    callCSRFController();
+    callCSRFController().then();
   }, []);
 
   const authLink = setContext((_, { headers }) => {
