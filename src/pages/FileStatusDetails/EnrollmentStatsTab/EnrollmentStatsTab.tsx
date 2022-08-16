@@ -30,7 +30,7 @@ const EnrollmentStatsTab = ({ packet }: EnrollmentStatsTabProps): ReactElement =
                   <Stack.Item>
                     <PlanInsuredStatsTable
                       header="Included Subscribers / Enrollments"
-                      caption="These are the numbers of Subscribers and Dependents sent in the inbound file for each Plan"
+                      caption="Counts for the enrollments that were included in the outbound vendor file."
                       planInsuredStats={includedStats}
                     />
                   </Stack.Item>
@@ -39,7 +39,7 @@ const EnrollmentStatsTab = ({ packet }: EnrollmentStatsTabProps): ReactElement =
                   <Stack.Item>
                     <PlanInsuredStatsTable
                       header="Excluded Subscribers / Enrollments"
-                      caption="These are the numbers of Subscribers and Dependents included on the inbound file, but NOT included on the outbound file"
+                      caption="Counts for enrollments that were on the inbound file but were not included in the outbound vendor file."
                       planInsuredStats={excludedPlanInsuredStat}
                     />
                   </Stack.Item>
@@ -50,7 +50,7 @@ const EnrollmentStatsTab = ({ packet }: EnrollmentStatsTabProps): ReactElement =
               <PivotItem headerText="Outbound">
                 <PlanInsuredStatsTable
                   header="Outbound Subscribers / Enrollments"
-                  caption="These are the numbers of Subscribers and Dependents included on the outbound file for each Plan"
+                  caption="Counts for the enrollments that were included in the outbound vendor file."
                   planInsuredStats={outboundEnrollmentStats}
                 />
               </PivotItem>
@@ -59,7 +59,7 @@ const EnrollmentStatsTab = ({ packet }: EnrollmentStatsTabProps): ReactElement =
               <PivotItem headerText="Inbound">
                 <PlanInsuredStatsTable
                   header="Inbound Subscribers / Enrollments"
-                  caption="These are the numbers of Subscribers and Dependents sent in the inbound file for each Plan"
+                  caption="Counts for the enrollments that were on the inbound file."
                   planInsuredStats={inboundEnrollmentStats}
                 />
               </PivotItem>
