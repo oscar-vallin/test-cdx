@@ -140,8 +140,8 @@ const XchangeDetailsPage = () => {
                   ))}
                 </Row>
                 <Row>
-                  <StyledButtonAction fontSize={18} id="__Add_FilenameQualifer">
-                    + Add Filename Qualifier
+                  <StyledButtonAction fontSize={18} id="__Add_FilenameQualifer" iconName="add">
+                    Add Filename Qualifier
                   </StyledButtonAction>
                 </Row>
               </Container>
@@ -407,9 +407,10 @@ const XchangeDetailsPage = () => {
                   <StyledProcessValueText variant="large">
                     {process.vendor.value?.name}-{process.specId.value}
                   </StyledProcessValueText>
-                  <StyledButtonAction fontSize={28} id="__Add_FileProcess">
-                    <span style={{ color: '#0078D4', fontSize: '22px' }}>+</span>{' '}
-                    <Text variant="large">Add File Process</Text>
+                  <StyledButtonAction fontSize={28} id="__Add_FileProcess" iconName="add">
+                    <Text variant="large" style={{ fontWeight: 'bold' }}>
+                      Add File Process
+                    </Text>
                   </StyledButtonAction>
                 </StyledColumTabs>
               ))}

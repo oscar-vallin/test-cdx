@@ -9,25 +9,45 @@ import { useOrgSid } from 'src/hooks/useOrgSid';
 import {
   useXchangeProfileAlertsLazyQuery,
   XchangeProfileAlerts,
+  useDeleteXchangeProfileAlertMutation,
   CdxWebCommandType,
   WebCommand,
 } from 'src/data/services/graphql';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
+import { useNotification } from 'src/hooks/useNotification';
 import { PageBody } from 'src/components/layouts/Column';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { IconButton, Spinner, SpinnerSize } from '@fluentui/react';
+import { IconButton, Spinner, SpinnerSize, Stack } from '@fluentui/react';
 import { ButtonLink } from 'src/components/buttons';
-import { StyledEnvironment, StyledAlertTypes } from './XchangeAlertsPage.style';
+import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
+import { StyledEnvironment, StyledAlertTypes, StyledButtonAction } from './XchangeAlertsPage.style';
 import { StyledQualifier } from '../XchangeDetails/XchangeDetailsPage.styles';
 import { XchangeAlertsPanel } from './XchangeAlertsPanel/XchangeAlertsPanel';
 
+const defaultDialogProps: DialogYesNoProps = {
+  id: '__XchangeAlert_Dlg',
+  open: false,
+  title: '',
+  message: '',
+  labelYes: 'Yes',
+  labelNo: 'No',
+  highlightNo: true,
+  highlightYes: false,
+};
+
 const XchangeAlertsPage = () => {
   const { orgSid } = useOrgSid();
+  const Toast = useNotification();
   const [openAlertsPanel, setOpenAlertsPanel] = useState(false);
   const [sid, setSid] = useState('');
   const [refreshXchangeDetails, setRefreshXchangeDetails] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
+  const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
   const [xchangeProfileAlerts, { data: dataXchangeAlerts, loading: loadingXchangeAlerts }] = useQueryHandler(
     useXchangeProfileAlertsLazyQuery
+  );
+  const [deleteXchangeProfileAlerts, { data: deleteProfileData, loading: deleteProfileLoading }] = useQueryHandler(
+    useDeleteXchangeProfileAlertMutation
   );
 
   const [xchangeAlerts, setXchangeAlerts] = useState<XchangeProfileAlerts>();
@@ -50,6 +70,13 @@ const XchangeAlertsPage = () => {
       setXchangeAlerts(dataXchangeAlerts.xchangeProfileAlerts);
     }
   }, [dataXchangeAlerts, loadingXchangeAlerts]);
+
+  useEffect(() => {
+    if (!deleteProfileLoading && deleteProfileData) {
+      setRefreshXchangeDetails(true);
+      Toast.success({ text: 'Alert has been deleted' });
+    }
+  }, [deleteProfileData, deleteProfileLoading]);
 
   const typesAlertsRender = (alertTypes: string[]) => {
     const alerts = alertTypes ?? [];
@@ -115,6 +142,30 @@ const XchangeAlertsPage = () => {
     return null;
   };
 
+  const hideDialog = () => {
+    setShowDialog(false);
+  };
+
+  const showUnsavedChangesDialog = (currentSid: string) => {
+    const updatedDialog = { ...defaultDialogProps };
+    updatedDialog.message = 'Are you sure you want to delete this Alert?';
+
+    updatedDialog.onYes = () => {
+      hideDialog();
+      deleteXchangeProfileAlerts({
+        variables: {
+          sid: currentSid,
+        },
+      });
+    };
+    updatedDialog.onNo = () => {
+      hideDialog();
+    };
+
+    setDialogProps(updatedDialog);
+    setShowDialog(true);
+  };
+
   const userPermissionsIcons = (commands: WebCommand[], currentSid: string) => {
     const _updateCmd = commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
     const _deleteCmd = commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Delete);
@@ -135,7 +186,11 @@ const XchangeAlertsPage = () => {
         )}
         {_deleteCmd && (
           <Column lg="1">
-            <IconButton iconProps={{ iconName: 'Trash' }} style={{ paddingBottom: '10px' }} />
+            <IconButton
+              iconProps={{ iconName: 'Trash' }}
+              style={{ paddingBottom: '10px' }}
+              onClick={() => showUnsavedChangesDialog(currentSid)}
+            />
           </Column>
         )}
       </>
@@ -156,7 +211,19 @@ const XchangeAlertsPage = () => {
         <Spacing margin={{ top: 'double' }}>
           <Row>
             <Column lg="6">
-              <Text variant="bold">Alerts on all Xchanges</Text>
+              <Stack horizontal horizontalAlign="space-between" style={{ width: '100%' }}>
+                <Text variant="bold">Alerts on all Xchanges</Text>
+                <StyledButtonAction
+                  id="__AddAlert"
+                  iconName="add"
+                  onClick={() => {
+                    setSid('');
+                    setOpenAlertsPanel(true);
+                  }}
+                >
+                  Add Alert
+                </StyledButtonAction>
+              </Stack>
               <Spacing margin={{ top: 'double' }}>
                 {xchangeAlerts?.globalXchangeAlerts && xchangeAlerts?.globalXchangeAlerts.length <= 0 && (
                   <Text>There are no global alerts configured</Text>
@@ -178,16 +245,18 @@ const XchangeAlertsPage = () => {
                   <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                     <Text variant="bold">Suscribers:</Text>
                   </Spacing>
-                  {globalAlerts?.subscribers?.map((subscriber) => (
-                    <Row>
-                      <Column lg="6">
-                        <ButtonLink>{subscriber.email}</ButtonLink>
-                      </Column>
-                      <Column lg="6">
-                        <ButtonLink>{subscriber.firstNm}</ButtonLink>
-                      </Column>
-                    </Row>
-                  ))}
+                  <Spacing margin={{ bottom: 'double' }}>
+                    {globalAlerts?.subscribers?.map((subscriber) => (
+                      <Row>
+                        <Column lg="6">
+                          <ButtonLink>{subscriber.email}</ButtonLink>
+                        </Column>
+                        <Column lg="6">
+                          <ButtonLink>{subscriber.firstNm}</ButtonLink>
+                        </Column>
+                      </Row>
+                    ))}
+                  </Spacing>
                 </>
               ))}
             </Column>
@@ -250,6 +319,7 @@ const XchangeAlertsPage = () => {
         sid={sid}
         refreshXchangeDetails={setRefreshXchangeDetails}
       />
+      <DialogYesNo {...dialogProps} open={showDialog} />
     </LayoutDashboard>
   );
 };

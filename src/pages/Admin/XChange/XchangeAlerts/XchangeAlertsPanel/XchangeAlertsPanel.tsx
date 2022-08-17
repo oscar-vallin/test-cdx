@@ -15,6 +15,9 @@ import {
   useXchangeProfileAlertFormLazyQuery,
   XchangeProfileAlertForm,
   useUpdateXchangeProfileAlertMutation,
+  useCreateXchangeProfileAlertMutation,
+  WebCommand,
+  CdxWebCommandType,
 } from 'src/data/services/graphql';
 import { PanelBody, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
 import { useEffect, useState } from 'react';
@@ -59,6 +62,8 @@ const XchangeAlertsPanel = ({ isPanelOpen, closePanel, sid, refreshXchangeDetail
   const [addSubscriberModal, setAddSubscriberModal] = useState(false);
   const [firstSubscribers, setFirstSubscribers] = useState(0);
   const [totalSubscribers, setTotalSubscribers] = useState<SubscriberOptionProps[]>([]);
+  const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
+  const [createCmd, setCreateCmd] = useState<WebCommand | null>();
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
@@ -67,6 +72,9 @@ const XchangeAlertsPanel = ({ isPanelOpen, closePanel, sid, refreshXchangeDetail
   );
   const [updateXchangeProfileAlert, { data: updateAlertdata, loading: updateAlertLoading, error: updateAlertError }] =
     useQueryHandler(useUpdateXchangeProfileAlertMutation);
+
+  const [createXchangeProfileAlert, { data: createAlertData, loading: createAlertLoading, error: createAlertError }] =
+    useQueryHandler(useCreateXchangeProfileAlertMutation);
 
   const fetchDataAlertForm = () => {
     xchangeAlertForm({
@@ -79,15 +87,29 @@ const XchangeAlertsPanel = ({ isPanelOpen, closePanel, sid, refreshXchangeDetail
 
   const updateProfileAlert = () => {
     const subscriberSids = totalSubscribers.map((subSids) => subSids.sid);
-    updateXchangeProfileAlert({
-      variables: {
-        alertInput: {
-          sid,
-          alertTypes: alertTypesValue,
-          subscriberSids,
+    if (updateCmd) {
+      updateXchangeProfileAlert({
+        variables: {
+          alertInput: {
+            sid,
+            alertTypes: alertTypesValue,
+            subscriberSids,
+          },
         },
-      },
-    });
+      });
+    }
+
+    if (createCmd) {
+      createXchangeProfileAlert({
+        variables: {
+          alertInput: {
+            orgSid,
+            alertTypes: alertTypesValue,
+            subscriberSids,
+          },
+        },
+      });
+    }
   };
 
   const subscribersList = (subscribers) => {
@@ -101,7 +123,7 @@ const XchangeAlertsPanel = ({ isPanelOpen, closePanel, sid, refreshXchangeDetail
       sub = {};
     }
     setFirstSubscribers(showSubs.length);
-    setTotalSubscribers(showSubs);
+    setTotalSubscribers((prevValues) => prevValues.concat(showSubs));
   };
 
   const removeSubscriber = (removeBySid: string) => {
@@ -122,6 +144,7 @@ const XchangeAlertsPanel = ({ isPanelOpen, closePanel, sid, refreshXchangeDetail
     updatedDialog.onYes = () => {
       hideDialog();
       closePanel(false);
+      setTotalSubscribers([]);
       setUnsavedChanges(false);
     };
     updatedDialog.onClose = () => {
@@ -135,6 +158,7 @@ const XchangeAlertsPanel = ({ isPanelOpen, closePanel, sid, refreshXchangeDetail
     if (unsavedChanges || firstSubscribers < totalSubscribers.length) {
       showUnsavedChangesDialog();
     } else {
+      setTotalSubscribers([]);
       closePanel(false);
     }
   };
@@ -149,8 +173,16 @@ const XchangeAlertsPanel = ({ isPanelOpen, closePanel, sid, refreshXchangeDetail
     if (!alertFormLoading && alertFormData) {
       const { xchangeProfileAlertForm } = alertFormData;
       setXchangeProfileAlert(xchangeProfileAlertForm);
-      if (xchangeProfileAlertForm.subscribers.value.length > 0) {
+      if (xchangeProfileAlertForm.subscribers.value && xchangeProfileAlertForm.subscribers.value.length > 0) {
         subscribersList(xchangeProfileAlertForm.subscribers.value);
+      }
+
+      if (xchangeProfileAlertForm?.commands) {
+        const pageCommands = xchangeProfileAlertForm?.commands;
+        const _updateCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
+        setUpdateCmd(_updateCmd);
+        const _createCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
+        setCreateCmd(_createCmd);
       }
     }
   }, [alertFormData, alertFormLoading]);
@@ -166,6 +198,18 @@ const XchangeAlertsPanel = ({ isPanelOpen, closePanel, sid, refreshXchangeDetail
       Toast.error({ text: 'There was an error to updated alert' });
     }
   }, [updateAlertdata, updateAlertLoading, updateAlertError]);
+
+  useEffect(() => {
+    if (!createAlertLoading && createAlertData) {
+      refreshXchangeDetails(true);
+      Toast.success({ text: 'Alert Added' });
+      closePanel(false);
+    }
+
+    if (!createAlertLoading && createAlertError) {
+      Toast.error({ text: 'There was an error to add alert' });
+    }
+  }, [createAlertData, createAlertLoading, createAlertError]);
 
   const onRenderAction = (item: any) => {
     return <IconButton iconProps={{ iconName: 'Trash' }} onClick={() => removeSubscriber(item.sid)} />;
@@ -256,7 +300,9 @@ const XchangeAlertsPanel = ({ isPanelOpen, closePanel, sid, refreshXchangeDetail
               />
             </Column>
           </Row>
-          <ButtonAction onClick={() => setAddSubscriberModal(true)}>+ Add Subscriber</ButtonAction>
+          <ButtonAction onClick={() => setAddSubscriberModal(true)} iconName="add">
+            Add Subscriber
+          </ButtonAction>
           <Spacing margin={{ top: 'normal' }}>
             <PrimaryButton id="__Update__Alert" iconProps={{ iconName: 'Save' }} onClick={() => updateProfileAlert()}>
               Save
@@ -271,7 +317,7 @@ const XchangeAlertsPanel = ({ isPanelOpen, closePanel, sid, refreshXchangeDetail
     <ThemedPanel
       closeButtonAriaLabel="Close"
       type={PanelType.medium}
-      headerText="Update Alert"
+      headerText={updateCmd ? 'Update Alert' : 'Create Alert'}
       isOpen={isPanelOpen}
       onDismiss={() => {
         onPanelClose();
@@ -281,7 +327,6 @@ const XchangeAlertsPanel = ({ isPanelOpen, closePanel, sid, refreshXchangeDetail
       {addSubscriberModal && (
         <AddSubscriberModal
           isOpen={setAddSubscriberModal}
-          open={addSubscriberModal}
           orgSid={orgSid}
           currentSubscribers={totalSubscribers}
           addSubscribers={setTotalSubscribers}

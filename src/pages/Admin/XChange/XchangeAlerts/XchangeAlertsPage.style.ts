@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { ButtonAction } from 'src/components/buttons';
 
 export const StyledEnvironment = styled.div`
   background-color: ${({ theme }) => theme.colors.white};
@@ -35,3 +36,8 @@ export const StyledAlertTypes = styled.div<StyledAlertTypesProps>`
 type StyledAlertTypesProps = {
   width: string;
 };
+
+export const StyledButtonAction = styled(ButtonAction)`
+  color: black;
+  padding-bottom: 20px;
+`;

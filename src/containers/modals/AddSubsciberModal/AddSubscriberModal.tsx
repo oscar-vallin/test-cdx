@@ -19,20 +19,19 @@ import { SubscriberOptionProps } from 'src/pages/Admin/XChange/XchangeAlerts/Xch
 import { StyledSubsOptions } from './AddSubscriberModal.styles';
 
 const defaultProps = {
-  open: false,
   isOpen: (data: boolean) => {},
   orgSid: '',
+  addSubscribers: (data: SubscriberOptionProps[]) => {},
 };
 
 type AddSubscriberModalProps = {
-  open: boolean;
   isOpen: (data: boolean) => void;
   orgSid: string;
   currentSubscribers: SubscriberOptionProps[];
   addSubscribers: (data: SubscriberOptionProps[]) => void;
 } & typeof defaultProps;
 
-const AddSubscriberModal = ({ open, isOpen, orgSid, addSubscribers, currentSubscribers }: AddSubscriberModalProps) => {
+const AddSubscriberModal = ({ isOpen, orgSid, addSubscribers, currentSubscribers }: AddSubscriberModalProps) => {
   const [userQuickSearch, { data: quickSearchData, loading: quickSearchLoading }] = useUserQuickSearchLazyQuery();
   const [createUser, { data: createUserData, loading: createUserLoading }] = useCreateUserMutation();
   const [addSubscriber, setAddSubscriber] = useState(false);
@@ -72,6 +71,7 @@ const AddSubscriberModal = ({ open, isOpen, orgSid, addSubscribers, currentSubsc
       return subscribers.map((subscriber, index) => (
         <Spacing margin={{ left: 'normal', top: 'normal', bottom: 'normal' }} key={index}>
           <Text
+            id="__QuickSearch__Users"
             style={{ cursor: 'pointer' }}
             onClick={() => {
               setCurrentSubscriber(subscriber.email);
@@ -93,7 +93,7 @@ const AddSubscriberModal = ({ open, isOpen, orgSid, addSubscribers, currentSubsc
         <Spacing margin={{ left: 'normal', top: 'normal', bottom: 'normal' }}>
           <Stack>
             <Text>No matching account found</Text>
-            <ButtonLink style={{ paddingTop: '10px' }} onClick={() => setAddNewAccount(true)}>
+            <ButtonLink id="__Add_NewAccount" style={{ paddingTop: '10px' }} onClick={() => setAddNewAccount(true)}>
               Add a new account
             </ButtonLink>
           </Stack>
@@ -130,7 +130,7 @@ const AddSubscriberModal = ({ open, isOpen, orgSid, addSubscribers, currentSubsc
           {addNewAccount && (
             <>
               <InputText
-                id="firstNameSubscriber"
+                id="firstNmSubscriber"
                 type="text"
                 value={firstNm}
                 label="First Name"
@@ -138,7 +138,7 @@ const AddSubscriberModal = ({ open, isOpen, orgSid, addSubscribers, currentSubsc
                 onChange={(event, newValue) => setFirstNm(newValue ?? '')}
               />
               <InputText
-                id="text"
+                id="lastNmSubscriber"
                 type="text"
                 value={lastNm}
                 label="Last Name"
@@ -146,7 +146,7 @@ const AddSubscriberModal = ({ open, isOpen, orgSid, addSubscribers, currentSubsc
                 onChange={(event, newValue) => setLastNm(newValue ?? '')}
               />
               <InputText
-                id="text"
+                id="emailSubscriber"
                 type="email"
                 value={email}
                 label="Username and Email Address"
@@ -194,9 +194,8 @@ const AddSubscriberModal = ({ open, isOpen, orgSid, addSubscribers, currentSubsc
     return (
       <>
         <PrimaryButton
-          id="__AddSubscriber_test_button"
+          id="__AddSubscriber_add_button"
           text="Add"
-          iconProps={{ iconName: 'Add' }}
           onClick={() => {
             if (addSubscriber) {
               addNewUser();
@@ -205,8 +204,8 @@ const AddSubscriberModal = ({ open, isOpen, orgSid, addSubscribers, currentSubsc
           }}
         />
         <DefaultButton
-          style={{ marginLeft: '10px' }}
           id="__AddSubscriber_cancel_button"
+          style={{ marginLeft: '10px' }}
           text="Cancel"
           onClick={() => isOpen(false)}
         />
