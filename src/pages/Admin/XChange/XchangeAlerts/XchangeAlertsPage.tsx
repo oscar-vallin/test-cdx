@@ -15,9 +15,9 @@ import {
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { PageBody } from 'src/components/layouts/Column';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { IconButton, Spinner, SpinnerSize } from '@fluentui/react';
+import { IconButton, Spinner, SpinnerSize, Stack } from '@fluentui/react';
 import { ButtonLink } from 'src/components/buttons';
-import { StyledEnvironment, StyledAlertTypes } from './XchangeAlertsPage.style';
+import { StyledEnvironment, StyledAlertTypes, StyledButtonAction } from './XchangeAlertsPage.style';
 import { StyledQualifier } from '../XchangeDetails/XchangeDetailsPage.styles';
 import { XchangeAlertsPanel } from './XchangeAlertsPanel/XchangeAlertsPanel';
 
@@ -156,7 +156,19 @@ const XchangeAlertsPage = () => {
         <Spacing margin={{ top: 'double' }}>
           <Row>
             <Column lg="6">
-              <Text variant="bold">Alerts on all Xchanges</Text>
+              <Stack horizontal horizontalAlign="space-between" style={{ width: '100%' }}>
+                <Text variant="bold">Alerts on all Xchanges</Text>
+                <StyledButtonAction
+                  id="__AddAlert"
+                  iconName="add"
+                  onClick={() => {
+                    setSid('');
+                    setOpenAlertsPanel(true);
+                  }}
+                >
+                  Add Alert
+                </StyledButtonAction>
+              </Stack>
               <Spacing margin={{ top: 'double' }}>
                 {xchangeAlerts?.globalXchangeAlerts && xchangeAlerts?.globalXchangeAlerts.length <= 0 && (
                   <Text>There are no global alerts configured</Text>
@@ -178,16 +190,18 @@ const XchangeAlertsPage = () => {
                   <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                     <Text variant="bold">Suscribers:</Text>
                   </Spacing>
-                  {globalAlerts?.subscribers?.map((subscriber) => (
-                    <Row>
-                      <Column lg="6">
-                        <ButtonLink>{subscriber.email}</ButtonLink>
-                      </Column>
-                      <Column lg="6">
-                        <ButtonLink>{subscriber.firstNm}</ButtonLink>
-                      </Column>
-                    </Row>
-                  ))}
+                  <Spacing margin={{ bottom: 'double' }}>
+                    {globalAlerts?.subscribers?.map((subscriber) => (
+                      <Row>
+                        <Column lg="6">
+                          <ButtonLink>{subscriber.email}</ButtonLink>
+                        </Column>
+                        <Column lg="6">
+                          <ButtonLink>{subscriber.firstNm}</ButtonLink>
+                        </Column>
+                      </Row>
+                    ))}
+                  </Spacing>
                 </>
               ))}
             </Column>
