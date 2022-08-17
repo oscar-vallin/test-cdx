@@ -104,7 +104,7 @@ export const StyledIconButton = styled(IconButton)`
     border: none !important;
     color: ${({ theme }) => theme.colors.white};
     padding: 0px 8px;
-    min-width: 0px;
+    min-width: 50px;
     height: 100%;
 
     &:hover,
