@@ -3,7 +3,6 @@ import { IColumn, Link, mergeStyles } from '@fluentui/react';
 import { format } from 'date-fns';
 import {
   Maybe,
-  Scalars,
   WorkPacketCommand,
   WorkPacketCommandType,
   WorkPacketStatus,
@@ -52,13 +51,12 @@ export const useWorkPacketColumns = (
   const renderDownloadLink = (
     workOrderId?: string,
     commands?: Maybe<Array<Maybe<WorkPacketCommand>>> | undefined,
-    filename?: string | null,
-    filePath?: Maybe<Scalars['String']> | undefined
+    filename?: string | null
   ) => {
     if (commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.DownloadFile)) {
       return (
         <CellItemRow>
-          <Link href={`${serverUrl}k/archive/download?workOrderID=${workOrderId}&s3Key=${filePath}`} target="_new">
+          <Link href={`${serverUrl}k/archive/download?workOrderID=${workOrderId}&fileName=${filename}`} target="_new">
             {filename}
           </Link>
         </CellItemRow>
@@ -431,7 +429,7 @@ export const useWorkPacketColumns = (
       sortable: true,
       filterable: true,
       onRender: (item: WorkPacketStatus) =>
-        renderDownloadLink(item.workOrderId, item.commands, item.inboundFilename, item.clientFileArchivePath),
+        renderDownloadLink(item.workOrderId, item.commands, item.inboundFilename),
     },
     {
       key: 'vendorFilename',
@@ -450,7 +448,7 @@ export const useWorkPacketColumns = (
       sortable: true,
       filterable: true,
       onRender: (item: WorkPacketStatus) =>
-        renderDownloadLink(item.workOrderId, item.commands, item.vendorFilename, item.vendorFileArchivePath),
+        renderDownloadLink(item.workOrderId, item.commands, item.vendorFilename),
     },
     {
       key: 'totalRecords',

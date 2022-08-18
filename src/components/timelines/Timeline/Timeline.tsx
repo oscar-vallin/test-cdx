@@ -158,7 +158,7 @@ const CDXTimeline = ({ packet, activeIndex = 0, onClick, onRedo }: CDXTimelinePr
             <InlineLabel>{`${label}:`}</InlineLabel>
             <Link
               target="_new"
-              href={`${serverUrl}k/archive/download?workOrderID=${packet?.workOrderId}&s3Key=${value}`}
+              href={`${serverUrl}k/archive/download?workOrderID=${packet?.workOrderId}&fileName=${fName}`}
               title={fName ?? undefined}
               style={{
                 fontSize: '.75rem',
