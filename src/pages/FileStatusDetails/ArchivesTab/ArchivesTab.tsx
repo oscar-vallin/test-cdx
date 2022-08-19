@@ -25,7 +25,7 @@ export const ArchivesTab = ({ packet }: ArchivesTabType) => {
       return (
         <Link
           target="_new"
-          href={`${serverUrl}k/archive/download?workOrderID=${workOrderId}&s3Key=${s3key}`}
+          href={`${serverUrl}k/archive/download?workOrderID=${workOrderId}&fileName=${filename}`}
           title={filename}
           style={{
             fontSize: theme.fontSizes.normal,

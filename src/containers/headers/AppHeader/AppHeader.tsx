@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { ReactElement, useState } from 'react';
 import { useHistory, useLocation } from 'react-router';
 import { Icon, IContextualMenuItem } from '@fluentui/react';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
@@ -10,6 +10,7 @@ import { useSessionStore } from 'src/store/SessionStore';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 
 import { ThemeFontSize } from 'src/data/services/graphql';
+import { topNavTour, WalkThrough } from 'src/components/help';
 import {
   NavButton,
   StyledDiv,
@@ -36,6 +37,7 @@ const AppHeader = ({ onMenuButtonClick, hasLeftMenu = true }: AppHeaderProps): R
   const ActiveDomainStore = useActiveDomainStore();
 
   const { setFontSize } = useCurrentUserTheme();
+  const [isShowHelp, setIsShowHelp] = useState(false);
 
   const updateThemeFontSize = (fontSize: ThemeFontSize) => {
     setFontSize(fontSize);
@@ -135,42 +137,53 @@ const AppHeader = ({ onMenuButtonClick, hasLeftMenu = true }: AppHeaderProps): R
     history.push(`${ROUTE_USER_SETTINGS.URL}?orgSid=${user.orgSid}`);
   };
 
+  const renderMenuItem = (props) => (
+    <StyledMenuItem selected={ThemeStore.userTheme.themeFontSize === props.item.key}>{props.item.text}</StyledMenuItem>
+  );
+
   return (
-    <StyledHeader data-e2e="AppHeader">
-      {showStyledNavIcon()}
+    <>
+      <StyledHeader data-e2e="AppHeader">
+        {showStyledNavIcon()}
 
-      <StyledNavButton
-        id="__ProfileMenu_Home_button"
-        onClick={() => {
-          ActiveDomainStore.setCurrentOrg(ActiveDomainStore.domainOrg.origin);
-        }}
-        title="Home"
-        aria-label="Home"
-      >
-        <Icon iconName="Home" />
-      </StyledNavButton>
-
-      <StyledNav>{renderTopNavButtons()}</StyledNav>
-
-      <StyledDiv>
-        <StyledIconButton
-          id="__ProfileMenu_Font_Buttons"
-          iconProps={{ iconName: 'Font' }}
-          title="Font sizes"
-          aria-label="Font sizes"
-          menuProps={{
-            items: settingsMenu,
-            contextualMenuItemAs: (props) => (
-              <StyledMenuItem selected={ThemeStore.userTheme.themeFontSize === props.item.key}>
-                {props.item.text}
-              </StyledMenuItem>
-            ),
+        <StyledNavButton
+          id="__ProfileMenu_Home_button"
+          onClick={() => {
+            ActiveDomainStore.setCurrentOrg(ActiveDomainStore.domainOrg.origin);
           }}
-        />
+          title="Home"
+          aria-label="Home"
+        >
+          <Icon iconName="Home" />
+        </StyledNavButton>
 
-        <ProfileMenu id="__ProfileMenu" onUserSettings={openUserSettings} />
-      </StyledDiv>
-    </StyledHeader>
+        <StyledNav>{renderTopNavButtons()}</StyledNav>
+
+        <StyledDiv>
+          <StyledIconButton
+            id="__AppHeader_Help"
+            iconProps={{ iconName: 'Help' }}
+            title="Help"
+            aria-label="Help"
+            onClick={() => setIsShowHelp(!isShowHelp)}
+          />
+
+          <StyledIconButton
+            id="__ProfileMenu_Font_Buttons"
+            iconProps={{ iconName: 'Font' }}
+            title="Font sizes"
+            aria-label="Font sizes"
+            menuProps={{
+              items: settingsMenu,
+              contextualMenuItemAs: renderMenuItem,
+            }}
+          />
+
+          <ProfileMenu id="__ProfileMenu" onUserSettings={openUserSettings} />
+        </StyledDiv>
+      </StyledHeader>
+      <WalkThrough id="__TopNav_Tour" show={isShowHelp} tour={topNavTour} onDismiss={() => setIsShowHelp(false)} />
+    </>
   );
 };
 

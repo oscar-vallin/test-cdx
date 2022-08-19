@@ -329,6 +329,11 @@ export type CompositePasswordRuleSetInput = {
   mustNotMatchPartialDictionaryWord?: Maybe<Scalars['Boolean']>;
 };
 
+export enum ContentType {
+  NamingConventionsExplained = 'NAMING_CONVENTIONS_EXPLAINED',
+  WhereToPlaceExtracts = 'WHERE_TO_PLACE_EXTRACTS'
+}
+
 export type CreateAccessPolicyGroupInput = {
   orgSid: Scalars['ID'];
   name: Scalars['String'];
@@ -676,6 +681,15 @@ export type ExtractParameters = {
   derivedParameter?: Maybe<Array<ExtractParameter>>;
 };
 
+export enum ExtractType {
+  Enrollment = 'ENROLLMENT',
+  Census = 'CENSUS',
+  CensusWithEnrollment = 'CENSUS_WITH_ENROLLMENT',
+  Payroll = 'PAYROLL',
+  CobraQe = 'COBRA_QE',
+  CobraIr = 'COBRA_IR'
+}
+
 export type FieldCreationEvent = {
   __typename?: 'FieldCreationEvent';
   message?: Maybe<Array<Scalars['String']>>;
@@ -862,7 +876,9 @@ export type Mutation = {
   convertXchangeProfile?: Maybe<XchangeProfile>;
   updateXchangeProfileComment?: Maybe<GenericResponse>;
   publishXchangeProfile?: Maybe<GenericResponse>;
+  updateXchangeConfigExtractType?: Maybe<GenericResponse>;
   updateXchangeConfigComment?: Maybe<GenericResponse>;
+  updateXchangeConfigInstruction?: Maybe<GenericResponse>;
   createXchangeStep?: Maybe<XchangeStepForm>;
   updateXchangeStep?: Maybe<XchangeStepForm>;
   moveUpXchangeStep?: Maybe<XchangeFileProcessForm>;
@@ -1160,9 +1176,21 @@ export type MutationPublishXchangeProfileArgs = {
 };
 
 
+export type MutationUpdateXchangeConfigExtractTypeArgs = {
+  sid: Scalars['ID'];
+  extractType: ExtractType;
+};
+
+
 export type MutationUpdateXchangeConfigCommentArgs = {
   sid: Scalars['ID'];
   comment: Scalars['String'];
+};
+
+
+export type MutationUpdateXchangeConfigInstructionArgs = {
+  sid: Scalars['ID'];
+  instruction?: Maybe<Scalars['String']>;
 };
 
 
@@ -1746,6 +1774,7 @@ export type Query = {
   currentUserDashThemePage?: Maybe<UserDashThemePage>;
   navigateToNewDomain?: Maybe<WebAppDomain>;
   simulateSessionExpir?: Maybe<LogOutInfo>;
+  content: Scalars['String'];
   passwordRulesForm?: Maybe<PasswordRulesForm>;
   /**
    * Used to validate a given password against the configured Password Rules for the given Org Sid
@@ -1766,6 +1795,7 @@ export type Query = {
   xchangeProfileAlerts?: Maybe<XchangeProfileAlerts>;
   xchangeProfileAlertForm?: Maybe<XchangeProfileAlertForm>;
   xchangeConfigAlertForm?: Maybe<XchangeConfigAlertForm>;
+  xchangeNamingConventions?: Maybe<XchangeNamingConventions>;
   topLevelOntologyClasses: Array<OntologyClass>;
   findOntologyClass?: Maybe<OntologyClass>;
   searchOntology: Array<OntologyClass>;
@@ -2127,6 +2157,11 @@ export type QueryNavigateToNewDomainArgs = {
 };
 
 
+export type QueryContentArgs = {
+  contentType?: Maybe<ContentType>;
+};
+
+
 export type QueryPasswordRulesFormArgs = {
   orgSid: Scalars['ID'];
 };
@@ -2214,6 +2249,11 @@ export type QueryXchangeConfigAlertFormArgs = {
   orgSid: Scalars['ID'];
   coreFilename: Scalars['String'];
   sid?: Maybe<Scalars['ID']>;
+};
+
+
+export type QueryXchangeNamingConventionsArgs = {
+  orgSid: Scalars['ID'];
 };
 
 
@@ -3320,6 +3360,7 @@ export type XchangeConfigForm = {
   requiresConversion: Scalars['Boolean'];
   coreFilename: UiStringField;
   coreFilenamePattern: UiStringField;
+  extractType: UiSelectOneField;
   comments: UiStringField;
   processes?: Maybe<Array<XchangeFileProcessForm>>;
   alerts?: Maybe<Array<XchangeAlert>>;
@@ -3329,6 +3370,16 @@ export type XchangeConfigForm = {
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
   errSeverity?: Maybe<ErrorSeverity>;
+};
+
+export type XchangeConfigNamingConvention = {
+  __typename?: 'XchangeConfigNamingConvention';
+  vendor: Scalars['String'];
+  extractType?: Maybe<ExtractType>;
+  uatFilename: Scalars['String'];
+  testFilename: Scalars['String'];
+  prodFilename: Scalars['String'];
+  specialInstructions?: Maybe<Scalars['String']>;
 };
 
 export type XchangeConfigSummary = {
@@ -3440,6 +3491,13 @@ export type XchangeFileTransmissionForm = {
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
   errSeverity?: Maybe<ErrorSeverity>;
+};
+
+export type XchangeNamingConventions = {
+  __typename?: 'XchangeNamingConventions';
+  conventions: Array<XchangeConfigNamingConvention>;
+  instruction: Scalars['String'];
+  commands: Array<WebCommand>;
 };
 
 export type XchangeProfile = {
@@ -5752,6 +5810,16 @@ export type SimulateSessionExpirQuery = (
   )> }
 );
 
+export type ContentQueryVariables = Exact<{
+  contentType?: Maybe<ContentType>;
+}>;
+
+
+export type ContentQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'content'>
+);
+
 export type PasswordRulesFormQueryVariables = Exact<{
   orgSid: Scalars['ID'];
 }>;
@@ -6084,6 +6152,9 @@ export type XchangeConfigQuery = (
     ), coreFilenamePattern: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
+    ), extractType: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
     ), comments: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
@@ -6473,6 +6544,26 @@ export type XchangeConfigAlertFormQuery = (
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
     )>> }
+  )> }
+);
+
+export type XchangeNamingConventionsQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+}>;
+
+
+export type XchangeNamingConventionsQuery = (
+  { __typename?: 'Query' }
+  & { xchangeNamingConventions?: Maybe<(
+    { __typename?: 'XchangeNamingConventions' }
+    & Pick<XchangeNamingConventions, 'instruction'>
+    & { conventions: Array<(
+      { __typename?: 'XchangeConfigNamingConvention' }
+      & Pick<XchangeConfigNamingConvention, 'vendor' | 'extractType' | 'uatFilename' | 'testFilename' | 'prodFilename' | 'specialInstructions'>
+    )>, commands: Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )> }
   )> }
 );
 
@@ -8100,6 +8191,31 @@ export type PublishXchangeProfileMutation = (
   )> }
 );
 
+export type UpdateXchangeConfigExtractTypeMutationVariables = Exact<{
+  sid: Scalars['ID'];
+  extractType: ExtractType;
+}>;
+
+
+export type UpdateXchangeConfigExtractTypeMutation = (
+  { __typename?: 'Mutation' }
+  & { updateXchangeConfigExtractType?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
+  )> }
+);
+
 export type UpdateXchangeConfigCommentMutationVariables = Exact<{
   sid: Scalars['ID'];
   comment: Scalars['String'];
@@ -8109,6 +8225,31 @@ export type UpdateXchangeConfigCommentMutationVariables = Exact<{
 export type UpdateXchangeConfigCommentMutation = (
   { __typename?: 'Mutation' }
   & { updateXchangeConfigComment?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
+  )> }
+);
+
+export type UpdateXchangeConfigInstructionMutationVariables = Exact<{
+  sid: Scalars['ID'];
+  instruction?: Maybe<Scalars['String']>;
+}>;
+
+
+export type UpdateXchangeConfigInstructionMutation = (
+  { __typename?: 'Mutation' }
+  & { updateXchangeConfigInstruction?: Maybe<(
     { __typename?: 'GenericResponse' }
     & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { allMessages?: Maybe<Array<(
@@ -13068,6 +13209,37 @@ export function useSimulateSessionExpirLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type SimulateSessionExpirQueryHookResult = ReturnType<typeof useSimulateSessionExpirQuery>;
 export type SimulateSessionExpirLazyQueryHookResult = ReturnType<typeof useSimulateSessionExpirLazyQuery>;
 export type SimulateSessionExpirQueryResult = Apollo.QueryResult<SimulateSessionExpirQuery, SimulateSessionExpirQueryVariables>;
+export const ContentDocument = gql`
+    query Content($contentType: ContentType) {
+  content(contentType: $contentType)
+}
+    `;
+
+/**
+ * __useContentQuery__
+ *
+ * To run a query within a React component, call `useContentQuery` and pass it any options that fit your needs.
+ * When your component renders, `useContentQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useContentQuery({
+ *   variables: {
+ *      contentType: // value for 'contentType'
+ *   },
+ * });
+ */
+export function useContentQuery(baseOptions?: Apollo.QueryHookOptions<ContentQuery, ContentQueryVariables>) {
+        return Apollo.useQuery<ContentQuery, ContentQueryVariables>(ContentDocument, baseOptions);
+      }
+export function useContentLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ContentQuery, ContentQueryVariables>) {
+          return Apollo.useLazyQuery<ContentQuery, ContentQueryVariables>(ContentDocument, baseOptions);
+        }
+export type ContentQueryHookResult = ReturnType<typeof useContentQuery>;
+export type ContentLazyQueryHookResult = ReturnType<typeof useContentLazyQuery>;
+export type ContentQueryResult = Apollo.QueryResult<ContentQuery, ContentQueryVariables>;
 export const PasswordRulesFormDocument = gql`
     query PasswordRulesForm($orgSid: ID!) {
   passwordRulesForm(orgSid: $orgSid) {
@@ -13527,6 +13699,9 @@ export const XchangeConfigDocument = gql`
     coreFilenamePattern {
       ...fragmentUIStringField
     }
+    extractType {
+      ...fragmentUISelectOneField
+    }
     comments {
       ...fragmentUIStringField
     }
@@ -13561,6 +13736,7 @@ export const XchangeConfigDocument = gql`
   }
 }
     ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentXchangeFileProcessFormFragmentDoc}
 ${FragmentWebCommandFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}`;
@@ -14275,6 +14451,50 @@ export function useXchangeConfigAlertFormLazyQuery(baseOptions?: Apollo.LazyQuer
 export type XchangeConfigAlertFormQueryHookResult = ReturnType<typeof useXchangeConfigAlertFormQuery>;
 export type XchangeConfigAlertFormLazyQueryHookResult = ReturnType<typeof useXchangeConfigAlertFormLazyQuery>;
 export type XchangeConfigAlertFormQueryResult = Apollo.QueryResult<XchangeConfigAlertFormQuery, XchangeConfigAlertFormQueryVariables>;
+export const XchangeNamingConventionsDocument = gql`
+    query XchangeNamingConventions($orgSid: ID!) {
+  xchangeNamingConventions(orgSid: $orgSid) {
+    conventions {
+      vendor
+      extractType
+      uatFilename
+      testFilename
+      prodFilename
+      specialInstructions
+    }
+    instruction
+    commands {
+      ...fragmentWebCommand
+    }
+  }
+}
+    ${FragmentWebCommandFragmentDoc}`;
+
+/**
+ * __useXchangeNamingConventionsQuery__
+ *
+ * To run a query within a React component, call `useXchangeNamingConventionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useXchangeNamingConventionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useXchangeNamingConventionsQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *   },
+ * });
+ */
+export function useXchangeNamingConventionsQuery(baseOptions: Apollo.QueryHookOptions<XchangeNamingConventionsQuery, XchangeNamingConventionsQueryVariables>) {
+        return Apollo.useQuery<XchangeNamingConventionsQuery, XchangeNamingConventionsQueryVariables>(XchangeNamingConventionsDocument, baseOptions);
+      }
+export function useXchangeNamingConventionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<XchangeNamingConventionsQuery, XchangeNamingConventionsQueryVariables>) {
+          return Apollo.useLazyQuery<XchangeNamingConventionsQuery, XchangeNamingConventionsQueryVariables>(XchangeNamingConventionsDocument, baseOptions);
+        }
+export type XchangeNamingConventionsQueryHookResult = ReturnType<typeof useXchangeNamingConventionsQuery>;
+export type XchangeNamingConventionsLazyQueryHookResult = ReturnType<typeof useXchangeNamingConventionsLazyQuery>;
+export type XchangeNamingConventionsQueryResult = Apollo.QueryResult<XchangeNamingConventionsQuery, XchangeNamingConventionsQueryVariables>;
 export const TopLevelOntologyClassesDocument = gql`
     query TopLevelOntologyClasses {
   topLevelOntologyClasses {
@@ -17368,6 +17588,51 @@ export function usePublishXchangeProfileMutation(baseOptions?: Apollo.MutationHo
 export type PublishXchangeProfileMutationHookResult = ReturnType<typeof usePublishXchangeProfileMutation>;
 export type PublishXchangeProfileMutationResult = Apollo.MutationResult<PublishXchangeProfileMutation>;
 export type PublishXchangeProfileMutationOptions = Apollo.BaseMutationOptions<PublishXchangeProfileMutation, PublishXchangeProfileMutationVariables>;
+export const UpdateXchangeConfigExtractTypeDocument = gql`
+    mutation UpdateXchangeConfigExtractType($sid: ID!, $extractType: ExtractType!) {
+  updateXchangeConfigExtractType(sid: $sid, extractType: $extractType) {
+    response
+    errCode
+    errMsg
+    errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export type UpdateXchangeConfigExtractTypeMutationFn = Apollo.MutationFunction<UpdateXchangeConfigExtractTypeMutation, UpdateXchangeConfigExtractTypeMutationVariables>;
+
+/**
+ * __useUpdateXchangeConfigExtractTypeMutation__
+ *
+ * To run a mutation, you first call `useUpdateXchangeConfigExtractTypeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateXchangeConfigExtractTypeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateXchangeConfigExtractTypeMutation, { data, loading, error }] = useUpdateXchangeConfigExtractTypeMutation({
+ *   variables: {
+ *      sid: // value for 'sid'
+ *      extractType: // value for 'extractType'
+ *   },
+ * });
+ */
+export function useUpdateXchangeConfigExtractTypeMutation(baseOptions?: Apollo.MutationHookOptions<UpdateXchangeConfigExtractTypeMutation, UpdateXchangeConfigExtractTypeMutationVariables>) {
+        return Apollo.useMutation<UpdateXchangeConfigExtractTypeMutation, UpdateXchangeConfigExtractTypeMutationVariables>(UpdateXchangeConfigExtractTypeDocument, baseOptions);
+      }
+export type UpdateXchangeConfigExtractTypeMutationHookResult = ReturnType<typeof useUpdateXchangeConfigExtractTypeMutation>;
+export type UpdateXchangeConfigExtractTypeMutationResult = Apollo.MutationResult<UpdateXchangeConfigExtractTypeMutation>;
+export type UpdateXchangeConfigExtractTypeMutationOptions = Apollo.BaseMutationOptions<UpdateXchangeConfigExtractTypeMutation, UpdateXchangeConfigExtractTypeMutationVariables>;
 export const UpdateXchangeConfigCommentDocument = gql`
     mutation UpdateXchangeConfigComment($sid: ID!, $comment: String!) {
   updateXchangeConfigComment(sid: $sid, comment: $comment) {
@@ -17413,6 +17678,51 @@ export function useUpdateXchangeConfigCommentMutation(baseOptions?: Apollo.Mutat
 export type UpdateXchangeConfigCommentMutationHookResult = ReturnType<typeof useUpdateXchangeConfigCommentMutation>;
 export type UpdateXchangeConfigCommentMutationResult = Apollo.MutationResult<UpdateXchangeConfigCommentMutation>;
 export type UpdateXchangeConfigCommentMutationOptions = Apollo.BaseMutationOptions<UpdateXchangeConfigCommentMutation, UpdateXchangeConfigCommentMutationVariables>;
+export const UpdateXchangeConfigInstructionDocument = gql`
+    mutation UpdateXchangeConfigInstruction($sid: ID!, $instruction: String) {
+  updateXchangeConfigInstruction(sid: $sid, instruction: $instruction) {
+    response
+    errCode
+    errMsg
+    errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export type UpdateXchangeConfigInstructionMutationFn = Apollo.MutationFunction<UpdateXchangeConfigInstructionMutation, UpdateXchangeConfigInstructionMutationVariables>;
+
+/**
+ * __useUpdateXchangeConfigInstructionMutation__
+ *
+ * To run a mutation, you first call `useUpdateXchangeConfigInstructionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateXchangeConfigInstructionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateXchangeConfigInstructionMutation, { data, loading, error }] = useUpdateXchangeConfigInstructionMutation({
+ *   variables: {
+ *      sid: // value for 'sid'
+ *      instruction: // value for 'instruction'
+ *   },
+ * });
+ */
+export function useUpdateXchangeConfigInstructionMutation(baseOptions?: Apollo.MutationHookOptions<UpdateXchangeConfigInstructionMutation, UpdateXchangeConfigInstructionMutationVariables>) {
+        return Apollo.useMutation<UpdateXchangeConfigInstructionMutation, UpdateXchangeConfigInstructionMutationVariables>(UpdateXchangeConfigInstructionDocument, baseOptions);
+      }
+export type UpdateXchangeConfigInstructionMutationHookResult = ReturnType<typeof useUpdateXchangeConfigInstructionMutation>;
+export type UpdateXchangeConfigInstructionMutationResult = Apollo.MutationResult<UpdateXchangeConfigInstructionMutation>;
+export type UpdateXchangeConfigInstructionMutationOptions = Apollo.BaseMutationOptions<UpdateXchangeConfigInstructionMutation, UpdateXchangeConfigInstructionMutationVariables>;
 export const CreateXchangeStepDocument = gql`
     mutation CreateXchangeStep($stepInput: CreateXchangeStepInput) {
   createXchangeStep(stepInput: $stepInput) {
