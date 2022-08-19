@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -13,27 +14,32 @@ import {
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import {
   useXchangeProfileAlertFormLazyQuery,
+  useXchangeConfigAlertFormLazyQuery,
   XchangeProfileAlertForm,
   useUpdateXchangeProfileAlertMutation,
   useCreateXchangeProfileAlertMutation,
+  XchangeConfigAlertForm,
+  useCreateXchangeConfigAlertMutation,
   WebCommand,
   CdxWebCommandType,
+  UiSelectManyField,
 } from 'src/data/services/graphql';
 import { PanelBody, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
-import { useEffect, useState } from 'react';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { Column, Container, Row } from 'src/components/layouts';
-import { UIInputMultiSelect } from 'src/components/inputs/InputDropdown';
+import { UIInputMultiSelect, UIInputSelectOne } from 'src/components/inputs/InputDropdown';
 import { ButtonAction, ButtonLink } from 'src/components/buttons';
 import { AddSubscriberModal } from 'src/containers/modals/AddSubsciberModal/AddSubscriberModal';
 import { useNotification } from 'src/hooks/useNotification';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
+import { InputText } from 'src/components/inputs/InputText';
 
 type XchangeAlertsPanelProps = {
   isPanelOpen: boolean;
   closePanel: (data: boolean) => void;
-  sid: string;
+  sid?: string;
+  coreFilename?: string;
   refreshXchangeDetails: (data: boolean) => void;
 };
 
@@ -54,11 +60,22 @@ const defaultDialogProps: DialogYesNoProps = {
   highlightYes: false,
 };
 
-const XchangeAlertsPanel = ({ isPanelOpen, closePanel, sid, refreshXchangeDetails }: XchangeAlertsPanelProps) => {
+const XchangeAlertsPanel = ({
+  isPanelOpen,
+  closePanel,
+  sid,
+  coreFilename,
+  refreshXchangeDetails,
+}: XchangeAlertsPanelProps) => {
   const { orgSid } = useOrgSid();
   const Toast = useNotification();
   const [xchangeProfileAlert, setXchangeProfileAlert] = useState<XchangeProfileAlertForm>();
-  const [alertTypesValue, setAlertTypesValue] = useState<string[]>([]);
+  const [xchangeConfigAlert, setXchangeConfigAlert] = useState<XchangeConfigAlertForm>();
+  const [filenameQualifier, setFilenameQualifier] = useState('');
+  const [customQualifier, setCustomQualifier] = useState<boolean>();
+  const [optionAlerts, setOptionAlerts] = useState([]);
+  const [alertTypes, setAlertTypes] = useState<UiSelectManyField>();
+  const [alertTypesValue, setAlertTypesValue] = useState<string[]>();
   const [addSubscriberModal, setAddSubscriberModal] = useState(false);
   const [firstSubscribers, setFirstSubscribers] = useState(0);
   const [totalSubscribers, setTotalSubscribers] = useState<SubscriberOptionProps[]>([]);
@@ -67,25 +84,44 @@ const XchangeAlertsPanel = ({ isPanelOpen, closePanel, sid, refreshXchangeDetail
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
-  const [xchangeAlertForm, { data: alertFormData, loading: alertFormLoading }] = useQueryHandler(
+
+  const [profileAlertForm, { data: alertProfileFormData, loading: alertProfileFormLoading }] = useQueryHandler(
     useXchangeProfileAlertFormLazyQuery
   );
-  const [updateXchangeProfileAlert, { data: updateAlertdata, loading: updateAlertLoading, error: updateAlertError }] =
-    useQueryHandler(useUpdateXchangeProfileAlertMutation);
+  const [configAlertForm, { data: alertConfigFormData, loading: alertConfigFormLoading }] = useQueryHandler(
+    useXchangeConfigAlertFormLazyQuery
+  );
+  const [createXchangeConfigAlert, { data: createConfigData, loading: createConfigloading, error: createConfigError }] =
+    useQueryHandler(useCreateXchangeConfigAlertMutation);
 
-  const [createXchangeProfileAlert, { data: createAlertData, loading: createAlertLoading, error: createAlertError }] =
-    useQueryHandler(useCreateXchangeProfileAlertMutation);
+  // eslint-disable-next-line prettier/prettier
+  const [updateXchangeProfileAlert, { data: updateProfiledata, loading: updateProfileLoading, error: updateProfileError }] =
+  useQueryHandler(useUpdateXchangeProfileAlertMutation);
+
+  // eslint-disable-next-line prettier/prettier
+  const [createXchangeProfileAlert, { data: createProfileData, loading: createProfileLoading, error: createProfileError }] =
+  useQueryHandler(useCreateXchangeProfileAlertMutation);
 
   const fetchDataAlertForm = () => {
-    xchangeAlertForm({
-      variables: {
-        orgSid,
-        sid,
-      },
-    });
+    if (coreFilename) {
+      configAlertForm({
+        variables: {
+          orgSid,
+          coreFilename,
+          sid,
+        },
+      });
+    } else {
+      profileAlertForm({
+        variables: {
+          orgSid,
+          sid,
+        },
+      });
+    }
   };
 
-  const updateProfileAlert = () => {
+  const saveProfileAlert = () => {
     const subscriberSids = totalSubscribers.map((subSids) => subSids.sid);
     if (updateCmd) {
       updateXchangeProfileAlert({
@@ -104,6 +140,23 @@ const XchangeAlertsPanel = ({ isPanelOpen, closePanel, sid, refreshXchangeDetail
         variables: {
           alertInput: {
             orgSid,
+            alertTypes: alertTypesValue,
+            subscriberSids,
+          },
+        },
+      });
+    }
+  };
+
+  const saveConfigAlert = () => {
+    const subscriberSids = totalSubscribers.map((subSids) => subSids.sid);
+    if (createCmd) {
+      createXchangeConfigAlert({
+        variables: {
+          alertInput: {
+            orgSid,
+            coreFilename,
+            filenameQualifier,
             alertTypes: alertTypesValue,
             subscriberSids,
           },
@@ -170,11 +223,22 @@ const XchangeAlertsPanel = ({ isPanelOpen, closePanel, sid, refreshXchangeDetail
   }, [isPanelOpen]);
 
   useEffect(() => {
-    if (!alertFormLoading && alertFormData) {
-      const { xchangeProfileAlertForm } = alertFormData;
+    if (!alertProfileFormLoading && alertProfileFormData) {
+      const { xchangeProfileAlertForm } = alertProfileFormData;
       setXchangeProfileAlert(xchangeProfileAlertForm);
+      if (xchangeProfileAlertForm?.alertTypes.value && xchangeProfileAlertForm?.alertTypes.value.length > 0) {
+        setAlertTypesValue(xchangeProfileAlertForm?.alertTypes.value.map((alert) => alert.value));
+      }
       if (xchangeProfileAlertForm.subscribers.value && xchangeProfileAlertForm.subscribers.value.length > 0) {
         subscribersList(xchangeProfileAlertForm.subscribers.value);
+      }
+
+      if (xchangeProfileAlertForm?.options) {
+        setOptionAlerts(xchangeProfileAlertForm?.options);
+      }
+
+      if (xchangeProfileAlertForm?.alertTypes) {
+        setAlertTypes(xchangeProfileAlertForm?.alertTypes);
       }
 
       if (xchangeProfileAlertForm?.commands) {
@@ -185,31 +249,73 @@ const XchangeAlertsPanel = ({ isPanelOpen, closePanel, sid, refreshXchangeDetail
         setCreateCmd(_createCmd);
       }
     }
-  }, [alertFormData, alertFormLoading]);
+  }, [alertProfileFormData, alertProfileFormLoading]);
 
   useEffect(() => {
-    if (!updateAlertLoading && updateAlertdata) {
+    if (!alertConfigFormLoading && alertConfigFormData) {
+      const { xchangeConfigAlertForm } = alertConfigFormData;
+      console.log(xchangeConfigAlertForm)
+      setXchangeConfigAlert(xchangeConfigAlertForm);
+      if (xchangeConfigAlertForm?.alertTypes.value && xchangeConfigAlertForm?.alertTypes.value.length > 0) {
+        setAlertTypesValue(xchangeConfigAlertForm?.alertTypes.value.map((alert) => alert.value));
+      }
+      if (xchangeConfigAlertForm.subscribers.value && xchangeConfigAlertForm.subscribers.value.length > 0) {
+        subscribersList(xchangeConfigAlertForm.subscribers.value);
+      }
+
+      if (xchangeConfigAlertForm?.options) {
+        setOptionAlerts(xchangeConfigAlertForm?.options);
+      }
+
+      if (xchangeConfigAlertForm?.alertTypes) {
+        setAlertTypes(xchangeConfigAlertForm?.alertTypes);
+      }
+
+      if (xchangeConfigAlertForm?.commands) {
+        const pageCommands = xchangeConfigAlertForm?.commands;
+        const _updateCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
+        setUpdateCmd(_updateCmd);
+        const _createCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
+        setCreateCmd(_createCmd);
+      }
+    }
+  }, [alertConfigFormData, alertConfigFormLoading]);
+
+  useEffect(() => {
+    if (!updateProfileLoading && updateProfiledata) {
       refreshXchangeDetails(true);
       Toast.success({ text: 'Alert updated' });
       closePanel(false);
     }
 
-    if (!updateAlertLoading && updateAlertError) {
+    if (!updateProfileLoading && updateProfileError) {
       Toast.error({ text: 'There was an error to updated alert' });
     }
-  }, [updateAlertdata, updateAlertLoading, updateAlertError]);
+  }, [updateProfiledata, updateProfileLoading, updateProfileError]);
 
   useEffect(() => {
-    if (!createAlertLoading && createAlertData) {
+    if (!createProfileLoading && createProfileData) {
       refreshXchangeDetails(true);
       Toast.success({ text: 'Alert Added' });
       closePanel(false);
     }
 
-    if (!createAlertLoading && createAlertError) {
+    if (!createProfileLoading && createProfileError) {
       Toast.error({ text: 'There was an error to add alert' });
     }
-  }, [createAlertData, createAlertLoading, createAlertError]);
+  }, [createProfileData, createProfileLoading, createProfileError]);
+
+  useEffect(() => {
+    if (!createConfigloading && createConfigData) {
+      refreshXchangeDetails(true);
+      Toast.success({ text: 'Alert Added' });
+      closePanel(false);
+    }
+
+    if (!createConfigloading && createConfigError) {
+      Toast.error({ text: 'There was an error to add alert' });
+    }
+  }, [createConfigData, createConfigloading, createConfigError]);
 
   const onRenderAction = (item: any) => {
     return <IconButton iconProps={{ iconName: 'Trash' }} onClick={() => removeSubscriber(item.sid)} />;
@@ -263,7 +369,7 @@ const XchangeAlertsPanel = ({ isPanelOpen, closePanel, sid, refreshXchangeDetail
   };
 
   const renderBody = () => {
-    if (alertFormLoading) {
+    if (alertProfileFormLoading || alertConfigFormLoading) {
       return (
         <Spacing margin={{ top: 'double' }}>
           <Spinner size={SpinnerSize.large} label="Loading alert form" />
@@ -274,16 +380,42 @@ const XchangeAlertsPanel = ({ isPanelOpen, closePanel, sid, refreshXchangeDetail
     return (
       <PanelBody>
         <Container>
+          {xchangeConfigAlert?.filenameQualifier.visible && (
+            <Row>
+              <Column lg="12">
+                {!customQualifier ? (
+                  <UIInputSelectOne
+                    id="filenameQualifier"
+                    value={filenameQualifier}
+                    uiField={xchangeConfigAlert.filenameQualifier}
+                    options={optionAlerts}
+                    onChange={(newValue) => setFilenameQualifier(newValue ?? '')}
+                  />
+                ) : (
+                  <InputText
+                    id="__filenameQualifier"
+                    value={filenameQualifier}
+                    label="Enviroment"
+                    required={xchangeConfigAlert.filenameQualifier.required}
+                    onChange={(_event, newValue) => setFilenameQualifier(newValue ?? '')}
+                  />
+                )}
+                <ButtonLink onClick={() => setCustomQualifier((prevState) => !prevState)}>
+                  use a custom qualifier
+                </ButtonLink>
+              </Column>
+            </Row>
+          )}
           <Row>
             <Column lg="12">
               <UIInputMultiSelect
                 id="__AlertTypes"
                 value={alertTypesValue}
-                uiField={xchangeProfileAlert?.alertTypes}
-                options={xchangeProfileAlert?.options}
-                onChange={(alertTypes) => {
+                uiField={alertTypes}
+                options={optionAlerts}
+                onChange={(types) => {
                   setUnsavedChanges(true);
-                  setAlertTypesValue(alertTypes ?? []);
+                  setAlertTypesValue(types ?? []);
                 }}
               />
             </Column>
@@ -304,7 +436,18 @@ const XchangeAlertsPanel = ({ isPanelOpen, closePanel, sid, refreshXchangeDetail
             Add Subscriber
           </ButtonAction>
           <Spacing margin={{ top: 'normal' }}>
-            <PrimaryButton id="__Update__Alert" iconProps={{ iconName: 'Save' }} onClick={() => updateProfileAlert()}>
+            <PrimaryButton
+              id="__Update__Alert"
+              iconProps={{ iconName: 'Save' }}
+              onClick={() => {
+                if (xchangeProfileAlert) {
+                  saveProfileAlert();
+                }
+                if (xchangeConfigAlert) {
+                  saveConfigAlert();
+                }
+              }}
+            >
               Save
             </PrimaryButton>
           </Spacing>
