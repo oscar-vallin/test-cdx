@@ -173,7 +173,7 @@ const XchangeTransmissionPanel = ({
           transInput: {
             xchangeFileProcessSid,
             parentSid: xchangeStepSid,
-            filenameQualifiers,
+            filenameQualifiers: customQualifier ? customFileQualifier : filenameQualifiers,
             protocol: {
               value: overrides.protocol ? protocol : xchangeFileTransmission?.protocol.value?.value,
               inherited: copyCmd ? overrides['protocol'] : !overrides['protocol'],
@@ -222,7 +222,7 @@ const XchangeTransmissionPanel = ({
             xchangeFileProcessSid,
             sid: xchangeFileTransmission?.sid,
             parentSid: xchangeStepSid,
-            filenameQualifiers,
+            filenameQualifiers: customQualifier ? customFileQualifier : filenameQualifiers,
             protocol: {
               value: protocol,
               inherited: xchangeFileTransmission?.protocol.inheritedFrom
@@ -699,7 +699,7 @@ const XchangeTransmissionPanel = ({
                         onChange={(event, newValue) => setCustomFileQualifier(newValue ?? '')}
                       />
                     )}
-                    <ButtonLink onClick={() => setCustomQualifier(true)}>use a custom qualifier</ButtonLink>
+                    <ButtonLink onClick={() => setCustomQualifier((prevState) => !prevState)}>use a custom qualifier</ButtonLink>
                   </Column>
                 </Row>
               </Spacing>
@@ -849,7 +849,7 @@ const XchangeTransmissionPanel = ({
         dataCopyTransmission.copyXchangeFileTransmission?.filenameQualifiers.value.length > 0
       ) {
         setFilenameQualifiers(
-          [dataCopyTransmission.copyXchangeFileTransmission.filenameQualifiers.value[0].value] ?? []
+          dataCopyTransmission.copyXchangeFileTransmission.filenameQualifiers.value.map((file) => file.value) ?? []
         );
       }
 

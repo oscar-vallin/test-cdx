@@ -12,6 +12,9 @@ import {
   XchangeFileProcessForm,
   XchangeDiagram,
   useUpdateXchangeConfigCommentMutation,
+  useDeleteXchangeConfigAlertMutation,
+  CdxWebCommandType,
+  WebCommand,
 } from 'src/data/services/graphql';
 import { UIInputText } from 'src/components/inputs/InputText';
 import { Spacing } from 'src/components/spacings/Spacing';
@@ -25,6 +28,7 @@ import {
   Text,
   TooltipHost,
 } from '@fluentui/react';
+import { useNotification } from 'src/hooks/useNotification';
 import { UIInputMultiSelect } from 'src/components/inputs/InputDropdown';
 import { PageBody } from 'src/components/layouts/Column';
 import { useOrgSid } from 'src/hooks/useOrgSid';
@@ -33,19 +37,37 @@ import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { ROUTE_XCHANGE_DETAILS } from 'src/data/constants/RouteConstants';
 import { Comment20Filled } from '@fluentui/react-icons';
 import { UIInputTextArea } from 'src/components/inputs/InputTextArea';
+import { ButtonAction, ButtonLink } from 'src/components/buttons';
+import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import {
   CardStyled,
   StyledColumTabs,
   SubsStyled,
   StyledButtonAction,
   StyledProcessValueText,
+  StyledContainerDiagram,
+  StyledQualifier,
 } from './XchangeDetailsPage.styles';
 import { Diagram } from './Diagram/Diagram';
+import { XchangeAlertsPanel } from '../XchangeAlerts/XchangeAlertsPanel/XchangeAlertsPanel';
+import { StyledAlertTypes } from '../XchangeAlerts/XchangeAlertsPage.style';
+
+const defaultDialogProps: DialogYesNoProps = {
+  id: '__XchangeDetails_Dlg',
+  open: false,
+  title: '',
+  message: '',
+  labelYes: 'Yes',
+  labelNo: 'No',
+  highlightNo: true,
+  highlightYes: false,
+};
 
 const XchangeDetailsPage = () => {
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const { orgSid } = useOrgSid();
+  const Toast = useNotification();
 
   const [xchangeDataDetails, setXchangeDataDetails] = useState<XchangeConfigForm>();
   const [coreFilenameData, setCoreFilenameData] = useState<UiStringField>();
@@ -60,16 +82,30 @@ const XchangeDetailsPage = () => {
   const [comments, setComments] = useState('');
   const [openUpdateComments, setOpenUpdateComments] = useState(false);
   const [closeTooltipHost, setCloseTooltipHost] = useState(true);
+  const [sid, setSid] = useState('');
+  const [openAlertsPanel, setOpenAlertsPanel] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
+  const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
 
   const [callXchangeDetails, { data: detailsData, loading: detailsLoading, error: detailsError }] =
     useXchangeConfigLazyQuery();
-  const [updateXchangeComment, { data: commentData, loading: commentLoadin }] = useUpdateXchangeConfigCommentMutation();
+  const [deleteXchangeConfigAlerts, { data: deleteConfigData, loading: deleteConfigLoading }] =
+    useDeleteXchangeConfigAlertMutation();
+
+  const [updateXchangeComment, { data: commentData }] = useUpdateXchangeConfigCommentMutation();
   const [showFileUpload, setShowFileUpload] = useState(false);
   const handleError = ErrorHandler();
 
   useEffect(() => {
     handleError(detailsError);
   }, [detailsError]);
+
+  useEffect(() => {
+    if (!deleteConfigLoading && deleteConfigData) {
+      setRefreshXchangeDetails(true);
+      Toast.success({ text: 'Alert has been deleted' });
+    }
+  }, [deleteConfigData, deleteConfigLoading]);
 
   const fetchData = () => {
     const coreFilename = urlParams.get('coreFilename');
@@ -91,6 +127,120 @@ const XchangeDetailsPage = () => {
     });
   };
 
+  const hideDialog = () => {
+    setShowDialog(false);
+  };
+
+  const showUnsavedChangesDialog = (currentSid: string) => {
+    const updatedDialog = { ...defaultDialogProps };
+    updatedDialog.message = 'Are you sure you want to delete this Alert?';
+
+    updatedDialog.onYes = () => {
+      hideDialog();
+      deleteXchangeConfigAlerts({
+        variables: {
+          sid: currentSid,
+        },
+      });
+    };
+    updatedDialog.onNo = () => {
+      hideDialog();
+    };
+
+    setDialogProps(updatedDialog);
+    setShowDialog(true);
+  };
+
+  const typesAlertsRender = (alertTypes: string[]) => {
+    const alerts = alertTypes ?? [];
+    const typesAlert: string[] = [];
+    let typeAlert = '';
+    for (let alert = 0; alert < alerts?.length; alert++) {
+      const splitAlerts = alerts[alert].split('_');
+      if (splitAlerts.length > 1) {
+        for (let j = 0; j < splitAlerts.length; j++) {
+          let type = splitAlerts[j].toLocaleLowerCase()[0].toUpperCase();
+          type += splitAlerts[j].substring(1).toLocaleLowerCase();
+          typeAlert += j === splitAlerts.length - 1 ? `${type}` : `${type} `;
+        }
+        typesAlert.push(typeAlert);
+        typeAlert = '';
+      } else {
+        let type = splitAlerts[0].toLocaleLowerCase()[0].toUpperCase();
+        type += splitAlerts[0].substring(1).toLocaleLowerCase();
+        typesAlert.push(type);
+      }
+    }
+
+    if (typesAlert) {
+      return (
+        <Row>
+          <Column lg="3">
+            <Text>Alert on: </Text>
+          </Column>
+          {typesAlert.map((type, index) => (
+            <StyledAlertTypes width="130px" key={index}>
+              <Column lg="2">{type}</Column>
+            </StyledAlertTypes>
+          ))}
+        </Row>
+      );
+    }
+    return null;
+  };
+
+  const filenameQualifier = (qualifierType: string, coreFilename: string) => {
+    const qualifier = qualifierType.replace(`${coreFilename}-`, '');
+    if (qualifier) {
+      let width = '40px';
+      let color = 'blue';
+      if (qualifier === 'TEST') {
+        color = 'orange';
+      } else if (qualifier === 'PROD-OE') {
+        width = '60px';
+      }
+
+      return (
+        <StyledQualifier width={width} color={color}>
+          {qualifier}
+        </StyledQualifier>
+      );
+    }
+
+    return null;
+  };
+
+  const userPermissionsIcons = (commands: WebCommand[], currentSid: string) => {
+    const _updateCmd = commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
+    const _deleteCmd = commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Delete);
+
+    return (
+      <>
+        {_updateCmd && (
+          <Column lg="1">
+            <IconButton
+              iconProps={{ iconName: 'EditSolid12' }}
+              style={{ paddingBottom: '10px' }}
+              onClick={() => {
+                setSid(currentSid);
+                setOpenAlertsPanel(true);
+              }}
+            />
+          </Column>
+        )}
+        {_deleteCmd && (
+          <Column lg="1">
+            <IconButton
+              iconProps={{ iconName: 'Trash' }}
+              style={{ paddingBottom: '10px' }}
+              onClick={() => showUnsavedChangesDialog(currentSid)}
+            />
+          </Column>
+        )}
+      </>
+    );
+  };
+
   const cardBox = () => {
     if (!detailsLoading) {
       return (
@@ -100,31 +250,36 @@ const XchangeDetailsPage = () => {
               <IconButton iconProps={{ iconName: 'Ringer' }} style={{ color: 'black', fontWeight: 'bold' }} />
               Alerts
             </Text>
-            <Spacing margin="normal">
-              <Row>
-                <Text style={{ fontWeight: 'bold' }}>Alert on all Xchanges</Text>
-              </Row>
-              <Spacing margin="normal" />
-              <Text>Subscribers</Text>
-            </Spacing>
-            <Spacing margin="normal">
-              <Row>
-                <Text style={{ fontWeight: 'bold' }}>Subscribers:</Text>
-              </Row>
-              <Spacing margin="normal" />
-              {xchangesAlerts?.map((xchangeData: XchangeAlert) =>
-                xchangeData.subscribers?.map((subs, index: number) => (
-                  <Spacing margin={{ bottom: 'normal' }} key={index}>
-                    <Row>
-                      <SubsStyled>
-                        <Text style={{ fontSize: '12px' }}>Alicia </Text>
-                        <Text style={{ fontSize: '12px' }}> {subs.email}</Text>
-                      </SubsStyled>
-                    </Row>
-                  </Spacing>
-                ))
-              )}
-            </Spacing>
+            {xchangesAlerts?.map((alert, index) => (
+              <Spacing margin="normal" key={index}>
+                <Row>
+                  <Column lg="2">{filenameQualifier(alert.filenameQualifier ?? '', alert?.coreFilename ?? '')}</Column>
+                  {userPermissionsIcons(alert?.commands ?? [], alert?.sid ?? '')}
+                </Row>
+                {typesAlertsRender(alert?.alertTypes ?? [])}
+                <Spacing margin={{ top: 'normal' }}>
+                  <Row>
+                    <Column lg="2">
+                      <Text style={{ fontWeight: 'bold' }}>Subscribers:</Text>
+                    </Column>
+                  </Row>
+                </Spacing>
+                {alert?.subscribers &&
+                  alert?.subscribers.map((subs) => (
+                    <Spacing margin="normal">
+                      <Row>
+                        <SubsStyled>
+                          <ButtonLink style={{ fontSize: '12px' }}>{subs.firstNm}</ButtonLink>
+                          <ButtonLink style={{ fontSize: '12px' }}> {subs.email}</ButtonLink>
+                        </SubsStyled>
+                      </Row>
+                    </Spacing>
+                  ))}
+              </Spacing>
+            ))}
+            <ButtonAction id="__Add_Alert" iconName="add" onClick={() => setOpenAlertsPanel(true)}>
+              Add alert
+            </ButtonAction>
           </CardStyled>
           <Spacing margin={{ top: 'normal' }}>
             <CardStyled>
@@ -139,12 +294,10 @@ const XchangeDetailsPage = () => {
                     />
                   ))}
                 </Row>
-                <Row>
-                  <StyledButtonAction fontSize={18} id="__Add_FilenameQualifer" iconName="add">
-                    Add Filename Qualifier
-                  </StyledButtonAction>
-                </Row>
               </Container>
+              <StyledButtonAction fontSize={18} id="__Add_FilenameQualifer" iconName="add">
+                Add Filename Qualifier
+              </StyledButtonAction>
             </CardStyled>
           </Spacing>
         </>
@@ -196,6 +349,7 @@ const XchangeDetailsPage = () => {
   useEffect(() => {
     if (detailsData?.xchangeConfig && !detailsLoading) {
       const { xchangeConfig } = detailsData;
+      console.log(xchangeConfig);
       setXchangeDataDetails(xchangeConfig);
 
       if (xchangeConfig.coreFilename) {
@@ -253,12 +407,6 @@ const XchangeDetailsPage = () => {
       updateComments();
     }
   }, [closeTooltipHost, commentData]);
-
-  useEffect(() => {
-    if (!commentLoadin && commentData) {
-      console.log(commentData);
-    }
-  }, [commentData, commentLoadin]);
 
   const renderFileUploadDialog = () => {
     const xchangeConfigSid = xchangeDataDetails?.sid;
@@ -416,12 +564,22 @@ const XchangeDetailsPage = () => {
               ))}
           </Row>
           <Row>
-            <Column lg="9">{renderDiagram()}</Column>
-            <Column lg="3">{cardBox()}</Column>
+            <StyledContainerDiagram>
+              <Column lg="9">{renderDiagram()}</Column>
+              <Column lg="3">{cardBox()}</Column>
+            </StyledContainerDiagram>
           </Row>
         </Container>
         {renderFileUploadDialog()}
       </PageBody>
+      <XchangeAlertsPanel
+        isPanelOpen={openAlertsPanel}
+        closePanel={setOpenAlertsPanel}
+        sid={sid}
+        refreshXchangeDetails={setRefreshXchangeDetails}
+        coreFilename={coreFilenameValue}
+      />
+      <DialogYesNo {...dialogProps} open={showDialog} />
     </LayoutDashboard>
   );
 };

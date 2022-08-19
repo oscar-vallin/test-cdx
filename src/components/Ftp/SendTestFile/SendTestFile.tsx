@@ -5,7 +5,7 @@ import { Spacing } from 'src/components/spacings/Spacing';
 import { TestFileStrategy } from 'src/data/services/graphql';
 import { UploadFile } from './UploadFile/UploadFile';
 import { CancelTestFile } from './CancelTestFile/CancelTestFile';
-import { GenerateFiles } from './GenerateFiles/GenerateFiles';
+import { GenerateTextFileContent, GenerateFileName } from './GenerateFiles';
 
 const SendTestFile = ({
   genTestFileForm,
@@ -81,13 +81,22 @@ const SendTestFile = ({
                   <>
                     {render!(props)}
                     {props?.checked && (
-                      <GenerateFiles
-                        genTestFileForm={genTestFileForm}
-                        vendorFileName={vendorFileName}
-                        setVendorFileName={setVendorFileName}
-                        textFileContent={textFileContent}
-                        setTextFileContent={setTextFileContent}
-                      />
+                      <>
+                        {genTestFileForm?.fileName.visible && (
+                          <GenerateFileName
+                            fileName={genTestFileForm?.fileName}
+                            vendorFileName={vendorFileName}
+                            setVendorFileName={setVendorFileName}
+                          />
+                        )}
+                        {genTestFileForm?.fileBody?.visible && (
+                          <GenerateTextFileContent 
+                            fileBody={genTestFileForm?.fileBody}
+                            textFileContent={textFileContent}
+                            setTextFileContent={setTextFileContent}
+                          />
+                        )}
+                      </>
                     )}
                   </>
                 );
