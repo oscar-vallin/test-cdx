@@ -10,6 +10,7 @@ import {
   useXchangeProfileAlertsLazyQuery,
   XchangeProfileAlerts,
   useDeleteXchangeProfileAlertMutation,
+  useDeleteXchangeConfigAlertMutation,
   CdxWebCommandType,
   WebCommand,
 } from 'src/data/services/graphql';
@@ -50,6 +51,10 @@ const XchangeAlertsPage = () => {
     useDeleteXchangeProfileAlertMutation
   );
 
+  const [deleteXchangeConfigAlerts, { data: deleteConfigData, loading: deleteConfigLoading }] = useQueryHandler(
+    useDeleteXchangeConfigAlertMutation
+  );
+
   const [xchangeAlerts, setXchangeAlerts] = useState<XchangeProfileAlerts>();
 
   const fetchData = () => {
@@ -67,6 +72,7 @@ const XchangeAlertsPage = () => {
 
   useEffect(() => {
     if (!loadingXchangeAlerts && dataXchangeAlerts) {
+      console.log(dataXchangeAlerts)
       setXchangeAlerts(dataXchangeAlerts.xchangeProfileAlerts);
     }
   }, [dataXchangeAlerts, loadingXchangeAlerts]);
@@ -77,6 +83,13 @@ const XchangeAlertsPage = () => {
       Toast.success({ text: 'Alert has been deleted' });
     }
   }, [deleteProfileData, deleteProfileLoading]);
+
+  useEffect(() => {
+    if (!deleteConfigLoading && deleteConfigData) {
+      setRefreshXchangeDetails(true);
+      Toast.success({ text: 'Alert has been deleted' });
+    }
+  }, [deleteConfigData, deleteConfigLoading]);
 
   const typesAlertsRender = (alertTypes: string[]) => {
     const alerts = alertTypes ?? [];
@@ -116,13 +129,14 @@ const XchangeAlertsPage = () => {
     return null;
   };
 
-  const filenameQualifier = (qualifierType: string) => {
-    if (qualifierType) {
+  const filenameQualifier = (qualifierType: string, coreFilename: string) => {
+    const qualifier = qualifierType.replace(`${coreFilename}-`, '');
+    if (qualifier) {
       let width = '48px';
       let color = 'blue';
-      if (qualifierType === 'TEST') {
+      if (qualifier === 'TEST') {
         color = 'orange';
-      } else if (qualifierType === 'PROD-OE') {
+      } else if (qualifier === 'PROD-OE') {
         width = '60px';
       }
 
@@ -131,7 +145,7 @@ const XchangeAlertsPage = () => {
           <Spacing margin={{ bottom: 'normal' }}>
             <Column lg="2">
               <StyledQualifier width={width} color={color}>
-                {qualifierType}
+                {qualifier}
               </StyledQualifier>
             </Column>
           </Spacing>
@@ -146,17 +160,25 @@ const XchangeAlertsPage = () => {
     setShowDialog(false);
   };
 
-  const showUnsavedChangesDialog = (currentSid: string) => {
+  const showUnsavedChangesDialog = (currentSid: string, xchangeTypeAlert: string) => {
     const updatedDialog = { ...defaultDialogProps };
     updatedDialog.message = 'Are you sure you want to delete this Alert?';
 
     updatedDialog.onYes = () => {
       hideDialog();
-      deleteXchangeProfileAlerts({
-        variables: {
-          sid: currentSid,
-        },
-      });
+      if (xchangeTypeAlert === 'profile') {
+        deleteXchangeProfileAlerts({
+          variables: {
+            sid: currentSid,
+          },
+        });
+      } else {
+        deleteXchangeConfigAlerts({
+          variables: {
+            sid: currentSid,
+          },
+        });
+      }
     };
     updatedDialog.onNo = () => {
       hideDialog();
@@ -166,7 +188,7 @@ const XchangeAlertsPage = () => {
     setShowDialog(true);
   };
 
-  const userPermissionsIcons = (commands: WebCommand[], currentSid: string) => {
+  const userPermissionsIcons = (commands: WebCommand[], currentSid: string, type: string) => {
     const _updateCmd = commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
     const _deleteCmd = commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Delete);
 
@@ -189,7 +211,7 @@ const XchangeAlertsPage = () => {
             <IconButton
               iconProps={{ iconName: 'Trash' }}
               style={{ paddingBottom: '10px' }}
-              onClick={() => showUnsavedChangesDialog(currentSid)}
+              onClick={() => showUnsavedChangesDialog(currentSid, type)}
             />
           </Column>
         )}
@@ -238,7 +260,7 @@ const XchangeAlertsPage = () => {
                           <StyledEnvironment>{globalAlerts?.filenameQualifier}</StyledEnvironment>
                         )}
                       </Column>
-                      {userPermissionsIcons(globalAlerts?.commands ?? [], globalAlerts?.sid ?? '')}
+                      {userPermissionsIcons(globalAlerts?.commands ?? [], globalAlerts?.sid ?? '', 'profile')}
                     </Row>
                   </Spacing>
                   {typesAlertsRender(globalAlerts?.alertTypes ?? [])}
@@ -274,10 +296,10 @@ const XchangeAlertsPage = () => {
                       <Column lg="3">
                         <ButtonLink>{individualAlerts.coreFilename}</ButtonLink>
                       </Column>
-                      {userPermissionsIcons(individualAlerts?.commands ?? [], individualAlerts?.sid ?? '')}
+                      {userPermissionsIcons(individualAlerts?.commands ?? [], individualAlerts?.sid ?? '', 'config')}
                     </Row>
                   </Spacing>
-                  {filenameQualifier(individualAlerts.filenameQualifier ?? '')}
+                  {filenameQualifier(individualAlerts.filenameQualifier ?? '', individualAlerts?.coreFilename ?? '')}
                   {typesAlertsRender(individualAlerts?.alertTypes ?? [])}
                   <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                     <Text variant="bold">Suscribers:</Text>
