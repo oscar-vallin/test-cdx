@@ -6,12 +6,14 @@ import { ButtonAction } from 'src/components/buttons';
 export const CardStyled = styled(DocumentCard)`
   background: ${({ theme }) => theme.colors.neutralLighter};
   border: none;
+  z-index: 10;
   border-radius: ${({ theme }) => theme.radius.normal};
   font: ${({ theme }) => theme.fontStyles.normal};
   min-width: unset;
   max-width: unset;
   min-height: 100px;
   width: 100%;
+  right: 40px;
   bottom: 70px;
 
   .ms-DocumentCard {
@@ -36,7 +38,7 @@ export const StyledColumTabs = styled(Column)`
 
 export const StyledContainer = styled.div<DemoCanvasWidgetProps>`
   height: 650px;
-  min-width: 1200px;
+  min-width: 1070px;
   width: 100%;
   background-color: ${({ theme }) => theme.colors.white};
 `;
@@ -44,6 +46,11 @@ type DemoCanvasWidgetProps = {
   color?: string;
   background?: string;
 };
+
+export const StyledContainerDiagram = styled.div`
+  boder: 1px solid black;
+  display: flex;
+`
 
 export const StyledSFTP = styled.div`
   x: 10;
@@ -77,7 +84,6 @@ export const StyledText = styled(Text)`
 `;
 
 export const StyledQualifier = styled.div<StyledQualifierProps>`
-  background-color: ${({ theme }) => theme.colors.white};
   width: ${({ width }) => width};
   height: 22px;
   border-top-left-radius: 5em 5em;
@@ -90,7 +96,7 @@ export const StyledQualifier = styled.div<StyledQualifierProps>`
   left: ${({ left }) => (left ? '180px' : null)};
   text-align: center;
   color: ${({ color }) => color};
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
 `;
 
