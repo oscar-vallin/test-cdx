@@ -1,4 +1,3 @@
-import { shallow } from 'enzyme';
 import { GenerateTextFileContent } from './GenerateTextFileContent';
 import { mountWithTheme } from 'src/utils/testUtils';
 import { UiStringField } from 'src/data/services/graphql';
@@ -29,7 +28,7 @@ describe('text file content input', () => {
     it('Should renders generate text file content input', () => {
       const wrapper = mountWithTheme(<GenerateTextFileContent {...defaultProps}/>);
 
-      expect(wrapper.find('input[id="textFileContent"]')).toHaveLength(1);
-      wrapper.find('input[id="textFileContent"]').simulate('change', { target: { value: 'test-file.txt' } });
+      expect(wrapper.find('textarea[id="textFileContent"]')).toHaveLength(1);
+      wrapper.find('textarea[id="textFileContent"]').simulate('change', { target: { value: 'test-file.txt' } });
     });
 });
