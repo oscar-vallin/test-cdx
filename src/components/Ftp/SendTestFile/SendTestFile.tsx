@@ -90,7 +90,7 @@ const SendTestFile = ({
                           />
                         )}
                         {genTestFileForm?.fileBody?.visible && (
-                          <GenerateTextFileContent 
+                          <GenerateTextFileContent
                             fileBody={genTestFileForm?.fileBody}
                             textFileContent={textFileContent}
                             setTextFileContent={setTextFileContent}

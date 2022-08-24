@@ -699,7 +699,9 @@ const XchangeTransmissionPanel = ({
                         onChange={(event, newValue) => setCustomFileQualifier(newValue ?? '')}
                       />
                     )}
-                    <ButtonLink onClick={() => setCustomQualifier((prevState) => !prevState)}>use a custom qualifier</ButtonLink>
+                    <ButtonLink onClick={() => setCustomQualifier((prevState) => !prevState)}>
+                      use a custom qualifier
+                    </ButtonLink>
                   </Column>
                 </Row>
               </Spacing>

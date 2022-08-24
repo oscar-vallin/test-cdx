@@ -72,7 +72,7 @@ const XchangeAlertsPage = () => {
 
   useEffect(() => {
     if (!loadingXchangeAlerts && dataXchangeAlerts) {
-      console.log(dataXchangeAlerts)
+      console.log(dataXchangeAlerts);
       setXchangeAlerts(dataXchangeAlerts.xchangeProfileAlerts);
     }
   }, [dataXchangeAlerts, loadingXchangeAlerts]);
