@@ -463,7 +463,7 @@ const XchangeTransmissionPanel = ({
         <Row>
           <Column lg="4">
             <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
-              <PanelTitle id="__CreateGroup_Panel_Title" variant="bold" size="large">
+              <PanelTitle id="__FileTransmission_Panel_Title" variant="bold" size="large">
                 File transmission
               </PanelTitle>
             </Stack>
