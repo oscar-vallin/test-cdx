@@ -14,13 +14,14 @@ import {
   IColumn,
   IContextualMenuItem,
   DetailsList,
+  TooltipHost,
 } from '@fluentui/react';
-
 import { EmptyState } from 'src/containers/states';
 import { useNotification } from 'src/hooks/useNotification';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Button } from 'src/components/buttons';
 import { Row, Column, Container } from 'src/components/layouts';
+import { People20Filled, PeopleAudience24Filled } from '@fluentui/react-icons';
 import { PageTitle } from 'src/components/typography';
 
 import {
@@ -39,8 +40,11 @@ import { ROUTE_ACCESS_MANAGEMENT_POLICIES } from 'src/data/constants/RouteConsta
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { PageBody } from 'src/components/layouts/Column';
+import { theme } from 'src/styles/themes/theme';
 import { StyledCommandButton } from '../AccessManagement.styles';
 import { AccessPolicyPanel } from './AccessPolicyPanel';
+import { AccessPolicyMembersPanel } from './AccessPolicyMembersPanel';
+import { AccessPolicyUsagePanel } from './AccessPolicyUsagePanel';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -49,11 +53,13 @@ const generateColumns = () => {
     fieldName: key,
     data: 'string',
     isPadded: true,
-    minWidth: 225,
+    minWidth: key === 'members' ? 50 : 225,
   });
 
   return [
     createColumn({ name: 'Name', key: 'name' }),
+    createColumn({ name: '', key: 'members' }),
+    createColumn({ name: '', key: 'groupUsages' }),
     createColumn({ name: 'Template', key: 'tmpl' }),
     createColumn({ name: '', key: 'actions' }),
   ];
@@ -63,6 +69,9 @@ const _AccessManagementPoliciesPage = () => {
   const { orgSid } = useOrgSid();
   const columns = generateColumns();
   const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [isPanelMembersOpen, setIsPanelMembersOpen] = useState(false);
+  const [isPanelUsageOpen, setIsPanelUsageOpen] = useState(false);
+  const [currentName, setCurrentName] = useState('');
   const Toast = useNotification();
 
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
@@ -120,6 +129,34 @@ const _AccessManagementPoliciesPage = () => {
           >
             {item?.name}
           </Link>
+        );
+      case 'members':
+        return (
+          <TooltipHost content={`${item?.members} Users are assidned to this police`}>
+            <People20Filled
+              style={{ color: theme.colors.themePrimary, cursor: 'pointer' }}
+              onClick={() => {
+                setSelectedPolicyId(item?.sid);
+                setCurrentName(item?.name ?? '');
+                setIsPanelMembersOpen(true);
+              }}
+            />
+            <span style={{ position: 'relative', bottom: '4px' }}>&nbsp;( {item?.members} )</span>
+          </TooltipHost>
+        );
+      case 'groupUsages':
+        return (
+          <TooltipHost content={`This policy is used in ${item?.groupUsages} Access Policy Groups`}>
+            <PeopleAudience24Filled
+              style={{ color: theme.colors.themePrimary, cursor: 'pointer' }}
+              onClick={() => {
+                setSelectedPolicyId(item?.sid);
+                setCurrentName(item?.name ?? '');
+                setIsPanelUsageOpen(true);
+              }}
+            />
+            <span style={{ position: 'relative', bottom: '6px' }}>&nbsp;( {item?.groupUsages} )</span>
+          </TooltipHost>
         );
       case 'tmpl':
         return item?.tmpl ? <FontIcon iconName="Completed" /> : <span />;
@@ -293,6 +330,20 @@ const _AccessManagementPoliciesPage = () => {
           }}
           selectedPolicyId={selectedPolicyId}
           selectedTemplateId={selectedTemplateId}
+        />
+
+        <AccessPolicyMembersPanel
+          isOpen={isPanelMembersOpen}
+          closePanel={setIsPanelMembersOpen}
+          selectedPolicyId={selectedPolicyId ?? ''}
+          currentName={currentName}
+        />
+
+        <AccessPolicyUsagePanel
+          isOpen={isPanelUsageOpen}
+          closePanel={setIsPanelUsageOpen}
+          selectedPolicyId={selectedPolicyId ?? ''}
+          currentName={currentName}
         />
 
         <Dialog
