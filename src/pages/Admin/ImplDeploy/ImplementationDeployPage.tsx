@@ -1,97 +1,138 @@
-import React, { memo, useState } from 'react';
-import { SpinnerSize, List, Label } from '@fluentui/react';
-import { format } from 'date-fns';
+import React, { memo, useEffect, useState } from 'react';
+import { Label, List } from '@fluentui/react';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Column, Container } from 'src/components/layouts';
 import { PageTitle, Text } from 'src/components/typography';
-import { ImplementationDeployMutation, useImplementationDeployMutation } from 'src/data/services/graphql';
-import { Spinner } from 'src/components/spinners/Spinner';
+import {
+  ImplementationDeployStatus,
+  ImplementationLogQuery,
+  ImplementationPollQuery,
+  useImplementationDeployMutation,
+  useImplementationLogLazyQuery,
+  useImplementationPollQuery,
+} from 'src/data/services/graphql';
 import { ROUTE_IMPL_DEPLOY } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { PageBody } from 'src/components/layouts/Column';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
+import { prettyEnumValue } from 'src/utils/CDXUtils';
 import { DeployButton, Row } from './ImplementationDeployPage.styles';
 
+const POLL_INTERVAL = 10000;
+
 const _ImplementationDeployPage = () => {
-  const onImplementationDeploy = (data: ImplementationDeployMutation) => {
-    setInit(false);
-    setDataLoading(false);
-    const timestamp = format(new Date(data?.implementationDeploy?.timestamp), 'MM/dd/yyyy hh:mm a');
-    setRequestDateTime(timestamp);
-    setStatus(data?.implementationDeploy?.response ?? 'Unknown');
-    setChanges(data?.implementationDeploy?.changes ?? []);
+  const [lastPolled, setLastPolled] = useState(new Date());
+
+  const handleError = ErrorHandler();
+
+  const [status, setStatus] = useState<ImplementationDeployStatus>(ImplementationDeployStatus.Idle);
+  const [requestDateTime, setRequestDateTime] = useState<Date>();
+  const [changes, setChanges] = useState<string[]>([]);
+
+  const onLogUpdate = (data: ImplementationLogQuery) => {
+    if (data.implementationLog?.changes) {
+      setChanges(data.implementationLog.changes);
+    } else {
+      setChanges([]);
+    }
+    if (data.implementationLog?.status) {
+      setStatus(data.implementationLog.status);
+    } else {
+      setStatus(ImplementationDeployStatus.Error);
+    }
+    if (data.implementationLog?.timestamp) {
+      setRequestDateTime(data.implementationLog.timestamp);
+    } else {
+      setRequestDateTime(undefined);
+    }
   };
-  const [apiCall, { data }] = useImplementationDeployMutation({
+
+  const [callImplLog] = useImplementationLogLazyQuery({
     errorPolicy: 'all',
-    onCompleted: onImplementationDeploy,
+    onError: handleError,
+    onCompleted: onLogUpdate,
   });
 
-  const [init, setInit] = useState(true);
-  const [dataLoading, setDataLoading] = useState(false);
-  const [status, setStatus] = useState<string>('Unknown');
-  const [requestDateTime, setRequestDateTime] = useState<string>(format(new Date(), 'MM/dd/yyyy hh:mm a'));
-  const [changes, setChanges] = useState<any[]>([]);
+  const [callImplDeploy] = useImplementationDeployMutation({
+    errorPolicy: 'all',
+    onCompleted: () => callImplLog(),
+    onError: handleError,
+  });
 
-  const doDeploy = () => {
-    setDataLoading(true);
-    apiCall().then(() => {
-      if (data) {
-        setInit(false);
-      }
-    });
+  const checkPollResult = (data: ImplementationPollQuery) => {
+    const updatedLogs = data.implementationPoll ?? 0;
+    if (updatedLogs > 0) {
+      console.log(`Updating Logs ${updatedLogs}`);
+      setLastPolled(new Date());
+      callImplLog();
+    } else {
+      console.log(`Not updating: ${updatedLogs}`);
+    }
   };
 
-  const renderDeploymentResult = () => {
-    if (dataLoading) {
-      return (
-        <Row>
-          <Column>
-            <Spinner size={SpinnerSize.large} label="Deploying..." />
-          </Column>
-        </Row>
-      );
+  const { data: pollData } = useImplementationPollQuery({
+    variables: {
+      lastUpdated: lastPolled,
+    },
+    skip: false,
+    pollInterval: POLL_INTERVAL,
+  });
+
+  useEffect(() => {
+    if (pollData) {
+      checkPollResult(pollData);
     }
-    if (init) {
-      return (
-        <Row>
-          <Column>
-            <Text>
-              Click the <strong>Deploy</strong> button to begin deploying the latest updates to the Implementations
-            </Text>
-          </Column>
-        </Row>
-      );
-    }
-    return (
-      <>
-        <Row>
-          <Column lg="6">
-            <Label>Status</Label>
-            <Text>{status}</Text>
-          </Column>
-          <Column lg="6">
-            <Label>Last Update</Label>
-            <Text>{requestDateTime}</Text>
-          </Column>
-        </Row>
-        <Row>
-          <Column>
-            <Label>Changes</Label>
-            {renderChangesList()}
-          </Column>
-        </Row>
-      </>
-    );
+  }, [pollData]);
+
+  useEffect(() => {
+    callImplLog();
+  }, []);
+
+  const doDeploy = () => {
+    callImplDeploy().then();
+  };
+
+  const onRenderCell = (item: string | undefined) => {
+    return <Text>{item}</Text>;
   };
 
   const renderChangesList = () => {
     if (changes.length > 0) {
       return <List items={changes} onRenderCell={onRenderCell} />;
     }
-    return <Text>No Changes since the last Deployment.</Text>;
+    return <Text>No recent updates found.</Text>;
   };
 
-  const onRenderCell = (item: string | undefined) => {
-    return <Text>{item}</Text>;
+  const renderDeploymentResult = () => {
+    return (
+      <>
+        <Row>
+          <Column lg="6">
+            <Label>Status</Label>
+            <Text>{prettyEnumValue(status)}</Text>
+          </Column>
+          <Column lg="6">
+            <Label>Last Deployment</Label>
+            <Text>{requestDateTime}</Text>
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <Label>Latest Updates</Label>
+            {renderChangesList()}
+          </Column>
+        </Row>
+        {status !== ImplementationDeployStatus.InProgress && (
+          <Row>
+            <Column>
+              <Text>
+                Click the <strong>Deploy</strong> button to begin deploying the latest updates to the Implementations
+              </Text>
+            </Column>
+          </Row>
+        )}
+      </>
+    );
   };
 
   return (
@@ -113,7 +154,7 @@ const _ImplementationDeployPage = () => {
               <DeployButton
                 id="__DeployBtn"
                 variant="primary"
-                disabled={dataLoading}
+                disabled={status === ImplementationDeployStatus.InProgress}
                 text="Deploy"
                 onClick={doDeploy}
               />
