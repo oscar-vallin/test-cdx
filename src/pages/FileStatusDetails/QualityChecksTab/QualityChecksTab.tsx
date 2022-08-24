@@ -212,7 +212,7 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
                     <Stack.Item>
                       <Stack horizontal tokens={{ childrenGap: 15 }} verticalAlign="center">
                         <Stack.Item>
-                          <Text size="giant">{errorPercent.toFixed(2)}</Text>
+                          <Text size="giant">{(errorPercent < 1) ? 'Less than 1' : errorPercent.toFixed(2)}</Text>
                           <SuperScript>%</SuperScript>
                         </Stack.Item>
                         <Stack.Item>
