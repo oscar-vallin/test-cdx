@@ -6,6 +6,7 @@ export enum UsersTableColumns {
   LAST_NAME,
   EMAIL,
   ORGANIZATION,
+  ACCESS_POLICY_GROUPS,
 }
 
 export const useUsersTableColumns = (selectedColumns: UsersTableColumns[]) => {
@@ -52,6 +53,17 @@ export const useUsersTableColumns = (selectedColumns: UsersTableColumns[]) => {
       name: 'Organization',
       key: 'organization',
       fieldName: 'orgName',
+      minWidth: 255,
+      isPadded: true,
+      dataType: 'string',
+      sortable: true,
+      filterable: false,
+    },
+    {
+      data: UsersTableColumns.ACCESS_POLICY_GROUPS,
+      name: 'Access Policy Groups',
+      key: 'accessPolicyGroups',
+      fieldName: 'accessName',
       minWidth: 255,
       isPadded: true,
       dataType: 'string',
