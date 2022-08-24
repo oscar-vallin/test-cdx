@@ -84,12 +84,14 @@ export const StyledText = styled(Text)`
 `;
 
 export const StyledQualifier = styled.div<StyledQualifierProps>`
+  background: ${({ theme }) => theme.colors.white};
   width: ${({ width }) => width};
   height: 22px;
   border-top-left-radius: 5em 5em;
   border-top-right-radius: 5em 5em;
   border-bottom-right-radius: 5em 5em;
   border-bottom-left-radius: 5em 5em;
+  padding-top: 2px;
   border: solid 1px ${({ color }) => color};
   position: ${({ position }) => (position ? 'absolute' : null)};
   top: ${({ top }) => (top ? '43px' : null)};
