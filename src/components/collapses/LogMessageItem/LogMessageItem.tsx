@@ -20,21 +20,21 @@ export const LogMessageItem = ({ logMessage }: LogMessageItemProps): ReactNode |
     if (!severity) {
       return 'info';
     }
-    switch (severity) {
-      case LogLevel.Debug:
-        return 'info';
-      case LogLevel.Error:
-        return 'error';
-      case LogLevel.Fatal:
-        return 'error';
-      case LogLevel.Info:
-        return 'info';
-      case LogLevel.Trace:
-        return 'info';
-      case LogLevel.Warn:
-        return 'warning';
-      default:
-        return 'info';
+
+    if (severity == 'DEBUG') {
+      return 'info';
+    } else if (severity == 'ERROR') {
+      return 'error';
+    } else if (severity == 'FATAL') {
+      return 'error';
+    } else if (severity == 'INFO') {
+      return 'info';
+    } else if (severity == 'TRACE') {
+      return 'info';
+    } else if (severity == 'WARN') {
+      return 'warning';
+    } else {
+      return 'info';
     }
   };
 
