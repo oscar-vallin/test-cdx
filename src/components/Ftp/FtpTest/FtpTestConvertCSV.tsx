@@ -3,18 +3,8 @@ import { FontIcon, Stack } from '@fluentui/react';
 import { ButtonLink } from 'src/components/buttons';
 import { yyyyMMdda } from 'src/utils/CDXUtils';
 
-const FtpTestConvertCSV = ({ allMessages }) => {
-  const quoteField = (field: string) => {
-    field = `"${field.replace(/"/g, '""')}"`;
-    return field;
-  };
-
-  const needsQuote = (str: string) => {
-    const DEFAULT_FIELD_DELIMITER = ',';
-    return str.includes(DEFAULT_FIELD_DELIMITER) || str.includes('\r') || str.includes('\n') || str.includes('"');
-  };
-
-  const ConvertToCSV = (objArray) => {
+function ConvertToCSVBinding(needsQuote: (str: string) => boolean, quoteField: (field: string) => string) {
+  return (objArray) => {
     const array = typeof objArray !== 'object' ? JSON.parse(objArray) : objArray;
     const baseColumns = ['Timestamp', 'Severity', 'Name', 'Body'];
     let str = '';
@@ -54,6 +44,28 @@ const FtpTestConvertCSV = ({ allMessages }) => {
     str = `${columnHeadersStr}\r\n${str}`;
     return str;
   };
+}
+
+function quoteFieldBinding() {
+  return (field: string) => {
+    field = `"${field.replace(/"/g, '""')}"`;
+    return field;
+  };
+};
+
+function needsQuoteBinding() {
+  return (str: string) => {
+    const DEFAULT_FIELD_DELIMITER = ',';
+    return str.includes(DEFAULT_FIELD_DELIMITER) || str.includes('\r') || str.includes('\n') || str.includes('"');
+  };
+}
+
+const FtpTestConvertCSV = ({ allMessages }) => {
+  const quoteField = quoteFieldBinding();
+
+  const needsQuote = needsQuoteBinding();
+
+  const ConvertToCSV = ConvertToCSVBinding(needsQuote, quoteField);
 
   const downloadLogsAsCsv = () => {
     if (allMessages?.length) {
@@ -63,7 +75,6 @@ const FtpTestConvertCSV = ({ allMessages }) => {
       const blob = new Blob(['\ufeff', str]);
       downloadLink.href = URL.createObjectURL(blob);
       downloadLink.download = 'ftp-test-logs.csv';
-
       document.body.appendChild(downloadLink);
       downloadLink.click();
       document.body.removeChild(downloadLink);
@@ -76,11 +87,11 @@ const FtpTestConvertCSV = ({ allMessages }) => {
         iconName="DownloadDocument"
         style={{ paddingRight: '.5em', cursor: 'pointer' }}
       />
-      <ButtonLink target="_new" onClick={downloadLogsAsCsv} title="Download Logs">
+      <ButtonLink id="__download_logs" target="_new" onClick={downloadLogsAsCsv} title="Download Logs">
         Download Logs
       </ButtonLink>
     </Stack.Item>
   );
 };
 
-export { FtpTestConvertCSV };
+export { FtpTestConvertCSV, ConvertToCSVBinding, quoteFieldBinding, needsQuoteBinding };
