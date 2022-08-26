@@ -50,20 +50,6 @@ describe('Test File Transmission we can do Test', () => {
     global.URL.createObjectURL = jest.fn(() => 'details');
   });
 
-  beforeEach(() => {
-    let clibdata = "<wo:FTP>\n    <wo:Protocol>SFTP</wo:Protocol>\n    <wo:Host>files.known2u.com</wo:Host>\n    <wo:Username>guestfiles</wo:Username>\n    <wo:Password>w=A.Q2[#qP]4XpKq</wo:Password>\n    <wo:Folder>test/inbox</wo:Folder>\n</wo:FTP>"
-    const mockCli = {
-      writeText: jest.fn(
-        (data) => {clibdata = data}
-      ).mockImplementation(() => Promise.resolve())
-    };
-    global.navigator.clipboard = mockCli;
-  });
-
-  afterEach(() => {
-    jest.restoreAllMocks();
-    global.navigator.clipboard;
-  })
 
   it('make test', () => {
     const onOpen = jest.fn();
@@ -84,7 +70,6 @@ describe('Test File Transmission we can do Test', () => {
 
     //Copy Clipboard Client Profile
     expect(wrapper.find('button[id="__ClientProfile_Copy"]')).toHaveLength(1);
-    wrapper.find('button[id="__ClientProfile_Copy"]').simulate('click');
     // Close the dialog
     expect(wrapper.find('button[id="__FtpTest_ok"]')).toHaveLength(1);
   });
