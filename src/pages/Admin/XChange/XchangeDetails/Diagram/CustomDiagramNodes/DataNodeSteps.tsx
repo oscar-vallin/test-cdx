@@ -96,6 +96,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
   if (subTitle && subTitle.trim() !== '') {
     styles['maxWidth'] = '250px';
     styles['maxHeight'] = '45px';
+    styles['marginBottom'] = '-15px'
     styles['width'] = '70%';
     styles['height'] = '100%';
     styles['overflow'] = 'hidden';
@@ -103,6 +104,10 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
 
   let width = '48px';
   let color = 'blue';
+
+  if (qualifier === 'StructErrors') {
+    width = '65px';
+  }
 
   if (qualifier === 'TEST') {
     color = 'orange';
@@ -234,8 +239,8 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
                   if (!lastNode) {
                     moveDownxchangeStep({
                       variables: {
-                        xchangeFileProcessSid,
                         sid,
+                        xchangeFileProcessSid,
                       },
                     });
                   }
@@ -266,7 +271,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
                     color: '#fff',
                     fontSize: '18px',
                     cursor: 'pointer',
-                    width: '40px',
+                    width: '37px',
                     height: '37px',
                     borderRadius: '50%',
                     backgroundColor: '#00a341',
@@ -291,7 +296,10 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
                 />
               )}
               <Text style={styles}>
-                {data.label} <br /> {subTitle && subTitle.trim() !== '' && <Text variant="small">{subTitle}</Text>}
+                {data.label}{' '}
+                {subTitle && subTitle.trim() !== '' && (
+                  <span style={{ fontSize: '10px', position: 'relative', bottom: '7px' }}>{subTitle}</span>
+                )}
               </Text>
             </Stack>
           </Row>
