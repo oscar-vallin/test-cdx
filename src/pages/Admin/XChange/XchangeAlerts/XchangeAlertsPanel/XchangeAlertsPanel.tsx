@@ -95,12 +95,16 @@ const XchangeAlertsPanel = ({
     useQueryHandler(useCreateXchangeConfigAlertMutation);
 
   // eslint-disable-next-line prettier/prettier
-  const [updateXchangeProfileAlert, { data: updateProfiledata, loading: updateProfileLoading, error: updateProfileError }] =
-  useQueryHandler(useUpdateXchangeProfileAlertMutation);
+  const [
+    updateXchangeProfileAlert,
+    { data: updateProfiledata, loading: updateProfileLoading, error: updateProfileError },
+  ] = useQueryHandler(useUpdateXchangeProfileAlertMutation);
 
   // eslint-disable-next-line prettier/prettier
-  const [createXchangeProfileAlert, { data: createProfileData, loading: createProfileLoading, error: createProfileError }] =
-  useQueryHandler(useCreateXchangeProfileAlertMutation);
+  const [
+    createXchangeProfileAlert,
+    { data: createProfileData, loading: createProfileLoading, error: createProfileError },
+  ] = useQueryHandler(useCreateXchangeProfileAlertMutation);
 
   const fetchDataAlertForm = () => {
     if (coreFilename) {
@@ -254,7 +258,7 @@ const XchangeAlertsPanel = ({
   useEffect(() => {
     if (!alertConfigFormLoading && alertConfigFormData) {
       const { xchangeConfigAlertForm } = alertConfigFormData;
-      console.log(xchangeConfigAlertForm)
+      console.log(xchangeConfigAlertForm);
       setXchangeConfigAlert(xchangeConfigAlertForm);
       if (xchangeConfigAlertForm?.alertTypes.value && xchangeConfigAlertForm?.alertTypes.value.length > 0) {
         setAlertTypesValue(xchangeConfigAlertForm?.alertTypes.value.map((alert) => alert.value));

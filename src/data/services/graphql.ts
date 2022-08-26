@@ -730,10 +730,18 @@ export type GrantExternalUserInput = {
 export type ImplementationDeployResponse = {
   __typename?: 'ImplementationDeployResponse';
   response: GqOperationResponse;
+  status: ImplementationDeployStatus;
   timestamp: Scalars['DateTime'];
   references?: Maybe<Array<Scalars['String']>>;
   changes?: Maybe<Array<Scalars['String']>>;
 };
+
+export enum ImplementationDeployStatus {
+  Idle = 'IDLE',
+  InProgress = 'IN_PROGRESS',
+  Complete = 'COMPLETE',
+  Error = 'ERROR'
+}
 
 export type InsuredStat = {
   __typename?: 'InsuredStat';
@@ -1782,6 +1790,8 @@ export type Query = {
    */
   passwordValidation?: Maybe<PasswordValidation>;
   xpsftpTest?: Maybe<XpsftpTestPage>;
+  implementationLog?: Maybe<ImplementationDeployResponse>;
+  implementationPoll?: Maybe<Scalars['Int']>;
   reprocessDialog?: Maybe<ReprocessDialog>;
   xchangeProfile?: Maybe<XchangeProfile>;
   xchangeConfig?: Maybe<XchangeConfigForm>;
@@ -2176,6 +2186,11 @@ export type QueryPasswordValidationArgs = {
 
 export type QueryXpsftpTestArgs = {
   orgSid?: Maybe<Scalars['ID']>;
+};
+
+
+export type QueryImplementationPollArgs = {
+  lastUpdated?: Maybe<Scalars['DateTime']>;
 };
 
 
@@ -6080,6 +6095,27 @@ export type XpsftpTestQuery = (
   )> }
 );
 
+export type ImplementationLogQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ImplementationLogQuery = (
+  { __typename?: 'Query' }
+  & { implementationLog?: Maybe<(
+    { __typename?: 'ImplementationDeployResponse' }
+    & Pick<ImplementationDeployResponse, 'response' | 'status' | 'timestamp' | 'references' | 'changes'>
+  )> }
+);
+
+export type ImplementationPollQueryVariables = Exact<{
+  lastUpdated?: Maybe<Scalars['DateTime']>;
+}>;
+
+
+export type ImplementationPollQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'implementationPoll'>
+);
+
 export type ReprocessDialogQueryVariables = Exact<{
   workOrderId: Scalars['String'];
 }>;
@@ -7838,7 +7874,7 @@ export type ImplementationDeployMutation = (
   { __typename?: 'Mutation' }
   & { implementationDeploy?: Maybe<(
     { __typename?: 'ImplementationDeployResponse' }
-    & Pick<ImplementationDeployResponse, 'response' | 'timestamp' | 'references' | 'changes'>
+    & Pick<ImplementationDeployResponse, 'response' | 'status' | 'timestamp' | 'references' | 'changes'>
   )> }
 );
 
@@ -13572,6 +13608,73 @@ export function useXpsftpTestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type XpsftpTestQueryHookResult = ReturnType<typeof useXpsftpTestQuery>;
 export type XpsftpTestLazyQueryHookResult = ReturnType<typeof useXpsftpTestLazyQuery>;
 export type XpsftpTestQueryResult = Apollo.QueryResult<XpsftpTestQuery, XpsftpTestQueryVariables>;
+export const ImplementationLogDocument = gql`
+    query ImplementationLog {
+  implementationLog {
+    response
+    status
+    timestamp
+    references
+    changes
+  }
+}
+    `;
+
+/**
+ * __useImplementationLogQuery__
+ *
+ * To run a query within a React component, call `useImplementationLogQuery` and pass it any options that fit your needs.
+ * When your component renders, `useImplementationLogQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useImplementationLogQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useImplementationLogQuery(baseOptions?: Apollo.QueryHookOptions<ImplementationLogQuery, ImplementationLogQueryVariables>) {
+        return Apollo.useQuery<ImplementationLogQuery, ImplementationLogQueryVariables>(ImplementationLogDocument, baseOptions);
+      }
+export function useImplementationLogLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ImplementationLogQuery, ImplementationLogQueryVariables>) {
+          return Apollo.useLazyQuery<ImplementationLogQuery, ImplementationLogQueryVariables>(ImplementationLogDocument, baseOptions);
+        }
+export type ImplementationLogQueryHookResult = ReturnType<typeof useImplementationLogQuery>;
+export type ImplementationLogLazyQueryHookResult = ReturnType<typeof useImplementationLogLazyQuery>;
+export type ImplementationLogQueryResult = Apollo.QueryResult<ImplementationLogQuery, ImplementationLogQueryVariables>;
+export const ImplementationPollDocument = gql`
+    query ImplementationPoll($lastUpdated: DateTime) {
+  implementationPoll(lastUpdated: $lastUpdated)
+}
+    `;
+
+/**
+ * __useImplementationPollQuery__
+ *
+ * To run a query within a React component, call `useImplementationPollQuery` and pass it any options that fit your needs.
+ * When your component renders, `useImplementationPollQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useImplementationPollQuery({
+ *   variables: {
+ *      lastUpdated: // value for 'lastUpdated'
+ *   },
+ * });
+ */
+export function useImplementationPollQuery(baseOptions?: Apollo.QueryHookOptions<ImplementationPollQuery, ImplementationPollQueryVariables>) {
+        return Apollo.useQuery<ImplementationPollQuery, ImplementationPollQueryVariables>(ImplementationPollDocument, baseOptions);
+      }
+export function useImplementationPollLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ImplementationPollQuery, ImplementationPollQueryVariables>) {
+          return Apollo.useLazyQuery<ImplementationPollQuery, ImplementationPollQueryVariables>(ImplementationPollDocument, baseOptions);
+        }
+export type ImplementationPollQueryHookResult = ReturnType<typeof useImplementationPollQuery>;
+export type ImplementationPollLazyQueryHookResult = ReturnType<typeof useImplementationPollLazyQuery>;
+export type ImplementationPollQueryResult = Apollo.QueryResult<ImplementationPollQuery, ImplementationPollQueryVariables>;
 export const ReprocessDialogDocument = gql`
     query ReprocessDialog($workOrderId: String!) {
   reprocessDialog(workOrderId: $workOrderId) {
@@ -16927,6 +17030,7 @@ export const ImplementationDeployDocument = gql`
     mutation ImplementationDeploy {
   implementationDeploy {
     response
+    status
     timestamp
     references
     changes

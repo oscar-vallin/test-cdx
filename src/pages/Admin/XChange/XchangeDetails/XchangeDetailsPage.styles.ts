@@ -50,7 +50,7 @@ type DemoCanvasWidgetProps = {
 export const StyledContainerDiagram = styled.div`
   boder: 1px solid black;
   display: flex;
-`
+`;
 
 export const StyledSFTP = styled.div`
   x: 10;

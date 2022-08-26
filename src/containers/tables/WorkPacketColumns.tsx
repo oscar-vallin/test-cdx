@@ -428,8 +428,7 @@ export const useWorkPacketColumns = (
       dataType: 'string',
       sortable: true,
       filterable: true,
-      onRender: (item: WorkPacketStatus) =>
-        renderDownloadLink(item.workOrderId, item.commands, item.inboundFilename),
+      onRender: (item: WorkPacketStatus) => renderDownloadLink(item.workOrderId, item.commands, item.inboundFilename),
     },
     {
       key: 'vendorFilename',
@@ -447,8 +446,7 @@ export const useWorkPacketColumns = (
       dataType: 'string',
       sortable: true,
       filterable: true,
-      onRender: (item: WorkPacketStatus) =>
-        renderDownloadLink(item.workOrderId, item.commands, item.vendorFilename),
+      onRender: (item: WorkPacketStatus) => renderDownloadLink(item.workOrderId, item.commands, item.vendorFilename),
     },
     {
       key: 'totalRecords',
