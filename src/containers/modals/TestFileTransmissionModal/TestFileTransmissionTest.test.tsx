@@ -27,16 +27,16 @@ jest.mock('src/data/services/graphql', () => ({
         ftpTestM: {
           status: 'COMPLETE',
           csvLog: {},
-          // allMessages: [{
-          //   severity: 'INFO',
-          //   name: 'Current Directory',
-          //   timeStamp: '2022-03-22T17:28:17.574701Z',
-          //   body: 'File uploaded succesfully',
-          //   attributes: [
-          //     { name: 'server.dir', strValue: '/' },
-          //     { name: 'server.dir', strValue: '/' },
-          //   ],
-          // }],
+          allMessages: [{
+            severity: 'INFO',
+            name: 'Current Directory',
+            timeStamp: '2022-03-22T17:28:17.574701Z',
+            body: 'File uploaded succesfully',
+            attributes: [
+              { name: 'server.dir', strValue: '/' },
+              { name: 'server.dir', strValue: '/' },
+            ],
+          }],
         },
       },
     },
@@ -44,6 +44,11 @@ jest.mock('src/data/services/graphql', () => ({
 }));
 
 describe('Test File Transmission we can do Test', () => {
+  global.URL.createObjectURL = jest.fn();
+  it('Handle createObjectUrl', () => {
+    global.URL.createObjectURL = jest.fn(() => 'details');
+  });
+
   it('make test', () => {
     const onOpen = jest.fn();
     const wrapper = mountWithTheme(
