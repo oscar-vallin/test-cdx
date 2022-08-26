@@ -119,7 +119,6 @@ const TestFileTransmissionModal = ({ isOpen, open }: TestFileTransmissionModalPr
         setMessage(errorMsg);
       }
     }
-
     if (errors) {
       Toast.error({ text: errors[0].message });
     }
@@ -142,31 +141,30 @@ const TestFileTransmissionModal = ({ isOpen, open }: TestFileTransmissionModalPr
       return 'info';
     }
     // purposely use a switch statement so if we add a WorkStatus, it will generate a compiler error.
-    switch (ftpTestStatus) {
-      case WorkStatus.Queued:
-        return 'info';
-      case WorkStatus.Processing:
-        return 'info';
-      case WorkStatus.Complete:
-        return 'success';
-      case WorkStatus.Error:
-        return 'error';
-      case WorkStatus.Submitted:
-        return 'info';
-      case WorkStatus.Warning:
-        return 'warning';
-      case WorkStatus.Hold:
-        return 'warning';
-      case WorkStatus.Canceled:
-        return 'error';
-      case WorkStatus.QualityCheckFailed:
-        return 'error';
-      case WorkStatus.NoRecords:
-        return 'warning';
-      case WorkStatus.TechMigrationCheckFailed:
-        return 'error';
-      default:
-        return 'info';
+    if (ftpTestStatus == 'QUEUED') {
+      return 'info';
+    } else if (ftpTestStatus == 'PROCESSING') {
+      return 'info';
+    } else if (ftpTestStatus == 'COMPLETE') {
+      return 'success';
+    } else if (ftpTestStatus == 'ERROR') {
+      return 'error';
+    } else if (ftpTestStatus == 'SUBMITTED') {
+      return 'info';
+    } else if (ftpTestStatus == 'WARNING') {
+      return 'warning';
+    } else if (ftpTestStatus == 'HOLD') {
+      return 'warning';
+    } else if (ftpTestStatus == 'CANCELED') {
+      return 'error';
+    } else if (ftpTestStatus == 'QUALITY_CHECK_FAILED') {
+      return 'error';
+    } else if (ftpTestStatus == 'NO_RECORDS') {
+      return 'warning';
+    } else if (ftpTestStatus == 'TECH_MIGRATION_CHECK_FAILED') {
+      return 'error';
+    } else {
+      return 'info';
     }
   };
 
@@ -234,6 +232,7 @@ const TestFileTransmissionModal = ({ isOpen, open }: TestFileTransmissionModalPr
                     </Stack.Item>
                     <Stack.Item align="center" disableShrink>
                       <Badge
+                        id="__Status_result"
                         variant={getBadgeVariant(ftpTestData?.ftpTestM?.status)}
                         label={ftpTestData?.ftpTestM?.status ? ftpTestData?.ftpTestM?.status : ''}
                         pill
