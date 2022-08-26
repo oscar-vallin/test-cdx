@@ -35,7 +35,7 @@ const FtpTestClientProfileSnippet = ({ clientProfileSnippet }) => {
         </Stack.Item>
         <Stack.Item align="center" disableShrink>
           <FontIcon iconName="Copy" onClick={copyProfileSnippet} style={{ paddingRight: '.5em', cursor: 'pointer' }} />
-          <ButtonLink onClick={copyProfileSnippet} target="_new" title="Copy To Clipboard">
+          <ButtonLink id="__ClientProfile_Copy" onClick={copyProfileSnippet} target="_new" title="Copy To Clipboard">
             Copy To Clipboard
           </ButtonLink>
         </Stack.Item>
