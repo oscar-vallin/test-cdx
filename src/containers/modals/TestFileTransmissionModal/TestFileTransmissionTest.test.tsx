@@ -27,17 +27,20 @@ jest.mock('src/data/services/graphql', () => ({
         ftpTestM: {
           status: 'COMPLETE',
           csvLog: {},
-          allMessages: [{
-            severity: 'INFO',
-            name: 'Current Directory',
-            timeStamp: '2022-03-22T17:28:17.574701Z',
-            body: 'File uploaded succesfully',
-            attributes: [
-              { name: 'server.dir', strValue: '/' },
-              { name: 'server.dir', strValue: '/' },
-            ],
-          }],
-          clientProfileSnippet: "<wo:FTP>\n    <wo:Protocol>SFTP</wo:Protocol>\n    <wo:Host>files.known2u.com</wo:Host>\n    <wo:Username>guestfiles</wo:Username>\n    <wo:Password>w=A.Q2[#qP]4XpKq</wo:Password>\n    <wo:Folder>test/inbox</wo:Folder>\n</wo:FTP>"
+          allMessages: [
+            {
+              severity: 'INFO',
+              name: 'Current Directory',
+              timeStamp: '2022-03-22T17:28:17.574701Z',
+              body: 'File uploaded succesfully',
+              attributes: [
+                { name: 'server.dir', strValue: '/' },
+                { name: 'server.dir', strValue: '/' },
+              ],
+            },
+          ],
+          clientProfileSnippet:
+            '<wo:FTP>\n    <wo:Protocol>SFTP</wo:Protocol>\n    <wo:Host>files.known2u.com</wo:Host>\n    <wo:Username>guestfiles</wo:Username>\n    <wo:Password>w=A.Q2[#qP]4XpKq</wo:Password>\n    <wo:Folder>test/inbox</wo:Folder>\n</wo:FTP>',
         },
       },
     },
@@ -49,7 +52,6 @@ describe('Test File Transmission we can do Test', () => {
   it('Handle createObjectUrl', () => {
     global.URL.createObjectURL = jest.fn(() => 'details');
   });
-
 
   it('make test', () => {
     const onOpen = jest.fn();
@@ -74,5 +76,3 @@ describe('Test File Transmission we can do Test', () => {
     expect(wrapper.find('button[id="__FtpTest_ok"]')).toHaveLength(1);
   });
 });
-
-

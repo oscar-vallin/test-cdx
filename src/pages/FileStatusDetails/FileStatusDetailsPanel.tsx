@@ -184,7 +184,7 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
       {
         id: '__Close_Details_Button',
         key: '__Close_Details_Buttn',
-        iconProps: {iconName: 'Cancel'},
+        iconProps: { iconName: 'Cancel' },
         onClick: handleClosePanel,
         text: 'Close Details',
         buttonStyles: {

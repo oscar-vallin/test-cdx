@@ -143,25 +143,25 @@ const TestFileTransmissionModal = ({ isOpen, open }: TestFileTransmissionModalPr
     // purposely use a switch statement so if we add a WorkStatus, it will generate a compiler error.
     if (ftpTestStatus == 'QUEUED') {
       return 'info';
-    } else if (ftpTestStatus == 'PROCESSING') {
+    } if (ftpTestStatus == 'PROCESSING') {
       return 'info';
-    } else if (ftpTestStatus == 'COMPLETE') {
+    } if (ftpTestStatus == 'COMPLETE') {
       return 'success';
-    } else if (ftpTestStatus == 'ERROR') {
+    } if (ftpTestStatus == 'ERROR') {
       return 'error';
-    } else if (ftpTestStatus == 'SUBMITTED') {
+    } if (ftpTestStatus == 'SUBMITTED') {
       return 'info';
-    } else if (ftpTestStatus == 'WARNING') {
+    } if (ftpTestStatus == 'WARNING') {
       return 'warning';
-    } else if (ftpTestStatus == 'HOLD') {
+    } if (ftpTestStatus == 'HOLD') {
       return 'warning';
-    } else if (ftpTestStatus == 'CANCELED') {
+    } if (ftpTestStatus == 'CANCELED') {
       return 'error';
-    } else if (ftpTestStatus == 'QUALITY_CHECK_FAILED') {
+    } if (ftpTestStatus == 'QUALITY_CHECK_FAILED') {
       return 'error';
-    } else if (ftpTestStatus == 'NO_RECORDS') {
+    } if (ftpTestStatus == 'NO_RECORDS') {
       return 'warning';
-    } else if (ftpTestStatus == 'TECH_MIGRATION_CHECK_FAILED') {
+    } if (ftpTestStatus == 'TECH_MIGRATION_CHECK_FAILED') {
       return 'error';
     } else {
       return 'info';

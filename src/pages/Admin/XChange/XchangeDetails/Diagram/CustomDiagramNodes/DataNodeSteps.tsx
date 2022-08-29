@@ -96,7 +96,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
   if (subTitle && subTitle.trim() !== '') {
     styles['maxWidth'] = '250px';
     styles['maxHeight'] = '45px';
-    styles['marginBottom'] = '-15px'
+    styles['marginBottom'] = '-15px';
     styles['width'] = '70%';
     styles['height'] = '100%';
     styles['overflow'] = 'hidden';

@@ -23,19 +23,23 @@ export const LogMessageItem = ({ logMessage }: LogMessageItemProps): ReactNode |
 
     if (severity == 'DEBUG') {
       return 'info';
-    } else if (severity == 'ERROR') {
+    }
+    if (severity == 'ERROR') {
       return 'error';
-    } else if (severity == 'FATAL') {
+    }
+    if (severity == 'FATAL') {
       return 'error';
-    } else if (severity == 'INFO') {
-      return 'info';
-    } else if (severity == 'TRACE') {
-      return 'info';
-    } else if (severity == 'WARN') {
-      return 'warning';
-    } else {
+    }
+    if (severity == 'INFO') {
       return 'info';
     }
+    if (severity == 'TRACE') {
+      return 'info';
+    }
+    if (severity == 'WARN') {
+      return 'warning';
+    }
+    return 'info';
   };
 
   return (

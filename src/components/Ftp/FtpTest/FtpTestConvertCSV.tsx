@@ -51,7 +51,7 @@ function quoteFieldBinding() {
     field = `"${field.replace(/"/g, '""')}"`;
     return field;
   };
-};
+}
 
 function needsQuoteBinding() {
   return (str: string) => {
