@@ -45,4 +45,7 @@ export const ThemedPanel = styled(Panel)`
       background-color: ${({ theme }) => theme.colors.white};
     }
   }
+  .ms-Overlay {
+    cursor: auto;
+  }
 `;
