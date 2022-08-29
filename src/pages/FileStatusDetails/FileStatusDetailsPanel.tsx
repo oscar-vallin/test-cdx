@@ -182,6 +182,18 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
 
     const items: ICommandBarItemProps[] = [
       {
+        id: '__Close_Details_Button',
+        key: '__Close_Details_Buttn',
+        iconProps: {iconName: 'Cancel'},
+        onClick: handleClosePanel,
+        text: 'Close Details',
+        buttonStyles: {
+          root: {
+            marginRight: '20px',
+          },
+        },
+      },
+      {
         id: '__ResendBtn',
         key: '__ResendBtn',
         icon: 'Send',
@@ -232,7 +244,7 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
       {
         id: '__CancelBtn',
         key: '__CancelBtn',
-        icon: 'Cancel',
+        icon: 'NotExecuted',
         confirmationMsg: "Are you sure you want to Cancel this Work Packet's processing?",
         command: cancelCmd,
         onClick: () => {
