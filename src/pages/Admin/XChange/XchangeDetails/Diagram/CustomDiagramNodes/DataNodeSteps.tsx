@@ -81,7 +81,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
   const [moveUpXchangeStep, { data: dataMoveUp, loading: loadingMoveUp }] =
     useQueryHandler(useMoveUpXchangeStepMutation);
 
-  const [moveDownxchangeStep, { data: dataMoveDown, loading: loadingMoveDown }] =
+  const [moveDownxchangeStep, { data: dataMoveDown, loading: loadingMoveDown, error: errorMoveDown }] =
     useQueryHandler(useMoveDownXchangeStepMutation);
 
   let iconName = data.icon;
@@ -96,7 +96,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
   if (subTitle && subTitle.trim() !== '') {
     styles['maxWidth'] = '250px';
     styles['maxHeight'] = '45px';
-    styles['marginBottom'] = '-15px'
+    styles['marginBottom'] = '-15px';
     styles['width'] = '70%';
     styles['height'] = '100%';
     styles['overflow'] = 'hidden';
@@ -107,9 +107,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
 
   if (qualifier === 'StructErrors') {
     width = '65px';
-  }
-
-  if (qualifier === 'TEST') {
+  } else if (qualifier === 'TEST') {
     color = 'orange';
   } else if (qualifier === 'PROD-OE') {
     width = '60px';
@@ -237,10 +235,11 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
                   setOpenPanel(false);
                   setHiddeIcon(true);
                   if (!lastNode) {
+                    console.log(sid, xchangeFileProcessSid)
                     moveDownxchangeStep({
                       variables: {
-                        sid,
                         xchangeFileProcessSid,
+                        sid,
                       },
                     });
                   }
@@ -387,7 +386,11 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
     if (!loadingMoveDown && dataMoveDown) {
       refreshDetailsPage(true);
     }
-  }, [dataMoveUp, loadingMoveUp, dataMoveDown, loadingMoveDown]);
+
+    if (!loadingMoveDown && errorMoveDown) {
+      console.log(errorMoveDown)
+    }
+  }, [dataMoveUp, loadingMoveUp, dataMoveDown, loadingMoveDown, errorMoveDown]);
 
   return (
     <>
