@@ -12,7 +12,6 @@ export function InitialNodes(data) {
     { x: 820, y: 700 },
   ];
   const initialSteps = data.steps.map((step, index: number) => {
-    // console.log(data.steps);
     const values = {};
     const lastNode = index === data.steps.length - 1;
     let positionX = 0;
@@ -44,9 +43,11 @@ export function InitialNodes(data) {
       if (step.position.y === 1) {
         positionY = 145;
       } else if (step.position.y === 2) {
-        positionY = 265;
+        positionY = 235;
       } else if (step.position.y === 3) {
-        positionY = 385;
+        positionY = 335;
+      } else if (step.position.y === 4) {
+        positionY = 430;
       }
     }
 
