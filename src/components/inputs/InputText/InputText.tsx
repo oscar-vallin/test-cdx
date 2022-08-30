@@ -88,11 +88,12 @@ const InputText = ({
 
 type UIReadOnlyType = {
   id: string;
+  type?: string;
   uiField?: UiField;
   renderLabel?: boolean;
 };
 
-const UIInputTextReadOnly = ({ id, uiField, renderLabel = true }: UIReadOnlyType) => {
+const UIInputTextReadOnly = ({ id, type = 'text', uiField, renderLabel = true }: UIReadOnlyType) => {
   const getValue = () => {
     let text = '';
     if (uiField && Object.prototype.hasOwnProperty.call(uiField, 'description')) {
@@ -101,6 +102,9 @@ const UIInputTextReadOnly = ({ id, uiField, renderLabel = true }: UIReadOnlyType
       text = uiField['value'];
     }
     if (text && text.length > 0) {
+      if (type === 'password') {
+        return '********';
+      }
       return text;
     }
     return <EmptyValue>&lt;empty&gt;</EmptyValue>;
@@ -140,7 +144,7 @@ const UIInputText = ({
   }
 
   if (uiField?.readOnly === true) {
-    return <UIInputTextReadOnly id={id} uiField={uiField} renderLabel={renderLabel} />;
+    return <UIInputTextReadOnly id={id} type={type} uiField={uiField} renderLabel={renderLabel} />;
   }
   return (
     <InputText

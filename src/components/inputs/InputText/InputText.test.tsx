@@ -178,6 +178,22 @@ describe('Basic Input Component', () => {
     expect(wrapper.find('UIInputTextReadOnly')).toHaveLength(0);
   });
 
+  it('Read Only Password Field', () => {
+    const roNickName: UiStringField = {
+      ...nickName,
+      value: 'Kerman',
+      readOnly: true,
+    };
+
+    const wrapper = shallow(<UIInputTextReadOnly id="foo" type="password" uiField={roNickName} />);
+
+    expect(wrapper.find('UIFormLabel')).toHaveLength(1);
+    expect(wrapper.contains('Kerman')).toEqual(false);
+    expect(wrapper.contains('********')).toEqual(true);
+    expect(wrapper.find('InputText')).toHaveLength(0);
+    expect(wrapper.find('UIInputTextReadOnly')).toHaveLength(0);
+  });
+
   it('Automatic Read Only rendering form UI Field', () => {
     const roNickName: UiStringField = {
       ...nickName,
