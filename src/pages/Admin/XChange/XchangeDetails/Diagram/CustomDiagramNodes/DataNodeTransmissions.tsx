@@ -156,9 +156,7 @@ const DataNodeTransmissions = ({ data, id }) => {
               refreshDetailsPage={refreshDetailsPage}
               setShowIcons={setShowIcons}
               xchangeFileProcessSid={xchangeFileProcessSid}
-              xchangeStepSid={sid}
-              orifinalFileTransmission={host}
-              qualifier={qualifier}
+              xchangeFileTransmissionSid={sid}
             />
           </Container>
         </>
@@ -195,9 +193,7 @@ const DataNodeTransmissions = ({ data, id }) => {
             refreshDetailsPage={refreshDetailsPage}
             setShowIcons={setShowIcons}
             xchangeFileProcessSid={xchangeFileProcessSid}
-            xchangeStepSid={sid}
-            orifinalFileTransmission={host}
-            qualifier={qualifier}
+            xchangeFileTransmissionSid={sid}
           />
         )}
       </>

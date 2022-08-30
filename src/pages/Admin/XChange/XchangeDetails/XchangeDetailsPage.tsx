@@ -349,7 +349,7 @@ const XchangeDetailsPage = () => {
   useEffect(() => {
     if (detailsData?.xchangeConfig && !detailsLoading) {
       const { xchangeConfig } = detailsData;
-      console.log(xchangeConfig);
+      // console.log(xchangeConfig);
       setXchangeDataDetails(xchangeConfig);
 
       if (xchangeConfig.coreFilename) {
