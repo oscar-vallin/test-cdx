@@ -130,4 +130,3 @@ export const StyledSubTitleText = styled.div`
   margin-top: -5px;
   height: 22px;
 `;
-
