@@ -21,7 +21,7 @@ import { Spacing } from 'src/components/spacings/Spacing';
 import { IconButton, Spinner, SpinnerSize, Stack } from '@fluentui/react';
 import { ButtonLink } from 'src/components/buttons';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
-import { StyledEnvironment, StyledAlertTypes, StyledButtonAction } from './XchangeAlertsPage.style';
+import { StyledEnvironment, StyledAlertTypes, StyledButtonAction, StyledSeparator } from './XchangeAlertsPage.style';
 import { StyledQualifier } from '../XchangeDetails/XchangeDetailsPage.styles';
 import { XchangeAlertsPanel } from './XchangeAlertsPanel/XchangeAlertsPanel';
 
@@ -91,6 +91,11 @@ const XchangeAlertsPage = () => {
     }
   }, [deleteConfigData, deleteConfigLoading]);
 
+  const adaptWidth = (alertT: string) => {
+    const width = alertT.length * 8;
+    return `${width}px`;
+  };
+
   const typesAlertsRender = (alertTypes: string[]) => {
     const alerts = alertTypes ?? [];
     const typesAlert: string[] = [];
@@ -118,9 +123,9 @@ const XchangeAlertsPage = () => {
           <Column lg="2">
             <Text variant="bold">Alert on: </Text>
           </Column>
-          {typesAlert.map((type, index) => (
-            <StyledAlertTypes width="130px" key={index}>
-              <Column lg="2">{type}</Column>
+          {typesAlert.map((type, typeAlertsIndex: number) => (
+            <StyledAlertTypes width={adaptWidth(type)} key={typeAlertsIndex}>
+              {type}
             </StyledAlertTypes>
           ))}
         </Row>
@@ -246,30 +251,27 @@ const XchangeAlertsPage = () => {
                   Add Alert
                 </StyledButtonAction>
               </Stack>
-              <Spacing margin={{ top: 'double' }}>
-                {xchangeAlerts?.globalXchangeAlerts && xchangeAlerts?.globalXchangeAlerts.length <= 0 && (
-                  <Text>There are no global alerts configured</Text>
-                )}
-              </Spacing>
-              {xchangeAlerts?.globalXchangeAlerts?.map((globalAlerts) => (
-                <>
-                  <Spacing margin={{ bottom: 'normal' }}>
-                    <Row>
-                      <Column lg="2">
-                        {globalAlerts?.filenameQualifier && (
-                          <StyledEnvironment>{globalAlerts?.filenameQualifier}</StyledEnvironment>
-                        )}
-                      </Column>
-                      {userPermissionsIcons(globalAlerts?.commands ?? [], globalAlerts?.sid ?? '', 'profile')}
-                    </Row>
-                  </Spacing>
+              <StyledSeparator color="#e6e6e6" />
+              {xchangeAlerts?.globalXchangeAlerts && xchangeAlerts?.globalXchangeAlerts.length <= 0 && (
+                <Text>There are no global alerts configured</Text>
+              )}
+              {xchangeAlerts?.globalXchangeAlerts?.map((globalAlerts, globalAlertsIndex: number) => (
+                <Spacing key={globalAlertsIndex}>
+                  <Row>
+                    <Column lg="2">
+                      {globalAlerts?.filenameQualifier && (
+                        <StyledEnvironment>{globalAlerts?.filenameQualifier}</StyledEnvironment>
+                      )}
+                    </Column>
+                    {userPermissionsIcons(globalAlerts?.commands ?? [], globalAlerts?.sid ?? '', 'profile')}
+                  </Row>
                   {typesAlertsRender(globalAlerts?.alertTypes ?? [])}
                   <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                     <Text variant="bold">Suscribers:</Text>
                   </Spacing>
                   <Spacing margin={{ bottom: 'double' }}>
-                    {globalAlerts?.subscribers?.map((subscriber) => (
-                      <Row>
+                    {globalAlerts?.subscribers?.map((subscriber, globalSubsIndex: number) => (
+                      <Row key={globalSubsIndex}>
                         <Column lg="6">
                           <ButtonLink>{subscriber.email}</ButtonLink>
                         </Column>
@@ -279,33 +281,32 @@ const XchangeAlertsPage = () => {
                       </Row>
                     ))}
                   </Spacing>
-                </>
+                </Spacing>
               ))}
             </Column>
             <Column lg="6">
               <Text variant="bold">Alerts on individual Xchanges</Text>
-              <Spacing margin={{ top: 'double' }}>
-                {xchangeAlerts?.individualXchangeAlerts && xchangeAlerts?.individualXchangeAlerts.length <= 0 && (
-                  <Text>There are no Xchange specific alerts configured</Text>
-                )}
+              <Spacing margin={{ top: 'normal' }}>
+                <StyledSeparator color="#e6e6e6" />
               </Spacing>
-              {xchangeAlerts?.individualXchangeAlerts?.map((individualAlerts) => (
-                <>
-                  <Spacing margin={{ bottom: 'normal', top: 'normal' }}>
-                    <Row>
-                      <Column lg="3">
-                        <ButtonLink>{individualAlerts.coreFilename}</ButtonLink>
-                      </Column>
-                      {userPermissionsIcons(individualAlerts?.commands ?? [], individualAlerts?.sid ?? '', 'config')}
-                    </Row>
-                  </Spacing>
+              {xchangeAlerts?.individualXchangeAlerts && xchangeAlerts?.individualXchangeAlerts.length <= 0 && (
+                <Text>There are no Xchange specific alerts configured</Text>
+              )}
+              {xchangeAlerts?.individualXchangeAlerts?.map((individualAlerts, individualAlertsIndex: number) => (
+                <Spacing key={individualAlertsIndex}>
+                  <Row>
+                    <Column lg="3">
+                      <ButtonLink>{individualAlerts.coreFilename}</ButtonLink>
+                    </Column>
+                    {userPermissionsIcons(individualAlerts?.commands ?? [], individualAlerts?.sid ?? '', 'config')}
+                  </Row>
                   {filenameQualifier(individualAlerts.filenameQualifier ?? '', individualAlerts?.coreFilename ?? '')}
                   {typesAlertsRender(individualAlerts?.alertTypes ?? [])}
                   <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                     <Text variant="bold">Suscribers:</Text>
                   </Spacing>
-                  {individualAlerts?.subscribers?.map((subscriber, index) => (
-                    <Row key={index}>
+                  {individualAlerts?.subscribers?.map((subscriber, individualSubsIndex: number) => (
+                    <Row key={individualSubsIndex}>
                       <Column lg="6">
                         <ButtonLink>{subscriber.firstNm}</ButtonLink>
                       </Column>
@@ -314,7 +315,7 @@ const XchangeAlertsPage = () => {
                       </Column>
                     </Row>
                   ))}
-                </>
+                </Spacing>
               ))}
             </Column>
           </Row>

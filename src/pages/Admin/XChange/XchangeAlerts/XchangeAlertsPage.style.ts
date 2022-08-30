@@ -17,8 +17,6 @@ export const StyledEnvironment = styled.div`
 `;
 
 export const StyledAlertTypes = styled.div<StyledAlertTypesProps>`
-  display: flex;
-  lign-items: center;
   background-color: ${({ theme }) => theme.colors.white};
   width: ${({ width }) => width};
   height: 22px;
@@ -40,4 +38,12 @@ type StyledAlertTypesProps = {
 export const StyledButtonAction = styled(ButtonAction)`
   color: black;
   padding-bottom: 20px;
+  margin-bottom: -7px;
+`;
+
+export const StyledSeparator = styled.hr`
+  width: 100%;
+  height: 1px;
+  border: none;
+  margin-bottom: 10px;
 `;
