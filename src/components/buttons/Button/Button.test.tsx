@@ -56,10 +56,9 @@ describe('Button Testing Unit...', () => {
   });
 
   it('Default props values, Should have a props', () => {
-    const defaultTree = shallowWithTheme(<Button id={'__Button'}>Button Text</Button>);
-    expect(defaultTree).toMatchSnapshot();
+    const defaultTree = shallowWithTheme(<Button>Button Text</Button>);
 
-    expect(defaultTree.children().props().id).toEqual('__Button');
+    expect(defaultTree.children().props().id).toEqual('');
     expect(defaultTree.children().props().variant).toEqual('secondary');
     expect(defaultTree.children().props().disabled).toBeFalsy();
     expect(defaultTree.children().props().block).toBeFalsy();
