@@ -21,7 +21,7 @@ import { useNotification } from 'src/hooks/useNotification';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Button } from 'src/components/buttons';
 import { Row, Column, Container } from 'src/components/layouts';
-import { People20Filled, PeopleAudience24Filled } from '@fluentui/react-icons';
+import { People20Filled, PeopleAudience20Filled } from '@fluentui/react-icons';
 import { PageTitle } from 'src/components/typography';
 
 import {
@@ -53,7 +53,7 @@ const generateColumns = () => {
     fieldName: key,
     data: 'string',
     isPadded: true,
-    minWidth: key === 'members' ? 50 : 225,
+    minWidth: key === 'members' ? 65 : 210,
   });
 
   return [
@@ -132,7 +132,7 @@ const _AccessManagementPoliciesPage = () => {
         );
       case 'members':
         return (
-          <TooltipHost content={`${item?.members} Users are assidned to this police`}>
+          <TooltipHost content={`${item?.members} Users are assigned to this policy`}>
             <People20Filled
               style={{ color: theme.colors.themePrimary, cursor: 'pointer' }}
               onClick={() => {
@@ -147,7 +147,7 @@ const _AccessManagementPoliciesPage = () => {
       case 'groupUsages':
         return (
           <TooltipHost content={`This policy is used in ${item?.groupUsages} Access Policy Groups`}>
-            <PeopleAudience24Filled
+            <PeopleAudience20Filled
               style={{ color: theme.colors.themePrimary, cursor: 'pointer' }}
               onClick={() => {
                 setSelectedPolicyId(item?.sid);
