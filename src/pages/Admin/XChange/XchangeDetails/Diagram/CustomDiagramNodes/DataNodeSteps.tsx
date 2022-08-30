@@ -235,7 +235,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
                   setOpenPanel(false);
                   setHiddeIcon(true);
                   if (!lastNode) {
-                    console.log(sid, xchangeFileProcessSid)
+                    console.log(sid, xchangeFileProcessSid);
                     moveDownxchangeStep({
                       variables: {
                         xchangeFileProcessSid,
@@ -388,7 +388,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
     }
 
     if (!loadingMoveDown && errorMoveDown) {
-      console.log(errorMoveDown)
+      console.log(errorMoveDown);
     }
   }, [dataMoveUp, loadingMoveUp, dataMoveDown, loadingMoveDown, errorMoveDown]);
 

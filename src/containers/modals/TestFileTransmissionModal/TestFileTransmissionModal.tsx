@@ -143,29 +143,38 @@ const TestFileTransmissionModal = ({ isOpen, open }: TestFileTransmissionModalPr
     // purposely use a switch statement so if we add a WorkStatus, it will generate a compiler error.
     if (ftpTestStatus == 'QUEUED') {
       return 'info';
-    } if (ftpTestStatus == 'PROCESSING') {
-      return 'info';
-    } if (ftpTestStatus == 'COMPLETE') {
-      return 'success';
-    } if (ftpTestStatus == 'ERROR') {
-      return 'error';
-    } if (ftpTestStatus == 'SUBMITTED') {
-      return 'info';
-    } if (ftpTestStatus == 'WARNING') {
-      return 'warning';
-    } if (ftpTestStatus == 'HOLD') {
-      return 'warning';
-    } if (ftpTestStatus == 'CANCELED') {
-      return 'error';
-    } if (ftpTestStatus == 'QUALITY_CHECK_FAILED') {
-      return 'error';
-    } if (ftpTestStatus == 'NO_RECORDS') {
-      return 'warning';
-    } if (ftpTestStatus == 'TECH_MIGRATION_CHECK_FAILED') {
-      return 'error';
-    } else {
+    }
+    if (ftpTestStatus == 'PROCESSING') {
       return 'info';
     }
+    if (ftpTestStatus == 'COMPLETE') {
+      return 'success';
+    }
+    if (ftpTestStatus == 'ERROR') {
+      return 'error';
+    }
+    if (ftpTestStatus == 'SUBMITTED') {
+      return 'info';
+    }
+    if (ftpTestStatus == 'WARNING') {
+      return 'warning';
+    }
+    if (ftpTestStatus == 'HOLD') {
+      return 'warning';
+    }
+    if (ftpTestStatus == 'CANCELED') {
+      return 'error';
+    }
+    if (ftpTestStatus == 'QUALITY_CHECK_FAILED') {
+      return 'error';
+    }
+    if (ftpTestStatus == 'NO_RECORDS') {
+      return 'warning';
+    }
+    if (ftpTestStatus == 'TECH_MIGRATION_CHECK_FAILED') {
+      return 'error';
+    }
+    return 'info';
   };
 
   const renderForm = () => {
