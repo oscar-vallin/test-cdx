@@ -14,7 +14,7 @@ import { Container, Row } from 'src/components/layouts';
 import { useNotification } from 'src/hooks/useNotification';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import Node from './Node';
-import { StyledQualifier } from '../../XchangeDetailsPage.styles';
+import { StyledQualifier, StyledSubTitleText } from '../../XchangeDetailsPage.styles';
 import { XchangeStepPanel } from '../../XchangeStepPanel/XchangeStepPanel';
 
 const defaultDialogProps: DialogYesNoProps = {
@@ -99,7 +99,6 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
     styles['marginBottom'] = '-15px';
     styles['width'] = '70%';
     styles['height'] = '100%';
-    styles['overflow'] = 'hidden';
   }
 
   let width = '48px';
@@ -235,7 +234,6 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
                   setOpenPanel(false);
                   setHiddeIcon(true);
                   if (!lastNode) {
-                    console.log(sid, xchangeFileProcessSid);
                     moveDownxchangeStep({
                       variables: {
                         xchangeFileProcessSid,
@@ -296,8 +294,15 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
               )}
               <Text style={styles}>
                 {data.label}{' '}
-                {subTitle && subTitle.trim() !== '' && (
-                  <span style={{ fontSize: '10px', position: 'relative', bottom: '7px' }}>{subTitle}</span>
+                {subTitle && subTitle.trim() !== '' && subTitle.length > 28 ? (
+                  <StyledSubTitleText>
+                    <span style={{ fontSize: '10px' }}>{subTitle.substring(0, 28)}</span>
+                    <span style={{ position: 'relative', fontSize: '10px', bottom: '8px' }}>
+                      {subTitle.substring(28, subTitle.length)}
+                    </span>
+                  </StyledSubTitleText>
+                ) : (
+                  <span style={{ fontSize: '10px' }}>{subTitle}</span>
                 )}
               </Text>
             </Stack>

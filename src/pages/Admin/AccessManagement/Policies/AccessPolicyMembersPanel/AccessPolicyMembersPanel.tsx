@@ -21,10 +21,9 @@ import {
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useUsersLists } from 'src/pages/Admin/Users/useUsersList';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { UsersTableColumns, useUsersTableColumns } from 'src/pages/Admin/Users/UsersTableColumn';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 import { ButtonLink } from 'src/components/buttons';
-import { useSortableColumns } from 'src/containers/tables';
+import { DataColumn, useSortableColumns } from 'src/containers/tables';
 import { UpdateUserPanel, useUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers';
 import { AccessPolicyGroupPanel } from '../../Groups/AccessPolicyGroup';
 
@@ -35,19 +34,8 @@ type AccessPolicyMembersProps = {
   currentName: string;
 };
 
-const cols: UsersTableColumns[] = [
-  UsersTableColumns.FIRST_NAME,
-  UsersTableColumns.LAST_NAME,
-  UsersTableColumns.EMAIL,
-  UsersTableColumns.ORGANIZATION,
-  UsersTableColumns.ACCESS_POLICY_GROUPS,
-];
-
 const AccessPolicyMembersPanel = ({ isOpen, closePanel, selectedPolicyId, currentName }: AccessPolicyMembersProps) => {
   const { orgSid } = useOrgSid();
-  const tableFilters = useTableFilters('Name, Last Name, Email, Organization, Access Policy Groups, etc.');
-  const { initialColumns } = useUsersTableColumns(cols);
-  const { columns } = useSortableColumns(tableFilters, initialColumns());
   const [accessPolicyMembers, setAccessPolicyMembers] = useState<AccessMemberConnection | null>();
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>();
   const [isGroupPanelOpen, setIsGroupPanelOpen] = useState(false);
@@ -69,6 +57,66 @@ const AccessPolicyMembersPanel = ({ isOpen, closePanel, selectedPolicyId, curren
       fetchTemplates({ variables: { orgSid } });
     }
   };
+
+  const columnOptions: DataColumn[] = [
+    {
+      name: 'First Name',
+      key: 'firstNm',
+      fieldName: 'person.firstNm',
+      minWidth: 100,
+      maxWidth: 400,
+      isPadded: true,
+      dataType: 'string',
+      sortable: true,
+      filterable: false,
+    },
+    {
+      name: 'Last Name',
+      key: 'lastNm',
+      fieldName: 'person.lastNm',
+      minWidth: 100,
+      maxWidth: 200,
+      isPadded: true,
+      isSorted: true,
+      isSortedDescending: false,
+      dataType: 'string',
+      sortable: true,
+      filterable: false,
+    },
+    {
+      name: 'Email',
+      key: 'email',
+      fieldName: 'email',
+      data: 'string',
+      dataType: 'enum',
+      sortable: true,
+      minWidth: 150,
+      maxWidth: 400,
+      flexGrow: 1,
+    },
+    {
+      name: 'Organization',
+      key: 'organization',
+      fieldName: 'orgName',
+      minWidth: 200,
+      isPadded: true,
+      dataType: 'string',
+      sortable: true,
+      filterable: false,
+    },
+    {
+      name: 'Access Policy Groups',
+      key: 'accessPolicyGroups',
+      fieldName: 'accessName',
+      minWidth: 200,
+      isPadded: true,
+      dataType: 'string',
+      sortable: true,
+      filterable: false,
+    },
+  ];
+  const tableFilters = useTableFilters('Name, Last Name, Email, Organization, Access Policy Groups, etc.');
+  const { columns } = useSortableColumns(tableFilters, columnOptions);
 
   const getMembers = () => {
     policyMembers({
@@ -119,6 +167,8 @@ const AccessPolicyMembersPanel = ({ isOpen, closePanel, selectedPolicyId, curren
     if (column?.key === 'accessPolicyGroups') {
       return (
         <ButtonLink
+          title={columnVal}
+          style={{ overflow: 'hidden' }}
           onClick={() => {
             setSelectedGroupId(accessPolicyGroupsSid ?? '');
             setIsGroupPanelOpen(true);
@@ -129,10 +179,22 @@ const AccessPolicyMembersPanel = ({ isOpen, closePanel, selectedPolicyId, curren
       );
     }
     if (column?.key === 'organization') {
-      return <ButtonLink>{columnVal}</ButtonLink>;
+      return (
+        <ButtonLink style={{ overflow: 'hidden' }} title={columnVal}>
+          {columnVal}
+        </ButtonLink>
+      );
     }
 
-    return <ButtonLink onClick={() => updateUserPanel.showPanel(item.userAccountSid)}>{columnVal}</ButtonLink>;
+    return (
+      <ButtonLink
+        style={{ overflow: 'hidden' }}
+        title={columnVal}
+        onClick={() => updateUserPanel.showPanel(item.userAccountSid)}
+      >
+        {columnVal}
+      </ButtonLink>
+    );
   };
 
   const renderPanelHeader = () => {
