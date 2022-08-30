@@ -456,6 +456,7 @@ export type CreateXchangeFileTransmissionInput = {
   userName: ExtensionField;
   password: ExtensionField;
   authKeyName: ExtensionField;
+  authKeyPassphrase: ExtensionField;
   folder: ExtensionField;
   filenamePattern: ExtensionField;
   stepWise: ExtensionField;
@@ -2879,6 +2880,7 @@ export type UpdateXchangeFileTransmissionInput = {
   userName: ExtensionField;
   password: ExtensionField;
   authKeyName: ExtensionField;
+  authKeyPassphrase: ExtensionField;
   folder: ExtensionField;
   filenamePattern: ExtensionField;
   stepWise: ExtensionField;
@@ -3475,6 +3477,7 @@ export type XchangeFileTransmission = {
   userName?: Maybe<Scalars['String']>;
   password?: Maybe<Scalars['String']>;
   authKeyName?: Maybe<Scalars['String']>;
+  authKeyPassphrase?: Maybe<Scalars['String']>;
   folder?: Maybe<Scalars['String']>;
   filenamePattern?: Maybe<Scalars['String']>;
   stepWise?: Maybe<Scalars['Boolean']>;
@@ -3494,6 +3497,7 @@ export type XchangeFileTransmissionForm = {
   userName: UiStringField;
   password: UiStringField;
   authKeyName: UiSelectOneField;
+  authKeyPassphrase: UiStringField;
   folder: UiStringField;
   filenamePattern: UiStringField;
   stepWise: UiBooleanField;
@@ -3953,7 +3957,7 @@ export type FragmentXchangeFileTransmissionFormFragment = (
   & Pick<XchangeFileTransmissionForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
   & { parent?: Maybe<(
     { __typename?: 'XchangeFileTransmission' }
-    & Pick<XchangeFileTransmission, 'sid' | 'filenameQualifiers' | 'protocol' | 'host' | 'port' | 'userName' | 'password' | 'authKeyName' | 'folder' | 'filenamePattern' | 'stepWise' | 'encryptionKeyName' | 'lastUpdated' | 'comments'>
+    & Pick<XchangeFileTransmission, 'sid' | 'filenameQualifiers' | 'protocol' | 'host' | 'port' | 'userName' | 'password' | 'authKeyName' | 'authKeyPassphrase' | 'folder' | 'filenamePattern' | 'stepWise' | 'encryptionKeyName' | 'lastUpdated' | 'comments'>
   )>, filenameQualifiers: (
     { __typename?: 'UISelectManyField' }
     & FragmentUiSelectManyFieldFragment
@@ -3975,6 +3979,9 @@ export type FragmentXchangeFileTransmissionFormFragment = (
   ), authKeyName: (
     { __typename?: 'UISelectOneField' }
     & FragmentUiSelectOneFieldFragment
+  ), authKeyPassphrase: (
+    { __typename?: 'UIStringField' }
+    & FragmentUiStringFieldFragment
   ), folder: (
     { __typename?: 'UIStringField' }
     & FragmentUiStringFieldFragment
@@ -6362,7 +6369,7 @@ export type XchangeFileTransmissionFormQuery = (
     & Pick<XchangeFileTransmissionForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { parent?: Maybe<(
       { __typename?: 'XchangeFileTransmission' }
-      & Pick<XchangeFileTransmission, 'sid' | 'filenameQualifiers' | 'protocol' | 'host' | 'port' | 'userName' | 'password' | 'authKeyName' | 'folder' | 'filenamePattern' | 'stepWise' | 'encryptionKeyName' | 'lastUpdated' | 'comments'>
+      & Pick<XchangeFileTransmission, 'sid' | 'filenameQualifiers' | 'protocol' | 'host' | 'port' | 'userName' | 'password' | 'authKeyName' | 'authKeyPassphrase' | 'folder' | 'filenamePattern' | 'stepWise' | 'encryptionKeyName' | 'lastUpdated' | 'comments'>
     )>, filenameQualifiers: (
       { __typename?: 'UISelectManyField' }
       & FragmentUiSelectManyFieldFragment
@@ -6384,6 +6391,9 @@ export type XchangeFileTransmissionFormQuery = (
     ), authKeyName: (
       { __typename?: 'UISelectOneField' }
       & FragmentUiSelectOneFieldFragment
+    ), authKeyPassphrase: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
     ), folder: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
@@ -6425,7 +6435,7 @@ export type CopyXchangeFileTransmissionQuery = (
     & Pick<XchangeFileTransmissionForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { parent?: Maybe<(
       { __typename?: 'XchangeFileTransmission' }
-      & Pick<XchangeFileTransmission, 'sid' | 'filenameQualifiers' | 'protocol' | 'host' | 'port' | 'userName' | 'password' | 'authKeyName' | 'folder' | 'filenamePattern' | 'stepWise' | 'encryptionKeyName' | 'lastUpdated' | 'comments'>
+      & Pick<XchangeFileTransmission, 'sid' | 'filenameQualifiers' | 'protocol' | 'host' | 'port' | 'userName' | 'password' | 'authKeyName' | 'authKeyPassphrase' | 'folder' | 'filenamePattern' | 'stepWise' | 'encryptionKeyName' | 'lastUpdated' | 'comments'>
     )>, filenameQualifiers: (
       { __typename?: 'UISelectManyField' }
       & FragmentUiSelectManyFieldFragment
@@ -6447,6 +6457,9 @@ export type CopyXchangeFileTransmissionQuery = (
     ), authKeyName: (
       { __typename?: 'UISelectOneField' }
       & FragmentUiSelectOneFieldFragment
+    ), authKeyPassphrase: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
     ), folder: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
@@ -8555,7 +8568,7 @@ export type CreateXchangeFileTransmissionMutation = (
     & Pick<XchangeFileTransmissionForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { parent?: Maybe<(
       { __typename?: 'XchangeFileTransmission' }
-      & Pick<XchangeFileTransmission, 'sid' | 'filenameQualifiers' | 'protocol' | 'host' | 'port' | 'userName' | 'password' | 'authKeyName' | 'folder' | 'filenamePattern' | 'stepWise' | 'encryptionKeyName' | 'lastUpdated' | 'comments'>
+      & Pick<XchangeFileTransmission, 'sid' | 'filenameQualifiers' | 'protocol' | 'host' | 'port' | 'userName' | 'password' | 'authKeyName' | 'authKeyPassphrase' | 'folder' | 'filenamePattern' | 'stepWise' | 'encryptionKeyName' | 'lastUpdated' | 'comments'>
     )>, filenameQualifiers: (
       { __typename?: 'UISelectManyField' }
       & FragmentUiSelectManyFieldFragment
@@ -8577,6 +8590,9 @@ export type CreateXchangeFileTransmissionMutation = (
     ), authKeyName: (
       { __typename?: 'UISelectOneField' }
       & FragmentUiSelectOneFieldFragment
+    ), authKeyPassphrase: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
     ), folder: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
@@ -8617,7 +8633,7 @@ export type UpdateXchangeFileTransmissionMutation = (
     & Pick<XchangeFileTransmissionForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { parent?: Maybe<(
       { __typename?: 'XchangeFileTransmission' }
-      & Pick<XchangeFileTransmission, 'sid' | 'filenameQualifiers' | 'protocol' | 'host' | 'port' | 'userName' | 'password' | 'authKeyName' | 'folder' | 'filenamePattern' | 'stepWise' | 'encryptionKeyName' | 'lastUpdated' | 'comments'>
+      & Pick<XchangeFileTransmission, 'sid' | 'filenameQualifiers' | 'protocol' | 'host' | 'port' | 'userName' | 'password' | 'authKeyName' | 'authKeyPassphrase' | 'folder' | 'filenamePattern' | 'stepWise' | 'encryptionKeyName' | 'lastUpdated' | 'comments'>
     )>, filenameQualifiers: (
       { __typename?: 'UISelectManyField' }
       & FragmentUiSelectManyFieldFragment
@@ -8639,6 +8655,9 @@ export type UpdateXchangeFileTransmissionMutation = (
     ), authKeyName: (
       { __typename?: 'UISelectOneField' }
       & FragmentUiSelectOneFieldFragment
+    ), authKeyPassphrase: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
     ), folder: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
@@ -9494,6 +9513,7 @@ export const FragmentXchangeFileTransmissionFormFragmentDoc = gql`
     userName
     password
     authKeyName
+    authKeyPassphrase
     folder
     filenamePattern
     stepWise
@@ -9521,6 +9541,9 @@ export const FragmentXchangeFileTransmissionFormFragmentDoc = gql`
   }
   authKeyName {
     ...fragmentUISelectOneField
+  }
+  authKeyPassphrase {
+    ...fragmentUIStringField
   }
   folder {
     ...fragmentUIStringField
@@ -14134,6 +14157,7 @@ export const XchangeFileTransmissionFormDocument = gql`
       userName
       password
       authKeyName
+      authKeyPassphrase
       folder
       filenamePattern
       stepWise
@@ -14161,6 +14185,9 @@ export const XchangeFileTransmissionFormDocument = gql`
     }
     authKeyName {
       ...fragmentUISelectOneField
+    }
+    authKeyPassphrase {
+      ...fragmentUIStringField
     }
     folder {
       ...fragmentUIStringField
@@ -14243,6 +14270,7 @@ export const CopyXchangeFileTransmissionDocument = gql`
       userName
       password
       authKeyName
+      authKeyPassphrase
       folder
       filenamePattern
       stepWise
@@ -14270,6 +14298,9 @@ export const CopyXchangeFileTransmissionDocument = gql`
     }
     authKeyName {
       ...fragmentUISelectOneField
+    }
+    authKeyPassphrase {
+      ...fragmentUIStringField
     }
     folder {
       ...fragmentUIStringField
@@ -18240,6 +18271,7 @@ export const CreateXchangeFileTransmissionDocument = gql`
       userName
       password
       authKeyName
+      authKeyPassphrase
       folder
       filenamePattern
       stepWise
@@ -18267,6 +18299,9 @@ export const CreateXchangeFileTransmissionDocument = gql`
     }
     authKeyName {
       ...fragmentUISelectOneField
+    }
+    authKeyPassphrase {
+      ...fragmentUIStringField
     }
     folder {
       ...fragmentUIStringField
@@ -18344,6 +18379,7 @@ export const UpdateXchangeFileTransmissionDocument = gql`
       userName
       password
       authKeyName
+      authKeyPassphrase
       folder
       filenamePattern
       stepWise
@@ -18371,6 +18407,9 @@ export const UpdateXchangeFileTransmissionDocument = gql`
     }
     authKeyName {
       ...fragmentUISelectOneField
+    }
+    authKeyPassphrase {
+      ...fragmentUIStringField
     }
     folder {
       ...fragmentUIStringField
