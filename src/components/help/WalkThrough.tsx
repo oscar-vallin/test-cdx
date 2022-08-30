@@ -17,15 +17,17 @@ export const WalkThrough = ({ id, show, tour, onDismiss }: WalkThroughType) => {
     onDismiss();
   };
 
-  const nextButton: IButtonProps = {
-    children: step >= tour.length - 1 ? 'Finish' : 'Next',
-    onClick: () => {
-      if (step >= tour.length - 1) {
-        dismiss();
-      } else {
-        setStep(step + 1);
-      }
-    },
+  const nextButton = (isLast: boolean): IButtonProps => {
+    return {
+      children: isLast ? 'Finish' : 'Next',
+      onClick: () => {
+        if (isLast) {
+          dismiss();
+        } else {
+          setStep(step + 1);
+        }
+      },
+    };
   };
 
   const prevButton: IButtonProps = {
@@ -38,7 +40,18 @@ export const WalkThrough = ({ id, show, tour, onDismiss }: WalkThroughType) => {
   };
 
   if (show && tour.length > 0) {
-    const tourStep = tour[step];
+    const modifiedTour: TourStep[] = [];
+    tour.forEach((_step) => {
+      const target = _step.target.replace('#', '');
+      if (document.getElementById(target)) {
+        modifiedTour.push(_step);
+      }
+    });
+    if (step >= modifiedTour.length) {
+      return null;
+    }
+    const tourStep = modifiedTour[step];
+    const isLast = step >= (modifiedTour.length - 1)
     return (
       <TeachingBubble
         target={tourStep.target}
@@ -48,9 +61,9 @@ export const WalkThrough = ({ id, show, tour, onDismiss }: WalkThroughType) => {
           id,
           directionalHint: tourStep.calloutDirection,
         }}
-        primaryButtonProps={nextButton}
+        primaryButtonProps={nextButton(isLast)}
         secondaryButtonProps={prevButton}
-        footerContent={`${step + 1} of ${tour.length}`}
+        footerContent={`${step + 1} of ${modifiedTour.length}`}
       >
         {tourStep.content}
       </TeachingBubble>

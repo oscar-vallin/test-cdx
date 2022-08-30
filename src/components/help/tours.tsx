@@ -28,6 +28,12 @@ export const topNavTour: TourStep[] = [
       'This button brings you back to your Home page.  Your Home page is the first page you land on when you logged in.',
   },
   {
+    target: '#__DASHBOARD_Tab',
+    title: 'Client Dashboard',
+    calloutDirection: DirectionalHint.bottomCenter,
+    content: 'This shows a quick summary of transmissions and errors by vendor.',
+  },
+  {
     target: '#__FILE_STATUS_Tab',
     title: 'File Status',
     calloutDirection: DirectionalHint.bottomCenter,

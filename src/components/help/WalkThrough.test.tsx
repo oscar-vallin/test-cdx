@@ -2,10 +2,40 @@ import { mount } from 'enzyme';
 import { WalkThrough } from './WalkThrough';
 import { topNavTour } from './tours';
 
+declare global {
+  interface Window {
+    domNode: any;
+  }
+}
+
 describe('WalkThrough component', () => {
+
+  beforeAll(() => {
+    const ids = [
+      '__AdminNavBtn',
+      '__ProfileMenu_Home_button',
+      '__FILE_STATUS_Tab',
+      '__ARCHIVES_Tab',
+      '__SCHEDULE_Tab',
+      '__TRANSMISSIONS_Tab',
+      '__ERRORS_Tab',
+      '__ProfileMenu_Font_Buttons',
+      '__ProfileMenu',
+    ]
+    ids.forEach((id) => {
+      const div = document.createElement('div');
+      div.setAttribute('id', id);
+      document.body.append(div);
+    });
+  });
+
   it('Top Nav Tour', () => {
     const dismiss = jest.fn();
-    const wrapper = mount(<WalkThrough id="LeTour" show={true} tour={topNavTour} onDismiss={dismiss} />);
+    // Purposely omit the Dashboard tab to test that it is ignored
+    const wrapper = mount(
+        <WalkThrough id="LeTour" show={true} tour={topNavTour} onDismiss={dismiss} />,
+      { attachTo: window.domNode }
+    );
     expect(wrapper.find('div[id="LeTour"]')).toHaveLength(1);
     expect(wrapper.find('div[id="LeTour"] div.ms-TeachingBubble-header').text()).toEqual('Main Navigation');
     expect(wrapper.find('div[id="LeTour"] .ms-TeachingBubble-subText').text()).toContain(
