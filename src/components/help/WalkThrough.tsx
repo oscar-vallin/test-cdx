@@ -51,7 +51,7 @@ export const WalkThrough = ({ id, show, tour, onDismiss }: WalkThroughType) => {
       return null;
     }
     const tourStep = modifiedTour[step];
-    const isLast = step >= (modifiedTour.length - 1)
+    const isLast = step >= modifiedTour.length - 1;
     return (
       <TeachingBubble
         target={tourStep.target}

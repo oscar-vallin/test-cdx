@@ -212,7 +212,9 @@ const XchangeTransmissionPanel = ({
               inherited: !overrides['stepWise'],
             },
             encryptionKeyName: {
-              value: overrides.encryptionKeyName ? encryptionKeyName : xchangeFileTransmission?.encryptionKeyName?.value?.value,
+              value: overrides.encryptionKeyName
+                ? encryptionKeyName
+                : xchangeFileTransmission?.encryptionKeyName?.value?.value,
               inherited: !overrides['encryptionKeyName'],
             },
             comments,
@@ -253,7 +255,9 @@ const XchangeTransmissionPanel = ({
             },
             authKeyPassphrase: {
               value: authKeyPassphrase,
-              inherited: overrides['authKeyPassphrase'] ? false : xchangeFileTransmission?.authKeyPassphrase.inheritedFrom,
+              inherited: overrides['authKeyPassphrase']
+                ? false
+                : xchangeFileTransmission?.authKeyPassphrase.inheritedFrom,
             },
             folder: {
               value: folder,
@@ -269,7 +273,9 @@ const XchangeTransmissionPanel = ({
             },
             encryptionKeyName: {
               value: encryptionKeyName,
-              inherited: overrides['encryptionKeyName'] ? false : xchangeFileTransmission?.encryptionKeyName.inheritedFrom,
+              inherited: overrides['encryptionKeyName']
+                ? false
+                : xchangeFileTransmission?.encryptionKeyName.inheritedFrom,
             },
             comments,
           },
@@ -576,7 +582,7 @@ const XchangeTransmissionPanel = ({
                     <Column lg="12">
                       <UIInputSelectOne
                         id="authKeyName"
-                        uiField={overrideEnables(xchangeFileTransmission?.authKeyName, "authKeyName")}
+                        uiField={overrideEnables(xchangeFileTransmission?.authKeyName, 'authKeyName')}
                         options={xchangeFileTransmission?.options}
                         value={authKeyName}
                         onChange={(newValue) => {
@@ -666,7 +672,12 @@ const XchangeTransmissionPanel = ({
                   <span>
                     Copied from{' '}
                     <Text style={{ fontWeight: 'bold' }}>
-                      {parent.host} ({parent.filenameQualifiers?.find(itm => itm)?.split('-')?.reduce((prev, current) => current)})
+                      {parent.host} (
+                      {parent.filenameQualifiers
+                        ?.find((itm) => itm)
+                        ?.split('-')
+                        ?.reduce((prev, current) => current)}
+                      )
                     </Text>
                   </span>
                 </Column>
@@ -831,11 +842,7 @@ const XchangeTransmissionPanel = ({
   const renderPanelFooter = () => {
     return (
       <>
-        <PrimaryButton
-          id="__Xchange_AddStep_Button"
-          iconProps={{ iconName: 'Save' }}
-          onClick={saveFileTransmission}
-        >
+        <PrimaryButton id="__Xchange_AddStep_Button" iconProps={{ iconName: 'Save' }} onClick={saveFileTransmission}>
           Save
         </PrimaryButton>
         {!choseArchive && (
