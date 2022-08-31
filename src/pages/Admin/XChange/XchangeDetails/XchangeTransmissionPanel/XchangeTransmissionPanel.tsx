@@ -712,7 +712,8 @@ const XchangeTransmissionPanel = ({
                   <InputText
                     id="__filenameQualifier"
                     value={customFileQualifier}
-                    label="Environment"
+                    label={xchangeFileTransmission.filenameQualifiers?.label}
+                    info={xchangeFileTransmission.filenameQualifiers?.info ?? undefined}
                     required={xchangeFileTransmission.filenameQualifiers.required}
                     onChange={(event, newValue) => setCustomFileQualifier(newValue ?? '')}
                   />
