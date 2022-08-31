@@ -92,7 +92,8 @@ const XchangeDetailsPage = () => {
   const [deleteXchangeConfigAlerts, { data: deleteConfigData, loading: deleteConfigLoading }] =
     useDeleteXchangeConfigAlertMutation();
 
-  const [updateXchangeComment, { data: commentData }] = useUpdateXchangeConfigCommentMutation();
+  const [updateXchangeComment, { data: commentData, loading: isLoadingComment }] =
+    useUpdateXchangeConfigCommentMutation();
   const [showFileUpload, setShowFileUpload] = useState(false);
   const handleError = ErrorHandler();
 
@@ -113,16 +114,6 @@ const XchangeDetailsPage = () => {
       variables: {
         orgSid,
         coreFilename: coreFilename ?? '',
-      },
-    });
-  };
-
-  const updateComments = () => {
-    setCloseTooltipHost(false);
-    updateXchangeComment({
-      variables: {
-        sid: xchangeDataDetails?.sid ?? '',
-        comment: comments,
       },
     });
   };
@@ -149,6 +140,11 @@ const XchangeDetailsPage = () => {
 
     setDialogProps(updatedDialog);
     setShowDialog(true);
+  };
+
+  const adaptWidth = (alertT: string) => {
+    const width = alertT.length * 8;
+    return `${width}px`;
   };
 
   const typesAlertsRender = (alertTypes: string[]) => {
@@ -179,8 +175,8 @@ const XchangeDetailsPage = () => {
             <Text>Alert on: </Text>
           </Column>
           {typesAlert.map((type, index) => (
-            <StyledAlertTypes width="130px" key={index}>
-              <Column lg="2">{type}</Column>
+            <StyledAlertTypes width={adaptWidth(type)} key={index}>
+              {type}
             </StyledAlertTypes>
           ))}
         </Row>
@@ -265,8 +261,8 @@ const XchangeDetailsPage = () => {
                   </Row>
                 </Spacing>
                 {alert?.subscribers &&
-                  alert?.subscribers.map((subs) => (
-                    <Spacing margin="normal">
+                  alert?.subscribers.map((subs, subsIndex: number) => (
+                    <Spacing margin="normal" key={subsIndex}>
                       <Row>
                         <SubsStyled>
                           <ButtonLink style={{ fontSize: '12px' }}>{subs.firstNm}</ButtonLink>
@@ -349,7 +345,6 @@ const XchangeDetailsPage = () => {
   useEffect(() => {
     if (detailsData?.xchangeConfig && !detailsLoading) {
       const { xchangeConfig } = detailsData;
-      // console.log(xchangeConfig);
       setXchangeDataDetails(xchangeConfig);
 
       if (xchangeConfig.coreFilename) {
@@ -380,33 +375,39 @@ const XchangeDetailsPage = () => {
     }
   }, [detailsData, detailsLoading]);
 
-  function useOutsideAlerter(ref) {
+  function useOutsideAlerter(ref, comment: string, currentSid: string, currentComment: string) {
     useEffect(() => {
       function handleClickOutside(event) {
         if (ref.current && !ref.current.contains(event.target)) {
-          if (!openUpdateComments) {
-            setOpenUpdateComments(false);
-            setCloseTooltipHost(false);
-            setTimeout(() => {
-              setCloseTooltipHost(true);
-            }, 0.001);
+          if (openUpdateComments && comment !== currentComment) {
+            updateXchangeComment({
+              variables: {
+                sid: currentSid,
+                comment,
+              },
+            });
           }
+          setOpenUpdateComments(false);
+          setCloseTooltipHost(false);
+          setCloseTooltipHost(true);
         }
       }
+      // Bind the event listener
       document.addEventListener('mousedown', handleClickOutside);
       return () => {
+        // Unbind the event listener on clean up
         document.removeEventListener('mousedown', handleClickOutside);
       };
-    }, [ref]);
+    }, [ref, openUpdateComments, comments]);
   }
   const wrapperRef = useRef(null);
-  useOutsideAlerter(wrapperRef);
+  useOutsideAlerter(wrapperRef, comments, xchangeDataDetails?.sid ?? '', xchangeDataDetails?.comments.value ?? '');
 
   useEffect(() => {
-    if (!commentData && xchangeDataDetails) {
-      updateComments();
+    if (!isLoadingComment && commentData) {
+      setOpenUpdateComments(false);
     }
-  }, [closeTooltipHost, commentData]);
+  }, [isLoadingComment, commentData]);
 
   const renderFileUploadDialog = () => {
     const xchangeConfigSid = xchangeDataDetails?.sid;
@@ -491,7 +492,7 @@ const XchangeDetailsPage = () => {
       );
     }
 
-    const updateComment = () => (
+    const updatingComments = () => (
       <UIInputTextArea
         id="FileTransmissionComment"
         uiField={detailsData?.xchangeConfig?.comments}
@@ -519,7 +520,7 @@ const XchangeDetailsPage = () => {
               },
             },
           }}
-          content={updateComment()}
+          content={updatingComments()}
         >
           <Comment20Filled style={styles} />
         </TooltipHost>
@@ -536,7 +537,7 @@ const XchangeDetailsPage = () => {
             <Column lg="6">
               <Stack horizontal={true} horizontalAlign="space-between">
                 <PageTitle id="__Page__Title__Details" title="Xchange Details" />
-                <div ref={wrapperRef}>{tooltipHostComments()}</div>
+                <div ref={wrapperRef}>{!detailsLoading && tooltipHostComments()}</div>
               </Stack>
             </Column>
             <Column lg="6" right>
