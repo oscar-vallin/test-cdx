@@ -105,7 +105,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
   let color = 'blue';
 
   if (qualifier === 'StructErrors') {
-    width = '65px';
+    width = '75px';
   } else if (qualifier === 'TEST') {
     color = 'orange';
   } else if (qualifier === 'PROD-OE') {
@@ -294,7 +294,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
               )}
               <Text style={styles}>
                 {data.label}{' '}
-                {subTitle && subTitle.trim() !== '' && subTitle.length > 28 ? (
+                {subTitle && subTitle.trim() !== '' && subTitle.length > 37 ? (
                   <StyledSubTitleText>
                     <span style={{ fontSize: '10px' }}>{subTitle.substring(0, 28)}</span>
                     <span style={{ position: 'relative', fontSize: '10px', bottom: '8px' }}>
