@@ -3360,6 +3360,7 @@ export type XchangeConfigActivity = {
 export type XchangeConfigAlertForm = {
   __typename?: 'XchangeConfigAlertForm';
   sid?: Maybe<Scalars['ID']>;
+  hasUnpublishedChanges: Scalars['Boolean'];
   filenameQualifier: UiSelectOneField;
   alertTypes: UiSelectManyField;
   subscribers: UiSelectManyField;
@@ -3375,6 +3376,7 @@ export type XchangeConfigForm = {
   __typename?: 'XchangeConfigForm';
   sid?: Maybe<Scalars['ID']>;
   requiresConversion: Scalars['Boolean'];
+  hasUnpublishedChanges: Scalars['Boolean'];
   coreFilename: UiStringField;
   coreFilenamePattern: UiStringField;
   extractType: UiSelectOneField;
@@ -3455,6 +3457,7 @@ export type XchangeDiagramStepGroup = {
 export type XchangeFileProcessForm = {
   __typename?: 'XchangeFileProcessForm';
   sid?: Maybe<Scalars['ID']>;
+  hasUnpublishedChanges: Scalars['Boolean'];
   vendor: UiSelectOneField;
   specId: UiStringField;
   filenameQualifiers: UiSelectManyField;
@@ -3489,6 +3492,7 @@ export type XchangeFileTransmission = {
 export type XchangeFileTransmissionForm = {
   __typename?: 'XchangeFileTransmissionForm';
   sid?: Maybe<Scalars['ID']>;
+  hasUnpublishedChanges: Scalars['Boolean'];
   parent?: Maybe<XchangeFileTransmission>;
   filenameQualifiers: UiSelectManyField;
   protocol: UiSelectOneField;
@@ -3538,6 +3542,7 @@ export type XchangeProfile = {
 export type XchangeProfileAlertForm = {
   __typename?: 'XchangeProfileAlertForm';
   sid?: Maybe<Scalars['ID']>;
+  hasUnpublishedChanges: Scalars['Boolean'];
   alertTypes: UiSelectManyField;
   subscribers: UiSelectManyField;
   options?: Maybe<Array<UiOptions>>;
@@ -3585,6 +3590,7 @@ export type XchangeProfileTooltips = {
 export type XchangeStepForm = {
   __typename?: 'XchangeStepForm';
   sid?: Maybe<Scalars['ID']>;
+  hasUnpublishedChanges: Scalars['Boolean'];
   xml: UiStringField;
   lastUpdated?: Maybe<UiReadOnlyField>;
   commands?: Maybe<Array<WebCommand>>;
@@ -3883,7 +3889,7 @@ export type FragmentXchangeConfigActivityFragment = (
 
 export type FragmentXchangeFileProcessFormFragment = (
   { __typename?: 'XchangeFileProcessForm' }
-  & Pick<XchangeFileProcessForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+  & Pick<XchangeFileProcessForm, 'sid' | 'hasUnpublishedChanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
   & { vendor: (
     { __typename?: 'UISelectOneField' }
     & FragmentUiSelectOneFieldFragment
@@ -3939,7 +3945,7 @@ export type FragmentXchangeFileProcessFormFragment = (
 
 export type FragmentXchangeStepFormFragment = (
   { __typename?: 'XchangeStepForm' }
-  & Pick<XchangeStepForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+  & Pick<XchangeStepForm, 'sid' | 'hasUnpublishedChanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
   & { xml: (
     { __typename?: 'UIStringField' }
     & FragmentUiStringFieldFragment
@@ -3954,7 +3960,7 @@ export type FragmentXchangeStepFormFragment = (
 
 export type FragmentXchangeFileTransmissionFormFragment = (
   { __typename?: 'XchangeFileTransmissionForm' }
-  & Pick<XchangeFileTransmissionForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+  & Pick<XchangeFileTransmissionForm, 'sid' | 'hasUnpublishedChanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
   & { parent?: Maybe<(
     { __typename?: 'XchangeFileTransmission' }
     & Pick<XchangeFileTransmission, 'sid' | 'filenameQualifiers' | 'protocol' | 'host' | 'port' | 'userName' | 'password' | 'authKeyName' | 'authKeyPassphrase' | 'folder' | 'filenamePattern' | 'stepWise' | 'encryptionKeyName' | 'lastUpdated' | 'comments'>
@@ -6188,7 +6194,7 @@ export type XchangeConfigQuery = (
   { __typename?: 'Query' }
   & { xchangeConfig?: Maybe<(
     { __typename?: 'XchangeConfigForm' }
-    & Pick<XchangeConfigForm, 'sid' | 'requiresConversion' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<XchangeConfigForm, 'sid' | 'requiresConversion' | 'hasUnpublishedChanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { coreFilename: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
@@ -6233,7 +6239,7 @@ export type XchangeFileProcessFormQuery = (
   { __typename?: 'Query' }
   & { xchangeFileProcessForm?: Maybe<(
     { __typename?: 'XchangeFileProcessForm' }
-    & Pick<XchangeFileProcessForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<XchangeFileProcessForm, 'sid' | 'hasUnpublishedChanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { vendor: (
       { __typename?: 'UISelectOneField' }
       & FragmentUiSelectOneFieldFragment
@@ -6318,7 +6324,7 @@ export type XchangeStepFormQuery = (
   { __typename?: 'Query' }
   & { xchangeStepForm?: Maybe<(
     { __typename?: 'XchangeStepForm' }
-    & Pick<XchangeStepForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<XchangeStepForm, 'sid' | 'hasUnpublishedChanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { xml: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
@@ -6342,7 +6348,7 @@ export type CopyXchangeStepQuery = (
   { __typename?: 'Query' }
   & { copyXchangeStep?: Maybe<(
     { __typename?: 'XchangeStepForm' }
-    & Pick<XchangeStepForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<XchangeStepForm, 'sid' | 'hasUnpublishedChanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { xml: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
@@ -6366,7 +6372,7 @@ export type XchangeFileTransmissionFormQuery = (
   { __typename?: 'Query' }
   & { xchangeFileTransmissionForm?: Maybe<(
     { __typename?: 'XchangeFileTransmissionForm' }
-    & Pick<XchangeFileTransmissionForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<XchangeFileTransmissionForm, 'sid' | 'hasUnpublishedChanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { parent?: Maybe<(
       { __typename?: 'XchangeFileTransmission' }
       & Pick<XchangeFileTransmission, 'sid' | 'filenameQualifiers' | 'protocol' | 'host' | 'port' | 'userName' | 'password' | 'authKeyName' | 'authKeyPassphrase' | 'folder' | 'filenamePattern' | 'stepWise' | 'encryptionKeyName' | 'lastUpdated' | 'comments'>
@@ -6432,7 +6438,7 @@ export type CopyXchangeFileTransmissionQuery = (
   { __typename?: 'Query' }
   & { copyXchangeFileTransmission?: Maybe<(
     { __typename?: 'XchangeFileTransmissionForm' }
-    & Pick<XchangeFileTransmissionForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<XchangeFileTransmissionForm, 'sid' | 'hasUnpublishedChanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { parent?: Maybe<(
       { __typename?: 'XchangeFileTransmission' }
       & Pick<XchangeFileTransmission, 'sid' | 'filenameQualifiers' | 'protocol' | 'host' | 'port' | 'userName' | 'password' | 'authKeyName' | 'authKeyPassphrase' | 'folder' | 'filenamePattern' | 'stepWise' | 'encryptionKeyName' | 'lastUpdated' | 'comments'>
@@ -6548,7 +6554,7 @@ export type XchangeProfileAlertFormQuery = (
   { __typename?: 'Query' }
   & { xchangeProfileAlertForm?: Maybe<(
     { __typename?: 'XchangeProfileAlertForm' }
-    & Pick<XchangeProfileAlertForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<XchangeProfileAlertForm, 'sid' | 'hasUnpublishedChanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { alertTypes: (
       { __typename?: 'UISelectManyField' }
       & FragmentUiSelectManyFieldFragment
@@ -6576,7 +6582,7 @@ export type XchangeConfigAlertFormQuery = (
   { __typename?: 'Query' }
   & { xchangeConfigAlertForm?: Maybe<(
     { __typename?: 'XchangeConfigAlertForm' }
-    & Pick<XchangeConfigAlertForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<XchangeConfigAlertForm, 'sid' | 'hasUnpublishedChanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { filenameQualifier: (
       { __typename?: 'UISelectOneField' }
       & FragmentUiSelectOneFieldFragment
@@ -8324,7 +8330,7 @@ export type CreateXchangeStepMutation = (
   { __typename?: 'Mutation' }
   & { createXchangeStep?: Maybe<(
     { __typename?: 'XchangeStepForm' }
-    & Pick<XchangeStepForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<XchangeStepForm, 'sid' | 'hasUnpublishedChanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { xml: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
@@ -8347,7 +8353,7 @@ export type UpdateXchangeStepMutation = (
   { __typename?: 'Mutation' }
   & { updateXchangeStep?: Maybe<(
     { __typename?: 'XchangeStepForm' }
-    & Pick<XchangeStepForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<XchangeStepForm, 'sid' | 'hasUnpublishedChanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { xml: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
@@ -8371,7 +8377,7 @@ export type MoveUpXchangeStepMutation = (
   { __typename?: 'Mutation' }
   & { moveUpXchangeStep?: Maybe<(
     { __typename?: 'XchangeFileProcessForm' }
-    & Pick<XchangeFileProcessForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<XchangeFileProcessForm, 'sid' | 'hasUnpublishedChanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { vendor: (
       { __typename?: 'UISelectOneField' }
       & FragmentUiSelectOneFieldFragment
@@ -8436,7 +8442,7 @@ export type MoveDownXchangeStepMutation = (
   { __typename?: 'Mutation' }
   & { moveDownXchangeStep?: Maybe<(
     { __typename?: 'XchangeFileProcessForm' }
-    & Pick<XchangeFileProcessForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<XchangeFileProcessForm, 'sid' | 'hasUnpublishedChanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { vendor: (
       { __typename?: 'UISelectOneField' }
       & FragmentUiSelectOneFieldFragment
@@ -8501,7 +8507,7 @@ export type DeleteXchangeStepMutation = (
   { __typename?: 'Mutation' }
   & { deleteXchangeStep?: Maybe<(
     { __typename?: 'XchangeFileProcessForm' }
-    & Pick<XchangeFileProcessForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<XchangeFileProcessForm, 'sid' | 'hasUnpublishedChanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { vendor: (
       { __typename?: 'UISelectOneField' }
       & FragmentUiSelectOneFieldFragment
@@ -8565,7 +8571,7 @@ export type CreateXchangeFileTransmissionMutation = (
   { __typename?: 'Mutation' }
   & { createXchangeFileTransmission?: Maybe<(
     { __typename?: 'XchangeFileTransmissionForm' }
-    & Pick<XchangeFileTransmissionForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<XchangeFileTransmissionForm, 'sid' | 'hasUnpublishedChanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { parent?: Maybe<(
       { __typename?: 'XchangeFileTransmission' }
       & Pick<XchangeFileTransmission, 'sid' | 'filenameQualifiers' | 'protocol' | 'host' | 'port' | 'userName' | 'password' | 'authKeyName' | 'authKeyPassphrase' | 'folder' | 'filenamePattern' | 'stepWise' | 'encryptionKeyName' | 'lastUpdated' | 'comments'>
@@ -8630,7 +8636,7 @@ export type UpdateXchangeFileTransmissionMutation = (
   { __typename?: 'Mutation' }
   & { updateXchangeFileTransmission?: Maybe<(
     { __typename?: 'XchangeFileTransmissionForm' }
-    & Pick<XchangeFileTransmissionForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<XchangeFileTransmissionForm, 'sid' | 'hasUnpublishedChanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { parent?: Maybe<(
       { __typename?: 'XchangeFileTransmission' }
       & Pick<XchangeFileTransmission, 'sid' | 'filenameQualifiers' | 'protocol' | 'host' | 'port' | 'userName' | 'password' | 'authKeyName' | 'authKeyPassphrase' | 'folder' | 'filenamePattern' | 'stepWise' | 'encryptionKeyName' | 'lastUpdated' | 'comments'>
@@ -8696,7 +8702,7 @@ export type DeleteXchangeFileTransmissionMutation = (
   { __typename?: 'Mutation' }
   & { deleteXchangeFileTransmission?: Maybe<(
     { __typename?: 'XchangeFileProcessForm' }
-    & Pick<XchangeFileProcessForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<XchangeFileProcessForm, 'sid' | 'hasUnpublishedChanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { vendor: (
       { __typename?: 'UISelectOneField' }
       & FragmentUiSelectOneFieldFragment
@@ -8760,7 +8766,7 @@ export type CreateXchangeProfileAlertMutation = (
   { __typename?: 'Mutation' }
   & { createXchangeProfileAlert?: Maybe<(
     { __typename?: 'XchangeProfileAlertForm' }
-    & Pick<XchangeProfileAlertForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<XchangeProfileAlertForm, 'sid' | 'hasUnpublishedChanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { alertTypes: (
       { __typename?: 'UISelectManyField' }
       & FragmentUiSelectManyFieldFragment
@@ -8786,7 +8792,7 @@ export type UpdateXchangeProfileAlertMutation = (
   { __typename?: 'Mutation' }
   & { updateXchangeProfileAlert?: Maybe<(
     { __typename?: 'XchangeProfileAlertForm' }
-    & Pick<XchangeProfileAlertForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<XchangeProfileAlertForm, 'sid' | 'hasUnpublishedChanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { alertTypes: (
       { __typename?: 'UISelectManyField' }
       & FragmentUiSelectManyFieldFragment
@@ -8836,7 +8842,7 @@ export type CreateXchangeConfigAlertMutation = (
   { __typename?: 'Mutation' }
   & { createXchangeConfigAlert?: Maybe<(
     { __typename?: 'XchangeConfigAlertForm' }
-    & Pick<XchangeConfigAlertForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<XchangeConfigAlertForm, 'sid' | 'hasUnpublishedChanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { filenameQualifier: (
       { __typename?: 'UISelectOneField' }
       & FragmentUiSelectOneFieldFragment
@@ -8865,7 +8871,7 @@ export type UpdateXchangeConfigAlertMutation = (
   { __typename?: 'Mutation' }
   & { updateXchangeConfigAlert?: Maybe<(
     { __typename?: 'XchangeConfigAlertForm' }
-    & Pick<XchangeConfigAlertForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<XchangeConfigAlertForm, 'sid' | 'hasUnpublishedChanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { filenameQualifier: (
       { __typename?: 'UISelectOneField' }
       & FragmentUiSelectOneFieldFragment
@@ -9362,6 +9368,7 @@ export const FragmentUiOptionsFragmentDoc = gql`
 export const FragmentXchangeFileProcessFormFragmentDoc = gql`
     fragment fragmentXchangeFileProcessForm on XchangeFileProcessForm {
   sid
+  hasUnpublishedChanges
   vendor {
     ...fragmentUISelectOneField
   }
@@ -9452,6 +9459,7 @@ export const FragmentUiReadOnlyFieldFragmentDoc = gql`
 export const FragmentXchangeStepFormFragmentDoc = gql`
     fragment fragmentXchangeStepForm on XchangeStepForm {
   sid
+  hasUnpublishedChanges
   xml {
     ...fragmentUIStringField
   }
@@ -9504,6 +9512,7 @@ export const FragmentUiBooleanFieldFragmentDoc = gql`
 export const FragmentXchangeFileTransmissionFormFragmentDoc = gql`
     fragment fragmentXchangeFileTransmissionForm on XchangeFileTransmissionForm {
   sid
+  hasUnpublishedChanges
   parent {
     sid
     filenameQualifiers
@@ -13819,6 +13828,7 @@ export const XchangeConfigDocument = gql`
   xchangeConfig(orgSid: $orgSid, coreFilename: $coreFilename) {
     sid
     requiresConversion
+    hasUnpublishedChanges
     coreFilename {
       ...fragmentUIStringField
     }
@@ -13897,6 +13907,7 @@ export const XchangeFileProcessFormDocument = gql`
     query XchangeFileProcessForm($xchangeFileProcessSid: ID!) {
   xchangeFileProcessForm(xchangeFileProcessSid: $xchangeFileProcessSid) {
     sid
+    hasUnpublishedChanges
     vendor {
       ...fragmentUISelectOneField
     }
@@ -14047,6 +14058,7 @@ export const XchangeStepFormDocument = gql`
     query XchangeStepForm($xchangeFileProcessSid: ID!, $sid: ID) {
   xchangeStepForm(xchangeFileProcessSid: $xchangeFileProcessSid, sid: $sid) {
     sid
+    hasUnpublishedChanges
     xml {
       ...fragmentUIStringField
     }
@@ -14096,6 +14108,7 @@ export const CopyXchangeStepDocument = gql`
     query CopyXchangeStep($xchangeFileProcessSid: ID!, $sid: ID!) {
   copyXchangeStep(xchangeFileProcessSid: $xchangeFileProcessSid, sid: $sid) {
     sid
+    hasUnpublishedChanges
     xml {
       ...fragmentUIStringField
     }
@@ -14148,6 +14161,7 @@ export const XchangeFileTransmissionFormDocument = gql`
     sid: $sid
   ) {
     sid
+    hasUnpublishedChanges
     parent {
       sid
       filenameQualifiers
@@ -14261,6 +14275,7 @@ export const CopyXchangeFileTransmissionDocument = gql`
     sid: $sid
   ) {
     sid
+    hasUnpublishedChanges
     parent {
       sid
       filenameQualifiers
@@ -14480,6 +14495,7 @@ export const XchangeProfileAlertFormDocument = gql`
     query XchangeProfileAlertForm($orgSid: ID!, $sid: ID) {
   xchangeProfileAlertForm(orgSid: $orgSid, sid: $sid) {
     sid
+    hasUnpublishedChanges
     alertTypes {
       ...fragmentUISelectManyField
     }
@@ -14532,6 +14548,7 @@ export const XchangeConfigAlertFormDocument = gql`
     query XchangeConfigAlertForm($orgSid: ID!, $coreFilename: String!, $sid: ID) {
   xchangeConfigAlertForm(orgSid: $orgSid, coreFilename: $coreFilename, sid: $sid) {
     sid
+    hasUnpublishedChanges
     filenameQualifier {
       ...fragmentUISelectOneField
     }
@@ -17862,6 +17879,7 @@ export const CreateXchangeStepDocument = gql`
     mutation CreateXchangeStep($stepInput: CreateXchangeStepInput) {
   createXchangeStep(stepInput: $stepInput) {
     sid
+    hasUnpublishedChanges
     xml {
       ...fragmentUIStringField
     }
@@ -17909,6 +17927,7 @@ export const UpdateXchangeStepDocument = gql`
     mutation UpdateXchangeStep($stepInput: UpdateXchangeStepInput) {
   updateXchangeStep(stepInput: $stepInput) {
     sid
+    hasUnpublishedChanges
     xml {
       ...fragmentUIStringField
     }
@@ -17956,6 +17975,7 @@ export const MoveUpXchangeStepDocument = gql`
     mutation MoveUpXchangeStep($xchangeFileProcessSid: ID!, $sid: ID!) {
   moveUpXchangeStep(xchangeFileProcessSid: $xchangeFileProcessSid, sid: $sid) {
     sid
+    hasUnpublishedChanges
     vendor {
       ...fragmentUISelectOneField
     }
@@ -18058,6 +18078,7 @@ export const MoveDownXchangeStepDocument = gql`
     mutation MoveDownXchangeStep($xchangeFileProcessSid: ID!, $sid: ID!) {
   moveDownXchangeStep(xchangeFileProcessSid: $xchangeFileProcessSid, sid: $sid) {
     sid
+    hasUnpublishedChanges
     vendor {
       ...fragmentUISelectOneField
     }
@@ -18160,6 +18181,7 @@ export const DeleteXchangeStepDocument = gql`
     mutation DeleteXchangeStep($xchangeFileProcessSid: ID!, $sid: ID!) {
   deleteXchangeStep(xchangeFileProcessSid: $xchangeFileProcessSid, sid: $sid) {
     sid
+    hasUnpublishedChanges
     vendor {
       ...fragmentUISelectOneField
     }
@@ -18262,6 +18284,7 @@ export const CreateXchangeFileTransmissionDocument = gql`
     mutation CreateXchangeFileTransmission($transInput: CreateXchangeFileTransmissionInput) {
   createXchangeFileTransmission(transInput: $transInput) {
     sid
+    hasUnpublishedChanges
     parent {
       sid
       filenameQualifiers
@@ -18370,6 +18393,7 @@ export const UpdateXchangeFileTransmissionDocument = gql`
     mutation UpdateXchangeFileTransmission($transInput: UpdateXchangeFileTransmissionInput) {
   updateXchangeFileTransmission(transInput: $transInput) {
     sid
+    hasUnpublishedChanges
     parent {
       sid
       filenameQualifiers
@@ -18481,6 +18505,7 @@ export const DeleteXchangeFileTransmissionDocument = gql`
     sid: $sid
   ) {
     sid
+    hasUnpublishedChanges
     vendor {
       ...fragmentUISelectOneField
     }
@@ -18583,6 +18608,7 @@ export const CreateXchangeProfileAlertDocument = gql`
     mutation CreateXchangeProfileAlert($alertInput: CreateXchangeProfileAlertInput) {
   createXchangeProfileAlert(alertInput: $alertInput) {
     sid
+    hasUnpublishedChanges
     alertTypes {
       ...fragmentUISelectManyField
     }
@@ -18633,6 +18659,7 @@ export const UpdateXchangeProfileAlertDocument = gql`
     mutation UpdateXchangeProfileAlert($alertInput: UpdateXchangeProfileAlertInput) {
   updateXchangeProfileAlert(alertInput: $alertInput) {
     sid
+    hasUnpublishedChanges
     alertTypes {
       ...fragmentUISelectManyField
     }
@@ -18727,6 +18754,7 @@ export const CreateXchangeConfigAlertDocument = gql`
     mutation CreateXchangeConfigAlert($alertInput: CreateXchangeConfigAlertInput) {
   createXchangeConfigAlert(alertInput: $alertInput) {
     sid
+    hasUnpublishedChanges
     filenameQualifier {
       ...fragmentUISelectOneField
     }
@@ -18781,6 +18809,7 @@ export const UpdateXchangeConfigAlertDocument = gql`
     mutation UpdateXchangeConfigAlert($alertInput: UpdateXchangeConfigAlertInput) {
   updateXchangeConfigAlert(alertInput: $alertInput) {
     sid
+    hasUnpublishedChanges
     filenameQualifier {
       ...fragmentUISelectOneField
     }

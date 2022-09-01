@@ -9,7 +9,6 @@ declare global {
 }
 
 describe('WalkThrough component', () => {
-
   beforeAll(() => {
     const ids = [
       '__AdminNavBtn',
@@ -21,7 +20,7 @@ describe('WalkThrough component', () => {
       '__ERRORS_Tab',
       '__ProfileMenu_Font_Buttons',
       '__ProfileMenu',
-    ]
+    ];
     ids.forEach((id) => {
       const div = document.createElement('div');
       div.setAttribute('id', id);
@@ -32,10 +31,9 @@ describe('WalkThrough component', () => {
   it('Top Nav Tour', () => {
     const dismiss = jest.fn();
     // Purposely omit the Dashboard tab to test that it is ignored
-    const wrapper = mount(
-        <WalkThrough id="LeTour" show={true} tour={topNavTour} onDismiss={dismiss} />,
-      { attachTo: window.domNode }
-    );
+    const wrapper = mount(<WalkThrough id="LeTour" show={true} tour={topNavTour} onDismiss={dismiss} />, {
+      attachTo: window.domNode,
+    });
     expect(wrapper.find('div[id="LeTour"]')).toHaveLength(1);
     expect(wrapper.find('div[id="LeTour"] div.ms-TeachingBubble-header').text()).toEqual('Main Navigation');
     expect(wrapper.find('div[id="LeTour"] .ms-TeachingBubble-subText').text()).toContain(
