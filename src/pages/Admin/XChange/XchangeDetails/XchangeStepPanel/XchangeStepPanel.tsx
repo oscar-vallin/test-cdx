@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { IconButton, PanelType, PrimaryButton, Spinner, SpinnerSize, Text } from '@fluentui/react';
-import CodeMirror from '@uiw/react-codemirror';
+import CodeMirror, { BasicSetupOptions } from '@uiw/react-codemirror';
 import { createTheme } from '@uiw/codemirror-themes';
 import { javascript } from '@codemirror/lang-javascript';
 import { tags as t } from '@lezer/highlight';
+import format from 'xml-formatter';
 import {
   useXchangeStepFormLazyQuery,
   useCreateXchangeStepMutation,
@@ -48,7 +49,6 @@ const myTheme = createTheme({
     foreground: 'black',
     lineHighlight: '#fff',
     gutterBackground: '#fff',
-    gutterForeground: '#fff',
     gutterBorder: '#fff',
   },
   styles: [
@@ -56,6 +56,10 @@ const myTheme = createTheme({
     { tag: t.angleBracket, color: '#0078D4' },
   ],
 });
+
+const setupOption: BasicSetupOptions = {
+  lineNumbers: false,
+};
 
 const XchangeStepPanel = ({
   isPanelOpen,
@@ -145,10 +149,11 @@ const XchangeStepPanel = ({
   };
 
   const removeLineBreakXml = (xmlValue: string) => xmlValue.split('\n').toString().replace(/,/g, '');
+  const removeSpace = (xmlValue: string) => xmlValue.replace(/\s+/g, '');
 
   const saveStep = () => {
-    const xml = removeLineBreakXml(editXmlData ?? '');
-
+    let xml = removeLineBreakXml(editXmlData ?? '');
+    xml = removeSpace(xml ?? '');
     if (optionXchangeStep === 'update') {
       updateXchangeStep({
         variables: {
@@ -171,23 +176,16 @@ const XchangeStepPanel = ({
   };
 
   const addlineBreakeXml = (xmlValue: string) => {
-    let xml = '';
-    const xmlLen = xmlValue?.length ?? 0;
-    if (xmlValue) {
-      for (let i = 0; i < xmlLen; i++) {
-        if (xmlValue[i] === '>' && xmlValue[i + 1] === '<') {
-          xml += `${xmlValue[i]}\n`;
-        } else {
-          xml += `${xmlValue[i]}`;
-        }
-      }
-    }
-    return xml;
+    const formattedXml = format(xmlValue, {
+      indentation: '  ',
+      collapseContent: true,
+      lineSeparator: '\n',
+    });
+    return formattedXml;
   };
 
   const comparePreviousXml = (editXml: string, preXml: string) => {
-    const currentXmlValue = removeLineBreakXml(editXml);
-    if (currentXmlValue.trim() !== preXml.trim()) {
+    if (editXml !== preXml) {
       setUnsavedChanges(true);
       return;
     }
@@ -229,8 +227,9 @@ const XchangeStepPanel = ({
               )}
               <CodeMirror
                 height="400px"
-                style={{ border: '1px solid gray', fontWeight: 'bold', fontSize: '16px' }}
+                style={{ border: '1px solid gray', fontWeight: 'bold', fontSize: '14px' }}
                 theme={myTheme}
+                basicSetup={setupOption}
                 extensions={[javascript({ jsx: true })]}
                 value={editXmlData ?? ''}
                 onChange={(value) => setEditXmlData(value)}
@@ -270,7 +269,7 @@ const XchangeStepPanel = ({
       if (dataAddStep.xchangeStepForm.xml.value) {
         const xmlValue = addlineBreakeXml(dataAddStep.xchangeStepForm.xml.value);
         setEditXmlData(xmlValue);
-        setPreviousXmlDate(dataAddStep.xchangeStepForm.xml.value);
+        setPreviousXmlDate(xmlValue);
       }
     }
 
@@ -287,7 +286,7 @@ const XchangeStepPanel = ({
     if (!loadingCopyStep && dataCopyStep) {
       const xmlValue = addlineBreakeXml(dataCopyStep.copyXchangeStep.xml.value);
       setEditXmlData(xmlValue);
-      setPreviousXmlDate(dataCopyStep.copyXchangeStep.xml.value);
+      setPreviousXmlDate(xmlValue);
     }
 
     if (dataCopyStep?.copyXchangeStep) {
