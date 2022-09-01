@@ -6,15 +6,15 @@ import { ButtonAction } from 'src/components/buttons';
 export const CardStyled = styled(DocumentCard)`
   background: ${({ theme }) => theme.colors.neutralLighter};
   border: none;
+  padding-right: 35px;
   z-index: 10;
   border-radius: ${({ theme }) => theme.radius.normal};
   font: ${({ theme }) => theme.fontStyles.normal};
-  min-width: unset;
-  max-width: unset;
+  min-width: 320px;
+  max-width: 400px;
   min-height: 100px;
   width: 100%;
-  right: 40px;
-  bottom: 70px;
+  bottom: 100px;
 
   .ms-DocumentCard {
     &:hover {
@@ -23,12 +23,6 @@ export const CardStyled = styled(DocumentCard)`
       }
     }
   }
-`;
-
-export const SubsStyled = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 90%;
 `;
 
 export const StyledColumTabs = styled(Column)`
@@ -46,11 +40,6 @@ type DemoCanvasWidgetProps = {
   color?: string;
   background?: string;
 };
-
-export const StyledContainerDiagram = styled.div`
-  boder: 1px solid black;
-  display: flex;
-`;
 
 export const StyledSFTP = styled.div`
   x: 10;

@@ -42,10 +42,8 @@ import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo
 import {
   CardStyled,
   StyledColumTabs,
-  SubsStyled,
   StyledButtonAction,
   StyledProcessValueText,
-  StyledContainerDiagram,
   StyledQualifier,
 } from './XchangeDetailsPage.styles';
 import { Diagram } from './Diagram/Diagram';
@@ -249,11 +247,11 @@ const XchangeDetailsPage = () => {
             {xchangesAlerts?.map((alert, index) => (
               <Spacing margin="normal" key={index}>
                 <Row>
-                  <Column lg="2">{filenameQualifier(alert.filenameQualifier ?? '', alert?.coreFilename ?? '')}</Column>
+                  {filenameQualifier(alert.filenameQualifier ?? '', alert?.coreFilename ?? '')}
                   {userPermissionsIcons(alert?.commands ?? [], alert?.sid ?? '')}
                 </Row>
                 {typesAlertsRender(alert?.alertTypes ?? [])}
-                <Spacing margin={{ top: 'normal' }}>
+                <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                   <Row>
                     <Column lg="2">
                       <Text style={{ fontWeight: 'bold' }}>Subscribers:</Text>
@@ -262,14 +260,14 @@ const XchangeDetailsPage = () => {
                 </Spacing>
                 {alert?.subscribers &&
                   alert?.subscribers.map((subs, subsIndex: number) => (
-                    <Spacing margin="normal" key={subsIndex}>
-                      <Row>
-                        <SubsStyled>
-                          <ButtonLink style={{ fontSize: '12px' }}>{subs.firstNm}</ButtonLink>
-                          <ButtonLink style={{ fontSize: '12px' }}> {subs.email}</ButtonLink>
-                        </SubsStyled>
-                      </Row>
-                    </Spacing>
+                    <Row key={subsIndex}>
+                      <Column lg="3">
+                        <ButtonLink style={{ fontSize: '12px' }}>{subs.firstNm}</ButtonLink>
+                      </Column>
+                      <Column lg="4">
+                        <ButtonLink style={{ fontSize: '12px' }}>{subs.email}</ButtonLink>
+                      </Column>
+                    </Row>
                   ))}
               </Spacing>
             ))}
@@ -565,10 +563,8 @@ const XchangeDetailsPage = () => {
               ))}
           </Row>
           <Row>
-            <StyledContainerDiagram>
-              <Column lg="9">{renderDiagram()}</Column>
-              <Column lg="3">{cardBox()}</Column>
-            </StyledContainerDiagram>
+            <Column lg="9">{renderDiagram()}</Column>
+            <Column lg="2">{cardBox()}</Column>
           </Row>
         </Container>
         {renderFileUploadDialog()}
