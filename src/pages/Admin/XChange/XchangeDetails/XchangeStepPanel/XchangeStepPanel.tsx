@@ -148,18 +148,13 @@ const XchangeStepPanel = ({
     }
   };
 
-  const removeLineBreakXml = (xmlValue: string) => xmlValue.split('\n').toString().replace(/,/g, '');
-  const removeSpace = (xmlValue: string) => xmlValue.replace(/\s+/g, '');
-
   const saveStep = () => {
-    let xml = removeLineBreakXml(editXmlData ?? '');
-    xml = removeSpace(xml ?? '');
     if (optionXchangeStep === 'update') {
       updateXchangeStep({
         variables: {
           stepInput: {
             sid: xchangeStepSid,
-            xml,
+            xml: editXmlData,
           },
         },
       });
@@ -168,14 +163,14 @@ const XchangeStepPanel = ({
         variables: {
           stepInput: {
             xchangeFileProcessSid,
-            xml,
+            xml: editXmlData,
           },
         },
       });
     }
   };
 
-  const addlineBreakeXml = (xmlValue: string) => {
+  const addFormatToXml = (xmlValue: string) => {
     const formattedXml = format(xmlValue, {
       indentation: '  ',
       collapseContent: true,
@@ -267,7 +262,7 @@ const XchangeStepPanel = ({
   useEffect(() => {
     if (!loadingAddStep && dataAddStep) {
       if (dataAddStep.xchangeStepForm.xml.value) {
-        const xmlValue = addlineBreakeXml(dataAddStep.xchangeStepForm.xml.value);
+        const xmlValue = addFormatToXml(dataAddStep.xchangeStepForm.xml.value);
         setEditXmlData(xmlValue);
         setPreviousXmlDate(xmlValue);
       }
@@ -284,7 +279,7 @@ const XchangeStepPanel = ({
 
   useEffect(() => {
     if (!loadingCopyStep && dataCopyStep) {
-      const xmlValue = addlineBreakeXml(dataCopyStep.copyXchangeStep.xml.value);
+      const xmlValue = addFormatToXml(dataCopyStep.copyXchangeStep.xml.value);
       setEditXmlData(xmlValue);
       setPreviousXmlDate(xmlValue);
     }
