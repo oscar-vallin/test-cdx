@@ -3,6 +3,16 @@ import { mountWithTheme } from 'src/utils/testUtils';
 import store from 'src/store/index';
 import { TestFileTransmissionModal } from './TestFileTransmissionModal';
 
+const  ftpTestCurrentData = {
+  host: 'ftpt.coresource.com',
+  user: 'testKnown2u_AHS',
+  password: 'YPrMkPtV',
+  port: '22',
+  folder: 'in',
+  stepWise: true,
+  sshKeyPath: 'KNTU',
+};
+
 jest.mock('src/hooks/useOrgSid', () => ({
   useOrgSid: () => ({
     orgSid: 8,
@@ -39,7 +49,7 @@ describe('Test File Transmission we can do Test', () => {
     const onOpen = jest.fn();
     const wrapper = mountWithTheme(
       <StoreProvider store={store}>
-        <TestFileTransmissionModal isOpen={onOpen} open={true} />
+        <TestFileTransmissionModal isOpen={onOpen} open={true} ftpTestCurrentData={ftpTestCurrentData}/>
       </StoreProvider>
     );
 

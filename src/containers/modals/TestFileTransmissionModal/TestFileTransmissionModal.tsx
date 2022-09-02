@@ -14,7 +14,6 @@ import {
   ErrorSeverity,
   SftpTestSendTestFileForm,
   useFtpTestMMutation,
-  XpsftpForm,
   TestFileStrategy,
   WorkStatus,
   useXpsftpTestLazyQuery,
@@ -35,19 +34,29 @@ const defaultProps = {
   isOpen: (data: boolean) => {},
 };
 
+type ftpTestCurrentDataProps = {
+  host: string;
+  user: string;
+  password: string;
+  port: string;
+  folder: string;
+  stepWise: boolean;
+  sshKeyPath: string;
+};
+
 type TestFileTransmissionModalProps = {
   open: boolean;
   isOpen: (data: boolean) => void;
+  ftpTestCurrentData: ftpTestCurrentDataProps;
 } & typeof defaultProps;
 
-const TestFileTransmissionModal = ({ isOpen, open }: TestFileTransmissionModalProps) => {
+const TestFileTransmissionModal = ({ isOpen, open, ftpTestCurrentData }: TestFileTransmissionModalProps) => {
   const { orgSid } = useOrgSid();
   const Toast = useNotification();
   const handleError = ErrorHandler();
   const inputFileRef = useRef() as React.MutableRefObject<HTMLInputElement>;
   const [fetchFtpTestForm, { data: dataForm, loading: loadingForm, error: errorForm }] = useXpsftpTestLazyQuery();
   const [callFtpTest, { data: ftpTestData, loading: ftpTestLoading, error: ftpTestError }] = useFtpTestMMutation();
-  const [ftpTestForm, setFtpTestForm] = useState<XpsftpForm | null>();
   const [genTestFileForm, setGenTestFileForm] = useState<SftpTestSendTestFileForm | null>();
   const [sendFileTest, setSendFileTest] = useState(false);
   const [vendorFileName, setVendorFileName] = useState('');
@@ -79,7 +88,6 @@ const TestFileTransmissionModal = ({ isOpen, open }: TestFileTransmissionModalPr
   useEffect(() => {
     setProcessingForm(true);
     if (dataForm && !loadingForm) {
-      setFtpTestForm(dataForm.xpsftpTest?.xpSFTPForm);
       setGenTestFileForm(dataForm.xpsftpTest?.sendTestFileForm);
     }
     setProcessingForm(false);
@@ -90,13 +98,13 @@ const TestFileTransmissionModal = ({ isOpen, open }: TestFileTransmissionModalPr
     const { data, errors } = await callFtpTest({
       variables: {
         xpsftp: {
-          host: ftpTestForm?.host?.value ?? '',
-          user: ftpTestForm?.user?.value ?? '',
-          password: ftpTestForm?.password?.value ?? '',
-          port: ftpTestForm?.port?.value,
-          folder: ftpTestForm?.folder?.value ?? '',
-          stepWise: ftpTestForm?.stepWise?.value,
-          sshKeyPath: ftpTestForm?.sshKeyPath?.value?.value,
+          host: ftpTestCurrentData.host,
+          user: ftpTestCurrentData.user,
+          password: ftpTestCurrentData.password,
+          port: +ftpTestCurrentData.port,
+          folder: ftpTestCurrentData.folder,
+          stepWise: ftpTestCurrentData.stepWise,
+          sshKeyPath: ftpTestCurrentData.sshKeyPath,
         },
         sendTestFile: {
           sendTestFile: sendFileTest && !testFile,
@@ -123,9 +131,6 @@ const TestFileTransmissionModal = ({ isOpen, open }: TestFileTransmissionModalPr
       Toast.error({ text: errors[0].message });
     }
 
-    if (data?.ftpTestM?.xpSFTPForm) {
-      setFtpTestForm(data?.ftpTestM?.xpSFTPForm);
-    }
     if (data?.ftpTestM?.sendTestFileForm) {
       setGenTestFileForm(data?.ftpTestM?.sendTestFileForm);
     }

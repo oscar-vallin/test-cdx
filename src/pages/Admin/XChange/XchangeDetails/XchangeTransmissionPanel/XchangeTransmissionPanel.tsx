@@ -869,7 +869,8 @@ const XchangeTransmissionPanel = ({
   useEffect(() => {
     if (!loadingCopyTransmission && dataCopyTransmission) {
       setOptionXchangeTransmission('copy');
-      setXchangeFileTransmission(dataCopyTransmission.copyXchangeFileTransmission);
+      console.log(dataCopyTransmission?.copyXchangeFileTransmission)
+      setXchangeFileTransmission(dataCopyTransmission?.copyXchangeFileTransmission);
       if (
         dataCopyTransmission.copyXchangeFileTransmission?.filenameQualifiers.value &&
         dataCopyTransmission.copyXchangeFileTransmission?.filenameQualifiers.value.length > 0
@@ -997,7 +998,19 @@ const XchangeTransmissionPanel = ({
       {renderBody()}
       <DialogYesNo {...dialogProps} open={showDialog} />
       {testFileTransmissionModal && (
-        <TestFileTransmissionModal isOpen={setTestFileTransmissionModal} open={testFileTransmissionModal} />
+        <TestFileTransmissionModal 
+          isOpen={setTestFileTransmissionModal}
+          open={testFileTransmissionModal}
+          ftpTestCurrentData={{
+            host,
+            user: userName,
+            password,
+            port,
+            folder,
+            stepWise,
+            sshKeyPath: authKeyName,
+          }}
+        />
       )}
     </ThemedPanel>
   );
