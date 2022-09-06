@@ -10,6 +10,7 @@ import {
   SelectionMode,
   Spinner,
   SpinnerSize,
+  TooltipHost,
 } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
@@ -18,7 +19,7 @@ import { Column, Container, Row } from 'src/components/layouts';
 import { Button, ButtonLink } from 'src/components/buttons';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { PageTitle } from 'src/components/typography';
-
+import { People20Filled } from '@fluentui/react-icons';
 import {
   AccessPolicyGroup,
   CdxWebCommandType,
@@ -35,9 +36,10 @@ import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { ROUTE_ACCESS_MANAGEMENT_GROUPS } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { PageBody } from 'src/components/layouts/Column';
+import { theme } from 'src/styles/themes/theme';
 import { useAccessManagementGroupsPageService } from './AccessManagementGroupsPage.service';
 import { StyledCommandButton } from '../AccessManagement.styles';
-import { AccessPolicyGroupPanel } from './AccessPolicyGroup';
+import { AccessPolicyGroupPanel, AccessPolicyGroupMembersPanel } from './AccessPolicyGroup';
 
 const generateColumns = () => {
   const createColumn = ({ name, key }) => ({
@@ -51,6 +53,7 @@ const generateColumns = () => {
 
   return [
     createColumn({ name: 'Name', key: 'name' }),
+    createColumn({ name: '', key: 'members' }),
     createColumn({ name: 'Template', key: 'tmpl' }),
     createColumn({ name: '', key: 'actions' }),
   ];
@@ -61,6 +64,8 @@ const AccessManagementGroupsContainer = () => {
   const [groups, setGroups] = useState<AccessPolicyGroup[]>([]);
   const columns = generateColumns();
   const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [isPanelMembersOpen, setIsPanelMembersOpen] = useState(false);
+  const [currentName, setCurrentName] = useState('');
   const [isDialogOpen, setDialogOpen] = useState(false);
   const Toast = useNotification();
   const [templateId, setTemplateId] = useState<string>();
@@ -201,6 +206,22 @@ const AccessManagementGroupsContainer = () => {
           </ButtonLink>
         </>
       );
+    } 
+
+    if (column.key === 'members') {
+      return (
+        <TooltipHost content={`${item.members} Users are assigned to this specialization`}>
+          <People20Filled 
+            style={{ color: theme.colors.themePrimary, cursor: 'pointer' }} 
+            onClick={() => {
+              setSelectedGroupId(item.sid);
+              setCurrentName(item.name);
+              setIsPanelMembersOpen(true);
+            }}
+          />
+          <span style={{ position: 'relative', bottom: '4px' }}>&nbsp;( {item?.members} )</span>
+        </TooltipHost>
+      )
     }
     return item[column.key];
   };
@@ -341,6 +362,13 @@ const AccessManagementGroupsContainer = () => {
         onClose={() => {
           setDialogOpen(false);
         }}
+      />
+
+      <AccessPolicyGroupMembersPanel
+        isOpen={isPanelMembersOpen}
+        closePanel={setIsPanelMembersOpen}
+        selectedGroupId={selectedGroupId ?? ''}
+        currentName={currentName}
       />
 
       <AccessPolicyGroupPanel
