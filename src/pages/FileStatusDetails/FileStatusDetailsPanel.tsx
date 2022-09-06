@@ -379,7 +379,12 @@ const FileStatusDetailsPanel = (
               && <Spinner size={SpinnerSize.medium} />}
           </Stack.Item>
           <Stack.Item align="center">
-            <IconButton iconProps={{ iconName: 'Copy' }} onClick={copyFileStatusDetailsUrl} />
+            <IconButton
+              iconProps={{ iconName: 'PageLink' }}
+              onClick={copyFileStatusDetailsUrl}
+              title="Copy a link to this File Status Details"
+              ariaLabel="Copy a link to this File Status Details"
+            />
           </Stack.Item>
           <Stack.Item align="center">
             <Badge
