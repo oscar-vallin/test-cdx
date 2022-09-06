@@ -1,5 +1,11 @@
 import { ReactElement } from 'react';
-import { ConstrainMode, DetailsList, DetailsListLayoutMode, IColumn, SelectionMode, } from '@fluentui/react';
+import {
+  ConstrainMode,
+  DetailsList,
+  DetailsListLayoutMode,
+  IColumn,
+  SelectionMode,
+} from '@fluentui/react';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { RecordCounts } from 'src/data/services/graphql';
 import { EmptyState } from 'src/containers/states';
