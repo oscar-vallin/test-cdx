@@ -12,7 +12,7 @@ import {
 } from '@fluentui/react';
 import { useHistory } from 'react-router-dom';
 
-import { PanelBody, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
+import { PanelBody, PanelHeader, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
 
 import { Badge } from 'src/components/badges/Badge';
 import { Text } from 'src/components/typography';
@@ -32,8 +32,9 @@ import { LabelValue } from 'src/components/labels/LabelValue';
 import { ArchivesTab } from 'src/pages/FileStatusDetails/ArchivesTab/ArchivesTab';
 import { isDateTimeValid } from 'src/utils/CDXUtils';
 import { useWorkPacketCommands } from 'src/pages/FileStatusDetails/useWorkPacketCommands';
+import { ButtonLink } from 'src/components/buttons';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { Row } from 'src/components/layouts';
+import { Column } from 'src/components/layouts';
 import { CDXTabsItemType, Tabs } from 'src/components/tabs/Tabs';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
 import { useNotification } from 'src/hooks/useNotification';
@@ -54,7 +55,9 @@ type FileStatusDetailsPanelProps = {
   tableFilters?: TableFiltersType;
 };
 
-const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: FileStatusDetailsPanelProps) => {
+const FileStatusDetailsPanel = (
+  { useFileStatusDetailsPanel, tableFilters }: FileStatusDetailsPanelProps,
+) => {
   const { fsOrgSid } = useFileStatusDetailsPanel;
   const { hash, setHash } = useFileStatusDetailsPanel;
   const id = useFileStatusDetailsPanel.workOrderId;
@@ -63,7 +66,6 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
 
   const [packet, setPacket] = useState<WorkPacketStatusDetails>();
   const [commandBarItems, setCommandBarItems] = useState<ICommandBarItemProps[]>([]);
-  const [showDetails, setShowDetails] = useState(true);
   const realId: string = id?.replace('*', '');
   const Toast = useNotification();
 
@@ -121,7 +123,8 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
     if (!packetStatus) {
       return 'info';
     }
-    // purposely use a switch statement so if we add a WorkStatus, it will generate a compiler error.
+    // purposely use a switch statement so if we add a WorkStatus,
+    // it will generate a compiler error.
     switch (packetStatus) {
       case WorkStatus.Queued:
         return 'info';
@@ -153,7 +156,6 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
   const deliveredFile: DeliveredFile | undefined | null = packet?.deliveredFiles
     ? packet?.deliveredFiles[0]
     : undefined;
-  // const rerunCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.RerunStep);
 
   const renderWorkPacketCommandButton = (item: any) => {
     if (!item) return null;
@@ -172,13 +174,51 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
     );
   };
 
+  const renderXchangeConfigButton = (item: any) => {
+    if (!item?.command) return null;
+    return (
+      <ButtonLink
+        id="__XchangeConfigBtn"
+        onClick={() => history.push(`/xchange-details?orgSid=${fsOrgSid}&coreFilename=${packet?.inboundFilename}`)}
+      >
+        {item.command.label}
+      </ButtonLink>
+    )
+  };
+
+  const handleClosePanel = () => {
+    pollWPStatus.stopPolling();
+    const params = new URLSearchParams(window.location.search);
+    params.delete('tab');
+    params.delete('workOrderId');
+    params.delete('fsOrgSid');
+    params.delete('redirectUrl');
+    history.replace(`${window.location.pathname}?${params.toString()}`);
+    useFileStatusDetailsPanel?.closePanel();
+  };
+
   useEffect(() => {
-    const resendCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Resend);
-    const continueCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Continue);
-    const reprocessCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Reprocess);
-    const reprocessRenameCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Rename);
-    const cancelCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Cancel);
-    const deleteCmd = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Delete);
+    const resendCmd = packet
+      ?.commands
+      ?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Resend);
+    const continueCmd = packet
+      ?.commands
+      ?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Continue);
+    const reprocessCmd = packet
+      ?.commands
+      ?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Reprocess);
+    const reprocessRenameCmd = packet
+      ?.commands
+      ?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Rename);
+    const cancelCmd = packet
+      ?.commands
+      ?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Cancel);
+    const deleteCmd = packet
+      ?.commands
+      ?.find((cmd) => cmd?.commandType === WorkPacketCommandType.Delete);
+    const xchangeConfigCmd = packet
+      ?.commands
+      ?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewConfiguration);
 
     const items: ICommandBarItemProps[] = [
       {
@@ -272,6 +312,13 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
         },
         onRender: renderWorkPacketCommandButton,
       },
+      {
+        id: '__XchangeConfigBtn',
+        key: '__XchangeConfigBtn',
+        command: xchangeConfigCmd,
+        onClick: () => history.push(`/xchange-details?orgSid=${fsOrgSid}&coreFilename=${packet?.inboundFilename}`),
+        onRender: renderXchangeConfigButton,
+      },
     ];
     setCommandBarItems(items);
   }, [packet]);
@@ -280,16 +327,22 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
     if (fileInfo) {
       return (
         <>
-          <Stack.Item>
+          <Stack.Item grow={1}>
             <Text size="small" variant="muted">
               Delivered Vendor File Details
             </Text>
             <LabelValue label="Filename" value={fileInfo.filename ?? 'File not found'} />
-            <LabelValue label="Delivered on" value={formatDate(new Date(fileInfo.timeDelivered))} />
-            <LabelValue label="Size" value={`${fileInfo.fileSizeInBytes} bytes (without encryption)`} />
+            <LabelValue
+              label="Delivered on"
+              value={formatDate(new Date(fileInfo.timeDelivered))}
+            />
+            <LabelValue
+              label="Size"
+              value={`${fileInfo.fileSizeInBytes} bytes (without encryption)`}
+            />
           </Stack.Item>
           {fileInfo?.ftp?.host && (
-            <Stack.Item>
+            <Stack.Item grow={1}>
               <Text size="small" variant="muted">
                 FTP details
               </Text>
@@ -310,68 +363,63 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
     Toast.success({ text: 'URL copied successfully' });
   };
 
-  const renderFileMetaData = () => (
-    <ShadowBox id="__FileMeta">
-      <Row wrap={false}>
-        <Stack horizontal={true} wrap={true} grow tokens={{ childrenGap: 10 }}>
-          <Stack.Item align="center" disableShrink>
-            <IconButton
-              iconProps={{ iconName: showDetails ? 'ChevronUp' : 'ChevronDown' }}
-              onClick={() => setShowDetails(!showDetails)}
-            />
-          </Stack.Item>
+  const renderPanelHeader = () => (
+    <PanelHeader id="__PanelHeader">
+      <Column lg="12">
+        <Stack
+          horizontal={true}
+          wrap={true}
+          grow
+          tokens={{ childrenGap: 10 }}
+          styles={{ root: { height: 44, marginLeft: '25px' } }}
+        >
           <Stack.Item align="center">
             <FileTitle>{packet?.inboundFilename ?? packet?.workOrderId}</FileTitle>
+            {packet?.packetStatus === WorkStatus.Processing
+              && <Spinner size={SpinnerSize.medium} />}
           </Stack.Item>
-          {packet?.packetStatus === WorkStatus.Processing && <Spinner size={SpinnerSize.medium} />}
           <Stack.Item align="center">
             <IconButton iconProps={{ iconName: 'Copy' }} onClick={copyFileStatusDetailsUrl} />
           </Stack.Item>
           <Stack.Item align="center">
-            <Badge variant={getBadgeVariant(packet?.packetStatus)} label={packet?.packetStatus} pill />
+            <Badge
+              variant={getBadgeVariant(packet?.packetStatus)}
+              label={packet?.packetStatus}
+              pill
+            />
           </Stack.Item>
           <Stack.Item align="center">
             <Badge variant="info" label={`Billing Units: ${packet?.populationCount ?? 'none'}`} pill />
             {packet?.suppressBilling && (
-            <>
-              <Required>*</Required>
-              <InfoIcon id="billingUnitInfo" tooltip="This exchange was not billed" />
-            </>
+              <>
+                <Required>*</Required>
+                <InfoIcon id="billingUnitInfo" tooltip="This exchange was not billed" />
+              </>
             )}
           </Stack.Item>
           <Stack.Item align="center" grow>
             <Text variant="muted">{renderReceivedDate()}</Text>
           </Stack.Item>
         </Stack>
-      </Row>
-      {showDetails && (
+      </Column>
+    </PanelHeader>
+  );
+
+  const renderFileMetaData = () => (
+    <ShadowBox id="__FileMeta">
       <FileMetaDetails>
-        <Stack horizontal={true} wrap={true} tokens={{ childrenGap: 15 }}>
-          <Stack.Item>
+        <Stack horizontal={true} wrap={true} tokens={{ childrenGap: 15 }} grow={true}>
+          <Stack.Item grow={1}>
             <LabelValue label="Vendor" value={packet?.vendorId} />
             <LabelValue label="Plan Sponsor" value={packet?.orgId} />
-          </Stack.Item>
-          <Stack.Item>
             <LabelValue label="Work Order Id" value={packet?.workOrderId} />
             <LabelValue label="Spec Id" value={packet?.specId} />
           </Stack.Item>
           {renderDeliveredFileInfo(deliveredFile)}
         </Stack>
       </FileMetaDetails>
-      )}
     </ShadowBox>
   );
-
-  const handleClosePanel = () => {
-    pollWPStatus.stopPolling();
-    const params = new URLSearchParams(window.location.search);
-    params.delete('tab');
-    params.delete('workOrderId');
-    params.delete('fsOrgSid');
-    params.delete('redirectUrl');
-    history.replace(`${window.location.pathname}?${params.toString()}`);
-    useFileStatusDetailsPanel?.closePanel();
-  };
 
   const handleFilesDetailsTabChange = (item: string) => {
     setHash(item);
@@ -467,6 +515,7 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
       isOpen={useFileStatusDetailsPanel?.isPanelOpen}
       onDismiss={handleClosePanel}
       onOuterClick={handleClosePanel}
+      onRenderHeader={renderPanelHeader}
       onRenderFooterContent={renderFooter}
       isFooterAtBottom={true}
     >
