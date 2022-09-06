@@ -560,7 +560,7 @@ const XchangeTransmissionPanel = ({
                     id="password"
                     type="password"
                     value={password}
-                    autocomplete="off"
+                    autocomplete="new-password"
                     uiField={overrideEnables(xchangeFileTransmission?.password, 'password')}
                     placeholder="password"
                     onChange={(event, newValue) => {
