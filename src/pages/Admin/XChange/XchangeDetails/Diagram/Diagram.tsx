@@ -1,8 +1,12 @@
 import { useEffect, useState } from 'react';
-import ReactFlow, { useNodesState, useEdgesState, addEdge, Connection, Edge } from 'react-flow-renderer';
+import ReactFlow, {
+  useNodesState, useEdgesState, addEdge, Connection, Edge,
+} from 'react-flow-renderer';
 import { Column, Container, Row } from 'src/components/layouts';
 import { XchangeDiagram } from 'src/data/services/graphql';
-import { StyledContainer, StyledHorizontalButtons, StyledText, StyledButtonAction } from '../XchangeDetailsPage.styles';
+import {
+  StyledContainer, StyledHorizontalButtons, StyledText, StyledButtonAction,
+} from '../XchangeDetailsPage.styles';
 import DataNodeSteps from './CustomDiagramNodes/DataNodeSteps';
 import DataNodeTransmissions from './CustomDiagramNodes/DataNodeTransmissions';
 import { InitialNodes } from './nodes/nodes';
@@ -36,30 +40,28 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
   const onConnect = (params: Edge<any> | Connection) => setEdges((eds) => addEdge(params, eds));
 
   const updateStep = (event, node) => {
-    setNodes((nds) =>
-      nds.map((n) => {
-        if (node.type === 'dataNodeTransmissions' && n.data.sid && n.data.sid === node.data.sid) {
-          n.data = {
-            ...node.data,
-            hoverOverShowIcons: false,
-            updateTransmission: true,
-            refreshDetailsPage,
-            xchangeFileProcessSid,
-          };
-        }
-        if (n.data.sid && n.data.index === node.data.index && node.type === 'dataNodeSteps') {
-          n.data = {
-            ...node.data,
-            qualifier: node.data.qualifier,
-            hoverOverShowIcons: false,
-            updateStep: true,
-            refreshDetailsPage,
-            xchangeFileProcessSid,
-          };
-        }
-        return n;
-      })
-    );
+    setNodes((nds) => nds.map((n) => {
+      if (node.type === 'dataNodeTransmissions' && n.data.sid && n.data.sid === node.data.sid) {
+        n.data = {
+          ...node.data,
+          hoverOverShowIcons: false,
+          updateTransmission: true,
+          refreshDetailsPage,
+          xchangeFileProcessSid,
+        };
+      }
+      if (n.data.sid && n.data.index === node.data.index && node.type === 'dataNodeSteps') {
+        n.data = {
+          ...node.data,
+          qualifier: node.data.qualifier,
+          hoverOverShowIcons: false,
+          updateStep: true,
+          refreshDetailsPage,
+          xchangeFileProcessSid,
+        };
+      }
+      return n;
+    }));
   };
 
   // const showIconsEachNode = (event, node) => {
@@ -90,57 +92,53 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
   // };
 
   const hideIcons = (event, node) => {
-    setNodes((nds) =>
-      nds.map((n) => {
-        if (node.type === 'dataNodeTransmissions' && n.data.sid && n.data.sid === node.data.sid) {
-          n.data = {
-            ...node.data,
-            hoverOverShowIcons: false,
-            updateTransmission: false,
-            refreshDetailsPage,
-            xchangeFileProcessSid,
-          };
-        }
-        if (n.data.sid && n.data.index === node.data.index && node.type === 'dataNodeSteps') {
-          n.data = {
-            ...node.data,
-            qualifier: node.data.qualifier,
-            hoverOverShowIcons: false,
-            updateStep: false,
-            refreshDetailsPage,
-            xchangeFileProcessSid: null,
-          };
-        }
-        return n;
-      })
-    );
+    setNodes((nds) => nds.map((n) => {
+      if (node.type === 'dataNodeTransmissions' && n.data.sid && n.data.sid === node.data.sid) {
+        n.data = {
+          ...node.data,
+          hoverOverShowIcons: false,
+          updateTransmission: false,
+          refreshDetailsPage,
+          xchangeFileProcessSid,
+        };
+      }
+      if (n.data.sid && n.data.index === node.data.index && node.type === 'dataNodeSteps') {
+        n.data = {
+          ...node.data,
+          qualifier: node.data.qualifier,
+          hoverOverShowIcons: false,
+          updateStep: false,
+          refreshDetailsPage,
+          xchangeFileProcessSid: null,
+        };
+      }
+      return n;
+    }));
   };
 
   const handleIcons = (event, node) => {
-    setNodes((nds) =>
-      nds.map((n) => {
-        if (node.type === 'dataNodeTransmissions' && n.data.sid && n.data.sid === node.data.sid) {
-          n.data = {
-            ...node.data,
-            hoverOverShowIcons: true,
-            updateTransmission: false,
-            refreshDetailsPage,
-            xchangeFileProcessSid,
-          };
-        }
-        if (n.data.sid && n.data.index === node.data.index && node.type === 'dataNodeSteps') {
-          n.data = {
-            ...node.data,
-            qualifier: node.data.qualifier,
-            hoverOverShowIcons: true,
-            updateStep: false,
-            refreshDetailsPage,
-            xchangeFileProcessSid,
-          };
-        }
-        return n;
-      })
-    );
+    setNodes((nds) => nds.map((n) => {
+      if (node.type === 'dataNodeTransmissions' && n.data.sid && n.data.sid === node.data.sid) {
+        n.data = {
+          ...node.data,
+          hoverOverShowIcons: true,
+          updateTransmission: false,
+          refreshDetailsPage,
+          xchangeFileProcessSid,
+        };
+      }
+      if (n.data.sid && n.data.index === node.data.index && node.type === 'dataNodeSteps') {
+        n.data = {
+          ...node.data,
+          qualifier: node.data.qualifier,
+          hoverOverShowIcons: true,
+          updateStep: false,
+          refreshDetailsPage,
+          xchangeFileProcessSid,
+        };
+      }
+      return n;
+    }));
   };
 
   useEffect(() => {

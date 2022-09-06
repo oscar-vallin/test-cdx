@@ -87,14 +87,14 @@ export const WorkPacketTable = ({
 
   const apiPolling = pollingQuery
     ? pollingQuery({
-        variables: {
-          orgSid,
-          searchText: tableFilters.searchText.delayedValue,
-          dateRange: { rangeStart: tableFilters.startDate.value, rangeEnd: tableFilters.endDate.value },
-          lastUpdated,
-        },
-        pollInterval: POLL_INTERVAL,
-      })
+      variables: {
+        orgSid,
+        searchText: tableFilters.searchText.delayedValue,
+        dateRange: { rangeStart: tableFilters.startDate.value, rangeEnd: tableFilters.endDate.value },
+        lastUpdated,
+      },
+      pollInterval: POLL_INTERVAL,
+    })
     : {};
 
   const onPageChange = (pageNumber: number) => {

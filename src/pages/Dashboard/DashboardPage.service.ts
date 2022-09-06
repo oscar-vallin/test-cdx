@@ -37,8 +37,7 @@ export const useDashboardService = (orgSid: string, dateRangeType?: string | nul
   const [isLoadingData, setIsLoadingData] = useState(true);
 
   const [apiDashboardPeriodsQuery, { data, loading, error }] = useDashboardPeriodsLazyQuery();
-  const [customPeriodQuery, { data: period, loading: customPeriodLoading, error: customPeriodError }] =
-    useDashboardPeriodCountsLazyQuery();
+  const [customPeriodQuery, { data: period, loading: customPeriodLoading, error: customPeriodError }] = useDashboardPeriodCountsLazyQuery();
   const handleError = ErrorHandler();
 
   useEffect(() => {
@@ -74,7 +73,9 @@ export const useDashboardService = (orgSid: string, dateRangeType?: string | nul
       return period?.dashboardPeriodCounts;
     }
 
-    const { dailyCounts, yesterdayCounts, monthlyCounts, lastMonthlyCounts } = data?.dashboardPeriods || {};
+    const {
+      dailyCounts, yesterdayCounts, monthlyCounts, lastMonthlyCounts,
+    } = data?.dashboardPeriods || {};
 
     if (isToday(dateId)) {
       return dailyCounts;
@@ -90,9 +91,7 @@ export const useDashboardService = (orgSid: string, dateRangeType?: string | nul
   };
 
   // * Get options by ID
-  const getOption = (id) => {
-    return datesOptions.find((option) => option.id === id) ?? DATES_OPTIONS[0];
-  };
+  const getOption = (id) => datesOptions.find((option) => option.id === id) ?? DATES_OPTIONS[0];
 
   // * Component Did Mount
   useEffect(() => {
@@ -138,9 +137,7 @@ export const useDashboardService = (orgSid: string, dateRangeType?: string | nul
     setIsLoadingData(true);
     // Get Change Selected Options.
     setDateOptions(
-      DATES_OPTIONS.map((option) => {
-        return { ...option, selected: option.id === dateId };
-      })
+      DATES_OPTIONS.map((option) => ({ ...option, selected: option.id === dateId })),
     );
 
     if (dateId !== DATE_OPTION_NAME.custom) {

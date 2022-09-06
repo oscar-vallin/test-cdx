@@ -1,7 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactElement, useState, useEffect } from 'react';
 
-import { SpinnerSize, PanelType, Spinner, ITag, Stack } from '@fluentui/react';
+import {
+  SpinnerSize, PanelType, Spinner, ITag, Stack,
+} from '@fluentui/react';
 import _ from 'lodash';
 import { useApolloClient } from '@apollo/client';
 
@@ -59,8 +61,12 @@ const groupSpecializations = (opts): SpecializationGroup[] => {
   const accessManagement = [...groups[vendorKey]];
 
   return [
-    { label: 'Exchange Status', labelKey: 'Exchanges', valueKey: orgKey, options: exchangeStatus },
-    { label: 'Access Management', labelKey: 'Permission', valueKey: vendorKey, options: accessManagement },
+    {
+      label: 'Exchange Status', labelKey: 'Exchanges', valueKey: orgKey, options: exchangeStatus,
+    },
+    {
+      label: 'Access Management', labelKey: 'Permission', valueKey: vendorKey, options: accessManagement,
+    },
   ];
 };
 
@@ -92,16 +98,16 @@ const AccessSpecializationPanel = ({
   const [currentItem, setCurrentItem]: any = useState(null);
 
   const [fetchAccessForm, { data: form, loading: isLoadingForm }] = useQueryHandler(
-    useAccessSpecializationFormLazyQuery
+    useAccessSpecializationFormLazyQuery,
   );
   const [fetchSpecialization, { data: specialization, loading: isLoadingSpecialization }] = useQueryHandler(
-    useFindAccessSpecializationLazyQuery
+    useFindAccessSpecializationLazyQuery,
   );
   const [createSpecialization, { data: createdSpecialization, loading: isCreatingSpecialization }] = useQueryHandler(
-    useCreateAccessSpecializationMutation
+    useCreateAccessSpecializationMutation,
   );
   const [updateSpecialization, { data: updatedSpecialization }] = useQueryHandler(
-    useUpdateAccessSpecializationMutation
+    useUpdateAccessSpecializationMutation,
   );
 
   const doClosePanel = () => {
@@ -206,7 +212,7 @@ const AccessSpecializationPanel = ({
           [item.permission]:
             item.orgSids.value?.map(({ name: itemName, value }) => ({ name: itemName, key: value })) || [],
         }),
-        {}
+        {},
       );
 
       setState({ name: name.value });
@@ -223,45 +229,44 @@ const AccessSpecializationPanel = ({
     return orgQuickSearch(client, handleError, text, orgSid);
   };
 
-  const renderBody = () => {
-    return (
-      <>
-        <FormRow>
-          <Column lg="12">
-            <UIInputText
-              id="__Specialization_Name"
-              uiField={accessForm?.name}
-              value={state.name}
-              onChange={(event, newValue) => {
-                setUnsavedChanges(true);
-                setState({ ...state, name: newValue });
-              }}
-            />
-          </Column>
-        </FormRow>
+  const renderBody = () => (
+    <>
+      <FormRow>
+        <Column lg="12">
+          <UIInputText
+            id="__Specialization_Name"
+            uiField={accessForm?.name}
+            value={state.name}
+            onChange={(event, newValue) => {
+              setUnsavedChanges(true);
+              setState({ ...state, name: newValue });
+            }}
+          />
+        </Column>
+      </FormRow>
 
-        <FormRow>
-          <Column lg="12">
-            <UIInputTextReadOnly id="__Organization" uiField={accessForm?.organization} />
-          </Column>
-        </FormRow>
+      <FormRow>
+        <Column lg="12">
+          <UIInputTextReadOnly id="__Organization" uiField={accessForm?.organization} />
+        </Column>
+      </FormRow>
 
-        <FormRow>
-          <Column lg="12">
-            <Spacing margin={{ top: 'small' }}>
-              <Text variant="bold">Specializations</Text>
-            </Spacing>
-          </Column>
-        </FormRow>
+      <FormRow>
+        <Column lg="12">
+          <Spacing margin={{ top: 'small' }}>
+            <Text variant="bold">Specializations</Text>
+          </Spacing>
+        </Column>
+      </FormRow>
 
-        <FormRow>
-          <Column lg="12">
-            {accessFilters.map((group: SpecializationGroup, groupIndex) => (
-              <Collapse label={group.label} expanded key={groupIndex}>
-                <Card elevation="none" spacing="none" key={`card_${groupIndex}`}>
-                  <Spacing padding="normal" key={`space_${groupIndex}`}>
-                    <Row>
-                      <Column lg="12">
+      <FormRow>
+        <Column lg="12">
+          {accessFilters.map((group: SpecializationGroup, groupIndex) => (
+            <Collapse label={group.label} expanded key={groupIndex}>
+              <Card elevation="none" spacing="none" key={`card_${groupIndex}`}>
+                <Spacing padding="normal" key={`space_${groupIndex}`}>
+                  <Row>
+                    <Column lg="12">
                         <Spacing margin={{ bottom: 'normal' }}>
                           <Row>
                             <Column lg="3">
@@ -304,16 +309,15 @@ const AccessSpecializationPanel = ({
                           </Spacing>
                         ))}
                       </Column>
-                    </Row>
-                  </Spacing>
-                </Card>
-              </Collapse>
-            ))}
-          </Column>
-        </FormRow>
-      </>
-    );
-  };
+                  </Row>
+                </Spacing>
+              </Card>
+            </Collapse>
+          ))}
+        </Column>
+      </FormRow>
+    </>
+  );
 
   const renderPanelHeader = () => (
     <PanelHeader id="__PanelHeader">
@@ -330,7 +334,7 @@ const AccessSpecializationPanel = ({
   const renderPanelFooter = () => {
     const commands = accessForm?.commands;
     const command = commands?.find(
-      (cmd) => cmd?.commandType === CdxWebCommandType.Create || cmd?.commandType === CdxWebCommandType.Update
+      (cmd) => cmd?.commandType === CdxWebCommandType.Create || cmd?.commandType === CdxWebCommandType.Update,
     );
     if (command) {
       return (

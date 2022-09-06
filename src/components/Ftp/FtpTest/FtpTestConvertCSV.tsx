@@ -25,10 +25,11 @@ function ConvertToCSVBinding(needsQuote: (str: string) => boolean, quoteField: (
             maxAttributes = Math.max(maxAttributes, attributes.length);
             for (let j = 0; j < attributes.length; j++) {
               for (const index in attributes[j]) {
-                if (index != '__typename')
+                if (index != '__typename') {
                   line += `${
                     needsQuote(attributes[j][index]) ? quoteField(attributes[j][index]) : attributes[j][index]
                   },`;
+                }
               }
             }
           }
@@ -94,4 +95,6 @@ const FtpTestConvertCSV = ({ allMessages }) => {
   );
 };
 
-export { FtpTestConvertCSV, ConvertToCSVBinding, quoteFieldBinding, needsQuoteBinding };
+export {
+  FtpTestConvertCSV, ConvertToCSVBinding, quoteFieldBinding, needsQuoteBinding,
+};

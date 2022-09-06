@@ -1,7 +1,11 @@
 import React, { ReactElement, useState } from 'react';
-import { Callout, DirectionalHint, FontIcon, Link, mergeStyleSets, PrimaryButton } from '@fluentui/react';
+import {
+  Callout, DirectionalHint, FontIcon, Link, mergeStyleSets, PrimaryButton,
+} from '@fluentui/react';
 import { Spinner } from 'src/components/spinners/Spinner';
-import { WorkPacketCommandType, WorkPacketStatusDetails, WorkStatus, WorkStepStatus } from 'src/data/services/graphql';
+import {
+  WorkPacketCommandType, WorkPacketStatusDetails, WorkStatus, WorkStepStatus,
+} from 'src/data/services/graphql';
 import { Text } from 'src/components/typography';
 import { LabelValue, LabelValueProps } from 'src/components/labels/LabelValue';
 import { InlineLabel } from 'src/components/labels/LabelValue/LabelValue.styles';
@@ -55,7 +59,9 @@ const ConditionalLabelValue = ({ label, value }: ConditionalLabelValueType) => {
   return null;
 };
 
-const CDXTimeline = ({ packet, activeIndex = 0, onClick, onRedo }: CDXTimelineProps): ReactElement => {
+const CDXTimeline = ({
+  packet, activeIndex = 0, onClick, onRedo,
+}: CDXTimelineProps): ReactElement => {
   const [showCallout, setShowCallout] = useState(false);
   const downloadCommand = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.DownloadFile);
 

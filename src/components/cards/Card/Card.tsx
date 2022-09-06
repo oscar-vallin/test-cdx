@@ -20,21 +20,21 @@ type CardProps = {
   children?: any | null;
 } & typeof defaultProps;
 
-const Card = ({ id, variant, elevation, spacing, onClick, children, ...props }: CardProps): ReactElement => {
-  return (
-    <CardStyled
-      id={id}
-      variant={variant}
-      elevation={elevation}
-      spacing={spacing}
-      className={getClassNames(null, props)}
-      horizontal
-      {...(onClick && { onClick })}
-    >
-      {children}
-    </CardStyled>
-  );
-};
+const Card = ({
+  id, variant, elevation, spacing, onClick, children, ...props
+}: CardProps): ReactElement => (
+  <CardStyled
+    id={id}
+    variant={variant}
+    elevation={elevation}
+    spacing={spacing}
+    className={getClassNames(null, props)}
+    horizontal
+    {...(onClick && { onClick })}
+  >
+    {children}
+  </CardStyled>
+);
 
 Card.defaultProps = defaultProps;
 

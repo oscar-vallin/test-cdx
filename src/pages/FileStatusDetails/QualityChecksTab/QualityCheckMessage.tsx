@@ -14,7 +14,9 @@ type QualityCheckMessageType = {
   transformedValue?: string;
 };
 
-export const QualityCheckMessage = ({ rowIndex, messages, value, transformedValue }: QualityCheckMessageType) => {
+export const QualityCheckMessage = ({
+  rowIndex, messages, value, transformedValue,
+}: QualityCheckMessageType) => {
   const [showCallout, setShowCallout] = useState(false);
 
   const renderValue = () => {

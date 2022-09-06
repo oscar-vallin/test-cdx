@@ -15,7 +15,9 @@ import { ButtonLink } from 'src/components/buttons';
 import { DataColumn } from 'src/containers/tables/ColumnHeader';
 import { prettyEnumValue } from 'src/utils/CDXUtils';
 import { FileProgress } from '../bars/FileProgress';
-import { CellItemRow, StyledCell, StyledColumn, Text } from './WorkPacketTable.styles';
+import {
+  CellItemRow, StyledCell, StyledColumn, Text,
+} from './WorkPacketTable.styles';
 
 export enum WorkPacketColumn {
   TIMESTAMP,
@@ -43,7 +45,7 @@ export enum WorkPacketColumn {
 
 export const useWorkPacketColumns = (
   selectedColumns: WorkPacketColumn[],
-  openDetails: (fsOrgSid?: string | null, workOrderId?: string, tab?: string) => void
+  openDetails: (fsOrgSid?: string | null, workOrderId?: string, tab?: string) => void,
 ) => {
   const graphQLUrl = process.env.REACT_APP_API_SERVER;
   const serverUrl = graphQLUrl?.replace('/graphql', '') ?? '';
@@ -51,7 +53,7 @@ export const useWorkPacketColumns = (
   const renderDownloadLink = (
     workOrderId?: string,
     commands?: Maybe<Array<Maybe<WorkPacketCommand>>> | undefined,
-    filename?: string | null
+    filename?: string | null,
   ) => {
     if (commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.DownloadFile)) {
       return (
@@ -92,9 +94,9 @@ export const useWorkPacketColumns = (
       onRender: (item: WorkPacketStatus) => {
         const timestamp = format(new Date(item.timestamp), 'MM/dd/yyyy hh:mm a');
         if (
-          item.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewDetails) &&
-          !item.reprocessedOn &&
-          !item.reprocessedBy
+          item.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewDetails)
+          && !item.reprocessedOn
+          && !item.reprocessedBy
         ) {
           return (
             <CellItemRow>
@@ -353,8 +355,8 @@ export const useWorkPacketColumns = (
           : null;
         const workOrderId = item.reprocessedBy ?? null;
         if (
-          reprocessOnTimestamp &&
-          item.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewDetails)
+          reprocessOnTimestamp
+          && item.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewDetails)
         ) {
           return (
             <StyledColumn>
@@ -385,9 +387,7 @@ export const useWorkPacketColumns = (
       dataType: 'string',
       sortable: true,
       filterable: true,
-      onRender: (item: WpProcessError) => {
-        return <span>{item.stepName}</span>;
-      },
+      onRender: (item: WpProcessError) => <span>{item.stepName}</span>,
     },
     {
       key: 'progress',
@@ -399,18 +399,16 @@ export const useWorkPacketColumns = (
       dataType: 'enum',
       sortable: false,
       filterable: false,
-      onRender: (item: WorkPacketStatus) => {
-        return (
-          <StyledCell>
-            <FileProgress
-              id={`__Progress_${item.workOrderId}`}
-              step={item.step}
-              stepStatus={item.stepStatus}
-              archiveOnly={item.archiveOnly ?? false}
-            />
-          </StyledCell>
-        );
-      },
+      onRender: (item: WorkPacketStatus) => (
+        <StyledCell>
+          <FileProgress
+            id={`__Progress_${item.workOrderId}`}
+            step={item.step}
+            stepStatus={item.stepStatus}
+            archiveOnly={item.archiveOnly ?? false}
+          />
+        </StyledCell>
+      ),
     },
     {
       key: 'inboundFilename',
@@ -522,9 +520,7 @@ export const useWorkPacketColumns = (
   const initialColumns = (): DataColumn[] => {
     const initCols: DataColumn[] = [];
     selectedColumns.forEach((sCol: WorkPacketColumn) => {
-      const matching = columnOptions.find((colOpt: IColumn) => {
-        return colOpt.data === sCol;
-      });
+      const matching = columnOptions.find((colOpt: IColumn) => colOpt.data === sCol);
       if (matching != null) {
         initCols.push(matching);
       }

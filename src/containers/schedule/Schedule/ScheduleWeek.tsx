@@ -1,4 +1,6 @@
-import { addDays, format, isSameDay, isSameHour, parseISO, startOfWeek } from 'date-fns';
+import {
+  addDays, format, isSameDay, isSameHour, parseISO, startOfWeek,
+} from 'date-fns';
 import { ReactElement } from 'react';
 import { ScheduleOccurrence } from 'src/data/services/graphql';
 import {
@@ -23,7 +25,9 @@ type ScheduleWeekProps = {
 //
 // ─── SCHEDULE WEEK COMPONENT ───────────────────────────────────────────────────────
 //
-export const ScheduleWeek = ({ currentDate, selectedDate, items, onChangeDate, onChangeView }: ScheduleWeekProps) => {
+export const ScheduleWeek = ({
+  currentDate, selectedDate, items, onChangeDate, onChangeView,
+}: ScheduleWeekProps) => {
   const startDate = startOfWeek(selectedDate ?? currentDate);
   const currentSelectedDate = selectedDate ?? currentDate;
 

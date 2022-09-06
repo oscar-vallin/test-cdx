@@ -26,30 +26,30 @@ type CardDashboardProps = {
   loading?: boolean;
 } & typeof defaultProps;
 
-const CardDashboard = ({ id, title, subtitle, value, total }: CardDashboardProps): ReactElement => {
-  return (
-    <Card id={id} elevation="smallest">
-      <Row>
-        <Column>
-          <Row>
-            <Column direction="column">
-              <Spacing margin={{ bottom: 'small' }}>
-                <StyledTitle>
-                  {title} &nbsp;
-                  {subtitle && <StyledSubtitle>({subtitle})</StyledSubtitle>}
-                </StyledTitle>
-              </Spacing>
+const CardDashboard = ({
+  id, title, subtitle, value, total,
+}: CardDashboardProps): ReactElement => (
+  <Card id={id} elevation="smallest">
+    <Row>
+      <Column>
+        <Row>
+          <Column direction="column">
+            <Spacing margin={{ bottom: 'small' }}>
+              <StyledTitle>
+                {title} &nbsp;
+                {subtitle && <StyledSubtitle>({subtitle})</StyledSubtitle>}
+              </StyledTitle>
+            </Spacing>
 
-              <StyledValues>
-                {(value ?? -1) >= 0 && (total ?? -1) > 0 ? `${value}/${total}` : <small>None</small>}
-              </StyledValues>
-            </Column>
-          </Row>
-        </Column>
-      </Row>
-    </Card>
-  );
-};
+            <StyledValues>
+              {(value ?? -1) >= 0 && (total ?? -1) > 0 ? `${value}/${total}` : <small>None</small>}
+            </StyledValues>
+          </Column>
+        </Row>
+      </Column>
+    </Row>
+  </Card>
+);
 
 CardDashboard.defaultProps = defaultProps;
 

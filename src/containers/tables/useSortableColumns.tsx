@@ -11,7 +11,7 @@ type UseSortableColumnsType = {
 export const useSortableColumns = (
   tableFilters: TableFiltersType,
   tableColumns: DataColumn[],
-  onFilter?: (key: string, value?: any) => void
+  onFilter?: (key: string, value?: any) => void,
 ): UseSortableColumnsType => {
   const [columns, setColumns] = useState(tableColumns);
 

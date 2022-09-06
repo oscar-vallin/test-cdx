@@ -30,8 +30,7 @@ export const useLoginUseCase = () => {
   const [state, setState] = useState({ ...INITIAL_STATE });
   const [userId, setUserId] = useState<string>();
 
-  const [verifyUserId, { data: verifiedUserId, loading: isVerifyingUserId, error: userIdVerificationError }] =
-    useBeginLoginMutation();
+  const [verifyUserId, { data: verifiedUserId, loading: isVerifyingUserId, error: userIdVerificationError }] = useBeginLoginMutation();
 
   const [
     verifyUserCredentials,
@@ -60,11 +59,15 @@ export const useLoginUseCase = () => {
   };
 
   const returnToInitialStep = () => {
-    setState({ ...state, step: 'USER_ID', loading: false, error: null, reset: false });
+    setState({
+      ...state, step: 'USER_ID', loading: false, error: null, reset: false,
+    });
   };
 
   useEffect(() => {
-    setState({ ...state, loading: isVerifyingUserId || isVerifyingCredentials, error: null, reset: false });
+    setState({
+      ...state, loading: isVerifyingUserId || isVerifyingCredentials, error: null, reset: false,
+    });
   }, [isVerifyingUserId, isVerifyingCredentials]);
 
   useEffect(() => {
@@ -85,8 +88,7 @@ export const useLoginUseCase = () => {
           window.location.reload();
         }
       } else {
-        const errMsg =
-          userIdVerificationError.graphQLErrors[0].message ?? 'Please provide a valid email address to proceed';
+        const errMsg = userIdVerificationError.graphQLErrors[0].message ?? 'Please provide a valid email address to proceed';
 
         setState({
           ...state,
@@ -101,13 +103,17 @@ export const useLoginUseCase = () => {
 
   useEffect(() => {
     if (credentialsVerificationError) {
-      setState({ step: 'USER_ID', data: null, loading: false, error: 'Invalid credentials', reset: true });
+      setState({
+        step: 'USER_ID', data: null, loading: false, error: 'Invalid credentials', reset: true,
+      });
     }
   }, [credentialsVerificationError]);
 
   useEffect(() => {
     if (verifiedUserId && verifiedUserId.beginLogin?.step === LoginStepType.Password) {
-      setState({ step: 'PASSWORD', data: verifiedUserId.beginLogin, loading: false, error: null, reset: false });
+      setState({
+        step: 'PASSWORD', data: verifiedUserId.beginLogin, loading: false, error: null, reset: false,
+      });
     }
   }, [verifiedUserId]);
 
@@ -137,5 +143,7 @@ export const useLoginUseCase = () => {
     }
   }, [userSession]);
 
-  return { performUserIdVerification, performUserAuthentication, returnToInitialStep, state };
+  return {
+    performUserIdVerification, performUserAuthentication, returnToInitialStep, state,
+  };
 };

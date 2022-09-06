@@ -13,12 +13,11 @@ export const StyledChoiceGroup = styled(ChoiceGroup)<StyledChoiceGroupProps>`
     display: ${({ inline }) => (inline ? 'flex' : 'block')};
 
     .ms-ChoiceField {
-      ${({ theme, inline }) =>
-        inline
-          ? `&:not(:last-child) {
+      ${({ theme, inline }) => (inline
+    ? `&:not(:last-child) {
               margin: 0 ${theme.spacing.normal} 0 0;
             }`
-          : `margin: ${theme.spacing.small} 0 0;`}}
+    : `margin: ${theme.spacing.small} 0 0;`)}}
     }
   }
 `;

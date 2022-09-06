@@ -14,15 +14,13 @@ export const useCreateUsersPanel = (orgSid: string) => {
   const [isUserCreated, setUserCreated] = useState(false);
   const handleError = ErrorHandler();
 
-  const [callUserAccountForm, { data: dataUserAccountForm, loading: userAccountLoading, error: userAccountError }] =
-    useUserAccountFormLazyQuery({
-      variables: {
-        orgSid,
-      },
-    });
+  const [callUserAccountForm, { data: dataUserAccountForm, loading: userAccountLoading, error: userAccountError }] = useUserAccountFormLazyQuery({
+    variables: {
+      orgSid,
+    },
+  });
 
-  const [callCreateUser, { data: userCreatedData, loading: creatingUserLoading, error: createUserError }] =
-    useCreateUserMutation();
+  const [callCreateUser, { data: userCreatedData, loading: creatingUserLoading, error: createUserError }] = useCreateUserMutation();
 
   const updateAccountInfo = (updates: UserAccount) => {
     const updated = updateForm(userAccountForm, updates);
@@ -68,10 +66,9 @@ export const useCreateUsersPanel = (orgSid: string) => {
   const handleCreateUser = async () => {
     setUserCreated(false);
 
-    const accessPolicyGroupSids: string[] =
-      userAccountForm.accessPolicyGroups?.value
-        ?.filter((opt) => opt != null && opt?.value != null)
-        ?.map((opt) => opt?.value ?? '') ?? [];
+    const accessPolicyGroupSids: string[] = userAccountForm.accessPolicyGroups?.value
+      ?.filter((opt) => opt != null && opt?.value != null)
+      ?.map((opt) => opt?.value ?? '') ?? [];
 
     const { data } = await callCreateUser({
       variables: {

@@ -8,7 +8,9 @@ export const DivStyled = styled.div<DivStyledProps>`
 
     return 'wrap';
   }};
-  justify-content: ${({ center, right, around, evenly, between }) => {
+  justify-content: ${({
+    center, right, around, evenly, between,
+  }) => {
     if (center) return 'center';
     if (right) return 'flex-end';
     if (around) return 'space-around';

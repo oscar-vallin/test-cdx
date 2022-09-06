@@ -4,7 +4,9 @@ import { Card } from 'src/components/cards';
 import { InputText } from 'src/components/inputs/InputText';
 import { InputDateRange } from 'src/components/inputs/InputDateRange';
 import { FormLabel } from 'src/components/labels/FormLabel';
-import { Column, Container, FilterSection, StyledRow } from './WorkPacketTable.styles';
+import {
+  Column, Container, FilterSection, StyledRow,
+} from './WorkPacketTable.styles';
 
 type TableFilterParams = {
   id: string;

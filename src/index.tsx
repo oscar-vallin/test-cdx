@@ -41,7 +41,7 @@ ReactDOM.render(
       </StoreProvider>
     </React.StrictMode>
   </>,
-  document.getElementById('app')
+  document.getElementById('app'),
 );
 
 // If you want your app to work offline and load faster, you can change

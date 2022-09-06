@@ -1,10 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactElement, useEffect, useState } from 'react';
-import { MessageBar, MessageBarType, PanelType, Stack } from '@fluentui/react';
+import {
+  MessageBar, MessageBarType, PanelType, Stack,
+} from '@fluentui/react';
 
 import { Tabs } from 'src/components/tabs/Tabs';
 import { Text } from 'src/components/typography';
-import { PanelBody, PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
+import {
+  PanelBody, PanelHeader, PanelTitle, ThemedPanel,
+} from 'src/layouts/Panels/Panels.styles';
 
 import { useNotification } from 'src/hooks/useNotification';
 import { GqOperationResponse } from 'src/data/services/graphql';
@@ -32,10 +36,14 @@ type CreateUsersPanelProps = {
 
 const tabs = ['#account', '#access', '#auth', '#summary'];
 
-const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUsersPanelProps): ReactElement => {
+const CreateUsersPanel = ({
+  orgSid, isOpen, onDismiss, onCreateUser,
+}: CreateUsersPanelProps): ReactElement => {
   const createUserService = useCreateUsersPanel(orgSid);
 
-  const { selectedTab, handleNext, handlePrev, handleTabChange, resetTabs } = useWizardTabs(tabs);
+  const {
+    selectedTab, handleNext, handlePrev, handleTabChange, resetTabs,
+  } = useWizardTabs(tabs);
   const { userAccountLoading } = createUserService ?? {};
   const [showDialog, setShowDialog] = useState(false);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
@@ -71,8 +79,7 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
       const responseCode = responseCreate?.createUser?.response;
 
       if (responseCode === GqOperationResponse.Fail) {
-        const _errorMsg =
-          responseCreate?.createUser?.errMsg ?? responseCreate?.createUser?.response ?? 'Error Creating User';
+        const _errorMsg = responseCreate?.createUser?.errMsg ?? responseCreate?.createUser?.response ?? 'Error Creating User';
         setErrorMsg(_errorMsg);
       } else {
         setErrorMsg(undefined);
@@ -82,8 +89,7 @@ const CreateUsersPanel = ({ orgSid, isOpen, onDismiss, onCreateUser }: CreateUse
         Toast.success({ text: 'User Account Successfully Created' });
       }
       if (responseCode === GqOperationResponse.PartialSuccess) {
-        const _errorMsg =
-          responseCreate?.createUser?.errMsg ?? responseCreate?.createUser?.response ?? 'Error Creating User';
+        const _errorMsg = responseCreate?.createUser?.errMsg ?? responseCreate?.createUser?.response ?? 'Error Creating User';
         Toast.warning({ text: _errorMsg });
       }
 

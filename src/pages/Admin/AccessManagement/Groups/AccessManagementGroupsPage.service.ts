@@ -4,12 +4,11 @@ import { useDeleteAccessPolicyGroupMutation } from 'src/data/services/graphql';
 export const useAccessManagementGroupsPageService = () => {
   const [policyGroupSid, setPolicyGroupSid] = useState('');
 
-  const [deleteAccessPolicyGroupMutation, { data: deleteData, loading: deleteLoading, error: deleteError }] =
-    useDeleteAccessPolicyGroupMutation({
-      variables: {
-        policyGroupSid,
-      },
-    });
+  const [deleteAccessPolicyGroupMutation, { data: deleteData, loading: deleteLoading, error: deleteError }] = useDeleteAccessPolicyGroupMutation({
+    variables: {
+      policyGroupSid,
+    },
+  });
 
   const deleteAccessPolicyGroup = async (groupId: string) => {
     setPolicyGroupSid(groupId);
@@ -21,11 +20,11 @@ export const useAccessManagementGroupsPageService = () => {
     });
   };
 
-  return { deleteAccessPolicyGroup, deleteData, deleteLoading, deleteError, setPolicyGroupSid };
+  return {
+    deleteAccessPolicyGroup, deleteData, deleteLoading, deleteError, setPolicyGroupSid,
+  };
 };
 
 // *
 // * Get Groups by Sid
-export const getGroupBySid = (groups, sid: string) => {
-  return groups.find(({ sid: groupSid }) => groupSid === sid);
-};
+export const getGroupBySid = (groups, sid: string) => groups.find(({ sid: groupSid }) => groupSid === sid);

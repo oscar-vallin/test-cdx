@@ -31,32 +31,32 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
     }
   };
 
-  const buildMenuItems = (version: string): IContextualMenuItem[] => {
-    return [
-      {
-        id: '__ProfileMenu_UserSettingsId',
-        key: 'ProfileMenu_UserSettings',
-        text: 'Settings',
-        onClick: handleSettings,
+  const buildMenuItems = (version: string): IContextualMenuItem[] => [
+    {
+      id: '__ProfileMenu_UserSettingsId',
+      key: 'ProfileMenu_UserSettings',
+      text: 'Settings',
+      onClick: handleSettings,
+    },
+    {
+      id: '__Logout_button', key: 'ProfileMenu_Logout', text: 'Logout', onClick: handleLogout,
+    },
+    {
+      id: '__separator',
+      key: 'ProfileMenu_Separator',
+      text: '-',
+      disabled: true,
+    },
+    {
+      id: '__Version_Info',
+      key: 'ProfileMenu_Version',
+      text: `version ${version}`,
+      disabled: true,
+      style: {
+        fontSize: '.75em',
       },
-      { id: '__Logout_button', key: 'ProfileMenu_Logout', text: 'Logout', onClick: handleLogout },
-      {
-        id: '__separator',
-        key: 'ProfileMenu_Separator',
-        text: '-',
-        disabled: true,
-      },
-      {
-        id: '__Version_Info',
-        key: 'ProfileMenu_Version',
-        text: `version ${version}`,
-        disabled: true,
-        style: {
-          fontSize: '.75em',
-        },
-      },
-    ];
-  };
+    },
+  ];
 
   const [items, setItems] = useState<IContextualMenuItem[]>([]);
 

@@ -75,7 +75,9 @@ const AccessManagementGroupsContainer = () => {
     },
   });
 
-  const { deleteAccessPolicyGroup, deleteError, deleteData, deleteLoading } = useAccessManagementGroupsPageService();
+  const {
+    deleteAccessPolicyGroup, deleteError, deleteData, deleteLoading,
+  } = useAccessManagementGroupsPageService();
 
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
   const [deleteCmd, setDeleteCmd] = useState<WebCommand | null>();
@@ -207,13 +209,11 @@ const AccessManagementGroupsContainer = () => {
 
   //
   // Render Loading Records
-  const renderLoadingRecords = () => {
-    return (
-      <Spacing margin={{ top: 'double' }}>
-        <Spinner size={SpinnerSize.large} label="Loading groups" />
-      </Spacing>
-    );
-  };
+  const renderLoadingRecords = () => (
+    <Spacing margin={{ top: 'double' }}>
+      <Spinner size={SpinnerSize.large} label="Loading groups" />
+    </Spacing>
+  );
 
   const renderCreateGroupButton = (uiOptions?: UiOption[] | null) => {
     if (!createCmd) {

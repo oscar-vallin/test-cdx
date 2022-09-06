@@ -31,7 +31,9 @@ type AddSubscriberModalProps = {
   addSubscribers: (data: SubscriberOptionProps[]) => void;
 } & typeof defaultProps;
 
-const AddSubscriberModal = ({ isOpen, orgSid, addSubscribers, currentSubscribers }: AddSubscriberModalProps) => {
+const AddSubscriberModal = ({
+  isOpen, orgSid, addSubscribers, currentSubscribers,
+}: AddSubscriberModalProps) => {
   const [userQuickSearch, { data: quickSearchData, loading: quickSearchLoading }] = useUserQuickSearchLazyQuery();
   const [createUser, { data: createUserData, loading: createUserLoading }] = useCreateUserMutation();
   const [addSubscriber, setAddSubscriber] = useState(false);
@@ -190,28 +192,26 @@ const AddSubscriberModal = ({ isOpen, orgSid, addSubscribers, currentSubscribers
     }
   };
 
-  const renderButtons = () => {
-    return (
-      <>
-        <PrimaryButton
-          id="__AddSubscriber_add_button"
-          text="Add"
-          onClick={() => {
-            if (addSubscriber) {
-              addNewUser();
-            }
-            setAddSubscriber(true);
-          }}
-        />
-        <DefaultButton
-          id="__AddSubscriber_cancel_button"
-          style={{ marginLeft: '10px' }}
-          text="Cancel"
-          onClick={() => isOpen(false)}
-        />
-      </>
-    );
-  };
+  const renderButtons = () => (
+    <>
+      <PrimaryButton
+        id="__AddSubscriber_add_button"
+        text="Add"
+        onClick={() => {
+          if (addSubscriber) {
+            addNewUser();
+          }
+          setAddSubscriber(true);
+        }}
+      />
+      <DefaultButton
+        id="__AddSubscriber_cancel_button"
+        style={{ marginLeft: '10px' }}
+        text="Cancel"
+        onClick={() => isOpen(false)}
+      />
+    </>
+  );
 
   return (
     <Dialog hidden={false} dialogContentProps={{ title: 'Add Subscriber' }} minWidth="500px">

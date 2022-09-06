@@ -135,7 +135,9 @@ type FormOptionsType = {
   onChange: (updated: PasswordRules) => void;
 };
 
-export const FormOptions = ({ form, group = '_', state, disabled = false, onChange }: FormOptionsType) => {
+export const FormOptions = ({
+  form, group = '_', state, disabled = false, onChange,
+}: FormOptionsType) => {
   const baseCheckboxId = `__checkbox${group === 'mustAlwaysBeMet' ? 'Must' : 'Some'}`;
   const baseInputId = `__input${group === 'mustAlwaysBeMet' ? 'Must' : 'Some'}`;
 
@@ -148,15 +150,13 @@ export const FormOptions = ({ form, group = '_', state, disabled = false, onChan
               id={`${baseCheckboxId}NoWhitespaces`}
               checked={state[group].mustNotContainWhiteSpace}
               disabled={disabled}
-              onChange={(event, checked) =>
-                onChange({
-                  ...state,
-                  [group]: {
-                    ...state[group],
-                    mustNotContainWhiteSpace: !!checked,
-                  },
-                })
-              }
+              onChange={(event, checked) => onChange({
+                ...state,
+                [group]: {
+                  ...state[group],
+                  mustNotContainWhiteSpace: !!checked,
+                },
+              })}
             />
 
             <Text {...(form[group]?.mustNotContainWhiteSpace?.errMsg ? { variant: 'error' } : {})}>
@@ -171,47 +171,45 @@ export const FormOptions = ({ form, group = '_', state, disabled = false, onChan
               id={`${baseCheckboxId}PasswordLength`}
               checked={state[group].mustFollowLengthRequirements}
               disabled={disabled}
-              onChange={(event, checked) =>
-                onChange({
-                  ...state,
-                  [group]: {
-                    ...state[group],
-                    mustFollowLengthRequirements: !!checked,
-                  },
-                })
-              }
+              onChange={(event, checked) => onChange({
+                ...state,
+                [group]: {
+                  ...state[group],
+                  mustFollowLengthRequirements: !!checked,
+                },
+              })}
             />
 
             <Text {...(form[group]?.mustFollowLengthRequirements?.errMsg ? { variant: 'error' } : {})}>
               {form[group]?.mustFollowLengthRequirements?.label
                 ? replaceInputs(form[group]?.mustFollowLengthRequirements?.label, {
-                    '{0}': (
-                      <FormInput
-                        id={`${baseInputId}MinLength`}
-                        key={`${baseInputId}MinLength`}
-                        disabled={disabled || state[group].mustFollowLengthRequirements == false}
-                        group={group}
-                        option="minLength"
-                        state={state}
-                        errorMessage={form[group]?.minLength?.errMsg}
-                        value={state[group].minLength}
-                        onChange={onChange}
-                      />
-                    ),
-                    '{1}': (
-                      <FormInput
-                        id={`${baseInputId}MaxLength`}
-                        key={`${baseInputId}MaxLength`}
-                        disabled={disabled || state[group].mustFollowLengthRequirements == false}
-                        group={group}
-                        option="maxLength"
-                        state={state}
-                        errorMessage={form[group]?.maxLength?.errMsg}
-                        value={state[group].maxLength}
-                        onChange={onChange}
-                      />
-                    ),
-                  })
+                  '{0}': (
+                    <FormInput
+                      id={`${baseInputId}MinLength`}
+                      key={`${baseInputId}MinLength`}
+                      disabled={disabled || state[group].mustFollowLengthRequirements == false}
+                      group={group}
+                      option="minLength"
+                      state={state}
+                      errorMessage={form[group]?.minLength?.errMsg}
+                      value={state[group].minLength}
+                      onChange={onChange}
+                    />
+                  ),
+                  '{1}': (
+                    <FormInput
+                      id={`${baseInputId}MaxLength`}
+                      key={`${baseInputId}MaxLength`}
+                      disabled={disabled || state[group].mustFollowLengthRequirements == false}
+                      group={group}
+                      option="maxLength"
+                      state={state}
+                      errorMessage={form[group]?.maxLength?.errMsg}
+                      value={state[group].maxLength}
+                      onChange={onChange}
+                    />
+                  ),
+                })
                 : 'Missing label from form'}
             </Text>
           </StyledDiv>
@@ -223,34 +221,32 @@ export const FormOptions = ({ form, group = '_', state, disabled = false, onChan
               id={`${baseCheckboxId}Uppercase`}
               checked={state[group].mustContainUpperCaseLetters}
               disabled={disabled}
-              onChange={(event, checked) =>
-                onChange({
-                  ...state,
-                  [group]: {
-                    ...state[group],
-                    mustContainUpperCaseLetters: !!checked,
-                  },
-                })
-              }
+              onChange={(event, checked) => onChange({
+                ...state,
+                [group]: {
+                  ...state[group],
+                  mustContainUpperCaseLetters: !!checked,
+                },
+              })}
             />
 
             <Text {...(form[group]?.mustContainUpperCaseLetters?.errMsg ? { variant: 'error' } : {})}>
               {form[group]?.mustContainUpperCaseLetters?.label
                 ? replaceInputs(form[group]?.mustContainUpperCaseLetters?.label, {
-                    '{0}': (
-                      <FormInput
-                        id={`${baseInputId}Uppercase`}
-                        key={`${baseInputId}Uppercase`}
-                        disabled={disabled || state[group].mustContainUpperCaseLetters == false}
-                        group={group}
-                        option="minUpperCaseLetters"
-                        state={state}
-                        errorMessage={form[group]?.minUpperCaseLetters?.errMsg}
-                        value={state[group].minUpperCaseLetters}
-                        onChange={onChange}
-                      />
-                    ),
-                  })
+                  '{0}': (
+                    <FormInput
+                      id={`${baseInputId}Uppercase`}
+                      key={`${baseInputId}Uppercase`}
+                      disabled={disabled || state[group].mustContainUpperCaseLetters == false}
+                      group={group}
+                      option="minUpperCaseLetters"
+                      state={state}
+                      errorMessage={form[group]?.minUpperCaseLetters?.errMsg}
+                      value={state[group].minUpperCaseLetters}
+                      onChange={onChange}
+                    />
+                  ),
+                })
                 : 'Missing label from form'}
             </Text>
           </StyledDiv>
@@ -262,34 +258,32 @@ export const FormOptions = ({ form, group = '_', state, disabled = false, onChan
               id={`${baseCheckboxId}Lowercase`}
               checked={state[group].mustContainLowerCaseLetters}
               disabled={disabled}
-              onChange={(event, checked) =>
-                onChange({
-                  ...state,
-                  [group]: {
-                    ...state[group],
-                    mustContainLowerCaseLetters: !!checked,
-                  },
-                })
-              }
+              onChange={(event, checked) => onChange({
+                ...state,
+                [group]: {
+                  ...state[group],
+                  mustContainLowerCaseLetters: !!checked,
+                },
+              })}
             />
 
             <Text {...(form[group]?.mustContainLowerCaseLetters?.errMsg ? { variant: 'error' } : {})}>
               {form[group]?.mustContainLowerCaseLetters?.label
                 ? replaceInputs(form[group]?.mustContainLowerCaseLetters?.label, {
-                    '{0}': (
-                      <FormInput
-                        id={`${baseInputId}Lowercase`}
-                        key={`${baseInputId}Lowercase`}
-                        disabled={disabled || state[group].mustContainLowerCaseLetters == false}
-                        group={group}
-                        option="minLowerCaseLetters"
-                        state={state}
-                        errorMessage={form[group]?.minLowerCaseLetters?.errMsg}
-                        value={state[group].minLowerCaseLetters}
-                        onChange={onChange}
-                      />
-                    ),
-                  })
+                  '{0}': (
+                    <FormInput
+                      id={`${baseInputId}Lowercase`}
+                      key={`${baseInputId}Lowercase`}
+                      disabled={disabled || state[group].mustContainLowerCaseLetters == false}
+                      group={group}
+                      option="minLowerCaseLetters"
+                      state={state}
+                      errorMessage={form[group]?.minLowerCaseLetters?.errMsg}
+                      value={state[group].minLowerCaseLetters}
+                      onChange={onChange}
+                    />
+                  ),
+                })
                 : 'Missing label from form'}
             </Text>
           </StyledDiv>
@@ -301,34 +295,32 @@ export const FormOptions = ({ form, group = '_', state, disabled = false, onChan
               id={`${baseCheckboxId}Digit`}
               checked={state[group].mustContainNumericDigits}
               disabled={disabled}
-              onChange={(event, checked) =>
-                onChange({
-                  ...state,
-                  [group]: {
-                    ...state[group],
-                    mustContainNumericDigits: !!checked,
-                  },
-                })
-              }
+              onChange={(event, checked) => onChange({
+                ...state,
+                [group]: {
+                  ...state[group],
+                  mustContainNumericDigits: !!checked,
+                },
+              })}
             />
 
             <Text {...(form[group]?.mustContainNumericDigits?.errMsg ? { variant: 'error' } : {})}>
               {form[group]?.mustContainNumericDigits?.label
                 ? replaceInputs(form[group]?.mustContainNumericDigits?.label, {
-                    '{0}': (
-                      <FormInput
-                        id={`${baseInputId}Digit`}
-                        key={`${baseInputId}Digit`}
-                        disabled={disabled || state[group].mustContainNumericDigits == false}
-                        group={group}
-                        option="minNumericDigits"
-                        state={state}
-                        errorMessage={form[group]?.minNumericDigits?.errMsg}
-                        value={state[group].minNumericDigits}
-                        onChange={onChange}
-                      />
-                    ),
-                  })
+                  '{0}': (
+                    <FormInput
+                      id={`${baseInputId}Digit`}
+                      key={`${baseInputId}Digit`}
+                      disabled={disabled || state[group].mustContainNumericDigits == false}
+                      group={group}
+                      option="minNumericDigits"
+                      state={state}
+                      errorMessage={form[group]?.minNumericDigits?.errMsg}
+                      value={state[group].minNumericDigits}
+                      onChange={onChange}
+                    />
+                  ),
+                })
                 : 'Missing label from form'}
             </Text>
           </StyledDiv>
@@ -340,34 +332,32 @@ export const FormOptions = ({ form, group = '_', state, disabled = false, onChan
               id={`${baseCheckboxId}SpecialChars`}
               checked={state[group].mustContainSpecialCharacters}
               disabled={disabled}
-              onChange={(event, checked) =>
-                onChange({
-                  ...state,
-                  [group]: {
-                    ...state[group],
-                    mustContainSpecialCharacters: !!checked,
-                  },
-                })
-              }
+              onChange={(event, checked) => onChange({
+                ...state,
+                [group]: {
+                  ...state[group],
+                  mustContainSpecialCharacters: !!checked,
+                },
+              })}
             />
 
             <Text {...(form[group]?.mustContainSpecialCharacters?.errMsg ? { variant: 'error' } : {})}>
               {form[group]?.mustContainSpecialCharacters?.label
                 ? replaceInputs(form[group]?.mustContainSpecialCharacters?.label, {
-                    '{0}': (
-                      <FormInput
-                        id={`${baseInputId}SpecialChars`}
-                        key={`${baseInputId}SpecialChars`}
-                        disabled={disabled || state[group].mustContainSpecialCharacters == false}
-                        group={group}
-                        option="minSpecialCharacters"
-                        state={state}
-                        errorMessage={form[group]?.minSpecialCharacters?.errMsg}
-                        value={state[group].minSpecialCharacters}
-                        onChange={onChange}
-                      />
-                    ),
-                  })
+                  '{0}': (
+                    <FormInput
+                      id={`${baseInputId}SpecialChars`}
+                      key={`${baseInputId}SpecialChars`}
+                      disabled={disabled || state[group].mustContainSpecialCharacters == false}
+                      group={group}
+                      option="minSpecialCharacters"
+                      state={state}
+                      errorMessage={form[group]?.minSpecialCharacters?.errMsg}
+                      value={state[group].minSpecialCharacters}
+                      onChange={onChange}
+                    />
+                  ),
+                })
                 : 'Missing label from form'}
             </Text>
           </StyledDiv>
@@ -380,15 +370,13 @@ export const FormOptions = ({ form, group = '_', state, disabled = false, onChan
               id={`${baseCheckboxId}NoUserName`}
               checked={state[group].mustNotContainUserName}
               disabled={disabled}
-              onChange={(event, checked) =>
-                onChange({
-                  ...state,
-                  [group]: {
-                    ...state[group],
-                    mustNotContainUserName: !!checked,
-                  },
-                })
-              }
+              onChange={(event, checked) => onChange({
+                ...state,
+                [group]: {
+                  ...state[group],
+                  mustNotContainUserName: !!checked,
+                },
+              })}
             />
 
             <Text {...(form[group]?.mustNotContainUserName?.errMsg ? { variant: 'error' } : {})}>
@@ -403,15 +391,13 @@ export const FormOptions = ({ form, group = '_', state, disabled = false, onChan
               id={`${baseCheckboxId}Sequence`}
               checked={state[group].mustNotContainNumericSequence}
               disabled={disabled}
-              onChange={(event, checked) =>
-                onChange({
-                  ...state,
-                  [group]: {
-                    ...state[group],
-                    mustNotContainNumericSequence: !!checked,
-                  },
-                })
-              }
+              onChange={(event, checked) => onChange({
+                ...state,
+                [group]: {
+                  ...state[group],
+                  mustNotContainNumericSequence: !!checked,
+                },
+              })}
             />
 
             <Text {...(form[group]?.mustNotContainNumericSequence?.errMsg ? { variant: 'error' } : {})}>
@@ -426,34 +412,32 @@ export const FormOptions = ({ form, group = '_', state, disabled = false, onChan
               id={`${baseCheckboxId}NotRepeat`}
               checked={state[group].mustNotRepeatCharacters}
               disabled={disabled}
-              onChange={(event, checked) =>
-                onChange({
-                  ...state,
-                  [group]: {
-                    ...state[group],
-                    mustNotRepeatCharacters: !!checked,
-                  },
-                })
-              }
+              onChange={(event, checked) => onChange({
+                ...state,
+                [group]: {
+                  ...state[group],
+                  mustNotRepeatCharacters: !!checked,
+                },
+              })}
             />
 
             <Text {...(form[group]?.mustNotRepeatCharacters?.errMsg ? { variant: 'error' } : {})}>
               {form[group]?.mustNotRepeatCharacters?.label
                 ? replaceInputs(form[group]?.mustNotRepeatCharacters?.label, {
-                    '{0}': (
-                      <FormInput
-                        id={`${baseInputId}RepeatedChars`}
-                        key={`${baseInputId}RepeatedChars`}
-                        disabled={disabled || state[group].mustNotRepeatCharacters == false}
-                        group={group}
-                        option="maxAllowedRepeatedChars"
-                        state={state}
-                        errorMessage={form[group]?.maxAllowedRepeatedChars?.errMsg}
-                        value={state[group].maxAllowedRepeatedChars}
-                        onChange={onChange}
-                      />
-                    ),
-                  })
+                  '{0}': (
+                    <FormInput
+                      id={`${baseInputId}RepeatedChars`}
+                      key={`${baseInputId}RepeatedChars`}
+                      disabled={disabled || state[group].mustNotRepeatCharacters == false}
+                      group={group}
+                      option="maxAllowedRepeatedChars"
+                      state={state}
+                      errorMessage={form[group]?.maxAllowedRepeatedChars?.errMsg}
+                      value={state[group].maxAllowedRepeatedChars}
+                      onChange={onChange}
+                    />
+                  ),
+                })
                 : 'Missing label from form'}
             </Text>
           </StyledDiv>
@@ -465,34 +449,32 @@ export const FormOptions = ({ form, group = '_', state, disabled = false, onChan
               id={`${baseCheckboxId}NotReuse`}
               checked={state[group].mustNotReusePasswords}
               disabled={disabled}
-              onChange={(event, checked) =>
-                onChange({
-                  ...state,
-                  [group]: {
-                    ...state[group],
-                    mustNotReusePasswords: !!checked,
-                  },
-                })
-              }
+              onChange={(event, checked) => onChange({
+                ...state,
+                [group]: {
+                  ...state[group],
+                  mustNotReusePasswords: !!checked,
+                },
+              })}
             />
 
             <Text {...(form[group]?.mustNotReusePasswords?.errMsg ? { variant: 'error' } : {})}>
               {form[group]?.mustNotReusePasswords?.label
                 ? replaceInputs(form[group]?.mustNotReusePasswords?.label, {
-                    '{0}': (
-                      <FormInput
-                        id={`${baseInputId}Variations`}
-                        key={`${baseInputId}Variations`}
-                        disabled={disabled || state[group].mustNotReusePasswords == false}
-                        group={group}
-                        option="minPasswordHistoryVariations"
-                        state={state}
-                        errorMessage={form[group]?.minPasswordHistoryVariations?.errMsg}
-                        value={state[group].minPasswordHistoryVariations}
-                        onChange={onChange}
-                      />
-                    ),
-                  })
+                  '{0}': (
+                    <FormInput
+                      id={`${baseInputId}Variations`}
+                      key={`${baseInputId}Variations`}
+                      disabled={disabled || state[group].mustNotReusePasswords == false}
+                      group={group}
+                      option="minPasswordHistoryVariations"
+                      state={state}
+                      errorMessage={form[group]?.minPasswordHistoryVariations?.errMsg}
+                      value={state[group].minPasswordHistoryVariations}
+                      onChange={onChange}
+                    />
+                  ),
+                })
                 : 'Missing label from form'}
             </Text>
           </StyledDiv>
@@ -504,15 +486,13 @@ export const FormOptions = ({ form, group = '_', state, disabled = false, onChan
               id={`${baseCheckboxId}NoExactMatch`}
               checked={state[group].mustNotMatchExactDictionaryWord}
               disabled={disabled}
-              onChange={(event, checked) =>
-                onChange({
-                  ...state,
-                  [group]: {
-                    ...state[group],
-                    mustNotMatchExactDictionaryWord: !!checked,
-                  },
-                })
-              }
+              onChange={(event, checked) => onChange({
+                ...state,
+                [group]: {
+                  ...state[group],
+                  mustNotMatchExactDictionaryWord: !!checked,
+                },
+              })}
             />
 
             <Text {...(form[group]?.mustNotMatchExactDictionaryWord?.errMsg ? { variant: 'error' } : {})}>
@@ -527,15 +507,13 @@ export const FormOptions = ({ form, group = '_', state, disabled = false, onChan
               id={`${baseCheckboxId}NoPartialMatch`}
               checked={state[group].mustNotMatchPartialDictionaryWord}
               disabled={disabled}
-              onChange={(event, checked) =>
-                onChange({
-                  ...state,
-                  [group]: {
-                    ...state[group],
-                    mustNotMatchPartialDictionaryWord: !!checked,
-                  },
-                })
-              }
+              onChange={(event, checked) => onChange({
+                ...state,
+                [group]: {
+                  ...state[group],
+                  mustNotMatchPartialDictionaryWord: !!checked,
+                },
+              })}
             />
 
             <Text {...(form[group]?.mustNotMatchPartialDictionaryWord?.errMsg ? { variant: 'error' } : {})}>

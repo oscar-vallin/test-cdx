@@ -30,20 +30,18 @@ const CDXMessageBar = ({
   actions,
   children,
   ...props
-}: CDXMessageBarProps): ReactElement => {
-  return (
-    <MessageBar
-      id={id}
-      messageBarType={MessageBarType[type]}
-      isMultiline={multiline}
-      truncated={truncated}
-      actions={actions}
-      {...props}
-    >
-      {content || children}
-    </MessageBar>
-  );
-};
+}: CDXMessageBarProps): ReactElement => (
+  <MessageBar
+    id={id}
+    messageBarType={MessageBarType[type]}
+    isMultiline={multiline}
+    truncated={truncated}
+    actions={actions}
+    {...props}
+  >
+    {content || children}
+  </MessageBar>
+);
 
 CDXMessageBar.defaultProps = defaultProps;
 

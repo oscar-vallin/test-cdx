@@ -43,7 +43,9 @@ import WorkStepsTab from './WorkStepsTab/WorkStepsTab';
 import EnrollmentStatsTab from './EnrollmentStatsTab/EnrollmentStatsTab';
 import VendorCountStatsTab from './VendorCountStatsTab/VendorCountStatsTab';
 import { WorkPacketCommandButton } from './WorkPacketCommandButton';
-import { FileMetaDetails, FileTitle, PanelFooter, ShadowBox } from './FileStatusDetails.styles';
+import {
+  FileMetaDetails, FileTitle, PanelFooter, ShadowBox,
+} from './FileStatusDetails.styles';
 import { UseFileStatusDetailsPanel } from './useFileStatusDetailsPanel';
 import { useFileStatusDetailsPoll } from './useFileStatusDetailsPoll';
 
@@ -113,9 +115,7 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
     return 'N/A';
   };
 
-  const renderReceivedDate = (): string => {
-    return `Received on ${formatDate(new Date(packet?.timestamp))}`;
-  };
+  const renderReceivedDate = (): string => `Received on ${formatDate(new Date(packet?.timestamp))}`;
 
   const getBadgeVariant = (packetStatus?: WorkStatus): string => {
     if (!packetStatus) {
@@ -310,59 +310,57 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
     Toast.success({ text: 'URL copied successfully' });
   };
 
-  const renderFileMetaData = () => {
-    return (
-      <ShadowBox id="__FileMeta">
-        <Row wrap={false}>
-          <Stack horizontal={true} wrap={true} grow tokens={{ childrenGap: 10 }}>
-            <Stack.Item align="center" disableShrink>
-              <IconButton
-                iconProps={{ iconName: showDetails ? 'ChevronUp' : 'ChevronDown' }}
-                onClick={() => setShowDetails(!showDetails)}
-              />
-            </Stack.Item>
-            <Stack.Item align="center">
-              <FileTitle>{packet?.inboundFilename ?? packet?.workOrderId}</FileTitle>
-            </Stack.Item>
-            {packet?.packetStatus === WorkStatus.Processing && <Spinner size={SpinnerSize.medium} />}
-            <Stack.Item align="center">
-              <IconButton iconProps={{ iconName: 'Copy' }} onClick={copyFileStatusDetailsUrl} />
-            </Stack.Item>
-            <Stack.Item align="center">
-              <Badge variant={getBadgeVariant(packet?.packetStatus)} label={packet?.packetStatus} pill />
-            </Stack.Item>
-            <Stack.Item align="center">
-              <Badge variant="info" label={`Billing Units: ${packet?.populationCount ?? 'none'}`} pill />
-              {packet?.suppressBilling && (
-                <>
-                  <Required>*</Required>
-                  <InfoIcon id="billingUnitInfo" tooltip="This exchange was not billed" />
-                </>
-              )}
-            </Stack.Item>
-            <Stack.Item align="center" grow>
-              <Text variant="muted">{renderReceivedDate()}</Text>
-            </Stack.Item>
-          </Stack>
-        </Row>
-        {showDetails && (
-          <FileMetaDetails>
-            <Stack horizontal={true} wrap={true} tokens={{ childrenGap: 15 }}>
-              <Stack.Item>
-                <LabelValue label="Vendor" value={packet?.vendorId} />
-                <LabelValue label="Plan Sponsor" value={packet?.orgId} />
-              </Stack.Item>
-              <Stack.Item>
-                <LabelValue label="Work Order Id" value={packet?.workOrderId} />
-                <LabelValue label="Spec Id" value={packet?.specId} />
-              </Stack.Item>
-              {renderDeliveredFileInfo(deliveredFile)}
-            </Stack>
-          </FileMetaDetails>
-        )}
-      </ShadowBox>
-    );
-  };
+  const renderFileMetaData = () => (
+    <ShadowBox id="__FileMeta">
+      <Row wrap={false}>
+        <Stack horizontal={true} wrap={true} grow tokens={{ childrenGap: 10 }}>
+          <Stack.Item align="center" disableShrink>
+            <IconButton
+              iconProps={{ iconName: showDetails ? 'ChevronUp' : 'ChevronDown' }}
+              onClick={() => setShowDetails(!showDetails)}
+            />
+          </Stack.Item>
+          <Stack.Item align="center">
+            <FileTitle>{packet?.inboundFilename ?? packet?.workOrderId}</FileTitle>
+          </Stack.Item>
+          {packet?.packetStatus === WorkStatus.Processing && <Spinner size={SpinnerSize.medium} />}
+          <Stack.Item align="center">
+            <IconButton iconProps={{ iconName: 'Copy' }} onClick={copyFileStatusDetailsUrl} />
+          </Stack.Item>
+          <Stack.Item align="center">
+            <Badge variant={getBadgeVariant(packet?.packetStatus)} label={packet?.packetStatus} pill />
+          </Stack.Item>
+          <Stack.Item align="center">
+            <Badge variant="info" label={`Billing Units: ${packet?.populationCount ?? 'none'}`} pill />
+            {packet?.suppressBilling && (
+            <>
+              <Required>*</Required>
+              <InfoIcon id="billingUnitInfo" tooltip="This exchange was not billed" />
+            </>
+            )}
+          </Stack.Item>
+          <Stack.Item align="center" grow>
+            <Text variant="muted">{renderReceivedDate()}</Text>
+          </Stack.Item>
+        </Stack>
+      </Row>
+      {showDetails && (
+      <FileMetaDetails>
+        <Stack horizontal={true} wrap={true} tokens={{ childrenGap: 15 }}>
+          <Stack.Item>
+            <LabelValue label="Vendor" value={packet?.vendorId} />
+            <LabelValue label="Plan Sponsor" value={packet?.orgId} />
+          </Stack.Item>
+          <Stack.Item>
+            <LabelValue label="Work Order Id" value={packet?.workOrderId} />
+            <LabelValue label="Spec Id" value={packet?.specId} />
+          </Stack.Item>
+          {renderDeliveredFileInfo(deliveredFile)}
+        </Stack>
+      </FileMetaDetails>
+      )}
+    </ShadowBox>
+  );
 
   const handleClosePanel = () => {
     pollWPStatus.stopPolling();
@@ -428,13 +426,11 @@ const FileStatusDetailsPanel = ({ useFileStatusDetailsPanel, tableFilters }: Fil
     return tabs;
   };
 
-  const renderFooter = () => {
-    return (
-      <PanelFooter>
-        <CommandBar items={commandBarItems} overflowButtonProps={{ ariaLabel: 'More commands' }} />
-      </PanelFooter>
-    );
-  };
+  const renderFooter = () => (
+    <PanelFooter>
+      <CommandBar items={commandBarItems} overflowButtonProps={{ ariaLabel: 'More commands' }} />
+    </PanelFooter>
+  );
 
   const renderBody = () => {
     if (loading) {

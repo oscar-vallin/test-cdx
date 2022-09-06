@@ -46,16 +46,16 @@ export const useCreateGroupPanel = (isOpen, orgSid, selectedGroupId, templateId)
   const [specializations, setSpecializations] = useState<UiOption[]>([]);
   // Hooks to Fetches.
   const [apiUseAccessPolicyGroupForm, { data: accessPolicyGroupFormData, loading: loadingForm }] = useQueryHandler(
-    useAccessPolicyGroupFormLazyQuery
+    useAccessPolicyGroupFormLazyQuery,
   );
   const [apiCreateAccessPolicyGroup, { data: createAccessPolicyGroupData, loading: creatingGroup }] = useQueryHandler(
-    useCreateAccessPolicyGroupMutation
+    useCreateAccessPolicyGroupMutation,
   );
   const [apiFindAccessPolicyGroup, { data: findAccessPolicyGroupData, loading: loadingGroup }] = useQueryHandler(
-    useFindAccessPolicyGroupLazyQuery
+    useFindAccessPolicyGroupLazyQuery,
   );
   const [apiUpdateAccessPolicyGroup, { data: updateAccessPolicyGroupData }] = useQueryHandler(
-    useUpdateAccessPolicyGroupMutation
+    useUpdateAccessPolicyGroupMutation,
   );
 
   // State for Form Definition.

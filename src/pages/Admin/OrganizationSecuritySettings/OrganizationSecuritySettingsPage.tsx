@@ -34,8 +34,7 @@ const _OrganizationSecuritySettingsPage = () => {
   const { orgSid } = useOrgSid();
   const Toast = useNotification();
   const [fetchPageForm, { data, loading: isLoadingForm, error: formError }] = useOrgSecurityFormLazyQuery();
-  const [callUpdateOrgSecurity, { data: dataUpdateOrgSecurity, loading: isUpdating, error: updateError }] =
-    useUpdateOrgSecurityMutation();
+  const [callUpdateOrgSecurity, { data: dataUpdateOrgSecurity, loading: isUpdating, error: updateError }] = useUpdateOrgSecurityMutation();
 
   const [state, setState] = useState<UpdateOrgSecurityInput>({ ...DEFAULT_FORM });
   const [form, setForm] = useState<OrgSecurityForm | null>();

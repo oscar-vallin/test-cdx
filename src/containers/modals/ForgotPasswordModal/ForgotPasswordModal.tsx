@@ -1,6 +1,8 @@
 /* eslint-disable no-alert */
 import { ReactElement, useEffect, useState } from 'react';
-import { Text, Dialog, DialogFooter, PrimaryButton, DefaultButton } from '@fluentui/react';
+import {
+  Text, Dialog, DialogFooter, PrimaryButton, DefaultButton,
+} from '@fluentui/react';
 import { useForgotPasswordMutation, useBeginLoginMutation } from 'src/data/services/graphql';
 import { InputText } from 'src/components/inputs/InputText';
 import { Spacing } from 'src/components/spacings/Spacing';

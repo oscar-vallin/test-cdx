@@ -5,25 +5,26 @@ import { ROUTE_DASHBOARD } from 'src/data/constants/RouteConstants';
 
 const parseBreadcrumbItems = (
   routes: parseBreadcrumbItemsProps[],
-  onClick = (param: any) => param
-): parseBreadcrumbItemsReturnProps[] =>
-  routes.map((route, index) => {
-    const path = { text: route.TITLE, key: route.ID };
+  onClick = (param: any) => param,
+): parseBreadcrumbItemsReturnProps[] => routes.map((route, index) => {
+  const path = { text: route.TITLE, key: route.ID };
 
-    if (routes.length === index + 1) {
-      return { ...path, isCurrentItem: route.isCurrentItem, as: 'h4' };
-    }
+  if (routes.length === index + 1) {
+    return { ...path, isCurrentItem: route.isCurrentItem, as: 'h4' };
+  }
 
-    return {
-      ...path,
-      onClick: () => onClick(route.URL),
-    };
-  });
+  return {
+    ...path,
+    onClick: () => onClick(route.URL),
+  };
+});
 
 //
 const defaultProps = {
   id: '',
-  items: [{ ID: '', TITLE: '', URL: '', MAIN_MENU: true, API_ID: '' }],
+  items: [{
+    ID: '', TITLE: '', URL: '', MAIN_MENU: true, API_ID: '',
+  }],
   onClick: () => null,
 };
 
@@ -33,7 +34,9 @@ type CDXBreadcrumbProps = {
   onClick?: any | undefined;
 } & typeof defaultProps;
 
-const CDXBreadcrumb = ({ id, items, onClick, ...props }: CDXBreadcrumbProps): ReactElement => {
+const CDXBreadcrumb = ({
+  id, items, onClick, ...props
+}: CDXBreadcrumbProps): ReactElement => {
   const history = useHistory();
 
   return (

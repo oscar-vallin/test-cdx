@@ -50,7 +50,7 @@ const ActiveOrgsPage = () => {
   const [searchAllOrgsFilter, setSearchAllOrgsFilter] = useState<boolean>(false);
 
   const [directSearchQuery, { data: dataSearch, loading: loadingSearch }] = useQueryHandler(
-    useSearchOrganizationsLazyQuery
+    useSearchOrganizationsLazyQuery,
   );
   const [pagingInfo, setPagingInfo] = useState<PaginationInfo>({
     pageNumber: 0,
@@ -191,7 +191,7 @@ const ActiveOrgsPage = () => {
         setPagingInfo(newPagingInfo);
       }
       const newCreateCmd = dataSearch?.searchOrganizations?.listPageInfo?.pageCommands?.find(
-        (cmd) => cmd?.commandType === CdxWebCommandType.Create
+        (cmd) => cmd?.commandType === CdxWebCommandType.Create,
       );
       setCreateCmd(newCreateCmd);
     }

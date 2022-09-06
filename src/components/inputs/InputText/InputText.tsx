@@ -1,6 +1,8 @@
 import React, { ReactElement } from 'react';
 import FormLabel, { UIFormLabel } from 'src/components/labels/FormLabel';
-import { UiField, UiStringField, UiIntField, UiLongField, Maybe } from 'src/data/services/graphql';
+import {
+  UiField, UiStringField, UiIntField, UiLongField, Maybe,
+} from 'src/data/services/graphql';
 import { EmptyValue, FieldValue, StyledTextField } from './InputText.styles';
 
 export type InputTextProps = {
@@ -93,7 +95,9 @@ type UIReadOnlyType = {
   renderLabel?: boolean;
 };
 
-const UIInputTextReadOnly = ({ id, type = 'text', uiField, renderLabel = true }: UIReadOnlyType) => {
+const UIInputTextReadOnly = ({
+  id, type = 'text', uiField, renderLabel = true,
+}: UIReadOnlyType) => {
   const getValue = () => {
     let text = '';
     if (uiField && Object.prototype.hasOwnProperty.call(uiField, 'description')) {

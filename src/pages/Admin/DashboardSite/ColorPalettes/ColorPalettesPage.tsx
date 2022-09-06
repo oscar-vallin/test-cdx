@@ -81,15 +81,15 @@ const _ColorPalettesPage = () => {
     const paletteColors = {
       ...(selectedPaletteId
         ? {
-            themePrimary: currentVariant.themePrimary,
-            neutralPrimary: isExtendingPalette ? defaultVariant.neutralPrimary : currentVariant.neutralPrimary,
-            white: isExtendingPalette ? defaultVariant.white : currentVariant.white,
-          }
+          themePrimary: currentVariant.themePrimary,
+          neutralPrimary: isExtendingPalette ? defaultVariant.neutralPrimary : currentVariant.neutralPrimary,
+          white: isExtendingPalette ? defaultVariant.white : currentVariant.white,
+        }
         : {
-            themePrimary: defaultVariant.themePrimary,
-            neutralPrimary: defaultVariant.neutralDark,
-            white: defaultVariant.white,
-          }),
+          themePrimary: defaultVariant.themePrimary,
+          neutralPrimary: defaultVariant.neutralDark,
+          white: defaultVariant.white,
+        }),
     };
 
     const variant = {
@@ -108,8 +108,9 @@ const _ColorPalettesPage = () => {
 
   useEffect(() => {
     if (selectedPaletteId) {
-      const { paletteNm, allowDark, defaultPalette, themePrimary, neutralPrimary, white, themeColorMode } =
-        colorPalettes.find(({ id }) => id === selectedPaletteId);
+      const {
+        paletteNm, allowDark, defaultPalette, themePrimary, neutralPrimary, white, themeColorMode,
+      } = colorPalettes.find(({ id }) => id === selectedPaletteId);
 
       setPaletteName(paletteNm);
       setPaletteType(themeColorMode !== null ? 'EXTEND' : 'CUSTOM');

@@ -41,5 +41,7 @@ export const useCurrentUser = () => {
     setProcessing(false);
   };
 
-  return { currentUserQuery, isProcessing, isLoading: loading, isCurrentUserLogged, setLoggedIn };
+  return {
+    currentUserQuery, isProcessing, isLoading: loading, isCurrentUserLogged, setLoggedIn,
+  };
 };

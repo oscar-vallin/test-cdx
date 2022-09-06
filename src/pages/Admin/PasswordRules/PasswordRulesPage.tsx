@@ -27,14 +27,15 @@ import { ROUTE_PASSWORD_RULES } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { PageBody } from 'src/components/layouts/Column';
 import { StyledComboBox, StyledDiv } from './PasswordRulesPage.styles';
-import { DEFAULT_FORM, extractFormValues, FormInput, FormOptions, replaceInputs } from './PasswordRulesFormUtils';
+import {
+  DEFAULT_FORM, extractFormValues, FormInput, FormOptions, replaceInputs,
+} from './PasswordRulesFormUtils';
 
 const _PasswordRulesPage = () => {
   const { orgSid } = useOrgSid();
   const Toast = useNotification();
   const [fetchPageForm, { data, loading: isLoadingForm, error: formError }] = usePasswordRulesFormLazyQuery();
-  const [updatePasswordRules, { data: updatedRules, loading: isUpdatingRules, error: updateError }] =
-    useQueryHandler(useUpdatePasswordRulesMutation);
+  const [updatePasswordRules, { data: updatedRules, loading: isUpdatingRules, error: updateError }] = useQueryHandler(useUpdatePasswordRulesMutation);
 
   const [state, setState] = useState<PasswordRules>({ ...DEFAULT_FORM });
   const [form, setForm] = useState<PasswordRulesForm | null>();
@@ -70,8 +71,7 @@ const _PasswordRulesPage = () => {
   useEffect(() => {
     if (updatedRules) {
       if (updatedRules.updatePasswordRules?.response === 'FAIL') {
-        const errorMessage =
-          updatedRules.updatePasswordRules?.errMsg ?? 'Please, check the highlighted fields and try again';
+        const errorMessage = updatedRules.updatePasswordRules?.errMsg ?? 'Please, check the highlighted fields and try again';
         Toast.error({ text: errorMessage });
       } else {
         Toast.success({ text: 'Password rules updated successfully' });
@@ -108,7 +108,7 @@ const _PasswordRulesPage = () => {
                 <EmptyState
                   title="An error occurred"
                   description="The password rules form could not be loaded. Please, try again in a few minutes."
-                  actions={
+                  actions={(
                     <Button
                       id="__ReloadFormButton"
                       variant="primary"
@@ -123,7 +123,7 @@ const _PasswordRulesPage = () => {
                     >
                       Reload
                     </Button>
-                  }
+                  )}
                 />
               ) : (
                 <div id="__PasswordRules-Form">
@@ -151,15 +151,13 @@ const _PasswordRulesPage = () => {
                             <Checkbox
                               id="__checkBoxSomeMustBeMet"
                               checked={state.someMustBeMet?.enabled ?? false}
-                              onChange={(event, checked) =>
-                                setState({
-                                  ...state,
-                                  someMustBeMet: {
-                                    ...state.someMustBeMet,
-                                    enabled: !!checked,
-                                  },
-                                })
-                              }
+                              onChange={(event, checked) => setState({
+                                ...state,
+                                someMustBeMet: {
+                                  ...state.someMustBeMet,
+                                  enabled: !!checked,
+                                },
+                              })}
                             />
 
                             <Text>
@@ -177,10 +175,9 @@ const _PasswordRulesPage = () => {
                                     })) || []
                                 }
                                 onChange={(event, option) => {
-                                  const complexity =
-                                    Object.keys(PasswordComplexity).find(
-                                      (x) => PasswordComplexity[x] == option?.key?.toString()
-                                    ) ?? 'ANY';
+                                  const complexity = Object.keys(PasswordComplexity).find(
+                                    (x) => PasswordComplexity[x] == option?.key?.toString(),
+                                  ) ?? 'ANY';
                                   setState({
                                     ...state,
                                     someMustBeMet: {
@@ -241,12 +238,10 @@ const _PasswordRulesPage = () => {
                               <Checkbox
                                 id="__checkBoxAutoLock"
                                 checked={state?.autoLockAccount ?? false}
-                                onChange={(event, checked) =>
-                                  setState({
-                                    ...state,
-                                    autoLockAccount: !!checked,
-                                  })
-                                }
+                                onChange={(event, checked) => setState({
+                                  ...state,
+                                  autoLockAccount: !!checked,
+                                })}
                               />
 
                               <Text {...(form?.autoLockAccount?.errMsg ? { variant: 'error' } : {})}>
@@ -254,19 +249,19 @@ const _PasswordRulesPage = () => {
 
                                 {form?.autoLockAfterFailedAttempts?.label
                                   ? replaceInputs(form?.autoLockAfterFailedAttempts.label, {
-                                      '{0}': (
-                                        <FormInput
-                                          id="__inputAutoLock"
-                                          key="__inputAutoLock"
-                                          disabled={state?.autoLockAccount == false}
-                                          option="autoLockAfterFailedAttempts"
-                                          state={state}
-                                          errorMessage={form?.autoLockAfterFailedAttempts?.errMsg}
-                                          value={state.autoLockAfterFailedAttempts}
-                                          onChange={setState}
-                                        />
-                                      ),
-                                    })
+                                    '{0}': (
+                                      <FormInput
+                                        id="__inputAutoLock"
+                                        key="__inputAutoLock"
+                                        disabled={state?.autoLockAccount == false}
+                                        option="autoLockAfterFailedAttempts"
+                                        state={state}
+                                        errorMessage={form?.autoLockAfterFailedAttempts?.errMsg}
+                                        value={state.autoLockAfterFailedAttempts}
+                                        onChange={setState}
+                                      />
+                                    ),
+                                  })
                                   : 'Missing label from form'}
                               </Text>
                             </StyledDiv>
@@ -281,12 +276,10 @@ const _PasswordRulesPage = () => {
                               <Checkbox
                                 id="__checkBoxAutoUnlock"
                                 checked={state?.autoUnlockAccount ?? false}
-                                onChange={(event, checked) =>
-                                  setState({
-                                    ...state,
-                                    autoUnlockAccount: !!checked,
-                                  })
-                                }
+                                onChange={(event, checked) => setState({
+                                  ...state,
+                                  autoUnlockAccount: !!checked,
+                                })}
                               />
 
                               <Text {...(form?.autoUnlockAccount?.errMsg ? { variant: 'error' } : {})}>
@@ -294,19 +287,19 @@ const _PasswordRulesPage = () => {
 
                                 {form?.autoUnlockAccountDelayMinutes?.label
                                   ? replaceInputs(form?.autoUnlockAccountDelayMinutes.label, {
-                                      '{0}': (
-                                        <FormInput
-                                          id="__inputAutoUnlock"
-                                          key="__inputAutoUnLock"
-                                          disabled={state?.autoUnlockAccount == false}
-                                          option="autoUnlockAccountDelayMinutes"
-                                          state={state}
-                                          errorMessage={form?.autoUnlockAccountDelayMinutes?.errMsg}
-                                          value={state.autoUnlockAccountDelayMinutes}
-                                          onChange={setState}
-                                        />
-                                      ),
-                                    })
+                                    '{0}': (
+                                      <FormInput
+                                        id="__inputAutoUnlock"
+                                        key="__inputAutoUnLock"
+                                        disabled={state?.autoUnlockAccount == false}
+                                        option="autoUnlockAccountDelayMinutes"
+                                        state={state}
+                                        errorMessage={form?.autoUnlockAccountDelayMinutes?.errMsg}
+                                        value={state.autoUnlockAccountDelayMinutes}
+                                        onChange={setState}
+                                      />
+                                    ),
+                                  })
                                   : 'Missing label from form'}
                               </Text>
                             </StyledDiv>

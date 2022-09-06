@@ -92,9 +92,7 @@ const _ImplementationDeployPage = () => {
     callImplDeploy().then();
   };
 
-  const onRenderCell = (item: string | undefined) => {
-    return <Text>{item}</Text>;
-  };
+  const onRenderCell = (item: string | undefined) => <Text>{item}</Text>;
 
   const renderChangesList = () => {
     if (changes.length > 0) {
@@ -103,37 +101,35 @@ const _ImplementationDeployPage = () => {
     return <Text>No recent updates found.</Text>;
   };
 
-  const renderDeploymentResult = () => {
-    return (
-      <>
-        <Row>
-          <Column lg="6">
-            <Label>Status</Label>
-            <Text>{prettyEnumValue(status)}</Text>
-          </Column>
-          <Column lg="6">
-            <Label>Last Deployment</Label>
-            <Text>{requestDateTime}</Text>
-          </Column>
-        </Row>
-        <Row>
-          <Column>
-            <Label>Latest Updates</Label>
-            {renderChangesList()}
-          </Column>
-        </Row>
-        {status !== ImplementationDeployStatus.InProgress && (
-          <Row>
-            <Column>
-              <Text>
-                Click the <strong>Deploy</strong> button to begin deploying the latest updates to the Implementations
-              </Text>
-            </Column>
-          </Row>
-        )}
-      </>
-    );
-  };
+  const renderDeploymentResult = () => (
+    <>
+      <Row>
+        <Column lg="6">
+          <Label>Status</Label>
+          <Text>{prettyEnumValue(status)}</Text>
+        </Column>
+        <Column lg="6">
+          <Label>Last Deployment</Label>
+          <Text>{requestDateTime}</Text>
+        </Column>
+      </Row>
+      <Row>
+        <Column>
+          <Label>Latest Updates</Label>
+          {renderChangesList()}
+        </Column>
+      </Row>
+      {status !== ImplementationDeployStatus.InProgress && (
+      <Row>
+        <Column>
+          <Text>
+            Click the <strong>Deploy</strong> button to begin deploying the latest updates to the Implementations
+          </Text>
+        </Column>
+      </Row>
+      )}
+    </>
+  );
 
   return (
     <LayoutDashboard id="PageImplDeploy" menuOptionSelected={ROUTE_IMPL_DEPLOY.API_ID}>

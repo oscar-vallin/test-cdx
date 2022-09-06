@@ -4,4 +4,6 @@ import { Row } from './Row';
 import { Column } from './Column';
 import { Grid } from './Grid';
 
-export { Box, Grid, Row, Column, Container };
+export {
+  Box, Grid, Row, Column, Container,
+};

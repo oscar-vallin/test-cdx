@@ -1,4 +1,6 @@
-import { getHours, format, isValid, startOfYesterday, startOfToday, endOfToday, endOfTomorrow } from 'date-fns';
+import {
+  getHours, format, isValid, startOfYesterday, startOfToday, endOfToday, endOfTomorrow,
+} from 'date-fns';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { yyyyMMdd } from 'src/utils/CDXUtils';
@@ -6,7 +8,9 @@ import { DateState, useDateValue, useEndDateValue } from './useDateValue';
 import { DelayedInput, useDelayedInputValue, useDelayedDropdownValue } from './useInputValue';
 import { useQueryParams } from './useQueryParams';
 import { useOrgSid } from './useOrgSid';
-import { Maybe, PageableInput, SortDirection, SortOrderInput } from '../data/services/graphql';
+import {
+  Maybe, PageableInput, SortDirection, SortOrderInput,
+} from '../data/services/graphql';
 
 export type TableFiltersType = {
   searchText: DelayedInput;
@@ -28,7 +32,7 @@ export const toUTC = (date: Date): Date => {
     date.getUTCDate(),
     date.getUTCHours(),
     date.getUTCMinutes(),
-    date.getUTCSeconds()
+    date.getUTCSeconds(),
   );
   const newTS = new Date(ts);
   return new Date(newTS.toLocaleString('en-US', { timeZone: 'UTC' }));

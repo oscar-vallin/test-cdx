@@ -21,7 +21,9 @@ const images = {
   logo: imgLogo,
 };
 
-const Image = ({ id, name, src, alt }: ImageProps): ReactElement => {
+const Image = ({
+  id, name, src, alt,
+}: ImageProps): ReactElement => {
   const _src = images[name] ?? src;
 
   return <StyledImage id={id} src={_src} alt={alt} />;

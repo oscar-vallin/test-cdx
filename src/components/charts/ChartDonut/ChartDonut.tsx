@@ -1,6 +1,8 @@
 import { ReactElement, useState } from 'react';
 import chroma from 'chroma-js';
-import { PieChart, Pie, Cell, Label, Legend, Sector } from 'recharts';
+import {
+  PieChart, Pie, Cell, Label, Legend, Sector,
+} from 'recharts';
 import { Text } from 'src/components/typography';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { ButtonLink } from 'src/components/buttons';
@@ -23,7 +25,9 @@ type ChartDonutProps = {
 
 const COLORS = ['#0088FE', '#D0D0D0', '#FFAAAA', '#AADD00', '#EEAA00', '#DDCCFF', '#00AAAA'];
 
-const ChartDonut = ({ id, label, size = 50, data, totalRecords, onClickSlice }: ChartDonutProps): ReactElement => {
+const ChartDonut = ({
+  id, label, size = 50, data, totalRecords, onClickSlice,
+}: ChartDonutProps): ReactElement => {
   const ThemeStore = useThemeStore();
   const total = totalRecords ?? data?.reduce((sum, current) => sum + current.value, 0);
   const totalDigits = total?.toString().length ?? 0;
@@ -47,22 +51,22 @@ const ChartDonut = ({ id, label, size = 50, data, totalRecords, onClickSlice }: 
     }
   };
 
-  const renderLegendText = (value: string, entry: any, index: number) => {
-    return (
-      <ButtonLink
-        onMouseOver={() => onMouseOver(entry, index)}
-        onMouseLeave={() => onMouseLeave()}
-        onClick={() => onClick(entry.payload)}
-      >
-        <Text size="small" variant={index === activeIndex ? 'bold' : 'normal'}>
-          {value} ({entry.payload.value}/{total})
-        </Text>
-      </ButtonLink>
-    );
-  };
+  const renderLegendText = (value: string, entry: any, index: number) => (
+    <ButtonLink
+      onMouseOver={() => onMouseOver(entry, index)}
+      onMouseLeave={() => onMouseLeave()}
+      onClick={() => onClick(entry.payload)}
+    >
+      <Text size="small" variant={index === activeIndex ? 'bold' : 'normal'}>
+        {value} ({entry.payload.value}/{total})
+      </Text>
+    </ButtonLink>
+  );
 
   const renderActiveShape = (props) => {
-    const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
+    const {
+      cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill,
+    } = props;
     return (
       <Sector
         cx={cx}

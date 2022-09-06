@@ -67,9 +67,8 @@ const AppHeader = ({ onMenuButtonClick, hasLeftMenu = true }: AppHeaderProps): R
     },
   ];
 
-  const renderTopNavButtons = () => {
-    return ActiveDomainStore.nav.dashboard.map((menuOption: { label: string; destination: string }) => {
-      const opt:
+  const renderTopNavButtons = () => ActiveDomainStore.nav.dashboard.map((menuOption: { label: string; destination: string }) => {
+    const opt:
         | {
             ID?: string;
             TITLE?: string;
@@ -79,43 +78,40 @@ const AppHeader = ({ onMenuButtonClick, hasLeftMenu = true }: AppHeaderProps): R
           }
         | any = getRouteByApiId(menuOption.label !== 'Admin' ? menuOption.destination : 'ADMIN');
 
-      return opt.MAIN_MENU ? (
-        <StyledNavButton
-          id={`__${menuOption.destination}_Tab`}
-          key={menuOption.destination}
-          data-e2e={menuOption.destination}
-          selected={location.pathname === opt.URL}
-          onClick={() => {
-            let dest = `${opt.URL}?orgSid=${orgSid}`;
-            if (startDate) {
-              dest += `&startDate=${startDate}`;
-            }
-            if (endDate) {
-              dest += `&endDate=${endDate}`;
-            }
-            history.push(dest);
+    return opt.MAIN_MENU ? (
+      <StyledNavButton
+        id={`__${menuOption.destination}_Tab`}
+        key={menuOption.destination}
+        data-e2e={menuOption.destination}
+        selected={location.pathname === opt.URL}
+        onClick={() => {
+          let dest = `${opt.URL}?orgSid=${orgSid}`;
+          if (startDate) {
+            dest += `&startDate=${startDate}`;
+          }
+          if (endDate) {
+            dest += `&endDate=${endDate}`;
+          }
+          history.push(dest);
 
-            return null;
-          }}
-        >
-          {menuOption.label}
-        </StyledNavButton>
-      ) : null;
-    });
-  };
+          return null;
+        }}
+      >
+        {menuOption.label}
+      </StyledNavButton>
+    ) : null;
+  });
 
-  const renderOrgName = () => {
-    return (
-      <div className="HeaderBtnText">
-        <div>
-          <h2 className="HeaderBtnText__title">{ActiveDomainStore.domainOrg.current.orgId}</h2>
-          <StyledOverFlow>
-            <small className="HeaderBtnText__description">{ActiveDomainStore.domainOrg.current.label}</small>
-          </StyledOverFlow>
-        </div>
+  const renderOrgName = () => (
+    <div className="HeaderBtnText">
+      <div>
+        <h2 className="HeaderBtnText__title">{ActiveDomainStore.domainOrg.current.orgId}</h2>
+        <StyledOverFlow>
+          <small className="HeaderBtnText__description">{ActiveDomainStore.domainOrg.current.label}</small>
+        </StyledOverFlow>
       </div>
-    );
-  };
+    </div>
+  );
 
   const showStyledNavIcon = () => {
     if (hasLeftMenu) {

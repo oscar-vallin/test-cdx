@@ -31,7 +31,9 @@ type AccessPolicyUsageProps = {
   currentName: string;
 };
 
-const AccessPolicyUsagePanel = ({ isOpen, closePanel, selectedPolicyId, currentName }: AccessPolicyUsageProps) => {
+const AccessPolicyUsagePanel = ({
+  isOpen, closePanel, selectedPolicyId, currentName,
+}: AccessPolicyUsageProps) => {
   const { orgSid } = useOrgSid();
   const [accessPolicyUsages, setAccessPolicyUsages] = useState<AccessGroupUsageConnection | null>();
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>();

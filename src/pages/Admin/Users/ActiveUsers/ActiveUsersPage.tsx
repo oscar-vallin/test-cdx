@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton, SearchBox, Stack } from '@fluentui/react';
+import {
+  DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton, SearchBox, Stack,
+} from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Column, Container, Row } from 'src/components/layouts';
@@ -81,7 +83,7 @@ const ActiveUsersPage = () => {
         pendingActivationFilter,
         expiredActivationFilter,
         searchAllOrgsFilter,
-        tableFilters.searchText.delayedValue
+        tableFilters.searchText.delayedValue,
       )
       .then();
   }, [tableFilters.pagingParams]);
@@ -91,11 +93,7 @@ const ActiveUsersPage = () => {
     setSelectedItems([]);
   };
 
-  const selectedUserIds = () => {
-    return selectedItems.map((node) => {
-      return node?.item?.sid;
-    });
-  };
+  const selectedUserIds = () => selectedItems.map((node) => node?.item?.sid);
 
   const renderCreateButton = (id: string) => {
     if (createCmd) {
@@ -135,10 +133,10 @@ const ActiveUsersPage = () => {
     }
 
     if (
-      !lockedFilter &&
-      !pendingActivationFilter &&
-      !expiredActivationFilter &&
-      !tableFilters.searchText.delayedValue.length
+      !lockedFilter
+      && !pendingActivationFilter
+      && !expiredActivationFilter
+      && !tableFilters.searchText.delayedValue.length
     ) {
       emptyText = createCmd
         ? 'There are no active users in this organization. Click the button below to create a new user.'
@@ -149,87 +147,85 @@ const ActiveUsersPage = () => {
     );
   };
 
-  const renderBody = () => {
-    return (
-      <>
-        <Stack
-          horizontal={true}
-          wrap={true}
-          style={{ width: '100%' }}
-          verticalAlign="end"
-          horizontalAlign="space-between"
-        >
-          {tableFilters?.searchText && (
-            <Column lg="6">
-              <SearchBox
-                id="Active_Users_Input-Search"
-                autoFocus
-                styles={{ root: { width: '100%' } }}
-                onChange={tableFilters.searchText.onChange}
-                placeholder="Search"
-              />
-            </Column>
-          )}
-          {userService.userSearchForm.lockedFilter?.visible && (
-            <UIInputCheck
-              id="__Locked__Users-Checkbox"
-              value={lockedFilter}
-              uiField={userService.userSearchForm.lockedFilter}
-              onChange={(_event, _lockedFilter: any) => {
-                setLockedFilter(_lockedFilter);
-              }}
-            />
-          )}
-          {userService.userSearchForm.pendingActivationFilter?.visible && (
-            <UIInputCheck
-              id="__PendingActivation__Users-Checkbox"
-              value={pendingActivationFilter}
-              uiField={userService.userSearchForm.pendingActivationFilter}
-              onChange={(_event, _pendingActivationFilter: any) => {
-                setPendingActivationFilter(_pendingActivationFilter);
-              }}
-            />
-          )}
-          {userService.userSearchForm.expiredActivationFilter?.visible && (
-            <UIInputCheck
-              id="__ExpiredActivation__Users-Checkbox"
-              value={expiredActivationFilter}
-              uiField={userService.userSearchForm.expiredActivationFilter}
-              onChange={(_event, _expiredActivationFilter: any) => {
-                setExpiredActivationFilter(_expiredActivationFilter);
-              }}
-            />
-          )}
-        </Stack>
-        {userService.userSearchForm.searchAllOrgs?.visible && (
-          <Spacing margin={{ top: 'normal' }}>
-            <Column lg="6">
-              <UIInputCheck
-                id="__SearchAllOrgs__Users-Checkbox"
-                value={searchAllOrgsFilter}
-                uiField={userService.userSearchForm.searchAllOrgs}
-                onChange={(_event, _searchAllOrgsFilter: any) => {
-                  setSearchAllOrgsFilter(_searchAllOrgsFilter);
-                }}
-              />
-            </Column>
-          </Spacing>
-        )}
-        {!userService.users?.length ? (
-          renderEmptyState()
-        ) : (
-          <UsersTable
-            tableFilters={tableFilters}
-            users={userService.users}
-            onClickUser={updateUserPanel.showPanel}
-            tooltips={userService.tooltips}
-            searchAllOrgs={searchAllOrgsFilter}
+  const renderBody = () => (
+    <>
+      <Stack
+        horizontal={true}
+        wrap={true}
+        style={{ width: '100%' }}
+        verticalAlign="end"
+        horizontalAlign="space-between"
+      >
+        {tableFilters?.searchText && (
+        <Column lg="6">
+          <SearchBox
+            id="Active_Users_Input-Search"
+            autoFocus
+            styles={{ root: { width: '100%' } }}
+            onChange={tableFilters.searchText.onChange}
+            placeholder="Search"
           />
+        </Column>
         )}
-        <Paginator id="__Paginator" pagingInfo={userService.pagingInfo} onPageChange={userService.onPageChange} />
-      </>
-    );
-  };
+        {userService.userSearchForm.lockedFilter?.visible && (
+        <UIInputCheck
+          id="__Locked__Users-Checkbox"
+          value={lockedFilter}
+          uiField={userService.userSearchForm.lockedFilter}
+          onChange={(_event, _lockedFilter: any) => {
+            setLockedFilter(_lockedFilter);
+          }}
+        />
+        )}
+        {userService.userSearchForm.pendingActivationFilter?.visible && (
+        <UIInputCheck
+          id="__PendingActivation__Users-Checkbox"
+          value={pendingActivationFilter}
+          uiField={userService.userSearchForm.pendingActivationFilter}
+          onChange={(_event, _pendingActivationFilter: any) => {
+            setPendingActivationFilter(_pendingActivationFilter);
+          }}
+        />
+        )}
+        {userService.userSearchForm.expiredActivationFilter?.visible && (
+        <UIInputCheck
+          id="__ExpiredActivation__Users-Checkbox"
+          value={expiredActivationFilter}
+          uiField={userService.userSearchForm.expiredActivationFilter}
+          onChange={(_event, _expiredActivationFilter: any) => {
+            setExpiredActivationFilter(_expiredActivationFilter);
+          }}
+        />
+        )}
+      </Stack>
+      {userService.userSearchForm.searchAllOrgs?.visible && (
+      <Spacing margin={{ top: 'normal' }}>
+        <Column lg="6">
+          <UIInputCheck
+            id="__SearchAllOrgs__Users-Checkbox"
+            value={searchAllOrgsFilter}
+            uiField={userService.userSearchForm.searchAllOrgs}
+            onChange={(_event, _searchAllOrgsFilter: any) => {
+              setSearchAllOrgsFilter(_searchAllOrgsFilter);
+            }}
+          />
+        </Column>
+      </Spacing>
+      )}
+      {!userService.users?.length ? (
+        renderEmptyState()
+      ) : (
+        <UsersTable
+          tableFilters={tableFilters}
+          users={userService.users}
+          onClickUser={updateUserPanel.showPanel}
+          tooltips={userService.tooltips}
+          searchAllOrgs={searchAllOrgsFilter}
+        />
+      )}
+      <Paginator id="__Paginator" pagingInfo={userService.pagingInfo} onPageChange={userService.onPageChange} />
+    </>
+  );
 
   return (
     <LayoutDashboard id="PageActiveUsers" menuOptionSelected={ROUTE_ACTIVE_USERS.API_ID}>
@@ -263,7 +259,7 @@ const ActiveUsersPage = () => {
               pendingActivationFilter,
               expiredActivationFilter,
               searchAllOrgsFilter,
-              tableFilters.searchText.delayedValue
+              tableFilters.searchText.delayedValue,
             )
             .then();
         }}
@@ -284,7 +280,7 @@ const ActiveUsersPage = () => {
               pendingActivationFilter,
               expiredActivationFilter,
               searchAllOrgsFilter,
-              tableFilters.searchText.delayedValue
+              tableFilters.searchText.delayedValue,
             )
             .then();
         }}
@@ -296,7 +292,7 @@ const ActiveUsersPage = () => {
         dialogContentProps={{
           type: DialogType.normal,
           title: 'Disable user',
-          subText: `Do you really want to disable the selected user(s) ?`,
+          subText: 'Do you really want to disable the selected user(s) ?',
         }}
         modalProps={{ isBlocking: true }}
       >

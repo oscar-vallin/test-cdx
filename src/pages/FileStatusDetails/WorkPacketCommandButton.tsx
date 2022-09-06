@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton, Stack } from '@fluentui/react';
+import {
+  DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton, Stack,
+} from '@fluentui/react';
 import {
   WorkPacketCommand,
   WorkPacketCommandType,
@@ -67,7 +69,7 @@ export const WorkPacketCommandButton = ({
   const [secondaryButtonText, setSecondaryButtonText] = useState('No');
   const [reprocessSecondButtonText, setReprocessSecondButtonText] = useState('External Exchange');
   const [reprocessSecondButtonAction, setReprocessSecondButtonAction] = useState(
-    ButtonActionTypes.HandleExternalReprocess
+    ButtonActionTypes.HandleExternalReprocess,
   );
   const [buttonAction, setButtonAction] = useState(ButtonActionTypes.Default);
   const [secondaryButtonAction, setSecondaryButtonAction] = useState(ButtonActionTypes.SecondaryDefault);
@@ -277,9 +279,9 @@ export const WorkPacketCommandButton = ({
 
   const showDialog = () => {
     if (
-      realId &&
-      (command?.commandType === WorkPacketCommandType.Reprocess ||
-        command?.commandType === WorkPacketCommandType.RerunStep)
+      realId
+      && (command?.commandType === WorkPacketCommandType.Reprocess
+        || command?.commandType === WorkPacketCommandType.RerunStep)
     ) {
       apiCallReprocessDialog({
         variables: {
@@ -312,13 +314,11 @@ export const WorkPacketCommandButton = ({
           }}
           modalProps={{ isBlocking: true }}
         >
-          {responseLogMessages?.map((item, index) => {
-            return (
-              <Spacing key={`dialog_logMessage-${index}`} padding={{ right: 'normal' }}>
-                <LogMessageItem logMessage={item} />
-              </Spacing>
-            );
-          })}
+          {responseLogMessages?.map((item, index) => (
+            <Spacing key={`dialog_logMessage-${index}`} padding={{ right: 'normal' }}>
+              <LogMessageItem logMessage={item} />
+            </Spacing>
+          ))}
           {command?.commandType === WorkPacketCommandType.Rename && (
             <InputText
               id="renameInput"

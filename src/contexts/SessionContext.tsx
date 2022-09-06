@@ -1,5 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ReactElement, ReactNode, useEffect, createContext } from 'react';
+import {
+  ReactElement, ReactNode, useEffect, createContext,
+} from 'react';
 import { useHistory } from 'react-router';
 import { useStoreRehydrated } from 'easy-peasy';
 
@@ -8,9 +10,7 @@ import { LoadingPage } from 'src/pages/Loading/LoadingPage';
 import { SessionStages } from '../store/SessionStore/SessionTypes';
 import { useSessionStore } from '../store/SessionStore';
 
-export const SessionContext = createContext<any>(() => {
-  return null;
-});
+export const SessionContext = createContext<any>(() => null);
 
 const defaultProps = {
   // children: '',

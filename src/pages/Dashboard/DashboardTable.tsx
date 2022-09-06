@@ -1,10 +1,14 @@
 import React, { ReactElement } from 'react';
-import { DetailsList, DetailsListLayoutMode, IColumn, SelectionMode } from '@fluentui/react';
+import {
+  DetailsList, DetailsListLayoutMode, IColumn, SelectionMode,
+} from '@fluentui/react';
 import { DashboardPeriodCount } from 'src/data/services/graphql';
 import { yyyyMMdd } from 'src/utils/CDXUtils';
 import { DarkSeparator } from 'src/components/separators/Separator';
 import { Column, Row } from 'src/components/layouts';
-import { CellLink, DashboardTableWrapper, EmptyTable, HeaderLink, SpecText } from './DashboardPage.styles';
+import {
+  CellLink, DashboardTableWrapper, EmptyTable, HeaderLink, SpecText,
+} from './DashboardPage.styles';
 
 type DashboardTableType = {
   id: string;
@@ -29,8 +33,7 @@ export const DashboardTable = ({
   buttons,
   renderTotal,
 }: DashboardTableType) => {
-  const destinationUrl = () =>
-    `/${linkTo}?&orgSid=${orgSid}&startDate=${yyyyMMdd(startDate)}&endDate=${yyyyMMdd(endDate)}`;
+  const destinationUrl = () => `/${linkTo}?&orgSid=${orgSid}&startDate=${yyyyMMdd(startDate)}&endDate=${yyyyMMdd(endDate)}`;
 
   const renderName = (item: DashboardPeriodCount) => (
     <>

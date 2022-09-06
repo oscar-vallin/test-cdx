@@ -152,9 +152,7 @@ export const groupPermissions = (opts?: UiOptions[] | null): PermissionGroups =>
       permissionGroups[groupName].subGroup.push(subGroup);
       const expr = new RegExp(permissionGroupingDef[groupName][subGroupName].regex);
       // find any matching permissions
-      const matchingOptions: UiOption[] = permissionOptions.filter((permissionOption) =>
-        expr.test(permissionOption?.value)
-      );
+      const matchingOptions: UiOption[] = permissionOptions.filter((permissionOption) => expr.test(permissionOption?.value));
       subGroup.options = matchingOptions;
 
       // Remove these permissions from the remaining options

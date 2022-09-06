@@ -21,9 +21,13 @@ type SessionStoreType = {
 export const useSessionStore = (): SessionStoreType => {
   const typedHooks = createTypedHooks<StoreModel>();
 
-  const { user, status, redirectUrl, globalError } = typedHooks.useStoreState((state) => state.SessionStore);
-  const { logout, setCurrentSession, setSessionStage, setRedirectUrl, setGlobalError } = typedHooks.useStoreActions(
-    (state) => state.SessionStore
+  const {
+    user, status, redirectUrl, globalError,
+  } = typedHooks.useStoreState((state) => state.SessionStore);
+  const {
+    logout, setCurrentSession, setSessionStage, setRedirectUrl, setGlobalError,
+  } = typedHooks.useStoreActions(
+    (state) => state.SessionStore,
   );
 
   return {

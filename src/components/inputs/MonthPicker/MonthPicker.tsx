@@ -1,5 +1,9 @@
-import { ReactElement, useState, useRef, useEffect } from 'react';
-import { Calendar, DateRangeType, DayOfWeek, DefaultButton } from '@fluentui/react';
+import {
+  ReactElement, useState, useRef, useEffect,
+} from 'react';
+import {
+  Calendar, DateRangeType, DayOfWeek, DefaultButton,
+} from '@fluentui/react';
 import { addDays, getDateRangeArray } from '@fluentui/date-time-utilities';
 import { Container } from './MonthPicker.styles';
 
@@ -114,9 +118,7 @@ export const MonthPicker = ({
     };
   };
 
-  const onCalendarDismiss = () => {
-    return selectedDate;
-  };
+  const onCalendarDismiss = () => selectedDate;
 
   if (selectedDateRange) {
     const rangeStart = selectedDateRange[0] as Date;

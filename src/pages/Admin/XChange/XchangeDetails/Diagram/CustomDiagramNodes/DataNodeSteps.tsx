@@ -1,5 +1,7 @@
 import { useState, memo, useEffect } from 'react';
-import { DirectionalHint, FontIcon, Stack, Text, TooltipHost } from '@fluentui/react';
+import {
+  DirectionalHint, FontIcon, Stack, Text, TooltipHost,
+} from '@fluentui/react';
 import { Handle, Position } from 'react-flow-renderer';
 import { BrainCircuit24Regular } from '@fluentui/react-icons';
 import {
@@ -75,14 +77,11 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
 
-  const [deleteXchangeStep, { data: dataDeleteStep, loading: loadingDeleteStep, error: errorDeleteStep }] =
-    useQueryHandler(useDeleteXchangeStepMutation);
+  const [deleteXchangeStep, { data: dataDeleteStep, loading: loadingDeleteStep, error: errorDeleteStep }] = useQueryHandler(useDeleteXchangeStepMutation);
 
-  const [moveUpXchangeStep, { data: dataMoveUp, loading: loadingMoveUp }] =
-    useQueryHandler(useMoveUpXchangeStepMutation);
+  const [moveUpXchangeStep, { data: dataMoveUp, loading: loadingMoveUp }] = useQueryHandler(useMoveUpXchangeStepMutation);
 
-  const [moveDownxchangeStep, { data: dataMoveDown, loading: loadingMoveDown, error: errorMoveDown }] =
-    useQueryHandler(useMoveDownXchangeStepMutation);
+  const [moveDownxchangeStep, { data: dataMoveDown, loading: loadingMoveDown, error: errorMoveDown }] = useQueryHandler(useMoveDownXchangeStepMutation);
 
   let iconName = data.icon;
   const subTitle = data.subTitle ?? '';
@@ -130,9 +129,9 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
 
   const hanldeSourcePosition = () => {
     if (
-      trans ||
-      data.position.x === 1 ||
-      ((sourceBottom === '1' || sourceBottom === '0') && data.label === 'Semantic Map')
+      trans
+      || data.position.x === 1
+      || ((sourceBottom === '1' || sourceBottom === '0') && data.label === 'Semantic Map')
     ) {
       return <Handle type="source" id={id} position={Position['Bottom']} />;
     }
@@ -169,7 +168,10 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
     if (showIcons && hiddeIcon) {
       return (
         <>
-          <div style={{ display: 'flex', position: 'absolute', bottom: 55, left: 180 }}>
+          <div style={{
+            display: 'flex', position: 'absolute', bottom: 55, left: 180,
+          }}
+          >
             <TooltipHost content="Copy Step">
               <FontIcon
                 iconName="Copy"
@@ -185,7 +187,10 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
               />
             </TooltipHost>
           </div>
-          <div style={{ display: 'flex', position: 'absolute', bottom: 55, left: 210 }}>
+          <div style={{
+            display: 'flex', position: 'absolute', bottom: 55, left: 210,
+          }}
+          >
             <TooltipHost content="Delete">
               <FontIcon
                 iconName="Trash"
@@ -253,89 +258,89 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
     return null;
   };
 
-  const renderNode = () => {
-    return (
-      <>
-        {renderHoverIcons()}
-        <Handle type="target" id={id} position={Position['Top']} />
-        <Container>
-          <Row>
-            <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
-              {iconName === 'Brain Circuit' ? (
-                <BrainCircuit24Regular
-                  aria-label="Brain"
-                  style={{
-                    color: '#fff',
-                    fontSize: '18px',
-                    cursor: 'pointer',
-                    width: '37px',
-                    height: '37px',
-                    borderRadius: '50%',
-                    backgroundColor: '#00a341',
-                    padding: '6px 0px 6px 0px',
-                    textAlign: 'center',
-                  }}
-                />
+  const renderNode = () => (
+    <>
+      {renderHoverIcons()}
+      <Handle type="target" id={id} position={Position['Top']} />
+      <Container>
+        <Row>
+          <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
+            {iconName === 'Brain Circuit' ? (
+              <BrainCircuit24Regular
+                aria-label="Brain"
+                style={{
+                  color: '#fff',
+                  fontSize: '18px',
+                  cursor: 'pointer',
+                  width: '37px',
+                  height: '37px',
+                  borderRadius: '50%',
+                  backgroundColor: '#00a341',
+                  padding: '6px 0px 6px 0px',
+                  textAlign: 'center',
+                }}
+              />
+            ) : (
+              <FontIcon
+                style={{
+                  color: '#fff',
+                  fontSize: '18px',
+                  cursor: 'pointer',
+                  width: '37px',
+                  height: '37px',
+                  borderRadius: '50%',
+                  backgroundColor: '#00a341',
+                  padding: '8px 1px 7px 0px',
+                  textAlign: 'center',
+                }}
+                iconName={iconName}
+              />
+            )}
+            <Text style={styles}>
+              {data.label}{' '}
+              {subTitle && subTitle.trim() !== '' && subTitle.length > 37 ? (
+                <StyledSubTitleText>
+                  <span style={{ fontSize: '10px' }}>{subTitle.substring(0, 28)}</span>
+                  <span style={{ position: 'relative', fontSize: '10px', bottom: '8px' }}>
+                    {subTitle.substring(28, subTitle.length)}
+                  </span>
+                </StyledSubTitleText>
               ) : (
-                <FontIcon
-                  style={{
-                    color: '#fff',
-                    fontSize: '18px',
-                    cursor: 'pointer',
-                    width: '37px',
-                    height: '37px',
-                    borderRadius: '50%',
-                    backgroundColor: '#00a341',
-                    padding: '8px 1px 7px 0px',
-                    textAlign: 'center',
-                  }}
-                  iconName={iconName}
-                />
+                <span style={{ fontSize: '10px' }}>{subTitle}</span>
               )}
-              <Text style={styles}>
-                {data.label}{' '}
-                {subTitle && subTitle.trim() !== '' && subTitle.length > 37 ? (
-                  <StyledSubTitleText>
-                    <span style={{ fontSize: '10px' }}>{subTitle.substring(0, 28)}</span>
-                    <span style={{ position: 'relative', fontSize: '10px', bottom: '8px' }}>
-                      {subTitle.substring(28, subTitle.length)}
-                    </span>
-                  </StyledSubTitleText>
-                ) : (
-                  <span style={{ fontSize: '10px' }}>{subTitle}</span>
-                )}
-              </Text>
-            </Stack>
-          </Row>
-        </Container>
-        {hanldeSourcePosition()}
-        {qualifier && (
-          <StyledQualifier position={true} left={true} top={true} width={width} color={color}>
-            {qualifier}
-          </StyledQualifier>
-        )}
-        {info && (
-          <TooltipHost content={info}>
-            <FontIcon
-              iconName="InfoSolid"
-              style={{ position: 'absolute', bottom: '18px', fontSize: '18px', cursor: 'pointer' }}
-            />
-          </TooltipHost>
-        )}
-        <XchangeStepPanel
-          isPanelOpen={openPanel}
-          closePanel={setOpenPanel}
-          setOptionXchangeStep={setOptionXchangeStep}
-          optionXchangeStep={optionXchangeStep}
-          refreshDetailsPage={refreshDetailsPage}
-          setShowIcons={setShowIcons}
-          xchangeFileProcessSid={xchangeFileProcessSid}
-          xchangeStepSid={sid}
-          xchangeStepTitle={label}
+            </Text>
+          </Stack>
+        </Row>
+      </Container>
+      {hanldeSourcePosition()}
+      {qualifier && (
+      <StyledQualifier position={true} left={true} top={true} width={width} color={color}>
+        {qualifier}
+      </StyledQualifier>
+      )}
+      {info && (
+      <TooltipHost content={info}>
+        <FontIcon
+          iconName="InfoSolid"
+          style={{
+            position: 'absolute', bottom: '18px', fontSize: '18px', cursor: 'pointer',
+          }}
         />
-      </>
-    );
-  };
+      </TooltipHost>
+      )}
+      <XchangeStepPanel
+        isPanelOpen={openPanel}
+        closePanel={setOpenPanel}
+        setOptionXchangeStep={setOptionXchangeStep}
+        optionXchangeStep={optionXchangeStep}
+        refreshDetailsPage={refreshDetailsPage}
+        setShowIcons={setShowIcons}
+        xchangeFileProcessSid={xchangeFileProcessSid}
+        xchangeStepSid={sid}
+        xchangeStepTitle={label}
+      />
+    </>
+  );
 
   useEffect(() => {
     if (updateStepPanel && !showDialog && !hoverIcon) {

@@ -19,13 +19,13 @@ type CDXSpacingProps = {
   inline?: boolean;
 } & typeof defaultProps;
 
-const CDXSpacing = ({ id, children, margin, padding, block, inline, ...props }: CDXSpacingProps): ReactElement => {
-  return (
-    <StyledDiv id={`${id}`} margin={margin} padding={padding} block={block} inline={inline} {...props}>
-      {children}
-    </StyledDiv>
-  );
-};
+const CDXSpacing = ({
+  id, children, margin, padding, block, inline, ...props
+}: CDXSpacingProps): ReactElement => (
+  <StyledDiv id={`${id}`} margin={margin} padding={padding} block={block} inline={inline} {...props}>
+    {children}
+  </StyledDiv>
+);
 
 CDXSpacing.defaultProps = defaultProps;
 

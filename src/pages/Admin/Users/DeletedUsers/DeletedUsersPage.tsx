@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogType, DialogFooter, PrimaryButton, DefaultButton } from '@fluentui/react';
+import {
+  Dialog, DialogType, DialogFooter, PrimaryButton, DefaultButton,
+} from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Row, Column, Container } from 'src/components/layouts';
 import { PageTitle } from 'src/components/typography';
-import { ActiveEnum, useActivateUsersMutation, UserItem, SortDirection } from 'src/data/services/graphql';
+import {
+  ActiveEnum, useActivateUsersMutation, UserItem, SortDirection,
+} from 'src/data/services/graphql';
 
 import { UpdateUserPanel, useUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers';
 import { UsersTable } from 'src/pages/Admin/Users/UsersTable';
@@ -49,11 +53,7 @@ const DeletedUsersPage = () => {
     setSelectedItems([]);
   };
 
-  const selectedUserIds = () => {
-    return selectedItems?.map((node) => {
-      return node?.item?.sid;
-    });
-  };
+  const selectedUserIds = () => selectedItems?.map((node) => node?.item?.sid);
 
   const renderBody = () => {
     if (!userService.users?.length) {
@@ -97,7 +97,7 @@ const DeletedUsersPage = () => {
         dialogContentProps={{
           type: DialogType.normal,
           title: 'Enable user',
-          subText: `Do you really want to enable the selected user ?`,
+          subText: 'Do you really want to enable the selected user ?',
         }}
         modalProps={{ isBlocking: true }}
       >

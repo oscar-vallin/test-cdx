@@ -11,25 +11,23 @@ const CDXModal = ({
   onDismiss = () => null,
   children,
   ...props
-}) => {
-  return (
-    <StyledModal
-      hidden={hidden}
-      onDismiss={onDismiss}
-      modalProps={{ isBlocking }}
-      dialogContentProps={{
-        type: DialogType.normal,
-        ...(title ? { title } : {}),
-        ...(subText ? { subText } : {}),
-      }}
-      {...props}
-    >
-      {children}
+}) => (
+  <StyledModal
+    hidden={hidden}
+    onDismiss={onDismiss}
+    modalProps={{ isBlocking }}
+    dialogContentProps={{
+      type: DialogType.normal,
+      ...(title ? { title } : {}),
+      ...(subText ? { subText } : {}),
+    }}
+    {...props}
+  >
+    {children}
 
-      {footer && <DialogFooter>{footer}</DialogFooter>}
-    </StyledModal>
-  );
-};
+    {footer && <DialogFooter>{footer}</DialogFooter>}
+  </StyledModal>
+);
 
 CDXModal.propTypes = {
   title: PropTypes.string,

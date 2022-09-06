@@ -108,9 +108,7 @@ export const useUserAuditLogsColumns = (selectedColumns: UserAuditLogsColumn[]) 
       dataType: 'string',
       sortable: false,
       filterable: false,
-      onRender: (item: UserAccountAuditLog) => {
-        return <span title={item.newValue ?? undefined}>{item.newValue}</span>;
-      },
+      onRender: (item: UserAccountAuditLog) => <span title={item.newValue ?? undefined}>{item.newValue}</span>,
     },
     {
       key: 'oldValue',
@@ -123,18 +121,14 @@ export const useUserAuditLogsColumns = (selectedColumns: UserAuditLogsColumn[]) 
       dataType: 'string',
       sortable: false,
       filterable: false,
-      onRender: (item: UserAccountAuditLog) => {
-        return <span title={item.oldValue ?? undefined}>{item.oldValue}</span>;
-      },
+      onRender: (item: UserAccountAuditLog) => <span title={item.oldValue ?? undefined}>{item.oldValue}</span>,
     },
   ];
 
   const initialColumns = (): DataColumn[] => {
     const initCols: DataColumn[] = [];
     selectedColumns.forEach((sCol: UserAuditLogsColumn) => {
-      const matching = columnOptions.find((colOpt: IColumn) => {
-        return colOpt.data === sCol;
-      });
+      const matching = columnOptions.find((colOpt: IColumn) => colOpt.data === sCol);
       if (matching != null) {
         initCols.push(matching);
       }

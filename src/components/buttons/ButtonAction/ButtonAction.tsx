@@ -10,7 +10,9 @@ type ButtonActionProps = {
   title?: string;
 };
 
-const ButtonAction = ({ id, children, iconName, disabled, onClick, title, ...props }: ButtonActionProps) => {
+const ButtonAction = ({
+  id, children, iconName, disabled, onClick, title, ...props
+}: ButtonActionProps) => {
   const _icon = { iconName };
 
   return (

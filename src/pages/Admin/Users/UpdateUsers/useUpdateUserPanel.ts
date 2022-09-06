@@ -55,8 +55,7 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
 
   const handleError = ErrorHandler();
 
-  const [callFindUserAccount, { data: dataFindUserAccount, error: findUserAccountError }] =
-    useFindUserAccountLazyQuery();
+  const [callFindUserAccount, { data: dataFindUserAccount, error: findUserAccountError }] = useFindUserAccountLazyQuery();
 
   const [callUpdateUser, { error: updateUserError }] = useUpdateUserMutation();
 
@@ -256,9 +255,7 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
     }
   };
 
-  const findCmd = (cmdType: CdxWebCommandType): WebCommand | undefined => {
-    return userAccountForm.commands?.find((cmd) => cmd?.commandType === cmdType);
-  };
+  const findCmd = (cmdType: CdxWebCommandType): WebCommand | undefined => userAccountForm.commands?.find((cmd) => cmd?.commandType === cmdType);
 
   //
   useEffect(() => {

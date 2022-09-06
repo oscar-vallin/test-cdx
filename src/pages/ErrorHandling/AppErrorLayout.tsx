@@ -1,6 +1,8 @@
 import React, { ReactElement } from 'react';
 import { LayoutLogin } from 'src/layouts/LayoutLogin';
-import { Card500, CenteredWrapper, K2ULogo, LogoRow } from 'src/layouts/LayoutLogin/LayoutLogin.styles';
+import {
+  Card500, CenteredWrapper, K2ULogo, LogoRow,
+} from 'src/layouts/LayoutLogin/LayoutLogin.styles';
 import { Column } from 'src/components/layouts';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { Button } from 'src/components/buttons';

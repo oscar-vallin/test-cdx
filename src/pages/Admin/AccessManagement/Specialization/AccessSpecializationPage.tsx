@@ -66,7 +66,7 @@ const AccessManagementSpecializationPage = () => {
   const [specializations, setSpecializations] = useState<Maybe<AccessSpecialization>[] | null>();
   const [accessSpecializationForOrg, { data, loading, error }] = useAccessSpecializationsForOrgLazyQuery();
   const [removeSpecialization, { data: removeResponse, loading: isRemovingSpecialization }] = useQueryHandler(
-    useDeleteAccessSpecializationMutation
+    useDeleteAccessSpecializationMutation,
   );
 
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
@@ -147,11 +147,11 @@ const AccessManagementSpecializationPage = () => {
     if (data) {
       setSpecializations(data?.accessSpecializationsForOrg?.nodes);
       const _createCmd = data?.accessSpecializationsForOrg?.listPageInfo?.pageCommands?.find(
-        (cmd) => cmd?.commandType === CdxWebCommandType.Create
+        (cmd) => cmd?.commandType === CdxWebCommandType.Create,
       );
       setCreateCmd(_createCmd);
       const _deleteCmd = data?.accessSpecializationsForOrg?.listPageInfo?.listItemCommands?.find(
-        (cmd) => cmd?.commandType === CdxWebCommandType.Delete
+        (cmd) => cmd?.commandType === CdxWebCommandType.Delete,
       );
       setDeleteCmd(_deleteCmd);
     }

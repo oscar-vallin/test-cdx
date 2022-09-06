@@ -24,21 +24,21 @@ type BoxProps = {
   bottom?: string;
 } & typeof defaultProps;
 
-const Box = ({ id, children, direction, left, right, top, bottom, ...props }: BoxProps): ReactElement => {
-  return (
-    <ComponentStyled
-      id={id}
-      direction={validateDirection(direction)}
-      className={getClassNames('ms-Grid-col', props)}
-      left={left}
-      right={right}
-      top={top}
-      bottom={bottom}
-    >
-      {children}
-    </ComponentStyled>
-  );
-};
+const Box = ({
+  id, children, direction, left, right, top, bottom, ...props
+}: BoxProps): ReactElement => (
+  <ComponentStyled
+    id={id}
+    direction={validateDirection(direction)}
+    className={getClassNames('ms-Grid-col', props)}
+    left={left}
+    right={right}
+    top={top}
+    bottom={bottom}
+  >
+    {children}
+  </ComponentStyled>
+);
 
 Box.defaultProps = defaultProps;
 

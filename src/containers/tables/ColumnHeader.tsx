@@ -31,7 +31,9 @@ type ColumnHeaderType = {
   onFilter?: (filterValue: any) => void;
 };
 
-export const ColumnHeader = ({ id, col, filterValue, onFilter }: ColumnHeaderType) => {
+export const ColumnHeader = ({
+  id, col, filterValue, onFilter,
+}: ColumnHeaderType) => {
   const filterText = useDelayedInputValue('', 'Filter', filterValue, 'text');
 
   const menuItems: IContextualMenuItem[] = [];
@@ -135,15 +137,13 @@ export const ColumnHeader = ({ id, col, filterValue, onFilter }: ColumnHeaderTyp
 
   const renderMenuList = (
     menuListProps?: IContextualMenuListProps,
-    defaultRender?: IRenderFunction<IContextualMenuListProps>
-  ) => {
-    return (
-      <div>
-        {defaultRender && defaultRender(menuListProps)}
-        {renderTextFilter()}
-      </div>
-    );
-  };
+    defaultRender?: IRenderFunction<IContextualMenuListProps>,
+  ) => (
+    <div>
+      {defaultRender && defaultRender(menuListProps)}
+      {renderTextFilter()}
+    </div>
+  );
 
   const buttonStyles: IButtonStyles = {
     root: {

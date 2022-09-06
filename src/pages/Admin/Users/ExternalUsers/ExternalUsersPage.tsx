@@ -6,7 +6,9 @@ import { Row, Column, Container } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { PageTitle } from 'src/components/typography';
 import { PageBody } from 'src/components/layouts/Column';
-import { useExternalUsersForOrgLazyQuery, CdxWebCommandType, UserItem, WebCommand } from 'src/data/services/graphql';
+import {
+  useExternalUsersForOrgLazyQuery, CdxWebCommandType, UserItem, WebCommand,
+} from 'src/data/services/graphql';
 import { UsersTable } from 'src/pages/Admin/Users/UsersTable';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { ROUTE_EXTERNAL_USERS } from 'src/data/constants/RouteConstants';
@@ -40,8 +42,8 @@ const ExternalUsersPage = () => {
       setUsers(data.externalUsersForOrg?.nodes);
       setAssignCmd(
         data.externalUsersForOrg?.listPageInfo?.pageCommands?.find(
-          (cmd) => cmd.commandType === CdxWebCommandType.Assign
-        )
+          (cmd) => cmd.commandType === CdxWebCommandType.Assign,
+        ),
       );
     }
 

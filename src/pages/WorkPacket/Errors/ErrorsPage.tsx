@@ -1,7 +1,9 @@
 import React from 'react';
 import { ROUTES } from 'src/data/constants/RouteConstants';
 import { WorkPacketColumn } from 'src/containers/tables/WorkPacketColumns';
-import { NullHandling, SortDirection, useWpProcessErrorsLazyQuery, WorkPacketStatus } from 'src/data/services/graphql';
+import {
+  NullHandling, SortDirection, useWpProcessErrorsLazyQuery, WorkPacketStatus,
+} from 'src/data/services/graphql';
 import { WorkPacketListPage } from 'src/pages/WorkPacket/WorkPacketListPage';
 
 export const ErrorsPage = () => {

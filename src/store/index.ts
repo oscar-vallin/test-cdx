@@ -1,4 +1,6 @@
-import { createStore, persist, thunkOn, ThunkOn } from 'easy-peasy';
+import {
+  createStore, persist, thunkOn, ThunkOn,
+} from 'easy-peasy';
 
 import { ThemeModel } from 'src/store/ThemeStore/ThemeStore';
 import { QueryParamModel } from 'src/store/QueryParamStore/QueryParamStore';

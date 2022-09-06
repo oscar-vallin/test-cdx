@@ -15,13 +15,13 @@ type CDXBadgeProps = {
   children?: ReactElement | string;
 } & typeof defaultProps;
 
-const CDXBadge = ({ id, variant = 'primary', pill, label, children }: CDXBadgeProps): ReactElement => {
-  return (
-    <StyledSpan id={id} variant={variant} pill={pill} className="cdx-badge">
-      {label || children}
-    </StyledSpan>
-  );
-};
+const CDXBadge = ({
+  id, variant = 'primary', pill, label, children,
+}: CDXBadgeProps): ReactElement => (
+  <StyledSpan id={id} variant={variant} pill={pill} className="cdx-badge">
+    {label || children}
+  </StyledSpan>
+);
 
 CDXBadge.defaultProps = defaultProps;
 

@@ -43,25 +43,23 @@ const Row = ({
   around,
   wrap,
   ...props
-}: RowProps): ReactElement => {
-  return (
-    <DivStyled
-      id={id}
-      variant={variant}
-      className={getClassNames('ms-Grid-row', props)}
-      center={center}
-      right={right}
-      top={top}
-      bottom={bottom}
-      between={between}
-      evenly={evenly}
-      around={around}
-      isWrap={wrap}
-    >
-      {children}
-    </DivStyled>
-  );
-};
+}: RowProps): ReactElement => (
+  <DivStyled
+    id={id}
+    variant={variant}
+    className={getClassNames('ms-Grid-row', props)}
+    center={center}
+    right={right}
+    top={top}
+    bottom={bottom}
+    between={between}
+    evenly={evenly}
+    around={around}
+    isWrap={wrap}
+  >
+    {children}
+  </DivStyled>
+);
 
 Row.defaultProps = defaultProps;
 

@@ -14,7 +14,7 @@ export const useActivityProcess = (startDate: Date, endDate: Date) => {
   const [apiError, setApiError] = useState<ApolloError | undefined>();
   const { orgSid } = useOrgSid();
   const [apiExchangeActivityInProcessLazy, { data, loading, error }] = useQueryHandler(
-    useExchangeActivityInProcessLazyQuery
+    useExchangeActivityInProcessLazyQuery,
   );
 
   useEffect(() => {

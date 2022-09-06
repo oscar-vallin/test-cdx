@@ -11,7 +11,9 @@ type FileProgressProps = {
   archiveOnly: boolean;
 };
 
-const FileProgress = ({ id, step, stepStatus, archiveOnly }: FileProgressProps): ReactElement | null => {
+const FileProgress = ({
+  id, step, stepStatus, archiveOnly,
+}: FileProgressProps): ReactElement | null => {
   const progressItem = getStepStatus(step, stepStatus, archiveOnly);
 
   if (!progressItem) return null;

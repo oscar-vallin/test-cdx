@@ -20,21 +20,17 @@ const PasswordRules = ({ user, password, onChange }: PasswordRulesParam) => {
   const [rules, setRules] = useState<PasswordValidation>();
   const [apiCall, { data, loading }] = usePasswordValidationLazyQuery();
 
-  const mustBeMetTitle = () => {
-    return (
-      <span>
-        Meet <strong>all</strong> of these
-      </span>
-    );
-  };
+  const mustBeMetTitle = () => (
+    <span>
+      Meet <strong>all</strong> of these
+    </span>
+  );
 
-  const someMustBeMetTitle = (requiredNumPassingRules: number) => {
-    return (
-      <span>
-        Meet <strong>{requiredNumPassingRules}</strong> of these
-      </span>
-    );
-  };
+  const someMustBeMetTitle = (requiredNumPassingRules: number) => (
+    <span>
+      Meet <strong>{requiredNumPassingRules}</strong> of these
+    </span>
+  );
 
   useEffect(() => {
     apiCall({

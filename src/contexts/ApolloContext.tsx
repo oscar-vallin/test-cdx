@@ -1,5 +1,9 @@
-import { ReactElement, ReactNode, createContext, useState, useEffect, useMemo } from 'react';
-import { ApolloProvider, ApolloClient, InMemoryCache, HttpLink, ApolloLink } from '@apollo/client';
+import {
+  ReactElement, ReactNode, createContext, useState, useEffect, useMemo,
+} from 'react';
+import {
+  ApolloProvider, ApolloClient, InMemoryCache, HttpLink, ApolloLink,
+} from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { useWatchCSRFToken } from 'src/hooks/useWatchCSRFToken';
 import { LoadingPage } from 'src/pages/Loading/LoadingPage';
@@ -40,21 +44,15 @@ export const ApolloContextProvider = ({ bypassLoading, children }: ApolloContext
     callCSRFController().then();
   }, []);
 
-  const authLink = setContext((_, { headers }) => {
-    return {
-      credentials: 'include',
-      headers: {
-        ...headers,
-        'X-XSRF-Token': getCSRFToken() || '',
-      },
-    };
-  });
+  const authLink = setContext((_, { headers }) => ({
+    credentials: 'include',
+    headers: {
+      ...headers,
+      'X-XSRF-Token': getCSRFToken() || '',
+    },
+  }));
 
-  const afterwareLink = new ApolloLink((operation, forward) => {
-    return forward(operation).map((response) => {
-      return response;
-    });
-  });
+  const afterwareLink = new ApolloLink((operation, forward) => forward(operation).map((response) => response));
 
   const uploadLink = createUploadLink({ uri: SERVER_URL });
 

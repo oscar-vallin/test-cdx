@@ -13,18 +13,18 @@ type UIInputCheckType = {
   value?: boolean;
   alignBottom?: boolean;
 };
-export const UIInputCheck = ({ id, uiField, onChange, value, alignBottom }: UIInputCheckType) => {
-  const renderLabel = () => {
-    return (
-      <span>
-        <InlineLabel required={uiField?.required}>{uiField?.label}</InlineLabel>
-        <InfoIcon id={`${id}_Info`} tooltip={uiField?.info} />
-        <ErrorIcon id={`${id}-ErrorMsg`} errorMessage={uiField?.errMsg} />
-        <InheritedFromIcon id={`${id}-inheritedFrom`} tooltip={uiField?.inheritedFrom} />
-        <InheritedByIcon id={`${id}-inheritedBy`} tooltip={uiField?.inheritedBy && uiField?.inheritedBy[0]} />
-      </span>
-    );
-  };
+export const UIInputCheck = ({
+  id, uiField, onChange, value, alignBottom,
+}: UIInputCheckType) => {
+  const renderLabel = () => (
+    <span>
+      <InlineLabel required={uiField?.required}>{uiField?.label}</InlineLabel>
+      <InfoIcon id={`${id}_Info`} tooltip={uiField?.info} />
+      <ErrorIcon id={`${id}-ErrorMsg`} errorMessage={uiField?.errMsg} />
+      <InheritedFromIcon id={`${id}-inheritedFrom`} tooltip={uiField?.inheritedFrom} />
+      <InheritedByIcon id={`${id}-inheritedBy`} tooltip={uiField?.inheritedBy && uiField?.inheritedBy[0]} />
+    </span>
+  );
 
   if (!uiField?.visible) {
     return null;

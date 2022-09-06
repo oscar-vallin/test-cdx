@@ -42,23 +42,21 @@ const Column = ({
   bottom,
   centerV,
   ...props
-}: ColumnProps): ReactElement => {
-  return (
-    <DivStyled
-      id={id}
-      variant={variant}
-      className={getClassNames('ms-Grid-col', props)}
-      center={center}
-      right={right}
-      top={top}
-      bottom={bottom}
-      centerV={centerV}
-      direction={direction}
-    >
-      {children}
-    </DivStyled>
-  );
-};
+}: ColumnProps): ReactElement => (
+  <DivStyled
+    id={id}
+    variant={variant}
+    className={getClassNames('ms-Grid-col', props)}
+    center={center}
+    right={right}
+    top={top}
+    bottom={bottom}
+    centerV={centerV}
+    direction={direction}
+  >
+    {children}
+  </DivStyled>
+);
 
 Column.defaultProps = defaultProps;
 

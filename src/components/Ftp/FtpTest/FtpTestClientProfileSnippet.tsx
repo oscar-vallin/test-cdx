@@ -11,22 +11,20 @@ const FtpTestClientProfileSnippet = ({ clientProfileSnippet }) => {
       Toast.success({ text: 'Copied!' });
     });
   };
-  const renderClientProfileSnippet = () => {
-    return (
-      <Spacing margin={{ bottom: 'normal', top: 'normal' }}>
-        {clientProfileSnippet && (
-          <TextField
-            id="clientProfileSnippet"
-            multiline
-            disabled
-            value={clientProfileSnippet}
-            rows={12}
-            resizable={false}
-          />
-        )}
-      </Spacing>
-    );
-  };
+  const renderClientProfileSnippet = () => (
+    <Spacing margin={{ bottom: 'normal', top: 'normal' }}>
+      {clientProfileSnippet && (
+      <TextField
+        id="clientProfileSnippet"
+        multiline
+        disabled
+        value={clientProfileSnippet}
+        rows={12}
+        resizable={false}
+      />
+      )}
+    </Spacing>
+  );
   return (
     <Spacing margin={{ bottom: 'normal', top: 'normal' }}>
       <Stack horizontal={true} horizontalAlign="space-between">

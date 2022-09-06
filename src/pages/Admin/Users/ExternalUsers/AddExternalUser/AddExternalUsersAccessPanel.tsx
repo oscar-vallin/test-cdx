@@ -1,10 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactElement, useState } from 'react';
-import { MessageBar, MessageBarType, PanelType, Stack, ITag } from '@fluentui/react';
+import {
+  MessageBar, MessageBarType, PanelType, Stack, ITag,
+} from '@fluentui/react';
 import { useApolloClient } from '@apollo/client';
 
 import { Tabs } from 'src/components/tabs/Tabs';
-import { PanelBody, PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
+import {
+  PanelBody, PanelHeader, PanelTitle, ThemedPanel,
+} from 'src/layouts/Panels/Panels.styles';
 
 import { useNotification } from 'src/hooks/useNotification';
 import { GqOperationResponse, UserAccountForm } from 'src/data/services/graphql';
@@ -34,7 +38,9 @@ const AddExternalUsersAccessPanel = ({
 }: AddExternalUsersAccessPanelProps): ReactElement => {
   const externalUsersAccessService = useExternalUsersAccessService(orgSid);
 
-  const { selectedTab, handleNext, handlePrev, handleTabChange, resetTabs } = useWizardTabs(tabs);
+  const {
+    selectedTab, handleNext, handlePrev, handleTabChange, resetTabs,
+  } = useWizardTabs(tabs);
   const [showDialog, setShowDialog] = useState(false);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [isProcessing, setProcessing] = useState<boolean>(false);
@@ -72,13 +78,9 @@ const AddExternalUsersAccessPanel = ({
     }
   };
 
-  const findExternalUsers = async (text: string): Promise<ITag[]> => {
-    return externalUsersAccessService.callFindExternalUsers(client, handleError, text);
-  };
+  const findExternalUsers = async (text: string): Promise<ITag[]> => externalUsersAccessService.callFindExternalUsers(client, handleError, text);
 
-  const handleFindExternalUsers = (text: string) => {
-    return findExternalUsers(text);
-  };
+  const handleFindExternalUsers = (text: string) => findExternalUsers(text);
 
   const handleGrantAccess = async () => {
     setProcessing(true);

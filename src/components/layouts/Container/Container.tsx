@@ -21,9 +21,7 @@ type ContainerProps = {
   bottom?: string;
 } & typeof defaultProps;
 
-const Container = ({ children, ...props }: ContainerProps): ReactElement => {
-  return <StyledBox {...props}>{children}</StyledBox>;
-};
+const Container = ({ children, ...props }: ContainerProps): ReactElement => <StyledBox {...props}>{children}</StyledBox>;
 
 Container.defaultProps = defaultProps;
 

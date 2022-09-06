@@ -34,7 +34,9 @@ type AccessPolicyMembersProps = {
   currentName: string;
 };
 
-const AccessPolicyMembersPanel = ({ isOpen, closePanel, selectedPolicyId, currentName }: AccessPolicyMembersProps) => {
+const AccessPolicyMembersPanel = ({
+  isOpen, closePanel, selectedPolicyId, currentName,
+}: AccessPolicyMembersProps) => {
   const { orgSid } = useOrgSid();
   const [accessPolicyMembers, setAccessPolicyMembers] = useState<AccessMemberConnection | null>();
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>();

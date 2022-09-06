@@ -9,7 +9,9 @@ type WalkThroughType = {
   onDismiss: () => void;
 };
 
-export const WalkThrough = ({ id, show, tour, onDismiss }: WalkThroughType) => {
+export const WalkThrough = ({
+  id, show, tour, onDismiss,
+}: WalkThroughType) => {
   const [step, setStep] = useState(0);
 
   const dismiss = () => {
@@ -17,18 +19,16 @@ export const WalkThrough = ({ id, show, tour, onDismiss }: WalkThroughType) => {
     onDismiss();
   };
 
-  const nextButton = (isLast: boolean): IButtonProps => {
-    return {
-      children: isLast ? 'Finish' : 'Next',
-      onClick: () => {
-        if (isLast) {
-          dismiss();
-        } else {
-          setStep(step + 1);
-        }
-      },
-    };
-  };
+  const nextButton = (isLast: boolean): IButtonProps => ({
+    children: isLast ? 'Finish' : 'Next',
+    onClick: () => {
+      if (isLast) {
+        dismiss();
+      } else {
+        setStep(step + 1);
+      }
+    },
+  });
 
   const prevButton: IButtonProps = {
     children: 'Previous',
