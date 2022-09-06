@@ -294,10 +294,10 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
               )}
               <Text style={styles}>
                 {data.label}{' '}
-                {subTitle && subTitle.trim() !== '' && subTitle.length > 37 ? (
+                {subTitle && subTitle.trim() !== '' && subTitle.length > 28 ? (
                   <StyledSubTitleText>
-                    <span style={{ fontSize: '10px' }}>{subTitle.substring(0, 28)}</span>
-                    <span style={{ position: 'relative', fontSize: '10px', bottom: '8px' }}>
+                    <span style={{ fontSize: '10px' }}>{subTitle.substring(0, 28)}{' '}</span>
+                    <span style={{ position: 'relative', fontSize: '10px', bottom: '10px' }}>
                       {subTitle.substring(28, subTitle.length)}
                     </span>
                   </StyledSubTitleText>
