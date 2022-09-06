@@ -1,11 +1,9 @@
 import { ReactElement } from 'react';
-import {
-  IColumn, DetailsListLayoutMode, SelectionMode, DetailsList,
-} from '@fluentui/react';
+import { ConstrainMode, DetailsList, DetailsListLayoutMode, IColumn, SelectionMode, } from '@fluentui/react';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { RecordCounts } from 'src/data/services/graphql';
 import { EmptyState } from 'src/containers/states';
-import { StatsRow, StyledVendorHeaderRow, StatsFooter } from '../FileStatusDetails.styles';
+import { StatsFooter, StatsRow, StyledVendorHeaderRow } from '../FileStatusDetails.styles';
 
 const COLUMNS: IColumn[] = [
   { key: 'name', name: 'Record Name', fieldName: 'name' },
@@ -49,6 +47,7 @@ const VendorCountStatsTab = ({ items }: VendorCountStatsTabProps): ReactElement 
           onRenderDetailsHeader={onRenderDetailsHeader}
           onRenderDetailsFooter={(args) => onRenderDetailsFooter(items?.totalCount, args)}
           isHeaderVisible
+          constrainMode={ConstrainMode.unconstrained}
         />
       </Spacing>
     );
