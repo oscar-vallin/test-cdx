@@ -869,7 +869,7 @@ const XchangeTransmissionPanel = ({
   useEffect(() => {
     if (!loadingCopyTransmission && dataCopyTransmission) {
       setOptionXchangeTransmission('copy');
-      console.log(dataCopyTransmission?.copyXchangeFileTransmission)
+      console.log(dataCopyTransmission?.copyXchangeFileTransmission);
       setXchangeFileTransmission(dataCopyTransmission?.copyXchangeFileTransmission);
       if (
         dataCopyTransmission.copyXchangeFileTransmission?.filenameQualifiers.value &&
@@ -998,7 +998,7 @@ const XchangeTransmissionPanel = ({
       {renderBody()}
       <DialogYesNo {...dialogProps} open={showDialog} />
       {testFileTransmissionModal && (
-        <TestFileTransmissionModal 
+        <TestFileTransmissionModal
           isOpen={setTestFileTransmissionModal}
           open={testFileTransmissionModal}
           ftpTestCurrentData={{

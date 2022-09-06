@@ -2922,7 +2922,8 @@ export enum UserAccountAuditEvent {
   InactiveLoginAttempt = 'INACTIVE_LOGIN_ATTEMPT',
   LockedLoginAttempt = 'LOCKED_LOGIN_ATTEMPT',
   Logout = 'LOGOUT',
-  ArchiveAccess = 'ARCHIVE_ACCESS'
+  ArchiveAccess = 'ARCHIVE_ACCESS',
+  WorkPacketAction = 'WORK_PACKET_ACTION'
 }
 
 export type UserAccountAuditLog = {

@@ -7,9 +7,7 @@
   "extends": [
     "plugin:react/recommended",
     "airbnb",
-    "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint",
-    "plugin:prettier/recommended"
+    "plugin:@typescript-eslint/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -19,7 +17,7 @@
     "ecmaVersion": 2020,
     "sourceType": "module"
   },
-  "plugins": ["react", "react-hooks", "@typescript-eslint", "prettier", "only-warn"],
+  "plugins": ["react", "react-hooks", "@typescript-eslint", "only-warn"],
   "rules": {
     "semi": 0,
     "react-hooks/rules-of-hooks": "error",
@@ -39,7 +37,6 @@
         "jsx": "never"
       }
     ],
-    "prettier/prettier": "error",
     "react/jsx-one-expression-per-line": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "react/jsx-props-no-spreading": "off",
