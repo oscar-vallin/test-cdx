@@ -429,18 +429,29 @@ const FileStatusDetailsPanel = (
   };
 
   const buildTabs = (): CDXTabsItemType[] => {
-    const tabs: CDXTabsItemType[] = [
-      {
-        title: 'Enrollment Stats',
-        hash: '#enrollment',
-        content: <EnrollmentStatsTab packet={packet} />,
-      },
-      {
-        title: 'Vendor Count Stats',
-        hash: '#vendor',
-        content: <VendorCountStatsTab items={packet?.outboundRecordCounts} />,
-      },
-    ];
+    const tabs: CDXTabsItemType[] = [];
+    if (packet?.enrollmentStats?.excludedInsuredStat
+      || (packet?.enrollmentStats?.excludedPlanInsuredStat?.length ?? 0) > 0
+      || packet?.enrollmentStats?.insuredStat
+      || (packet?.enrollmentStats?.planInsuredStat?.length ?? 0) > 0
+    ) {
+      tabs.push(
+        {
+          title: 'Enrollment Stats',
+          hash: '#enrollment',
+          content: <EnrollmentStatsTab packet={packet} />,
+        },
+      );
+    }
+    if (packet?.outboundRecordCounts?.totalCount) {
+      tabs.push(
+        {
+          title: 'Vendor Count Stats',
+          hash: '#vendor',
+          content: <VendorCountStatsTab items={packet?.outboundRecordCounts} />,
+        },
+      );
+    }
     if (packet?.workStepStatus && packet.workStepStatus.length > 0) {
       tabs.push({
         title: 'Work Steps',
