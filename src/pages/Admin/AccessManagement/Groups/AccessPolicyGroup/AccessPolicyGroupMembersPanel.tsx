@@ -10,62 +10,42 @@ import {
   Stack,
 } from '@fluentui/react';
 import { PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
-import {
-  useAccessPolicyMembersLazyQuery,
-  AccessMemberConnection,
-  AccessMember,
-  ActiveEnum,
-  useAccessPolicyGroupsForOrgLazyQuery,
-  useAccessPolicyGroupTemplatesLazyQuery,
-} from 'src/data/services/graphql';
-import { useOrgSid } from 'src/hooks/useOrgSid';
+import { useAccessPolicyGroupMembersLazyQuery, AccessMember, ActiveEnum } from 'src/data/services/graphql';
 import { useUsersLists } from 'src/pages/Admin/Users/useUsersList';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 import { ButtonLink } from 'src/components/buttons';
 import { DataColumn, useSortableColumns } from 'src/containers/tables';
 import { UpdateUserPanel, useUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers';
-import { AccessPolicyGroupPanel } from '../../Groups/AccessPolicyGroup';
 
 type AccessPolicyMembersProps = {
   isOpen: boolean;
   closePanel: (data: boolean) => void;
-  selectedPolicyId: string;
+  selectedGroupId: string;
   currentName: string;
 };
 
-const AccessPolicyMembersPanel = ({
-  isOpen, closePanel, selectedPolicyId, currentName,
+const AccessPolicyGroupMembersPanel = ({
+  isOpen,
+  closePanel,
+  selectedGroupId,
+  currentName,
 }: AccessPolicyMembersProps) => {
-  const { orgSid } = useOrgSid();
-  const [accessPolicyMembers, setAccessPolicyMembers] = useState<AccessMemberConnection | null>();
-  const [selectedGroupId, setSelectedGroupId] = useState<string | null>();
-  const [isGroupPanelOpen, setIsGroupPanelOpen] = useState(false);
-  const [apiAmGroupsForOrg] = useAccessPolicyGroupsForOrgLazyQuery();
-  const [fetchTemplates] = useAccessPolicyGroupTemplatesLazyQuery({
-    variables: {
-      orgSid,
-    },
-  });
-  const [policyMembers, { data: accessMembers, loading: isLoadingAccessMembers }] = useAccessPolicyMembersLazyQuery();
+  const [groupMembers, setGroupMembers] = useState<AccessMember[] | null>();
+
+  const [policyMembers, { data: accessPolicyGroupMembersData, loading: isLoadingAccessGroupMembers }] =
+    useAccessPolicyGroupMembersLazyQuery();
 
   const updateUserPanel = useUpdateUserPanel();
 
   const userService = useUsersLists(ActiveEnum.Active);
-
-  const fetchData = () => {
-    apiAmGroupsForOrg({ variables: { orgSid } });
-    if (orgSid) {
-      fetchTemplates({ variables: { orgSid } });
-    }
-  };
 
   const columnOptions: DataColumn[] = [
     {
       name: 'First Name',
       key: 'firstNm',
       fieldName: 'person.firstNm',
-      minWidth: 100,
+      minWidth: 200,
       maxWidth: 200,
       isPadded: true,
       dataType: 'string',
@@ -106,24 +86,14 @@ const AccessPolicyMembersPanel = ({
       sortable: true,
       filterable: false,
     },
-    {
-      name: 'Access Policy Groups',
-      key: 'accessPolicyGroups',
-      fieldName: 'accessName',
-      minWidth: 200,
-      isPadded: true,
-      dataType: 'string',
-      sortable: true,
-      filterable: false,
-    },
   ];
-  const tableFilters = useTableFilters('Name, Last Name, Email, Organization, Access Policy Groups, etc.');
+  const tableFilters = useTableFilters('Name, Last Name, Email, Organization, etc.');
   const { columns } = useSortableColumns(tableFilters, columnOptions);
 
   const getMembers = () => {
     policyMembers({
       variables: {
-        policySid: selectedPolicyId,
+        policyGroupSid: selectedGroupId,
         pageableInput: tableFilters.pagingParams,
       },
     });
@@ -136,10 +106,10 @@ const AccessPolicyMembersPanel = ({
   }, [isOpen, tableFilters.pagingParams]);
 
   useEffect(() => {
-    if (!isLoadingAccessMembers && accessMembers) {
-      setAccessPolicyMembers(accessMembers?.accessPolicyMembers);
+    if (!isLoadingAccessGroupMembers && accessPolicyGroupMembersData) {
+      setGroupMembers(accessPolicyGroupMembersData.accessPolicyGroupMembers?.nodes);
     }
-  }, [accessMembers, isLoadingAccessMembers]);
+  }, [accessPolicyGroupMembersData, isLoadingAccessGroupMembers]);
 
   useEffect(() => {
     // Reset the page number when any filtering occurs
@@ -153,7 +123,6 @@ const AccessPolicyMembersPanel = ({
 
   const onRenderItemColumn = (item: AccessMember, index?: number, column?: IColumn) => {
     let columnVal: string | undefined;
-    const accessPolicyGroupsSid = item.accessPolicyGroups ? item.accessPolicyGroups[0].sid : '';
     if (column?.key === 'firstNm') {
       columnVal = item.firstNm;
     } else if (column?.key === 'lastNm') {
@@ -162,24 +131,8 @@ const AccessPolicyMembersPanel = ({
       columnVal = item.email;
     } else if (column?.key === 'organization') {
       columnVal = item.organization.name ?? '';
-    } else if (column?.key === 'accessPolicyGroups') {
-      columnVal = item.accessPolicyGroups ? item.accessPolicyGroups[0].name : '';
     }
 
-    if (column?.key === 'accessPolicyGroups') {
-      return (
-        <ButtonLink
-          title={columnVal}
-          style={{ overflow: 'hidden' }}
-          onClick={() => {
-            setSelectedGroupId(accessPolicyGroupsSid ?? '');
-            setIsGroupPanelOpen(true);
-          }}
-        >
-          {columnVal}
-        </ButtonLink>
-      );
-    }
     if (column?.key === 'organization') {
       return (
         <ButtonLink style={{ overflow: 'hidden' }} title={columnVal}>
@@ -200,12 +153,12 @@ const AccessPolicyMembersPanel = ({
   };
 
   const renderPanelHeader = () => {
-    if (!isLoadingAccessMembers) {
+    if (!isLoadingAccessGroupMembers) {
       return (
         <PanelHeader id="__PanelHeader">
           <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
-            <PanelTitle id="__AccessPolicyMembers_Panel_Title" variant="bold" size="large">
-              {currentName} - ({accessPolicyMembers?.nodes?.length})
+            <PanelTitle id="__AccessPolicyGroupMembers_Panel_Title" variant="bold" size="large">
+              {currentName}
             </PanelTitle>
           </Stack>
         </PanelHeader>
@@ -215,17 +168,17 @@ const AccessPolicyMembersPanel = ({
   };
 
   const renderBody = () => {
-    if (isLoadingAccessMembers) {
+    if (isLoadingAccessGroupMembers) {
       return (
         <Spacing margin={{ top: 'double' }}>
-          <Spinner size={SpinnerSize.large} label="Loading access policy members" />
+          <Spinner size={SpinnerSize.large} label="Loading access policy group members" />
         </Spacing>
       );
     }
 
     return (
       <DetailsList
-        items={accessPolicyMembers?.nodes ?? []}
+        items={groupMembers ?? []}
         selectionMode={SelectionMode.none}
         columns={columns}
         layoutMode={DetailsListLayoutMode.justified}
@@ -251,23 +204,8 @@ const AccessPolicyMembersPanel = ({
           userService.fetchUsers(0, tableFilters.pagingParams.sort, tableFilters.searchText.delayedValue).then();
         }}
       />
-
-      <AccessPolicyGroupPanel
-        isOpen={isGroupPanelOpen}
-        onCreateGroupPolicy={() => {
-          fetchData();
-        }}
-        onUpdateGroupPolicy={() => {
-          fetchData();
-        }}
-        onDismiss={() => {
-          setIsGroupPanelOpen(false);
-          setSelectedGroupId(null);
-        }}
-        selectedGroupId={selectedGroupId}
-      />
     </ThemedPanel>
   );
 };
 
-export { AccessPolicyMembersPanel };
+export default AccessPolicyGroupMembersPanel;

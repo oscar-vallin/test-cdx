@@ -1,5 +1,12 @@
 import { useEffect, useState } from 'react';
 import {
+  useAccessSpecializationMembersLazyQuery,
+  AccessMember,
+  ActiveEnum,
+  useAccessPolicyGroupsForOrgLazyQuery,
+  useAccessPolicyGroupTemplatesLazyQuery,
+} from 'src/data/services/graphql';
+import {
   DetailsList,
   DetailsListLayoutMode,
   IColumn,
@@ -10,35 +17,30 @@ import {
   Stack,
 } from '@fluentui/react';
 import { PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
-import {
-  useAccessPolicyMembersLazyQuery,
-  AccessMemberConnection,
-  AccessMember,
-  ActiveEnum,
-  useAccessPolicyGroupsForOrgLazyQuery,
-  useAccessPolicyGroupTemplatesLazyQuery,
-} from 'src/data/services/graphql';
-import { useOrgSid } from 'src/hooks/useOrgSid';
-import { useUsersLists } from 'src/pages/Admin/Users/useUsersList';
-import { Spacing } from 'src/components/spacings/Spacing';
 import { useTableFilters } from 'src/hooks/useTableFilters';
-import { ButtonLink } from 'src/components/buttons';
+import { Spacing } from 'src/components/spacings/Spacing';
 import { DataColumn, useSortableColumns } from 'src/containers/tables';
+import { ButtonLink } from 'src/components/buttons';
 import { UpdateUserPanel, useUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers';
+import { useUsersLists } from 'src/pages/Admin/Users/useUsersList';
+import { useOrgSid } from 'src/hooks/useOrgSid';
 import { AccessPolicyGroupPanel } from '../../Groups/AccessPolicyGroup';
 
-type AccessPolicyMembersProps = {
+type AccessSpecializationMembersProps = {
   isOpen: boolean;
   closePanel: (data: boolean) => void;
-  selectedPolicyId: string;
+  selectedAccessId: string;
   currentName: string;
 };
 
-const AccessPolicyMembersPanel = ({
-  isOpen, closePanel, selectedPolicyId, currentName,
-}: AccessPolicyMembersProps) => {
+const AccessSpecializationMembersPanel = ({
+  isOpen,
+  closePanel,
+  selectedAccessId,
+  currentName,
+}: AccessSpecializationMembersProps) => {
   const { orgSid } = useOrgSid();
-  const [accessPolicyMembers, setAccessPolicyMembers] = useState<AccessMemberConnection | null>();
+  const [members, setMembers] = useState<AccessMember[] | null>();
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>();
   const [isGroupPanelOpen, setIsGroupPanelOpen] = useState(false);
   const [apiAmGroupsForOrg] = useAccessPolicyGroupsForOrgLazyQuery();
@@ -47,7 +49,9 @@ const AccessPolicyMembersPanel = ({
       orgSid,
     },
   });
-  const [policyMembers, { data: accessMembers, loading: isLoadingAccessMembers }] = useAccessPolicyMembersLazyQuery();
+
+  const [accessSpecializationMembers, { data: specializationMembersData, loading: isLoadingSpecializationMembers }] =
+    useAccessSpecializationMembersLazyQuery();
 
   const updateUserPanel = useUpdateUserPanel();
 
@@ -65,7 +69,7 @@ const AccessPolicyMembersPanel = ({
       name: 'First Name',
       key: 'firstNm',
       fieldName: 'person.firstNm',
-      minWidth: 100,
+      minWidth: 200,
       maxWidth: 200,
       isPadded: true,
       dataType: 'string',
@@ -97,16 +101,6 @@ const AccessPolicyMembersPanel = ({
       flexGrow: 1,
     },
     {
-      name: 'Organization',
-      key: 'organization',
-      fieldName: 'orgName',
-      minWidth: 200,
-      isPadded: true,
-      dataType: 'string',
-      sortable: true,
-      filterable: false,
-    },
-    {
       name: 'Access Policy Groups',
       key: 'accessPolicyGroups',
       fieldName: 'accessName',
@@ -117,13 +111,13 @@ const AccessPolicyMembersPanel = ({
       filterable: false,
     },
   ];
-  const tableFilters = useTableFilters('Name, Last Name, Email, Organization, Access Policy Groups, etc.');
+  const tableFilters = useTableFilters('Name, Last Name, Email, Access Policy Groups, etc.');
   const { columns } = useSortableColumns(tableFilters, columnOptions);
 
-  const getMembers = () => {
-    policyMembers({
+  const getspecializationMembers = () => {
+    accessSpecializationMembers({
       variables: {
-        policySid: selectedPolicyId,
+        specializationSid: selectedAccessId,
         pageableInput: tableFilters.pagingParams,
       },
     });
@@ -131,15 +125,15 @@ const AccessPolicyMembersPanel = ({
 
   useEffect(() => {
     if (isOpen) {
-      getMembers();
+      getspecializationMembers();
     }
-  }, [isOpen, tableFilters.pagingParams]);
+  }, [isOpen]);
 
   useEffect(() => {
-    if (!isLoadingAccessMembers && accessMembers) {
-      setAccessPolicyMembers(accessMembers?.accessPolicyMembers);
+    if (!isLoadingSpecializationMembers && specializationMembersData) {
+      setMembers(specializationMembersData.accessSpecializationMembers?.nodes);
     }
-  }, [accessMembers, isLoadingAccessMembers]);
+  }, [specializationMembersData, isLoadingSpecializationMembers]);
 
   useEffect(() => {
     // Reset the page number when any filtering occurs
@@ -160,8 +154,6 @@ const AccessPolicyMembersPanel = ({
       columnVal = item.lastNm ?? '';
     } else if (column?.key === 'email') {
       columnVal = item.email;
-    } else if (column?.key === 'organization') {
-      columnVal = item.organization.name ?? '';
     } else if (column?.key === 'accessPolicyGroups') {
       columnVal = item.accessPolicyGroups ? item.accessPolicyGroups[0].name : '';
     }
@@ -200,12 +192,12 @@ const AccessPolicyMembersPanel = ({
   };
 
   const renderPanelHeader = () => {
-    if (!isLoadingAccessMembers) {
+    if (!isLoadingSpecializationMembers) {
       return (
         <PanelHeader id="__PanelHeader">
           <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
-            <PanelTitle id="__AccessPolicyMembers_Panel_Title" variant="bold" size="large">
-              {currentName} - ({accessPolicyMembers?.nodes?.length})
+            <PanelTitle id="__AccessSpecializationMembers_Panel_Title" variant="bold" size="large">
+              {currentName} - {members?.length}
             </PanelTitle>
           </Stack>
         </PanelHeader>
@@ -215,17 +207,17 @@ const AccessPolicyMembersPanel = ({
   };
 
   const renderBody = () => {
-    if (isLoadingAccessMembers) {
+    if (isLoadingSpecializationMembers) {
       return (
         <Spacing margin={{ top: 'double' }}>
-          <Spinner size={SpinnerSize.large} label="Loading access policy members" />
+          <Spinner size={SpinnerSize.large} label="Loading access specialization members" />
         </Spacing>
       );
     }
 
     return (
       <DetailsList
-        items={accessPolicyMembers?.nodes ?? []}
+        items={members ?? []}
         selectionMode={SelectionMode.none}
         columns={columns}
         layoutMode={DetailsListLayoutMode.justified}
@@ -270,4 +262,4 @@ const AccessPolicyMembersPanel = ({
   );
 };
 
-export { AccessPolicyMembersPanel };
+export default AccessSpecializationMembersPanel;
