@@ -267,48 +267,48 @@ const AccessSpecializationPanel = ({
                 <Spacing padding="normal" key={`space_${groupIndex}`}>
                   <Row>
                     <Column lg="12">
-                        <Spacing margin={{ bottom: 'normal' }}>
-                          <Row>
-                            <Column lg="3">
-                              <Text variant="bold">{group.labelKey}</Text>
+                      <Spacing margin={{ bottom: 'normal' }}>
+                        <Row>
+                          <Column lg="3">
+                            <Text variant="bold">{group.labelKey}</Text>
+                          </Column>
+                          <Column lg="9">
+                            <Text variant="bold">{group.valueKey}</Text>
+                          </Column>
+                        </Row>
+                      </Spacing>
+
+                      {group.options?.map((option, optIndex) => (
+                        <Spacing margin={{ top: 'small', bottom: 'small' }} key={`group_${optIndex}`}>
+                          <Row center>
+                            <Column lg="3" key={`${groupIndex}-${optIndex}-left`}>
+                              <Text>{option.label}</Text>
                             </Column>
-                            <Column lg="9">
-                              <Text variant="bold">{group.valueKey}</Text>
+
+                            <Column lg="9" key={`${groupIndex}-${optIndex}-right`}>
+                              <TagPicker
+                                disabled={option.orgSids.readOnly}
+                                debounce={500}
+                                id={`__Specialization_${option.permission}`}
+                                doSearch={(searchText) => doOrgSearch(option, searchText)}
+                                value={specializations[option.permission]}
+                                onChange={(items) => {
+                                  setUnsavedChanges(true);
+
+                                  const { permission } = option;
+
+                                  setCurrentItem({
+                                    [permission]: items,
+                                  });
+
+                                  return null;
+                                }}
+                              />
                             </Column>
                           </Row>
                         </Spacing>
-
-                        {group.options?.map((option, optIndex) => (
-                          <Spacing margin={{ top: 'small', bottom: 'small' }} key={`group_${optIndex}`}>
-                            <Row center>
-                              <Column lg="3" key={`${groupIndex}-${optIndex}-left`}>
-                                <Text>{option.label}</Text>
-                              </Column>
-
-                              <Column lg="9" key={`${groupIndex}-${optIndex}-right`}>
-                                <TagPicker
-                                  disabled={option.orgSids.readOnly}
-                                  debounce={500}
-                                  id={`__Specialization_${option.permission}`}
-                                  doSearch={(searchText) => doOrgSearch(option, searchText)}
-                                  value={specializations[option.permission]}
-                                  onChange={(items) => {
-                                    setUnsavedChanges(true);
-
-                                    const { permission } = option;
-
-                                    setCurrentItem({
-                                      [permission]: items,
-                                    });
-
-                                    return null;
-                                  }}
-                                />
-                              </Column>
-                            </Row>
-                          </Spacing>
-                        ))}
-                      </Column>
+                      ))}
+                    </Column>
                   </Row>
                 </Spacing>
               </Card>

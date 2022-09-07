@@ -516,29 +516,29 @@ const XChangePage = () => {
                 <>
                   <Column lg="3" md={12}>
                     <StyledIconsComments>
-                        <IconButton iconProps={{ iconName: 'Save' }} onClick={sendComment} />
-                        <Text variant="small">Save</Text>
-                      </StyledIconsComments>
+                      <IconButton iconProps={{ iconName: 'Save' }} onClick={sendComment} />
+                      <Text variant="small">Save</Text>
+                    </StyledIconsComments>
                   </Column>
                   <Column lg="3">
                     <StyledIconsComments>
-                        <IconButton
-                          iconProps={{ iconName: 'Cancel' }}
-                          onClick={() => {
-                            setEditComment(false);
-                            setComment(dataXchange.xchangeProfile.comments);
-                          }}
-                        />
-                        <Text variant="small">Cancel</Text>
-                      </StyledIconsComments>
+                      <IconButton
+                        iconProps={{ iconName: 'Cancel' }}
+                        onClick={() => {
+                          setEditComment(false);
+                          setComment(dataXchange.xchangeProfile.comments);
+                        }}
+                      />
+                      <Text variant="small">Cancel</Text>
+                    </StyledIconsComments>
                   </Column>
                 </>
               ) : (
                 <Column lg="6" right>
                   <IconButton
-                      iconProps={{ iconName: 'EditSolid12' }}
-                      onClick={() => setEditComment(updateCmd !== undefined && true)}
-                    />
+                    iconProps={{ iconName: 'EditSolid12' }}
+                    onClick={() => setEditComment(updateCmd !== undefined && true)}
+                  />
                 </Column>
               )}
             </Row>

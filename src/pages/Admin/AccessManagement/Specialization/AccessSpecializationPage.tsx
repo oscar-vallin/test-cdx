@@ -79,10 +79,14 @@ const AccessManagementSpecializationPage = () => {
   const [currentName, setCurrentName] = useState('');
 
   const [specializations, setSpecializations] = useState<Maybe<AccessSpecialization>[] | null>();
-  const [accessSpecializationForOrg, { data, loading, error }] = useAccessSpecializationsForOrgLazyQuery();
-  const [removeSpecialization, { data: removeResponse, loading: isRemovingSpecialization }] = useQueryHandler(
-    useDeleteAccessSpecializationMutation,
-  );
+  const [
+    accessSpecializationForOrg,
+    { data, loading, error },
+  ] = useAccessSpecializationsForOrgLazyQuery();
+  const [
+    removeSpecialization,
+    { data: removeResponse, loading: isRemovingSpecialization },
+  ] = useQueryHandler(useDeleteAccessSpecializationMutation);
 
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
   const [deleteCmd, setDeleteCmd] = useState<WebCommand | null>();
@@ -221,6 +225,7 @@ const AccessManagementSpecializationPage = () => {
         </Button>
       );
     }
+    return null;
   };
 
   const renderBody = () => {

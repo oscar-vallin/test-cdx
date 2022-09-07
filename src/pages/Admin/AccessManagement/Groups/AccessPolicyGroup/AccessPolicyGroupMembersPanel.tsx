@@ -33,8 +33,10 @@ const AccessPolicyGroupMembersPanel = ({
 }: AccessPolicyMembersProps) => {
   const [groupMembers, setGroupMembers] = useState<AccessMember[] | null>();
 
-  const [policyMembers, { data: accessPolicyGroupMembersData, loading: isLoadingAccessGroupMembers }] =
-    useAccessPolicyGroupMembersLazyQuery();
+  const [
+    policyMembers,
+    { data: accessPolicyGroupMembersData, loading: isLoadingAccessGroupMembers },
+  ] = useAccessPolicyGroupMembersLazyQuery();
 
   const updateUserPanel = useUpdateUserPanel();
 
@@ -201,7 +203,11 @@ const AccessPolicyGroupMembersPanel = ({
       <UpdateUserPanel
         useUpdateUserPanel={updateUserPanel}
         onUpdateUser={() => {
-          userService.fetchUsers(0, tableFilters.pagingParams.sort, tableFilters.searchText.delayedValue).then();
+          userService.fetchUsers(
+            0,
+            tableFilters.pagingParams.sort,
+            tableFilters.searchText.delayedValue,
+          ).then();
         }}
       />
     </ThemedPanel>

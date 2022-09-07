@@ -47,7 +47,10 @@ const AccessPolicyMembersPanel = ({
       orgSid,
     },
   });
-  const [policyMembers, { data: accessMembers, loading: isLoadingAccessMembers }] = useAccessPolicyMembersLazyQuery();
+  const [
+    policyMembers,
+    { data: accessMembers, loading: isLoadingAccessMembers },
+  ] = useAccessPolicyMembersLazyQuery();
 
   const updateUserPanel = useUpdateUserPanel();
 
@@ -248,7 +251,11 @@ const AccessPolicyMembersPanel = ({
       <UpdateUserPanel
         useUpdateUserPanel={updateUserPanel}
         onUpdateUser={() => {
-          userService.fetchUsers(0, tableFilters.pagingParams.sort, tableFilters.searchText.delayedValue).then();
+          userService.fetchUsers(
+            0,
+            tableFilters.pagingParams.sort,
+            tableFilters.searchText.delayedValue,
+          ).then();
         }}
       />
 
