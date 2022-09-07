@@ -14,7 +14,7 @@ import { CurrentActivityPage } from './Admin/Activity';
 import { ColorPalettesPage, DefaultThemePage } from './Admin/DashboardSite';
 import { ActiveUsersPage } from './Admin/Users/ActiveUsers';
 import { DeletedUsersPage } from './Admin/Users/DeletedUsers';
-import { OntologyPage, XChangePage, XchangeAlertsPage, XchangeDetailsPage } from './Admin/XChange';
+import { OntologyPage, XChangePage, XchangeAlertsPage, XchangeDetailsPage, NamingPage } from './Admin/XChange';
 import { FtpTestPage } from './Admin/FtpTest';
 import { UserAuditLogsPage } from './Admin/Users/UserAuditLogs';
 import {
@@ -107,6 +107,9 @@ export const Routes = () => {
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_ONTOLOGY_BROWSER.URL}>
         <OntologyPage />
+      </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_XCHANGE_NAMING.URL}>
+        <NamingPage />
       </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_XCHANGE_ALERTS.URL}>
         <XchangeAlertsPage />
