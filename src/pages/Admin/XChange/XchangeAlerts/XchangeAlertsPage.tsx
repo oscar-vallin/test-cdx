@@ -41,6 +41,7 @@ const XchangeAlertsPage = () => {
   const Toast = useNotification();
   const [openAlertsPanel, setOpenAlertsPanel] = useState(false);
   const [sid, setSid] = useState('');
+  const [coreFilenameValue, setCoreFilenameValue] = useState('');
   const [refreshXchangeDetails, setRefreshXchangeDetails] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
@@ -72,7 +73,6 @@ const XchangeAlertsPage = () => {
 
   useEffect(() => {
     if (!loadingXchangeAlerts && dataXchangeAlerts) {
-      console.log(dataXchangeAlerts);
       setXchangeAlerts(dataXchangeAlerts.xchangeProfileAlerts);
     }
   }, [dataXchangeAlerts, loadingXchangeAlerts]);
@@ -193,7 +193,8 @@ const XchangeAlertsPage = () => {
     setShowDialog(true);
   };
 
-  const userPermissionsIcons = (commands: WebCommand[], currentSid: string, type: string) => {
+  const userPermissionsIcons = (
+    commands: WebCommand[], currentSid: string, type: string, corefilename?: string) => {
     const _updateCmd = commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
     const _deleteCmd = commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Delete);
 
@@ -206,6 +207,7 @@ const XchangeAlertsPage = () => {
               style={{ paddingBottom: '10px' }}
               onClick={() => {
                 setSid(currentSid);
+                setCoreFilenameValue(corefilename ?? '')
                 setOpenAlertsPanel(true);
               }}
             />
@@ -252,9 +254,10 @@ const XchangeAlertsPage = () => {
                 </StyledButtonAction>
               </Stack>
               <StyledSeparator color="#e6e6e6" />
-              {xchangeAlerts?.globalXchangeAlerts && xchangeAlerts?.globalXchangeAlerts.length <= 0 && (
+              {xchangeAlerts?.globalXchangeAlerts && xchangeAlerts?.globalXchangeAlerts.length <= 0 
+                && (
                 <Text>There are no global alerts configured</Text>
-              )}
+                )}
               {xchangeAlerts?.globalXchangeAlerts?.map((globalAlerts, globalAlertsIndex: number) => (
                 <Spacing key={globalAlertsIndex}>
                   <Row>
@@ -298,7 +301,7 @@ const XchangeAlertsPage = () => {
                     <Column lg="3">
                       <ButtonLink>{individualAlerts.coreFilename}</ButtonLink>
                     </Column>
-                    {userPermissionsIcons(individualAlerts?.commands ?? [], individualAlerts?.sid ?? '', 'config')}
+                    {userPermissionsIcons(individualAlerts?.commands ?? [], individualAlerts?.sid ?? '', 'config', individualAlerts.coreFilename ?? '')}
                   </Row>
                   {filenameQualifier(individualAlerts.filenameQualifier ?? '', individualAlerts?.coreFilename ?? '')}
                   {typesAlertsRender(individualAlerts?.alertTypes ?? [])}
@@ -341,6 +344,7 @@ const XchangeAlertsPage = () => {
         closePanel={setOpenAlertsPanel}
         sid={sid}
         refreshXchangeDetails={setRefreshXchangeDetails}
+        coreFilename={coreFilenameValue}
       />
       <DialogYesNo {...dialogProps} open={showDialog} />
     </LayoutDashboard>
