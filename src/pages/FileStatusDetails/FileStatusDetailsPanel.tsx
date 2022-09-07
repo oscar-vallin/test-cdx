@@ -316,7 +316,7 @@ const FileStatusDetailsPanel = (
         id: '__XchangeConfigBtn',
         key: '__XchangeConfigBtn',
         command: xchangeConfigCmd,
-        onClick: () => history.push(`/xchange-details?orgSid=${fsOrgSid}&coreFilename=${packet?.inboundFilename}`),
+        onClick: () => history.push(`/xchange-details?orgSid=${fsOrgSid}&coreFilename=${packet?.coreFilename}`),
         onRender: renderXchangeConfigButton,
       },
     ];
