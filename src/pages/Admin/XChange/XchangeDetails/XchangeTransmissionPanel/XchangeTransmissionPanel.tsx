@@ -865,7 +865,7 @@ const XchangeTransmissionPanel = ({
   useEffect(() => {
     if (!loadingCopyTransmission && dataCopyTransmission) {
       setOptionXchangeTransmission('copy');
-      console.log(dataCopyTransmission?.copyXchangeFileTransmission);
+      // console.log(dataCopyTransmission?.copyXchangeFileTransmission);
       setXchangeFileTransmission(dataCopyTransmission?.copyXchangeFileTransmission);
       if (
         dataCopyTransmission.copyXchangeFileTransmission?.filenameQualifiers.value
