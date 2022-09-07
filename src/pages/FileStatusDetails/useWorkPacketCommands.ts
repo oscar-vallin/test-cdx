@@ -48,8 +48,7 @@ export const useWorkPacketCommands = (workOrderId: string) => {
     },
   });
 
-  const [apiCallRenameReprocess, { data: renameReprocessData, error: renameReprocessError }] =
-    useWorkPacketRenameAndReprocessMutation();
+  const [apiCallRenameReprocess, { data: renameReprocessData, error: renameReprocessError }] = useWorkPacketRenameAndReprocessMutation();
 
   const [apiCallResend, { data: resendData, error: resendError }] = useWorkPacketResendMutation({
     variables: {

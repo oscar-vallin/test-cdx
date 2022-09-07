@@ -63,7 +63,7 @@ const XChangePage = () => {
   const [xchangeProfile, { data: dataXchange, loading: loadingXchange }] = useQueryHandler(useXchangeProfileLazyQuery);
 
   const [xchangeProfileComment, { data: dataComment, loading: loadingComment }] = useQueryHandler(
-    useUpdateXchangeProfileCommentMutation
+    useUpdateXchangeProfileCommentMutation,
   );
 
   const [xchanges, setXchanges] = useState<XchangeConfigSummary[]>([]);
@@ -129,7 +129,7 @@ const XChangePage = () => {
     lastActivity: Date,
     type?: string,
     vendorName?: string[] | null,
-    filesProcessed?: number
+    filesProcessed?: number,
   ) => {
     const error = type?.trim() !== '';
     const fromDate = new Date(lastActivity);
@@ -240,7 +240,7 @@ const XChangePage = () => {
                     node?.uatActivity?.lastActivity,
                     'UAT',
                     node?.vendorIds,
-                    uatFilesProcessed
+                    uatFilesProcessed,
                   )}
                 >
                   <CircleStyled color="purple">{uatFilesProcessed}</CircleStyled>
@@ -254,7 +254,7 @@ const XChangePage = () => {
                     node?.testActivity.lastActivity,
                     'TEST',
                     node?.vendorIds,
-                    testFilesProcessed
+                    testFilesProcessed,
                   )}
                 >
                   <CircleStyled color="orange">{testFilesProcessed}</CircleStyled>
@@ -268,7 +268,7 @@ const XChangePage = () => {
                     node?.prodActivity?.lastActivity,
                     'PROD',
                     node?.vendorIds,
-                    prodFilesProcessed
+                    prodFilesProcessed,
                   )}
                 >
                   <CircleStyled color="blue">{prodFilesProcessed}</CircleStyled>
@@ -464,65 +464,64 @@ const XChangePage = () => {
     return !editComment;
   };
 
-  const cardBox = () => {
-    return (
-      <>
-        <CardStyled>
+  const cardBox = () => (
+    <>
+      <CardStyled>
+        <ButtonLink to={`/xchange-alerts?orgSid=${orgSid}`}>
+          <FontIcon iconName="Ringer" style={{ margin: '10px 6px 0 6px' }} />
+          Alerts
+        </ButtonLink>
+        <Spacing margin="normal">
+          <Row>
+            <Text style={{ fontWeight: 'bold' }}>Alert on all Xchanges</Text>
+          </Row>
+          <Spacing margin="normal" />
           <ButtonLink to={`/xchange-alerts?orgSid=${orgSid}`}>
-            <FontIcon iconName="Ringer" style={{ margin: '10px 6px 0 6px' }} />
-            Alerts
+            ({globalXchangeAlerts?.numSubscribers}) Subscribers
           </ButtonLink>
-          <Spacing margin="normal">
-            <Row>
-              <Text style={{ fontWeight: 'bold' }}>Alert on all Xchanges</Text>
-            </Row>
-            <Spacing margin="normal" />
-            <ButtonLink to={`/xchange-alerts?orgSid=${orgSid}`}>
-              ({globalXchangeAlerts?.numSubscribers}) Subscribers
-            </ButtonLink>
-          </Spacing>
-          <Spacing margin="normal">
-            <Row>
-              <Text style={{ fontWeight: 'bold' }}>Individual Xchange Alerts</Text>
-            </Row>
-            <Spacing margin="normal" />
-            {individualXchangeAlerts?.map((individualXchange: XchangeAlertsProps, index: number) => (
-              <Spacing margin={{ bottom: 'normal' }} key={index}>
-                <Row>
-                  <Column lg="8">
-                    <ButtonLink to={`/xchange-alerts?orgSid=${orgSid}`} style={{ fontSize: '12px' }}>
-                      {' '}
-                      {individualXchange.coreFilename}{' '}
-                    </ButtonLink>
-                  </Column>
-                  <Column lg="4">
-                    <ButtonLink to={`/xchange-alerts?orgSid=${orgSid}`} style={{ fontSize: '12px' }}>
-                      {' '}
-                      ({individualXchange.numSubscribers}) Subscriber
-                    </ButtonLink>
-                  </Column>
-                </Row>
-              </Spacing>
-            ))}
-          </Spacing>
-        </CardStyled>
-        <Spacing margin={{ top: 'normal' }}>
-          <CardStyled>
-            <ContainerInput>
+        </Spacing>
+        <Spacing margin="normal">
+          <Row>
+            <Text style={{ fontWeight: 'bold' }}>Individual Xchange Alerts</Text>
+          </Row>
+          <Spacing margin="normal" />
+          {individualXchangeAlerts?.map((individualXchange: XchangeAlertsProps, index: number) => (
+            <Spacing margin={{ bottom: 'normal' }} key={index}>
               <Row>
-                <Column lg="6">
-                  <Text style={{ fontWeight: 'bold', marginTop: '10px' }}>Comments</Text>
+                <Column lg="8">
+                  <ButtonLink to={`/xchange-alerts?orgSid=${orgSid}`} style={{ fontSize: '12px' }}>
+                    {' '}
+                    {individualXchange.coreFilename}{' '}
+                  </ButtonLink>
                 </Column>
-                {!requiresConversion && editComment ? (
-                  <>
-                    <Column lg="3" md={12}>
-                      <StyledIconsComments>
+                <Column lg="4">
+                  <ButtonLink to={`/xchange-alerts?orgSid=${orgSid}`} style={{ fontSize: '12px' }}>
+                    {' '}
+                    ({individualXchange.numSubscribers}) Subscriber
+                  </ButtonLink>
+                </Column>
+              </Row>
+            </Spacing>
+          ))}
+        </Spacing>
+      </CardStyled>
+      <Spacing margin={{ top: 'normal' }}>
+        <CardStyled>
+          <ContainerInput>
+            <Row>
+              <Column lg="6">
+                <Text style={{ fontWeight: 'bold', marginTop: '10px' }}>Comments</Text>
+              </Column>
+              {!requiresConversion && editComment ? (
+                <>
+                  <Column lg="3" md={12}>
+                    <StyledIconsComments>
                         <IconButton iconProps={{ iconName: 'Save' }} onClick={sendComment} />
                         <Text variant="small">Save</Text>
                       </StyledIconsComments>
-                    </Column>
-                    <Column lg="3">
-                      <StyledIconsComments>
+                  </Column>
+                  <Column lg="3">
+                    <StyledIconsComments>
                         <IconButton
                           iconProps={{ iconName: 'Cancel' }}
                           onClick={() => {
@@ -532,32 +531,31 @@ const XChangePage = () => {
                         />
                         <Text variant="small">Cancel</Text>
                       </StyledIconsComments>
-                    </Column>
-                  </>
-                ) : (
-                  <Column lg="6" right>
-                    <IconButton
+                  </Column>
+                </>
+              ) : (
+                <Column lg="6" right>
+                  <IconButton
                       iconProps={{ iconName: 'EditSolid12' }}
                       onClick={() => setEditComment(updateCmd !== undefined && true)}
                     />
-                  </Column>
-                )}
-              </Row>
-              <TextField
-                multiline
-                borderless={true}
-                readOnly={readonlyComments()}
-                resizable={false}
-                value={comment ?? ''}
-                rows={7}
-                onChange={(event, newValue) => setComment(newValue ?? '')}
-              />
-            </ContainerInput>
-          </CardStyled>
-        </Spacing>
-      </>
-    );
-  };
+                </Column>
+              )}
+            </Row>
+            <TextField
+              multiline
+              borderless={true}
+              readOnly={readonlyComments()}
+              resizable={false}
+              value={comment ?? ''}
+              rows={7}
+              onChange={(event, newValue) => setComment(newValue ?? '')}
+            />
+          </ContainerInput>
+        </CardStyled>
+      </Spacing>
+    </>
+  );
 
   return (
     <LayoutDashboard id="XChangePage" menuOptionSelected={ROUTE_XCHANGE_LIST.API_ID}>

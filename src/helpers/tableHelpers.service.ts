@@ -16,16 +16,14 @@ import {
 } from 'date-fns';
 
 //
-export const formatField = (value: any, columnId: string, text: any, sublabel: string, child: any) => {
-  return {
-    id: columnId,
-    value,
-    columnId,
-    text,
-    sublabel,
-    child,
-  };
-};
+export const formatField = (value: any, columnId: string, text: any, sublabel: string, child: any) => ({
+  id: columnId,
+  value,
+  columnId,
+  text,
+  sublabel,
+  child,
+});
 
 export const isTodayInRange = (firstDate, secondDate) => {
   const _today = new Date();

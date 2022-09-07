@@ -6,7 +6,9 @@ import { ExternalUsersPage } from 'src/pages/Admin/Users/ExternalUsers';
 import { LoginPage } from './Login';
 import { UserSettingsPage } from './UserSettings';
 import { DashboardPage } from './Dashboard';
-import { FileStatusPage, ArchivePage, SchedulePage, TransmissionsPage, ErrorsPage } from './WorkPacket';
+import {
+  FileStatusPage, ArchivePage, SchedulePage, TransmissionsPage, ErrorsPage,
+} from './WorkPacket';
 import { AccessDenied, PageNotFound } from './ErrorHandling';
 import { ActiveOrgsPage } from './Admin/Organizations';
 import { ExternalOrgsPage } from './Admin/ExternalOrganization';
@@ -29,15 +31,14 @@ import { ImplementationDeployPage } from './Admin/ImplDeploy';
 import { PasswordRulesPage } from './Admin/PasswordRules';
 import { OrganizationSecuritySettingsPage } from './Admin/OrganizationSecuritySettings';
 
-export const Routes = () => {
-  return (
-    <Switch>
-      <UnauthRoute path="/login">
-        <LoginPage />
-      </UnauthRoute>
-      <UnauthRoute path={ROUTES.ROUTE_PASSWORD_RESET.URL}>
-        <PasswordResetPage />
-      </UnauthRoute>
+export const Routes = () => (
+  <Switch>
+    <UnauthRoute path="/login">
+      <LoginPage />
+    </UnauthRoute>
+    <UnauthRoute path={ROUTES.ROUTE_PASSWORD_RESET.URL}>
+      <PasswordResetPage />
+    </UnauthRoute>
 
       <AuthRoute exact path="/">
         <DashboardPage />
@@ -140,4 +141,3 @@ export const Routes = () => {
       </AuthRoute>
     </Switch>
   );
-};

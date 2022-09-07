@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 // components
 import { useHistory, useLocation } from 'react-router-dom';
-import { endOfMonth, endOfYesterday, startOfDay, startOfMonth, startOfYesterday, subMonths } from 'date-fns';
+import {
+  endOfMonth, endOfYesterday, startOfDay, startOfMonth, startOfYesterday, subMonths,
+} from 'date-fns';
 import { SpinnerSize } from '@fluentui/react';
 import { CardDashboard } from 'src/containers/cards/CardDashboard';
 
@@ -44,7 +46,7 @@ const DashboardPage = () => {
   const dateParam = urlParams.get('date');
 
   const [dateRangeType, setDateRangeType] = useState(
-    (startDate != null ? DATE_OPTION_NAME.custom : dateParam) ?? DATE_OPTION_NAME.today
+    (startDate != null ? DATE_OPTION_NAME.custom : dateParam) ?? DATE_OPTION_NAME.today,
   );
   const history = useHistory();
   const fromDate = useDateValue('', startDate ? new Date(`${startDate}T00:00:00.000`) : new Date());
@@ -197,13 +199,11 @@ const DashboardPage = () => {
     ));
   };
 
-  const pageFallBack = () => {
-    return (
-      <Spacing margin={{ top: 'double' }}>
-        <Spinner size={SpinnerSize.large} label="Fetching dashboard data" />
-      </Spacing>
-    );
-  };
+  const pageFallBack = () => (
+    <Spacing margin={{ top: 'double' }}>
+      <Spinner size={SpinnerSize.large} label="Fetching dashboard data" />
+    </Spacing>
+  );
 
   const renderCountsByFile = () => {
     if (dashboardPeriodCounts?.showCountsByFile !== true) {

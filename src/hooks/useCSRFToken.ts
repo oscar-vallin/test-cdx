@@ -6,17 +6,13 @@ export const useCSRFToken = () => {
 
   const SessionStore = useSessionStore();
 
-  const getCSRFToken = () => {
-    return document.getElementById('__csrf_token')?.getAttribute('content');
-  };
+  const getCSRFToken = () => document.getElementById('__csrf_token')?.getAttribute('content');
 
   const setCSRFToken = (token: string) => {
     document.getElementById('__csrf_token')?.setAttribute('content', token);
   };
 
-  const getAuthToken = () => {
-    return window.sessionStorage.getItem('_initSession');
-  };
+  const getAuthToken = () => window.sessionStorage.getItem('_initSession');
 
   const setAuthToken = (token: string) => {
     // Save the auth token in session storage which needs to be in a separate location than the CSRF token
@@ -49,5 +45,7 @@ export const useCSRFToken = () => {
     }
   };
 
-  return { callCSRFController, getCSRFToken, setCSRFToken, getAuthToken, setAuthToken };
+  return {
+    callCSRFController, getCSRFToken, setCSRFToken, getAuthToken, setAuthToken,
+  };
 };

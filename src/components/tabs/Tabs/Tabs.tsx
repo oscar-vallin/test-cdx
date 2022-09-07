@@ -28,7 +28,7 @@ const renderHeader = (
   onClickTab: (key: string) => void,
   badge?: BadgeType,
   link?: IPivotItemProps,
-  defaultRenderer?: (props?: IPivotItemProps) => JSX.Element | null
+  defaultRenderer?: (props?: IPivotItemProps) => JSX.Element | null,
 ) => (
   <StyledSpan onClick={() => onClickTab(hash)}>
     {defaultRenderer && defaultRenderer(link)}
@@ -36,37 +36,37 @@ const renderHeader = (
   </StyledSpan>
 );
 
-const CDXTabs = ({ items, selectedKey, onClickTab }: CDXTabsType): ReactElement => {
-  return (
-    <StyledPivot
-      selectedKey={selectedKey}
-      overflowBehavior="menu"
-      overflowAriaLabel="more items"
-      styles={{
-        link: {
-          fontSize: theme.fontSizes.normal,
-        },
-        linkIsSelected: {
-          fontSize: theme.fontSizes.normal,
-        },
-      }}
-      style={{ fontSize: theme.fontSizes.normal }}
-    >
-      {items.map(({ title, content, badge, hash, disabled }: CDXTabsItemType, index) => (
-        <PivotItem
-          headerText={title}
-          key={index}
-          itemKey={hash}
-          onRenderItemLink={(link, defaultRenderer) => renderHeader(hash, onClickTab, badge, link, defaultRenderer)}
-          headerButtonProps={{
-            disabled,
-          }}
-        >
-          {content}
-        </PivotItem>
-      ))}
-    </StyledPivot>
-  );
-};
+const CDXTabs = ({ items, selectedKey, onClickTab }: CDXTabsType): ReactElement => (
+  <StyledPivot
+    selectedKey={selectedKey}
+    overflowBehavior="menu"
+    overflowAriaLabel="more items"
+    styles={{
+      link: {
+        fontSize: theme.fontSizes.normal,
+      },
+      linkIsSelected: {
+        fontSize: theme.fontSizes.normal,
+      },
+    }}
+    style={{ fontSize: theme.fontSizes.normal }}
+  >
+    {items.map(({
+      title, content, badge, hash, disabled,
+    }: CDXTabsItemType, index) => (
+      <PivotItem
+        headerText={title}
+        key={index}
+        itemKey={hash}
+        onRenderItemLink={(link, defaultRenderer) => renderHeader(hash, onClickTab, badge, link, defaultRenderer)}
+        headerButtonProps={{
+          disabled,
+        }}
+      >
+        {content}
+      </PivotItem>
+    ))}
+  </StyledPivot>
+);
 
 export { CDXTabs };

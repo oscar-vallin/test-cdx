@@ -16,22 +16,21 @@ export const columns = [
   { key: 'extractVersion', label: 'Version', style: 'text' },
 ];
 
-export const getItems = (data) =>
-  data?.wpTransmissions?.nodes?.map((item) => {
-    const datetime = format(new Date(item.deliveredOn), 'MM/dd/yyyy hh:mm a');
+export const getItems = (data) => data?.wpTransmissions?.nodes?.map((item) => {
+  const datetime = format(new Date(item.deliveredOn), 'MM/dd/yyyy hh:mm a');
 
-    return [
-      formatField(datetime, 'datetime', datetime, '', null),
-      formatField(item.planSponsorId, 'planSponsor', item.planSponsorId, '', null),
-      formatField(item.vendorId, 'vendorId', item.vendorId, '', null),
-      formatField(item.specId, 'specId', item.specId, '', null),
-      formatField(item.implementation, 'implementation', item.implementation, '', null),
-      formatField(item.inboundFilename, 'inboundFilename', item.inboundFilename, '', null),
-      formatField(item.outboundFilename, 'outboundFilename', item.outboundFilename, '', null),
-      formatField(item.outboundFilesize, 'outboundFilesize', item.outboundFilesize, '', null),
-      formatField(item.billingCount, 'billingCount', item.billingCount, '', null),
-      formatField(item.totalRecords, 'totalRecords', item.totalRecords, '', null),
-      formatField(item.extractType, 'extractType', item.extractType, '', null),
-      formatField(item.extractVersion, 'extractVersion', item.extractVersion, '', null),
-    ];
-  });
+  return [
+    formatField(datetime, 'datetime', datetime, '', null),
+    formatField(item.planSponsorId, 'planSponsor', item.planSponsorId, '', null),
+    formatField(item.vendorId, 'vendorId', item.vendorId, '', null),
+    formatField(item.specId, 'specId', item.specId, '', null),
+    formatField(item.implementation, 'implementation', item.implementation, '', null),
+    formatField(item.inboundFilename, 'inboundFilename', item.inboundFilename, '', null),
+    formatField(item.outboundFilename, 'outboundFilename', item.outboundFilename, '', null),
+    formatField(item.outboundFilesize, 'outboundFilesize', item.outboundFilesize, '', null),
+    formatField(item.billingCount, 'billingCount', item.billingCount, '', null),
+    formatField(item.totalRecords, 'totalRecords', item.totalRecords, '', null),
+    formatField(item.extractType, 'extractType', item.extractType, '', null),
+    formatField(item.extractVersion, 'extractVersion', item.extractVersion, '', null),
+  ];
+});

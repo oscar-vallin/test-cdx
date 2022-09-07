@@ -27,7 +27,9 @@ const cols: UsersTableColumns[] = [UsersTableColumns.FIRST_NAME, UsersTableColum
 
 const searchAllOrgsCols: UsersTableColumns[] = [...cols, UsersTableColumns.ORGANIZATION];
 
-export const UsersTable = ({ users, onClickUser, tableFilters, tooltips, searchAllOrgs }: UsersTableType) => {
+export const UsersTable = ({
+  users, onClickUser, tableFilters, tooltips, searchAllOrgs,
+}: UsersTableType) => {
   const ThemeStore = useThemeStore();
 
   const { initialColumns } = useUsersTableColumns(cols);

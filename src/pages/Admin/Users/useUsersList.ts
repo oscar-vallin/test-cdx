@@ -34,7 +34,7 @@ export const useUsersLists = (activeFilter: ActiveEnum) => {
     pendingActivationFilter?,
     expiredActivationFilter?,
     searchAllOrgs?,
-    searchText?
+    searchText?,
   ) => {
     const sort = sortParam || [
       { property: 'person.lastNm', direction: SortDirection.Asc },

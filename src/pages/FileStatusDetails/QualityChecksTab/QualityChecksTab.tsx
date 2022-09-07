@@ -18,7 +18,9 @@ import { Card } from 'src/components/cards/Card';
 import { ChartDonut } from 'src/components/charts/ChartDonut';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { DarkSeparator } from 'src/components/separators/Separator';
-import { FieldCreationEvent, Maybe, RecordCreationEvent, WorkPacketStatusDetails } from 'src/data/services/graphql';
+import {
+  FieldCreationEvent, Maybe, RecordCreationEvent, WorkPacketStatusDetails,
+} from 'src/data/services/graphql';
 import { theme } from 'src/styles/themes/theme';
 import { ChartDataType } from 'src/components/charts/ChartDonut/ChartDonut';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
@@ -28,12 +30,24 @@ import { SuperScript, WhiteButton } from '../FileStatusDetails.styles';
 import { QualityCheckMessage } from './QualityCheckMessage';
 
 const COLUMNS: IColumn[] = [
-  { key: 'status', name: 'Status', fieldName: 'status', minWidth: 80, maxWidth: 80 },
-  { key: 'employeeId', name: 'Employee ID', fieldName: 'employeeId', minWidth: 100, maxWidth: 100 },
-  { key: 'employee', name: 'Employee', fieldName: 'employee', minWidth: 100, maxWidth: 150 },
-  { key: 'dependent', name: 'Dependent', fieldName: 'dependent', minWidth: 100, maxWidth: 150 },
-  { key: 'field', name: 'Field', fieldName: 'field', minWidth: 100, maxWidth: 150 },
-  { key: 'message', name: 'Message', fieldName: 'message', minWidth: 200, flexGrow: 1 },
+  {
+    key: 'status', name: 'Status', fieldName: 'status', minWidth: 80, maxWidth: 80,
+  },
+  {
+    key: 'employeeId', name: 'Employee ID', fieldName: 'employeeId', minWidth: 100, maxWidth: 100,
+  },
+  {
+    key: 'employee', name: 'Employee', fieldName: 'employee', minWidth: 100, maxWidth: 150,
+  },
+  {
+    key: 'dependent', name: 'Dependent', fieldName: 'dependent', minWidth: 100, maxWidth: 150,
+  },
+  {
+    key: 'field', name: 'Field', fieldName: 'field', minWidth: 100, maxWidth: 150,
+  },
+  {
+    key: 'message', name: 'Message', fieldName: 'message', minWidth: 200, flexGrow: 1,
+  },
 ].map((col) => ({ ...col, data: 'string', isPadded: true }));
 
 type RowType = {
@@ -96,13 +110,12 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
 
   const items = qualityChecks?.sequenceCreationEvent ?? [];
 
-  const totalNumErrors =
-    (qualityChecks?.accStructReqError?.count ?? 0) +
-    (qualityChecks?.clientSpecificReqError?.count ?? 0) +
-    (qualityChecks?.accStructTruncError?.count ?? 0) +
-    (qualityChecks?.reqError?.count ?? 0) +
-    (qualityChecks?.truncError?.count ?? 0) +
-    (qualityChecks?.codeListMappingError?.count ?? 0);
+  const totalNumErrors = (qualityChecks?.accStructReqError?.count ?? 0)
+    + (qualityChecks?.clientSpecificReqError?.count ?? 0)
+    + (qualityChecks?.accStructTruncError?.count ?? 0)
+    + (qualityChecks?.reqError?.count ?? 0)
+    + (qualityChecks?.truncError?.count ?? 0)
+    + (qualityChecks?.codeListMappingError?.count ?? 0);
 
   const hasQualityCheckStats = (qualityChecks?.totalRecordCount ?? 0) > 0;
   const hasErrors = totalNumErrors > 0;
@@ -123,7 +136,7 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
       data,
       'Missing Client Specific Mapping',
       'clientSpecificReqError',
-      qualityChecks?.clientSpecificReqError?.count
+      qualityChecks?.clientSpecificReqError?.count,
     );
     addChartData(data, 'Account Structure Truncated', 'accStructTruncError', qualityChecks?.accStructTruncError?.count);
     addChartData(data, 'Missing Required Field', 'reqError', qualityChecks?.reqError?.count);
@@ -132,18 +145,16 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
     return data;
   };
 
-  const eventToRow = (status: string, recordEvent: RecordCreationEvent, fieldEvent: FieldCreationEvent): RowType => {
-    return {
-      status,
-      employeeId: recordEvent.unitId ?? '',
-      employee: recordEvent.outerContext ?? '',
-      dependent: recordEvent.context ?? '',
-      messages: fieldEvent.message,
-      field: fieldEvent.name ?? '',
-      value: fieldEvent.rawValue ?? '',
-      transformValue: fieldEvent.value ?? '',
-    };
-  };
+  const eventToRow = (status: string, recordEvent: RecordCreationEvent, fieldEvent: FieldCreationEvent): RowType => ({
+    status,
+    employeeId: recordEvent.unitId ?? '',
+    employee: recordEvent.outerContext ?? '',
+    dependent: recordEvent.context ?? '',
+    messages: fieldEvent.message,
+    field: fieldEvent.name ?? '',
+    value: fieldEvent.rawValue ?? '',
+    transformValue: fieldEvent.value ?? '',
+  });
 
   // Toggles for the details table
   const [showInfo, setShowInfo] = useState(true);

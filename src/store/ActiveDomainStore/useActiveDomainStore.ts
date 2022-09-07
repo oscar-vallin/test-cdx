@@ -5,8 +5,10 @@ export const useActiveDomainStore = (): any => {
   const typedHooks = createTypedHooks<StoreModel>();
 
   const { nav, domainOrg } = typedHooks.useStoreState((state) => state.ActiveDomainStore);
-  const { setDashboardNav, setAdminNav, setCurrentOrg, setOriginOrg, reset } = typedHooks.useStoreActions(
-    (state) => state.ActiveDomainStore
+  const {
+    setDashboardNav, setAdminNav, setCurrentOrg, setOriginOrg, reset,
+  } = typedHooks.useStoreActions(
+    (state) => state.ActiveDomainStore,
   );
 
   return {

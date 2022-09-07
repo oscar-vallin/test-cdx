@@ -29,20 +29,18 @@ const FormLabel = ({
   inheritedBy,
   errorMessage,
   ...props
-}: FormLabelProps): ReactElement => {
-  return (
-    <LabelRow id={id}>
-      <Label {...props} id={id ? `${id}-Label` : undefined}>
-        {label}
-      </Label>
-      {required && <Required id={id ? `${id}-Required` : undefined}>&nbsp;*</Required>}
-      <InfoIcon id={`${id}-Info`} tooltip={info} />
-      <InheritedFromIcon id={`${id}-inheritedFrom`} tooltip={inheritedFrom} />
-      <InheritedByIcon id={`${id}-inheritedBy`} tooltip={inheritedBy && inheritedBy[0]} />
-      <ErrorIcon id={`${id}-ErrorMsg`} errorMessage={errorMessage} />
-    </LabelRow>
-  );
-};
+}: FormLabelProps): ReactElement => (
+  <LabelRow id={id}>
+    <Label {...props} id={id ? `${id}-Label` : undefined}>
+      {label}
+    </Label>
+    {required && <Required id={id ? `${id}-Required` : undefined}>&nbsp;*</Required>}
+    <InfoIcon id={`${id}-Info`} tooltip={info} />
+    <InheritedFromIcon id={`${id}-inheritedFrom`} tooltip={inheritedFrom} />
+    <InheritedByIcon id={`${id}-inheritedBy`} tooltip={inheritedBy && inheritedBy[0]} />
+    <ErrorIcon id={`${id}-ErrorMsg`} errorMessage={errorMessage} />
+  </LabelRow>
+);
 
 FormLabel.defaultProps = defaultProps;
 
@@ -51,18 +49,16 @@ type UIFormLabelType = {
   uiField?: UiField | null;
 };
 
-const UIFormLabel = ({ id, uiField }: UIFormLabelType) => {
-  return (
-    <FormLabel
-      id={`${id}`}
-      label={uiField?.label ?? ''}
-      required={uiField?.required ?? false}
-      info={uiField?.info ?? undefined}
-      inheritedFrom={uiField?.inheritedFrom ?? undefined}
-      inheritedBy={uiField?.inheritedBy ? uiField.inheritedBy : undefined}
-      errorMessage={uiField?.errMsg ?? undefined}
-    />
-  );
-};
+const UIFormLabel = ({ id, uiField }: UIFormLabelType) => (
+  <FormLabel
+    id={`${id}`}
+    label={uiField?.label ?? ''}
+    required={uiField?.required ?? false}
+    info={uiField?.info ?? undefined}
+    inheritedFrom={uiField?.inheritedFrom ?? undefined}
+    inheritedBy={uiField?.inheritedBy ? uiField.inheritedBy : undefined}
+    errorMessage={uiField?.errMsg ?? undefined}
+  />
+);
 
 export { FormLabel, UIFormLabel };

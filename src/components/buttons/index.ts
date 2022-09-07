@@ -3,4 +3,6 @@ import { ButtonText } from './ButtonText';
 import { ButtonAction } from './ButtonAction';
 import { ButtonLink } from './Link';
 
-export { Button, ButtonText, ButtonAction, ButtonLink };
+export {
+  Button, ButtonText, ButtonAction, ButtonLink,
+};

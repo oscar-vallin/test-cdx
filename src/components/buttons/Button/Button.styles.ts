@@ -1,9 +1,7 @@
 import styled from 'styled-components';
 import { CommandButton, PrimaryButton } from '@fluentui/react';
 
-const getBorderVariant = (theme, variant) => {
-  return `1px solid ${variant === 'secondary' ? theme.colors.black : 'transparent'}`;
-};
+const getBorderVariant = (theme, variant) => `1px solid ${variant === 'secondary' ? theme.colors.black : 'transparent'}`;
 
 const getVariant = (theme, variant) => {
   const VARIANTS = {

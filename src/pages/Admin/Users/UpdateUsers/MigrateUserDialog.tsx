@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useApolloClient } from '@apollo/client';
-import { Dialog, DialogFooter, DialogType, ITag, Stack } from '@fluentui/react';
+import {
+  Dialog, DialogFooter, DialogType, ITag, Stack,
+} from '@fluentui/react';
 import { GqOperationResponse, UserAccountForm, useUserAccountFormLazyQuery } from 'src/data/services/graphql';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { Button } from 'src/components/buttons';
@@ -23,10 +25,12 @@ type MigrateUserDialogType = {
   onCancel: () => void;
 };
 
-export const MigrateUserDialog = ({ useUpdateUserPanel, userName, onMigrateUser, onCancel }: MigrateUserDialogType) => {
+export const MigrateUserDialog = ({
+  useUpdateUserPanel, userName, onMigrateUser, onCancel,
+}: MigrateUserDialogType) => {
   const [selectedOrgs, setSelectedOrgs] = useState<ITag[]>();
   const [selectedGroupSids, setSelectedGroupSids] = useState<string[]>(
-    getSelectedAccessGroupSids(useUpdateUserPanel.userAccountForm)
+    getSelectedAccessGroupSids(useUpdateUserPanel.userAccountForm),
   );
   const [
     callUserAccountForm,
@@ -73,9 +77,7 @@ export const MigrateUserDialog = ({ useUpdateUserPanel, userName, onMigrateUser,
       const { userAccountForm } = dataUserAccountForm;
       // Prepopulate the values of the access groups with the access groups the user currently has
       if (userAccountForm?.accessPolicyGroups) {
-        userAccountForm.accessPolicyGroups.value = selectedGroupSids.map((id) => {
-          return { name: id, value: id };
-        });
+        userAccountForm.accessPolicyGroups.value = selectedGroupSids.map((id) => ({ name: id, value: id }));
         userAccountForm.accessPolicyGroups.label = 'New Access Groups';
       }
       setOtherOrgForm(userAccountForm);

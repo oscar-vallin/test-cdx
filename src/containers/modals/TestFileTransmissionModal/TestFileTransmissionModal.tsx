@@ -119,10 +119,9 @@ const TestFileTransmissionModal = ({ isOpen, open, ftpTestCurrentData }: TestFil
     if (data?.ftpTestM?.status === 'ERROR') {
       Toast.error({ text: data?.ftpTestM?.logMessage.body });
       if (data?.ftpTestM?.xpSFTPForm?.errSeverity === ErrorSeverity.Error) {
-        const errorMsg =
-          data.ftpTestM.xpSFTPForm.errMsg ??
-          data.ftpTestM.logMessage.body ??
-          'Error occurred, please verify the information and try again.';
+        const errorMsg = data.ftpTestM.xpSFTPForm.errMsg
+          ?? data.ftpTestM.logMessage.body
+          ?? 'Error occurred, please verify the information and try again.';
         setMessageType(MessageBarType.error);
         setMessage(errorMsg);
       }

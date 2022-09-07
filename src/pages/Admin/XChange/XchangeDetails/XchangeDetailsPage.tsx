@@ -85,13 +85,10 @@ const XchangeDetailsPage = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
 
-  const [callXchangeDetails, { data: detailsData, loading: detailsLoading, error: detailsError }] =
-    useXchangeConfigLazyQuery();
-  const [deleteXchangeConfigAlerts, { data: deleteConfigData, loading: deleteConfigLoading }] =
-    useDeleteXchangeConfigAlertMutation();
+  const [callXchangeDetails, { data: detailsData, loading: detailsLoading, error: detailsError }] = useXchangeConfigLazyQuery();
+  const [deleteXchangeConfigAlerts, { data: deleteConfigData, loading: deleteConfigLoading }] = useDeleteXchangeConfigAlertMutation();
 
-  const [updateXchangeComment, { data: commentData, loading: isLoadingComment }] =
-    useUpdateXchangeConfigCommentMutation();
+  const [updateXchangeComment, { data: commentData, loading: isLoadingComment }] = useUpdateXchangeConfigCommentMutation();
   const [showFileUpload, setShowFileUpload] = useState(false);
   const handleError = ErrorHandler();
 
@@ -258,8 +255,8 @@ const XchangeDetailsPage = () => {
                     </Column>
                   </Row>
                 </Spacing>
-                {alert?.subscribers &&
-                  alert?.subscribers.map((subs, subsIndex: number) => (
+                {alert?.subscribers
+                  && alert?.subscribers.map((subs, subsIndex: number) => (
                     <Row key={subsIndex}>
                       <Column lg="3">
                         <ButtonLink style={{ fontSize: '12px' }}>{subs.firstNm}</ButtonLink>
@@ -548,8 +545,8 @@ const XchangeDetailsPage = () => {
         <Container>
           <Row>{renderBody()}</Row>
           <Row>
-            {fileProcesses &&
-              fileProcesses?.map((process, index) => (
+            {fileProcesses
+              && fileProcesses?.map((process, index) => (
                 <StyledColumTabs lg="9" key={index}>
                   <StyledProcessValueText variant="large">
                     {process.vendor.value?.name}-{process.specId.value}

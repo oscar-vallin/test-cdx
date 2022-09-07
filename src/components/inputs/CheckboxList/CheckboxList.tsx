@@ -75,30 +75,26 @@ const CheckboxList = ({
     return <div id={id}>{emptyMessage}</div>;
   }
 
-  const renderLabel = (item) => {
-    return (
-      <span>
-        <InlineLabel required={item?.required}>{item?.label}</InlineLabel>
-        <InfoIcon id={`${id}_Info`} tooltip={formatTooltip ? formatInfoTooltip(item?.info) : item?.info} />
-        <ErrorIcon id={`${id}-ErrorMsg`} errorMessage={item?.errMsg} />
-      </span>
-    );
-  };
+  const renderLabel = (item) => (
+    <span>
+      <InlineLabel required={item?.required}>{item?.label}</InlineLabel>
+      <InfoIcon id={`${id}_Info`} tooltip={formatTooltip ? formatInfoTooltip(item?.info) : item?.info} />
+      <ErrorIcon id={`${id}-ErrorMsg`} errorMessage={item?.errMsg} />
+    </span>
+  );
 
   return (
     <div id={id}>
-      {options.map((item, index) => {
-        return (
-          <OptionRow key={`checkbox_list-${index}`}>
-            <Checkbox
-              label={item.label}
-              onRenderLabel={() => renderLabel(item)}
-              checked={item.checked}
-              onChange={() => onItemCheck(item.value)}
-            />
-          </OptionRow>
-        );
-      })}
+      {options.map((item, index) => (
+        <OptionRow key={`checkbox_list-${index}`}>
+          <Checkbox
+            label={item.label}
+            onRenderLabel={() => renderLabel(item)}
+            checked={item.checked}
+            onChange={() => onItemCheck(item.value)}
+          />
+        </OptionRow>
+      ))}
     </div>
   );
 };

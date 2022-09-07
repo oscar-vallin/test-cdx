@@ -1,5 +1,7 @@
 import { ReactElement } from 'react';
-import { Dialog, DialogType, DialogFooter, PrimaryButton, DefaultButton } from '@fluentui/react';
+import {
+  Dialog, DialogType, DialogFooter, PrimaryButton, DefaultButton,
+} from '@fluentui/react';
 
 export type DialogYesNoProps = {
   id: string;

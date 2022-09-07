@@ -18,10 +18,14 @@ import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useNotification } from 'src/hooks/useNotification';
 import { PageBody } from 'src/components/layouts/Column';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { IconButton, Spinner, SpinnerSize, Stack } from '@fluentui/react';
+import {
+  IconButton, Spinner, SpinnerSize, Stack,
+} from '@fluentui/react';
 import { ButtonLink } from 'src/components/buttons';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
-import { StyledEnvironment, StyledAlertTypes, StyledButtonAction, StyledSeparator } from './XchangeAlertsPage.style';
+import {
+  StyledEnvironment, StyledAlertTypes, StyledButtonAction, StyledSeparator,
+} from './XchangeAlertsPage.style';
 import { StyledQualifier } from '../XchangeDetails/XchangeDetailsPage.styles';
 import { XchangeAlertsPanel } from './XchangeAlertsPanel/XchangeAlertsPanel';
 
@@ -46,14 +50,14 @@ const XchangeAlertsPage = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
   const [xchangeProfileAlerts, { data: dataXchangeAlerts, loading: loadingXchangeAlerts }] = useQueryHandler(
-    useXchangeProfileAlertsLazyQuery
+    useXchangeProfileAlertsLazyQuery,
   );
   const [deleteXchangeProfileAlerts, { data: deleteProfileData, loading: deleteProfileLoading }] = useQueryHandler(
-    useDeleteXchangeProfileAlertMutation
+    useDeleteXchangeProfileAlertMutation,
   );
 
   const [deleteXchangeConfigAlerts, { data: deleteConfigData, loading: deleteConfigLoading }] = useQueryHandler(
-    useDeleteXchangeConfigAlertMutation
+    useDeleteXchangeConfigAlertMutation,
   );
 
   const [xchangeAlerts, setXchangeAlerts] = useState<XchangeProfileAlerts>();

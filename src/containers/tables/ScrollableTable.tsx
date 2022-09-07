@@ -73,7 +73,7 @@ export const ScrollableTable = ({
 
   const renderHeaderTooltip = (
     props?: IDetailsColumnRenderTooltipProps,
-    defaultRender?: (_props?: IDetailsColumnRenderTooltipProps) => JSX.Element | null
+    defaultRender?: (_props?: IDetailsColumnRenderTooltipProps) => JSX.Element | null,
   ) => {
     if (!defaultRender) {
       return null;
@@ -89,7 +89,7 @@ export const ScrollableTable = ({
 
   const renderDetailsHeader = (
     props?: IDetailsHeaderProps,
-    defaultRender?: (_props?: IDetailsHeaderProps) => JSX.Element | null
+    defaultRender?: (_props?: IDetailsHeaderProps) => JSX.Element | null,
   ) => {
     if (props) {
       props.onRenderColumnHeaderTooltip = renderHeaderTooltip;

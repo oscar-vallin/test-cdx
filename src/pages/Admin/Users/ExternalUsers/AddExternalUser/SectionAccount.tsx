@@ -43,9 +43,7 @@ const SectionAccount = ({
   const [sendEmail, setSendEmail] = useState<boolean>(form.sendActivationEmail?.value ?? true);
   const creatUserCmd = form?.commands?.find((cmd) => cmd.commandType === CdxWebCommandType.Create);
 
-  const handleNext = () => {
-    return onNext();
-  };
+  const handleNext = () => onNext();
 
   const saveFields = (firstName: string, lastName: string, email: string, sid?: string) => {
     const user: UserAccount = {
@@ -77,30 +75,28 @@ const SectionAccount = ({
     return user;
   };
 
-  const handleNoResultsFound = () => {
-    return (
-      <Spacing id="__noResultsFound-Container" margin="normal">
-        <FormRow>
-          <Text id="__noResultsFound-Label" size="small">
-            No matching account found
-          </Text>
-        </FormRow>
-        {creatUserCmd && (
-          <FormRow>
-            <ButtonLink
-              id="__noResultsFound-Link"
-              onClick={() => {
-                setUserSelected(true);
-                setCreateExternalUser(true);
-              }}
-            >
-              Add a new account
-            </ButtonLink>
-          </FormRow>
-        )}
-      </Spacing>
-    );
-  };
+  const handleNoResultsFound = () => (
+    <Spacing id="__noResultsFound-Container" margin="normal">
+      <FormRow>
+        <Text id="__noResultsFound-Label" size="small">
+          No matching account found
+        </Text>
+      </FormRow>
+      {creatUserCmd && (
+      <FormRow>
+        <ButtonLink
+          id="__noResultsFound-Link"
+          onClick={() => {
+            setUserSelected(true);
+            setCreateExternalUser(true);
+          }}
+        >
+          Add a new account
+        </ButtonLink>
+      </FormRow>
+      )}
+    </Spacing>
+  );
 
   const onCheck = () => {
     const toggle = !sendEmail;
@@ -137,7 +133,7 @@ const SectionAccount = ({
                     selectedItem[0].firstName ?? '',
                     selectedItem[0].lastName ?? '',
                     selectedItem[0].email ?? '',
-                    selectedItem[0].key ?? ''
+                    selectedItem[0].key ?? '',
                   );
                 } else {
                   setUserSelected(false);

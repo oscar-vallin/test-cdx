@@ -1,4 +1,6 @@
-import { GqOperationResponse, Maybe, UiOption, UserAccount, UserAccountForm } from 'src/data/services/graphql';
+import {
+  GqOperationResponse, Maybe, UiOption, UserAccount, UserAccountForm,
+} from 'src/data/services/graphql';
 import { CheckboxItem } from 'src/data/Types';
 
 export const defaultForm = {
@@ -48,7 +50,7 @@ export const defaultForm = {
 export const updateForm = (
   userAccountForm: UserAccountForm,
   userAccount?: UserAccount,
-  accessPolicyGroupSids?: string[]
+  accessPolicyGroupSids?: string[],
 ): UserAccountForm => {
   if (userAccount) {
     userAccountForm.sid = userAccount.sid;
@@ -72,12 +74,10 @@ export const updateForm = (
   if (accessPolicyGroupSids) {
     userAccountForm.accessPolicyGroups = {
       ...(userAccountForm.accessPolicyGroups ?? defaultForm.accessPolicyGroups),
-      value: accessPolicyGroupSids.map((sid) => {
-        return {
-          name: '',
-          value: sid,
-        };
-      }),
+      value: accessPolicyGroupSids.map((sid) => ({
+        name: '',
+        value: sid,
+      })),
     };
   }
 
@@ -88,10 +88,7 @@ export const renderSelectedGroupsReadOnly = (form?: UserAccountForm): string => 
   const groupOptions: CheckboxItem[] = [];
 
   if (form) {
-    const formOpts: Maybe<UiOption>[] =
-      form?.options?.find((itm) => {
-        return itm?.key === form?.accessPolicyGroups?.options;
-      })?.values ?? [];
+    const formOpts: Maybe<UiOption>[] = form?.options?.find((itm) => itm?.key === form?.accessPolicyGroups?.options)?.values ?? [];
     const groupSids = form?.accessPolicyGroups?.value?.map((nvp) => nvp?.value) ?? [];
 
     formOpts.forEach((opt) => {
@@ -113,10 +110,7 @@ export const renderSelectedGroupsReadOnly = (form?: UserAccountForm): string => 
 };
 
 export const getAccessGroupOptions = (form?: UserAccountForm): UiOption[] => {
-  const formOpts: Maybe<UiOption>[] =
-    form?.options?.find((itm) => {
-      return itm?.key === form?.accessPolicyGroups?.options;
-    })?.values ?? [];
+  const formOpts: Maybe<UiOption>[] = form?.options?.find((itm) => itm?.key === form?.accessPolicyGroups?.options)?.values ?? [];
 
   const groupOpts: UiOption[] = [];
   formOpts.forEach((opt) => {
@@ -129,20 +123,12 @@ export const getAccessGroupOptions = (form?: UserAccountForm): UiOption[] => {
   return groupOpts;
 };
 
-export const getSelectedAccessGroupSids = (form?: UserAccountForm): string[] => {
-  return (
-    form?.accessPolicyGroups?.value
-      ?.filter((grp) => grp && grp.value)
-      ?.map((grp) => {
-        return grp?.value || '';
-      }) ?? []
-  );
-};
+export const getSelectedAccessGroupSids = (form?: UserAccountForm): string[] => (
+  form?.accessPolicyGroups?.value
+    ?.filter((grp) => grp && grp.value)
+    ?.map((grp) => grp?.value || '') ?? []
+);
 
-export const getOrganizationSpecificGroups = (groupOptions: UiOption[]) => {
-  return groupOptions.filter((g) => g.category === 'Organization specific groups');
-};
+export const getOrganizationSpecificGroups = (groupOptions: UiOption[]) => groupOptions.filter((g) => g.category === 'Organization specific groups');
 
-export const getSystemManagedGroups = (groupOptions: UiOption[]) => {
-  return groupOptions.filter((g) => g.category === 'System managed groups');
-};
+export const getSystemManagedGroups = (groupOptions: UiOption[]) => groupOptions.filter((g) => g.category === 'System managed groups');

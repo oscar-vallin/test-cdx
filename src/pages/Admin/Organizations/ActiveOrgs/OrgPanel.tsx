@@ -1,10 +1,14 @@
-import { MessageBar, MessageBarType, PanelType, Spinner, SpinnerSize, Stack } from '@fluentui/react';
+import {
+  MessageBar, MessageBarType, PanelType, Spinner, SpinnerSize, Stack,
+} from '@fluentui/react';
 import { Column } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { LightSeparator } from 'src/components/separators/Separator';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import React, { useEffect, useState } from 'react';
-import { PanelBody, PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
+import {
+  PanelBody, PanelHeader, PanelTitle, ThemedPanel,
+} from 'src/layouts/Panels/Panels.styles';
 import {
   CdxWebCommandType,
   GqOperationResponse,
@@ -48,7 +52,9 @@ const INITIAL_STATE: OrgStateType = {
   orgType: undefined,
 };
 
-export const OrgPanel = ({ isOpen, selectedOrgSid, onDismiss, onSave }: OrgPanelType) => {
+export const OrgPanel = ({
+  isOpen, selectedOrgSid, onDismiss, onSave,
+}: OrgPanelType) => {
   const { orgSid: orgOwnerSid } = useOrgSid();
   const [orgState, setOrgState] = useState<OrgStateType>(INITIAL_STATE);
   const [orgForm, setOrgForm] = useState<OrganizationForm | null>();
@@ -185,65 +191,63 @@ export const OrgPanel = ({ isOpen, selectedOrgSid, onDismiss, onSave }: OrgPanel
     );
   };
 
-  const renderBody = () => {
-    return (
-      <>
-        <FormRow>
-          <Column lg="6">{renderOrgId()}</Column>
-          <Column lg="6">
-            <UIInputSelectOne
-              id="__OrgType"
-              uiField={orgForm?.orgType}
-              value={orgState.orgType?.toString() ?? ''}
-              options={orgForm?.options}
-              onChange={(newValue) => {
-                setUnsavedChanges(true);
-                const orgType = getEnumByValue(OrgType, newValue);
-                setOrgState({ ...orgState, orgType });
-              }}
-            />
-          </Column>
-        </FormRow>
-        <FormRow>
-          <Column lg="12">
-            <UIInputText
-              id="__OrgName"
-              uiField={orgForm?.name}
-              value={orgState.name ?? ''}
-              onChange={(event, newValue) => {
-                setUnsavedChanges(true);
-                setOrgState({ ...orgState, name: newValue });
-              }}
-            />
-          </Column>
-        </FormRow>
-        <FormRow>
-          <Column lg="6">
-            <UIInputText
-              id="__Mv1Id"
-              uiField={orgForm?.mv1Id}
-              value={orgState.mv1Id ?? ''}
-              onChange={(event, newValue) => {
-                setUnsavedChanges(true);
-                setOrgState({ ...orgState, mv1Id: newValue });
-              }}
-            />
-          </Column>
-          <Column lg="6">
-            <UIInputText
-              id="__Mv1Folder"
-              uiField={orgForm?.mv1Folder}
-              value={orgState.mv1Folder ?? ''}
-              onChange={(event, newValue) => {
-                setUnsavedChanges(true);
-                setOrgState({ ...orgState, mv1Folder: newValue });
-              }}
-            />
-          </Column>
-        </FormRow>
-      </>
-    );
-  };
+  const renderBody = () => (
+    <>
+      <FormRow>
+        <Column lg="6">{renderOrgId()}</Column>
+        <Column lg="6">
+          <UIInputSelectOne
+            id="__OrgType"
+            uiField={orgForm?.orgType}
+            value={orgState.orgType?.toString() ?? ''}
+            options={orgForm?.options}
+            onChange={(newValue) => {
+              setUnsavedChanges(true);
+              const orgType = getEnumByValue(OrgType, newValue);
+              setOrgState({ ...orgState, orgType });
+            }}
+          />
+        </Column>
+      </FormRow>
+      <FormRow>
+        <Column lg="12">
+          <UIInputText
+            id="__OrgName"
+            uiField={orgForm?.name}
+            value={orgState.name ?? ''}
+            onChange={(event, newValue) => {
+              setUnsavedChanges(true);
+              setOrgState({ ...orgState, name: newValue });
+            }}
+          />
+        </Column>
+      </FormRow>
+      <FormRow>
+        <Column lg="6">
+          <UIInputText
+            id="__Mv1Id"
+            uiField={orgForm?.mv1Id}
+            value={orgState.mv1Id ?? ''}
+            onChange={(event, newValue) => {
+              setUnsavedChanges(true);
+              setOrgState({ ...orgState, mv1Id: newValue });
+            }}
+          />
+        </Column>
+        <Column lg="6">
+          <UIInputText
+            id="__Mv1Folder"
+            uiField={orgForm?.mv1Folder}
+            value={orgState.mv1Folder ?? ''}
+            onChange={(event, newValue) => {
+              setUnsavedChanges(true);
+              setOrgState({ ...orgState, mv1Folder: newValue });
+            }}
+          />
+        </Column>
+      </FormRow>
+    </>
+  );
 
   const renderPanelHeader = () => (
     <PanelHeader id="__PanelHeader">
@@ -291,7 +295,7 @@ export const OrgPanel = ({ isOpen, selectedOrgSid, onDismiss, onSave }: OrgPanel
   const renderPanelFooter = () => {
     const commands = orgForm?.commands;
     const command = commands?.find(
-      (cmd) => cmd?.commandType === CdxWebCommandType.Create || cmd?.commandType === CdxWebCommandType.Update
+      (cmd) => cmd?.commandType === CdxWebCommandType.Create || cmd?.commandType === CdxWebCommandType.Update,
     );
     if (command) {
       return (

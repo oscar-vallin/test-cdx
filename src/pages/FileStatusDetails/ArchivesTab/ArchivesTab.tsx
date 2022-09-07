@@ -57,19 +57,13 @@ export const ArchivesTab = ({ packet }: ArchivesTabType) => {
   return (
     <Spacing padding="normal">
       {renderRow('Client file', 'primary', packet?.clientFileArchivePath)}
-      {packet?.supplementalFilesArchivePaths?.map((itm, index) =>
-        renderRow('Supplemental', 'primary', itm, `supp_${index}`)
-      )}
-      {packet?.workStepStatus?.map((workStep, wsIndex) =>
-        workStep?.stepFile?.map((stepFile, stepFileIndex) =>
-          renderRow(
-            stepFile?.label ?? workStep?.stepName ?? workStep?.stepType ?? 'Work Step',
-            'info',
-            stepFile?.value,
-            `step_${wsIndex}_${stepFileIndex}`
-          )
-        )
-      )}
+      {packet?.supplementalFilesArchivePaths?.map((itm, index) => renderRow('Supplemental', 'primary', itm, `supp_${index}`))}
+      {packet?.workStepStatus?.map((workStep, wsIndex) => workStep?.stepFile?.map((stepFile, stepFileIndex) => renderRow(
+        stepFile?.label ?? workStep?.stepName ?? workStep?.stepType ?? 'Work Step',
+        'info',
+        stepFile?.value,
+        `step_${wsIndex}_${stepFileIndex}`,
+      )))}
       {renderRow('Sent to Vendor', 'success', packet?.vendorFileArchivePath)}
     </Spacing>
   );

@@ -20,10 +20,10 @@ type NavPanelType = {
   onCollapse: () => void;
 };
 
-export const NavPanel = ({ id, label, elements, expanded, onExpand, onCollapse }: NavPanelType) => {
-  const hasSelectedMenu = (): boolean => {
-    return elements.find((elem) => elem.selected) != null;
-  };
+export const NavPanel = ({
+  id, label, elements, expanded, onExpand, onCollapse,
+}: NavPanelType) => {
+  const hasSelectedMenu = (): boolean => elements.find((elem) => elem.selected) != null;
 
   const [isOpen, setIsOpen] = useState(expanded || hasSelectedMenu());
 

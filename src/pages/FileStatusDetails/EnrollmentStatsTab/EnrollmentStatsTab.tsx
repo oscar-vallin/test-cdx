@@ -14,8 +14,7 @@ type EnrollmentStatsTabProps = {
 const EnrollmentStatsTab = ({ packet }: EnrollmentStatsTabProps): ReactElement => {
   const includedStats = mapIncludedStats(packet?.enrollmentStats);
   const excludedPlanInsuredStat = mapExcludedStats(packet?.enrollmentStats);
-  const summaryOnly =
-    !packet?.enrollmentStats?.excludedInsuredStat && !packet?.enrollmentStats?.excludedPlanInsuredStat;
+  const summaryOnly = !packet?.enrollmentStats?.excludedInsuredStat && !packet?.enrollmentStats?.excludedPlanInsuredStat;
   const outboundEnrollmentStats = mapIncludedStats(packet?.outboundEnrollmentStats);
   const inboundEnrollmentStats = mapIncludedStats(packet?.inboundEnrollmentStats);
 

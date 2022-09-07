@@ -25,13 +25,13 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity' }) => {
 
   const { searchText, startDate, endDate } = useTableFilters('Name, Id, Last Activity');
   const [apiCompleted, { data: dataCompleted, loading: loadingCompleted, error: errorCompleted }] = useQueryHandler(
-    useExchangeActivityTransmittedLazyQuery
+    useExchangeActivityTransmittedLazyQuery,
   );
   const [apiErrored, { data: dataErrored, loading: loadingErrored, error: errorErrored }] = useQueryHandler(
-    useExchangeActivityErroredLazyQuery
+    useExchangeActivityErroredLazyQuery,
   );
   const [apiInProcess, { data: dataInProcess, loading: loadingInProcess, error: errorInProcess }] = useQueryHandler(
-    useExchangeActivityInProcessLazyQuery
+    useExchangeActivityInProcessLazyQuery,
   );
 
   useEffect(() => {

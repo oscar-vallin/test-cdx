@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { addDays, addMonths, endOfWeek, format, startOfWeek } from 'date-fns';
+import {
+  addDays, addMonths, endOfWeek, format, startOfWeek,
+} from 'date-fns';
 
 import { addWeeks, DateRangeType } from '@fluentui/react';
 
@@ -27,7 +29,9 @@ type ScheduleHeaderType = {
   onChangeView: (view: string) => void;
 };
 
-export const ScheduleHeader = ({ id, currentView, selectedDate, onChangeDate, onChangeView }: ScheduleHeaderType) => {
+export const ScheduleHeader = ({
+  id, currentView, selectedDate, onChangeDate, onChangeView,
+}: ScheduleHeaderType) => {
   const headerMonthFormat = 'MMMM';
   const headerYearFormat = 'yyyy';
   const [calendarOpen, setCalendarOpen] = useState(false);
@@ -109,13 +113,11 @@ export const ScheduleHeader = ({ id, currentView, selectedDate, onChangeDate, on
     setCalendarOpen(open);
   };
 
-  const renderTodayButton = () => {
-    return (
-      <ButtonAction id="__Today_Button" onClick={handleSelectToday} iconName="GotoToday" disabled={false}>
-        Today
-      </ButtonAction>
-    );
-  };
+  const renderTodayButton = () => (
+    <ButtonAction id="__Today_Button" onClick={handleSelectToday} iconName="GotoToday" disabled={false}>
+      Today
+    </ButtonAction>
+  );
 
   const renderHeaderTitle = () => {
     const formatWeek = 'LLL d';
@@ -164,7 +166,7 @@ export const ScheduleHeader = ({ id, currentView, selectedDate, onChangeDate, on
             <HeaderMonth>
               {`${format(weekStart, formatWeek)} - ${format(weekEnd, formatWeek)}, ${format(
                 selectedDate,
-                headerYearFormat
+                headerYearFormat,
               )}`}
             </HeaderMonth>
           </HeaderButtonTitle>
@@ -209,90 +211,86 @@ export const ScheduleHeader = ({ id, currentView, selectedDate, onChangeDate, on
 
   //
   // *
-  const renderNavArrows = () => {
-    return (
-      <UpDownContainer>
-        {isCurrentViewDay(currentView) && (
-          <>
-            <ButtonAction id="ButtonPrev" onClick={handlePrevDay} iconName="ChromeBack" disabled={false} />
-            <ButtonAction id="ButtonNext" onClick={handleNextDay} iconName="ChromeBackMirrored" disabled={false} />
-          </>
-        )}
-        {isCurrentViewWeek(currentView) && (
-          <>
-            <ButtonAction id="ButtonPrev" onClick={handlePrevWeek} iconName="ChromeBack" disabled={false} />
-            <ButtonAction id="ButtonNext" onClick={handleNextWeek} iconName="ChromeBackMirrored" disabled={false} />
-          </>
-        )}
-        {isCurrentViewMonth(currentView) && (
-          <>
-            <ButtonAction id="ButtonUp" onClick={handlePrevMonth} iconName="SortUp" disabled={false} />
-            <ButtonAction id="ButtonDown" onClick={handleNextMonth} iconName="SortDown" disabled={false} />
-          </>
-        )}
-      </UpDownContainer>
-    );
-  };
+  const renderNavArrows = () => (
+    <UpDownContainer>
+      {isCurrentViewDay(currentView) && (
+      <>
+        <ButtonAction id="ButtonPrev" onClick={handlePrevDay} iconName="ChromeBack" disabled={false} />
+        <ButtonAction id="ButtonNext" onClick={handleNextDay} iconName="ChromeBackMirrored" disabled={false} />
+      </>
+      )}
+      {isCurrentViewWeek(currentView) && (
+      <>
+        <ButtonAction id="ButtonPrev" onClick={handlePrevWeek} iconName="ChromeBack" disabled={false} />
+        <ButtonAction id="ButtonNext" onClick={handleNextWeek} iconName="ChromeBackMirrored" disabled={false} />
+      </>
+      )}
+      {isCurrentViewMonth(currentView) && (
+      <>
+        <ButtonAction id="ButtonUp" onClick={handlePrevMonth} iconName="SortUp" disabled={false} />
+        <ButtonAction id="ButtonDown" onClick={handleNextMonth} iconName="SortDown" disabled={false} />
+      </>
+      )}
+    </UpDownContainer>
+  );
 
-  const renderHeaderMonth = () => {
-    return (
-      <Row id={id}>
-        <Column lg="8">
-          <RowHeaderItem>
-            {renderTodayButton()}
-            {renderNavArrows()}
-            {renderHeaderTitle()}
-          </RowHeaderItem>
-        </Column>
-        <Column lg="4" direction="row" right>
-          <Spacing margin={{ left: 'normal' }}>
-            <HeaderButtonView
-              id="__HeaderButtonView_Button-MonthView_Id"
-              variant="secondary"
-              disabled={false}
-              block={false}
-              key="Button-MonthView"
-              selected={isCurrentViewMonth(currentView)}
-              onClick={() => handleChangeView('month')}
-              text=""
-            >
-              Month
-            </HeaderButtonView>
-          </Spacing>
+  const renderHeaderMonth = () => (
+    <Row id={id}>
+      <Column lg="8">
+        <RowHeaderItem>
+          {renderTodayButton()}
+          {renderNavArrows()}
+          {renderHeaderTitle()}
+        </RowHeaderItem>
+      </Column>
+      <Column lg="4" direction="row" right>
+        <Spacing margin={{ left: 'normal' }}>
+          <HeaderButtonView
+            id="__HeaderButtonView_Button-MonthView_Id"
+            variant="secondary"
+            disabled={false}
+            block={false}
+            key="Button-MonthView"
+            selected={isCurrentViewMonth(currentView)}
+            onClick={() => handleChangeView('month')}
+            text=""
+          >
+            Month
+          </HeaderButtonView>
+        </Spacing>
 
-          <Spacing margin={{ left: 'normal' }}>
-            <HeaderButtonView
-              id="__HeaderButtonView_Button-WeekView_Id"
-              variant="secondary"
-              disabled={false}
-              block={false}
-              key="Button-WeekView"
-              selected={isCurrentViewWeek(currentView)}
-              onClick={() => handleChangeView('week')}
-              text=""
-            >
-              Week
-            </HeaderButtonView>
-          </Spacing>
+        <Spacing margin={{ left: 'normal' }}>
+          <HeaderButtonView
+            id="__HeaderButtonView_Button-WeekView_Id"
+            variant="secondary"
+            disabled={false}
+            block={false}
+            key="Button-WeekView"
+            selected={isCurrentViewWeek(currentView)}
+            onClick={() => handleChangeView('week')}
+            text=""
+          >
+            Week
+          </HeaderButtonView>
+        </Spacing>
 
-          <Spacing margin={{ left: 'normal' }}>
-            <HeaderButtonView
-              id="__HeaderButtonView_Button-DayView_Id"
-              variant="secondary"
-              disabled={false}
-              block={false}
-              key="Button-DayView"
-              selected={isCurrentViewDay(currentView)}
-              onClick={() => handleChangeView('day')}
-              text=""
-            >
-              Day
-            </HeaderButtonView>
-          </Spacing>
-        </Column>
-      </Row>
-    );
-  };
+        <Spacing margin={{ left: 'normal' }}>
+          <HeaderButtonView
+            id="__HeaderButtonView_Button-DayView_Id"
+            variant="secondary"
+            disabled={false}
+            block={false}
+            key="Button-DayView"
+            selected={isCurrentViewDay(currentView)}
+            onClick={() => handleChangeView('day')}
+            text=""
+          >
+            Day
+          </HeaderButtonView>
+        </Spacing>
+      </Column>
+    </Row>
+  );
 
   return <>{renderHeaderMonth()}</>;
 };

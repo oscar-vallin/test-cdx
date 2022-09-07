@@ -14,7 +14,7 @@ type PollResult = {
 export const useFileStatusDetailsPoll = (
   orgSid?: string,
   workOrderId?: string,
-  workStatus?: WorkStatus
+  workStatus?: WorkStatus,
 ): PollResult => {
   const [dataUpdated, setDataUpdated] = useState(false);
   const handleError = ErrorHandler();
@@ -62,9 +62,9 @@ export const useFileStatusDetailsPoll = (
 
   useEffect(() => {
     if (
-      !pollWPStatus.loading &&
-      pollWPStatus.data?.workPacketStatusPoll &&
-      pollWPStatus.data.workPacketStatusPoll > 0
+      !pollWPStatus.loading
+      && pollWPStatus.data?.workPacketStatusPoll
+      && pollWPStatus.data.workPacketStatusPoll > 0
     ) {
       setDataUpdated(true);
       setLastUpdatedPoll(new Date());

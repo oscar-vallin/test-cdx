@@ -10,14 +10,12 @@ type RuleItemsParam = {
   items: PasswordValidationRule[];
 };
 
-const RuleItem = (idx: number, { item }: RuleItemParam) => {
-  return (
-    <div key={`ruleItem_${idx}`} style={{ display: 'flex', alignItems: 'center' }}>
-      {item.passes ? <StyledIcon iconName="StatusCircleCheckmark" /> : <StyledIcon iconName="StatusCircleErrorX" />}
-      {item.label}
-    </div>
-  );
-};
+const RuleItem = (idx: number, { item }: RuleItemParam) => (
+  <div key={`ruleItem_${idx}`} style={{ display: 'flex', alignItems: 'center' }}>
+    {item.passes ? <StyledIcon iconName="StatusCircleCheckmark" /> : <StyledIcon iconName="StatusCircleErrorX" />}
+    {item.label}
+  </div>
+);
 
 const RuleItems = ({ items }: RuleItemsParam) => {
   const rows: ReactElement[] = [];

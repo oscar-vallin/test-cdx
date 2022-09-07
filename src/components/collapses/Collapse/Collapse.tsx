@@ -9,9 +9,7 @@ const CDXCollapse = ({
   children,
   className = '',
   expanded = false,
-  onToggle = (expandedValue: boolean) => {
-    return {} as any;
-  },
+  onToggle = (expandedValue: boolean) => ({} as any),
   ...props
 }) => {
   const [isExpanded, setIsExpanded] = useState(!!expanded);

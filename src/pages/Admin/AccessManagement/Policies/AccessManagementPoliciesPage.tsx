@@ -80,7 +80,7 @@ const _AccessManagementPoliciesPage = () => {
 
   const [policies, setPolicies] = useState<Maybe<AccessPolicy>[] | null>();
   const [fetchTemplatePolicies, { data: templatePolicies, loading: isLoadingTemplatePolicies }] = useQueryHandler(
-    useAccessPolicyTemplatesLazyQuery
+    useAccessPolicyTemplatesLazyQuery,
   );
 
   const [templatePolicyMenu, setTemplatePolicyMenu] = useState<IContextualMenuItem[]>([]);
@@ -188,18 +188,17 @@ const _AccessManagementPoliciesPage = () => {
   }, [orgSid]);
 
   useEffect(() => {
-    let templates: IContextualMenuItem[] =
-      templatePolicies?.accessPolicyTemplates?.map((policy) => ({
-        key: policy.value,
-        text: policy.label,
-        style: {
-          padding: '0 5px 0 15px',
-        },
-        onClick: (event, item) => {
-          setSelectedTemplateId(item.key);
-          setIsPanelOpen(true);
-        },
-      })) || [];
+    let templates: IContextualMenuItem[] = templatePolicies?.accessPolicyTemplates?.map((policy) => ({
+      key: policy.value,
+      text: policy.label,
+      style: {
+        padding: '0 5px 0 15px',
+      },
+      onClick: (event, item) => {
+        setSelectedTemplateId(item.key);
+        setIsPanelOpen(true);
+      },
+    })) || [];
 
     if (templates.length > 0) {
       templates = [
@@ -257,13 +256,13 @@ const _AccessManagementPoliciesPage = () => {
           }}
           {...(!isLoadingTemplatePolicies && templatePolicyMenu.length > 0
             ? {
-                menuProps: {
-                  items: templatePolicyMenu,
-                  contextualMenuItemAs: (props) => (
-                    <div id={`PolicyTemplate__${props.item.key}`}>{props.item.text}</div>
-                  ),
-                },
-              }
+              menuProps: {
+                items: templatePolicyMenu,
+                contextualMenuItemAs: (props) => (
+                  <div id={`PolicyTemplate__${props.item.key}`}>{props.item.text}</div>
+                ),
+              },
+            }
             : {})}
         >
           {createCmd.label}

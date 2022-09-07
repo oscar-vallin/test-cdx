@@ -2,7 +2,9 @@ import React, { ReactElement } from 'react';
 import { Icon } from '@fluentui/react';
 import { ROUTES } from 'src/data/constants/RouteConstants';
 import { WorkPacketColumn } from 'src/containers/tables/WorkPacketColumns';
-import { NullHandling, SortDirection, useWpTransmissionsLazyQuery, WpTransmission } from 'src/data/services/graphql';
+import {
+  NullHandling, SortDirection, useWpTransmissionsLazyQuery, WpTransmission,
+} from 'src/data/services/graphql';
 import { tableFiltersToQueryParams, TableFiltersType } from 'src/hooks/useTableFilters';
 import { DownloadLink } from 'src/containers/tables/WorkPacketTable.styles';
 import { useOrgSid } from 'src/hooks/useOrgSid';
@@ -23,9 +25,7 @@ export const TransmissionsPage = () => {
 
   const getTotal = (data) => data?.wpTransmissions?.paginationInfo?.totalElements ?? 0;
 
-  const renderTotal = (totalRecords: number) => {
-    return <span>{totalRecords > 0 ? `${totalRecords} results found` : 'No results found'}</span>;
-  };
+  const renderTotal = (totalRecords: number) => <span>{totalRecords > 0 ? `${totalRecords} results found` : 'No results found'}</span>;
 
   const renderDownloadLink = (totalRecords: number, tableFilters: TableFiltersType): ReactElement => {
     const graphQLUrl = process.env.REACT_APP_API_SERVER;
@@ -47,14 +47,12 @@ export const TransmissionsPage = () => {
     return <span />;
   };
 
-  const renderTotalRecords = (totalRecords: number, tableFilters: TableFiltersType) => {
-    return (
-      <>
-        {renderDownloadLink(totalRecords, tableFilters)}
-        {renderTotal(totalRecords)}
-      </>
-    );
-  };
+  const renderTotalRecords = (totalRecords: number, tableFilters: TableFiltersType) => (
+    <>
+      {renderDownloadLink(totalRecords, tableFilters)}
+      {renderTotal(totalRecords)}
+    </>
+  );
 
   return (
     <WorkPacketListPage

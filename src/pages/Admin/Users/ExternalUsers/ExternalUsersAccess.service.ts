@@ -122,10 +122,9 @@ export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: s
   };
 
   const handleGrantUserAccess = async () => {
-    const accessPolicyGroupSids: string[] =
-      userAccountForm.accessPolicyGroups?.value
-        ?.filter((opt) => opt != null && opt?.value != null)
-        ?.map((opt) => opt?.value ?? '') ?? [];
+    const accessPolicyGroupSids: string[] = userAccountForm.accessPolicyGroups?.value
+      ?.filter((opt) => opt != null && opt?.value != null)
+      ?.map((opt) => opt?.value ?? '') ?? [];
     const { data } = await callGrantExternalUserAccess({
       variables: {
         userInfo: {
@@ -145,10 +144,9 @@ export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: s
   };
 
   const handleCreateExternalUser = async () => {
-    const accessPolicyGroupSids: string[] =
-      userAccountForm.accessPolicyGroups?.value
-        ?.filter((opt) => opt != null && opt?.value != null)
-        ?.map((opt) => opt?.value ?? '') ?? [];
+    const accessPolicyGroupSids: string[] = userAccountForm.accessPolicyGroups?.value
+      ?.filter((opt) => opt != null && opt?.value != null)
+      ?.map((opt) => opt?.value ?? '') ?? [];
 
     const { data } = await callCreateExternalUser({
       variables: {
@@ -203,7 +201,7 @@ export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: s
   async function callFindExternalUsers(
     client: ApolloClient<object>,
     handleApolloError: (error?: any) => void,
-    searchText: string
+    searchText: string,
   ): Promise<ITag[]> {
     let users: ITag[] = [];
     await client

@@ -17,7 +17,7 @@ async function orgQuickSearch(
   client: ApolloClient<object>,
   handleError: (error?: any) => void,
   searchText: string,
-  orgOwnerSid: string
+  orgOwnerSid: string,
 ): Promise<ITag[]> {
   let orgs: ITag[] = [];
   await client
@@ -50,7 +50,7 @@ async function vendorQuickSearch(
   client: ApolloClient<object>,
   handleError: (error?: any) => void,
   searchText: string,
-  orgOwnerSid: string
+  orgOwnerSid: string,
 ): Promise<ITag[]> {
   let orgs: ITag[] = [];
   await client
@@ -82,7 +82,7 @@ async function vendorQuickSearch(
 async function userOrgsQuickSearch(
   client: ApolloClient<object>,
   handleError: (error?: any) => void,
-  searchText: string
+  searchText: string,
 ): Promise<ITag[]> {
   let orgs: ITag[] = [];
   await client

@@ -29,9 +29,7 @@ export const FileStatusPage = () => {
 
   const getTotal = (data) => data?.workPacketStatuses?.paginationInfo?.totalElements ?? 0;
 
-  const renderTotal = (totalRecords: number): ReactElement => {
-    return <span>{totalRecords > 0 ? `${totalRecords} results found` : 'No results found'}</span>;
-  };
+  const renderTotal = (totalRecords: number): ReactElement => <span>{totalRecords > 0 ? `${totalRecords} results found` : 'No results found'}</span>;
 
   const renderDownloadLink = (totalRecords: number, tableFilters: TableFiltersType): ReactElement => {
     const graphQLUrl = process.env.REACT_APP_API_SERVER;
@@ -53,14 +51,12 @@ export const FileStatusPage = () => {
     return <span />;
   };
 
-  const renderTotalRecords = (totalRecords: number, tableFilters: TableFiltersType) => {
-    return (
-      <>
-        {renderDownloadLink(totalRecords, tableFilters)}
-        {renderTotal(totalRecords)}
-      </>
-    );
-  };
+  const renderTotalRecords = (totalRecords: number, tableFilters: TableFiltersType) => (
+    <>
+      {renderDownloadLink(totalRecords, tableFilters)}
+      {renderTotal(totalRecords)}
+    </>
+  );
 
   return (
     <WorkPacketListPage

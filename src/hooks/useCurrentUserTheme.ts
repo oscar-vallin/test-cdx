@@ -14,8 +14,7 @@ export const useCurrentUserTheme = () => {
   const { isAuthenticated } = SessionStore.status;
 
   const [callUserThemeQuery, { data: dataTheme, loading: loadingTheme }] = useUserThemeLazyQuery();
-  const [callSetOwnDashFontSize, { data: dataUpdatedFont, loading: loadingFont, error: errorFont }] =
-    useSetOwnDashThemeFontSizeMutation();
+  const [callSetOwnDashFontSize, { data: dataUpdatedFont, loading: loadingFont, error: errorFont }] = useSetOwnDashThemeFontSizeMutation();
 
   useEffect(() => {
     handleError(errorFont);

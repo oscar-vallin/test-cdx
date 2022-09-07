@@ -1,5 +1,7 @@
 import { useState, useEffect, ReactElement } from 'react';
-import { addDays, endOfMonth, endOfWeek, format, isSameDay, isSameMonth, startOfMonth, startOfWeek } from 'date-fns';
+import {
+  addDays, endOfMonth, endOfWeek, format, isSameDay, isSameMonth, startOfMonth, startOfWeek,
+} from 'date-fns';
 
 import { Text } from 'src/components/typography';
 import {
@@ -114,13 +116,13 @@ export const ScheduleSubHeader = ({
               {isCurrentDate || isStartMonth || isEndMonth ? format(day, 'MMM d') : format(day, 'd')}
             </WeekViewNumber>
             <WeekViewDayName isSameMonth={isCurrentMonth}>{format(day, 'EEE')}</WeekViewDayName>
-          </WeekViewContainer>
+          </WeekViewContainer>,
         );
       } else {
         days.push(
           <DayOfWeek id={`__MonthSubHeader_${i}`} key={`day_${i}`}>
             <Text size="small">{format(day, dateFormat)}</Text>
-          </DayOfWeek>
+          </DayOfWeek>,
         );
       }
     }

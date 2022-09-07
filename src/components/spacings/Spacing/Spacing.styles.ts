@@ -5,7 +5,9 @@ const getSpacingValues = ({ spacing }, attr) => {
     return spacing[attr];
   }
 
-  const { top = 'none', right = 'none', bottom = 'none', left = 'none' } = attr;
+  const {
+    top = 'none', right = 'none', bottom = 'none', left = 'none',
+  } = attr;
 
   return `${spacing[top]} ${spacing[right]} ${spacing[bottom]} ${spacing[left]}`;
 };

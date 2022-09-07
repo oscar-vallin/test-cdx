@@ -15,7 +15,9 @@ type UIInputMultiSelectType = {
   placeholder?: string;
 };
 
-export const UIInputMultiSelect = ({ id, uiField, options, value, onChange, placeholder }: UIInputMultiSelectType) => {
+export const UIInputMultiSelect = ({
+  id, uiField, options, value, onChange, placeholder,
+}: UIInputMultiSelectType) => {
   const onRenderLabel = () => <UIFormLabel id={`${id}_lbl`} uiField={uiField} />;
 
   const renderReadOnlyValues = () => {

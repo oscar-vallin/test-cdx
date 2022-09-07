@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import { IconButton, PanelType, PrimaryButton, Spinner, SpinnerSize, Text } from '@fluentui/react';
+import {
+  IconButton, PanelType, PrimaryButton, Spinner, SpinnerSize, Text,
+} from '@fluentui/react';
 import CodeMirror, { BasicSetupOptions } from '@uiw/react-codemirror';
 import { createTheme } from '@uiw/codemirror-themes';
 import { javascript } from '@codemirror/lang-javascript';
@@ -16,7 +18,9 @@ import {
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { useNotification } from 'src/hooks/useNotification';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
-import { ThemedPanel, PanelBody, WizardButtonRow, WizardBody } from 'src/layouts/Panels/Panels.styles';
+import {
+  ThemedPanel, PanelBody, WizardButtonRow, WizardBody,
+} from 'src/layouts/Panels/Panels.styles';
 import { Spacing } from 'src/components/spacings/Spacing';
 
 type XchangeStepPanelProps = {
@@ -81,17 +85,13 @@ const XchangeStepPanel = ({
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
 
-  const [xchangeStepForm, { data: dataAddStep, loading: loadingAddStep }] =
-    useQueryHandler(useXchangeStepFormLazyQuery);
+  const [xchangeStepForm, { data: dataAddStep, loading: loadingAddStep }] = useQueryHandler(useXchangeStepFormLazyQuery);
 
-  const [xchangeCopyStepForm, { data: dataCopyStep, loading: loadingCopyStep }] =
-    useQueryHandler(useCopyXchangeStepLazyQuery);
+  const [xchangeCopyStepForm, { data: dataCopyStep, loading: loadingCopyStep }] = useQueryHandler(useCopyXchangeStepLazyQuery);
 
-  const [updateXchangeStep, { data: dataUpdateStep, loading: loadingUpdateXchange, error: errorUpdateXchange }] =
-    useQueryHandler(useUpdateXchangeStepMutation);
+  const [updateXchangeStep, { data: dataUpdateStep, loading: loadingUpdateXchange, error: errorUpdateXchange }] = useQueryHandler(useUpdateXchangeStepMutation);
 
-  const [createXchangeStep, { data: dataCreateStep, loading: loadingCreateStep, error: errorCreateStep }] =
-    useQueryHandler(useCreateXchangeStepMutation);
+  const [createXchangeStep, { data: dataCreateStep, loading: loadingCreateStep, error: errorCreateStep }] = useQueryHandler(useCreateXchangeStepMutation);
 
   const getxmlData = () => {
     if (isPanelOpen) {
@@ -120,8 +120,7 @@ const XchangeStepPanel = ({
   const showUnsavedChangesDialog = () => {
     const updatedDialog = { ...defaultDialogProps };
     updatedDialog.title = 'You have unsaved changes';
-    updatedDialog.message =
-      'Changes made to this Xchange step will be discarded?  Are you sure you wish to continue and lose your changes?';
+    updatedDialog.message = 'Changes made to this Xchange step will be discarded?  Are you sure you wish to continue and lose your changes?';
 
     updatedDialog.onYes = () => {
       hideDialog();
@@ -311,12 +310,12 @@ const XchangeStepPanel = ({
   useEffect(() => {
     if (!loadingUpdateXchange && dataUpdateStep) {
       refreshDetailsPage(true);
-      Toast.success({ text: `Xchange step updated` });
+      Toast.success({ text: 'Xchange step updated' });
       closePanel(false);
     }
 
     if (!loadingUpdateXchange && errorUpdateXchange) {
-      Toast.error({ text: `There was an error to update step` });
+      Toast.error({ text: 'There was an error to update step' });
     }
   }, [dataUpdateStep, loadingUpdateXchange, errorUpdateXchange]);
 

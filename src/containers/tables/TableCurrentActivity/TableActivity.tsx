@@ -1,5 +1,7 @@
 import { ReactElement } from 'react';
-import { IColumn, DetailsListLayoutMode, SelectionMode, Spinner, DetailsList } from '@fluentui/react';
+import {
+  IColumn, DetailsListLayoutMode, SelectionMode, Spinner, DetailsList,
+} from '@fluentui/react';
 import { format } from 'date-fns';
 import { Column } from 'src/components/layouts';
 import { OrganizationLink } from 'src/data/services/graphql';
@@ -25,29 +27,25 @@ const TableActivity = ({
   emptyMessage,
   onClick,
 }: TableActivityProps): ReactElement => {
-  const renderOrgName = (item: OrganizationLink) => {
-    return (
-      <ButtonLink
-        onClick={() => {
-          onClick(item.id);
-        }}
-      >
-        {item.name}
-      </ButtonLink>
-    );
-  };
+  const renderOrgName = (item: OrganizationLink) => (
+    <ButtonLink
+      onClick={() => {
+        onClick(item.id);
+      }}
+    >
+      {item.name}
+    </ButtonLink>
+  );
 
-  const renderLastActivity = (item: OrganizationLink) => {
-    return (
-      <ButtonLink
-        onClick={() => {
-          onClick(item.id);
-        }}
-      >
-        {format(new Date(item.activityTime), 'MM/dd/yyyy hh:mm a')}
-      </ButtonLink>
-    );
-  };
+  const renderLastActivity = (item: OrganizationLink) => (
+    <ButtonLink
+      onClick={() => {
+        onClick(item.id);
+      }}
+    >
+      {format(new Date(item.activityTime), 'MM/dd/yyyy hh:mm a')}
+    </ButtonLink>
+  );
 
   const columns: IColumn[] = [
     {

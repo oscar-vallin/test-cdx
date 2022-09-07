@@ -19,9 +19,7 @@ const SectionAccount = ({ form, onNext, saveOptions }: SectionAccountProps) => {
   const formLastName = useFormInputValue(form.person?.lastNm?.value ?? '');
   const formEmail = useFormInputValue(form.email?.value ?? '');
 
-  const handleNext = () => {
-    return onNext();
-  };
+  const handleNext = () => onNext();
 
   const saveFields = (firstName: string, lastName: string, email: string) => {
     const user: UserAccount = {

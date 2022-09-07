@@ -2,7 +2,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactElement, useState, useEffect } from 'react';
 import { MessageBar, MessageBarType } from '@fluentui/react';
-import { BigTitle, Card500, CenteredWrapper, K2ULogo, LogoRow } from 'src/layouts/LayoutLogin/LayoutLogin.styles';
+import {
+  BigTitle, Card500, CenteredWrapper, K2ULogo, LogoRow,
+} from 'src/layouts/LayoutLogin/LayoutLogin.styles';
 import { Column } from 'src/components/layouts';
 import { InputText } from 'src/components/inputs/InputText';
 import { Spinner } from 'src/components/spinners/Spinner';
@@ -10,7 +12,9 @@ import { ButtonLink } from 'src/components/buttons';
 import { useLoginUseCase } from 'src/use-cases/Authentication';
 import { ForgotPasswordModal } from 'src/containers/modals/ForgotPasswordModal';
 import { useSessionStore } from 'src/store/SessionStore';
-import { StyledRow, StyledButton, StyledText, StyledButtonIcon } from './FormLogin.styles';
+import {
+  StyledRow, StyledButton, StyledText, StyledButtonIcon,
+} from './FormLogin.styles';
 
 const defaultProps = {
   id: '',
@@ -25,7 +29,9 @@ const INITIAL_STATE = { userId: '', password: '' };
 const FormLogin = ({ id }: FormLoginProps): ReactElement => {
   const SessionStore = useSessionStore();
 
-  const { performUserIdVerification, performUserAuthentication, returnToInitialStep, state } = useLoginUseCase();
+  const {
+    performUserIdVerification, performUserAuthentication, returnToInitialStep, state,
+  } = useLoginUseCase();
 
   const [values, setValues] = useState({ ...INITIAL_STATE });
   const [isValidEmail, setIsValidEmail] = useState(false);

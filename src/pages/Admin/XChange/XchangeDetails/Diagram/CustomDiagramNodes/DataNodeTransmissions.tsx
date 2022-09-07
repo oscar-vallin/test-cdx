@@ -1,5 +1,7 @@
 import React, { memo, useEffect, useState } from 'react';
-import { DirectionalHint, FontIcon, Stack, Text, TooltipHost } from '@fluentui/react';
+import {
+  DirectionalHint, FontIcon, Stack, Text, TooltipHost,
+} from '@fluentui/react';
 import { useDeleteXchangeFileTransmissionMutation } from 'src/data/services/graphql';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { Handle, Position } from 'react-flow-renderer';
@@ -42,7 +44,7 @@ const DataNodeTransmissions = ({ data, id }) => {
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
 
   const [deleteXchangeFileTransmission, { data: dataDelete, loading: loadingDelete }] = useQueryHandler(
-    useDeleteXchangeFileTransmissionMutation
+    useDeleteXchangeFileTransmissionMutation,
   );
 
   let width = '48px';
@@ -82,7 +84,10 @@ const DataNodeTransmissions = ({ data, id }) => {
     if (showIcons) {
       return (
         <>
-          <div style={{ display: 'flex', position: 'absolute', bottom: 55, left: 180 }}>
+          <div style={{
+            display: 'flex', position: 'absolute', bottom: 55, left: 180,
+          }}
+          >
             <TooltipHost content="Copy Step">
               <FontIcon
                 iconName="Copy"
@@ -97,7 +102,10 @@ const DataNodeTransmissions = ({ data, id }) => {
               />
             </TooltipHost>
           </div>
-          <div style={{ display: 'flex', position: 'absolute', bottom: 55, left: 210 }}>
+          <div style={{
+            display: 'flex', position: 'absolute', bottom: 55, left: 210,
+          }}
+          >
             <TooltipHost content="Delete" directionalHint={DirectionalHint['rightCenter']}>
               <FontIcon
                 iconName="Trash"

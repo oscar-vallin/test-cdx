@@ -12,7 +12,9 @@ type HighlightCounterProps = {
   children?: ReactElement | any;
 };
 
-const HighlightCounter = ({ id, type, href, onClick, children, ...props }: HighlightCounterProps): ReactElement => {
+const HighlightCounter = ({
+  id, type, href, onClick, children, ...props
+}: HighlightCounterProps): ReactElement => {
   if (href) {
     return (
       <HighlightBubble id={id} type={type} {...props}>

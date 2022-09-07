@@ -89,8 +89,8 @@ export const LogMessageItem = ({ logMessage }: LogMessageItemProps): ReactNode |
                 />
               )}
             </Spacing>
-            {logMessage.attributes?.length &&
-              logMessage.attributes.map((attribute, attributeIndex) => (
+            {logMessage.attributes?.length
+              && logMessage.attributes.map((attribute, attributeIndex) => (
                 <Spacing margin={{ bottom: 'normal' }} key={attributeIndex}>
                   <LabelValue label={attribute.name} value={attribute.strValue} />
                 </Spacing>

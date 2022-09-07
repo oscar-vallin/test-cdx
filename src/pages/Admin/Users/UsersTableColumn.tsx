@@ -75,9 +75,7 @@ export const useUsersTableColumns = (selectedColumns: UsersTableColumns[]) => {
   const initialColumns = (): DataColumn[] => {
     const initCols: DataColumn[] = [];
     selectedColumns.forEach((sCol: UsersTableColumns) => {
-      const matching = columnOptions.find((colOpt: IColumn) => {
-        return colOpt.data === sCol;
-      });
+      const matching = columnOptions.find((colOpt: IColumn) => colOpt.data === sCol);
       if (matching != null) {
         initCols.push(matching);
       }

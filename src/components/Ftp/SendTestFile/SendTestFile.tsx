@@ -40,67 +40,61 @@ const SendTestFile = ({
               text: '',
               styles: { choiceFieldWrapper: { marginTop: '10px', width: '100%' } },
               // eslint-disable-next-line react/no-unstable-nested-components
-              onRenderLabel: (props) => {
-                return (
-                  <Spacing margin={{ left: 'double' }}>
-                    {testFile ? (
-                      <CancelTestFile setTestFile={setTestFile} testFile={testFile} />
-                    ) : (
-                      <UploadFile props={props} inputFileRef={inputFileRef} />
-                    )}
-                  </Spacing>
-                );
-              },
+              onRenderLabel: (props) => (
+                <Spacing margin={{ left: 'double' }}>
+                  {testFile ? (
+                    <CancelTestFile setTestFile={setTestFile} testFile={testFile} />
+                  ) : (
+                    <UploadFile props={props} inputFileRef={inputFileRef} />
+                  )}
+                </Spacing>
+              ),
               // eslint-disable-next-line react/no-unstable-nested-components
-              onRenderField: (props, render) => {
-                return (
-                  <>
-                    {render!(props)}
-                    <input style={{ display: 'none' }} type="file" ref={inputFileRef} onChange={handleChooseFile} />
-                    {props?.checked && genTestFileForm?.fileName?.visible && (
-                      <Spacing margin={{ bottom: 'normal', top: 'normal' }}>
-                        <UIInputText
-                          id="fileName"
-                          uiField={genTestFileForm?.fileName}
-                          value={vendorFileName}
-                          onChange={(event, newValue) => setVendorFileName(newValue ?? '')}
-                        />
-                      </Spacing>
-                    )}
-                  </>
-                );
-              },
+              onRenderField: (props, render) => (
+                <>
+                  {render!(props)}
+                  <input style={{ display: 'none' }} type="file" ref={inputFileRef} onChange={handleChooseFile} />
+                  {props?.checked && genTestFileForm?.fileName?.visible && (
+                  <Spacing margin={{ bottom: 'normal', top: 'normal' }}>
+                    <UIInputText
+                      id="fileName"
+                      uiField={genTestFileForm?.fileName}
+                      value={vendorFileName}
+                      onChange={(event, newValue) => setVendorFileName(newValue ?? '')}
+                    />
+                  </Spacing>
+                  )}
+                </>
+              ),
             },
             {
               key: TestFileStrategy.Generate,
               text: 'Generate a File',
               styles: { choiceFieldWrapper: { marginTop: '10px', width: '100%' } },
               // eslint-disable-next-line react/no-unstable-nested-components
-              onRenderField: (props, render) => {
-                return (
+              onRenderField: (props, render) => (
+                <>
+                  {render!(props)}
+                  {props?.checked && (
                   <>
-                    {render!(props)}
-                    {props?.checked && (
-                      <>
-                        {genTestFileForm?.fileName.visible && (
-                          <GenerateFileName
-                            fileName={genTestFileForm?.fileName}
-                            vendorFileName={vendorFileName}
-                            setVendorFileName={setVendorFileName}
-                          />
-                        )}
-                        {genTestFileForm?.fileBody?.visible && (
-                          <GenerateTextFileContent
-                            fileBody={genTestFileForm?.fileBody}
-                            textFileContent={textFileContent}
-                            setTextFileContent={setTextFileContent}
-                          />
-                        )}
-                      </>
+                    {genTestFileForm?.fileName.visible && (
+                    <GenerateFileName
+                      fileName={genTestFileForm?.fileName}
+                      vendorFileName={vendorFileName}
+                      setVendorFileName={setVendorFileName}
+                    />
+                    )}
+                    {genTestFileForm?.fileBody?.visible && (
+                    <GenerateTextFileContent
+                      fileBody={genTestFileForm?.fileBody}
+                      textFileContent={textFileContent}
+                      setTextFileContent={setTextFileContent}
+                    />
                     )}
                   </>
-                );
-              },
+                  )}
+                </>
+              ),
             },
           ]}
           onChange={() => {

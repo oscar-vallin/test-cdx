@@ -18,13 +18,11 @@ export const LayoutLogin = ({
   id,
   children,
   direction = StyleConstants.DIRECTION_COLUMN,
-}: LayoutLoginProps): ReactElement => {
-  return (
-    <BoxStyled id={id} direction={direction}>
-      {children}
-    </BoxStyled>
-  );
-};
+}: LayoutLoginProps): ReactElement => (
+  <BoxStyled id={id} direction={direction}>
+    {children}
+  </BoxStyled>
+);
 
 LayoutLogin.defaultProps = defaultProps;
 

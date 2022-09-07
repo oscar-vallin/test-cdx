@@ -42,26 +42,24 @@ const Text = ({
   breakWord,
   title,
   ...props
-}: TextProps): ReactElement => {
-  return (
-    <StyledText
-      id={id ? `${id}-Text` : undefined}
-      variant={variant}
-      center={center}
-      right={right}
-      top={top}
-      bottom={bottom}
-      transform={transform}
-      breakWord={breakWord}
-      title={title}
-      size={size}
-      className="Text"
-      {...props}
-    >
-      {children}
-    </StyledText>
-  );
-};
+}: TextProps): ReactElement => (
+  <StyledText
+    id={id ? `${id}-Text` : undefined}
+    variant={variant}
+    center={center}
+    right={right}
+    top={top}
+    bottom={bottom}
+    transform={transform}
+    breakWord={breakWord}
+    title={title}
+    size={size}
+    className="Text"
+    {...props}
+  >
+    {children}
+  </StyledText>
+);
 
 Text.defaultProps = defaultProps;
 

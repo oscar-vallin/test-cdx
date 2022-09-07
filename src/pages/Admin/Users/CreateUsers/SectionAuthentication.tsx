@@ -14,7 +14,9 @@ type SectionAuthProps = {
   saveOptions: (sendActivationEmail: boolean) => void;
 };
 
-const SectionAuthentication = ({ form, onPrev, onNext, saveOptions }: SectionAuthProps) => {
+const SectionAuthentication = ({
+  form, onPrev, onNext, saveOptions,
+}: SectionAuthProps) => {
   const [sendEmail, setSendEmail] = useState<boolean>(form.sendActivationEmail?.value ?? true);
 
   useEffect(() => {

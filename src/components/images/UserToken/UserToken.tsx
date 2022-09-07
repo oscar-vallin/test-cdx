@@ -12,18 +12,16 @@ type UserTokenProps = {
   name?: string;
 } & typeof defaultProps;
 
-const UserToken = ({ id, name }: UserTokenProps): ReactElement => {
-  return (
-    <StyledPersona
-      id={id}
-      text={name}
-      size={PersonaSize.size32}
-      imageAlt={name}
-      initialsColor={PersonaInitialsColor.darkBlue}
-      hidePersonaDetails
-    />
-  );
-};
+const UserToken = ({ id, name }: UserTokenProps): ReactElement => (
+  <StyledPersona
+    id={id}
+    text={name}
+    size={PersonaSize.size32}
+    imageAlt={name}
+    initialsColor={PersonaInitialsColor.darkBlue}
+    hidePersonaDetails
+  />
+);
 
 UserToken.defaultProps = defaultProps;
 

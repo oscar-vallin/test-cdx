@@ -10,7 +10,9 @@ type ButtonContextualProps = {
   items: IContextualMenuItem[];
 };
 
-const ButtonContextual = ({ id, children, title, items }: ButtonContextualProps): ReactElement => {
+const ButtonContextual = ({
+  id, children, title, items,
+}: ButtonContextualProps): ReactElement => {
   const menuProps: IContextualMenuProps = useConst(() => ({
     shouldFocusOnMount: true,
     items,

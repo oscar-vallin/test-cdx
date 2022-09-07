@@ -192,7 +192,7 @@ export const WeekViewContainer = styled.div<StyledWeekViewContainerProps>`
 
   color: ${({ isSameDay }) => (isSameDay ? COLOR_MAIN : COLOR_BORDER)};
   border-top-color: ${({ isSameDay }) => (isSameDay ? COLOR_MAIN : COLOR_BORDER)};
-  border-top-width: ${({ isSameDay }) => (isSameDay ? `5px 0px 0px` : `1px`)};
+  border-top-width: ${({ isSameDay }) => (isSameDay ? '5px 0px 0px' : '1px')};
   border-left-color: ${COLOR_BORDER};
   border-right-color: ${COLOR_BORDER};
   border-left-width: 1px;

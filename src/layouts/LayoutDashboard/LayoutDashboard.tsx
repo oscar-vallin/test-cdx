@@ -1,4 +1,6 @@
-import { ReactElement, ReactNode, useEffect, useState } from 'react';
+import {
+  ReactElement, ReactNode, useEffect, useState,
+} from 'react';
 import { AppHeader } from 'src/containers/headers/AppHeader';
 
 import { StyleConstants } from 'src/data/constants/StyleConstants';

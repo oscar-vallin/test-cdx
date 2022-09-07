@@ -26,13 +26,11 @@ const style: StyledProps | undefined = {
 interface NodeProps {
   content: React.ReactNode;
 }
-const Node: React.FC<NodeProps> = ({ content }: NodeProps) => {
+const Node: React.FC<NodeProps> = ({ content }: NodeProps) =>
   // Collapse contentWrapper on icon click
-  return (
+  (
     <div style={{ ...style.body }}>
       <div style={{ display: 'flex', alignItems: 'center', marginTop: '6px' }}>{content}</div>
     </div>
   );
-};
-
 export default memo(Node);

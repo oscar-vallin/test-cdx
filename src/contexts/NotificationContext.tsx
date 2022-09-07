@@ -1,9 +1,9 @@
-import React, { ReactElement, ReactNode, useEffect, useReducer } from 'react';
+import React, {
+  ReactElement, ReactNode, useEffect, useReducer,
+} from 'react';
 import { Toast } from '../components/toast';
 
-export const NotificationContext = React.createContext<any>(() => {
-  return {};
-});
+export const NotificationContext = React.createContext<any>(() => ({}));
 
 const INITIAL_STATE = {
   type: 'info',

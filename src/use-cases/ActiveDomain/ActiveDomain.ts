@@ -39,14 +39,11 @@ export const useActiveDomainUseCase = () => {
 
   const history = useHistory();
 
-  const [fetchDashNav, { data: dashNav, loading: isFetchingDashNav, error: dashNavError }] =
-    useNavigateToNewDomainLazyQuery();
+  const [fetchDashNav, { data: dashNav, loading: isFetchingDashNav, error: dashNavError }] = useNavigateToNewDomainLazyQuery();
 
-  const [fetchOrgNav, { data: orgNav, loading: isFetchingOrgNav, error: orgNavError }] =
-    useNavigateToNewDomainLazyQuery();
+  const [fetchOrgNav, { data: orgNav, loading: isFetchingOrgNav, error: orgNavError }] = useNavigateToNewDomainLazyQuery();
 
-  const [fetchCurrentOrgNav, { data: currentOrgNav, loading: isFetchingCurrentOrgNav, error: currentOrgNavError }] =
-    useCurrentOrgNavLazyQuery();
+  const [fetchCurrentOrgNav, { data: currentOrgNav, loading: isFetchingCurrentOrgNav, error: currentOrgNavError }] = useCurrentOrgNavLazyQuery();
 
   const handleSessionTimeout = (error?: any) => {
     if (window.location.pathname !== ROUTES.ROUTE_LOGIN.URL && error?.networkError?.statusCode === 403) {

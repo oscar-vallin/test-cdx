@@ -15,17 +15,15 @@ type PageHeaderProps = {
   children?: any;
 } & typeof defaultProps;
 
-const PageHeader = ({ id, spacing, children }: PageHeaderProps): ReactElement => {
-  return (
-    <StyledBox id={id} spacing={spacing}>
-      <Row id={`${id}__Nav`} left>
-        <Column id={`${id}__Col-Left`} sm={12}>
-          {children}
-        </Column>
-      </Row>
-    </StyledBox>
-  );
-};
+const PageHeader = ({ id, spacing, children }: PageHeaderProps): ReactElement => (
+  <StyledBox id={id} spacing={spacing}>
+    <Row id={`${id}__Nav`} left>
+      <Column id={`${id}__Col-Left`} sm={12}>
+        {children}
+      </Column>
+    </Row>
+  </StyledBox>
+);
 
 PageHeader.defaultProps = defaultProps;
 

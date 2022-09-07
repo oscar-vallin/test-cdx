@@ -93,8 +93,8 @@ type CalendarBodyCellProps = {
 
 export const CalendarBodyCell = styled.div<CalendarBodyCellProps>`
   border-color: ${({ isSelectedDate }) => (isSelectedDate ? COLOR_MAIN : COLOR_BORDER)};
-  border-width: ${({ isSelectedDate }) => (isSelectedDate ? `5px 0px 0px` : `1px`)};
-  padding-top: ${({ isSelectedDate }) => (isSelectedDate ? `0px` : `5px`)};
+  border-width: ${({ isSelectedDate }) => (isSelectedDate ? '5px 0px 0px' : '1px')};
+  padding-top: ${({ isSelectedDate }) => (isSelectedDate ? '0px' : '5px')};
   border-style: solid;
   cursor: pointer;
   background: ${({ isSameDay }) => (isSameDay ? COLOR_BG : COLOR_NEUTRAL)};

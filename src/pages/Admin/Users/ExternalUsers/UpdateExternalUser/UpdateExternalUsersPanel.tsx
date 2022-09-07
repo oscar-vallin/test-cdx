@@ -1,9 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactElement, useState } from 'react';
-import { MessageBar, MessageBarType, PanelType, Stack } from '@fluentui/react';
+import {
+  MessageBar, MessageBarType, PanelType, Stack,
+} from '@fluentui/react';
 
 import { Tabs } from 'src/components/tabs/Tabs';
-import { PanelBody, PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
+import {
+  PanelBody, PanelHeader, PanelTitle, ThemedPanel,
+} from 'src/layouts/Panels/Panels.styles';
 
 import { useNotification } from 'src/hooks/useNotification';
 import { GqOperationResponse, UserAccountForm } from 'src/data/services/graphql';

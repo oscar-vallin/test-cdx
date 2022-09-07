@@ -33,7 +33,9 @@ type RunOccurrence = {
   canViewDetails: boolean;
 };
 
-export const ScheduleDay = ({ currentDate, selectedDate, items, useFileStatusDetailsPanel }: ScheduleDayType) => {
+export const ScheduleDay = ({
+  currentDate, selectedDate, items, useFileStatusDetailsPanel,
+}: ScheduleDayType) => {
   const currentSelectedDate = selectedDate ?? currentDate;
 
   const rows: ReactElement[] = [];

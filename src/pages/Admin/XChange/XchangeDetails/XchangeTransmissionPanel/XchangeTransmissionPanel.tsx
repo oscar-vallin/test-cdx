@@ -10,7 +10,9 @@ import {
   Text,
   TooltipHost,
 } from '@fluentui/react';
-import { PanelBody, PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
+import {
+  PanelBody, PanelHeader, PanelTitle, ThemedPanel,
+} from 'src/layouts/Panels/Panels.styles';
 import {
   useCopyXchangeFileTransmissionLazyQuery,
   XchangeFileTransmissionForm,
@@ -131,20 +133,17 @@ const XchangeTransmissionPanel = ({
   const [testFileTransmissionModal, setTestFileTransmissionModal] = useState(false);
 
   const [copyFileTransmission, { data: dataCopyTransmission, loading: loadingCopyTransmission }] = useQueryHandler(
-    useCopyXchangeFileTransmissionLazyQuery
+    useCopyXchangeFileTransmissionLazyQuery,
   );
 
-  const [fileTransmissionForm, { data: dataFileTransmissionForm, loading: loadingFileTransmissionForm }] =
-    useQueryHandler(useXchangeFileTransmissionFormLazyQuery);
+  const [fileTransmissionForm, { data: dataFileTransmissionForm, loading: loadingFileTransmissionForm }] = useQueryHandler(useXchangeFileTransmissionFormLazyQuery);
 
-  const [createXchangeFileTransmission, { data: dataCreateFile, loading: loadingCreateFile, error: errorCreateFile }] =
-    useQueryHandler(useCreateXchangeFileTransmissionMutation);
+  const [createXchangeFileTransmission, { data: dataCreateFile, loading: loadingCreateFile, error: errorCreateFile }] = useQueryHandler(useCreateXchangeFileTransmissionMutation);
 
-  const [updateXchangeFileTransmission, { data: dataUpdateFile, loading: loadingUpdateFile, error: errorUpdateFile }] =
-    useQueryHandler(useUpdateXchangeFileTransmissionMutation);
+  const [updateXchangeFileTransmission, { data: dataUpdateFile, loading: loadingUpdateFile, error: errorUpdateFile }] = useQueryHandler(useUpdateXchangeFileTransmissionMutation);
 
   const [previewFilenamePattern, { data: dataFilenamePattern, loading: loadingFilenamePattern }] = useQueryHandler(
-    usePreviewFilenamePatternLazyQuery
+    usePreviewFilenamePatternLazyQuery,
   );
 
   const getFileTransmissionData = () => {
@@ -341,8 +340,7 @@ const XchangeTransmissionPanel = ({
   const showUnsavedChangesDialog = () => {
     const updatedDialog = { ...defaultDialogProps };
     updatedDialog.title = 'You have unsaved changes';
-    updatedDialog.message =
-      'Changes made to this Xchange step will be discarded?  Are you sure you wish to continue and lose your changes?';
+    updatedDialog.message = 'Changes made to this Xchange step will be discarded?  Are you sure you wish to continue and lose your changes?';
 
     updatedDialog.onYes = () => {
       hideDialog();
@@ -839,26 +837,24 @@ const XchangeTransmissionPanel = ({
     return null;
   };
 
-  const renderPanelFooter = () => {
-    return (
-      <>
-        <PrimaryButton id="__Xchange_AddStep_Button" iconProps={{ iconName: 'Save' }} onClick={saveFileTransmission}>
-          Save
-        </PrimaryButton>
-        {!choseArchive && (
-          <DefaultButton
-            style={{ marginLeft: '10px' }}
-            iconProps={{
-              iconName: 'Phone',
-              style: { color: theme.colors.black, fontWeight: theme.fontWeights.bold },
-            }}
-            text="Test Configuration"
-            onClick={() => setTestFileTransmissionModal(true)}
-          />
-        )}
-      </>
-    );
-  };
+  const renderPanelFooter = () => (
+    <>
+      <PrimaryButton id="__Xchange_AddStep_Button" iconProps={{ iconName: 'Save' }} onClick={saveFileTransmission}>
+        Save
+      </PrimaryButton>
+      {!choseArchive && (
+      <DefaultButton
+        style={{ marginLeft: '10px' }}
+        iconProps={{
+          iconName: 'Phone',
+          style: { color: theme.colors.black, fontWeight: theme.fontWeights.bold },
+        }}
+        text="Test Configuration"
+        onClick={() => setTestFileTransmissionModal(true)}
+      />
+      )}
+    </>
+  );
 
   useEffect(() => {
     if (isPanelOpen) {
@@ -872,11 +868,11 @@ const XchangeTransmissionPanel = ({
       console.log(dataCopyTransmission?.copyXchangeFileTransmission);
       setXchangeFileTransmission(dataCopyTransmission?.copyXchangeFileTransmission);
       if (
-        dataCopyTransmission.copyXchangeFileTransmission?.filenameQualifiers.value &&
-        dataCopyTransmission.copyXchangeFileTransmission?.filenameQualifiers.value.length > 0
+        dataCopyTransmission.copyXchangeFileTransmission?.filenameQualifiers.value
+        && dataCopyTransmission.copyXchangeFileTransmission?.filenameQualifiers.value.length > 0
       ) {
         setFilenameQualifiers(
-          dataCopyTransmission.copyXchangeFileTransmission.filenameQualifiers.value.map((file) => file.value) ?? []
+          dataCopyTransmission.copyXchangeFileTransmission.filenameQualifiers.value.map((file) => file.value) ?? [],
         );
       }
       if (dataCopyTransmission.copyXchangeFileTransmission?.commands) {
@@ -894,11 +890,11 @@ const XchangeTransmissionPanel = ({
       setOptionXchangeTransmission('update');
       setXchangeFileTransmission(dataFileTransmissionForm.xchangeFileTransmissionForm);
       if (
-        dataFileTransmissionForm.xchangeFileTransmissionForm?.filenameQualifiers.value &&
-        dataFileTransmissionForm.xchangeFileTransmissionForm?.filenameQualifiers.value.length > 0
+        dataFileTransmissionForm.xchangeFileTransmissionForm?.filenameQualifiers.value
+        && dataFileTransmissionForm.xchangeFileTransmissionForm?.filenameQualifiers.value.length > 0
       ) {
         setFilenameQualifiers(
-          [dataFileTransmissionForm.xchangeFileTransmissionForm.filenameQualifiers.value[0].value] ?? []
+          [dataFileTransmissionForm.xchangeFileTransmissionForm.filenameQualifiers.value[0].value] ?? [],
         );
       }
       if (dataFileTransmissionForm.xchangeFileTransmissionForm?.commands) {
@@ -959,7 +955,7 @@ const XchangeTransmissionPanel = ({
     }
 
     if (!loadingCreateFile && errorCreateFile) {
-      Toast.error({ text: `There was an error to add File Transmission` });
+      Toast.error({ text: 'There was an error to add File Transmission' });
     }
   }, [dataCreateFile, loadingCreateFile, errorCreateFile]);
 
@@ -971,7 +967,7 @@ const XchangeTransmissionPanel = ({
     }
 
     if (!loadingUpdateFile && errorUpdateFile) {
-      Toast.error({ text: `There was an error to update File Transmission` });
+      Toast.error({ text: 'There was an error to update File Transmission' });
     }
   }, [dataUpdateFile, loadingUpdateFile, errorUpdateFile]);
 

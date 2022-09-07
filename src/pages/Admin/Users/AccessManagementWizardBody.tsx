@@ -19,10 +19,10 @@ export const AccessManagementWizardBody = ({ form, saveOptions }: AccessManageme
   const [selectedSids, setSelectedSids] = useState<string[]>(getSelectedAccessGroupSids(form));
   const [groupOptions, setGroupOptions] = useState<UiOption[]>(getAccessGroupOptions(form));
   const [orgSpecificGroupOptions, setOrgSpecificGroupOptions] = useState<UiOption[]>(
-    getOrganizationSpecificGroups(groupOptions)
+    getOrganizationSpecificGroups(groupOptions),
   );
   const [systemManagedGroupOptions, setSystemManagedGroupOptions] = useState<UiOption[]>(
-    getSystemManagedGroups(groupOptions)
+    getSystemManagedGroups(groupOptions),
   );
 
   useEffect(() => {

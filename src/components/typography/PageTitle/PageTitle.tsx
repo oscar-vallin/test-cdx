@@ -12,7 +12,9 @@ type PageTitleParams = {
   loading?: boolean;
 };
 
-const PageTitle = ({ id, title, subTitle, icon, loading }: PageTitleParams) => {
+const PageTitle = ({
+  id, title, subTitle, icon, loading,
+}: PageTitleParams) => {
   const renderIcon = () => {
     if (icon) {
       if (loading) {

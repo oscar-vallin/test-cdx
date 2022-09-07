@@ -1,7 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactElement, useEffect, useState } from 'react';
 
-import { PanelType, Spinner, SpinnerSize, Stack } from '@fluentui/react';
+import {
+  PanelType, Spinner, SpinnerSize, Stack,
+} from '@fluentui/react';
 
 import { useNotification } from 'src/hooks/useNotification';
 import { Spacing } from 'src/components/spacings/Spacing';
@@ -81,11 +83,9 @@ const AccessPolicyPanel = ({
   const [applicableOrgTypes, setApplicableOrgTypes]: any = useState([]);
 
   const [fetchPolicyForm, { data: form, loading: isLoadingForm }] = useQueryHandler(useAccessPolicyFormLazyQuery);
-  const [createPolicy, { data: createdPolicy, loading: isCreatingPolicy }] =
-    useQueryHandler(useCreateAccessPolicyMutation);
+  const [createPolicy, { data: createdPolicy, loading: isCreatingPolicy }] = useQueryHandler(useCreateAccessPolicyMutation);
 
-  const [updatePolicy, { data: updatedPolicy, loading: isUpdatingPolicy }] =
-    useQueryHandler(useUpdateAccessPolicyMutation);
+  const [updatePolicy, { data: updatedPolicy, loading: isUpdatingPolicy }] = useQueryHandler(useUpdateAccessPolicyMutation);
 
   const [fetchPolicy, { data: policy, loading: isLoadingPolicy }] = useQueryHandler(useFindAccessPolicyLazyQuery);
 
@@ -115,10 +115,9 @@ const AccessPolicyPanel = ({
 
       if (createAccessPolicy?.response === GqOperationResponse.Fail) {
         setPolicyForm(createAccessPolicy);
-        const errorMsg =
-          createAccessPolicy?.errMsg ??
-          createAccessPolicy?.response ??
-          'Please check the highlighted fields and try again';
+        const errorMsg = createAccessPolicy?.errMsg
+          ?? createAccessPolicy?.response
+          ?? 'Please check the highlighted fields and try again';
         Toast.error({ text: errorMsg });
       } else if (createAccessPolicy?.sid) {
         onCreatePolicy(createAccessPolicy);
@@ -134,10 +133,9 @@ const AccessPolicyPanel = ({
 
       if (updateAccessPolicy?.response === GqOperationResponse.Fail) {
         setPolicyForm(updateAccessPolicy);
-        const errorMsg =
-          updateAccessPolicy?.errMsg ??
-          updateAccessPolicy?.response ??
-          'Please check the highlighted fields and try again';
+        const errorMsg = updateAccessPolicy?.errMsg
+          ?? updateAccessPolicy?.response
+          ?? 'Please check the highlighted fields and try again';
         Toast.error({ text: errorMsg });
       } else if (updateAccessPolicy?.sid) {
         onUpdatePolicy(updateAccessPolicy);
@@ -157,8 +155,8 @@ const AccessPolicyPanel = ({
             orgSid,
             ...(selectedTemplateId
               ? {
-                  templatePolicySid: selectedTemplateId,
-                }
+                templatePolicySid: selectedTemplateId,
+              }
               : {}),
           },
           errorPolicy: 'all',
@@ -228,7 +226,7 @@ const AccessPolicyPanel = ({
 
   const renderSaveButton = () => {
     const saveCmd = policyForm?.commands?.find(
-      (cmd) => cmd?.commandType === CdxWebCommandType.Create || cmd?.commandType === CdxWebCommandType.Update
+      (cmd) => cmd?.commandType === CdxWebCommandType.Create || cmd?.commandType === CdxWebCommandType.Update,
     );
     if (saveCmd) {
       return (
@@ -276,22 +274,16 @@ const AccessPolicyPanel = ({
     return null;
   };
 
-  const renderCheckboxLabel = (uiOption: UiOption): JSX.Element | null => {
-    return (
-      <>
-        <Text>{uiOption?.label}</Text>
-        <InfoIcon id={`__Perm-info-${uiOption?.value}`} tooltip={uiOption?.info} />
-      </>
-    );
-  };
+  const renderCheckboxLabel = (uiOption: UiOption): JSX.Element | null => (
+    <>
+      <Text>{uiOption?.label}</Text>
+      <InfoIcon id={`__Perm-info-${uiOption?.value}`} tooltip={uiOption?.info} />
+    </>
+  );
 
-  const isListOption = (option?: UiOption): boolean => {
-    return option?.value?.endsWith('_LIST') ?? false;
-  };
+  const isListOption = (option?: UiOption): boolean => option?.value?.endsWith('_LIST') ?? false;
 
-  const isReadOption = (option?: UiOption): boolean => {
-    return option?.value?.endsWith('_READ') ?? false;
-  };
+  const isReadOption = (option?: UiOption): boolean => option?.value?.endsWith('_READ') ?? false;
 
   /**
    * Given a permission option, find its corresponding LIST permission option in the
@@ -365,7 +357,7 @@ const AccessPolicyPanel = ({
         // If this is a READ permission and we unchecked, we need to uncheck all other _CREATE, _UPDATE, etc. permissions
         const permPrefix = option.value.substring(0, option.value.lastIndexOf('_READ'));
         const readControlledOptions = permissionOptions?.filter(
-          (perm) => perm.startsWith(permPrefix) && !perm.endsWith('_LIST')
+          (perm) => perm.startsWith(permPrefix) && !perm.endsWith('_LIST'),
         );
         _permissions = _permissions.filter((value) => !readControlledOptions?.includes(value));
       }

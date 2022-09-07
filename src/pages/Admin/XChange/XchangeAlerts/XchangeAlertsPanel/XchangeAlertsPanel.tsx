@@ -86,13 +86,12 @@ const XchangeAlertsPanel = ({
   const [unsavedChanges, setUnsavedChanges] = useState(false);
 
   const [profileAlertForm, { data: alertProfileFormData, loading: alertProfileFormLoading }] = useQueryHandler(
-    useXchangeProfileAlertFormLazyQuery
+    useXchangeProfileAlertFormLazyQuery,
   );
   const [configAlertForm, { data: alertConfigFormData, loading: alertConfigFormLoading }] = useQueryHandler(
-    useXchangeConfigAlertFormLazyQuery
+    useXchangeConfigAlertFormLazyQuery,
   );
-  const [createXchangeConfigAlert, { data: createConfigData, loading: createConfigloading, error: createConfigError }] =
-    useQueryHandler(useCreateXchangeConfigAlertMutation);
+  const [createXchangeConfigAlert, { data: createConfigData, loading: createConfigloading, error: createConfigError }] = useQueryHandler(useCreateXchangeConfigAlertMutation);
 
   // eslint-disable-next-line prettier/prettier
   const [
@@ -195,8 +194,7 @@ const XchangeAlertsPanel = ({
   const showUnsavedChangesDialog = () => {
     const updatedDialog = { ...defaultDialogProps };
     updatedDialog.title = 'You have unsaved changes';
-    updatedDialog.message =
-      'Changes made to this Xchange step will be discarded?  Are you sure you wish to continue and lose your changes?';
+    updatedDialog.message = 'Changes made to this Xchange step will be discarded?  Are you sure you wish to continue and lose your changes?';
 
     updatedDialog.onYes = () => {
       hideDialog();
@@ -321,9 +319,7 @@ const XchangeAlertsPanel = ({
     }
   }, [createConfigData, createConfigloading, createConfigError]);
 
-  const onRenderAction = (item: any) => {
-    return <IconButton iconProps={{ iconName: 'Trash' }} onClick={() => removeSubscriber(item.sid)} />;
-  };
+  const onRenderAction = (item: any) => <IconButton iconProps={{ iconName: 'Trash' }} onClick={() => removeSubscriber(item.sid)} />;
 
   const columns: IColumn[] = [
     {

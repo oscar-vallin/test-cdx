@@ -122,10 +122,9 @@ const _FtpTestPage = () => {
     if (data?.ftpTestM?.status === 'ERROR') {
       Toast.error({ text: data?.ftpTestM?.logMessage.body });
       if (data?.ftpTestM?.xpSFTPForm?.errSeverity === ErrorSeverity.Error) {
-        const errorMsg =
-          data.ftpTestM.xpSFTPForm.errMsg ??
-          data.ftpTestM.logMessage.body ??
-          'Error occurred, please verify the information and try again.';
+        const errorMsg = data.ftpTestM.xpSFTPForm.errMsg
+          ?? data.ftpTestM.logMessage.body
+          ?? 'Error occurred, please verify the information and try again.';
         setMessageType(MessageBarType.error);
         setMessage(errorMsg);
       }
@@ -171,277 +170,265 @@ const _FtpTestPage = () => {
     }
   };
 
-  const renderForm = () => {
-    return (
-      <Container>
-        <Row>
-          <Column xxl="12" xl="12">
-            <Row>
-              <Column sm="8">
-                {ftpTestForm?.host?.visible && (
-                  <Spacing margin={{ bottom: 'normal' }}>
-                    <UIInputText
-                      id="host"
-                      uiField={ftpTestForm.host}
-                      placeholder="host"
-                      value={host}
-                      onChange={(event, newValue) => setHost(newValue ?? '')}
-                    />
-                  </Spacing>
-                )}
-              </Column>
-              <Column sm="4">
-                {ftpTestForm?.port?.visible && (
-                  <Spacing margin={{ bottom: 'normal', left: 'normal' }}>
-                    <UIInputText
-                      id="port"
-                      uiField={ftpTestForm.port}
-                      placeholder="port"
-                      value={port}
-                      type="number"
-                      onChange={(event, newValue) => setPort(newValue ?? '')}
-                    />
-                  </Spacing>
-                )}
-              </Column>
-            </Row>
-            {ftpTestForm?.user?.visible && (
+  const renderForm = () => (
+    <Container>
+      <Row>
+        <Column xxl="12" xl="12">
+          <Row>
+            <Column sm="8">
+              {ftpTestForm?.host?.visible && (
               <Spacing margin={{ bottom: 'normal' }}>
                 <UIInputText
-                  id="user"
-                  uiField={ftpTestForm.user}
-                  placeholder="user"
-                  value={user}
-                  autocomplete="off"
-                  onChange={(event, newValue) => setUser(newValue ?? '')}
+                  id="host"
+                  uiField={ftpTestForm.host}
+                  placeholder="host"
+                  value={host}
+                  onChange={(event, newValue) => setHost(newValue ?? '')}
                 />
               </Spacing>
-            )}
-            {ftpTestForm?.password?.visible && (
-              <Spacing margin={{ bottom: 'normal' }}>
-                <InputText
-                  disabled={ftpTestForm?.password?.readOnly ?? false}
-                  autofocus={false}
-                  label={ftpTestForm?.password?.label}
-                  errorMessage={ftpTestForm?.password?.errMsg ?? undefined}
-                  info={ftpTestForm?.password?.info ?? undefined}
-                  required={ftpTestForm?.password?.required ?? false}
-                  minLength={ftpTestForm?.password?.min}
-                  maxLength={ftpTestForm?.password?.max}
-                  canRevealPassword
-                  type="password"
-                  autocomplete="new-password"
-                  id="password"
-                  placeholder="password"
-                  value={password}
-                  onChange={(event, newValue) => setPassword(newValue ?? '')}
-                />
-                {errorValidatePasswordSSHKey && (
-                  <StyledError>Either the Password or SSH Key must be provided</StyledError>
-                )}
-              </Spacing>
-            )}
-            {!showSSHKeys && (
-              <Spacing>
-                <Column>
-                  <Link onClick={() => setShowSShKeys(true)}>use key-based authentication</Link>
-                </Column>
-              </Spacing>
-            )}
-            {ftpTestForm?.sshKeyPath?.visible && showSSHKeys && (
-              <Spacing>
-                <UIInputSelectOne
-                  id="sshKey"
-                  uiField={ftpTestForm.sshKeyPath}
-                  options={ftpTestForm.options}
-                  value={sshKeyPath}
-                  onChange={(newValue) => setSshKeyPath(newValue ?? '')}
-                  placeholder="(no key selected)"
-                />
-                {errorValidatePasswordSSHKey && (
-                  <StyledError>Either the Password or SSH Key must be provided</StyledError>
-                )}
-              </Spacing>
-            )}
-            {ftpTestForm?.folder?.visible && (
-              <Spacing margin={{ bottom: 'normal' }}>
+              )}
+            </Column>
+            <Column sm="4">
+              {ftpTestForm?.port?.visible && (
+              <Spacing margin={{ bottom: 'normal', left: 'normal' }}>
                 <UIInputText
-                  id="folder"
-                  uiField={ftpTestForm.folder}
-                  value={folder}
-                  onChange={(event, newValue) => setFolder(newValue ?? '')}
+                  id="port"
+                  uiField={ftpTestForm.port}
+                  placeholder="port"
+                  value={port}
+                  type="number"
+                  onChange={(event, newValue) => setPort(newValue ?? '')}
                 />
               </Spacing>
+              )}
+            </Column>
+          </Row>
+          {ftpTestForm?.user?.visible && (
+          <Spacing margin={{ bottom: 'normal' }}>
+            <UIInputText
+              id="user"
+              uiField={ftpTestForm.user}
+              placeholder="user"
+              value={user}
+              autocomplete="off"
+              onChange={(event, newValue) => setUser(newValue ?? '')}
+            />
+          </Spacing>
+          )}
+          {ftpTestForm?.password?.visible && (
+          <Spacing margin={{ bottom: 'normal' }}>
+            <InputText
+              disabled={ftpTestForm?.password?.readOnly ?? false}
+              autofocus={false}
+              label={ftpTestForm?.password?.label}
+              errorMessage={ftpTestForm?.password?.errMsg ?? undefined}
+              info={ftpTestForm?.password?.info ?? undefined}
+              required={ftpTestForm?.password?.required ?? false}
+              minLength={ftpTestForm?.password?.min}
+              maxLength={ftpTestForm?.password?.max}
+              canRevealPassword
+              type="password"
+              autocomplete="new-password"
+              id="password"
+              placeholder="password"
+              value={password}
+              onChange={(event, newValue) => setPassword(newValue ?? '')}
+            />
+            {errorValidatePasswordSSHKey && (
+            <StyledError>Either the Password or SSH Key must be provided</StyledError>
             )}
-            {ftpTestForm?.stepWise?.visible && (
-              <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                <UIInputCheck
-                  id="stepWise"
-                  uiField={ftpTestForm?.stepWise}
-                  value={stepWise}
-                  onChange={(event, _stepWise: any) => setStepWise(_stepWise)}
-                />
-              </Spacing>
+          </Spacing>
+          )}
+          {!showSSHKeys && (
+          <Spacing>
+            <Column>
+              <Link onClick={() => setShowSShKeys(true)}>use key-based authentication</Link>
+            </Column>
+          </Spacing>
+          )}
+          {ftpTestForm?.sshKeyPath?.visible && showSSHKeys && (
+          <Spacing>
+            <UIInputSelectOne
+              id="sshKey"
+              uiField={ftpTestForm.sshKeyPath}
+              options={ftpTestForm.options}
+              value={sshKeyPath}
+              onChange={(newValue) => setSshKeyPath(newValue ?? '')}
+              placeholder="(no key selected)"
+            />
+            {errorValidatePasswordSSHKey && (
+            <StyledError>Either the Password or SSH Key must be provided</StyledError>
             )}
-            {genTestFileForm?.sendTestFile?.visible && (
-              <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                <UIInputCheck
-                  id="sendFileTest"
-                  uiField={genTestFileForm?.sendTestFile}
-                  onChange={(_event, _sendFileTest: any) => setSendFileTest(_sendFileTest)}
-                />
-              </Spacing>
-            )}
-            {sendFileTest && (
-              <Spacing margin={{ bottom: 'normal' }} padding={{ left: 'normal' }}>
-                <Spacing margin={{ bottom: 'normal' }}>
-                  <ChoiceGroup
-                    defaultSelectedKey={genTestFileForm?.testFileStrategy?.value?.value}
-                    options={[
-                      {
-                        key: TestFileStrategy.Upload,
-                        text: '',
-                        styles: { choiceFieldWrapper: { marginTop: '10px', width: '100%' } },
-                        onRenderLabel: (props) => {
-                          return (
-                            <Spacing margin={{ left: 'double' }}>
-                              {testFile ? (
-                                <StyledSelectedFile>
-                                  <Text variant="normal">{testFile.name}</Text>
-                                  <IconButton
-                                    iconProps={{ iconName: 'Cancel' }}
-                                    onClick={() => setTestFile(undefined)}
-                                  />
-                                </StyledSelectedFile>
-                              ) : (
-                                <Link
-                                  underline
-                                  target="_new"
-                                  onClick={() => {
-                                    inputFileRef.current.value = '';
-                                    inputFileRef.current.click();
-                                  }}
-                                  disabled={!props?.checked}
-                                  title="Upload File"
-                                  style={{ cursor: 'pointer' }}
-                                >
-                                  Upload File...
-                                </Link>
-                              )}
-                            </Spacing>
-                          );
-                        },
-                        onRenderField: (props, render) => {
-                          return (
-                            <>
-                              {render!(props)}
-                              <input
-                                style={{ display: 'none' }}
-                                type="file"
-                                ref={inputFileRef}
-                                onChange={handleChooseFile}
+          </Spacing>
+          )}
+          {ftpTestForm?.folder?.visible && (
+          <Spacing margin={{ bottom: 'normal' }}>
+            <UIInputText
+              id="folder"
+              uiField={ftpTestForm.folder}
+              value={folder}
+              onChange={(event, newValue) => setFolder(newValue ?? '')}
+            />
+          </Spacing>
+          )}
+          {ftpTestForm?.stepWise?.visible && (
+          <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+            <UIInputCheck
+              id="stepWise"
+              uiField={ftpTestForm?.stepWise}
+              value={stepWise}
+              onChange={(event, _stepWise: any) => setStepWise(_stepWise)}
+            />
+          </Spacing>
+          )}
+          {genTestFileForm?.sendTestFile?.visible && (
+          <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+            <UIInputCheck
+              id="sendFileTest"
+              uiField={genTestFileForm?.sendTestFile}
+              onChange={(_event, _sendFileTest: any) => setSendFileTest(_sendFileTest)}
+            />
+          </Spacing>
+          )}
+          {sendFileTest && (
+          <Spacing margin={{ bottom: 'normal' }} padding={{ left: 'normal' }}>
+            <Spacing margin={{ bottom: 'normal' }}>
+              <ChoiceGroup
+                defaultSelectedKey={genTestFileForm?.testFileStrategy?.value?.value}
+                options={[
+                  {
+                    key: TestFileStrategy.Upload,
+                    text: '',
+                    styles: { choiceFieldWrapper: { marginTop: '10px', width: '100%' } },
+                    onRenderLabel: (props) => (
+                          <Spacing margin={{ left: 'double' }}>
+                            {testFile ? (
+                              <StyledSelectedFile>
+                                <Text variant="normal">{testFile.name}</Text>
+                                <IconButton
+                                  iconProps={{ iconName: 'Cancel' }}
+                                  onClick={() => setTestFile(undefined)}
+                                />
+                              </StyledSelectedFile>
+                            ) : (
+                              <Link
+                                underline
+                                target="_new"
+                                onClick={() => {
+                                  inputFileRef.current.value = '';
+                                  inputFileRef.current.click();
+                                }}
+                                disabled={!props?.checked}
+                                title="Upload File"
+                                style={{ cursor: 'pointer' }}
+                              >
+                                Upload File...
+                              </Link>
+                            )}
+                          </Spacing>
+                    ),
+                    onRenderField: (props, render) => (
+                          <>
+                            {render!(props)}
+                            <input
+                              style={{ display: 'none' }}
+                              type="file"
+                              ref={inputFileRef}
+                              onChange={handleChooseFile}
+                            />
+                            {props?.checked && genTestFileForm?.fileName?.visible && (
+                            <Spacing margin={{ bottom: 'normal', top: 'normal' }}>
+                              <UIInputText
+                                id="fileName"
+                                uiField={genTestFileForm?.fileName}
+                                value={vendorFileName}
+                                onChange={(event, newValue) => setVendorFileName(newValue ?? '')}
                               />
-                              {props?.checked && genTestFileForm?.fileName?.visible && (
-                                <Spacing margin={{ bottom: 'normal', top: 'normal' }}>
-                                  <UIInputText
-                                    id="fileName"
-                                    uiField={genTestFileForm?.fileName}
-                                    value={vendorFileName}
-                                    onChange={(event, newValue) => setVendorFileName(newValue ?? '')}
-                                  />
-                                </Spacing>
-                              )}
-                            </>
-                          );
-                        },
-                      },
-                      {
-                        key: TestFileStrategy.Generate,
-                        text: 'Generate a File',
-                        styles: { choiceFieldWrapper: { marginTop: '10px', width: '100%' } },
-                        onRenderField: (props, render) => {
-                          return (
+                            </Spacing>
+                            )}
+                          </>
+                    ),
+                  },
+                  {
+                    key: TestFileStrategy.Generate,
+                    text: 'Generate a File',
+                    styles: { choiceFieldWrapper: { marginTop: '10px', width: '100%' } },
+                    onRenderField: (props, render) => (
+                          <>
+                            {render!(props)}
+                            {props?.checked && (
                             <>
-                              {render!(props)}
-                              {props?.checked && (
-                                <>
-                                  {genTestFileForm?.fileName?.visible && (
-                                    <Spacing margin={{ bottom: 'normal', top: 'normal' }}>
-                                      <UIInputText
-                                        id="fileName"
-                                        uiField={genTestFileForm?.fileName}
-                                        value={vendorFileName}
-                                        onChange={(event, newValue) => setVendorFileName(newValue ?? '')}
-                                      />
-                                    </Spacing>
-                                  )}
-                                  {genTestFileForm?.fileBody?.visible && (
-                                    <Spacing margin={{ bottom: 'normal' }}>
-                                      <UIInputTextArea
-                                        id="textFileContent"
-                                        uiField={genTestFileForm?.fileBody}
-                                        value={textFileContent}
-                                        multiline={true}
-                                        onChange={(event, newValue: any) => setTextFileContent(newValue ?? '')}
-                                        placeholder="Put the text you want in the file here, if you leave blank the text 'Connection Test' will be used for the file's contents."
-                                        resizable={false}
-                                        rows={10}
-                                      />
-                                    </Spacing>
-                                  )}
-                                </>
+                              {genTestFileForm?.fileName?.visible && (
+                              <Spacing margin={{ bottom: 'normal', top: 'normal' }}>
+                                <UIInputText
+                                  id="fileName"
+                                  uiField={genTestFileForm?.fileName}
+                                  value={vendorFileName}
+                                  onChange={(event, newValue) => setVendorFileName(newValue ?? '')}
+                                />
+                              </Spacing>
+                              )}
+                              {genTestFileForm?.fileBody?.visible && (
+                              <Spacing margin={{ bottom: 'normal' }}>
+                                <UIInputTextArea
+                                  id="textFileContent"
+                                  uiField={genTestFileForm?.fileBody}
+                                  value={textFileContent}
+                                  multiline={true}
+                                  onChange={(event, newValue: any) => setTextFileContent(newValue ?? '')}
+                                  placeholder="Put the text you want in the file here, if you leave blank the text 'Connection Test' will be used for the file's contents."
+                                  resizable={false}
+                                  rows={10}
+                                />
+                              </Spacing>
                               )}
                             </>
-                          );
-                        },
-                      },
-                    ]}
-                    onChange={() => {
-                      setVendorFileName('');
-                      setTestFile(undefined);
-                    }}
-                  />
-                </Spacing>
-              </Spacing>
-            )}
-            {ftpTestForm && (
-              <Spacing margin={{ bottom: 'normal' }}>
-                <Button id="__FtpTestPageId" variant="primary" disabled={false} text="Test" onClick={handleOnTestBtn} />
-              </Spacing>
-            )}
-          </Column>
-        </Row>
-      </Container>
-    );
-  };
+                            )}
+                          </>
+                    ),
+                  },
+                ]}
+                onChange={() => {
+                  setVendorFileName('');
+                  setTestFile(undefined);
+                }}
+              />
+            </Spacing>
+          </Spacing>
+          )}
+          {ftpTestForm && (
+          <Spacing margin={{ bottom: 'normal' }}>
+            <Button id="__FtpTestPageId" variant="primary" disabled={false} text="Test" onClick={handleOnTestBtn} />
+          </Spacing>
+          )}
+        </Column>
+      </Row>
+    </Container>
+  );
 
-  const renderResults = () => {
-    return (
-      <>
-        {ftpTestData?.ftpTestM?.allMessages &&
-          ftpTestData?.ftpTestM?.allMessages.map((logMessageItem, logMessageItemIndex) => (
+  const renderResults = () => (
+    <>
+      {ftpTestData?.ftpTestM?.allMessages
+          && ftpTestData?.ftpTestM?.allMessages.map((logMessageItem, logMessageItemIndex) => (
             <LogMessageItem key={logMessageItemIndex} logMessage={logMessageItem} />
           ))}
-      </>
-    );
-  };
+    </>
+  );
 
-  const renderClientProfileSnippet = () => {
-    return (
-      <Spacing margin={{ bottom: 'normal', top: 'normal' }}>
-        {ftpTestData?.ftpTestM?.clientProfileSnippet && (
-          <TextField
-            id="clientProfileSnippet"
-            multiline
-            disabled
-            value={ftpTestData?.ftpTestM?.clientProfileSnippet}
-            rows={12}
-            resizable={false}
-          />
-        )}
-      </Spacing>
-    );
-  };
+  const renderClientProfileSnippet = () => (
+    <Spacing margin={{ bottom: 'normal', top: 'normal' }}>
+      {ftpTestData?.ftpTestM?.clientProfileSnippet && (
+      <TextField
+        id="clientProfileSnippet"
+        multiline
+        disabled
+        value={ftpTestData?.ftpTestM?.clientProfileSnippet}
+        rows={12}
+        resizable={false}
+      />
+      )}
+    </Spacing>
+  );
 
   const getBadgeVariant = (ftpTestStatus?: WorkStatus): string => {
     if (!ftpTestStatus) {
@@ -512,10 +499,11 @@ const _FtpTestPage = () => {
             maxAttributes = Math.max(maxAttributes, attributes.length);
             for (let j = 0; j < attributes.length; j++) {
               for (const index in attributes[j]) {
-                if (index != '__typename')
+                if (index != '__typename') {
                   line += `${
                     needsQuote(attributes[j][index]) ? quoteField(attributes[j][index]) : attributes[j][index]
                   },`;
+                }
               }
             }
           }

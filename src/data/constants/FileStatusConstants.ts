@@ -319,15 +319,12 @@ export const getStepStatusLabel = (status: WorkStatus) => {
   return '';
 };
 
-export const getStepStatus = (stepId: WorkStep, stepStatusId: WorkStatus, isArchiveOnly: boolean) => {
-  return (
-    STEP_STATUS.find(
-      ({ step, stepStatus, archiveOnly }) =>
-        step === stepId &&
-        stepStatus === stepStatusId &&
-        archiveOnly === (stepId === WorkStep.TransmitFile && stepStatusId === 'COMPLETE' ? isArchiveOnly : false)
-    ) ??
-    STEP_STATUS_DEFAULT.find((step) => step.step === stepId) ??
-    STEP_STATUS_DEFAULT[0]
-  );
-};
+export const getStepStatus = (stepId: WorkStep, stepStatusId: WorkStatus, isArchiveOnly: boolean) => (
+  STEP_STATUS.find(
+    ({ step, stepStatus, archiveOnly }) => step === stepId
+        && stepStatus === stepStatusId
+        && archiveOnly === (stepId === WorkStep.TransmitFile && stepStatusId === 'COMPLETE' ? isArchiveOnly : false),
+  )
+    ?? STEP_STATUS_DEFAULT.find((step) => step.step === stepId)
+    ?? STEP_STATUS_DEFAULT[0]
+);

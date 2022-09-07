@@ -11,9 +11,7 @@ type RuleGroupParams = {
 };
 
 const RuleGroup = ({ title, passes, children }: RuleGroupParams) => {
-  const renderIcon = (value) => {
-    return value ? <StyledIcon iconName="StatusCircleCheckmark" /> : <StyledIcon iconName="StatusCircleErrorX" />;
-  };
+  const renderIcon = (value) => (value ? <StyledIcon iconName="StatusCircleCheckmark" /> : <StyledIcon iconName="StatusCircleErrorX" />);
 
   return (
     <StyledDiv level={1}>

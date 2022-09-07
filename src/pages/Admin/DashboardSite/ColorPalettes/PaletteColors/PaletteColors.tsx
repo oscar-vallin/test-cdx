@@ -16,35 +16,35 @@ type PaletteColorsProps = {
   onChange?: any | null;
 } & typeof defaultProps;
 
-const PaletteColors = ({ type, colors, selected, onChange }: PaletteColorsProps): ReactElement => {
-  return (
-    <ChoiceGroup
-      label="Color Palette"
-      selectedKey={selected}
-      options={Object.keys(colors)
-        .filter((key) => (type === 'EXTEND' ? key === 'themePrimary' : true))
-        .map((key, index) => ({
-          text: '',
-          key,
-          label: labels[index],
-          onRenderField: (props: any, render: any) => {
-            const colorKey = props.id.split('-').pop();
+const PaletteColors = ({
+  type, colors, selected, onChange,
+}: PaletteColorsProps): ReactElement => (
+  <ChoiceGroup
+    label="Color Palette"
+    selectedKey={selected}
+    options={Object.keys(colors)
+      .filter((key) => (type === 'EXTEND' ? key === 'themePrimary' : true))
+      .map((key, index) => ({
+        text: '',
+        key,
+        label: labels[index],
+        onRenderField: (props: any, render: any) => {
+          const colorKey = props.id.split('-').pop();
 
-            return (
-              <StyledPreview>
-                {render(props)}
+          return (
+            <StyledPreview>
+              {render(props)}
 
-                <StyledColorPreview color={colors[colorKey]} />
+              <StyledColorPreview color={colors[colorKey]} />
 
-                <span>{props.label}</span>
-              </StyledPreview>
-            );
-          },
-        }))}
-      onChange={(evt, { key }: any) => onChange({ key, color: colors[key] })}
-    />
-  );
-};
+              <span>{props.label}</span>
+            </StyledPreview>
+          );
+        },
+      }))}
+    onChange={(evt, { key }: any) => onChange({ key, color: colors[key] })}
+  />
+);
 
 PaletteColors.defaultProps = defaultProps;
 

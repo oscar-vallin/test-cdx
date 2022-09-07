@@ -1,7 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactElement, useEffect, useState } from 'react';
 
-import { MessageBar, MessageBarType, PanelType, Stack, Checkbox } from '@fluentui/react';
+import {
+  MessageBar, MessageBarType, PanelType, Stack, Checkbox,
+} from '@fluentui/react';
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { Button } from 'src/components/buttons';
@@ -19,7 +21,9 @@ import { UIInputMultiSelect } from 'src/components/inputs/InputDropdown';
 import { TagPicker } from 'src/components/inputs/TagPicker';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { useNotification } from 'src/hooks/useNotification';
-import { PanelBody, PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
+import {
+  PanelBody, PanelHeader, PanelTitle, ThemedPanel,
+} from 'src/layouts/Panels/Panels.styles';
 import { Text } from 'src/components/typography';
 import { orgQuickSearch } from 'src/hooks/useQuickSearch';
 import { useApolloClient } from '@apollo/client';
@@ -68,7 +72,7 @@ const AccessPolicyGroupPanel = ({
   const [selectedPoliciesValues, setSelectedPoliciesValues] = useState<string[]>(accessPolicyData.policySids);
 
   const [selectedSpecializationsValues, setSelectedSpecializationsValues] = useState<string[]>(
-    accessPolicyData.specializationSids
+    accessPolicyData.specializationSids,
   );
 
   const doClosePanel = () => {
@@ -155,15 +159,13 @@ const AccessPolicyGroupPanel = ({
     }
   }, [isOpen]);
 
-  const renderLabel = (item) => {
-    return (
-      <span>
-        <InlineLabel required={item?.required}>{item?.label}</InlineLabel>
-        <InfoIcon id="$_Info" tooltip={formatInfoTooltip(item?.info)} />
-        <ErrorIcon id="$-ErrorMsg" errorMessage={item?.errMsg} />
-      </span>
-    );
-  };
+  const renderLabel = (item) => (
+    <span>
+      <InlineLabel required={item?.required}>{item?.label}</InlineLabel>
+      <InfoIcon id="$_Info" tooltip={formatInfoTooltip(item?.info)} />
+      <ErrorIcon id="$-ErrorMsg" errorMessage={item?.errMsg} />
+    </span>
+  );
 
   const renderOptionsGroup = (formUiLabelField, options, onChange, id) => {
     const subGroups: any[][] = [[], []];
@@ -177,30 +179,26 @@ const AccessPolicyGroupPanel = ({
           <Column lg="12">
             <Card id={`${id}-Card`} elevation="none" spacing="none">
               <Row top>
-                {subGroups.map((subGroup, index) => {
-                  return (
-                    <Column lg="6" key={index}>
-                      <Card id={`${id}_subGroup-${index}`} elevation="none">
-                        {subGroup.map((item, itemindex) => {
-                          return (
-                            <Spacing
-                              id={`${id}_subGroup-${index}_item-${itemindex}`}
-                              margin={{ top: 'small' }}
-                              key={`${index}-${itemindex}`}
-                            >
-                              <Checkbox
-                                label={item.label}
-                                onRenderLabel={() => renderLabel(item)}
-                                checked={item.checked}
-                                onChange={() => onChange(item.value)}
-                              />
-                            </Spacing>
-                          );
-                        })}
-                      </Card>
-                    </Column>
-                  );
-                })}
+                {subGroups.map((subGroup, index) => (
+                  <Column lg="6" key={index}>
+                    <Card id={`${id}_subGroup-${index}`} elevation="none">
+                      {subGroup.map((item, itemindex) => (
+                        <Spacing
+                          id={`${id}_subGroup-${index}_item-${itemindex}`}
+                          margin={{ top: 'small' }}
+                          key={`${index}-${itemindex}`}
+                        >
+                          <Checkbox
+                            label={item.label}
+                            onRenderLabel={() => renderLabel(item)}
+                            checked={item.checked}
+                            onChange={() => onChange(item.value)}
+                          />
+                        </Spacing>
+                      ))}
+                    </Card>
+                  </Column>
+                ))}
               </Row>
             </Card>
           </Column>
@@ -331,13 +329,13 @@ const AccessPolicyGroupPanel = ({
               form.policies,
               getCheckedValues(policies, selectedPoliciesValues),
               onPolicyChange,
-              'policiesGroup'
+              'policiesGroup',
             )}
             {renderOptionsGroup(
               form.specializations,
               getCheckedValues(specializations, selectedSpecializationsValues),
               onSpecializationChange,
-              'specializationsGroup'
+              'specializationsGroup',
             )}
 
             <FormRow>
@@ -412,7 +410,7 @@ const AccessPolicyGroupPanel = ({
   const renderPanelFooter = () => {
     const commands = accessPolicyForm?.commands;
     const command = commands?.find(
-      (cmd) => cmd?.commandType === CdxWebCommandType.Create || cmd?.commandType === CdxWebCommandType.Update
+      (cmd) => cmd?.commandType === CdxWebCommandType.Create || cmd?.commandType === CdxWebCommandType.Update,
     );
     if (command) {
       return (

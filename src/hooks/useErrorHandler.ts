@@ -6,10 +6,8 @@ const handle = (err) => {
   // Generic Toast
 };
 
-const useErrorHandler = () => {
-  return {
-    handle,
-  };
-};
+const useErrorHandler = () => ({
+  handle,
+});
 
 export default useErrorHandler;

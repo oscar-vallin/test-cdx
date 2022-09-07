@@ -43,9 +43,7 @@ const _UserAuditLogsPage = () => {
 
   const getTotal = (data?: UserAccountAuditLogsQuery) => data?.userAccountAuditLogs?.paginationInfo?.totalElements ?? 0;
 
-  const renderTotal = (totalRecords: number): ReactElement => {
-    return <span>{totalRecords > 0 ? `${totalRecords} results found` : 'No results found'}</span>;
-  };
+  const renderTotal = (totalRecords: number): ReactElement => <span>{totalRecords > 0 ? `${totalRecords} results found` : 'No results found'}</span>;
 
   const renderDownloadLink = (totalRecords: number, tableFilters: TableFiltersType): ReactElement => {
     const graphQLUrl = process.env.REACT_APP_API_SERVER;

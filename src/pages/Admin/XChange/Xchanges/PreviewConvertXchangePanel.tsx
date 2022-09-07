@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { PanelType, Text, PrimaryButton, Spinner, SpinnerSize } from '@fluentui/react';
+import {
+  PanelType, Text, PrimaryButton, Spinner, SpinnerSize,
+} from '@fluentui/react';
 import { PanelBody, ThemedPanel, WizardButtonRow } from 'src/layouts/Panels/Panels.styles';
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
@@ -26,11 +28,11 @@ const PreviewConvertXchangePanel = ({ isPanelOpen, closePanel, refreshXchangePag
   const Toast = useNotification();
 
   const [xchangePreviewConvert, { data: dataPreviewConvert, loading: loadingPreviewConvert }] = useQueryHandler(
-    usePreviewConvertXchangeProfileLazyQuery
+    usePreviewConvertXchangeProfileLazyQuery,
   );
 
   const [xchangeConvert, { data: dataConvert, loading: loadingConvert, error: errorConvert }] = useQueryHandler(
-    useConvertXchangeProfileMutation
+    useConvertXchangeProfileMutation,
   );
 
   const [newUsersAccounts, setNewUsersAccounts] = useState([]);

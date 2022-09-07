@@ -54,11 +54,9 @@ export const PasswordResetPage = () => {
 
   const token = getToken();
 
-  const [callVerifyToken, { data: dataVerifyToken, loading: loadingVerifyToken }] =
-    useVerifyPasswordResetTokenLazyQuery();
+  const [callVerifyToken, { data: dataVerifyToken, loading: loadingVerifyToken }] = useVerifyPasswordResetTokenLazyQuery();
 
-  const [callUpdatePassword, { data: dataUpdatePassword, loading: dataUpdatePasswordLoading }] =
-    useUpdatePasswordMutation();
+  const [callUpdatePassword, { data: dataUpdatePassword, loading: dataUpdatePasswordLoading }] = useUpdatePasswordMutation();
 
   useEffect(() => {
     callVerifyToken({
@@ -110,8 +108,8 @@ export const PasswordResetPage = () => {
         setPageState(PageState.COMPLETE);
       } else {
         setValidationMessage(
-          dataUpdatePassword?.updatePassword?.errMsg ??
-            'An internal error occurred updating your password. Please contact your administrator.'
+          dataUpdatePassword?.updatePassword?.errMsg
+            ?? 'An internal error occurred updating your password. Please contact your administrator.',
         );
       }
     }
@@ -129,45 +127,39 @@ export const PasswordResetPage = () => {
     });
   };
 
-  const renderLoading = () => {
-    return (
+  const renderLoading = () => (
+    <FormRow>
+      <Column>
+        <Text>Loading...</Text>
+      </Column>
+    </FormRow>
+  );
+
+  const renderComplete = () => (
+    <>
       <FormRow>
         <Column>
-          <Text>Loading...</Text>
+          <Text>Your Password has been successfully updated.</Text>
         </Column>
       </FormRow>
-    );
-  };
-
-  const renderComplete = () => {
-    return (
-      <>
-        <FormRow>
-          <Column>
-            <Text>Your Password has been successfully updated.</Text>
-          </Column>
-        </FormRow>
-        <FormRow>
-          <Column>
-            <PrimaryButton100 id="__ReturnToLogin_Btn" href="/login">
-              Login to CDX Dashboard
-            </PrimaryButton100>
-          </Column>
-        </FormRow>
-      </>
-    );
-  };
-
-  const renderInvalidToken = () => {
-    return (
       <FormRow>
-        <MessageBar id="__Invalid_Token_Msg" messageBarType={MessageBarType.error} isMultiline>
-          <Text>The given token is invalid or has expired.</Text>
-          <Text>Please contact your administrator to Reset your Password and have another token sent to you.</Text>
-        </MessageBar>
+        <Column>
+          <PrimaryButton100 id="__ReturnToLogin_Btn" href="/login">
+            Login to CDX Dashboard
+          </PrimaryButton100>
+        </Column>
       </FormRow>
-    );
-  };
+    </>
+  );
+
+  const renderInvalidToken = () => (
+    <FormRow>
+      <MessageBar id="__Invalid_Token_Msg" messageBarType={MessageBarType.error} isMultiline>
+        <Text>The given token is invalid or has expired.</Text>
+        <Text>Please contact your administrator to Reset your Password and have another token sent to you.</Text>
+      </MessageBar>
+    </FormRow>
+  );
 
   const renderForm = () => {
     if (user) {

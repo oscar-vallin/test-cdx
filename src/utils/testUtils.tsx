@@ -7,8 +7,7 @@ import { theme } from '../styles/themes/theme';
 const LightTheme = { ...theme, ...defaultTheme };
 export const mountWithTheme = (children: any) => mount(<ThemeProvider theme={LightTheme}>{children}</ThemeProvider>);
 
-export const shallowWithTheme = (children: any) =>
-  shallow(<ThemeProvider theme={LightTheme}>{children}</ThemeProvider>);
+export const shallowWithTheme = (children: any) => shallow(<ThemeProvider theme={LightTheme}>{children}</ThemeProvider>);
 
 export const renderWithTheme = (children: any) => render(<ThemeProvider theme={LightTheme}>{children}</ThemeProvider>);
 

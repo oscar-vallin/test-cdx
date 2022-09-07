@@ -3163,6 +3163,7 @@ export type WorkPacketCommand = {
 
 export enum WorkPacketCommandType {
   ViewDetails = 'VIEW_DETAILS',
+  ViewConfiguration = 'VIEW_CONFIGURATION',
   DownloadFile = 'DOWNLOAD_FILE',
   RerunStep = 'RERUN_STEP',
   Continue = 'CONTINUE',
@@ -3404,6 +3405,7 @@ export type XchangeConfigNamingConvention = {
 
 export type XchangeConfigSummary = {
   __typename?: 'XchangeConfigSummary';
+  sid?: Maybe<Scalars['ID']>;
   vendorIds?: Maybe<Array<Scalars['String']>>;
   specIds?: Maybe<Array<Scalars['String']>>;
   coreFilename?: Maybe<Scalars['String']>;
@@ -6155,7 +6157,7 @@ export type XchangeProfileQuery = (
     & Pick<XchangeProfile, 'comments' | 'hasUnpublishedChanges' | 'requiresConversion' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { xchanges?: Maybe<Array<(
       { __typename?: 'XchangeConfigSummary' }
-      & Pick<XchangeConfigSummary, 'vendorIds' | 'specIds' | 'coreFilename' | 'active' | 'hasUnpublishedChanges' | 'hasAlerts' | 'implementationPending'>
+      & Pick<XchangeConfigSummary, 'sid' | 'vendorIds' | 'specIds' | 'coreFilename' | 'active' | 'hasUnpublishedChanges' | 'hasAlerts' | 'implementationPending'>
       & { uatActivity: (
         { __typename?: 'XchangeConfigActivity' }
         & FragmentXchangeConfigActivityFragment
@@ -8168,7 +8170,7 @@ export type ConvertXchangeProfileMutation = (
     & Pick<XchangeProfile, 'comments' | 'hasUnpublishedChanges' | 'requiresConversion' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { xchanges?: Maybe<Array<(
       { __typename?: 'XchangeConfigSummary' }
-      & Pick<XchangeConfigSummary, 'vendorIds' | 'specIds' | 'coreFilename' | 'active' | 'hasUnpublishedChanges' | 'hasAlerts' | 'implementationPending'>
+      & Pick<XchangeConfigSummary, 'sid' | 'vendorIds' | 'specIds' | 'coreFilename' | 'active' | 'hasUnpublishedChanges' | 'hasAlerts' | 'implementationPending'>
       & { uatActivity: (
         { __typename?: 'XchangeConfigActivity' }
         & FragmentXchangeConfigActivityFragment
@@ -13747,6 +13749,7 @@ export const XchangeProfileDocument = gql`
     query XchangeProfile($orgSid: ID!) {
   xchangeProfile(orgSid: $orgSid) {
     xchanges {
+      sid
       vendorIds
       specIds
       coreFilename
@@ -17576,6 +17579,7 @@ export const ConvertXchangeProfileDocument = gql`
     mutation ConvertXchangeProfile($orgSid: ID!) {
   convertXchangeProfile(orgSid: $orgSid) {
     xchanges {
+      sid
       vendorIds
       specIds
       coreFilename

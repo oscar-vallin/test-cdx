@@ -37,8 +37,7 @@ const OntologyPage = () => {
     callTopLevelClasses,
     { data: dataTopLevelClasses, loading: loadingTopLevelClasses, error: errorTopLevelClasses },
   ] = useTopLevelOntologyClassesLazyQuery();
-  const [callSearchOntology, { data: dataSearchOntology, loading: loadingSearchOntology, error: errorSearchOntology }] =
-    useSearchOntologyLazyQuery();
+  const [callSearchOntology, { data: dataSearchOntology, loading: loadingSearchOntology, error: errorSearchOntology }] = useSearchOntologyLazyQuery();
   const [
     callFindOntologyById,
     { data: dataFindOntologyById, loading: loadingFindOntologyById, error: errorFindOntologyById },

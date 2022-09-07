@@ -33,13 +33,11 @@ const Button = ({
   onClick,
   block = false,
   ...props
-}: ButtonProps): ReactElement => {
-  return (
-    <StyledButton id={id} variant={variant} disabled={disabled} onClick={onClick} block={block} {...props}>
-      {text || children}
-    </StyledButton>
-  );
-};
+}: ButtonProps): ReactElement => (
+  <StyledButton id={id} variant={variant} disabled={disabled} onClick={onClick} block={block} {...props}>
+    {text || children}
+  </StyledButton>
+);
 
 Button.defaultProps = defaultProps;
 

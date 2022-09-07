@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import { ComboBox, Dialog, DialogFooter, DialogType, IComboBoxOption } from '@fluentui/react';
+import {
+  ComboBox, Dialog, DialogFooter, DialogType, IComboBoxOption,
+} from '@fluentui/react';
 import { GqOperationResponse, useXchangeFileUploadMutation } from 'src/data/services/graphql';
 import { Button } from 'src/components/buttons';
 import { ErrorHandler } from 'src/utils/ErrorHandler';

@@ -11,7 +11,9 @@ import {
   startOfWeek,
 } from 'date-fns';
 import { SchedOccurStatusEnum, ScheduleOccurrence } from 'src/data/services/graphql';
-import { Body, CalendarBodyCell, CalendarBodyCellNumber, MonthBodyRow, CellItem } from './Schedule.styles';
+import {
+  Body, CalendarBodyCell, CalendarBodyCellNumber, MonthBodyRow, CellItem,
+} from './Schedule.styles';
 
 type ScheduleMonthType = {
   id: string;
@@ -122,7 +124,7 @@ export const ScheduleMonth = ({
                 : formattedDateNotValid}
             </CalendarBodyCellNumber>
             {renderItems(day, items)}
-          </CalendarBodyCell>
+          </CalendarBodyCell>,
         );
 
         day = addDays(day, 1);
@@ -130,7 +132,7 @@ export const ScheduleMonth = ({
       rows.push(
         <MonthBodyRow id={`CalendarBodyRow-${day}`} key={`week_${day}`}>
           {days}
-        </MonthBodyRow>
+        </MonthBodyRow>,
       );
       days = [];
     }

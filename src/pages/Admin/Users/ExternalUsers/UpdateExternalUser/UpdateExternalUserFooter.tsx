@@ -8,19 +8,17 @@ type UpdateExternalUserFooterProps = {
   onSave: () => void;
 };
 
-const UpdateExternalUserFooter = ({ saveCmd, onSave }: UpdateExternalUserFooterProps): ReactElement => {
-  return (
-    <WizardButtonRow>
-      {saveCmd && (
-        <span>
-          <Button id="__User_Save_Button" onClick={onSave} variant="primary">
-            Save
-          </Button>
-        </span>
-      )}
-    </WizardButtonRow>
-  );
-};
+const UpdateExternalUserFooter = ({ saveCmd, onSave }: UpdateExternalUserFooterProps): ReactElement => (
+  <WizardButtonRow>
+    {saveCmd && (
+    <span>
+      <Button id="__User_Save_Button" onClick={onSave} variant="primary">
+        Save
+      </Button>
+    </span>
+    )}
+  </WizardButtonRow>
+);
 
 export { UpdateExternalUserFooter };
 export default UpdateExternalUserFooter;

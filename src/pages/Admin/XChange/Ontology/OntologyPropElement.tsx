@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Callout, DirectionalHint, FontIcon, IconButton, List, Sticky, StickyPositionType } from '@fluentui/react';
+import {
+  Callout, DirectionalHint, FontIcon, IconButton, List, Sticky, StickyPositionType,
+} from '@fluentui/react';
 import { OntologyPath, OntologyProperty } from 'src/data/services/graphql';
 import { ButtonLink } from 'src/components/buttons';
 import { Text } from 'src/components/typography/Text';

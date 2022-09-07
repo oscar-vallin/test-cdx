@@ -12,7 +12,9 @@ import {
 } from '@fluentui/react';
 
 import { Tabs } from 'src/components/tabs/Tabs';
-import { PanelBody, PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
+import {
+  PanelBody, PanelHeader, PanelTitle, ThemedPanel,
+} from 'src/layouts/Panels/Panels.styles';
 
 import { UseUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers/useUpdateUserPanel';
 import { GqOperationResponse, UserAccount } from 'src/data/services/graphql';
@@ -118,8 +120,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
       const responseCode = responseCreate?.updateUser?.response;
 
       if (responseCode === GqOperationResponse.Fail || responseCode === GqOperationResponse.PartialSuccess) {
-        const errorMsg =
-          responseCreate?.updateUser?.errMsg ?? responseCreate?.updateUser?.response ?? 'Error Updating User';
+        const errorMsg = responseCreate?.updateUser?.errMsg ?? responseCreate?.updateUser?.response ?? 'Error Updating User';
         setMessageType(MessageBarType.error);
         setMessage(errorMsg);
       }
@@ -140,10 +141,9 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
     if (response?.updateUserAccessPolicyGroups) {
       const responseCode = response.updateUserAccessPolicyGroups?.response;
       if (responseCode === GqOperationResponse.Fail || responseCode === GqOperationResponse.PartialSuccess) {
-        const errorMsg =
-          response?.updateUserAccessPolicyGroups?.errMsg ??
-          response?.updateUserAccessPolicyGroups?.response ??
-          'Error Updating Assigned Access Policy Groups';
+        const errorMsg = response?.updateUserAccessPolicyGroups?.errMsg
+          ?? response?.updateUserAccessPolicyGroups?.response
+          ?? 'Error Updating Assigned Access Policy Groups';
         setMessageType(MessageBarType.error);
         setMessage(errorMsg);
       }
@@ -228,8 +228,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
   const showUnsavedChangesDialog = () => {
     const updatedDialog = { ...defaultDialogProps };
     updatedDialog.title = 'You have unsaved changes';
-    updatedDialog.message =
-      "You are about to lose changes made to this user's profile. Are you sure you want to undo these changes?";
+    updatedDialog.message = "You are about to lose changes made to this user's profile. Are you sure you want to undo these changes?";
     updatedDialog.onYes = () => {
       hideDialog();
       doClosePanel();
@@ -244,8 +243,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
   const showResetPasswordDialog = () => {
     const updatedDialog = { ...defaultDialogProps };
     updatedDialog.title = "Reset this user's password?";
-    updatedDialog.message =
-      "You are about to send a password reset link to this user's email? Are you sure you want to continue?";
+    updatedDialog.message = "You are about to send a password reset link to this user's email? Are you sure you want to continue?";
     updatedDialog.onYes = () => {
       handleResetPassword().then();
       hideDialog();
@@ -260,8 +258,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
   const showDeactivateUserDialog = () => {
     const updatedDialog = { ...defaultDialogProps };
     updatedDialog.title = 'Deactivate User?';
-    updatedDialog.message =
-      'You are about to deactivate this user which will prevent this user from logging in. Are you sure you want to continue?';
+    updatedDialog.message = 'You are about to deactivate this user which will prevent this user from logging in. Are you sure you want to continue?';
     updatedDialog.onYes = () => {
       handleDeactivateUser().then();
       hideDialog();
@@ -276,8 +273,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
   const showActivateUserDialog = () => {
     const updatedDialog = { ...defaultDialogProps };
     updatedDialog.title = 'Activate User?';
-    updatedDialog.message =
-      'You are about to activate this user which will allow this user to log in. Are you sure you want to continue?';
+    updatedDialog.message = 'You are about to activate this user which will allow this user to log in. Are you sure you want to continue?';
     updatedDialog.onYes = () => {
       handleActivateUser().then();
       hideDialog();
@@ -371,9 +367,7 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
           overflowItems={overflowItems()}
           overflowButtonProps={overflowProps}
           ariaLabel="User actions"
-          onReduceData={() => {
-            return undefined;
-          }}
+          onReduceData={() => undefined}
         />
       </Column>
     </PanelHeader>

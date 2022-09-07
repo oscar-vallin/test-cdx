@@ -26,7 +26,9 @@ const useInputValue = (label, placeholder, initialValue, type) => {
     setValue(e?.target?.value ?? '');
   };
 
-  return { label, placeholder, type, value, onChange, setValue };
+  return {
+    label, placeholder, type, value, onChange, setValue,
+  };
 };
 
 const useDelayedInputValue = (label, placeholder, initialValue, type): DelayedInput => {
@@ -44,7 +46,9 @@ const useDelayedInputValue = (label, placeholder, initialValue, type): DelayedIn
     setValue(newValue ?? '');
   };
 
-  return { label, placeholder, type, value, onChange, setValue, delayedValue };
+  return {
+    label, placeholder, type, value, onChange, setValue, delayedValue,
+  };
 };
 
 const useDelayedDropdownValue = (label, placeholder, initialValue, type): DelayedInput => {
@@ -63,7 +67,11 @@ const useDelayedDropdownValue = (label, placeholder, initialValue, type): Delaye
     else setValue(o.key ?? '');
   };
 
-  return { label, placeholder, type, value, onChange, setValue, delayedValue };
+  return {
+    label, placeholder, type, value, onChange, setValue, delayedValue,
+  };
 };
 
-export { useInputValue, useDelayedInputValue, useFormInputValue, useDelayedDropdownValue };
+export {
+  useInputValue, useDelayedInputValue, useFormInputValue, useDelayedDropdownValue,
+};

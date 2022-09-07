@@ -36,9 +36,9 @@ function prettyEnumValue(enumValue?) {
   return enumValue
     .toString()
     .replace(/_/g, ' ')
-    .replace(/(?<=[A-Z])[A-Z]+/g, (str) => {
-      return str.toLowerCase();
-    });
+    .replace(/(?<=[A-Z])[A-Z]+/g, (str) => str.toLowerCase());
 }
 
-export { isDateTimeValid, yyyyMMdd, getEnumByValue, yyyyMMdda, prettyEnumValue };
+export {
+  isDateTimeValid, yyyyMMdd, getEnumByValue, yyyyMMdda, prettyEnumValue,
+};
