@@ -1943,6 +1943,7 @@ export type QueryUserAccountAuditLogsArgs = {
   orgSid: Scalars['ID'];
   changedUserSid?: Maybe<Scalars['ID']>;
   changedByUserSid?: Maybe<Scalars['ID']>;
+  workOrderId?: Maybe<Scalars['String']>;
   events?: Maybe<Array<UserAccountAuditEvent>>;
   dateRange: DateTimeRangeInput;
   pageableInput?: Maybe<PageableInput>;
@@ -3164,6 +3165,7 @@ export type WorkPacketCommand = {
 export enum WorkPacketCommandType {
   ViewDetails = 'VIEW_DETAILS',
   ViewConfiguration = 'VIEW_CONFIGURATION',
+  Audit = 'AUDIT',
   DownloadFile = 'DOWNLOAD_FILE',
   RerunStep = 'RERUN_STEP',
   Continue = 'CONTINUE',
@@ -3220,6 +3222,7 @@ export type WorkPacketStatusConnection = {
 export type WorkPacketStatusDetails = {
   __typename?: 'WorkPacketStatusDetails';
   workOrderId: Scalars['String'];
+  coreFilename: Scalars['String'];
   inboundFilename: Scalars['String'];
   timestamp: Scalars['DateTime'];
   orgSid: Scalars['ID'];
@@ -4140,7 +4143,7 @@ export type WorkPacketStatusDetailsQuery = (
   { __typename?: 'Query' }
   & { workPacketStatusDetails?: Maybe<(
     { __typename?: 'WorkPacketStatusDetails' }
-    & Pick<WorkPacketStatusDetails, 'workOrderId' | 'inboundFilename' | 'timestamp' | 'orgSid' | 'orgId' | 'orgName' | 'vendorSid' | 'vendorId' | 'vendorName' | 'specId' | 'specImplName' | 'fingerPrint' | 'populationCount' | 'suppressBilling' | 'packetStatus' | 'inboundLabel' | 'outboundLabel' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'supplementalFilesArchivePaths'>
+    & Pick<WorkPacketStatusDetails, 'workOrderId' | 'coreFilename' | 'inboundFilename' | 'timestamp' | 'orgSid' | 'orgId' | 'orgName' | 'vendorSid' | 'vendorId' | 'vendorName' | 'specId' | 'specImplName' | 'fingerPrint' | 'populationCount' | 'suppressBilling' | 'packetStatus' | 'inboundLabel' | 'outboundLabel' | 'clientFileArchivePath' | 'vendorFileArchivePath' | 'supplementalFilesArchivePaths'>
     & { deliveredFiles?: Maybe<Array<(
       { __typename?: 'DeliveredFile' }
       & Pick<DeliveredFile, 'filename' | 'fileSizeInBytes' | 'textSizeInBytes' | 'timeDelivered'>
@@ -4709,6 +4712,7 @@ export type UserAccountAuditLogsQueryVariables = Exact<{
   orgSid: Scalars['ID'];
   changedUserSid?: Maybe<Scalars['ID']>;
   changedByUserSid?: Maybe<Scalars['ID']>;
+  workOrderId?: Maybe<Scalars['String']>;
   events?: Maybe<Array<UserAccountAuditEvent> | UserAccountAuditEvent>;
   dateRange: DateTimeRangeInput;
   pageableInput?: Maybe<PageableInput>;
@@ -9852,6 +9856,7 @@ export const WorkPacketStatusDetailsDocument = gql`
     query WorkPacketStatusDetails($orgSid: ID!, $workOrderId: String!) {
   workPacketStatusDetails(orgSid: $orgSid, workOrderId: $workOrderId) {
     workOrderId
+    coreFilename
     inboundFilename
     timestamp
     orgSid
@@ -10985,11 +10990,12 @@ export type FindUserAccountQueryHookResult = ReturnType<typeof useFindUserAccoun
 export type FindUserAccountLazyQueryHookResult = ReturnType<typeof useFindUserAccountLazyQuery>;
 export type FindUserAccountQueryResult = Apollo.QueryResult<FindUserAccountQuery, FindUserAccountQueryVariables>;
 export const UserAccountAuditLogsDocument = gql`
-    query UserAccountAuditLogs($orgSid: ID!, $changedUserSid: ID, $changedByUserSid: ID, $events: [UserAccountAuditEvent!], $dateRange: DateTimeRangeInput!, $pageableInput: PageableInput) {
+    query UserAccountAuditLogs($orgSid: ID!, $changedUserSid: ID, $changedByUserSid: ID, $workOrderId: String, $events: [UserAccountAuditEvent!], $dateRange: DateTimeRangeInput!, $pageableInput: PageableInput) {
   userAccountAuditLogs(
     orgSid: $orgSid
     changedUserSid: $changedUserSid
     changedByUserSid: $changedByUserSid
+    workOrderId: $workOrderId
     events: $events
     dateRange: $dateRange
     pageableInput: $pageableInput
@@ -11046,6 +11052,7 @@ ${FragmentListPageInfoFragmentDoc}`;
  *      orgSid: // value for 'orgSid'
  *      changedUserSid: // value for 'changedUserSid'
  *      changedByUserSid: // value for 'changedByUserSid'
+ *      workOrderId: // value for 'workOrderId'
  *      events: // value for 'events'
  *      dateRange: // value for 'dateRange'
  *      pageableInput: // value for 'pageableInput'

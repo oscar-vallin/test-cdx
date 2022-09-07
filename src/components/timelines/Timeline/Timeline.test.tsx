@@ -6,6 +6,7 @@ const workPacket: WorkPacketStatusDetails = {
   timestamp: '2020-11-08T05:17:32.000',
   workOrderId: 'textWorkOrder345',
   inboundFilename: 'ABC-inbound-file.zip.pgp',
+  coreFilename: 'ABC-inbound',
   orgSid: '1',
   packetStatus: WorkStatus.Complete,
   vendorSid: '',

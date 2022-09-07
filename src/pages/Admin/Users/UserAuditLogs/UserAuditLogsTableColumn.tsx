@@ -12,6 +12,8 @@ export enum UserAuditLogsColumn {
   CHANGED_BY,
   NEW_VALUE,
   OLD_VALUE,
+  DETAILS,
+  INITIATED_BY,
 }
 
 export const useUserAuditLogsColumns = (selectedColumns: UserAuditLogsColumn[]) => {
@@ -27,6 +29,7 @@ export const useUserAuditLogsColumns = (selectedColumns: UserAuditLogsColumn[]) 
       key: 'auditDateTime',
       name: 'Date/Time',
       targetWidthProportion: 1,
+      flexGrow: 1,
       minWidth: 80,
       maxWidth: 150,
       fieldName: 'auditDateTime',
@@ -64,6 +67,7 @@ export const useUserAuditLogsColumns = (selectedColumns: UserAuditLogsColumn[]) 
       key: 'event',
       name: 'Event',
       targetWidthProportion: 1,
+      flexGrow: 1,
       minWidth: 80,
       maxWidth: 100,
       fieldName: 'event',
@@ -89,7 +93,8 @@ export const useUserAuditLogsColumns = (selectedColumns: UserAuditLogsColumn[]) 
       sortable: false,
       filterable: false,
       onRender: (item?: UserAccountAuditLog) => {
-        if (item?.changedByUserAccount && item?.changedByUserAccount.sid !== item?.userAccount?.sid) {
+        if (item?.changedByUserAccount
+          && item?.changedByUserAccount.sid !== item?.userAccount?.sid) {
           const name = getUserAccountAuditFormat(item.changedByUserAccount);
           return <span title={name}>{name}</span>;
         }
@@ -122,6 +127,39 @@ export const useUserAuditLogsColumns = (selectedColumns: UserAuditLogsColumn[]) 
       sortable: false,
       filterable: false,
       onRender: (item: UserAccountAuditLog) => <span title={item.oldValue ?? undefined}>{item.oldValue}</span>,
+    },
+    {
+      key: 'details',
+      name: '',
+      targetWidthProportion: 2,
+      flexGrow:  2,
+      minWidth: 80,
+      maxWidth: 700,
+      fieldName: 'newValue',
+      isPadded: true,
+      data: UserAuditLogsColumn.DETAILS,
+      dataType: 'string',
+      sortable: false,
+      filterable: false,
+      onRender: (item: UserAccountAuditLog) => <span title={item.newValue ?? undefined}>{item.newValue}</span>
+    },
+    {
+      key: 'initiatedBy',
+      name: 'Initiated By',
+      targetWidthProportion: 1,
+      flexGrow: 1,
+      minWidth: 80,
+      maxWidth: 200,
+      fieldName: 'changedByUserAccount',
+      isPadded: true,
+      data: UserAuditLogsColumn.INITIATED_BY,
+      dataType: 'string',
+      sortable: false,
+      filterable: false,
+      onRender: (item?: UserAccountAuditLog) => {
+        const name = getUserAccountAuditFormat(item?.changedByUserAccount);
+        return <span title={name}>{name}</span>;
+      },
     },
   ];
 
