@@ -50,8 +50,10 @@ const AccessSpecializationMembersPanel = ({
     },
   });
 
-  const [accessSpecializationMembers, { data: specializationMembersData, loading: isLoadingSpecializationMembers }] =
-    useAccessSpecializationMembersLazyQuery();
+  const [
+    accessSpecializationMembers,
+    { data: specializationMembersData, loading: isLoadingSpecializationMembers },
+  ] = useAccessSpecializationMembersLazyQuery();
 
   const updateUserPanel = useUpdateUserPanel();
 
@@ -240,7 +242,11 @@ const AccessSpecializationMembersPanel = ({
       <UpdateUserPanel
         useUpdateUserPanel={updateUserPanel}
         onUpdateUser={() => {
-          userService.fetchUsers(0, tableFilters.pagingParams.sort, tableFilters.searchText.delayedValue).then();
+          userService.fetchUsers(
+            0,
+            tableFilters.pagingParams.sort,
+            tableFilters.searchText.delayedValue,
+          ).then();
         }}
       />
 

@@ -39,6 +39,7 @@ import { CDXTabsItemType, Tabs } from 'src/components/tabs/Tabs';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
 import { useNotification } from 'src/hooks/useNotification';
 import { EmptyState } from 'src/containers/states';
+import { AuditLogTab } from 'src/pages/FileStatusDetails/AuditLogTab/AuditLogTab';
 import QualityChecksTab from './QualityChecksTab/QualityChecksTab';
 import WorkStepsTab from './WorkStepsTab/WorkStepsTab';
 import EnrollmentStatsTab from './EnrollmentStatsTab/EnrollmentStatsTab';
@@ -179,7 +180,9 @@ const FileStatusDetailsPanel = (
     return (
       <ButtonLink
         id="__XchangeConfigBtn"
-        onClick={() => history.push(`/xchange-details?orgSid=${fsOrgSid}&coreFilename=${packet?.inboundFilename}`)}
+        onClick={() => {
+          history.push(`/xchange-details?orgSid=${fsOrgSid}&coreFilename=${packet?.coreFilename}`);
+        }}
       >
         {item.command.label}
       </ButtonLink>
@@ -316,7 +319,7 @@ const FileStatusDetailsPanel = (
         id: '__XchangeConfigBtn',
         key: '__XchangeConfigBtn',
         command: xchangeConfigCmd,
-        onClick: () => history.push(`/xchange-details?orgSid=${fsOrgSid}&coreFilename=${packet?.inboundFilename}`),
+        onClick: () => history.push(`/xchange-details?orgSid=${fsOrgSid}&coreFilename=${packet?.coreFilename}`),
         onRender: renderXchangeConfigButton,
       },
     ];
@@ -486,6 +489,13 @@ const FileStatusDetailsPanel = (
       hash: '#archives',
       content: <ArchivesTab packet={packet} />,
     });
+    if (packet?.commands?.find((cmd) => cmd.commandType === WorkPacketCommandType.Audit)) {
+      tabs.push({
+        title: 'Audit Log',
+        hash: '#audit',
+        content: <AuditLogTab packet={packet} />,
+      })
+    }
 
     return tabs;
   };

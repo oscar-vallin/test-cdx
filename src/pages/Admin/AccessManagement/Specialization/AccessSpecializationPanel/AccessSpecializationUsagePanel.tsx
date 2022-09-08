@@ -46,8 +46,7 @@ const AccessSpecializationUsagePanel = ({
       orgSid,
     },
   });
-  const [accessSpecializationUsages, { data: accessSpecializationData, loading: isLoadingAccessSpecialization }] =
-    useAccessSpecializationUsagesLazyQuery();
+  const [accessSpecializationUsages, { data: accessSpecializationData, loading: isLoadingAccessSpecialization }] = useAccessSpecializationUsagesLazyQuery();
 
   const fetchData = () => {
     apiAmGroupsForOrg({ variables: { orgSid } });

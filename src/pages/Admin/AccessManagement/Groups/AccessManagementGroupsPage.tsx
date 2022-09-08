@@ -74,7 +74,10 @@ const AccessManagementGroupsContainer = () => {
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>();
   const handleError = ErrorHandler();
 
-  const [fetchTemplates, { data: templatesData, error: templatesError }] = useAccessPolicyGroupTemplatesLazyQuery({
+  const [
+    fetchTemplates,
+    { data: templatesData, error: templatesError },
+  ] = useAccessPolicyGroupTemplatesLazyQuery({
     variables: {
       orgSid,
     },
@@ -208,13 +211,13 @@ const AccessManagementGroupsContainer = () => {
           </ButtonLink>
         </>
       );
-    } 
+    }
 
     if (column.key === 'members') {
       return (
         <TooltipHost content={`${item.members} Users are assigned to this specialization`}>
-          <People20Filled 
-            style={{ color: theme.colors.themePrimary, cursor: 'pointer' }} 
+          <People20Filled
+            style={{ color: theme.colors.themePrimary, cursor: 'pointer' }}
             onClick={() => {
               setSelectedGroupId(item.sid);
               setCurrentName(item.name);
