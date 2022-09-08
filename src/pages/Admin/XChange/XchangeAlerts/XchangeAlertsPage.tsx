@@ -147,6 +147,9 @@ const XchangeAlertsPage = () => {
         color = 'orange';
       } else if (qualifier === 'PROD-OE') {
         width = '60px';
+      } else if (qualifier === 'TEST-OE') {
+        width = '60px';
+        color = 'orange';
       }
 
       return (
@@ -251,6 +254,7 @@ const XchangeAlertsPage = () => {
                   iconName="add"
                   onClick={() => {
                     setSid('');
+                    setCoreFilenameValue('');
                     setOpenAlertsPanel(true);
                   }}
                 >
