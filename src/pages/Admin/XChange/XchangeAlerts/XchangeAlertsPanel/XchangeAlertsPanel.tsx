@@ -20,6 +20,7 @@ import {
   useCreateXchangeProfileAlertMutation,
   XchangeConfigAlertForm,
   useCreateXchangeConfigAlertMutation,
+  useUpdateXchangeConfigAlertMutation,
   WebCommand,
   CdxWebCommandType,
   UiSelectManyField,
@@ -69,8 +70,8 @@ const XchangeAlertsPanel = ({
 }: XchangeAlertsPanelProps) => {
   const { orgSid } = useOrgSid();
   const Toast = useNotification();
-  const [xchangeProfileAlert, setXchangeProfileAlert] = useState<XchangeProfileAlertForm>();
-  const [xchangeConfigAlert, setXchangeConfigAlert] = useState<XchangeConfigAlertForm>();
+  const [xchangeProfileAlert, setXchangeProfileAlert] = useState<XchangeProfileAlertForm | null>();
+  const [xchangeConfigAlert, setXchangeConfigAlert] = useState<XchangeConfigAlertForm | null>();
   const [filenameQualifier, setFilenameQualifier] = useState('');
   const [customQualifier, setCustomQualifier] = useState<boolean>();
   const [optionAlerts, setOptionAlerts] = useState([]);
@@ -85,21 +86,29 @@ const XchangeAlertsPanel = ({
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
 
-  const [profileAlertForm, { data: alertProfileFormData, loading: alertProfileFormLoading }] = useQueryHandler(
+  const [profileAlertForm,
+    { data: alertProfileFormData, loading: alertProfileFormLoading },
+  ] = useQueryHandler(
     useXchangeProfileAlertFormLazyQuery,
   );
-  const [configAlertForm, { data: alertConfigFormData, loading: alertConfigFormLoading }] = useQueryHandler(
+  const [configAlertForm,
+    { data: alertConfigFormData, loading: alertConfigFormLoading },
+  ] = useQueryHandler(
     useXchangeConfigAlertFormLazyQuery,
   );
-  const [createXchangeConfigAlert, { data: createConfigData, loading: createConfigloading, error: createConfigError }] = useQueryHandler(useCreateXchangeConfigAlertMutation);
+  const [createXchangeConfigAlert,
+    { data: createConfigData, loading: createConfigloading, error: createConfigError },
+  ] = useQueryHandler(useCreateXchangeConfigAlertMutation);
 
-  // eslint-disable-next-line prettier/prettier
+  const [updateXchangeConfigAlert,
+    { data: updateConfigData, loading: updateConfigLoading, error: updateConfigerror },
+  ] = useQueryHandler(useUpdateXchangeConfigAlertMutation);
+
   const [
     updateXchangeProfileAlert,
     { data: updateProfiledata, loading: updateProfileLoading, error: updateProfileError },
   ] = useQueryHandler(useUpdateXchangeProfileAlertMutation);
 
-  // eslint-disable-next-line prettier/prettier
   const [
     createXchangeProfileAlert,
     { data: createProfileData, loading: createProfileLoading, error: createProfileError },
@@ -166,6 +175,19 @@ const XchangeAlertsPanel = ({
         },
       });
     }
+
+    if (updateCmd) {
+      updateXchangeConfigAlert({
+        variables: {
+          alertInput: {
+            sid,
+            filenameQualifier,
+            alertTypes: alertTypesValue,
+            subscriberSids,
+          },
+        },
+      });
+    }
   };
 
   const subscribersList = (subscribers) => {
@@ -201,6 +223,9 @@ const XchangeAlertsPanel = ({
       closePanel(false);
       setTotalSubscribers([]);
       setUnsavedChanges(false);
+      setAlertTypesValue([]);
+      setXchangeConfigAlert(null);
+      setXchangeProfileAlert(null);
     };
     updatedDialog.onClose = () => {
       hideDialog();
@@ -214,6 +239,9 @@ const XchangeAlertsPanel = ({
       showUnsavedChangesDialog();
     } else {
       setTotalSubscribers([]);
+      setAlertTypesValue([]);
+      setXchangeConfigAlert(null);
+      setXchangeProfileAlert(null);
       closePanel(false);
     }
   };
@@ -256,7 +284,6 @@ const XchangeAlertsPanel = ({
   useEffect(() => {
     if (!alertConfigFormLoading && alertConfigFormData) {
       const { xchangeConfigAlertForm } = alertConfigFormData;
-      console.log(xchangeConfigAlertForm);
       setXchangeConfigAlert(xchangeConfigAlertForm);
       if (xchangeConfigAlertForm?.alertTypes.value && xchangeConfigAlertForm?.alertTypes.value.length > 0) {
         setAlertTypesValue(xchangeConfigAlertForm?.alertTypes.value.map((alert) => alert.value));
@@ -271,6 +298,10 @@ const XchangeAlertsPanel = ({
 
       if (xchangeConfigAlertForm?.alertTypes) {
         setAlertTypes(xchangeConfigAlertForm?.alertTypes);
+      }
+
+      if (xchangeConfigAlertForm?.filenameQualifier.value.value) {
+        setFilenameQualifier(xchangeConfigAlertForm?.filenameQualifier.value.value ?? '');
       }
 
       if (xchangeConfigAlertForm?.commands) {
@@ -318,6 +349,18 @@ const XchangeAlertsPanel = ({
       Toast.error({ text: 'There was an error to add alert' });
     }
   }, [createConfigData, createConfigloading, createConfigError]);
+
+  useEffect(() => {
+    if (!updateConfigLoading && updateConfigData) {
+      refreshXchangeDetails(true);
+      Toast.success({ text: 'Alert updated' });
+      closePanel(false);
+    }
+
+    if (!updateConfigLoading && updateConfigerror) {
+      Toast.error({ text: 'There was an error to updated alert' });
+    }
+  }, [updateConfigData, updateConfigLoading, updateConfigerror]);
 
   const onRenderAction = (item: any) => <IconButton iconProps={{ iconName: 'Trash' }} onClick={() => removeSubscriber(item.sid)} />;
 
