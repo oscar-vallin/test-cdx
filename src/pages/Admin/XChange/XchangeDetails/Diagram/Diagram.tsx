@@ -23,9 +23,12 @@ type DiagramProps = {
   data: XchangeDiagram;
   refreshDetailsPage: (data: boolean) => void;
   xchangeFileProcessSid?: string;
+  allowedCommands: boolean;
 };
 
-const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramProps) => {
+const Diagram = ({
+  data, refreshDetailsPage, xchangeFileProcessSid, allowedCommands,
+}: DiagramProps) => {
   const { initialNodes } = InitialNodes(data);
   const { initialEdges } = InitialEdges(data);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
@@ -154,6 +157,7 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
             <StyledButtonAction
               fontSize={24}
               id="__Add_XchangeSteps"
+              disabled={!allowedCommands}
               title="Add Step"
               onClick={() => {
                 setOpenStepPanel(true);
@@ -161,12 +165,13 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
               }}
             >
               <StyledText>
-                Xchange Steps <span style={{ color: '#0078D4', fontSize: '22px' }}>+</span>
+                Xchange Steps {allowedCommands && <span style={{ color: '#0078D4', fontSize: '22px' }}>+</span>}
               </StyledText>
             </StyledButtonAction>
             <StyledButtonAction
               fontSize={24}
               id="__Add_FileTransmission"
+              disabled={!allowedCommands}
               title="Add File Transmission"
               onClick={() => {
                 setOpenFilePanel(true);
@@ -174,7 +179,7 @@ const Diagram = ({ data, refreshDetailsPage, xchangeFileProcessSid }: DiagramPro
               }}
             >
               <StyledText>
-                File Transmissions <span style={{ color: '#0078D4', fontSize: '22px' }}>+</span>
+                File Transmissions {allowedCommands && <span style={{ color: '#0078D4', fontSize: '22px' }}>+</span>}
               </StyledText>
             </StyledButtonAction>
           </StyledHorizontalButtons>

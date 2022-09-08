@@ -76,6 +76,7 @@ const XchangeDetailsPage = () => {
   const [fileProcesses, setFileProcesses] = useState<XchangeFileProcessForm[]>();
   const [fileProcess, setFileProcess] = useState<XchangeFileProcessForm>();
   const [dataDiagram, setDataDiagram] = useState<XchangeDiagram>();
+  const [allowedCommands, setAllowedCommands] = useState(false);
   const [refreshXchangeDetails, setRefreshXchangeDetails] = useState(false);
   const [comments, setComments] = useState('');
   const [openUpdateComments, setOpenUpdateComments] = useState(false);
@@ -257,20 +258,28 @@ const XchangeDetailsPage = () => {
                 </Spacing>
                 {alert?.subscribers
                   && alert?.subscribers.map((subs, subsIndex: number) => (
-                    <Row key={subsIndex}>
-                      <Column lg="3">
-                        <ButtonLink style={{ fontSize: '12px' }}>{subs.firstNm}</ButtonLink>
-                      </Column>
-                      <Column lg="4">
-                        <ButtonLink style={{ fontSize: '12px' }}>{subs.email}</ButtonLink>
-                      </Column>
-                    </Row>
+                    <Spacing margin={{ bottom: 'normal' }} key={subsIndex}>
+                      <Row>
+                        <Column lg="6">
+                          <ButtonLink style={{ fontSize: '12px', maxWidth: '130px', wordWrap: 'break-word' }}>
+                            {subs.firstNm}
+                          </ButtonLink>
+                        </Column>
+                        <Column lg="6">
+                          <ButtonLink style={{ fontSize: '12px', maxWidth: '150px', wordWrap: 'break-word' }}>
+                            {subs.email}
+                          </ButtonLink>
+                        </Column>
+                      </Row>
+                    </Spacing>
                   ))}
               </Spacing>
             ))}
+            {allowedCommands && (
             <ButtonAction id="__Add_Alert" iconName="add" onClick={() => setOpenAlertsPanel(true)}>
               Add alert
             </ButtonAction>
+            )}
           </CardStyled>
           <Spacing margin={{ top: 'normal' }}>
             <CardStyled>
@@ -286,9 +295,11 @@ const XchangeDetailsPage = () => {
                   ))}
                 </Row>
               </Container>
+              {allowedCommands && (
               <StyledButtonAction fontSize={18} id="__Add_FilenameQualifer" iconName="add">
                 Add Filename Qualifier
               </StyledButtonAction>
+              )}
             </CardStyled>
           </Spacing>
         </>
@@ -367,6 +378,10 @@ const XchangeDetailsPage = () => {
       if (xchangeConfig.comments) {
         setComments(xchangeConfig.comments.value ?? '');
       }
+
+      if (xchangeConfig.commands && xchangeConfig.commands.length > 0) {
+        setAllowedCommands(true);
+      }
     }
   }, [detailsData, detailsLoading]);
 
@@ -442,6 +457,7 @@ const XchangeDetailsPage = () => {
           data={dataDiagram}
           refreshDetailsPage={setRefreshXchangeDetails}
           xchangeFileProcessSid={xchangeFileProcessSid ?? ''}
+          allowedCommands={allowedCommands}
         />
       );
     }

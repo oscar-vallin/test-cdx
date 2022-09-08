@@ -60,7 +60,9 @@ type XchangeAlertsProps = {
 const XChangePage = () => {
   const { orgSid } = useOrgSid();
   const ThemeStore = useThemeStore();
-  const [xchangeProfile, { data: dataXchange, loading: loadingXchange }] = useQueryHandler(useXchangeProfileLazyQuery);
+  const [xchangeProfile, { data: dataXchange, loading: loadingXchange }] = useQueryHandler(
+    useXchangeProfileLazyQuery,
+  );
 
   const [xchangeProfileComment, { data: dataComment, loading: loadingComment }] = useQueryHandler(
     useUpdateXchangeProfileCommentMutation,
@@ -457,7 +459,7 @@ const XChangePage = () => {
   };
 
   const readonlyComments = () => {
-    if (!updateCmd) {
+    if (updateCmd?.endPoint !== 'updateXchangeProfileComment') {
       return true;
     }
 
@@ -488,7 +490,7 @@ const XChangePage = () => {
           {individualXchangeAlerts?.map((individualXchange: XchangeAlertsProps, index: number) => (
             <Spacing margin={{ bottom: 'normal' }} key={index}>
               <Row>
-                <Column lg="8">
+                <Column lg="7">
                   <ButtonLink to={`/xchange-alerts?orgSid=${orgSid}`} style={{ fontSize: '12px' }}>
                     {' '}
                     {individualXchange.coreFilename}{' '}
@@ -497,7 +499,7 @@ const XChangePage = () => {
                 <Column lg="4">
                   <ButtonLink to={`/xchange-alerts?orgSid=${orgSid}`} style={{ fontSize: '12px' }}>
                     {' '}
-                    ({individualXchange.numSubscribers}) Subscriber
+                    ({individualXchange.numSubscribers}) Subscribers
                   </ButtonLink>
                 </Column>
               </Row>
@@ -516,29 +518,29 @@ const XChangePage = () => {
                 <>
                   <Column lg="3" md={12}>
                     <StyledIconsComments>
-                        <IconButton iconProps={{ iconName: 'Save' }} onClick={sendComment} />
-                        <Text variant="small">Save</Text>
-                      </StyledIconsComments>
+                      <IconButton iconProps={{ iconName: 'Save' }} onClick={sendComment} />
+                      <Text variant="small">Save</Text>
+                    </StyledIconsComments>
                   </Column>
                   <Column lg="3">
                     <StyledIconsComments>
-                        <IconButton
-                          iconProps={{ iconName: 'Cancel' }}
-                          onClick={() => {
-                            setEditComment(false);
-                            setComment(dataXchange.xchangeProfile.comments);
-                          }}
-                        />
-                        <Text variant="small">Cancel</Text>
-                      </StyledIconsComments>
+                      <IconButton
+                        iconProps={{ iconName: 'Cancel' }}
+                        onClick={() => {
+                          setEditComment(false);
+                          setComment(dataXchange.xchangeProfile.comments);
+                        }}
+                      />
+                      <Text variant="small">Cancel</Text>
+                    </StyledIconsComments>
                   </Column>
                 </>
               ) : (
                 <Column lg="6" right>
                   <IconButton
-                      iconProps={{ iconName: 'EditSolid12' }}
-                      onClick={() => setEditComment(updateCmd !== undefined && true)}
-                    />
+                    iconProps={{ iconName: 'EditSolid12' }}
+                    onClick={() => setEditComment(updateCmd !== undefined && true)}
+                  />
                 </Column>
               )}
             </Row>
@@ -591,7 +593,7 @@ const XChangePage = () => {
           <Container>
             <Row>
               <Column lg="7">
-                <Text style={{ fontWeight: 'bold' }}>Xchanges</Text>
+                <Text style={!createCmd ? { fontWeight: 'bold', marginBottom: '10px' } : { fontWeight: 'bold' }}>Xchanges</Text>
               </Column>
               {createCmd && (
                 <Column lg="2" right>
