@@ -59,17 +59,17 @@ const NamingPage = () => {
             || search.test(extractType)
                 || search.test(prodFilename)
                     || search.test(testFilename) || search.test(uatFilename)) {
-          setTimeout(() => {
-            setFilterConventions((currentConvention) => currentConvention.concat(convention));
-          }, 500);
+          setFilterConventions((currentConvention) => currentConvention.concat(convention));
         }
       }
     });
   };
 
+  // eslint-disable-next-line consistent-return
   useEffect(() => {
     if (conventions && conventions?.length > 0) {
-      filterConventionData();
+      const timer = setTimeout(() => filterConventionData(), 500);
+      return () => clearTimeout(timer);
     }
   }, [searchConventions]);
 
