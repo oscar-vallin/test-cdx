@@ -15,6 +15,7 @@ import {
   TextField,
   SearchBox,
   FontIcon,
+  DirectionalHint,
 } from '@fluentui/react';
 import { ButtonLink } from 'src/components/buttons';
 import { Column, Container, Row } from 'src/components/layouts';
@@ -27,6 +28,7 @@ import {
   useXchangeProfileLazyQuery,
   XchangeConfigSummary,
   useUpdateXchangeProfileCommentMutation,
+  usePublishXchangeProfileMutation,
   CdxWebCommandType,
   WebCommand,
 } from 'src/data/services/graphql';
@@ -34,6 +36,8 @@ import { yyyyMMdd } from 'src/utils/CDXUtils';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { PageBody } from 'src/components/layouts/Column';
 import { useThemeStore } from 'src/store/ThemeStore';
+import { DialogYesNoProps, DialogYesNo } from 'src/containers/modals/DialogYesNo';
+import { useNotification } from 'src/hooks/useNotification';
 import { PreviewConvertXchangePanel } from './PreviewConvertXchangePanel';
 import {
   CardStyled,
@@ -57,9 +61,21 @@ type XchangeAlertsProps = {
   hasUnpublishedChanges: boolean;
 };
 
+const defaultDialogProps: DialogYesNoProps = {
+  id: '__XchangeProfile_Dlg',
+  open: false,
+  title: '',
+  message: '',
+  labelYes: 'Yes',
+  labelNo: 'No',
+  highlightNo: true,
+  highlightYes: false,
+};
+
 const XChangePage = () => {
   const { orgSid } = useOrgSid();
   const ThemeStore = useThemeStore();
+  const Toast = useNotification();
   const [xchangeProfile, { data: dataXchange, loading: loadingXchange }] = useQueryHandler(
     useXchangeProfileLazyQuery,
   );
@@ -67,6 +83,9 @@ const XChangePage = () => {
   const [xchangeProfileComment, { data: dataComment, loading: loadingComment }] = useQueryHandler(
     useUpdateXchangeProfileCommentMutation,
   );
+
+  const [publishXchange, { data: publishData, loading: isLoadingPublish, error: publishError },
+  ] = useQueryHandler(usePublishXchangeProfileMutation);
 
   const [xchanges, setXchanges] = useState<XchangeConfigSummary[]>([]);
   const [searchXchanges, setSearchXchanges] = useState<string>('');
@@ -77,10 +96,13 @@ const XChangePage = () => {
   const [requiresConversion, setRequiresConversion] = useState<boolean>();
   const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
+  const [activeCmd, setActiveCmd] = useState<WebCommand | null>();
   const [editComment, setEditComment] = useState(false);
   const [comment, setComment] = useState<string | null>();
   const [refreshDataXchange, setRefreshDataXchange] = useState(false);
   const [isPreviewPanelOpen, setIsPreviewPanelOpen] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
+  const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
 
   const fetchData = () => {
     xchangeProfile({
@@ -113,6 +135,30 @@ const XChangePage = () => {
         }
       }
     });
+  };
+
+  const hideDialog = () => {
+    setShowDialog(false);
+  };
+
+  const showUnsavedChangesDialog = () => {
+    const updatedDialog = { ...defaultDialogProps };
+    updatedDialog.message = 'Are you sure you want to publish these changes?';
+
+    updatedDialog.onYes = () => {
+      hideDialog();
+      publishXchange({
+        variables: {
+          orgSid,
+        },
+      });
+    };
+    updatedDialog.onNo = () => {
+      hideDialog();
+    };
+
+    setDialogProps(updatedDialog);
+    setShowDialog(true);
   };
 
   const updateDateFormat = (date: Date) => {
@@ -200,6 +246,8 @@ const XChangePage = () => {
       setUpdateCmd(_updateCmd);
       const _createCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
       setCreateCmd(_createCmd);
+      const _activeCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Activate);
+      setActiveCmd(_activeCmd);
     }
   }, [dataXchange, loadingXchange]);
 
@@ -214,6 +262,16 @@ const XChangePage = () => {
       fetchData();
     }
   }, [dataComment, loadingComment]);
+
+  useEffect(() => {
+    if (!isLoadingPublish && publishData) {
+      setRefreshDataXchange(true);
+      Toast.success({ text: 'Alert has been deleted' });
+    }
+    if (!isLoadingPublish && publishError) {
+      Toast.error({ text: 'There was an error publish the xchange profile' });
+    }
+  }, [publishData, isLoadingPublish, publishError]);
 
   const onRenderItemColum = (node: XchangeConfigSummary, itemIndex?: number, column?: IColumn) => {
     let columnVal: string | undefined;
@@ -401,7 +459,15 @@ const XChangePage = () => {
   const renderCreateButton = () => {
     if (dataXchange && !requiresConversion) {
       return (
-        <PrimaryButton id="__Publish" iconProps={{ iconName: 'FileHTML' }}>
+        <PrimaryButton
+          id="__Publish"
+          iconProps={{ iconName: 'FileHTML' }}
+          onClick={() => {
+            if (activeCmd) {
+              showUnsavedChangesDialog();
+            }
+          }}
+        >
           Publish
         </PrimaryButton>
       );
@@ -581,6 +647,20 @@ const XChangePage = () => {
                   />
                 </TooltipHost>
               )}
+              {dataXchange?.xchangeProfile.hasUnpublishedChanges && (
+                <TooltipHost content={tooltipContent?.hasUnpublishedChanges} id="hasUnpublishedChanges" directionalHint={DirectionalHint.rightCenter}>
+                  <FontIcon
+                    id="hasUnpublishedChanges"
+                    style={{
+                      color: ThemeStore.userTheme.colors.custom.error,
+                      fontSize: '12px',
+                      cursor: 'pointer',
+                      margin: '5px 0 0 8px',
+                    }}
+                    iconName="6PointStar"
+                  />
+                </TooltipHost>
+              )}
             </Column>
             <Column lg="6" right>
               {renderCreateButton()}
@@ -631,6 +711,7 @@ const XChangePage = () => {
           refreshXchangePage={setRefreshDataXchange}
         />
       )}
+      <DialogYesNo {...dialogProps} open={showDialog} />
     </LayoutDashboard>
   );
 };
