@@ -36,7 +36,6 @@ const AddSubscriberModal = ({
 }: AddSubscriberModalProps) => {
   const [userQuickSearch, { data: quickSearchData, loading: quickSearchLoading }] = useUserQuickSearchLazyQuery();
   const [createUser, { data: createUserData, loading: createUserLoading }] = useCreateUserMutation();
-  const [addSubscriber, setAddSubscriber] = useState(false);
   const [currentSubscriber, setCurrentSubscriber] = useState('');
   const [subscriberFound, setSubsciberFound] = useState<SubscriberOptionProps | null>();
   const [addNewAccount, setAddNewAccount] = useState(false);
@@ -106,70 +105,64 @@ const AddSubscriberModal = ({
     return null;
   };
 
-  const renderBody = () => {
-    if (addSubscriber) {
-      return (
+  const renderBody = () => (
+    <>
+      <SearchBox
+        id="Subscriber_Input-Search"
+        disabled={false}
+        value={currentSubscriber}
+        styles={{ root: { width: '100%', borderColor: 'gray' } }}
+        onChange={(event, searchText) => {
+          userQuickSearch({
+            variables: {
+              orgSid,
+              searchText,
+            },
+          });
+          setCurrentSubscriber(searchText ?? '');
+          if (currentSubscriber.trim() === '') {
+            setSubsciberFound(null);
+          }
+        }}
+        placeholder="Search Susbscriber"
+      />
+      {addNewAccount && (
         <>
-          <SearchBox
-            id="Subscriber_Input-Search"
-            disabled={false}
-            value={currentSubscriber}
-            styles={{ root: { width: '100%', borderColor: 'gray' } }}
-            onChange={(event, searchText) => {
-              userQuickSearch({
-                variables: {
-                  orgSid,
-                  searchText,
-                },
-              });
-              setCurrentSubscriber(searchText ?? '');
-              if (currentSubscriber.trim() === '') {
-                setSubsciberFound(null);
-              }
-            }}
-            placeholder="Search Susbscriber"
+          <InputText
+            id="firstNmSubscriber"
+            type="text"
+            value={firstNm}
+            label="First Name"
+            required={true}
+            onChange={(event, newValue) => setFirstNm(newValue ?? '')}
           />
-          {addNewAccount && (
-            <>
-              <InputText
-                id="firstNmSubscriber"
-                type="text"
-                value={firstNm}
-                label="First Name"
-                required={true}
-                onChange={(event, newValue) => setFirstNm(newValue ?? '')}
-              />
-              <InputText
-                id="lastNmSubscriber"
-                type="text"
-                value={lastNm}
-                label="Last Name"
-                required={true}
-                onChange={(event, newValue) => setLastNm(newValue ?? '')}
-              />
-              <InputText
-                id="emailSubscriber"
-                type="email"
-                value={email}
-                label="Username and Email Address"
-                required={true}
-                onChange={(event, newValue) => setEmail(newValue ?? '')}
-              />
-              <Spacing margin={{ top: 'normal' }}>
-                <MessageBar
-                  type="warning"
-                  content="This user does not seem to be within your organization (based on their email address) This user will be added as a 3rd party user."
-                  multiline
-                />
-              </Spacing>
-            </>
-          )}
+          <InputText
+            id="lastNmSubscriber"
+            type="text"
+            value={lastNm}
+            label="Last Name"
+            required={true}
+            onChange={(event, newValue) => setLastNm(newValue ?? '')}
+          />
+          <InputText
+            id="emailSubscriber"
+            type="email"
+            value={email}
+            label="Username and Email Address"
+            required={true}
+            onChange={(event, newValue) => setEmail(newValue ?? '')}
+          />
+          <Spacing margin={{ top: 'normal' }}>
+            <MessageBar
+              type="warning"
+              content="This user does not seem to be within your organization (based on their email address) This user will be added as a 3rd party user."
+              multiline
+            />
+          </Spacing>
         </>
-      );
-    }
-
-    return null;
-  };
+      )}
+    </>
+  );
 
   const addNewUser = () => {
     if (subscriberFound) {
@@ -197,12 +190,7 @@ const AddSubscriberModal = ({
       <PrimaryButton
         id="__AddSubscriber_add_button"
         text="Add"
-        onClick={() => {
-          if (addSubscriber) {
-            addNewUser();
-          }
-          setAddSubscriber(true);
-        }}
+        onClick={() => addNewUser()}
       />
       <DefaultButton
         id="__AddSubscriber_cancel_button"
