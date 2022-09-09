@@ -29,6 +29,8 @@ import {
   XchangeConfigSummary,
   useUpdateXchangeProfileCommentMutation,
   usePublishXchangeProfileMutation,
+  useDeactivateXchangeConfigMutation,
+  useActivateXchangeConfigMutation,
   CdxWebCommandType,
   WebCommand,
 } from 'src/data/services/graphql';
@@ -87,6 +89,12 @@ const XChangePage = () => {
   const [publishXchange, { data: publishData, loading: isLoadingPublish, error: publishError },
   ] = useQueryHandler(usePublishXchangeProfileMutation);
 
+  const [deactivateXchange, { data: deactivateData, loading: isLoadingDeactivate },
+  ] = useQueryHandler(useDeactivateXchangeConfigMutation);
+
+  const [activateXchange, { data: activateData, loading: isLoadingActivate },
+  ] = useQueryHandler(useActivateXchangeConfigMutation);
+
   const [xchanges, setXchanges] = useState<XchangeConfigSummary[]>([]);
   const [searchXchanges, setSearchXchanges] = useState<string>('');
   const [filterXchange, setFilterXchange] = useState<XchangeConfigSummary[]>([]);
@@ -94,6 +102,7 @@ const XChangePage = () => {
   const [globalXchangeAlerts, setGlobalXchangeAlerts] = useState<XchangeAlertsProps>();
   const [individualXchangeAlerts, setIndividualXchangeAlerts] = useState<XchangeAlertsProps[]>();
   const [requiresConversion, setRequiresConversion] = useState<boolean>();
+  const [coreFilename, setCoreFilename] = useState('');
   const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
   const [activeCmd, setActiveCmd] = useState<WebCommand | null>();
@@ -128,9 +137,9 @@ const XChangePage = () => {
     xchanges.forEach((data: XchangeConfigSummary) => {
       const spec = data?.specIds ?? '';
       const vendor = data?.vendorIds ?? '';
-      const coreFilename = data?.coreFilename ?? '';
-      if (coreFilename || spec || vendor) {
-        if (search.test(coreFilename) || search.test(spec[0]) || search.test(vendor[0])) {
+      const coreFN = data?.coreFilename ?? '';
+      if (coreFN || spec || vendor) {
+        if (search.test(coreFN) || search.test(spec[0]) || search.test(vendor[0])) {
           setFilterXchange((currentXchange) => currentXchange.concat(data));
         }
       }
@@ -160,6 +169,39 @@ const XChangePage = () => {
     setDialogProps(updatedDialog);
     setShowDialog(true);
   };
+
+  const showUnsavedChangesDeactivateAndActiveDialog = (
+    currentstatus: boolean,
+    currentSid: string,
+    currentCorefilename: string,
+  ) => {
+    const updatedDialog = { ...defaultDialogProps };
+    updatedDialog.message = `Are you sure you want to ${currentstatus ? 'deactivate' : 'activate'} this Xchange ${currentCorefilename}?`;
+
+    updatedDialog.onYes = () => {
+      hideDialog();
+      setCoreFilename(currentCorefilename);
+      if (currentstatus) {
+        deactivateXchange({
+          variables: {
+            sid: currentSid,
+          },
+        });
+      } else {
+        activateXchange({
+          variables: {
+            sid: currentSid,
+          },
+        });
+      }
+    };
+    updatedDialog.onNo = () => {
+      hideDialog();
+    };
+
+    setDialogProps(updatedDialog);
+    setShowDialog(true);
+  }
 
   const updateDateFormat = (date: Date) => {
     const currentDate = new Date(date);
@@ -227,11 +269,13 @@ const XChangePage = () => {
   };
 
   useEffect(() => {
+    setRefreshDataXchange(false);
     fetchData();
   }, [useOrgSid, refreshDataXchange]);
 
   useEffect(() => {
     if (!loadingXchange && dataXchange) {
+      console.log(dataXchange)
       setXchanges(dataXchange.xchangeProfile.xchanges);
       setTooltipContent(dataXchange.xchangeProfile.tooltips);
       setGlobalXchangeAlerts(dataXchange.xchangeProfile.globalXchangeAlerts);
@@ -273,6 +317,20 @@ const XChangePage = () => {
     }
   }, [publishData, isLoadingPublish, publishError]);
 
+  useEffect(() => {
+    if (!isLoadingDeactivate && deactivateData) {
+      setRefreshDataXchange(true);
+      Toast.success({ text: `Xchange ${coreFilename} has been deactivated` });
+    }
+  }, [deactivateData, isLoadingDeactivate]);
+
+  useEffect(() => {
+    if (!isLoadingActivate && activateData) {
+      setRefreshDataXchange(true);
+      Toast.success({ text: `Xchange ${coreFilename} has been activated` });
+    }
+  }, [activateData, isLoadingActivate]);
+
   const onRenderItemColum = (node: XchangeConfigSummary, itemIndex?: number, column?: IColumn) => {
     let columnVal: string | undefined;
     if (column?.key === 'vendorIds') {
@@ -287,10 +345,15 @@ const XChangePage = () => {
     const testFilesProcessed = node?.testActivity.filesProcessed;
     const prodFilesProcessed = node?.prodActivity.filesProcessed;
 
-    const coreFilename = node?.coreFilename;
+    const coreFN = node?.coreFilename;
     return (
       <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
-        <ButtonLink to={`/xchange-details?orgSid=${orgSid}&coreFilename=${coreFilename}`}>{columnVal}</ButtonLink>
+        {node.active ? (
+          <ButtonLink to={`/xchange-details?orgSid=${orgSid}&coreFilename=${coreFN}`}>{columnVal}</ButtonLink>
+
+        ) : (
+          <ButtonLink style={{ color: 'rgb(161, 159, 157)', cursor: 'auto' }}>{columnVal}</ButtonLink>
+        )}
         <>
           {column?.key === 'active' && (
             <>
@@ -396,9 +459,41 @@ const XChangePage = () => {
     );
   };
 
-  const onRenderAction = () => {
+  const onRenderAction = (item) => {
+    // console.log(item)
     if (!requiresConversion) {
-      return <IconButton iconProps={{ iconName: 'Trash' }} />;
+      if (item.active) {
+        return (
+          <TooltipHost content="Deactivate" directionalHint={DirectionalHint.rightCenter}>
+            <FontIcon
+              iconName="Trash"
+              style={{ color: 'blue', fontSize: '15px', cursor: 'pointer' }}
+              onClick={() => {
+                showUnsavedChangesDeactivateAndActiveDialog(
+                  item.active,
+                  item.sid,
+                  item.coreFilename,
+                );
+              }}
+            />
+          </TooltipHost>
+        );
+      }
+      return (
+        <TooltipHost content="Inactive" directionalHint={DirectionalHint.rightCenter}>
+          <FontIcon
+            style={{ fontSize: '18px', cursor: 'pointer', color: 'rgb(161, 159, 157)' }}
+            iconName="StatusCircleBlock"
+            onClick={() => {
+              showUnsavedChangesDeactivateAndActiveDialog(
+                item.active,
+                item.sid,
+                item.coreFilename,
+              );
+            }}
+          />
+        </TooltipHost>
+      )
     }
     return null;
   };
