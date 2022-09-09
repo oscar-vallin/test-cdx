@@ -3398,6 +3398,7 @@ export type XchangeConfigForm = {
 
 export type XchangeConfigNamingConvention = {
   __typename?: 'XchangeConfigNamingConvention';
+  sid?: Maybe<Scalars['ID']>;
   vendor: Scalars['String'];
   extractType?: Maybe<ExtractType>;
   uatFilename: Scalars['String'];
@@ -6621,7 +6622,7 @@ export type XchangeNamingConventionsQuery = (
     & Pick<XchangeNamingConventions, 'instruction'>
     & { conventions: Array<(
       { __typename?: 'XchangeConfigNamingConvention' }
-      & Pick<XchangeConfigNamingConvention, 'vendor' | 'extractType' | 'uatFilename' | 'testFilename' | 'prodFilename' | 'specialInstructions'>
+      & Pick<XchangeConfigNamingConvention, 'sid' | 'vendor' | 'extractType' | 'uatFilename' | 'testFilename' | 'prodFilename' | 'specialInstructions'>
     )>, commands: Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
@@ -14617,6 +14618,7 @@ export const XchangeNamingConventionsDocument = gql`
     query XchangeNamingConventions($orgSid: ID!) {
   xchangeNamingConventions(orgSid: $orgSid) {
     conventions {
+      sid
       vendor
       extractType
       uatFilename

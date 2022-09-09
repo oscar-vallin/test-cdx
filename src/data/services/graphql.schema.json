@@ -27230,6 +27230,18 @@
         "description": null,
         "fields": [
           {
+            "name": "sid",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "vendor",
             "description": null,
             "args": [],
