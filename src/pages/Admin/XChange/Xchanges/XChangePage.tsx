@@ -419,7 +419,7 @@ const XChangePage = () => {
                 <TooltipHost content={tooltipContent?.hasAlerts}>
                   <FontIcon
                     style={{
-                      color: ThemeStore.userTheme.colors.black,
+                      color: !node.active ? 'rgb(161, 159, 157)' : ThemeStore.userTheme.colors.black,
                       fontSize: '15px',
                       cursor: 'pointer',
                       marginTop: '4px',
@@ -433,7 +433,7 @@ const XChangePage = () => {
                 <TooltipHost content={tooltipContent?.implementationPending}>
                   <FontIcon
                     style={{
-                      color: ThemeStore.userTheme.colors.custom.warning,
+                      color: !node.active ? 'rgb(161, 159, 157)' : ThemeStore.userTheme.colors.custom.warning,
                       fontSize: '15px',
                       cursor: 'pointer',
                       marginTop: '4px',
@@ -446,7 +446,11 @@ const XChangePage = () => {
               {node?.hasUnpublishedChanges && (
                 <TooltipHost content={tooltipContent?.hasUnpublishedChanges}>
                   <FontIcon
-                    style={{ color: ThemeStore.userTheme.colors.custom.error, fontSize: '12px', cursor: 'pointer' }}
+                    style={{
+                      color: !node.active ? 'rgb(161, 159, 157)' : ThemeStore.userTheme.colors.custom.error,
+                      fontSize: '12px',
+                      cursor: 'pointer',
+                    }}
                     aria-describedby="XchangeUnpublishedChanges-Icon"
                     iconName="6PointStar"
                   />
