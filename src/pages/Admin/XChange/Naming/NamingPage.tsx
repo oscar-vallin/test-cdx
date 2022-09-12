@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Column, Container, Row } from 'src/components/layouts';
-import { PageTitle, Text } from 'src/components/typography';
+import { PageTitle } from 'src/components/typography';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ROUTE_XCHANGE_NAMING } from 'src/data/constants/RouteConstants';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
@@ -17,21 +17,30 @@ import {
   Spinner,
   SpinnerSize,
   Stack,
+  TooltipHost,
+  Text,
+  FontIcon,
 } from '@fluentui/react';
-import { Lightbulb20Filled } from '@fluentui/react-icons';
+import { Lightbulb20Filled, Notepad16Regular } from '@fluentui/react-icons';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
-import { NamingConventionsPanel, WherePlaceExtractsPanel } from './NamingPanel';
+import { NamingConventionsPanel, WherePlaceExtractsPanel, SpecialInstructionPanel } from './NamingPanel';
 
 const NamingPage = () => {
   const { orgSid } = useOrgSid();
   const ActiveDomainStore = useActiveDomainStore();
   const [conventions, setConventions] = useState<XchangeConfigNamingConvention[]>([]);
   const [searchConventions, setSearchConventions] = useState<string>('');
+  const [specialInstructionIcon, setSpecialInstructionIcon] = useState<number | null>(0);
+  const [sid, setSid] = useState('');
+  const [count, setCount] = useState(0);
+  const [specialInstruction, setSpecialInstruction] = useState('');
   const [filterConventions, setFilterConventions] = useState<XchangeConfigNamingConvention[]>([]);
   const [isOpenConventionsPanel, setIsOpenConventionsPanel] = useState(false);
   const [isOpenWherePlaceExtracts, setIsOpenWherePlaceExtracts] = useState(false);
-  const [namingConventions, { data: namingConventionsData, loading: isLoadingNaming }] = useXchangeNamingConventionsLazyQuery();
+  const [isOpenSpecialInstructionPanel, setIsOpenSpecialInstructionPanel] = useState(false);
+  const [namingConventions, { data: namingConventionsData, loading: isLoadingNaming },
+  ] = useXchangeNamingConventionsLazyQuery();
 
   const fetchData = () => {
     namingConventions({
@@ -75,11 +84,31 @@ const NamingPage = () => {
 
   useEffect(() => {
     if (!isLoadingNaming && namingConventionsData) {
+      console.log(namingConventionsData)
       setConventions(namingConventionsData.xchangeNamingConventions?.conventions ?? []);
     }
   }, [namingConventions, isLoadingNaming]);
 
-  const onRenderItemColumn = (item, itemIndex?, column?: IColumn) => {
+  const tooltipGostSpecialInstruction = (instruction: string, conventionSid: string) => (
+    <Spacing margin="normal">
+      <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+        <Text variant="large">Special Instructions/Notes</Text>
+      </Spacing>
+      <Text variant="small">{instruction}</Text>
+      <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+        <ButtonLink onClick={() => {
+          setSid(conventionSid);
+          setSpecialInstruction(instruction);
+          setSpecialInstructionIcon(null);
+          setIsOpenSpecialInstructionPanel(true);
+        }}
+        >edit
+        </ButtonLink>
+      </Spacing>
+    </Spacing>
+  );
+
+  const onRenderItemColumn = (item, itemIndex?: number, column?: IColumn) => {
     let columnVal: string | undefined;
     if (column?.key === 'vendor') {
       columnVal = item.vendor ?? '';
@@ -92,8 +121,49 @@ const NamingPage = () => {
     } else if (column?.key === 'extractType') {
       columnVal = item.extractType ?? '';
     }
-
-    return <Text>{columnVal}</Text>
+    let index = 0;
+    if (itemIndex === 0 || itemIndex) {
+      index = itemIndex + 1;
+    }
+    return (
+      <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
+        { column?.key === 'vendor' && index === specialInstructionIcon ? (
+          <Stack.Item align="center" disableShrink>
+            <Text>{columnVal}</Text>
+            <div style={{
+              display: 'flex',
+              position: 'absolute',
+              bottom: '10px',
+              left: '240px',
+            }}
+            >
+              <TooltipHost content="Add special instruction">
+                <Notepad16Regular
+                  style={{ color: '#0078D4', cursor: 'pointer' }}
+                  onClick={() => {
+                    setSid(item.sid);
+                    setSpecialInstructionIcon(null)
+                    setSpecialInstruction('');
+                    setIsOpenSpecialInstructionPanel(true);
+                  }}
+                />
+              </TooltipHost>
+            </div>
+          </Stack.Item>
+        ) : (
+          <Text>{columnVal}</Text>
+        )}
+        {column?.key !== 'extractType' && column?.key !== 'vendor' && item.specialInstructions && (
+          <TooltipHost content={tooltipGostSpecialInstruction(
+            item.specialInstructions,
+            item.sid,
+          )}
+          >
+            <FontIcon iconName="Info" style={{ cursor: 'pointer', color: 'blue' }} />
+          </TooltipHost>
+        )}
+      </Stack>
+    );
   }
 
   const columns: IColumn[] = [
@@ -104,7 +174,7 @@ const NamingPage = () => {
       data: 'string',
       isPadded: true,
       minWidth: 150,
-      maxWidth: 200,
+      maxWidth: 250,
       flexGrow: 1,
     },
     {
@@ -160,6 +230,17 @@ const NamingPage = () => {
     />
   );
 
+  const onItemInvoked = (item, itemIndex?: number) => {
+    let index = 0;
+    if (itemIndex === 0 || itemIndex) {
+      index = itemIndex + 1;
+    }
+    if (count === 0) {
+      setSpecialInstructionIcon(index);
+    }
+    setCount(0);
+  };
+
   const renderBody = () => {
     if (isLoadingNaming) {
       return (
@@ -178,6 +259,7 @@ const NamingPage = () => {
             selectionMode={SelectionMode.none}
             onRenderItemColumn={onRenderItemColumn}
             layoutMode={DetailsListLayoutMode.justified}
+            onActiveItemChanged={onItemInvoked}
           />
         )
       }
@@ -189,6 +271,7 @@ const NamingPage = () => {
           onRenderItemColumn={onRenderItemColumn}
           selectionMode={SelectionMode.none}
           layoutMode={DetailsListLayoutMode.justified}
+          onActiveItemChanged={onItemInvoked}
         />
       )
     }
@@ -239,7 +322,7 @@ const NamingPage = () => {
               <Row>
                 <Column lg="3">
                   <Stack.Item>
-                    Client id: <Text variant="bold">{ActiveDomainStore.domainOrg.current.label}</Text>
+                    Client id: <Text>{ActiveDomainStore.domainOrg.current.label}</Text>
                   </Stack.Item>
                 </Column>
                 <Column lg="3">
@@ -273,6 +356,14 @@ const NamingPage = () => {
       <WherePlaceExtractsPanel
         isOpen={isOpenWherePlaceExtracts}
         closePanel={setIsOpenWherePlaceExtracts}
+      />
+      <SpecialInstructionPanel
+        isOpen={isOpenSpecialInstructionPanel}
+        closePanel={setIsOpenSpecialInstructionPanel}
+        onCount={setCount}
+        sid={sid}
+        specialInstruction={specialInstruction}
+        hideIcon={setSpecialInstructionIcon}
       />
     </LayoutDashboard>
   );
