@@ -2,7 +2,7 @@ import { FontIcon, SpinnerSize } from '@fluentui/react';
 import React from 'react';
 import { theme } from 'src/styles/themes/theme';
 import { Text } from '../Text';
-import { PaddedSpinner, SubTitle } from './PageTitle.styles';
+import { PaddedSpinner, SubTitle, Title } from './PageTitle.styles';
 
 type PageTitleParams = {
   id: string;
@@ -39,12 +39,29 @@ const PageTitle = ({
     return '';
   };
 
+  const renderTitle = () => {
+    if (title.includes('(')) {
+      let index = 0;
+      index = title.indexOf('(');
+      return (
+        <Title id={id}>
+          <Text size="large" variant="bold">
+            {title.slice(0, index)}
+          </Text>
+          <Text>
+            {title.slice(index, title.length)}
+          </Text>
+        </Title>
+      );
+    }
+
+    return <Text id={id} size="large" variant="bold">{title}</Text>
+  };
+
   return (
     <>
       {renderIcon()}
-      <Text id={id} size="large" variant="bold">
-        {title}
-      </Text>
+      {renderTitle()}
       {renderSubTitle()}
     </>
   );
