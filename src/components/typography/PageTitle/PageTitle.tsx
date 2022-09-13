@@ -41,11 +41,10 @@ const PageTitle = ({
 
   const renderTitle = () => {
     if (title.includes('(')) {
-      let index = 0;
-      index = title.indexOf('(');
+      const index = title.indexOf('(');
       return (
         <Title id={id}>
-          <Text size="large" variant="bold">
+          <Text id={id} size="large" variant="bold">
             {title.slice(0, index)}
           </Text>
           <Text>
