@@ -27,6 +27,7 @@ import { UIInputCheck } from 'src/components/inputs/InputCheck';
 import { PageBody } from 'src/components/layouts/Column';
 import { UpdateUserPanel, useUpdateUserPanel } from '../UpdateUsers';
 import { CreateUsersPanel } from '../CreateUsers';
+import { SearchBoxStyled, PrimaryButtonStyled, ColumnStyled } from './ActiveUserPage.styles';
 
 const ActiveUsersPage = () => {
   const { orgSid } = useOrgSid();
@@ -98,7 +99,7 @@ const ActiveUsersPage = () => {
   const renderCreateButton = (id: string) => {
     if (createCmd) {
       return (
-        <PrimaryButton
+        <PrimaryButtonStyled
           id={id}
           iconProps={{ iconName: 'AddFriend' }}
           ariaLabel={createCmd.label ?? undefined}
@@ -107,7 +108,7 @@ const ActiveUsersPage = () => {
           }}
         >
           {createCmd.label}
-        </PrimaryButton>
+        </PrimaryButtonStyled>
       );
     }
     return null;
@@ -158,7 +159,7 @@ const ActiveUsersPage = () => {
       >
         {tableFilters?.searchText && (
         <Column lg="6">
-          <SearchBox
+          <SearchBoxStyled
             id="Active_Users_Input-Search"
             autoFocus
             styles={{ root: { width: '100%' } }}
@@ -168,34 +169,40 @@ const ActiveUsersPage = () => {
         </Column>
         )}
         {userService.userSearchForm.lockedFilter?.visible && (
-        <UIInputCheck
-          id="__Locked__Users-Checkbox"
-          value={lockedFilter}
-          uiField={userService.userSearchForm.lockedFilter}
-          onChange={(_event, _lockedFilter: any) => {
-            setLockedFilter(_lockedFilter);
-          }}
-        />
+          <ColumnStyled lg="12">
+            <UIInputCheck
+              id="__Locked__Users-Checkbox"
+              value={lockedFilter}
+              uiField={userService.userSearchForm.lockedFilter}
+              onChange={(_event, _lockedFilter: any) => {
+                setLockedFilter(_lockedFilter);
+              }}
+            />
+          </ColumnStyled>
         )}
         {userService.userSearchForm.pendingActivationFilter?.visible && (
-        <UIInputCheck
-          id="__PendingActivation__Users-Checkbox"
-          value={pendingActivationFilter}
-          uiField={userService.userSearchForm.pendingActivationFilter}
-          onChange={(_event, _pendingActivationFilter: any) => {
-            setPendingActivationFilter(_pendingActivationFilter);
-          }}
-        />
+          <ColumnStyled lg="12">
+            <UIInputCheck
+              id="__PendingActivation__Users-Checkbox"
+              value={pendingActivationFilter}
+              uiField={userService.userSearchForm.pendingActivationFilter}
+              onChange={(_event, _pendingActivationFilter: any) => {
+                setPendingActivationFilter(_pendingActivationFilter);
+              }}
+            />
+          </ColumnStyled>
         )}
         {userService.userSearchForm.expiredActivationFilter?.visible && (
-        <UIInputCheck
-          id="__ExpiredActivation__Users-Checkbox"
-          value={expiredActivationFilter}
-          uiField={userService.userSearchForm.expiredActivationFilter}
-          onChange={(_event, _expiredActivationFilter: any) => {
-            setExpiredActivationFilter(_expiredActivationFilter);
-          }}
-        />
+          <ColumnStyled lg="12">
+            <UIInputCheck
+              id="__ExpiredActivation__Users-Checkbox"
+              value={expiredActivationFilter}
+              uiField={userService.userSearchForm.expiredActivationFilter}
+              onChange={(_event, _expiredActivationFilter: any) => {
+                setExpiredActivationFilter(_expiredActivationFilter);
+              }}
+            />
+          </ColumnStyled>
         )}
       </Stack>
       {userService.userSearchForm.searchAllOrgs?.visible && (
