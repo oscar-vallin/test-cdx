@@ -464,6 +464,12 @@ export type CreateXchangeFileTransmissionInput = {
   comments?: Maybe<Scalars['String']>;
 };
 
+export type CreateXchangeJobGroupInput = {
+  orgSid: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  schedule?: Maybe<ScheduleInput>;
+};
+
 export type CreateXchangeProfileAlertInput = {
   orgSid: Scalars['ID'];
   alertTypes?: Maybe<Array<AlertType>>;
@@ -585,6 +591,23 @@ export type DateTimeRangeInput = {
   rangeStart: Scalars['DateTime'];
   rangeEnd: Scalars['DateTime'];
 };
+
+export enum DayOfWeek {
+  Sunday = 'SUNDAY',
+  Monday = 'MONDAY',
+  Tuesday = 'TUESDAY',
+  Wednesday = 'WEDNESDAY',
+  Thursday = 'THURSDAY',
+  Friday = 'FRIDAY',
+  Saturday = 'SATURDAY'
+}
+
+export enum DayOrdinal {
+  First = 'FIRST',
+  Second = 'SECOND',
+  Third = 'THIRD',
+  Last = 'LAST'
+}
 
 export type DefaultDashThemePage = {
   __typename?: 'DefaultDashThemePage';
@@ -816,6 +839,21 @@ export type MigrateUserInput = {
   accessPolicyGroupSids?: Maybe<Array<Scalars['ID']>>;
 };
 
+export enum Month {
+  January = 'JANUARY',
+  February = 'FEBRUARY',
+  March = 'MARCH',
+  April = 'APRIL',
+  May = 'MAY',
+  June = 'JUNE',
+  July = 'JULY',
+  August = 'AUGUST',
+  September = 'SEPTEMBER',
+  October = 'OCTOBER',
+  November = 'NOVEMBER',
+  December = 'DECEMBER'
+}
+
 export type Mutation = {
   __typename?: 'Mutation';
   beginLogin?: Maybe<LoginStep>;
@@ -904,6 +942,9 @@ export type Mutation = {
   deleteXchangeConfigAlert?: Maybe<GenericResponse>;
   deactivateXchangeConfig?: Maybe<GenericResponse>;
   activateXchangeConfig?: Maybe<GenericResponse>;
+  updateXchangeSchedule?: Maybe<XchangeScheduleForm>;
+  createXchangeJobGroup?: Maybe<XchangeJobGroupForm>;
+  updateXchangeJobGroup?: Maybe<XchangeJobGroupForm>;
 };
 
 
@@ -1204,12 +1245,12 @@ export type MutationUpdateXchangeConfigInstructionArgs = {
 
 
 export type MutationCreateXchangeStepArgs = {
-  stepInput?: Maybe<CreateXchangeStepInput>;
+  stepInput: CreateXchangeStepInput;
 };
 
 
 export type MutationUpdateXchangeStepArgs = {
-  stepInput?: Maybe<UpdateXchangeStepInput>;
+  stepInput: UpdateXchangeStepInput;
 };
 
 
@@ -1232,12 +1273,12 @@ export type MutationDeleteXchangeStepArgs = {
 
 
 export type MutationCreateXchangeFileTransmissionArgs = {
-  transInput?: Maybe<CreateXchangeFileTransmissionInput>;
+  transInput: CreateXchangeFileTransmissionInput;
 };
 
 
 export type MutationUpdateXchangeFileTransmissionArgs = {
-  transInput?: Maybe<UpdateXchangeFileTransmissionInput>;
+  transInput: UpdateXchangeFileTransmissionInput;
 };
 
 
@@ -1248,12 +1289,12 @@ export type MutationDeleteXchangeFileTransmissionArgs = {
 
 
 export type MutationCreateXchangeProfileAlertArgs = {
-  alertInput?: Maybe<CreateXchangeProfileAlertInput>;
+  alertInput: CreateXchangeProfileAlertInput;
 };
 
 
 export type MutationUpdateXchangeProfileAlertArgs = {
-  alertInput?: Maybe<UpdateXchangeProfileAlertInput>;
+  alertInput: UpdateXchangeProfileAlertInput;
 };
 
 
@@ -1263,12 +1304,12 @@ export type MutationDeleteXchangeProfileAlertArgs = {
 
 
 export type MutationCreateXchangeConfigAlertArgs = {
-  alertInput?: Maybe<CreateXchangeConfigAlertInput>;
+  alertInput: CreateXchangeConfigAlertInput;
 };
 
 
 export type MutationUpdateXchangeConfigAlertArgs = {
-  alertInput?: Maybe<UpdateXchangeConfigAlertInput>;
+  alertInput: UpdateXchangeConfigAlertInput;
 };
 
 
@@ -1284,6 +1325,21 @@ export type MutationDeactivateXchangeConfigArgs = {
 
 export type MutationActivateXchangeConfigArgs = {
   sid: Scalars['ID'];
+};
+
+
+export type MutationUpdateXchangeScheduleArgs = {
+  scheduleInput: UpdateXchangeScheduleInput;
+};
+
+
+export type MutationCreateXchangeJobGroupArgs = {
+  jobGroupInput: CreateXchangeJobGroupInput;
+};
+
+
+export type MutationUpdateXchangeJobGroupArgs = {
+  jobGroupInput: UpdateXchangeJobGroupInput;
 };
 
 export type Nvp = NvpStr | NvpId;
@@ -1807,6 +1863,9 @@ export type Query = {
   xchangeProfileAlertForm?: Maybe<XchangeProfileAlertForm>;
   xchangeConfigAlertForm?: Maybe<XchangeConfigAlertForm>;
   xchangeNamingConventions?: Maybe<XchangeNamingConventions>;
+  xchangeScheduleForm?: Maybe<XchangeScheduleForm>;
+  xchangeJobGroups?: Maybe<XchangeJobGroupConnection>;
+  xchangeJobGroupForm?: Maybe<XchangeJobGroupForm>;
   topLevelOntologyClasses: Array<OntologyClass>;
   findOntologyClass?: Maybe<OntologyClass>;
   searchOntology: Array<OntologyClass>;
@@ -2274,6 +2333,23 @@ export type QueryXchangeNamingConventionsArgs = {
 };
 
 
+export type QueryXchangeScheduleFormArgs = {
+  xchangeConfigSid: Scalars['ID'];
+};
+
+
+export type QueryXchangeJobGroupsArgs = {
+  orgSid: Scalars['ID'];
+  pageableInput?: Maybe<PageableInput>;
+};
+
+
+export type QueryXchangeJobGroupFormArgs = {
+  orgSid: Scalars['ID'];
+  sid?: Maybe<Scalars['ID']>;
+};
+
+
 export type QueryFindOntologyClassArgs = {
   id: Scalars['String'];
 };
@@ -2305,6 +2381,18 @@ export type RecordCreationEvent = {
   warning?: Maybe<Array<FieldCreationEvent>>;
   information?: Maybe<Array<FieldCreationEvent>>;
 };
+
+export enum RelativeDay {
+  Day = 'DAY',
+  Sunday = 'SUNDAY',
+  Monday = 'MONDAY',
+  Tuesday = 'TUESDAY',
+  Wednesday = 'WEDNESDAY',
+  Thursday = 'THURSDAY',
+  Friday = 'FRIDAY',
+  Saturday = 'SATURDAY',
+  Weekday = 'WEEKDAY'
+}
 
 export type ReprocessDialog = {
   __typename?: 'ReprocessDialog';
@@ -2446,6 +2534,32 @@ export enum SchedOccurStatusEnum {
   NotScheduled = 'NOT_SCHEDULED'
 }
 
+export enum ScheduleFrequency {
+  Weekly = 'WEEKLY',
+  Monthly = 'MONTHLY',
+  InGroup = 'IN_GROUP'
+}
+
+export type ScheduleInput = {
+  scheduleType?: Maybe<ScheduleType>;
+  frequency?: Maybe<ScheduleFrequency>;
+  xchangeJobGroupSid?: Maybe<Scalars['ID']>;
+  months?: Maybe<Array<Month>>;
+  days?: Maybe<Array<DayOfWeek>>;
+  endDayOfMonth?: Maybe<Scalars['Int']>;
+  endDayOrdinal?: Maybe<DayOrdinal>;
+  endRelativeDay?: Maybe<RelativeDay>;
+  endHour?: Maybe<Scalars['Int']>;
+  endMinute?: Maybe<Scalars['Int']>;
+  timezone?: Maybe<Scalars['String']>;
+  subscriberSids?: Maybe<Array<Scalars['ID']>>;
+  hasSilencePeriod?: Maybe<Scalars['Boolean']>;
+  silenceStartMonth?: Maybe<Month>;
+  silenceStartDay?: Maybe<Scalars['Int']>;
+  silenceEndMonth?: Maybe<Month>;
+  silenceEndDay?: Maybe<Scalars['Int']>;
+};
+
 export type ScheduleOccurrence = {
   __typename?: 'ScheduleOccurrence';
   resource: Scalars['String'];
@@ -2471,6 +2585,11 @@ export type ScheduleRunOccurrence = {
   statusLabel: Scalars['String'];
   commands?: Maybe<Array<WorkPacketCommand>>;
 };
+
+export enum ScheduleType {
+  ExpectedToRun = 'EXPECTED_TO_RUN',
+  NotScheduled = 'NOT_SCHEDULED'
+}
 
 export type SequenceCreationEvent = {
   __typename?: 'SequenceCreationEvent';
@@ -2889,10 +3008,21 @@ export type UpdateXchangeFileTransmissionInput = {
   comments?: Maybe<Scalars['String']>;
 };
 
+export type UpdateXchangeJobGroupInput = {
+  sid: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  schedule?: Maybe<ScheduleInput>;
+};
+
 export type UpdateXchangeProfileAlertInput = {
   sid: Scalars['ID'];
   alertTypes?: Maybe<Array<AlertType>>;
   subscriberSids?: Maybe<Array<Scalars['ID']>>;
+};
+
+export type UpdateXchangeScheduleInput = {
+  xchangeConfigSid: Scalars['ID'];
+  schedule?: Maybe<ScheduleInput>;
 };
 
 export type UpdateXchangeStepInput = {
@@ -3382,6 +3512,7 @@ export type XchangeConfigForm = {
   sid?: Maybe<Scalars['ID']>;
   requiresConversion: Scalars['Boolean'];
   hasUnpublishedChanges: Scalars['Boolean'];
+  schedule: XchangeSchedule;
   coreFilename: UiStringField;
   coreFilenamePattern: UiStringField;
   extractType: UiSelectOneField;
@@ -3523,6 +3654,48 @@ export type XchangeFileTransmissionForm = {
   errSeverity?: Maybe<ErrorSeverity>;
 };
 
+export type XchangeJobGroup = {
+  __typename?: 'XchangeJobGroup';
+  name?: Maybe<Scalars['String']>;
+  schedule: XchangeSchedule;
+  includedExchanges: Array<Scalars['String']>;
+};
+
+export type XchangeJobGroupConnection = {
+  __typename?: 'XchangeJobGroupConnection';
+  listPageInfo?: Maybe<ListPageInfo>;
+  paginationInfo: PaginationInfo;
+  nodes?: Maybe<Array<XchangeJobGroup>>;
+};
+
+export type XchangeJobGroupForm = {
+  __typename?: 'XchangeJobGroupForm';
+  sid?: Maybe<Scalars['ID']>;
+  name: UiStringField;
+  scheduleType: UiSelectOneField;
+  frequency: UiSelectOneField;
+  months: UiSelectManyField;
+  days: UiSelectManyField;
+  endDayOfMonth: UiSelectOneField;
+  endDayOrdinal: UiSelectOneField;
+  endRelativeDay: UiSelectOneField;
+  endHour: UiSelectOneField;
+  endMinute: UiSelectOneField;
+  timezone: UiSelectOneField;
+  subscribers: UiSelectManyField;
+  hasSilencePeriod?: Maybe<UiBooleanField>;
+  silenceStartMonth?: Maybe<UiSelectOneField>;
+  silenceStartDay?: Maybe<UiSelectOneField>;
+  silenceEndMonth?: Maybe<UiSelectOneField>;
+  silenceEndDay?: Maybe<UiSelectOneField>;
+  options?: Maybe<Array<UiOptions>>;
+  commands?: Maybe<Array<WebCommand>>;
+  response: GqOperationResponse;
+  errCode?: Maybe<Scalars['String']>;
+  errMsg?: Maybe<Scalars['String']>;
+  errSeverity?: Maybe<ErrorSeverity>;
+};
+
 export type XchangeNamingConventions = {
   __typename?: 'XchangeNamingConventions';
   conventions: Array<XchangeConfigNamingConvention>;
@@ -3592,6 +3765,58 @@ export type XchangeProfileTooltips = {
   hasAlerts: Scalars['String'];
   implementationPending: Scalars['String'];
   requiresConversion: Scalars['String'];
+};
+
+export type XchangeSchedule = {
+  __typename?: 'XchangeSchedule';
+  scheduleType?: Maybe<ScheduleType>;
+  frequency?: Maybe<ScheduleFrequency>;
+  xchangeJobGroupSid?: Maybe<Scalars['ID']>;
+  xchangeJobGroupName?: Maybe<Scalars['String']>;
+  months?: Maybe<Array<Month>>;
+  days?: Maybe<Array<DayOfWeek>>;
+  endDayOfMonth?: Maybe<Scalars['Int']>;
+  endDayOrdinal?: Maybe<DayOrdinal>;
+  endRelativeDay?: Maybe<RelativeDay>;
+  endHour?: Maybe<Scalars['Int']>;
+  endMinute?: Maybe<Scalars['Int']>;
+  timezone?: Maybe<Scalars['String']>;
+  subscribers?: Maybe<Array<XchangeAlertSubscriber>>;
+  hasSilencePeriod: Scalars['Boolean'];
+  silenceStartMonth?: Maybe<Month>;
+  silenceStartDay?: Maybe<Scalars['Int']>;
+  silenceEndMonth?: Maybe<Month>;
+  silenceEndDay?: Maybe<Scalars['Int']>;
+  expectedRunSchedule?: Maybe<Scalars['String']>;
+  expectedCompletionTime?: Maybe<Scalars['String']>;
+};
+
+export type XchangeScheduleForm = {
+  __typename?: 'XchangeScheduleForm';
+  sid?: Maybe<Scalars['ID']>;
+  scheduleType: UiSelectOneField;
+  frequency: UiSelectOneField;
+  xchangeJobGroup: UiSelectOneField;
+  months: UiSelectManyField;
+  days: UiSelectManyField;
+  endDayOfMonth: UiSelectOneField;
+  endDayOrdinal: UiSelectOneField;
+  endRelativeDay: UiSelectOneField;
+  endHour: UiSelectOneField;
+  endMinute: UiSelectOneField;
+  timezone: UiSelectOneField;
+  subscribers: UiSelectManyField;
+  hasSilencePeriod?: Maybe<UiBooleanField>;
+  silenceStartMonth?: Maybe<UiSelectOneField>;
+  silenceStartDay?: Maybe<UiSelectOneField>;
+  silenceEndMonth?: Maybe<UiSelectOneField>;
+  silenceEndDay?: Maybe<UiSelectOneField>;
+  options?: Maybe<Array<UiOptions>>;
+  commands?: Maybe<Array<WebCommand>>;
+  response: GqOperationResponse;
+  errCode?: Maybe<Scalars['String']>;
+  errMsg?: Maybe<Scalars['String']>;
+  errSeverity?: Maybe<ErrorSeverity>;
 };
 
 export type XchangeStepForm = {
@@ -6203,7 +6428,14 @@ export type XchangeConfigQuery = (
   & { xchangeConfig?: Maybe<(
     { __typename?: 'XchangeConfigForm' }
     & Pick<XchangeConfigForm, 'sid' | 'requiresConversion' | 'hasUnpublishedChanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
-    & { coreFilename: (
+    & { schedule: (
+      { __typename?: 'XchangeSchedule' }
+      & Pick<XchangeSchedule, 'scheduleType' | 'frequency' | 'xchangeJobGroupSid' | 'xchangeJobGroupName' | 'months' | 'days' | 'endDayOfMonth' | 'endDayOrdinal' | 'endRelativeDay' | 'endHour' | 'endMinute' | 'timezone' | 'hasSilencePeriod' | 'silenceStartMonth' | 'silenceStartDay' | 'silenceEndMonth' | 'silenceEndDay' | 'expectedRunSchedule' | 'expectedCompletionTime'>
+      & { subscribers?: Maybe<Array<(
+        { __typename?: 'XchangeAlertSubscriber' }
+        & Pick<XchangeAlertSubscriber, 'sid' | 'email' | 'firstNm' | 'lastNm'>
+      )>> }
+    ), coreFilename: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
     ), coreFilenamePattern: (
@@ -6627,6 +6859,180 @@ export type XchangeNamingConventionsQuery = (
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
     )> }
+  )> }
+);
+
+export type XchangeScheduleFormQueryVariables = Exact<{
+  xchangeConfigSid: Scalars['ID'];
+}>;
+
+
+export type XchangeScheduleFormQuery = (
+  { __typename?: 'Query' }
+  & { xchangeScheduleForm?: Maybe<(
+    { __typename?: 'XchangeScheduleForm' }
+    & Pick<XchangeScheduleForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { scheduleType: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), frequency: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), xchangeJobGroup: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), months: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), days: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), endDayOfMonth: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), endDayOrdinal: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), endRelativeDay: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), endHour: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), endMinute: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), timezone: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), subscribers: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), hasSilencePeriod?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    )>, silenceStartMonth?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, silenceStartDay?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, silenceEndMonth?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, silenceEndDay?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type XchangeJobGroupsQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+  pageableInput?: Maybe<PageableInput>;
+}>;
+
+
+export type XchangeJobGroupsQuery = (
+  { __typename?: 'Query' }
+  & { xchangeJobGroups?: Maybe<(
+    { __typename?: 'XchangeJobGroupConnection' }
+    & { listPageInfo?: Maybe<(
+      { __typename?: 'ListPageInfo' }
+      & FragmentListPageInfoFragment
+    )>, paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), nodes?: Maybe<Array<(
+      { __typename?: 'XchangeJobGroup' }
+      & Pick<XchangeJobGroup, 'name' | 'includedExchanges'>
+      & { schedule: (
+        { __typename?: 'XchangeSchedule' }
+        & Pick<XchangeSchedule, 'scheduleType' | 'frequency' | 'xchangeJobGroupSid' | 'xchangeJobGroupName' | 'months' | 'days' | 'endDayOfMonth' | 'endDayOrdinal' | 'endRelativeDay' | 'endHour' | 'endMinute' | 'timezone' | 'hasSilencePeriod' | 'silenceStartMonth' | 'silenceStartDay' | 'silenceEndMonth' | 'silenceEndDay' | 'expectedRunSchedule' | 'expectedCompletionTime'>
+        & { subscribers?: Maybe<Array<(
+          { __typename?: 'XchangeAlertSubscriber' }
+          & Pick<XchangeAlertSubscriber, 'sid' | 'email' | 'firstNm' | 'lastNm'>
+        )>> }
+      ) }
+    )>> }
+  )> }
+);
+
+export type XchangeJobGroupFormQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+  sid?: Maybe<Scalars['ID']>;
+}>;
+
+
+export type XchangeJobGroupFormQuery = (
+  { __typename?: 'Query' }
+  & { xchangeJobGroupForm?: Maybe<(
+    { __typename?: 'XchangeJobGroupForm' }
+    & Pick<XchangeJobGroupForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), scheduleType: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), frequency: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), months: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), days: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), endDayOfMonth: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), endDayOrdinal: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), endRelativeDay: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), endHour: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), endMinute: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), timezone: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), subscribers: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), hasSilencePeriod?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    )>, silenceStartMonth?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, silenceStartDay?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, silenceEndMonth?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, silenceEndDay?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
   )> }
 );
 
@@ -8330,7 +8736,7 @@ export type UpdateXchangeConfigInstructionMutation = (
 );
 
 export type CreateXchangeStepMutationVariables = Exact<{
-  stepInput?: Maybe<CreateXchangeStepInput>;
+  stepInput: CreateXchangeStepInput;
 }>;
 
 
@@ -8353,7 +8759,7 @@ export type CreateXchangeStepMutation = (
 );
 
 export type UpdateXchangeStepMutationVariables = Exact<{
-  stepInput?: Maybe<UpdateXchangeStepInput>;
+  stepInput: UpdateXchangeStepInput;
 }>;
 
 
@@ -8571,7 +8977,7 @@ export type DeleteXchangeStepMutation = (
 );
 
 export type CreateXchangeFileTransmissionMutationVariables = Exact<{
-  transInput?: Maybe<CreateXchangeFileTransmissionInput>;
+  transInput: CreateXchangeFileTransmissionInput;
 }>;
 
 
@@ -8636,7 +9042,7 @@ export type CreateXchangeFileTransmissionMutation = (
 );
 
 export type UpdateXchangeFileTransmissionMutationVariables = Exact<{
-  transInput?: Maybe<UpdateXchangeFileTransmissionInput>;
+  transInput: UpdateXchangeFileTransmissionInput;
 }>;
 
 
@@ -8766,7 +9172,7 @@ export type DeleteXchangeFileTransmissionMutation = (
 );
 
 export type CreateXchangeProfileAlertMutationVariables = Exact<{
-  alertInput?: Maybe<CreateXchangeProfileAlertInput>;
+  alertInput: CreateXchangeProfileAlertInput;
 }>;
 
 
@@ -8792,7 +9198,7 @@ export type CreateXchangeProfileAlertMutation = (
 );
 
 export type UpdateXchangeProfileAlertMutationVariables = Exact<{
-  alertInput?: Maybe<UpdateXchangeProfileAlertInput>;
+  alertInput: UpdateXchangeProfileAlertInput;
 }>;
 
 
@@ -8842,7 +9248,7 @@ export type DeleteXchangeProfileAlertMutation = (
 );
 
 export type CreateXchangeConfigAlertMutationVariables = Exact<{
-  alertInput?: Maybe<CreateXchangeConfigAlertInput>;
+  alertInput: CreateXchangeConfigAlertInput;
 }>;
 
 
@@ -8871,7 +9277,7 @@ export type CreateXchangeConfigAlertMutation = (
 );
 
 export type UpdateXchangeConfigAlertMutationVariables = Exact<{
-  alertInput?: Maybe<UpdateXchangeConfigAlertInput>;
+  alertInput: UpdateXchangeConfigAlertInput;
 }>;
 
 
@@ -8967,6 +9373,219 @@ export type ActivateXchangeConfigMutation = (
         { __typename?: 'NVPId' }
         & UnionNvp_NvpId_Fragment
       )>> }
+    )>> }
+  )> }
+);
+
+export type UpdateXchangeScheduleMutationVariables = Exact<{
+  scheduleInput: UpdateXchangeScheduleInput;
+}>;
+
+
+export type UpdateXchangeScheduleMutation = (
+  { __typename?: 'Mutation' }
+  & { updateXchangeSchedule?: Maybe<(
+    { __typename?: 'XchangeScheduleForm' }
+    & Pick<XchangeScheduleForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { scheduleType: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), frequency: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), xchangeJobGroup: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), months: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), days: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), endDayOfMonth: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), endDayOrdinal: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), endRelativeDay: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), endHour: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), endMinute: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), timezone: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), subscribers: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), hasSilencePeriod?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    )>, silenceStartMonth?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, silenceStartDay?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, silenceEndMonth?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, silenceEndDay?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type CreateXchangeJobGroupMutationVariables = Exact<{
+  jobGroupInput: CreateXchangeJobGroupInput;
+}>;
+
+
+export type CreateXchangeJobGroupMutation = (
+  { __typename?: 'Mutation' }
+  & { createXchangeJobGroup?: Maybe<(
+    { __typename?: 'XchangeJobGroupForm' }
+    & Pick<XchangeJobGroupForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), scheduleType: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), frequency: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), months: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), days: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), endDayOfMonth: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), endDayOrdinal: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), endRelativeDay: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), endHour: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), endMinute: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), timezone: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), subscribers: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), hasSilencePeriod?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    )>, silenceStartMonth?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, silenceStartDay?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, silenceEndMonth?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, silenceEndDay?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type UpdateXchangeJobGroupMutationVariables = Exact<{
+  jobGroupInput: UpdateXchangeJobGroupInput;
+}>;
+
+
+export type UpdateXchangeJobGroupMutation = (
+  { __typename?: 'Mutation' }
+  & { updateXchangeJobGroup?: Maybe<(
+    { __typename?: 'XchangeJobGroupForm' }
+    & Pick<XchangeJobGroupForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), scheduleType: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), frequency: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), months: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), days: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), endDayOfMonth: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), endDayOrdinal: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), endRelativeDay: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), endHour: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), endMinute: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), timezone: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), subscribers: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), hasSilencePeriod?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    )>, silenceStartMonth?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, silenceStartDay?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, silenceEndMonth?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, silenceEndDay?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
     )>> }
   )> }
 );
@@ -13841,6 +14460,33 @@ export const XchangeConfigDocument = gql`
     sid
     requiresConversion
     hasUnpublishedChanges
+    schedule {
+      scheduleType
+      frequency
+      xchangeJobGroupSid
+      xchangeJobGroupName
+      months
+      days
+      endDayOfMonth
+      endDayOrdinal
+      endRelativeDay
+      endHour
+      endMinute
+      timezone
+      subscribers {
+        sid
+        email
+        firstNm
+        lastNm
+      }
+      hasSilencePeriod
+      silenceStartMonth
+      silenceStartDay
+      silenceEndMonth
+      silenceEndDay
+      expectedRunSchedule
+      expectedCompletionTime
+    }
     coreFilename {
       ...fragmentUIStringField
     }
@@ -14659,6 +15305,275 @@ export function useXchangeNamingConventionsLazyQuery(baseOptions?: Apollo.LazyQu
 export type XchangeNamingConventionsQueryHookResult = ReturnType<typeof useXchangeNamingConventionsQuery>;
 export type XchangeNamingConventionsLazyQueryHookResult = ReturnType<typeof useXchangeNamingConventionsLazyQuery>;
 export type XchangeNamingConventionsQueryResult = Apollo.QueryResult<XchangeNamingConventionsQuery, XchangeNamingConventionsQueryVariables>;
+export const XchangeScheduleFormDocument = gql`
+    query XchangeScheduleForm($xchangeConfigSid: ID!) {
+  xchangeScheduleForm(xchangeConfigSid: $xchangeConfigSid) {
+    sid
+    scheduleType {
+      ...fragmentUISelectOneField
+    }
+    frequency {
+      ...fragmentUISelectOneField
+    }
+    xchangeJobGroup {
+      ...fragmentUISelectOneField
+    }
+    months {
+      ...fragmentUISelectManyField
+    }
+    days {
+      ...fragmentUISelectManyField
+    }
+    endDayOfMonth {
+      ...fragmentUISelectOneField
+    }
+    endDayOrdinal {
+      ...fragmentUISelectOneField
+    }
+    endRelativeDay {
+      ...fragmentUISelectOneField
+    }
+    endHour {
+      ...fragmentUISelectOneField
+    }
+    endMinute {
+      ...fragmentUISelectOneField
+    }
+    timezone {
+      ...fragmentUISelectOneField
+    }
+    subscribers {
+      ...fragmentUISelectManyField
+    }
+    hasSilencePeriod {
+      ...fragmentUIBooleanField
+    }
+    silenceStartMonth {
+      ...fragmentUISelectOneField
+    }
+    silenceStartDay {
+      ...fragmentUISelectOneField
+    }
+    silenceEndMonth {
+      ...fragmentUISelectOneField
+    }
+    silenceEndDay {
+      ...fragmentUISelectOneField
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+
+/**
+ * __useXchangeScheduleFormQuery__
+ *
+ * To run a query within a React component, call `useXchangeScheduleFormQuery` and pass it any options that fit your needs.
+ * When your component renders, `useXchangeScheduleFormQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useXchangeScheduleFormQuery({
+ *   variables: {
+ *      xchangeConfigSid: // value for 'xchangeConfigSid'
+ *   },
+ * });
+ */
+export function useXchangeScheduleFormQuery(baseOptions: Apollo.QueryHookOptions<XchangeScheduleFormQuery, XchangeScheduleFormQueryVariables>) {
+        return Apollo.useQuery<XchangeScheduleFormQuery, XchangeScheduleFormQueryVariables>(XchangeScheduleFormDocument, baseOptions);
+      }
+export function useXchangeScheduleFormLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<XchangeScheduleFormQuery, XchangeScheduleFormQueryVariables>) {
+          return Apollo.useLazyQuery<XchangeScheduleFormQuery, XchangeScheduleFormQueryVariables>(XchangeScheduleFormDocument, baseOptions);
+        }
+export type XchangeScheduleFormQueryHookResult = ReturnType<typeof useXchangeScheduleFormQuery>;
+export type XchangeScheduleFormLazyQueryHookResult = ReturnType<typeof useXchangeScheduleFormLazyQuery>;
+export type XchangeScheduleFormQueryResult = Apollo.QueryResult<XchangeScheduleFormQuery, XchangeScheduleFormQueryVariables>;
+export const XchangeJobGroupsDocument = gql`
+    query XchangeJobGroups($orgSid: ID!, $pageableInput: PageableInput) {
+  xchangeJobGroups(orgSid: $orgSid, pageableInput: $pageableInput) {
+    listPageInfo {
+      ...fragmentListPageInfo
+    }
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    nodes {
+      name
+      schedule {
+        scheduleType
+        frequency
+        xchangeJobGroupSid
+        xchangeJobGroupName
+        months
+        days
+        endDayOfMonth
+        endDayOrdinal
+        endRelativeDay
+        endHour
+        endMinute
+        timezone
+        subscribers {
+          sid
+          email
+          firstNm
+          lastNm
+        }
+        hasSilencePeriod
+        silenceStartMonth
+        silenceStartDay
+        silenceEndMonth
+        silenceEndDay
+        expectedRunSchedule
+        expectedCompletionTime
+      }
+      includedExchanges
+    }
+  }
+}
+    ${FragmentListPageInfoFragmentDoc}
+${FragmentPaginationInfoFragmentDoc}`;
+
+/**
+ * __useXchangeJobGroupsQuery__
+ *
+ * To run a query within a React component, call `useXchangeJobGroupsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useXchangeJobGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useXchangeJobGroupsQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      pageableInput: // value for 'pageableInput'
+ *   },
+ * });
+ */
+export function useXchangeJobGroupsQuery(baseOptions: Apollo.QueryHookOptions<XchangeJobGroupsQuery, XchangeJobGroupsQueryVariables>) {
+        return Apollo.useQuery<XchangeJobGroupsQuery, XchangeJobGroupsQueryVariables>(XchangeJobGroupsDocument, baseOptions);
+      }
+export function useXchangeJobGroupsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<XchangeJobGroupsQuery, XchangeJobGroupsQueryVariables>) {
+          return Apollo.useLazyQuery<XchangeJobGroupsQuery, XchangeJobGroupsQueryVariables>(XchangeJobGroupsDocument, baseOptions);
+        }
+export type XchangeJobGroupsQueryHookResult = ReturnType<typeof useXchangeJobGroupsQuery>;
+export type XchangeJobGroupsLazyQueryHookResult = ReturnType<typeof useXchangeJobGroupsLazyQuery>;
+export type XchangeJobGroupsQueryResult = Apollo.QueryResult<XchangeJobGroupsQuery, XchangeJobGroupsQueryVariables>;
+export const XchangeJobGroupFormDocument = gql`
+    query XchangeJobGroupForm($orgSid: ID!, $sid: ID) {
+  xchangeJobGroupForm(orgSid: $orgSid, sid: $sid) {
+    sid
+    name {
+      ...fragmentUIStringField
+    }
+    scheduleType {
+      ...fragmentUISelectOneField
+    }
+    frequency {
+      ...fragmentUISelectOneField
+    }
+    months {
+      ...fragmentUISelectManyField
+    }
+    days {
+      ...fragmentUISelectManyField
+    }
+    endDayOfMonth {
+      ...fragmentUISelectOneField
+    }
+    endDayOrdinal {
+      ...fragmentUISelectOneField
+    }
+    endRelativeDay {
+      ...fragmentUISelectOneField
+    }
+    endHour {
+      ...fragmentUISelectOneField
+    }
+    endMinute {
+      ...fragmentUISelectOneField
+    }
+    timezone {
+      ...fragmentUISelectOneField
+    }
+    subscribers {
+      ...fragmentUISelectManyField
+    }
+    hasSilencePeriod {
+      ...fragmentUIBooleanField
+    }
+    silenceStartMonth {
+      ...fragmentUISelectOneField
+    }
+    silenceStartDay {
+      ...fragmentUISelectOneField
+    }
+    silenceEndMonth {
+      ...fragmentUISelectOneField
+    }
+    silenceEndDay {
+      ...fragmentUISelectOneField
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+
+/**
+ * __useXchangeJobGroupFormQuery__
+ *
+ * To run a query within a React component, call `useXchangeJobGroupFormQuery` and pass it any options that fit your needs.
+ * When your component renders, `useXchangeJobGroupFormQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useXchangeJobGroupFormQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      sid: // value for 'sid'
+ *   },
+ * });
+ */
+export function useXchangeJobGroupFormQuery(baseOptions: Apollo.QueryHookOptions<XchangeJobGroupFormQuery, XchangeJobGroupFormQueryVariables>) {
+        return Apollo.useQuery<XchangeJobGroupFormQuery, XchangeJobGroupFormQueryVariables>(XchangeJobGroupFormDocument, baseOptions);
+      }
+export function useXchangeJobGroupFormLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<XchangeJobGroupFormQuery, XchangeJobGroupFormQueryVariables>) {
+          return Apollo.useLazyQuery<XchangeJobGroupFormQuery, XchangeJobGroupFormQueryVariables>(XchangeJobGroupFormDocument, baseOptions);
+        }
+export type XchangeJobGroupFormQueryHookResult = ReturnType<typeof useXchangeJobGroupFormQuery>;
+export type XchangeJobGroupFormLazyQueryHookResult = ReturnType<typeof useXchangeJobGroupFormLazyQuery>;
+export type XchangeJobGroupFormQueryResult = Apollo.QueryResult<XchangeJobGroupFormQuery, XchangeJobGroupFormQueryVariables>;
 export const TopLevelOntologyClassesDocument = gql`
     query TopLevelOntologyClasses {
   topLevelOntologyClasses {
@@ -17890,7 +18805,7 @@ export type UpdateXchangeConfigInstructionMutationHookResult = ReturnType<typeof
 export type UpdateXchangeConfigInstructionMutationResult = Apollo.MutationResult<UpdateXchangeConfigInstructionMutation>;
 export type UpdateXchangeConfigInstructionMutationOptions = Apollo.BaseMutationOptions<UpdateXchangeConfigInstructionMutation, UpdateXchangeConfigInstructionMutationVariables>;
 export const CreateXchangeStepDocument = gql`
-    mutation CreateXchangeStep($stepInput: CreateXchangeStepInput) {
+    mutation CreateXchangeStep($stepInput: CreateXchangeStepInput!) {
   createXchangeStep(stepInput: $stepInput) {
     sid
     hasUnpublishedChanges
@@ -17938,7 +18853,7 @@ export type CreateXchangeStepMutationHookResult = ReturnType<typeof useCreateXch
 export type CreateXchangeStepMutationResult = Apollo.MutationResult<CreateXchangeStepMutation>;
 export type CreateXchangeStepMutationOptions = Apollo.BaseMutationOptions<CreateXchangeStepMutation, CreateXchangeStepMutationVariables>;
 export const UpdateXchangeStepDocument = gql`
-    mutation UpdateXchangeStep($stepInput: UpdateXchangeStepInput) {
+    mutation UpdateXchangeStep($stepInput: UpdateXchangeStepInput!) {
   updateXchangeStep(stepInput: $stepInput) {
     sid
     hasUnpublishedChanges
@@ -18295,7 +19210,7 @@ export type DeleteXchangeStepMutationHookResult = ReturnType<typeof useDeleteXch
 export type DeleteXchangeStepMutationResult = Apollo.MutationResult<DeleteXchangeStepMutation>;
 export type DeleteXchangeStepMutationOptions = Apollo.BaseMutationOptions<DeleteXchangeStepMutation, DeleteXchangeStepMutationVariables>;
 export const CreateXchangeFileTransmissionDocument = gql`
-    mutation CreateXchangeFileTransmission($transInput: CreateXchangeFileTransmissionInput) {
+    mutation CreateXchangeFileTransmission($transInput: CreateXchangeFileTransmissionInput!) {
   createXchangeFileTransmission(transInput: $transInput) {
     sid
     hasUnpublishedChanges
@@ -18404,7 +19319,7 @@ export type CreateXchangeFileTransmissionMutationHookResult = ReturnType<typeof 
 export type CreateXchangeFileTransmissionMutationResult = Apollo.MutationResult<CreateXchangeFileTransmissionMutation>;
 export type CreateXchangeFileTransmissionMutationOptions = Apollo.BaseMutationOptions<CreateXchangeFileTransmissionMutation, CreateXchangeFileTransmissionMutationVariables>;
 export const UpdateXchangeFileTransmissionDocument = gql`
-    mutation UpdateXchangeFileTransmission($transInput: UpdateXchangeFileTransmissionInput) {
+    mutation UpdateXchangeFileTransmission($transInput: UpdateXchangeFileTransmissionInput!) {
   updateXchangeFileTransmission(transInput: $transInput) {
     sid
     hasUnpublishedChanges
@@ -18619,7 +19534,7 @@ export type DeleteXchangeFileTransmissionMutationHookResult = ReturnType<typeof 
 export type DeleteXchangeFileTransmissionMutationResult = Apollo.MutationResult<DeleteXchangeFileTransmissionMutation>;
 export type DeleteXchangeFileTransmissionMutationOptions = Apollo.BaseMutationOptions<DeleteXchangeFileTransmissionMutation, DeleteXchangeFileTransmissionMutationVariables>;
 export const CreateXchangeProfileAlertDocument = gql`
-    mutation CreateXchangeProfileAlert($alertInput: CreateXchangeProfileAlertInput) {
+    mutation CreateXchangeProfileAlert($alertInput: CreateXchangeProfileAlertInput!) {
   createXchangeProfileAlert(alertInput: $alertInput) {
     sid
     hasUnpublishedChanges
@@ -18670,7 +19585,7 @@ export type CreateXchangeProfileAlertMutationHookResult = ReturnType<typeof useC
 export type CreateXchangeProfileAlertMutationResult = Apollo.MutationResult<CreateXchangeProfileAlertMutation>;
 export type CreateXchangeProfileAlertMutationOptions = Apollo.BaseMutationOptions<CreateXchangeProfileAlertMutation, CreateXchangeProfileAlertMutationVariables>;
 export const UpdateXchangeProfileAlertDocument = gql`
-    mutation UpdateXchangeProfileAlert($alertInput: UpdateXchangeProfileAlertInput) {
+    mutation UpdateXchangeProfileAlert($alertInput: UpdateXchangeProfileAlertInput!) {
   updateXchangeProfileAlert(alertInput: $alertInput) {
     sid
     hasUnpublishedChanges
@@ -18765,7 +19680,7 @@ export type DeleteXchangeProfileAlertMutationHookResult = ReturnType<typeof useD
 export type DeleteXchangeProfileAlertMutationResult = Apollo.MutationResult<DeleteXchangeProfileAlertMutation>;
 export type DeleteXchangeProfileAlertMutationOptions = Apollo.BaseMutationOptions<DeleteXchangeProfileAlertMutation, DeleteXchangeProfileAlertMutationVariables>;
 export const CreateXchangeConfigAlertDocument = gql`
-    mutation CreateXchangeConfigAlert($alertInput: CreateXchangeConfigAlertInput) {
+    mutation CreateXchangeConfigAlert($alertInput: CreateXchangeConfigAlertInput!) {
   createXchangeConfigAlert(alertInput: $alertInput) {
     sid
     hasUnpublishedChanges
@@ -18820,7 +19735,7 @@ export type CreateXchangeConfigAlertMutationHookResult = ReturnType<typeof useCr
 export type CreateXchangeConfigAlertMutationResult = Apollo.MutationResult<CreateXchangeConfigAlertMutation>;
 export type CreateXchangeConfigAlertMutationOptions = Apollo.BaseMutationOptions<CreateXchangeConfigAlertMutation, CreateXchangeConfigAlertMutationVariables>;
 export const UpdateXchangeConfigAlertDocument = gql`
-    mutation UpdateXchangeConfigAlert($alertInput: UpdateXchangeConfigAlertInput) {
+    mutation UpdateXchangeConfigAlert($alertInput: UpdateXchangeConfigAlertInput!) {
   updateXchangeConfigAlert(alertInput: $alertInput) {
     sid
     hasUnpublishedChanges
@@ -19006,3 +19921,296 @@ export function useActivateXchangeConfigMutation(baseOptions?: Apollo.MutationHo
 export type ActivateXchangeConfigMutationHookResult = ReturnType<typeof useActivateXchangeConfigMutation>;
 export type ActivateXchangeConfigMutationResult = Apollo.MutationResult<ActivateXchangeConfigMutation>;
 export type ActivateXchangeConfigMutationOptions = Apollo.BaseMutationOptions<ActivateXchangeConfigMutation, ActivateXchangeConfigMutationVariables>;
+export const UpdateXchangeScheduleDocument = gql`
+    mutation UpdateXchangeSchedule($scheduleInput: UpdateXchangeScheduleInput!) {
+  updateXchangeSchedule(scheduleInput: $scheduleInput) {
+    sid
+    scheduleType {
+      ...fragmentUISelectOneField
+    }
+    frequency {
+      ...fragmentUISelectOneField
+    }
+    xchangeJobGroup {
+      ...fragmentUISelectOneField
+    }
+    months {
+      ...fragmentUISelectManyField
+    }
+    days {
+      ...fragmentUISelectManyField
+    }
+    endDayOfMonth {
+      ...fragmentUISelectOneField
+    }
+    endDayOrdinal {
+      ...fragmentUISelectOneField
+    }
+    endRelativeDay {
+      ...fragmentUISelectOneField
+    }
+    endHour {
+      ...fragmentUISelectOneField
+    }
+    endMinute {
+      ...fragmentUISelectOneField
+    }
+    timezone {
+      ...fragmentUISelectOneField
+    }
+    subscribers {
+      ...fragmentUISelectManyField
+    }
+    hasSilencePeriod {
+      ...fragmentUIBooleanField
+    }
+    silenceStartMonth {
+      ...fragmentUISelectOneField
+    }
+    silenceStartDay {
+      ...fragmentUISelectOneField
+    }
+    silenceEndMonth {
+      ...fragmentUISelectOneField
+    }
+    silenceEndDay {
+      ...fragmentUISelectOneField
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+export type UpdateXchangeScheduleMutationFn = Apollo.MutationFunction<UpdateXchangeScheduleMutation, UpdateXchangeScheduleMutationVariables>;
+
+/**
+ * __useUpdateXchangeScheduleMutation__
+ *
+ * To run a mutation, you first call `useUpdateXchangeScheduleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateXchangeScheduleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateXchangeScheduleMutation, { data, loading, error }] = useUpdateXchangeScheduleMutation({
+ *   variables: {
+ *      scheduleInput: // value for 'scheduleInput'
+ *   },
+ * });
+ */
+export function useUpdateXchangeScheduleMutation(baseOptions?: Apollo.MutationHookOptions<UpdateXchangeScheduleMutation, UpdateXchangeScheduleMutationVariables>) {
+        return Apollo.useMutation<UpdateXchangeScheduleMutation, UpdateXchangeScheduleMutationVariables>(UpdateXchangeScheduleDocument, baseOptions);
+      }
+export type UpdateXchangeScheduleMutationHookResult = ReturnType<typeof useUpdateXchangeScheduleMutation>;
+export type UpdateXchangeScheduleMutationResult = Apollo.MutationResult<UpdateXchangeScheduleMutation>;
+export type UpdateXchangeScheduleMutationOptions = Apollo.BaseMutationOptions<UpdateXchangeScheduleMutation, UpdateXchangeScheduleMutationVariables>;
+export const CreateXchangeJobGroupDocument = gql`
+    mutation CreateXchangeJobGroup($jobGroupInput: CreateXchangeJobGroupInput!) {
+  createXchangeJobGroup(jobGroupInput: $jobGroupInput) {
+    sid
+    name {
+      ...fragmentUIStringField
+    }
+    scheduleType {
+      ...fragmentUISelectOneField
+    }
+    frequency {
+      ...fragmentUISelectOneField
+    }
+    months {
+      ...fragmentUISelectManyField
+    }
+    days {
+      ...fragmentUISelectManyField
+    }
+    endDayOfMonth {
+      ...fragmentUISelectOneField
+    }
+    endDayOrdinal {
+      ...fragmentUISelectOneField
+    }
+    endRelativeDay {
+      ...fragmentUISelectOneField
+    }
+    endHour {
+      ...fragmentUISelectOneField
+    }
+    endMinute {
+      ...fragmentUISelectOneField
+    }
+    timezone {
+      ...fragmentUISelectOneField
+    }
+    subscribers {
+      ...fragmentUISelectManyField
+    }
+    hasSilencePeriod {
+      ...fragmentUIBooleanField
+    }
+    silenceStartMonth {
+      ...fragmentUISelectOneField
+    }
+    silenceStartDay {
+      ...fragmentUISelectOneField
+    }
+    silenceEndMonth {
+      ...fragmentUISelectOneField
+    }
+    silenceEndDay {
+      ...fragmentUISelectOneField
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+export type CreateXchangeJobGroupMutationFn = Apollo.MutationFunction<CreateXchangeJobGroupMutation, CreateXchangeJobGroupMutationVariables>;
+
+/**
+ * __useCreateXchangeJobGroupMutation__
+ *
+ * To run a mutation, you first call `useCreateXchangeJobGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateXchangeJobGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createXchangeJobGroupMutation, { data, loading, error }] = useCreateXchangeJobGroupMutation({
+ *   variables: {
+ *      jobGroupInput: // value for 'jobGroupInput'
+ *   },
+ * });
+ */
+export function useCreateXchangeJobGroupMutation(baseOptions?: Apollo.MutationHookOptions<CreateXchangeJobGroupMutation, CreateXchangeJobGroupMutationVariables>) {
+        return Apollo.useMutation<CreateXchangeJobGroupMutation, CreateXchangeJobGroupMutationVariables>(CreateXchangeJobGroupDocument, baseOptions);
+      }
+export type CreateXchangeJobGroupMutationHookResult = ReturnType<typeof useCreateXchangeJobGroupMutation>;
+export type CreateXchangeJobGroupMutationResult = Apollo.MutationResult<CreateXchangeJobGroupMutation>;
+export type CreateXchangeJobGroupMutationOptions = Apollo.BaseMutationOptions<CreateXchangeJobGroupMutation, CreateXchangeJobGroupMutationVariables>;
+export const UpdateXchangeJobGroupDocument = gql`
+    mutation UpdateXchangeJobGroup($jobGroupInput: UpdateXchangeJobGroupInput!) {
+  updateXchangeJobGroup(jobGroupInput: $jobGroupInput) {
+    sid
+    name {
+      ...fragmentUIStringField
+    }
+    scheduleType {
+      ...fragmentUISelectOneField
+    }
+    frequency {
+      ...fragmentUISelectOneField
+    }
+    months {
+      ...fragmentUISelectManyField
+    }
+    days {
+      ...fragmentUISelectManyField
+    }
+    endDayOfMonth {
+      ...fragmentUISelectOneField
+    }
+    endDayOrdinal {
+      ...fragmentUISelectOneField
+    }
+    endRelativeDay {
+      ...fragmentUISelectOneField
+    }
+    endHour {
+      ...fragmentUISelectOneField
+    }
+    endMinute {
+      ...fragmentUISelectOneField
+    }
+    timezone {
+      ...fragmentUISelectOneField
+    }
+    subscribers {
+      ...fragmentUISelectManyField
+    }
+    hasSilencePeriod {
+      ...fragmentUIBooleanField
+    }
+    silenceStartMonth {
+      ...fragmentUISelectOneField
+    }
+    silenceStartDay {
+      ...fragmentUISelectOneField
+    }
+    silenceEndMonth {
+      ...fragmentUISelectOneField
+    }
+    silenceEndDay {
+      ...fragmentUISelectOneField
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+export type UpdateXchangeJobGroupMutationFn = Apollo.MutationFunction<UpdateXchangeJobGroupMutation, UpdateXchangeJobGroupMutationVariables>;
+
+/**
+ * __useUpdateXchangeJobGroupMutation__
+ *
+ * To run a mutation, you first call `useUpdateXchangeJobGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateXchangeJobGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateXchangeJobGroupMutation, { data, loading, error }] = useUpdateXchangeJobGroupMutation({
+ *   variables: {
+ *      jobGroupInput: // value for 'jobGroupInput'
+ *   },
+ * });
+ */
+export function useUpdateXchangeJobGroupMutation(baseOptions?: Apollo.MutationHookOptions<UpdateXchangeJobGroupMutation, UpdateXchangeJobGroupMutationVariables>) {
+        return Apollo.useMutation<UpdateXchangeJobGroupMutation, UpdateXchangeJobGroupMutationVariables>(UpdateXchangeJobGroupDocument, baseOptions);
+      }
+export type UpdateXchangeJobGroupMutationHookResult = ReturnType<typeof useUpdateXchangeJobGroupMutation>;
+export type UpdateXchangeJobGroupMutationResult = Apollo.MutationResult<UpdateXchangeJobGroupMutation>;
+export type UpdateXchangeJobGroupMutationOptions = Apollo.BaseMutationOptions<UpdateXchangeJobGroupMutation, UpdateXchangeJobGroupMutationVariables>;
