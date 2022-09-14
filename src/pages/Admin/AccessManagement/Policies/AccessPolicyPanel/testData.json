@@ -254,6 +254,26 @@
           "info": null
         },
         {
+          "label": "Xchange Alerts - Read",
+          "value": "XCHANGE_ALERT_READ",
+          "info": null
+        },
+        {
+          "label": "Xchange Alerts - Create",
+          "value": "XCHANGE_ALERT_CREATE",
+          "info": "Grants access to create new Alerts on Xchanges and create Job Groups for setting up an expected schedule for a group of Xchanges."
+        },
+        {
+          "label": "Xchange Alerts - Update",
+          "value": "XCHANGE_ALERT_UPDATE",
+          "info": "Grants access to update Alerts on Xchanges and update Job Groups for setting up an expected schedule for a group of Xchanges."
+        },
+        {
+          "label": "Xchange Alerts - Delete",
+          "value": "XCHANGE_ALERT_DELETE",
+          "info": "Grants access to delete Alerts on Xchanges and delete configured Job Groups."
+        },
+        {
           "label": "Users - Read",
           "value": "USER_READ",
           "info": null
@@ -830,6 +850,32 @@
               "label": "Xchange Profile - Publish",
               "value": "XCHANGE_PROFILE_PUBLISH",
               "info": null
+            }
+          ]
+        },
+        {
+          "id": "Permissions_XchangeAlert",
+          "label": "",
+          "options": [
+            {
+              "label": "Xchange Alerts - Read",
+              "value": "XCHANGE_ALERT_READ",
+              "info": null
+            },
+            {
+              "label": "Xchange Alerts - Create",
+              "value": "XCHANGE_ALERT_CREATE",
+              "info": "Grants access to create new Alerts on Xchanges and create Job Groups for setting up an expected schedule for a group of Xchanges."
+            },
+            {
+              "label": "Xchange Alerts - Update",
+              "value": "XCHANGE_ALERT_UPDATE",
+              "info": "Grants access to update Alerts on Xchanges and update Job Groups for setting up an expected schedule for a group of Xchanges."
+            },
+            {
+              "label": "Xchange Alerts - Delete",
+              "value": "XCHANGE_ALERT_DELETE",
+              "info": "Grants access to delete Alerts on Xchanges and delete configured Job Groups."
             }
           ]
         }
