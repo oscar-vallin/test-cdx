@@ -199,7 +199,7 @@ const AccessSpecializationMembersPanel = ({
         <PanelHeader id="__PanelHeader">
           <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
             <PanelTitle id="__AccessSpecializationMembers_Panel_Title" variant="bold" size="large">
-              {currentName} - {members?.length}
+              {currentName} - members ({members?.length})
             </PanelTitle>
           </Stack>
         </PanelHeader>

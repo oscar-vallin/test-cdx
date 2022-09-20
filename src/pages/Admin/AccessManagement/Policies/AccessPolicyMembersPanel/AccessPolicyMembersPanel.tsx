@@ -208,7 +208,7 @@ const AccessPolicyMembersPanel = ({
         <PanelHeader id="__PanelHeader">
           <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
             <PanelTitle id="__AccessPolicyMembers_Panel_Title" variant="bold" size="large">
-              {currentName} - ({accessPolicyMembers?.nodes?.length})
+              {currentName} - members ({accessPolicyMembers?.nodes?.length})
             </PanelTitle>
           </Stack>
         </PanelHeader>
