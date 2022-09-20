@@ -1885,6 +1885,12 @@
             "deprecationReason": null
           },
           {
+            "name": "XCHANGE_JOB_GROUPS",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "XCHANGE_NAMING",
             "description": null,
             "isDeprecated": false,
@@ -12829,6 +12835,30 @@
           },
           {
             "name": "XCHANGE_PROFILE_PUBLISH",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "XCHANGE_ALERT_READ",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "XCHANGE_ALERT_CREATE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "XCHANGE_ALERT_UPDATE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "XCHANGE_ALERT_DELETE",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null

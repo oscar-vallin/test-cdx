@@ -46,7 +46,10 @@ const AccessSpecializationUsagePanel = ({
       orgSid,
     },
   });
-  const [accessSpecializationUsages, { data: accessSpecializationData, loading: isLoadingAccessSpecialization }] = useAccessSpecializationUsagesLazyQuery();
+  const [
+    accessSpecializationUsages,
+    { data: accessSpecializationData, loading: isLoadingAccessSpecialization },
+  ] = useAccessSpecializationUsagesLazyQuery();
 
   const fetchData = () => {
     apiAmGroupsForOrg({ variables: { orgSid } });
@@ -101,7 +104,7 @@ const AccessSpecializationUsagePanel = ({
         <PanelHeader id="__PanelHeader">
           <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
             <PanelTitle id="__AccessSpecializationUsages_Panel_Title" variant="bold" size="large">
-              {currentName} - {usages?.length}
+              {currentName} - usage ({usages?.length})
             </PanelTitle>
           </Stack>
         </PanelHeader>

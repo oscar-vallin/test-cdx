@@ -38,7 +38,10 @@ const AccessPolicyUsagePanel = ({
   const [accessPolicyUsages, setAccessPolicyUsages] = useState<AccessGroupUsageConnection | null>();
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>();
   const [isGroupPanelOpen, setIsGroupPanelOpen] = useState(false);
-  const [policyUsages, { data: accesUsages, loading: isLoadingAccessUsages }] = useAccessPolicyUsagesLazyQuery();
+  const [
+    policyUsages,
+    { data: accesUsages, loading: isLoadingAccessUsages },
+  ] = useAccessPolicyUsagesLazyQuery();
   const [apiAmGroupsForOrg] = useAccessPolicyGroupsForOrgLazyQuery();
   const [fetchTemplates] = useAccessPolicyGroupTemplatesLazyQuery({
     variables: {
@@ -133,7 +136,7 @@ const AccessPolicyUsagePanel = ({
         <PanelHeader id="__PanelHeader">
           <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
             <PanelTitle id="__AccessPolicyUsages_Panel_Title" variant="bold" size="large">
-              {currentName} - ({accessPolicyUsages?.nodes?.length})
+              {currentName} - usage ({accessPolicyUsages?.nodes?.length})
             </PanelTitle>
           </Stack>
         </PanelHeader>

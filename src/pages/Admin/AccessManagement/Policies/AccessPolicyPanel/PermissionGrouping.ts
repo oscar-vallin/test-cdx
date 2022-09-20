@@ -103,6 +103,11 @@ const permissionGroupingDef = {
       label: '',
       regex: '(XCHANGE_PROFILE_.+)|(XCHANGE_FILE_UPLOAD)',
     },
+    xalert: {
+      id: 'XchangeAlert',
+      label: '',
+      regex: 'XCHANGE_ALERT_.+'
+    }
   },
 };
 
