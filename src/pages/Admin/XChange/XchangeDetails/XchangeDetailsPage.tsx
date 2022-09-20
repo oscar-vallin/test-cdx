@@ -13,6 +13,7 @@ import {
   XchangeDiagram,
   useUpdateXchangeConfigCommentMutation,
   useDeleteXchangeConfigAlertMutation,
+  XchangeSchedule,
   CdxWebCommandType,
   WebCommand,
 } from 'src/data/services/graphql';
@@ -20,6 +21,7 @@ import { UIInputText } from 'src/components/inputs/InputText';
 import { Spacing } from 'src/components/spacings/Spacing';
 import {
   DirectionalHint,
+  FontIcon,
   IconButton,
   PrimaryButton,
   Spinner,
@@ -29,7 +31,6 @@ import {
   TooltipHost,
 } from '@fluentui/react';
 import { useNotification } from 'src/hooks/useNotification';
-import { UIInputMultiSelect } from 'src/components/inputs/InputDropdown';
 import { PageBody } from 'src/components/layouts/Column';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { FileUploadDialog } from 'src/pages/Admin/XChange/XchangeDetails/FileUpload/FileUploadDialog';
@@ -48,6 +49,8 @@ import {
 } from './XchangeDetailsPage.styles';
 import { Diagram } from './Diagram/Diagram';
 import { XchangeAlertsPanel } from '../XchangeAlerts/XchangeAlertsPanel/XchangeAlertsPanel';
+import { JobGroupPanel } from './JobGroupPanel/JobGroupPanel';
+import { SchedulePanel } from './SchedulePanel/SchedulePanel';
 import { StyledAlertTypes } from '../XchangeAlerts/XchangeAlertsPage.style';
 
 const defaultDialogProps: DialogYesNoProps = {
@@ -82,14 +85,20 @@ const XchangeDetailsPage = () => {
   const [openUpdateComments, setOpenUpdateComments] = useState(false);
   const [closeTooltipHost, setCloseTooltipHost] = useState(true);
   const [sid, setSid] = useState('');
+  const [schedule, setSchedule] = useState<XchangeSchedule>();
   const [openAlertsPanel, setOpenAlertsPanel] = useState(false);
+  const [openJobGroup, setOpenJobGroup] = useState(false);
+  const [openSchedulePanel, setOpenSchedulePanel] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
 
-  const [callXchangeDetails, { data: detailsData, loading: detailsLoading, error: detailsError }] = useXchangeConfigLazyQuery();
-  const [deleteXchangeConfigAlerts, { data: deleteConfigData, loading: deleteConfigLoading }] = useDeleteXchangeConfigAlertMutation();
+  const [callXchangeDetails, { data: detailsData, loading: detailsLoading, error: detailsError },
+  ] = useXchangeConfigLazyQuery();
+  const [deleteXchangeConfigAlerts, { data: deleteConfigData, loading: deleteConfigLoading },
+  ] = useDeleteXchangeConfigAlertMutation();
 
-  const [updateXchangeComment, { data: commentData, loading: isLoadingComment }] = useUpdateXchangeConfigCommentMutation();
+  const [updateXchangeComment, { data: commentData, loading: isLoadingComment },
+  ] = useUpdateXchangeConfigCommentMutation();
   const [showFileUpload, setShowFileUpload] = useState(false);
   const handleError = ErrorHandler();
 
@@ -285,21 +294,35 @@ const XchangeDetailsPage = () => {
             <CardStyled>
               <Container>
                 <Row>
-                  {fileProcesses?.map((process: XchangeFileProcessForm, index: number) => (
-                    <UIInputMultiSelect
-                      key={index}
-                      id="__applicableOrgTypes"
-                      uiField={process.filenameQualifiers}
-                      options={process.options ?? []}
+                  <Stack horizontal={true} horizontalAlign="space-between">
+                    <Text style={{ fontWeight: 'bold', marginTop: '8px' }}>
+                      <FontIcon iconName="CalendarAgenda" style={{ fontSize: '10px', fontWeight: 500, paddingRight: '8px' }} />
+                      Schedule
+                    </Text>
+                    <IconButton
+                      iconProps={{ iconName: 'EditSolid12' }}
+                      style={{ fontSize: '0.675rem' }}
+                      onClick={() => {
+                        setOpenSchedulePanel(true);
+                      }}
                     />
-                  ))}
+                  </Stack>
+                </Row>
+                <Row>
+                  <Column>
+                    <Text>{schedule?.expectedRunSchedule}</Text>
+                  </Column>
+                </Row>
+                <Row>
+                  <Column>
+                    <ButtonLink
+                      onClick={() => setOpenJobGroup(true)}
+                    >
+                      {schedule?.xchangeJobGroupName}
+                    </ButtonLink>
+                  </Column>
                 </Row>
               </Container>
-              {allowedCommands && (
-              <StyledButtonAction fontSize={18} id="__Add_FilenameQualifer" iconName="add">
-                Add Filename Qualifier
-              </StyledButtonAction>
-              )}
             </CardStyled>
           </Spacing>
         </>
@@ -381,6 +404,10 @@ const XchangeDetailsPage = () => {
 
       if (xchangeConfig.commands && xchangeConfig.commands.length > 0) {
         setAllowedCommands(true);
+      }
+
+      if (xchangeConfig.schedule) {
+        setSchedule(xchangeConfig.schedule);
       }
     }
   }, [detailsData, detailsLoading]);
@@ -588,6 +615,16 @@ const XchangeDetailsPage = () => {
         sid={sid}
         refreshXchangeDetails={setRefreshXchangeDetails}
         coreFilename={coreFilenameValue}
+      />
+      <JobGroupPanel
+        isPanelOpen={openJobGroup}
+        closePanel={setOpenJobGroup}
+      />
+      <SchedulePanel
+        dataSchedule={xchangeDataDetails?.schedule}
+        isPanelOpen={openSchedulePanel}
+        closePanel={setOpenSchedulePanel}
+        xchangeConfigSid={xchangeDataDetails?.sid ?? ''}
       />
       <DialogYesNo {...dialogProps} open={showDialog} />
     </LayoutDashboard>
