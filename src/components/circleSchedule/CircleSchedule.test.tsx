@@ -1,5 +1,4 @@
-import { shallow } from 'enzyme';
-import { shallowWithTheme } from 'src/utils/testUtils';
+import { shallowWithTheme, mountWithTheme } from 'src/utils/testUtils';
 import { CircleSchedule } from './CircleSchedule';
 
 const defaultProps = {
@@ -10,7 +9,7 @@ const defaultProps = {
 };
 
 describe('Monthly and weekly circle test', () => {
-  const tree = shallowWithTheme(<CircleSchedule {...defaultProps} ></CircleSchedule>);
+  const tree = mountWithTheme(<CircleSchedule {...defaultProps} ></CircleSchedule>);
 
   it('Should be defined', () => {
     expect(CircleSchedule).toBeDefined();
@@ -27,4 +26,4 @@ describe('Monthly and weekly circle test', () => {
     expect(tree2.children().props().selected).toEqual(true);
   })
 
-})
+});
