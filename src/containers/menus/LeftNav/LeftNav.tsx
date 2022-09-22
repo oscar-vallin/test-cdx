@@ -105,7 +105,7 @@ export const LeftNav = ({ menuOptionSelected, isOpen }: LeftNavProps) => {
     }
 
     if (menuOptionSelected === ROUTE_XCHANGE_DETAILS.API_ID && navItem.label === 'Xchange Profile') {
-      if (navItem.subNavItems.length < 5) {
+      if (navItem.subNavItems.length < 6) {
         const positionOne = navItem.subNavItems[0];
         navItem.subNavItems.shift();
         navItem.subNavItems.unshift({
@@ -117,7 +117,7 @@ export const LeftNav = ({ menuOptionSelected, isOpen }: LeftNavProps) => {
         navItem.subNavItems.unshift(positionOne);
       }
     } else if (menuOptionSelected !== ROUTE_XCHANGE_DETAILS.API_ID && navItem.label === 'Xchange Profile') {
-      if (navItem.subNavItems.length > 4) {
+      if (navItem.subNavItems.length > 5) {
         const positionOne = navItem.subNavItems[0];
         navItem.subNavItems.shift();
         navItem.subNavItems.shift();
