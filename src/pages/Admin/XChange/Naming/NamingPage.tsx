@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -10,6 +10,7 @@ import {
   Stack,
   TooltipHost,
   FontIcon,
+  Icon,
 } from '@fluentui/react';
 import { Lightbulb20Filled, Notepad16Regular } from '@fluentui/react-icons';
 import { Column, Container, Row } from 'src/components/layouts';
@@ -18,11 +19,15 @@ import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ROUTE_XCHANGE_NAMING } from 'src/data/constants/RouteConstants';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { useOrgSid } from 'src/hooks/useOrgSid';
-import { useXchangeNamingConventionsLazyQuery, XchangeConfigNamingConvention } from 'src/data/services/graphql';
+import {
+  useXchangeNamingConventionsLazyQuery,
+  XchangeConfigNamingConvention,
+} from 'src/data/services/graphql';
 import { PageBody } from 'src/components/layouts/Column';
 import { ButtonLink } from 'src/components/buttons';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
+import { DownloadLink } from 'src/containers/tables/WorkPacketTable.styles';
 import { NamingConventionsPanel, WherePlaceExtractsPanel, SpecialInstructionPanel } from './NamingPanel';
 
 const NamingPage = () => {
@@ -83,7 +88,6 @@ const NamingPage = () => {
 
   useEffect(() => {
     if (!isLoadingNaming && namingConventionsData) {
-      console.log(namingConventionsData)
       setConventions(namingConventionsData.xchangeNamingConventions?.conventions ?? []);
     }
   }, [namingConventions, isLoadingNaming]);
@@ -303,6 +307,9 @@ const NamingPage = () => {
 
     )
   };
+  const graphQLUrl = process.env.REACT_APP_API_SERVER;
+  const serverUrl = graphQLUrl?.replace('/graphql', '') ?? '';
+
   return (
     <LayoutDashboard id="NamingConventionsPage" menuOptionSelected={ROUTE_XCHANGE_NAMING.API_ID}>
       <PageHeader>
@@ -310,6 +317,16 @@ const NamingPage = () => {
           <Row>
             <Column lg="6" direction="row">
               <PageTitle id="__Page__Title_Naming_Conventions" title="Xchange Naming Conventions" />
+            </Column>
+            <Column lg="6" right>
+              <DownloadLink
+                target="_new"
+                href={`${serverUrl}docx/namingConventions?orgSid=${orgSid}`}
+                title="Download naming conventions as an MS Word document"
+              >
+                <Icon iconName="WordDocument" style={{ paddingRight: '5px' }} />
+                Download
+              </DownloadLink>
             </Column>
           </Row>
         </Container>
