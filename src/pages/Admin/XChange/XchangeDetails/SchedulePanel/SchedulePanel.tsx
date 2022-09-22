@@ -104,6 +104,7 @@ const SchedulePanel = ({
   const [addSubscriberModal, setAddSubscriberModal] = useState(false);
   const [showDateRange, setShowDateRange] = useState(false);
   const [scheduleFrequency, setScheduleFrequency] = useState('');
+  const [scheduleType, setScheduleType] = useState('');
 
   const [
     scheduleForm, { data: formData, loading: isLoadingForm },
@@ -142,8 +143,10 @@ const SchedulePanel = ({
   useEffect(() => {
     if (!isLoadingForm && formData) {
       const { xchangeScheduleForm } = formData;
+      console.log(xchangeScheduleForm)
       setXchangeSchedule(xchangeScheduleForm);
-      console.log(formData)
+      setScheduleFrequency(xchangeScheduleForm?.frequency.value?.value ?? '');
+      setScheduleType(xchangeScheduleForm?.scheduleType.value?.value ?? '');
     }
   }, [formData, isLoadingForm]);
 
@@ -231,8 +234,8 @@ const SchedulePanel = ({
   };
 
   const selectedWeekly = () => (
-    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-      <Stack horizontal={true} horizontalAlign="space-around">
+    <Spacing margin={{ top: 'double', bottom: 'normal' }}>
+      <Stack horizontal={true} horizontalAlign="space-between">
         {DAYS.map((day, indexDay) => (
           <CircleSchedule
             label={day}
@@ -249,8 +252,8 @@ const SchedulePanel = ({
   );
 
   const selectedMonthly = () => (
-    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-      <Stack horizontal={true} horizontalAlign="space-around">
+    <Spacing margin={{ top: 'double', bottom: 'normal' }}>
+      <Stack horizontal={true} horizontalAlign="space-between">
         {FIRST_MONTHS.map((month, indexMonth) => (
           <CircleSchedule
             label={month}
@@ -267,8 +270,8 @@ const SchedulePanel = ({
           />
         ))}
       </Stack>
-      <Spacing margin={{ top: 'normal' }}/>
-      <Stack horizontal={true} horizontalAlign="space-around">
+      <Spacing margin={{ top: 'normal' }} />
+      <Stack horizontal={true} horizontalAlign="space-between">
         {LAST_MONTHS.map((month, indexMonth) => (
           <CircleSchedule
             label={month}
@@ -303,15 +306,18 @@ const SchedulePanel = ({
                 id="scheduleType"
                 uiField={xchangeSchedule?.scheduleType}
                 options={xchangeSchedule?.options}
-                value={xchangeSchedule?.scheduleType.value?.value}
+                placeholder="Select a type"
+                value={scheduleType}
+                onChange={(_newValue) => setScheduleType(_newValue ?? '')}
               />
             </Column>
             <Column lg="4">
               <UIFlatSelectOneField
-                id="scheduleType"
+                id="scheduleFrequency"
                 uiField={xchangeSchedule?.frequency}
                 options={xchangeSchedule?.options}
-                value={xchangeSchedule?.frequency.value?.value}
+                placeholder="Select a frecuency"
+                value={scheduleFrequency}
                 onChange={(_newValue) => setScheduleFrequency(_newValue ?? '')}
               />
             </Column>
@@ -335,13 +341,58 @@ const SchedulePanel = ({
           <ButtonAction onClick={() => setAddSubscriberModal(true)} iconName="add">
             Add person to be notified
           </ButtonAction>
-          <Checkbox
-            label="Do not alert within the timeframe"
-            checked={showDateRange}
-            onChange={() => {
-              setShowDateRange((prevState) => !prevState);
-            }}
-          />
+          <Spacing margin={{ top: 'normal', bottom: 'normal', left: 'normal' }}>
+            <Checkbox
+              label="Do not alert within the timeframe"
+              checked={showDateRange}
+              onChange={() => {
+                setShowDateRange((prevState) => !prevState);
+              }}
+            />
+          </Spacing>
+          <Row>
+            <Spacing margin={{ left: 'normal' }}>
+              {showDateRange && (
+                <Stack horizontal={true}>
+                  <Column lg="2">
+                    <UIFlatSelectOneField
+                      id="scheduleStartMonth"
+                      uiField={xchangeSchedule?.silenceStartMonth}
+                      options={xchangeSchedule?.options}
+                      placeholder="month"
+                    />
+                  </Column>
+                  <Column lg="1">
+                    <UIFlatSelectOneField
+                      id="scheduleStartDay"
+                      uiField={xchangeSchedule?.silenceStartDay}
+                      options={xchangeSchedule?.options}
+                      placeholder="day"
+                    />
+                  </Column>
+                  <Column lg="2">
+                    <span style={{ marginTop: '10px', marginLeft: '35px' }}> to</span>
+                  </Column>
+                  <Column lg="2">
+                    <UIFlatSelectOneField
+                      id="scheduleLastMonth"
+                      uiField={xchangeSchedule?.silenceEndMonth}
+                      options={xchangeSchedule?.options}
+                      placeholder="month"
+                    />
+                  </Column>
+                  <Column lg="1">
+                    <UIFlatSelectOneField
+                      id="scheduleLastDay"
+                      uiField={xchangeSchedule?.silenceEndDay}
+                      options={xchangeSchedule?.options}
+                      placeholder="day"
+                    />
+                  </Column>
+                </Stack>
+              )}
+            </Spacing>
+          </Row>
         </Container>
       </WizardBody>
       <WizardButtonRow>
