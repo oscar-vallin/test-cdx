@@ -1,4 +1,4 @@
-import { ComboBox } from '@fluentui/react';
+import { ComboBox, Dropdown } from '@fluentui/react';
 import styled from 'styled-components';
 
 export const ThemedComboBox = styled(ComboBox)`
@@ -12,19 +12,30 @@ export const ThemedComboBox = styled(ComboBox)`
   }
 `;
 
-export const ThemedFlatComboBox = styled(ComboBox)`
-  .ms-ComboBox {
+export const ThemeDropdown = styled(Dropdown)`
+  .ms-Dropdown {
     background-color: ${({ theme }) => theme.colors.white};
+    border-color: ${({ theme }) => theme.colors.white};
+    outline: none;
 
-    input {
-      background-color: ${({ theme }) => theme.colors.white};
-      color: ${({ theme }) => theme.colors.black};
-      font-weight: ${({ theme }) => theme.fontWeights.bold};
+    & span: first-child {
+      border-color: ${({ theme }) => theme.colors.white};
+      border-bottom-color: ${({ theme }) => theme.colors.themePrimary}; 
+      border-width: 2px;
+      padding: 0px 28px 0px 0px;
+
     }
-
     &::after {
-      border: 2px solid transparent;
-      border-bottom-color: ${({ theme }) => theme.colors.themePrimary} 
+      border-color: ${({ theme }) => theme.colors.white};
+      border-bottom-color: ${({ theme }) => theme.colors.themePrimary}; 
+      border-width: 2px;
+    }
+    [data-icon-name='ChevronDown'] {
+      font-weight: ${({ theme }) => theme.fontWeights.bold};
+      font-size: 0.75em;
+    }
+    & span: {
+      outline: none;
     }
   }
   .ms-Icon {
@@ -32,4 +43,5 @@ export const ThemedFlatComboBox = styled(ComboBox)`
     color: ${({ theme }) => theme.colors.black};
     font-weight: ${({ theme }) => theme.fontWeights.bold};
   }
+
 `;
