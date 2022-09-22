@@ -1,13 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Column, Container, Row } from 'src/components/layouts';
-import { PageTitle } from 'src/components/typography';
-import { PageHeader } from 'src/containers/headers/PageHeader';
-import { ROUTE_XCHANGE_NAMING } from 'src/data/constants/RouteConstants';
-import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
-import { useOrgSid } from 'src/hooks/useOrgSid';
-import { useXchangeNamingConventionsLazyQuery, XchangeConfigNamingConvention } from 'src/data/services/graphql';
-import { PageBody } from 'src/components/layouts/Column';
-import { ButtonLink } from 'src/components/buttons';
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -18,10 +9,18 @@ import {
   SpinnerSize,
   Stack,
   TooltipHost,
-  Text,
   FontIcon,
 } from '@fluentui/react';
 import { Lightbulb20Filled, Notepad16Regular } from '@fluentui/react-icons';
+import { Column, Container, Row } from 'src/components/layouts';
+import { Text, PageTitle } from 'src/components/typography';
+import { PageHeader } from 'src/containers/headers/PageHeader';
+import { ROUTE_XCHANGE_NAMING } from 'src/data/constants/RouteConstants';
+import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
+import { useOrgSid } from 'src/hooks/useOrgSid';
+import { useXchangeNamingConventionsLazyQuery, XchangeConfigNamingConvention } from 'src/data/services/graphql';
+import { PageBody } from 'src/components/layouts/Column';
+import { ButtonLink } from 'src/components/buttons';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { NamingConventionsPanel, WherePlaceExtractsPanel, SpecialInstructionPanel } from './NamingPanel';
@@ -89,12 +88,12 @@ const NamingPage = () => {
     }
   }, [namingConventions, isLoadingNaming]);
 
-  const tooltipGostSpecialInstruction = (instruction: string, conventionSid: string) => (
+  const tooltipGetSpecialInstruction = (instruction: string, conventionSid: string) => (
     <Spacing margin="normal">
       <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-        <Text variant="large">Special Instructions/Notes</Text>
+        <Text variant="bold">Special Instructions/Notes</Text>
       </Spacing>
-      <Text variant="small">{instruction}</Text>
+      <Text>{instruction}</Text>
       <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
         <ButtonLink onClick={() => {
           setSid(conventionSid);
@@ -129,7 +128,7 @@ const NamingPage = () => {
       <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
         { column?.key === 'vendor' && index === specialInstructionIcon ? (
           <Stack.Item align="center" disableShrink>
-            <Text>{columnVal}</Text>
+            <Text ellipsis title={columnVal}>{columnVal}</Text>
             <div style={{
               display: 'flex',
               position: 'absolute',
@@ -151,10 +150,10 @@ const NamingPage = () => {
             </div>
           </Stack.Item>
         ) : (
-          <Text>{columnVal}</Text>
+          <Text ellipsis title={columnVal}>{columnVal}</Text>
         )}
         {column?.key !== 'extractType' && column?.key !== 'vendor' && item.specialInstructions && (
-          <TooltipHost content={tooltipGostSpecialInstruction(
+          <TooltipHost content={tooltipGetSpecialInstruction(
             item.specialInstructions,
             item.sid,
           )}
@@ -183,8 +182,8 @@ const NamingPage = () => {
       fieldName: 'extractType',
       data: 'string',
       isPadded: true,
-      minWidth: 150,
-      maxWidth: 200,
+      minWidth: 100,
+      maxWidth: 150,
       flexGrow: 1,
     },
     {
@@ -322,7 +321,7 @@ const NamingPage = () => {
               <Row>
                 <Column lg="3">
                   <Stack.Item>
-                    Client id: <Text>{ActiveDomainStore.domainOrg.current.label}</Text>
+                    Client ID: <Text variant="semiBold">{ActiveDomainStore.domainOrg.current.orgId}</Text>
                   </Stack.Item>
                 </Column>
                 <Column lg="3">
@@ -344,7 +343,7 @@ const NamingPage = () => {
               </Row>
             </Spacing>
           )}
-          <Spacing margin={{ top: 'double' }}>
+          <Spacing margin={{ top: 'double', bottom: 'double' }}>
             {renderBody()}
           </Spacing>
         </Container>

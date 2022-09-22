@@ -18,6 +18,8 @@ export const StyledText = styled.span<StyledTextProps>`
     return 'start';
   }};
   text-transform: ${({ transform }) => transform};
+  overflow: ${({ ellipsis }) => ellipsis ? 'hidden' : 'visible'};
+  text-overflow: ${({ ellipsis }) => ellipsis ? 'ellipsis' : 'clip'};
   word-break: ${({ breakWord }) => `break-${breakWord}`};
   width: ${({ center, right }) => (center || right ? '100%' : 'auto')};
   line-height: normal;
@@ -32,4 +34,5 @@ type StyledTextProps = {
   breakWord: string;
   top: string;
   bottom: string;
+  ellipsis: boolean;
 };

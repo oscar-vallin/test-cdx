@@ -37,7 +37,7 @@ const NamingConventionsPanel = ({ isOpen, closePanel }: NamingConventionsProps) 
 
     return (
       <Spacing margin={{ top: 'double' }}>
-            <div id="__NamingConventionsPanel" dangerouslySetInnerHTML={{ __html: data?.content ?? '' }}/>
+          <div id="__NamingConventionsPanel" dangerouslySetInnerHTML={{ __html: data?.content ?? '' }}/>
       </Spacing>
     )
   };

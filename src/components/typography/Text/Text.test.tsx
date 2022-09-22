@@ -1,5 +1,6 @@
 import { shallow } from 'enzyme';
 import { Text as Component } from './Text';
+import { mountWithTheme } from 'src/utils/testUtils';
 
 const defaultProps = { left: 'star', right: false, top: 'center', bottom: 'center' };
 
@@ -39,7 +40,7 @@ describe('Text', () => {
     expect(tree.props().left).toEqual('star');
   });
 
-  it('Should have rigth property', () => {
+  it('Should have right property', () => {
     expect(tree.props().right).toBeFalsy();
   });
 
@@ -49,5 +50,14 @@ describe('Text', () => {
 
   it('Should have bottom property', () => {
     expect(tree.props().bottom).toEqual('center');
+  });
+
+  it('Ellipsis', () => {
+    const wrapper = mountWithTheme(
+      <Component {...defaultProps} variant="normal" ellipsis>
+        A super long word
+      </Component>
+    );
+    expect(wrapper.find('span').getDOMNode()).toHaveStyle("text-overflow: ellipsis")
   });
 });
