@@ -14,7 +14,7 @@ const SubscribersList = ({ totalSubscribers, currentSubscribers }: UserListProps
       currentSubscribers.filter((user: SubscriberOptionProps) => user.sid !== removeBySid),
     );
   };
-  const onRenderAction = (item: any) => <IconButton iconProps={{ iconName: 'Trash' }} onClick={() => removeSubscriber(item.sid)} />;
+  const onRenderAction = (item: any, index?: number) => <IconButton id={`Remove_Subscriber_${index}`} iconProps={{ iconName: 'Trash' }} onClick={() => removeSubscriber(item.sid)} />;
 
   const columns: IColumn[] = [
     {
@@ -58,7 +58,7 @@ const SubscribersList = ({ totalSubscribers, currentSubscribers }: UserListProps
     }
     return (
       <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
-        <ButtonLink>{columnVal}</ButtonLink>
+        <ButtonLink id={`Subscriber_${index}`}>{columnVal}</ButtonLink>
       </Stack>
     );
   };
