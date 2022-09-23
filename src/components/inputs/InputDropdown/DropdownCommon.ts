@@ -49,3 +49,9 @@ export const buildDropdownOption = (
     },
   ];
 };
+
+export const buildDropdownTimeOption = (time):
+  IDropdownOption[] => time.map((value): IDropdownOption => ({
+  key: value.value,
+  text: value.label,
+}));
