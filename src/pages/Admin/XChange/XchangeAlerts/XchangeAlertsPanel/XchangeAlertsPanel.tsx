@@ -1,15 +1,9 @@
 import { useEffect, useState } from 'react';
 import {
-  DetailsList,
-  DetailsListLayoutMode,
-  IColumn,
-  IconButton,
   PanelType,
   PrimaryButton,
-  SelectionMode,
   Spinner,
   SpinnerSize,
-  Stack,
 } from '@fluentui/react';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import {
@@ -35,6 +29,7 @@ import { AddSubscriberModal } from 'src/containers/modals/AddSubsciberModal/AddS
 import { useNotification } from 'src/hooks/useNotification';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { InputText } from 'src/components/inputs/InputText';
+import { SubscribersList } from 'src/components/subscribers';
 
 type XchangeAlertsPanelProps = {
   isPanelOpen: boolean;
@@ -204,11 +199,6 @@ const XchangeAlertsPanel = ({
     setTotalSubscribers((prevValues) => prevValues.concat(showSubs));
   };
 
-  const removeSubscriber = (removeBySid: string) => {
-    setUnsavedChanges(true);
-    setTotalSubscribers(totalSubscribers.filter((subscriber: SubscriberOptionProps) => subscriber.sid !== removeBySid));
-  };
-
   const hideDialog = () => {
     setShowDialog(false);
   };
@@ -362,55 +352,6 @@ const XchangeAlertsPanel = ({
     }
   }, [updateConfigData, updateConfigLoading, updateConfigerror]);
 
-  const onRenderAction = (item: any) => <IconButton iconProps={{ iconName: 'Trash' }} onClick={() => removeSubscriber(item.sid)} />;
-
-  const columns: IColumn[] = [
-    {
-      name: 'Subscribers',
-      key: 'name',
-      fieldName: 'name',
-      data: 'string',
-      isPadded: true,
-      minWidth: 180,
-      maxWidth: 600,
-      flexGrow: 1,
-    },
-    {
-      name: '',
-      key: 'email',
-      fieldName: 'email',
-      data: 'string',
-      isPadded: true,
-      minWidth: 180,
-      maxWidth: 400,
-      flexGrow: 1,
-    },
-    {
-      name: '',
-      key: 'actions',
-      fieldName: 'actions',
-      data: 'string',
-      isPadded: true,
-      minWidth: 50,
-      maxWidth: 50,
-      onRender: onRenderAction,
-    },
-  ];
-
-  const onRenderItemColum = (item, index, column) => {
-    let columnVal: string | undefined;
-    if (column?.key === 'name') {
-      columnVal = item?.name;
-    } else if (column?.key === 'email') {
-      columnVal = item?.email;
-    }
-    return (
-      <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
-        <ButtonLink>{columnVal}</ButtonLink>
-      </Stack>
-    );
-  };
-
   const renderBody = () => {
     if (alertProfileFormLoading || alertConfigFormLoading) {
       return (
@@ -465,13 +406,9 @@ const XchangeAlertsPanel = ({
           </Row>
           <Row>
             <Column lg="12">
-              <DetailsList
-                items={totalSubscribers ?? []}
-                columns={columns}
-                selectionMode={SelectionMode.none}
-                onRenderItemColumn={onRenderItemColum}
-                layoutMode={DetailsListLayoutMode.justified}
-                isHeaderVisible
+              <SubscribersList
+                currentSubscribers={totalSubscribers}
+                totalSubscribers={setTotalSubscribers}
               />
             </Column>
           </Row>
