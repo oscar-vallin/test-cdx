@@ -18,6 +18,7 @@ import {
   PanelType,
   PrimaryButton,
   Stack,
+  Text,
 } from '@fluentui/react';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { CircleSchedule } from 'src/components/circleSchedule';
@@ -26,9 +27,9 @@ import { SubscribersList } from 'src/components/subscribers/SubscribersList';
 import { AddSubscriberModal } from 'src/containers/modals/AddSubsciberModal/AddSubscriberModal';
 import { ButtonAction } from 'src/components/buttons';
 import { UIFlatSelectOneField } from 'src/components/inputs/InputDropdown/UIFlatSelectOneField';
-import { SubscriberOptionProps } from '../../XchangeAlerts/XchangeAlertsPanel/XchangeAlertsPanel';
 import { Column, Container, Row } from 'src/components/layouts';
-import { Text } from 'src/components/typography';
+import { UITimeSelectOneField } from 'src/components/inputs/InputDropdown/UITimeSelectOneField';
+import { SubscriberOptionProps } from '../../XchangeAlerts/XchangeAlertsPanel/XchangeAlertsPanel';
 
 type ScheduleProps = {
     isPanelOpen: boolean;
@@ -105,6 +106,7 @@ const SchedulePanel = ({
   const [showDateRange, setShowDateRange] = useState(false);
   const [scheduleFrequency, setScheduleFrequency] = useState('');
   const [scheduleType, setScheduleType] = useState('');
+  const [scheduleTime, setScheduleTime] = useState('');
 
   const [
     scheduleForm, { data: formData, loading: isLoadingForm },
@@ -293,7 +295,10 @@ const SchedulePanel = ({
 
   const saveSchedule = () => {
     console.log(days);
-    console.log(months);
+    // console.log(months);
+    console.log(scheduleType)
+    console.log(scheduleFrequency)
+    console.log(scheduleTime)
   }
 
   const renderBody = () => (
@@ -325,12 +330,32 @@ const SchedulePanel = ({
           {scheduleFrequency === ScheduleFrequency.Weekly && (
             <>
               {selectedWeekly()}
-              <Row>
-                <Column lg="4">
-                  <Text>To be completed by</Text>
-
-                </Column>
-              </Row>
+              <Spacing margin={{ top: 'normal' }}>
+                <Row>
+                  <Column lg="4">
+                    <Text style={{ marginTop: '8px' }}>To be completed by</Text>
+                  </Column>
+                  <Column lg="2">
+                    <UITimeSelectOneField
+                      id="scheduleSelectTime"
+                      uiFieldHour={xchangeSchedule?.endHour}
+                      uiFieldMinute={xchangeSchedule?.endMinute}
+                      placeholder="time"
+                      onChange={(_newValue) => setScheduleTime(_newValue ?? '')}
+                    />
+                  </Column>
+                  <Column lg="5">
+                    <Spacing margin={{ left: 'normal' }}>
+                      <UIFlatSelectOneField
+                        id="scheduleTimezone"
+                        uiField={xchangeSchedule?.timezone}
+                        options={xchangeSchedule?.options}
+                        placeholder="timezone"
+                      />
+                    </Spacing>
+                  </Column>
+                </Row>
+              </Spacing>
             </>
           )}
           {scheduleFrequency === ScheduleFrequency.Monthly && selectedMonthly()}

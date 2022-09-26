@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
-import { PanelType, PrimaryButton, Stack, TextField } from '@fluentui/react';
+import {
+  PanelType,
+  PrimaryButton,
+  Stack,
+  TextField,
+} from '@fluentui/react';
 import { PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
 import { useUpdateXchangeConfigInstructionMutation } from 'src/data/services/graphql';
 import { useNotification } from 'src/hooks/useNotification';
@@ -36,7 +41,7 @@ const SpecialInstructionPanel = ({
 
   useEffect(() => {
     setInstructionData(specialInstruction ?? '');
-  });
+  }, [specialInstruction]);
 
   useEffect(() => {
     if (!loading && data) {
@@ -76,7 +81,9 @@ const SpecialInstructionPanel = ({
       onDismiss={() => {
         if (specialInstruction?.trim() === '') {
           onCount(1);
+          setInstructionData('');
         } else {
+          setInstructionData(specialInstruction ?? '');
           onCount(0)
         }
         hideIcon(null);
@@ -89,7 +96,9 @@ const SpecialInstructionPanel = ({
         resizable={false}
         value={instructionData}
         rows={15}
-        onChange={(event, newValue) => setInstructionData(newValue ?? '')}
+        onChange={(event, newValue) => {
+          setInstructionData(newValue ?? '')
+        }}
       />
     </ThemedPanel>
   );
