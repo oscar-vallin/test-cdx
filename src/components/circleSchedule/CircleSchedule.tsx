@@ -1,16 +1,16 @@
 import { StyledCircle } from './CircleSchedule.style';
 
 type CircleScheduleProps = {
+  id: string;
   label: string;
   selected: boolean;
   onClick: () => void;
-  key: number;
 };
 
 const CircleSchedule = ({
-  label, selected, onClick, key,
+  id, label, selected, onClick,
 }: CircleScheduleProps) => (
-  <StyledCircle selected={selected} onClick={onClick} key={key}>
+  <StyledCircle id={id} selected={selected} onClick={onClick}>
     {label}
   </StyledCircle>
 );

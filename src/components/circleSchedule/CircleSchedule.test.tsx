@@ -2,10 +2,10 @@ import { shallowWithTheme, mountWithTheme } from 'src/utils/testUtils';
 import { CircleSchedule } from './CircleSchedule';
 
 const defaultProps = {
+    id: 'sun_0',
     label: 'Sun',
     selected: false,
     onClick: jest.fn(),
-    key: 0,
 };
 
 describe('Monthly and weekly circle test', () => {
