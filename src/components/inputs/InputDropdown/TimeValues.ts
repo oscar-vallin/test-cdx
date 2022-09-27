@@ -33,7 +33,7 @@ export const TIME = [
   { value: '15,30', label: '3:30 PM' },
   { value: '16,0', label: '4:00 PM' },
   { value: '16,30', label: '4:30 PM' },
-  { value: '17,0', label: '5:30 PM' },
+  { value: '17,0', label: '5:00 PM' },
   { value: '17,30', label: '5:30 PM' },
   { value: '18,0', label: '6:00 PM' },
   { value: '18,30', label: '6:30 PM' },
