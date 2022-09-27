@@ -214,6 +214,7 @@ export enum CdxWebPage {
   Schedule = 'SCHEDULE',
   Transmissions = 'TRANSMISSIONS',
   Errors = 'ERRORS',
+  Visualizations = 'VISUALIZATIONS',
   OrgActivity = 'ORG_ACTIVITY',
   ActiveOrgs = 'ACTIVE_ORGS',
   ExternalOrgs = 'EXTERNAL_ORGS',
