@@ -13,10 +13,9 @@ import { PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.
 import { useAccessPolicyGroupMembersLazyQuery, AccessMember, ActiveEnum } from 'src/data/services/graphql';
 import { useUsersLists } from 'src/pages/Admin/Users/useUsersList';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { useTableFilters } from 'src/hooks/useTableFilters';
 import { ButtonLink } from 'src/components/buttons';
-import { DataColumn, useSortableColumns } from 'src/containers/tables';
 import { UpdateUserPanel, useUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers';
+import { MembersList } from '../../MembersList/MembersList';
 
 type AccessPolicyMembersProps = {
   isOpen: boolean;
@@ -31,6 +30,7 @@ const AccessPolicyGroupMembersPanel = ({
   selectedGroupId,
   currentName,
 }: AccessPolicyMembersProps) => {
+  const { tableFilters, columns } = MembersList({ organization: true, accessPolicyGroups: false });
   const [groupMembers, setGroupMembers] = useState<AccessMember[] | null>();
 
   const [
@@ -41,56 +41,6 @@ const AccessPolicyGroupMembersPanel = ({
   const updateUserPanel = useUpdateUserPanel();
 
   const userService = useUsersLists(ActiveEnum.Active);
-
-  const columnOptions: DataColumn[] = [
-    {
-      name: 'First Name',
-      key: 'firstNm',
-      fieldName: 'person.firstNm',
-      minWidth: 200,
-      maxWidth: 200,
-      isPadded: true,
-      dataType: 'string',
-      sortable: true,
-      filterable: false,
-    },
-    {
-      name: 'Last Name',
-      key: 'lastNm',
-      fieldName: 'person.lastNm',
-      minWidth: 100,
-      maxWidth: 200,
-      isPadded: true,
-      isSorted: true,
-      isSortedDescending: false,
-      dataType: 'string',
-      sortable: true,
-      filterable: false,
-    },
-    {
-      name: 'Email',
-      key: 'email',
-      fieldName: 'email',
-      data: 'string',
-      dataType: 'enum',
-      sortable: true,
-      minWidth: 200,
-      maxWidth: 400,
-      flexGrow: 1,
-    },
-    {
-      name: 'Organization',
-      key: 'organization',
-      fieldName: 'orgName',
-      minWidth: 200,
-      isPadded: true,
-      dataType: 'string',
-      sortable: true,
-      filterable: false,
-    },
-  ];
-  const tableFilters = useTableFilters('Name, Last Name, Email, Organization, etc.');
-  const { columns } = useSortableColumns(tableFilters, columnOptions);
 
   const getMembers = () => {
     policyMembers({
