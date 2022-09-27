@@ -18,7 +18,7 @@ const SubscribersList = ({ totalSubscribers, currentSubscribers }: UserListProps
 
   const columns: IColumn[] = [
     {
-      name: 'Subscribers',
+      name: '',
       key: 'name',
       fieldName: 'name',
       data: 'string',

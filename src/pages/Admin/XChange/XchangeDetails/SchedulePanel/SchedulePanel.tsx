@@ -19,6 +19,7 @@ import {
 import {
   Checkbox,
   ChoiceGroup,
+  FontIcon,
   PanelType,
   PrimaryButton,
   Spinner,
@@ -428,6 +429,12 @@ const SchedulePanel = ({
             </Spacing>
           </>
         )}
+        <Stack.Item>
+          <Spacing margin={{ top: 'double' }}>
+            <FontIcon iconName="Ringer" style={{ marginTop: '50px', fontWeight: 'bold' }} />
+            <Text style={{ fontWeight: 'bold', paddingLeft: '5px' }}>Alert if not delivered by expected day</Text>
+          </Spacing>
+        </Stack.Item>
         <SubscribersList
           currentSubscribers={totalSubscribers}
           totalSubscribers={setTotalSubscribers}
