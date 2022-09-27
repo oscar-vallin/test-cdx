@@ -6,7 +6,7 @@ import { TestFileTransmissionModal } from './TestFileTransmissionModal';
 const ftpTestCurrentData = {
   host: 'ftpt.coresource.com',
   user: 'testKnown2u_AHS',
-  password: 'YPrMkPtV',
+  password: '',
   port: '22',
   folder: 'in',
   stepWise: true,
