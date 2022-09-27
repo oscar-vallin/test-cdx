@@ -294,10 +294,8 @@ const SchedulePanel = ({
     let frecuency = scheduleFrequency.toLocaleLowerCase();
     frecuency = frecuency.charAt(0).toUpperCase() + frecuency.slice(1);
     if (frecuency.includes('_')) frecuency = 'InGroup';
-    frecuency.split('_');
     // eslint-disable-next-line no-unused-expressions
     type === 'NotScheduled' ? type = 'NotScheduled' : type = 'ExpectedToRun';
-
     scheduleUpdate({
       variables: {
         scheduleInput: {
