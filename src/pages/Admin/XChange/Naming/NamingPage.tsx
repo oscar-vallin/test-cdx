@@ -319,14 +319,16 @@ const NamingPage = () => {
               <PageTitle id="__Page__Title_Naming_Conventions" title="Xchange Naming Conventions" />
             </Column>
             <Column lg="6" right>
-              <DownloadLink
-                target="_new"
-                href={`${serverUrl}docx/namingConventions?orgSid=${orgSid}`}
-                title="Download naming conventions as an MS Word document"
-              >
-                <Icon iconName="WordDocument" style={{ paddingRight: '5px' }} />
-                Download
-              </DownloadLink>
+              <Text size="large" right>
+                <DownloadLink
+                  target="_new"
+                  href={`${serverUrl}docx/namingConventions?orgSid=${orgSid}`}
+                  title="Download naming conventions as an MS Word document"
+                >
+                  <Icon iconName="WordDocument" style={{ paddingRight: '5px' }} />
+                  Download
+                </DownloadLink>
+              </Text>
             </Column>
           </Row>
         </Container>
