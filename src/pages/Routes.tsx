@@ -16,7 +16,14 @@ import { CurrentActivityPage } from './Admin/Activity';
 import { ColorPalettesPage, DefaultThemePage } from './Admin/DashboardSite';
 import { ActiveUsersPage } from './Admin/Users/ActiveUsers';
 import { DeletedUsersPage } from './Admin/Users/DeletedUsers';
-import { OntologyPage, XChangePage, XchangeAlertsPage, XchangeDetailsPage, NamingPage } from './Admin/XChange';
+import {
+  OntologyPage,
+  XChangePage,
+  XchangeAlertsPage,
+  XchangeDetailsPage,
+  NamingPage,
+  JobGroups
+} from './Admin/XChange';
 import { FtpTestPage } from './Admin/FtpTest';
 import { UserAuditLogsPage } from './Admin/Users/UserAuditLogs';
 import {
@@ -115,6 +122,9 @@ export const Routes = () => (
       <AuthRoute path={ROUTES.ROUTE_XCHANGE_ALERTS.URL}>
         <XchangeAlertsPage />
       </AuthRoute>
+      <AuthRoute path={ROUTES.ROUTE_XCHANGE_JOB_GROUPS.URL}>
+        <JobGroups />
+      </AuthRoute>
       <AuthRoute path={ROUTES.ROUTE_XCHANGE_DETAILS.URL}>
         <XchangeDetailsPage />
       </AuthRoute>
@@ -140,4 +150,4 @@ export const Routes = () => (
         <PageNotFound />
       </AuthRoute>
     </Switch>
-  );
+);

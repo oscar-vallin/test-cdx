@@ -1,22 +1,29 @@
 import { useState, useEffect } from 'react';
 import {
-  DayOfWeek,
-  Month,
   XchangeSchedule,
   useXchangeScheduleFormLazyQuery,
+  useUpdateXchangeScheduleMutation,
   XchangeScheduleForm,
   ScheduleFrequency,
+  UiOption,
+  Month,
+  DayOrdinal,
+  RelativeDay,
+  DayOfWeek,
+  ScheduleType,
 } from 'src/data/services/graphql';
 import {
   PanelBody,
   ThemedPanel,
-  WizardBody,
-  WizardButtonRow,
 } from 'src/layouts/Panels/Panels.styles';
 import {
   Checkbox,
+  ChoiceGroup,
+  FontIcon,
   PanelType,
   PrimaryButton,
+  Spinner,
+  SpinnerSize,
   Stack,
   Text,
 } from '@fluentui/react';
@@ -29,6 +36,7 @@ import { ButtonAction } from 'src/components/buttons';
 import { UIFlatSelectOneField } from 'src/components/inputs/InputDropdown/UIFlatSelectOneField';
 import { Column, Container, Row } from 'src/components/layouts';
 import { UITimeSelectOneField } from 'src/components/inputs/InputDropdown/UITimeSelectOneField';
+import { useNotification } from 'src/hooks/useNotification';
 import { SubscriberOptionProps } from '../../XchangeAlerts/XchangeAlertsPanel/XchangeAlertsPanel';
 
 type ScheduleProps = {
@@ -37,8 +45,6 @@ type ScheduleProps = {
     dataSchedule?: XchangeSchedule,
     xchangeConfigSid: string,
 };
-
-const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 type DaysProps = {
   Sun: boolean;
@@ -59,8 +65,6 @@ const DefaulDaysProps: DaysProps = {
   Fri: false,
   Sat: false,
 };
-const FIRST_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-const LAST_MONTHS = ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 type MonthsProps = {
   Jan: boolean;
@@ -93,24 +97,42 @@ const DefaulMonthsProps: MonthsProps = {
 };
 
 const SchedulePanel = ({
-  isPanelOpen, closePanel, dataSchedule, xchangeConfigSid,
+  isPanelOpen, closePanel, xchangeConfigSid,
 }: ScheduleProps) => {
   const { orgSid } = useOrgSid();
+  const Toast = useNotification();
   const [xchangeSchedule, setXchangeSchedule] = useState<XchangeScheduleForm | null>();
   const [currentDaySelected, setCurrentDaySelected] = useState<DaysProps>(DefaulDaysProps);
   const [currentMonthSelected, setCurrentMonthSelected] = useState<MonthsProps>(DefaulMonthsProps);
-  const [days, setDays] = useState<string[]>([]);
-  const [months, setMonths] = useState<string[]>([]);
+  const [days, setDays] = useState<DayOfWeek[]>([]);
+  const [months, setMonths] = useState<Month[]>([]);
+  const [everyMonth, setEveryMonth] = useState<UiOption[]>([]);
+  const [everyDay, setEveryDay] = useState<UiOption[]>([]);
   const [totalSubscribers, setTotalSubscribers] = useState<SubscriberOptionProps[]>([]);
   const [addSubscriberModal, setAddSubscriberModal] = useState(false);
-  const [showDateRange, setShowDateRange] = useState(false);
+  const [hasSilencePeriod, setHasSilencePeriod] = useState(false);
   const [scheduleFrequency, setScheduleFrequency] = useState('');
   const [scheduleType, setScheduleType] = useState('');
   const [scheduleTime, setScheduleTime] = useState('');
+  const [scheduleTimezone, setScheduleTimeZone] = useState('');
+  const [silenceStartMonth, setSilenceStartMonth] = useState('');
+  const [silenceStartDay, setSilenceStartDay] = useState('');
+  const [silenceEndMonth, setSilenceEndMonth] = useState('');
+  const [silenceEndDay, setSilenceEndDay] = useState('');
+  const [endDayOfMonth, setEndDayOfMonth] = useState('');
+  const [endDayOrdinal, setEndDayOrdinal] = useState('');
+  const [endRelativeDay, setEndRelativeDay] = useState('');
+  const [toBeCompletedMonthy, setToBeCompletedMonthy] = useState(true);
+  const [refreshPanel, setRefreshPanel] = useState(false);
 
   const [
     scheduleForm, { data: formData, loading: isLoadingForm },
-  ] = useXchangeScheduleFormLazyQuery()
+  ] = useXchangeScheduleFormLazyQuery();
+
+  const [
+    scheduleUpdate,
+    { data: updateData, loading: isLoadingUpdate, error: updateError },
+  ] = useUpdateXchangeScheduleMutation();
 
   const fethData = () => {
     scheduleForm({
@@ -135,116 +157,78 @@ const SchedulePanel = ({
 
   useEffect(() => {
     if (isPanelOpen) {
-      if (dataSchedule?.subscribers && dataSchedule.subscribers.length > 0) {
-        subscribersList(dataSchedule.subscribers);
-      }
+      setRefreshPanel(false);
       fethData();
     }
-  }, [isPanelOpen]);
+  }, [isPanelOpen, refreshPanel]);
 
   useEffect(() => {
     if (!isLoadingForm && formData) {
       const { xchangeScheduleForm } = formData;
-      console.log(xchangeScheduleForm)
       setXchangeSchedule(xchangeScheduleForm);
+      if (xchangeScheduleForm?.subscribers.value
+        && xchangeScheduleForm.subscribers.value.length > 0) {
+        subscribersList(xchangeScheduleForm.subscribers.value)
+      }
       setScheduleFrequency(xchangeScheduleForm?.frequency.value?.value ?? '');
       setScheduleType(xchangeScheduleForm?.scheduleType.value?.value ?? '');
+      setHasSilencePeriod(xchangeScheduleForm?.hasSilencePeriod?.value ?? true);
+      const monthsValues = xchangeScheduleForm?.options?.find((m) => m.key === 'Month');
+      const daysValues = xchangeScheduleForm?.options?.find((d) => d.key === 'DayOfWeek');
+      setEveryMonth(monthsValues?.values ?? []);
+      setEveryDay(daysValues?.values ?? []);
     }
   }, [formData, isLoadingForm]);
 
-  const handleMonths = (selectedMonth: boolean, month: string) => {
-    let currentMonth = '';
-    switch (month) {
-      case 'Jan':
-        currentMonth = Month.January;
-        break;
-      case 'Feb':
-        currentMonth = Month.February;
-        break;
-      case 'Mar':
-        currentMonth = Month.March;
-        break;
-      case 'Apr':
-        currentMonth = Month.April;
-        break;
-      case 'May':
-        currentMonth = Month.May;
-        break;
-      case 'Jun':
-        currentMonth = Month.June;
-        break;
-      case 'Jul':
-        currentMonth = Month.July;
-        break;
-      case 'Aug':
-        currentMonth = Month.August;
-        break;
-      case 'Sep':
-        currentMonth = Month.September;
-        break;
-      case 'Oct':
-        currentMonth = Month.October;
-        break;
-      case 'Nov':
-        currentMonth = Month.November;
-        break;
-      case 'Dec':
-        currentMonth = Month.December;
-        break;
-      default:
-        break;
+  useEffect(() => {
+    if (!isLoadingUpdate && updateData) {
+      setRefreshPanel(true);
+      Toast.success({ text: 'Schedule Updated' });
     }
+  }, [updateData, isLoadingUpdate, updateError]);
+
+  const handleMonths = (selectedMonth: boolean, month: string, end?: boolean) => {
+    let currentMonth = month.toLocaleLowerCase();
+    currentMonth = currentMonth.charAt(0).toUpperCase() + currentMonth.slice(1);
     if (selectedMonth) {
-      setMonths((prevState) => prevState.concat(currentMonth));
+      setMonths((prevState) => prevState.concat(Month[currentMonth]));
       return;
     }
-    setMonths((prevState) => prevState.filter((m) => m !== currentMonth));
+    setMonths((prevState) => prevState.filter((m) => m !== month));
+
+    if (end) {
+      setSilenceEndMonth(currentMonth);
+    } else {
+      setSilenceStartMonth(currentMonth);
+    }
   };
 
   const handleDays = (selectedDay: boolean, day: string) => {
-    let currentDay = '';
-    switch (day) {
-      case 'Sun':
-        currentDay = DayOfWeek.Sunday;
-        break;
-      case 'Mon':
-        currentDay = DayOfWeek.Monday;
-        break;
-      case 'Tue':
-        currentDay = DayOfWeek.Tuesday;
-        break;
-      case 'Wed':
-        currentDay = DayOfWeek.Wednesday;
-        break;
-      case 'Thu':
-        currentDay = DayOfWeek.Thursday;
-        break;
-      case 'Fri':
-        currentDay = DayOfWeek.Friday;
-        break;
-      case 'Sat':
-        currentDay = DayOfWeek.Saturday;
-        break;
-      default:
-        break;
-    }
+    let currentDay = day.toLocaleLowerCase();
+    currentDay = currentDay.charAt(0).toUpperCase() + currentDay.slice(1);
     if (selectedDay) {
-      setDays((prevState) => prevState.concat(currentDay));
+      setDays((prevState) => prevState.concat(DayOfWeek[currentDay]));
       return;
     }
-    setDays((prevState) => prevState.filter((d) => d !== currentDay));
+    setDays((prevState) => prevState.filter((d) => d !== day));
+    setEndRelativeDay(currentDay);
   };
 
   const selectedWeekly = () => (
     <Spacing margin={{ top: 'double', bottom: 'normal' }}>
       <Stack horizontal={true} horizontalAlign="space-between">
-        {DAYS.map((day, indexDay) => (
+        {everyDay.map((day, indexDay) => (
           <CircleSchedule
-            label={day}
-            selected={currentDaySelected[day]}
+            id={`${day}__${indexDay}`}
+            label={day.label}
+            selected={currentDaySelected[day.label]}
             onClick={() => {
-              setCurrentDaySelected({ ...currentDaySelected, [day]: !currentDaySelected[day] });
-              handleDays(!currentDaySelected[day], day);
+              setCurrentDaySelected(
+                {
+                  ...currentDaySelected, [day.label]: !currentDaySelected[day.label],
+                },
+              );
+              handleDays(!currentDaySelected[day.label], day.value);
             }}
             key={indexDay}
           />
@@ -253,20 +237,24 @@ const SchedulePanel = ({
     </Spacing>
   );
 
+  const firstMonth = everyMonth.filter((_value, i) => i < 6);
+  const lastMonth = everyMonth.filter((_value, i) => i > 5);
+
   const selectedMonthly = () => (
     <Spacing margin={{ top: 'double', bottom: 'normal' }}>
       <Stack horizontal={true} horizontalAlign="space-between">
-        {FIRST_MONTHS.map((month, indexMonth) => (
+        {firstMonth.map((month, indexMonth) => (
           <CircleSchedule
-            label={month}
-            selected={currentMonthSelected[month]}
+            id={`${month.value}__${indexMonth}`}
+            label={month.label}
+            selected={currentMonthSelected[month.label]}
             onClick={() => {
               setCurrentMonthSelected(
                 {
-                  ...currentMonthSelected, [month]: !currentMonthSelected[month],
+                  ...currentMonthSelected, [month.label]: !currentMonthSelected[month.label],
                 },
               );
-              handleMonths(!currentMonthSelected[month], month);
+              handleMonths(!currentMonthSelected[month.label], month.value);
             }}
             key={indexMonth}
           />
@@ -274,17 +262,18 @@ const SchedulePanel = ({
       </Stack>
       <Spacing margin={{ top: 'normal' }} />
       <Stack horizontal={true} horizontalAlign="space-between">
-        {LAST_MONTHS.map((month, indexMonth) => (
+        {lastMonth.map((month, indexMonth) => (
           <CircleSchedule
-            label={month}
-            selected={currentMonthSelected[month]}
+            id={`${month.value}__${indexMonth}`}
+            label={month.label}
+            selected={currentMonthSelected[month.label]}
             onClick={() => {
               setCurrentMonthSelected(
                 {
-                  ...currentMonthSelected, [month]: !currentMonthSelected[month],
+                  ...currentMonthSelected, [month.label]: !currentMonthSelected[month.label],
                 },
               );
-              handleMonths(!currentMonthSelected[month], month);
+              handleMonths(!currentMonthSelected[month.label], month.value);
             }}
             key={indexMonth}
           />
@@ -294,16 +283,241 @@ const SchedulePanel = ({
   );
 
   const saveSchedule = () => {
-    console.log(days);
-    // console.log(months);
-    console.log(scheduleType)
-    console.log(scheduleFrequency)
-    console.log(scheduleTime)
+    const subscriberSids = totalSubscribers.map((subSids) => subSids.sid);
+    let endHour: number | undefined;
+    let endMinute: number | undefined;
+    if (scheduleTime) {
+      endHour = +scheduleTime.split(',')[0];
+      endMinute = +scheduleTime.split(',')[1];
+    }
+    let type = '';
+    let frecuency = scheduleFrequency.toLocaleLowerCase();
+    frecuency = frecuency.charAt(0).toUpperCase() + frecuency.slice(1);
+    if (frecuency.includes('_')) frecuency = 'InGroup';
+    // eslint-disable-next-line no-unused-expressions
+    type === 'NotScheduled' ? type = 'NotScheduled' : type = 'ExpectedToRun';
+    scheduleUpdate({
+      variables: {
+        scheduleInput: {
+          xchangeConfigSid,
+          schedule: {
+            frequency: ScheduleFrequency[frecuency],
+            scheduleType: ScheduleType[type],
+            months,
+            days,
+            endDayOfMonth: !endDayOfMonth ? undefined : +endDayOfMonth,
+            endDayOrdinal: DayOrdinal[endDayOrdinal],
+            endRelativeDay: RelativeDay[endRelativeDay],
+            endHour,
+            endMinute,
+            timezone: scheduleTimezone,
+            subscriberSids,
+            hasSilencePeriod,
+            silenceStartMonth: Month[silenceStartMonth],
+            silenceStartDay: !silenceStartDay ? undefined : +silenceStartDay,
+            silenceEndMonth: Month[silenceEndMonth],
+            silenceEndDay: !silenceEndDay ? undefined : +silenceEndDay,
+          },
+        },
+      },
+    });
   }
 
-  const renderBody = () => (
-    <PanelBody>
-      <WizardBody>
+  const renderBody = () => {
+    if (isLoadingForm) {
+      return (
+        <Spacing margin={{ top: 'double' }}>
+          <Spinner size={SpinnerSize.large} label="Loading schedule panel" />
+        </Spacing>
+      );
+    }
+
+    return (
+      <>
+        {scheduleFrequency === ScheduleFrequency.Weekly && (
+          <>
+            {selectedWeekly()}
+            <Spacing margin={{ top: 'normal' }}>
+              <Row>
+                <Column lg="4">
+                  <Text style={{ marginTop: '8px' }}>To be completed by</Text>
+                </Column>
+                <Column lg="2">
+                  <UITimeSelectOneField
+                    id="scheduleSelectTime"
+                    uiFieldHour={xchangeSchedule?.endHour}
+                    uiFieldMinute={xchangeSchedule?.endMinute}
+                    placeholder="time"
+                    onChange={(_newValue) => setScheduleTime(_newValue ?? '')}
+                  />
+                </Column>
+                <Column lg="5">
+                  <Spacing margin={{ left: 'normal' }}>
+                    <UIFlatSelectOneField
+                      id="scheduleTimezone"
+                      uiField={xchangeSchedule?.timezone}
+                      options={xchangeSchedule?.options}
+                      placeholder="timezone"
+                      onChange={(_newValue) => setScheduleTimeZone(_newValue ?? '')}
+                    />
+                  </Spacing>
+                </Column>
+              </Row>
+            </Spacing>
+          </>
+        )}
+        {scheduleFrequency === ScheduleFrequency.Monthly && (
+          <>
+            {selectedMonthly()}
+            <Spacing margin={{ top: 'normal' }}>
+              <Row>
+                <Column lg="4">
+                  <Text style={{ marginTop: '8px' }}>To be completed by</Text>
+                </Column>
+                <ChoiceGroup
+                  style={{ paddingBottom: '20px' }}
+                  defaultSelectedKey="singleDay"
+                  options={[
+                    { key: 'singleDay', text: '' },
+                    { key: 'relOrdDay', text: '' },
+                  ]}
+                  onChange={() => setToBeCompletedMonthy((prevState) => !prevState)}
+                />
+                <Column lg="2">
+                  <UIFlatSelectOneField
+                    id="scheduleSelectTime"
+                    uiField={xchangeSchedule?.endDayOfMonth}
+                    options={xchangeSchedule?.options}
+                    disabled={!toBeCompletedMonthy}
+                    placeholder="day"
+                    onChange={(_newValue) => setEndDayOfMonth(_newValue ?? '')}
+                  />
+                  <span style={{ marginTop: '5px' }} />
+                  <UIFlatSelectOneField
+                    id="scheduleSelectTime"
+                    uiField={xchangeSchedule?.endDayOrdinal}
+                    options={xchangeSchedule?.options}
+                    placeholder="Ord"
+                    disabled={toBeCompletedMonthy}
+                    onChange={(_newValue) => {
+                      if (_newValue === 'FIRST') {
+                        setEndDayOrdinal('First');
+                      } else if (_newValue === 'SECOND') {
+                        setEndDayOrdinal('Second')
+                      } else if (_newValue === 'THIRD') {
+                        setEndDayOrdinal('Third')
+                      } else {
+                        setEndDayOrdinal('Last');
+                      }
+                    }}
+                  />
+                </Column>
+                <Column lg="4">
+                  <Text style={{ marginTop: '10px', marginBottom: '8px' }}>Day</Text>
+                  <UIFlatSelectOneField
+                    id="scheduleSelectTime"
+                    uiField={xchangeSchedule?.endRelativeDay}
+                    options={xchangeSchedule?.options}
+                    placeholder="Day"
+                    disabled={toBeCompletedMonthy}
+                    onChange={(_newValue) => handleDays(false, _newValue ?? '')}
+                  />
+                </Column>
+              </Row>
+            </Spacing>
+          </>
+        )}
+        <Stack.Item>
+          <Spacing margin={{ top: 'double' }}>
+            <FontIcon iconName="Ringer" style={{ marginTop: '50px', fontWeight: 'bold' }} />
+            <Text style={{ fontWeight: 'bold', paddingLeft: '5px' }}>Alert if not delivered by expected day</Text>
+          </Spacing>
+        </Stack.Item>
+        <SubscribersList
+          currentSubscribers={totalSubscribers}
+          totalSubscribers={setTotalSubscribers}
+        />
+        <ButtonAction onClick={() => setAddSubscriberModal(true)} iconName="add">
+          Add person to be notified
+        </ButtonAction>
+        <Spacing margin={{ top: 'normal', bottom: 'normal', left: 'normal' }}>
+          <Checkbox
+            label={xchangeSchedule?.hasSilencePeriod?.label}
+            checked={hasSilencePeriod}
+            onChange={() => {
+              setHasSilencePeriod((prevState) => !prevState);
+            }}
+          />
+        </Spacing>
+        <Row>
+          <Spacing margin={{ left: 'normal' }}>
+            {hasSilencePeriod && (
+              <Stack horizontal={true}>
+                <Column lg="2">
+                  <UIFlatSelectOneField
+                    id="scheduleStartMonth"
+                    uiField={xchangeSchedule?.silenceStartMonth}
+                    options={xchangeSchedule?.options}
+                    placeholder="month"
+                    onChange={(_newValue) => handleMonths(false, _newValue ?? '', false)}
+                  />
+                </Column>
+                <Column lg="1">
+                  <UIFlatSelectOneField
+                    id="scheduleStartDay"
+                    uiField={xchangeSchedule?.silenceStartDay}
+                    options={xchangeSchedule?.options}
+                    placeholder="day"
+                    onChange={(_newValue) => setSilenceStartDay(_newValue ?? '')}
+                  />
+                </Column>
+                <Column lg="2">
+                  <span style={{ marginTop: '10px', marginLeft: '35px' }}> to</span>
+                </Column>
+                <Column lg="2">
+                  <UIFlatSelectOneField
+                    id="scheduleLastMonth"
+                    uiField={xchangeSchedule?.silenceEndMonth}
+                    options={xchangeSchedule?.options}
+                    placeholder="month"
+                    onChange={(_newValue) => handleMonths(false, _newValue ?? '', true)}
+                  />
+                </Column>
+                <Column lg="1">
+                  <UIFlatSelectOneField
+                    id="scheduleLastDay"
+                    uiField={xchangeSchedule?.silenceEndDay}
+                    options={xchangeSchedule?.options}
+                    placeholder="day"
+                    onChange={(_newValue) => setSilenceEndDay(_newValue ?? '')}
+                  />
+                </Column>
+              </Stack>
+            )}
+          </Spacing>
+        </Row>
+      </>
+    );
+  };
+
+  const renderPanelFooter = () => (
+    <PrimaryButton id="__Schedule_Button" onClick={saveSchedule}>
+      Save
+    </PrimaryButton>
+  );
+
+  return (
+    <ThemedPanel
+      closeButtonAriaLabel="Close"
+      type={PanelType.medium}
+      headerText="Schedule"
+      isOpen={isPanelOpen}
+      onRenderFooterContent={renderPanelFooter}
+      onDismiss={() => {
+        closePanel(false);
+      }}
+    >
+      <PanelBody>
         <Container>
           <Row>
             <Column lg="4">
@@ -316,6 +530,7 @@ const SchedulePanel = ({
                 onChange={(_newValue) => setScheduleType(_newValue ?? '')}
               />
             </Column>
+            {scheduleType !== 'NOT_SCHEDULED' && !isLoadingForm && (
             <Column lg="4">
               <UIFlatSelectOneField
                 id="scheduleFrequency"
@@ -326,119 +541,11 @@ const SchedulePanel = ({
                 onChange={(_newValue) => setScheduleFrequency(_newValue ?? '')}
               />
             </Column>
+            )}
           </Row>
-          {scheduleFrequency === ScheduleFrequency.Weekly && (
-            <>
-              {selectedWeekly()}
-              <Spacing margin={{ top: 'normal' }}>
-                <Row>
-                  <Column lg="4">
-                    <Text style={{ marginTop: '8px' }}>To be completed by</Text>
-                  </Column>
-                  <Column lg="2">
-                    <UITimeSelectOneField
-                      id="scheduleSelectTime"
-                      uiFieldHour={xchangeSchedule?.endHour}
-                      uiFieldMinute={xchangeSchedule?.endMinute}
-                      placeholder="time"
-                      onChange={(_newValue) => setScheduleTime(_newValue ?? '')}
-                    />
-                  </Column>
-                  <Column lg="5">
-                    <Spacing margin={{ left: 'normal' }}>
-                      <UIFlatSelectOneField
-                        id="scheduleTimezone"
-                        uiField={xchangeSchedule?.timezone}
-                        options={xchangeSchedule?.options}
-                        placeholder="timezone"
-                      />
-                    </Spacing>
-                  </Column>
-                </Row>
-              </Spacing>
-            </>
-          )}
-          {scheduleFrequency === ScheduleFrequency.Monthly && selectedMonthly()}
-          <SubscribersList
-            currentSubscribers={totalSubscribers}
-            totalSubscribers={setTotalSubscribers}
-          />
-          <ButtonAction onClick={() => setAddSubscriberModal(true)} iconName="add">
-            Add person to be notified
-          </ButtonAction>
-          <Spacing margin={{ top: 'normal', bottom: 'normal', left: 'normal' }}>
-            <Checkbox
-              label="Do not alert within the timeframe"
-              checked={showDateRange}
-              onChange={() => {
-                setShowDateRange((prevState) => !prevState);
-              }}
-            />
-          </Spacing>
-          <Row>
-            <Spacing margin={{ left: 'normal' }}>
-              {showDateRange && (
-                <Stack horizontal={true}>
-                  <Column lg="2">
-                    <UIFlatSelectOneField
-                      id="scheduleStartMonth"
-                      uiField={xchangeSchedule?.silenceStartMonth}
-                      options={xchangeSchedule?.options}
-                      placeholder="month"
-                    />
-                  </Column>
-                  <Column lg="1">
-                    <UIFlatSelectOneField
-                      id="scheduleStartDay"
-                      uiField={xchangeSchedule?.silenceStartDay}
-                      options={xchangeSchedule?.options}
-                      placeholder="day"
-                    />
-                  </Column>
-                  <Column lg="2">
-                    <span style={{ marginTop: '10px', marginLeft: '35px' }}> to</span>
-                  </Column>
-                  <Column lg="2">
-                    <UIFlatSelectOneField
-                      id="scheduleLastMonth"
-                      uiField={xchangeSchedule?.silenceEndMonth}
-                      options={xchangeSchedule?.options}
-                      placeholder="month"
-                    />
-                  </Column>
-                  <Column lg="1">
-                    <UIFlatSelectOneField
-                      id="scheduleLastDay"
-                      uiField={xchangeSchedule?.silenceEndDay}
-                      options={xchangeSchedule?.options}
-                      placeholder="day"
-                    />
-                  </Column>
-                </Stack>
-              )}
-            </Spacing>
-          </Row>
+          {scheduleType !== 'NOT_SCHEDULED' && renderBody()}
         </Container>
-      </WizardBody>
-      <WizardButtonRow>
-        <PrimaryButton id="__Schedule_Button" onClick={saveSchedule}>
-          Save
-        </PrimaryButton>
-      </WizardButtonRow>
-    </PanelBody>
-  );
-
-  return (
-    <ThemedPanel
-      closeButtonAriaLabel="Close"
-      type={PanelType.medium}
-      headerText="Schedule"
-      isOpen={isPanelOpen}
-      onDismiss={() => {
-        closePanel(false);
-      }}
-    >
-      {renderBody()}
+      </PanelBody>
       {addSubscriberModal && (
         <AddSubscriberModal
           isOpen={setAddSubscriberModal}

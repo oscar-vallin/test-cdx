@@ -11,12 +11,13 @@ type UIInputMultiSelectType = {
     uiField?: UiSelectOneField | null;
     options?: Maybe<Array<Maybe<UiOptions>>>;
     value?: string;
+    disabled?: boolean;
     onChange?: (newValue?: string) => void | null;
     placeholder?: string;
   };
 
 export const UIFlatSelectOneField = ({
-  id, uiField, options, value, onChange, placeholder,
+  id, uiField, options, value, disabled, onChange, placeholder,
 }: UIInputMultiSelectType) => {
   const handleChange = (e: React.FormEvent<HTMLDivElement>, newValue?: IDropdownOption) => {
     if (onChange && newValue) {
@@ -57,10 +58,9 @@ export const UIFlatSelectOneField = ({
       id={id}
       style={{
         width: '100%',
-        borderBottomColor: 'blue',
-        outline: 'none',
       }}
       selectedKey={value}
+      disabled={disabled}
       onRenderTitle={onRenderTitle}
       onChange={handleChange}
       multiSelect={false}

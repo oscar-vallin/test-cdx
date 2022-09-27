@@ -17,14 +17,13 @@ import {
   Stack,
 } from '@fluentui/react';
 import { PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
-import { useTableFilters } from 'src/hooks/useTableFilters';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { DataColumn, useSortableColumns } from 'src/containers/tables';
 import { ButtonLink } from 'src/components/buttons';
 import { UpdateUserPanel, useUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers';
 import { useUsersLists } from 'src/pages/Admin/Users/useUsersList';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { AccessPolicyGroupPanel } from '../../Groups/AccessPolicyGroup';
+import { MembersList } from '../../MembersList/MembersList';
 
 type AccessSpecializationMembersProps = {
   isOpen: boolean;
@@ -40,6 +39,7 @@ const AccessSpecializationMembersPanel = ({
   currentName,
 }: AccessSpecializationMembersProps) => {
   const { orgSid } = useOrgSid();
+  const { tableFilters, columns } = MembersList({ organization: false, accessPolicyGroups: true });
   const [members, setMembers] = useState<AccessMember[] | null>();
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>();
   const [isGroupPanelOpen, setIsGroupPanelOpen] = useState(false);
@@ -65,56 +65,6 @@ const AccessSpecializationMembersPanel = ({
       fetchTemplates({ variables: { orgSid } });
     }
   };
-
-  const columnOptions: DataColumn[] = [
-    {
-      name: 'First Name',
-      key: 'firstNm',
-      fieldName: 'person.firstNm',
-      minWidth: 200,
-      maxWidth: 200,
-      isPadded: true,
-      dataType: 'string',
-      sortable: true,
-      filterable: false,
-    },
-    {
-      name: 'Last Name',
-      key: 'lastNm',
-      fieldName: 'person.lastNm',
-      minWidth: 100,
-      maxWidth: 200,
-      isPadded: true,
-      isSorted: true,
-      isSortedDescending: false,
-      dataType: 'string',
-      sortable: true,
-      filterable: false,
-    },
-    {
-      name: 'Email',
-      key: 'email',
-      fieldName: 'email',
-      data: 'string',
-      dataType: 'enum',
-      sortable: true,
-      minWidth: 200,
-      maxWidth: 400,
-      flexGrow: 1,
-    },
-    {
-      name: 'Access Policy Groups',
-      key: 'accessPolicyGroups',
-      fieldName: 'accessName',
-      minWidth: 200,
-      isPadded: true,
-      dataType: 'string',
-      sortable: true,
-      filterable: false,
-    },
-  ];
-  const tableFilters = useTableFilters('Name, Last Name, Email, Access Policy Groups, etc.');
-  const { columns } = useSortableColumns(tableFilters, columnOptions);
 
   const getspecializationMembers = () => {
     accessSpecializationMembers({
