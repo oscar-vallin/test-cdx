@@ -214,6 +214,7 @@ export enum CdxWebPage {
   Schedule = 'SCHEDULE',
   Transmissions = 'TRANSMISSIONS',
   Errors = 'ERRORS',
+  Visualizations = 'VISUALIZATIONS',
   OrgActivity = 'ORG_ACTIVITY',
   ActiveOrgs = 'ACTIVE_ORGS',
   ExternalOrgs = 'EXTERNAL_ORGS',
@@ -854,6 +855,13 @@ export enum Month {
   November = 'NOVEMBER',
   December = 'DECEMBER'
 }
+
+export type MonthCount = {
+  __typename?: 'MonthCount';
+  month: Scalars['Int'];
+  year: Scalars['Int'];
+  count: Scalars['Int'];
+};
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -1778,6 +1786,8 @@ export type Query = {
   workPacketStatusesPoll?: Maybe<Scalars['Int']>;
   wpProcessErrors?: Maybe<WpProcessErrorConnection>;
   wpTransmissions?: Maybe<WpTransmissionConnection>;
+  wpTransmissionCountBySponsor?: Maybe<Array<Maybe<WpTransmissionSummary>>>;
+  wpTransmissionCountByVendor?: Maybe<Array<Maybe<WpTransmissionSummary>>>;
   scheduleOccurrences?: Maybe<ScheduleOccurrenceConnection>;
   /** Get the dashboard period counts for a fixed set of common periods, (today, yesterday, this month, last month) */
   dashboardPeriods?: Maybe<DashboardPeriods>;
@@ -1950,6 +1960,18 @@ export type QueryWpTransmissionsArgs = {
   orgSid: Scalars['ID'];
   filter?: Maybe<WpTransmissionFilter>;
   pageableInput?: Maybe<PageableInput>;
+};
+
+
+export type QueryWpTransmissionCountBySponsorArgs = {
+  orgSid: Scalars['ID'];
+  dateRange: DateTimeRangeInput;
+};
+
+
+export type QueryWpTransmissionCountByVendorArgs = {
+  orgSid: Scalars['ID'];
+  dateRange: DateTimeRangeInput;
 };
 
 
@@ -3244,6 +3266,12 @@ export type WpTransmissionFilter = {
   outboundFilename?: Maybe<Scalars['String']>;
   specId?: Maybe<Scalars['String']>;
   implementation?: Maybe<Scalars['String']>;
+};
+
+export type WpTransmissionSummary = {
+  __typename?: 'WPTransmissionSummary';
+  organization: Organization;
+  monthCounts?: Maybe<Array<MonthCount>>;
 };
 
 export type WebAppDomain = {
@@ -4601,6 +4629,46 @@ export type WpTransmissionsQuery = (
       )>> }
     )>> }
   )> }
+);
+
+export type WpTransmissionCountBySponsorQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+  dateRange: DateTimeRangeInput;
+}>;
+
+
+export type WpTransmissionCountBySponsorQuery = (
+  { __typename?: 'Query' }
+  & { wpTransmissionCountBySponsor?: Maybe<Array<Maybe<(
+    { __typename?: 'WPTransmissionSummary' }
+    & { organization: (
+      { __typename?: 'Organization' }
+      & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
+    ), monthCounts?: Maybe<Array<(
+      { __typename?: 'MonthCount' }
+      & Pick<MonthCount, 'month' | 'year' | 'count'>
+    )>> }
+  )>>> }
+);
+
+export type WpTransmissionCountByVendorQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+  dateRange: DateTimeRangeInput;
+}>;
+
+
+export type WpTransmissionCountByVendorQuery = (
+  { __typename?: 'Query' }
+  & { wpTransmissionCountByVendor?: Maybe<Array<Maybe<(
+    { __typename?: 'WPTransmissionSummary' }
+    & { organization: (
+      { __typename?: 'Organization' }
+      & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
+    ), monthCounts?: Maybe<Array<(
+      { __typename?: 'MonthCount' }
+      & Pick<MonthCount, 'month' | 'year' | 'count'>
+    )>> }
+  )>>> }
 );
 
 export type ScheduleOccurrencesQueryVariables = Exact<{
@@ -10987,6 +11055,96 @@ export function useWpTransmissionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type WpTransmissionsQueryHookResult = ReturnType<typeof useWpTransmissionsQuery>;
 export type WpTransmissionsLazyQueryHookResult = ReturnType<typeof useWpTransmissionsLazyQuery>;
 export type WpTransmissionsQueryResult = Apollo.QueryResult<WpTransmissionsQuery, WpTransmissionsQueryVariables>;
+export const WpTransmissionCountBySponsorDocument = gql`
+    query WpTransmissionCountBySponsor($orgSid: ID!, $dateRange: DateTimeRangeInput!) {
+  wpTransmissionCountBySponsor(orgSid: $orgSid, dateRange: $dateRange) {
+    organization {
+      sid
+      name
+      orgId
+      orgType
+      orgTypeLabel
+    }
+    monthCounts {
+      month
+      year
+      count
+    }
+  }
+}
+    `;
+
+/**
+ * __useWpTransmissionCountBySponsorQuery__
+ *
+ * To run a query within a React component, call `useWpTransmissionCountBySponsorQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWpTransmissionCountBySponsorQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWpTransmissionCountBySponsorQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      dateRange: // value for 'dateRange'
+ *   },
+ * });
+ */
+export function useWpTransmissionCountBySponsorQuery(baseOptions: Apollo.QueryHookOptions<WpTransmissionCountBySponsorQuery, WpTransmissionCountBySponsorQueryVariables>) {
+        return Apollo.useQuery<WpTransmissionCountBySponsorQuery, WpTransmissionCountBySponsorQueryVariables>(WpTransmissionCountBySponsorDocument, baseOptions);
+      }
+export function useWpTransmissionCountBySponsorLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WpTransmissionCountBySponsorQuery, WpTransmissionCountBySponsorQueryVariables>) {
+          return Apollo.useLazyQuery<WpTransmissionCountBySponsorQuery, WpTransmissionCountBySponsorQueryVariables>(WpTransmissionCountBySponsorDocument, baseOptions);
+        }
+export type WpTransmissionCountBySponsorQueryHookResult = ReturnType<typeof useWpTransmissionCountBySponsorQuery>;
+export type WpTransmissionCountBySponsorLazyQueryHookResult = ReturnType<typeof useWpTransmissionCountBySponsorLazyQuery>;
+export type WpTransmissionCountBySponsorQueryResult = Apollo.QueryResult<WpTransmissionCountBySponsorQuery, WpTransmissionCountBySponsorQueryVariables>;
+export const WpTransmissionCountByVendorDocument = gql`
+    query WpTransmissionCountByVendor($orgSid: ID!, $dateRange: DateTimeRangeInput!) {
+  wpTransmissionCountByVendor(orgSid: $orgSid, dateRange: $dateRange) {
+    organization {
+      sid
+      name
+      orgId
+      orgType
+      orgTypeLabel
+    }
+    monthCounts {
+      month
+      year
+      count
+    }
+  }
+}
+    `;
+
+/**
+ * __useWpTransmissionCountByVendorQuery__
+ *
+ * To run a query within a React component, call `useWpTransmissionCountByVendorQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWpTransmissionCountByVendorQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWpTransmissionCountByVendorQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      dateRange: // value for 'dateRange'
+ *   },
+ * });
+ */
+export function useWpTransmissionCountByVendorQuery(baseOptions: Apollo.QueryHookOptions<WpTransmissionCountByVendorQuery, WpTransmissionCountByVendorQueryVariables>) {
+        return Apollo.useQuery<WpTransmissionCountByVendorQuery, WpTransmissionCountByVendorQueryVariables>(WpTransmissionCountByVendorDocument, baseOptions);
+      }
+export function useWpTransmissionCountByVendorLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WpTransmissionCountByVendorQuery, WpTransmissionCountByVendorQueryVariables>) {
+          return Apollo.useLazyQuery<WpTransmissionCountByVendorQuery, WpTransmissionCountByVendorQueryVariables>(WpTransmissionCountByVendorDocument, baseOptions);
+        }
+export type WpTransmissionCountByVendorQueryHookResult = ReturnType<typeof useWpTransmissionCountByVendorQuery>;
+export type WpTransmissionCountByVendorLazyQueryHookResult = ReturnType<typeof useWpTransmissionCountByVendorLazyQuery>;
+export type WpTransmissionCountByVendorQueryResult = Apollo.QueryResult<WpTransmissionCountByVendorQuery, WpTransmissionCountByVendorQueryVariables>;
 export const ScheduleOccurrencesDocument = gql`
     query ScheduleOccurrences($orgSid: ID!, $dateRange: DateTimeRangeInput, $pageableInput: PageableInput) {
   scheduleOccurrences(
