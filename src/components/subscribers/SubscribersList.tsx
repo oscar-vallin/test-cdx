@@ -1,14 +1,17 @@
 import {
-  DetailsList, DetailsListLayoutMode, IColumn, IconButton, SelectionMode, Stack,
+  DetailsListLayoutMode, IColumn, IconButton, SelectionMode, Stack,
 } from '@fluentui/react';
 import { SubscriberOptionProps } from 'src/pages/Admin/XChange/XchangeAlerts/XchangeAlertsPanel/XchangeAlertsPanel';
 import { ButtonLink } from '../buttons';
+import { StyledList } from './SubscribersList.style';
 
 type UserListProps = {
     currentSubscribers: SubscriberOptionProps[];
     totalSubscribers: (data: SubscriberOptionProps[]) => void;
-}
-const SubscribersList = ({ totalSubscribers, currentSubscribers }: UserListProps) => {
+    title?: boolean,
+};
+
+const SubscribersList = ({ totalSubscribers, currentSubscribers, title }: UserListProps) => {
   const removeSubscriber = (removeBySid: string) => {
     totalSubscribers(
       currentSubscribers.filter((user: SubscriberOptionProps) => user.sid !== removeBySid),
@@ -18,7 +21,7 @@ const SubscribersList = ({ totalSubscribers, currentSubscribers }: UserListProps
 
   const columns: IColumn[] = [
     {
-      name: '',
+      name: title ? 'Subscribers' : '',
       key: 'name',
       fieldName: 'name',
       data: 'string',
@@ -64,13 +67,14 @@ const SubscribersList = ({ totalSubscribers, currentSubscribers }: UserListProps
   };
 
   return (
-    <DetailsList
+    <StyledList
       items={currentSubscribers ?? []}
       columns={columns}
       selectionMode={SelectionMode.none}
       onRenderItemColumn={onRenderItemColum}
       layoutMode={DetailsListLayoutMode.justified}
       isHeaderVisible
+      title={title}
     />
   )
 };
