@@ -1460,6 +1460,32 @@ export type Organization = {
   orgTypeLabel: Scalars['String'];
 };
 
+export type OrganizationActivity = {
+  __typename?: 'OrganizationActivity';
+  sid?: Maybe<Scalars['ID']>;
+  name?: Maybe<Scalars['String']>;
+  orgId: Scalars['String'];
+  orgType: OrgType;
+  orgTypeLabel: Scalars['String'];
+  /** UAT file activity in the last 30 days */
+  uatActivity: XchangeActivity;
+  /** Test file activity in the last 30 days */
+  testActivity: XchangeActivity;
+  /** Prod file activity in the last 30 days */
+  prodActivity: XchangeActivity;
+  /** Errored file activity in the last 30 days */
+  errorActivity?: Maybe<XchangeActivity>;
+  /** Vendor Names this organization integrates with */
+  vendorNames: Array<Scalars['String']>;
+};
+
+export type OrganizationActivityConnection = {
+  __typename?: 'OrganizationActivityConnection';
+  paginationInfo: PaginationInfo;
+  listPageInfo?: Maybe<ListPageInfo>;
+  nodes?: Maybe<Array<OrganizationActivity>>;
+};
+
 export type OrganizationConnection = {
   __typename?: 'OrganizationConnection';
   paginationInfo: PaginationInfo;
@@ -1829,12 +1855,10 @@ export type Query = {
   findAccessSpecialization?: Maybe<AccessSpecializationForm>;
   accessPolicyGroupForm?: Maybe<AccessPolicyGroupForm>;
   findAccessPolicyGroup?: Maybe<AccessPolicyGroupForm>;
-  topLevelOrgsByType?: Maybe<Array<Organization>>;
   orgById?: Maybe<Organization>;
-  directOrganizations?: Maybe<OrganizationConnection>;
   organizationForm?: Maybe<OrganizationForm>;
   findOrganization?: Maybe<OrganizationForm>;
-  searchOrganizations?: Maybe<OrganizationConnection>;
+  searchOrganizations?: Maybe<OrganizationActivityConnection>;
   organizationQuickSearch?: Maybe<Array<Organization>>;
   vendorQuickSearch?: Maybe<Array<Organization>>;
   /**
@@ -2156,21 +2180,9 @@ export type QueryFindAccessPolicyGroupArgs = {
 };
 
 
-export type QueryTopLevelOrgsByTypeArgs = {
-  orgType: OrgType;
-};
-
-
 export type QueryOrgByIdArgs = {
   orgSid?: Maybe<Scalars['ID']>;
   orgId: Scalars['String'];
-};
-
-
-export type QueryDirectOrganizationsArgs = {
-  orgSid: Scalars['ID'];
-  orgFilter?: Maybe<OrgFilterInput>;
-  pageableInput?: Maybe<PageableInput>;
 };
 
 
@@ -3494,6 +3506,12 @@ export type XsftpInput = {
   sshKeyPassword?: Maybe<Scalars['String']>;
 };
 
+export type XchangeActivity = {
+  __typename?: 'XchangeActivity';
+  filesProcessed: Scalars['Int'];
+  lastActivity?: Maybe<Scalars['DateTime']>;
+};
+
 export type XchangeAlert = {
   __typename?: 'XchangeAlert';
   sid?: Maybe<Scalars['ID']>;
@@ -3517,12 +3535,6 @@ export type XchangeAlertSummary = {
   coreFilename?: Maybe<Scalars['String']>;
   numSubscribers: Scalars['Int'];
   hasUnpublishedChanges: Scalars['Boolean'];
-};
-
-export type XchangeConfigActivity = {
-  __typename?: 'XchangeConfigActivity';
-  filesProcessed: Scalars['Int'];
-  lastActivity?: Maybe<Scalars['DateTime']>;
 };
 
 export type XchangeConfigAlertForm = {
@@ -3577,10 +3589,14 @@ export type XchangeConfigSummary = {
   vendorIds?: Maybe<Array<Scalars['String']>>;
   specIds?: Maybe<Array<Scalars['String']>>;
   coreFilename?: Maybe<Scalars['String']>;
-  uatActivity: XchangeConfigActivity;
-  testActivity: XchangeConfigActivity;
-  prodActivity: XchangeConfigActivity;
-  errorActivity?: Maybe<XchangeConfigActivity>;
+  /** UAT file activity in the last 30 days */
+  uatActivity: XchangeActivity;
+  /** Test file activity in the last 30 days */
+  testActivity: XchangeActivity;
+  /** Prod file activity in the last 30 days */
+  prodActivity: XchangeActivity;
+  /** Errored file activity in the last 30 days */
+  errorActivity?: Maybe<XchangeActivity>;
   active: Scalars['Boolean'];
   hasUnpublishedChanges: Scalars['Boolean'];
   hasAlerts: Scalars['Boolean'];
@@ -4147,9 +4163,9 @@ export type FragmentUiReadOnlyFieldFragment = (
   & Pick<UiReadOnlyField, 'value' | 'description' | 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'inheritedFrom' | 'inheritedBy' | 'errCode' | 'errMsg' | 'errSeverity'>
 );
 
-export type FragmentXchangeConfigActivityFragment = (
-  { __typename?: 'XchangeConfigActivity' }
-  & Pick<XchangeConfigActivity, 'filesProcessed' | 'lastActivity'>
+export type FragmentXchangeActivityFragment = (
+  { __typename?: 'XchangeActivity' }
+  & Pick<XchangeActivity, 'filesProcessed' | 'lastActivity'>
 );
 
 export type FragmentXchangeFileProcessFormFragment = (
@@ -5746,19 +5762,6 @@ export type FindAccessPolicyGroupQuery = (
   )> }
 );
 
-export type TopLevelOrgsByTypeQueryVariables = Exact<{
-  orgType: OrgType;
-}>;
-
-
-export type TopLevelOrgsByTypeQuery = (
-  { __typename?: 'Query' }
-  & { topLevelOrgsByType?: Maybe<Array<(
-    { __typename?: 'Organization' }
-    & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
-  )>> }
-);
-
 export type OrgByIdQueryVariables = Exact<{
   orgSid?: Maybe<Scalars['ID']>;
   orgId: Scalars['String'];
@@ -5770,30 +5773,6 @@ export type OrgByIdQuery = (
   & { orgById?: Maybe<(
     { __typename?: 'Organization' }
     & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
-  )> }
-);
-
-export type DirectOrganizationsQueryVariables = Exact<{
-  orgSid: Scalars['ID'];
-  orgFilter?: Maybe<OrgFilterInput>;
-  pageableInput?: Maybe<PageableInput>;
-}>;
-
-
-export type DirectOrganizationsQuery = (
-  { __typename?: 'Query' }
-  & { directOrganizations?: Maybe<(
-    { __typename?: 'OrganizationConnection' }
-    & { paginationInfo: (
-      { __typename?: 'PaginationInfo' }
-      & FragmentPaginationInfoFragment
-    ), listPageInfo?: Maybe<(
-      { __typename?: 'ListPageInfo' }
-      & FragmentListPageInfoFragment
-    )>, nodes?: Maybe<Array<(
-      { __typename?: 'Organization' }
-      & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
-    )>> }
   )> }
 );
 
@@ -5884,7 +5863,7 @@ export type SearchOrganizationsQueryVariables = Exact<{
 export type SearchOrganizationsQuery = (
   { __typename?: 'Query' }
   & { searchOrganizations?: Maybe<(
-    { __typename?: 'OrganizationConnection' }
+    { __typename?: 'OrganizationActivityConnection' }
     & { paginationInfo: (
       { __typename?: 'PaginationInfo' }
       & FragmentPaginationInfoFragment
@@ -5892,8 +5871,21 @@ export type SearchOrganizationsQuery = (
       { __typename?: 'ListPageInfo' }
       & FragmentListPageInfoFragment
     )>, nodes?: Maybe<Array<(
-      { __typename?: 'Organization' }
-      & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
+      { __typename?: 'OrganizationActivity' }
+      & Pick<OrganizationActivity, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel' | 'vendorNames'>
+      & { uatActivity: (
+        { __typename?: 'XchangeActivity' }
+        & FragmentXchangeActivityFragment
+      ), testActivity: (
+        { __typename?: 'XchangeActivity' }
+        & FragmentXchangeActivityFragment
+      ), prodActivity: (
+        { __typename?: 'XchangeActivity' }
+        & FragmentXchangeActivityFragment
+      ), errorActivity?: Maybe<(
+        { __typename?: 'XchangeActivity' }
+        & FragmentXchangeActivityFragment
+      )> }
     )>> }
   )> }
 );
@@ -6462,17 +6454,17 @@ export type XchangeProfileQuery = (
       { __typename?: 'XchangeConfigSummary' }
       & Pick<XchangeConfigSummary, 'sid' | 'vendorIds' | 'specIds' | 'coreFilename' | 'active' | 'hasUnpublishedChanges' | 'hasAlerts' | 'implementationPending'>
       & { uatActivity: (
-        { __typename?: 'XchangeConfigActivity' }
-        & FragmentXchangeConfigActivityFragment
+        { __typename?: 'XchangeActivity' }
+        & FragmentXchangeActivityFragment
       ), testActivity: (
-        { __typename?: 'XchangeConfigActivity' }
-        & FragmentXchangeConfigActivityFragment
+        { __typename?: 'XchangeActivity' }
+        & FragmentXchangeActivityFragment
       ), prodActivity: (
-        { __typename?: 'XchangeConfigActivity' }
-        & FragmentXchangeConfigActivityFragment
+        { __typename?: 'XchangeActivity' }
+        & FragmentXchangeActivityFragment
       ), errorActivity?: Maybe<(
-        { __typename?: 'XchangeConfigActivity' }
-        & FragmentXchangeConfigActivityFragment
+        { __typename?: 'XchangeActivity' }
+        & FragmentXchangeActivityFragment
       )> }
     )>>, globalXchangeAlerts?: Maybe<(
       { __typename?: 'XchangeAlertSummary' }
@@ -8656,17 +8648,17 @@ export type ConvertXchangeProfileMutation = (
       { __typename?: 'XchangeConfigSummary' }
       & Pick<XchangeConfigSummary, 'sid' | 'vendorIds' | 'specIds' | 'coreFilename' | 'active' | 'hasUnpublishedChanges' | 'hasAlerts' | 'implementationPending'>
       & { uatActivity: (
-        { __typename?: 'XchangeConfigActivity' }
-        & FragmentXchangeConfigActivityFragment
+        { __typename?: 'XchangeActivity' }
+        & FragmentXchangeActivityFragment
       ), testActivity: (
-        { __typename?: 'XchangeConfigActivity' }
-        & FragmentXchangeConfigActivityFragment
+        { __typename?: 'XchangeActivity' }
+        & FragmentXchangeActivityFragment
       ), prodActivity: (
-        { __typename?: 'XchangeConfigActivity' }
-        & FragmentXchangeConfigActivityFragment
+        { __typename?: 'XchangeActivity' }
+        & FragmentXchangeActivityFragment
       ), errorActivity?: Maybe<(
-        { __typename?: 'XchangeConfigActivity' }
-        & FragmentXchangeConfigActivityFragment
+        { __typename?: 'XchangeActivity' }
+        & FragmentXchangeActivityFragment
       )> }
     )>>, globalXchangeAlerts?: Maybe<(
       { __typename?: 'XchangeAlertSummary' }
@@ -9986,8 +9978,8 @@ export const FragmentUiLongFieldFragmentDoc = gql`
   errSeverity
 }
     `;
-export const FragmentXchangeConfigActivityFragmentDoc = gql`
-    fragment fragmentXchangeConfigActivity on XchangeConfigActivity {
+export const FragmentXchangeActivityFragmentDoc = gql`
+    fragment fragmentXchangeActivity on XchangeActivity {
   filesProcessed
   lastActivity
 }
@@ -13152,43 +13144,6 @@ export function useFindAccessPolicyGroupLazyQuery(baseOptions?: Apollo.LazyQuery
 export type FindAccessPolicyGroupQueryHookResult = ReturnType<typeof useFindAccessPolicyGroupQuery>;
 export type FindAccessPolicyGroupLazyQueryHookResult = ReturnType<typeof useFindAccessPolicyGroupLazyQuery>;
 export type FindAccessPolicyGroupQueryResult = Apollo.QueryResult<FindAccessPolicyGroupQuery, FindAccessPolicyGroupQueryVariables>;
-export const TopLevelOrgsByTypeDocument = gql`
-    query TopLevelOrgsByType($orgType: OrgType!) {
-  topLevelOrgsByType(orgType: $orgType) {
-    sid
-    name
-    orgId
-    orgType
-    orgTypeLabel
-  }
-}
-    `;
-
-/**
- * __useTopLevelOrgsByTypeQuery__
- *
- * To run a query within a React component, call `useTopLevelOrgsByTypeQuery` and pass it any options that fit your needs.
- * When your component renders, `useTopLevelOrgsByTypeQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useTopLevelOrgsByTypeQuery({
- *   variables: {
- *      orgType: // value for 'orgType'
- *   },
- * });
- */
-export function useTopLevelOrgsByTypeQuery(baseOptions: Apollo.QueryHookOptions<TopLevelOrgsByTypeQuery, TopLevelOrgsByTypeQueryVariables>) {
-        return Apollo.useQuery<TopLevelOrgsByTypeQuery, TopLevelOrgsByTypeQueryVariables>(TopLevelOrgsByTypeDocument, baseOptions);
-      }
-export function useTopLevelOrgsByTypeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TopLevelOrgsByTypeQuery, TopLevelOrgsByTypeQueryVariables>) {
-          return Apollo.useLazyQuery<TopLevelOrgsByTypeQuery, TopLevelOrgsByTypeQueryVariables>(TopLevelOrgsByTypeDocument, baseOptions);
-        }
-export type TopLevelOrgsByTypeQueryHookResult = ReturnType<typeof useTopLevelOrgsByTypeQuery>;
-export type TopLevelOrgsByTypeLazyQueryHookResult = ReturnType<typeof useTopLevelOrgsByTypeLazyQuery>;
-export type TopLevelOrgsByTypeQueryResult = Apollo.QueryResult<TopLevelOrgsByTypeQuery, TopLevelOrgsByTypeQueryVariables>;
 export const OrgByIdDocument = gql`
     query OrgById($orgSid: ID, $orgId: String!) {
   orgById(orgSid: $orgSid, orgId: $orgId) {
@@ -13227,58 +13182,6 @@ export function useOrgByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Or
 export type OrgByIdQueryHookResult = ReturnType<typeof useOrgByIdQuery>;
 export type OrgByIdLazyQueryHookResult = ReturnType<typeof useOrgByIdLazyQuery>;
 export type OrgByIdQueryResult = Apollo.QueryResult<OrgByIdQuery, OrgByIdQueryVariables>;
-export const DirectOrganizationsDocument = gql`
-    query DirectOrganizations($orgSid: ID!, $orgFilter: OrgFilterInput, $pageableInput: PageableInput) {
-  directOrganizations(
-    orgSid: $orgSid
-    orgFilter: $orgFilter
-    pageableInput: $pageableInput
-  ) {
-    paginationInfo {
-      ...fragmentPaginationInfo
-    }
-    listPageInfo {
-      ...fragmentListPageInfo
-    }
-    nodes {
-      sid
-      name
-      orgId
-      orgType
-      orgTypeLabel
-    }
-  }
-}
-    ${FragmentPaginationInfoFragmentDoc}
-${FragmentListPageInfoFragmentDoc}`;
-
-/**
- * __useDirectOrganizationsQuery__
- *
- * To run a query within a React component, call `useDirectOrganizationsQuery` and pass it any options that fit your needs.
- * When your component renders, `useDirectOrganizationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useDirectOrganizationsQuery({
- *   variables: {
- *      orgSid: // value for 'orgSid'
- *      orgFilter: // value for 'orgFilter'
- *      pageableInput: // value for 'pageableInput'
- *   },
- * });
- */
-export function useDirectOrganizationsQuery(baseOptions: Apollo.QueryHookOptions<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>) {
-        return Apollo.useQuery<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>(DirectOrganizationsDocument, baseOptions);
-      }
-export function useDirectOrganizationsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>) {
-          return Apollo.useLazyQuery<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>(DirectOrganizationsDocument, baseOptions);
-        }
-export type DirectOrganizationsQueryHookResult = ReturnType<typeof useDirectOrganizationsQuery>;
-export type DirectOrganizationsLazyQueryHookResult = ReturnType<typeof useDirectOrganizationsLazyQuery>;
-export type DirectOrganizationsQueryResult = Apollo.QueryResult<DirectOrganizationsQuery, DirectOrganizationsQueryVariables>;
 export const OrganizationFormDocument = gql`
     query OrganizationForm($orgOwnerSid: ID!) {
   organizationForm(orgOwnerSid: $orgOwnerSid) {
@@ -13431,11 +13334,25 @@ export const SearchOrganizationsDocument = gql`
       orgId
       orgType
       orgTypeLabel
+      uatActivity {
+        ...fragmentXchangeActivity
+      }
+      testActivity {
+        ...fragmentXchangeActivity
+      }
+      prodActivity {
+        ...fragmentXchangeActivity
+      }
+      errorActivity {
+        ...fragmentXchangeActivity
+      }
+      vendorNames
     }
   }
 }
     ${FragmentPaginationInfoFragmentDoc}
-${FragmentListPageInfoFragmentDoc}`;
+${FragmentListPageInfoFragmentDoc}
+${FragmentXchangeActivityFragmentDoc}`;
 
 /**
  * __useSearchOrganizationsQuery__
@@ -14544,16 +14461,16 @@ export const XchangeProfileDocument = gql`
       specIds
       coreFilename
       uatActivity {
-        ...fragmentXchangeConfigActivity
+        ...fragmentXchangeActivity
       }
       testActivity {
-        ...fragmentXchangeConfigActivity
+        ...fragmentXchangeActivity
       }
       prodActivity {
-        ...fragmentXchangeConfigActivity
+        ...fragmentXchangeActivity
       }
       errorActivity {
-        ...fragmentXchangeConfigActivity
+        ...fragmentXchangeActivity
       }
       active
       hasUnpublishedChanges
@@ -14589,7 +14506,7 @@ export const XchangeProfileDocument = gql`
     errSeverity
   }
 }
-    ${FragmentXchangeConfigActivityFragmentDoc}
+    ${FragmentXchangeActivityFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
 
 /**
@@ -18671,16 +18588,16 @@ export const ConvertXchangeProfileDocument = gql`
       specIds
       coreFilename
       uatActivity {
-        ...fragmentXchangeConfigActivity
+        ...fragmentXchangeActivity
       }
       testActivity {
-        ...fragmentXchangeConfigActivity
+        ...fragmentXchangeActivity
       }
       prodActivity {
-        ...fragmentXchangeConfigActivity
+        ...fragmentXchangeActivity
       }
       errorActivity {
-        ...fragmentXchangeConfigActivity
+        ...fragmentXchangeActivity
       }
       active
       hasUnpublishedChanges
@@ -18716,7 +18633,7 @@ export const ConvertXchangeProfileDocument = gql`
     errSeverity
   }
 }
-    ${FragmentXchangeConfigActivityFragmentDoc}
+    ${FragmentXchangeActivityFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
 export type ConvertXchangeProfileMutationFn = Apollo.MutationFunction<ConvertXchangeProfileMutation, ConvertXchangeProfileMutationVariables>;
 
