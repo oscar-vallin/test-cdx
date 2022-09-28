@@ -40,6 +40,7 @@ const NamingPage = () => {
   const [count, setCount] = useState(0);
   const [specialInstruction, setSpecialInstruction] = useState('');
   const [filterConventions, setFilterConventions] = useState<XchangeConfigNamingConvention[]>([]);
+  const [refreshNamingPage, setRefreshNamingPage] = useState(false);
   const [isOpenConventionsPanel, setIsOpenConventionsPanel] = useState(false);
   const [isOpenWherePlaceExtracts, setIsOpenWherePlaceExtracts] = useState(false);
   const [isOpenSpecialInstructionPanel, setIsOpenSpecialInstructionPanel] = useState(false);
@@ -55,8 +56,9 @@ const NamingPage = () => {
   };
 
   useEffect(() => {
+    setRefreshNamingPage(false);
     fetchData();
-  }, [orgSid]);
+  }, [orgSid, refreshNamingPage]);
 
   const filterConventionData = () => {
     setFilterConventions([]);
@@ -382,6 +384,7 @@ const NamingPage = () => {
         sid={sid}
         specialInstruction={specialInstruction}
         hideIcon={setSpecialInstructionIcon}
+        refreshNamingPage={setRefreshNamingPage}
       />
     </LayoutDashboard>
   );
