@@ -436,6 +436,7 @@ const SchedulePanel = ({
         <SubscribersList
           currentSubscribers={totalSubscribers}
           totalSubscribers={setTotalSubscribers}
+          title={false}
         />
         <ButtonAction onClick={() => setAddSubscriberModal(true)} iconName="add">
           Add person to be notified
