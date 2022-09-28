@@ -12,7 +12,7 @@ const items: SubscriberOptionProps[] = [
 
 describe('Subscriber List component', () => {
     it('Susbcriber List', () => {
-        const list = mount(<SubscribersList totalSubscribers={jest.fn()} currentSubscribers={items} />);
+        const list = mount(<SubscribersList totalSubscribers={jest.fn()} currentSubscribers={items} title={true}/>);
         expect(list.find('button[id="Subscriber_0"]')).toHaveLength(2);
         list.find('button[id="Subscriber_0"]').at(0).simulate('click');
         list.find('button[id="Subscriber_0"]').at(1).simulate('click');
@@ -22,7 +22,7 @@ describe('Subscriber List component', () => {
     });
 
     it('Subscriber List empty', () => {
-        const list = mountWithTheme(<SubscribersList  totalSubscribers={jest.fn()} currentSubscribers={[]} />);
+        const list = mountWithTheme(<SubscribersList  totalSubscribers={jest.fn()} currentSubscribers={[]} title={false}/>);
         expect(list.find('button')).toHaveLength(0)
         expect(list.find("i[data-icon-name='Info']")).toHaveLength(0);
     });

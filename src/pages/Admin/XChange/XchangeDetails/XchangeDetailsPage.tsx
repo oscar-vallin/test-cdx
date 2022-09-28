@@ -40,6 +40,7 @@ import { Comment20Filled } from '@fluentui/react-icons';
 import { UIInputTextArea } from 'src/components/inputs/InputTextArea';
 import { ButtonAction, ButtonLink } from 'src/components/buttons';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
+import { EmptyMessage } from 'src/containers/tables/TableCurrentActivity/TableActivity.styles';
 import {
   CardStyled,
   StyledColumTabs,
@@ -284,6 +285,15 @@ const XchangeDetailsPage = () => {
                   ))}
               </Spacing>
             ))}
+            {xchangesAlerts?.length === 0 && (
+              <Row>
+                <Column>
+                  <EmptyMessage size="normal">
+                    {'<none>'}
+                  </EmptyMessage>
+                </Column>
+              </Row>
+            )}
             {allowedCommands && (
             <ButtonAction id="__Add_Alert" iconName="add" onClick={() => setOpenAlertsPanel(true)}>
               Add alert
@@ -308,6 +318,13 @@ const XchangeDetailsPage = () => {
                     />
                   </Stack>
                 </Row>
+                {schedule?.scheduleType === 'NOT_SCHEDULED' && (
+                  <Row>
+                    <EmptyMessage size="normal">
+                      {'<none>'}
+                    </EmptyMessage>
+                  </Row>
+                )}
                 <Row>
                   <Column>
                     <Text>{schedule?.expectedRunSchedule}</Text>

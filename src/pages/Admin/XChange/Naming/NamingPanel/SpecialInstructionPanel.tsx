@@ -16,6 +16,7 @@ type SpecialInstructionProps = {
     onCount: (data: number) => void;
     specialInstruction?: string,
     hideIcon: (data: number | null) => void;
+    refreshNamingPage: (data: boolean) => void;
 };
 
 const SpecialInstructionPanel = ({
@@ -25,6 +26,7 @@ const SpecialInstructionPanel = ({
   onCount,
   specialInstruction,
   hideIcon,
+  refreshNamingPage,
 }: SpecialInstructionProps) => {
   const Toast = useNotification();
   const [instructionData, setInstructionData] = useState('');
@@ -46,6 +48,7 @@ const SpecialInstructionPanel = ({
   useEffect(() => {
     if (!loading && data) {
       closePanel(false);
+      refreshNamingPage(true);
       Toast.success({ text: 'The instructions were saved successfully' });
     }
   }, [data, loading]);

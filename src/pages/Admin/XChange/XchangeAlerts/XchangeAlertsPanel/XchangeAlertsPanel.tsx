@@ -290,7 +290,8 @@ const XchangeAlertsPanel = ({
         setAlertTypes(xchangeConfigAlertForm?.alertTypes);
       }
 
-      if (xchangeConfigAlertForm?.filenameQualifier.value.value) {
+      if (xchangeConfigAlertForm?.filenameQualifier.value
+        && xchangeConfigAlertForm?.filenameQualifier.value.value) {
         setFilenameQualifier(xchangeConfigAlertForm?.filenameQualifier.value.value ?? '');
       }
 
@@ -409,6 +410,7 @@ const XchangeAlertsPanel = ({
               <SubscribersList
                 currentSubscribers={totalSubscribers}
                 totalSubscribers={setTotalSubscribers}
+                title={true}
               />
             </Column>
           </Row>
