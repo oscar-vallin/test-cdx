@@ -181,7 +181,7 @@ const XchangeDetailsPage = () => {
             <Text>Alert on: </Text>
           </Column>
           {typesAlert.map((type, index) => (
-            <StyledAlertTypes width={adaptWidth(type)} key={index}>
+            <StyledAlertTypes width={adaptWidth(type)} key={index} paddingTop={true}>
               {type}
             </StyledAlertTypes>
           ))}
@@ -203,7 +203,7 @@ const XchangeDetailsPage = () => {
       }
 
       return (
-        <StyledQualifier width={width} color={color}>
+        <StyledQualifier width={width} color={color} paddingTop={true}>
           {qualifier}
         </StyledQualifier>
       );
