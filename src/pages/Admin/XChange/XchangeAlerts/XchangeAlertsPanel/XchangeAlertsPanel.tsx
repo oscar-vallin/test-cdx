@@ -36,7 +36,7 @@ type XchangeAlertsPanelProps = {
   closePanel: (data: boolean) => void;
   sid?: string;
   coreFilename?: string;
-  refreshXchangeDetails: (data: boolean) => void;
+  refreshPage: (data: boolean) => void;
 };
 
 export type SubscriberOptionProps = {
@@ -61,7 +61,7 @@ const XchangeAlertsPanel = ({
   closePanel,
   sid,
   coreFilename,
-  refreshXchangeDetails,
+  refreshPage,
 }: XchangeAlertsPanelProps) => {
   const { orgSid } = useOrgSid();
   const Toast = useNotification();
@@ -216,6 +216,7 @@ const XchangeAlertsPanel = ({
       setAlertTypesValue([]);
       setXchangeConfigAlert(null);
       setXchangeProfileAlert(null);
+      setFilenameQualifier('');
     };
     updatedDialog.onClose = () => {
       hideDialog();
@@ -232,6 +233,7 @@ const XchangeAlertsPanel = ({
       setAlertTypesValue([]);
       setXchangeConfigAlert(null);
       setXchangeProfileAlert(null);
+      setFilenameQualifier('');
       closePanel(false);
     }
   };
@@ -307,7 +309,7 @@ const XchangeAlertsPanel = ({
 
   useEffect(() => {
     if (!updateProfileLoading && updateProfiledata) {
-      refreshXchangeDetails(true);
+      refreshPage(true);
       Toast.success({ text: 'Alert updated' });
       closePanel(false);
     }
@@ -319,7 +321,7 @@ const XchangeAlertsPanel = ({
 
   useEffect(() => {
     if (!createProfileLoading && createProfileData) {
-      refreshXchangeDetails(true);
+      refreshPage(true);
       Toast.success({ text: 'Alert Added' });
       closePanel(false);
     }
@@ -331,7 +333,7 @@ const XchangeAlertsPanel = ({
 
   useEffect(() => {
     if (!createConfigloading && createConfigData) {
-      refreshXchangeDetails(true);
+      refreshPage(true);
       Toast.success({ text: 'Alert Added' });
       closePanel(false);
     }
@@ -343,7 +345,7 @@ const XchangeAlertsPanel = ({
 
   useEffect(() => {
     if (!updateConfigLoading && updateConfigData) {
-      refreshXchangeDetails(true);
+      refreshPage(true);
       Toast.success({ text: 'Alert updated' });
       closePanel(false);
     }
