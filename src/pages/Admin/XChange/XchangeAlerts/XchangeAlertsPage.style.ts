@@ -39,6 +39,10 @@ export const StyledButtonAction = styled(ButtonAction)`
   color: black;
   padding-bottom: 20px;
   margin-bottom: -7px;
+  [data-icon-name*='add'] {
+    font-size: 0.75em;
+    font-weight: 600;
+  }
 `;
 
 export const StyledSeparator = styled.hr`

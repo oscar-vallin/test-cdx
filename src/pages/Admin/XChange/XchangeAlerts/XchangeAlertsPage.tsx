@@ -46,17 +46,21 @@ const XchangeAlertsPage = () => {
   const [openAlertsPanel, setOpenAlertsPanel] = useState(false);
   const [sid, setSid] = useState('');
   const [coreFilenameValue, setCoreFilenameValue] = useState('');
-  const [refreshXchangeDetails, setRefreshXchangeDetails] = useState(false);
+  const [refreshXchangeAlert, setRefreshXchangeAlert] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
-  const [xchangeProfileAlerts, { data: dataXchangeAlerts, loading: loadingXchangeAlerts }] = useQueryHandler(
+  const [xchangeProfileAlerts,
+    { data: dataXchangeAlerts, loading: loadingXchangeAlerts },
+  ] = useQueryHandler(
     useXchangeProfileAlertsLazyQuery,
   );
-  const [deleteXchangeProfileAlerts, { data: deleteProfileData, loading: deleteProfileLoading }] = useQueryHandler(
+  const [deleteXchangeProfileAlerts, { data: deleteProfileData, loading: deleteProfileLoading },
+  ] = useQueryHandler(
     useDeleteXchangeProfileAlertMutation,
   );
 
-  const [deleteXchangeConfigAlerts, { data: deleteConfigData, loading: deleteConfigLoading }] = useQueryHandler(
+  const [deleteXchangeConfigAlerts, { data: deleteConfigData, loading: deleteConfigLoading },
+  ] = useQueryHandler(
     useDeleteXchangeConfigAlertMutation,
   );
 
@@ -71,9 +75,9 @@ const XchangeAlertsPage = () => {
   };
 
   useEffect(() => {
-    setRefreshXchangeDetails(false);
+    setRefreshXchangeAlert(false);
     fetchData();
-  }, [refreshXchangeDetails]);
+  }, [refreshXchangeAlert]);
 
   useEffect(() => {
     if (!loadingXchangeAlerts && dataXchangeAlerts) {
@@ -83,14 +87,14 @@ const XchangeAlertsPage = () => {
 
   useEffect(() => {
     if (!deleteProfileLoading && deleteProfileData) {
-      setRefreshXchangeDetails(true);
+      setRefreshXchangeAlert(true);
       Toast.success({ text: 'Alert has been deleted' });
     }
   }, [deleteProfileData, deleteProfileLoading]);
 
   useEffect(() => {
     if (!deleteConfigLoading && deleteConfigData) {
-      setRefreshXchangeDetails(true);
+      setRefreshXchangeAlert(true);
       Toast.success({ text: 'Alert has been deleted' });
     }
   }, [deleteConfigData, deleteConfigLoading]);
@@ -200,34 +204,29 @@ const XchangeAlertsPage = () => {
     setShowDialog(true);
   };
 
-  const userPermissionsIcons = (
-    commands: WebCommand[], currentSid: string, type: string, corefilename?: string) => {
+  const userPermissionsIcons = (commands: WebCommand[], currentSid: string, type: string, corefilename?: string) => {
     const _updateCmd = commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
     const _deleteCmd = commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Delete);
 
     return (
       <>
         {_updateCmd && (
-          <Column lg="1">
-            <IconButton
-              iconProps={{ iconName: 'EditSolid12' }}
-              style={{ paddingBottom: '10px' }}
-              onClick={() => {
-                setSid(currentSid);
-                setCoreFilenameValue(corefilename ?? '')
-                setOpenAlertsPanel(true);
-              }}
-            />
-          </Column>
+          <IconButton
+            iconProps={{ iconName: 'EditSolid12' }}
+            style={{ paddingBottom: '10px', marginLeft: '10px' }}
+            onClick={() => {
+              setSid(currentSid);
+              setCoreFilenameValue(corefilename ?? '')
+              setOpenAlertsPanel(true);
+            }}
+          />
         )}
         {_deleteCmd && (
-          <Column lg="1">
-            <IconButton
-              iconProps={{ iconName: 'Trash' }}
-              style={{ paddingBottom: '10px' }}
-              onClick={() => showUnsavedChangesDialog(currentSid, type)}
-            />
-          </Column>
+          <IconButton
+            iconProps={{ iconName: 'Trash' }}
+            style={{ paddingBottom: '10px' }}
+            onClick={() => showUnsavedChangesDialog(currentSid, type)}
+          />
         )}
       </>
     );
@@ -266,68 +265,81 @@ const XchangeAlertsPage = () => {
                 && (
                 <Text>There are no global alerts configured</Text>
                 )}
-              {xchangeAlerts?.globalXchangeAlerts?.map((globalAlerts, globalAlertsIndex: number) => (
-                <Spacing key={globalAlertsIndex}>
-                  <Row>
-                    <Column lg="2">
-                      {globalAlerts?.filenameQualifier && (
-                        <StyledEnvironment>{globalAlerts?.filenameQualifier}</StyledEnvironment>
-                      )}
-                    </Column>
-                    {userPermissionsIcons(globalAlerts?.commands ?? [], globalAlerts?.sid ?? '', 'profile')}
-                  </Row>
-                  {typesAlertsRender(globalAlerts?.alertTypes ?? [])}
-                  <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                    <Text variant="bold">Suscribers:</Text>
+              {xchangeAlerts?.globalXchangeAlerts?.map(
+                (globalAlerts, globalAlertsIndex: number) => (
+                  <Spacing key={globalAlertsIndex}>
+                    <Row>
+                      <Column lg="2">
+                        {globalAlerts?.filenameQualifier && (
+                          <StyledEnvironment>{globalAlerts?.filenameQualifier}</StyledEnvironment>
+                        )}
+                      </Column>
+                      {userPermissionsIcons(globalAlerts?.commands ?? [], globalAlerts?.sid ?? '', 'profile')}
+                    </Row>
+                    {typesAlertsRender(globalAlerts?.alertTypes ?? [])}
+                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                      <Text variant="bold">Suscribers:</Text>
+                    </Spacing>
+                    <Spacing margin={{ bottom: 'double' }}>
+                      {globalAlerts?.subscribers?.map((subscriber, globalSubsIndex: number) => (
+                        <Row key={globalSubsIndex}>
+                          <Column lg="6">
+                            <ButtonLink>{subscriber.email}</ButtonLink>
+                          </Column>
+                          <Column lg="6">
+                            <ButtonLink>{subscriber.firstNm}</ButtonLink>
+                          </Column>
+                        </Row>
+                      ))}
+                    </Spacing>
                   </Spacing>
-                  <Spacing margin={{ bottom: 'double' }}>
-                    {globalAlerts?.subscribers?.map((subscriber, globalSubsIndex: number) => (
-                      <Row key={globalSubsIndex}>
-                        <Column lg="6">
-                          <ButtonLink>{subscriber.email}</ButtonLink>
-                        </Column>
-                        <Column lg="6">
-                          <ButtonLink>{subscriber.firstNm}</ButtonLink>
-                        </Column>
-                      </Row>
-                    ))}
-                  </Spacing>
-                </Spacing>
-              ))}
+                ),
+              )}
             </Column>
             <Column lg="6">
               <Text variant="bold">Alerts on individual Xchanges</Text>
               <Spacing margin={{ top: 'normal' }}>
                 <StyledSeparator color="#e6e6e6" />
               </Spacing>
-              {xchangeAlerts?.individualXchangeAlerts && xchangeAlerts?.individualXchangeAlerts.length <= 0 && (
+              {xchangeAlerts?.individualXchangeAlerts
+                && xchangeAlerts?.individualXchangeAlerts.length <= 0 && (
                 <Text>There are no Xchange specific alerts configured</Text>
               )}
-              {xchangeAlerts?.individualXchangeAlerts?.map((individualAlerts, individualAlertsIndex: number) => (
-                <Spacing key={individualAlertsIndex}>
-                  <Row>
-                    <Column lg="3">
-                      <ButtonLink>{individualAlerts.coreFilename}</ButtonLink>
-                    </Column>
-                    {userPermissionsIcons(individualAlerts?.commands ?? [], individualAlerts?.sid ?? '', 'config', individualAlerts.coreFilename ?? '')}
-                  </Row>
-                  {filenameQualifier(individualAlerts.filenameQualifier ?? '', individualAlerts?.coreFilename ?? '')}
-                  {typesAlertsRender(individualAlerts?.alertTypes ?? [])}
-                  <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                    <Text variant="bold">Suscribers:</Text>
-                  </Spacing>
-                  {individualAlerts?.subscribers?.map((subscriber, individualSubsIndex: number) => (
-                    <Row key={individualSubsIndex}>
-                      <Column lg="6">
-                        <ButtonLink>{subscriber.firstNm}</ButtonLink>
-                      </Column>
-                      <Column lg="6">
-                        <ButtonLink>{subscriber.email}</ButtonLink>
+              {xchangeAlerts?.individualXchangeAlerts?.map(
+                (individualAlerts, individualAlertsIndex: number) => (
+                  <Spacing margin={{ bottom: 'normal' }} key={individualAlertsIndex}>
+                    <Row>
+                      <Column lg="12">
+                        <Stack horizontal={true} horizontalAlign="space-between">
+                          <Stack.Item align="center" disableShrink>
+                            <ButtonLink underline style={{ fontWeight: 'bold', fontSize: '13.5px' }}>
+                              {individualAlerts.coreFilename}
+                            </ButtonLink>
+                            {userPermissionsIcons(individualAlerts?.commands ?? [], individualAlerts?.sid ?? '', 'config', individualAlerts.coreFilename ?? '')}
+                          </Stack.Item>
+                        </Stack>
                       </Column>
                     </Row>
-                  ))}
-                </Spacing>
-              ))}
+                    {filenameQualifier(individualAlerts.filenameQualifier ?? '', individualAlerts?.coreFilename ?? '')}
+                    {typesAlertsRender(individualAlerts?.alertTypes ?? [])}
+                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                      <Text variant="bold">Suscribers:</Text>
+                    </Spacing>
+                    {individualAlerts?.subscribers?.map(
+                      (subscriber, individualSubsIndex: number) => (
+                        <Row key={individualSubsIndex}>
+                          <Column lg="6">
+                            <ButtonLink>{subscriber.firstNm}</ButtonLink>
+                          </Column>
+                          <Column lg="6">
+                            <ButtonLink>{subscriber.email}</ButtonLink>
+                          </Column>
+                        </Row>
+                      ),
+                    )}
+                  </Spacing>
+                ),
+              )}
             </Column>
           </Row>
         </Spacing>
@@ -351,7 +363,7 @@ const XchangeAlertsPage = () => {
         isPanelOpen={openAlertsPanel}
         closePanel={setOpenAlertsPanel}
         sid={sid}
-        refreshXchangeDetails={setRefreshXchangeDetails}
+        refreshPage={setRefreshXchangeAlert}
         coreFilename={coreFilenameValue}
       />
       <DialogYesNo {...dialogProps} open={showDialog} />
