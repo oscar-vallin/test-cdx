@@ -275,7 +275,6 @@ const XChangePage = () => {
 
   useEffect(() => {
     if (!loadingXchange && dataXchange) {
-      console.log(dataXchange)
       setXchanges(dataXchange.xchangeProfile.xchanges);
       setTooltipContent(dataXchange.xchangeProfile.tooltips);
       setGlobalXchangeAlerts(dataXchange.xchangeProfile.globalXchangeAlerts);
@@ -464,7 +463,6 @@ const XChangePage = () => {
   };
 
   const onRenderAction = (item) => {
-    // console.log(item)
     if (!requiresConversion) {
       if (item.active) {
         return (
