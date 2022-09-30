@@ -51,7 +51,7 @@ import {
 import { Diagram } from './Diagram/Diagram';
 import { XchangeAlertsPanel } from '../XchangeAlerts/XchangeAlertsPanel/XchangeAlertsPanel';
 import { JobGroupPanel } from './JobGroupPanel/JobGroupPanel';
-import { SchedulePanel } from './SchedulePanel/SchedulePanel';
+import { SchedulePanel } from '../SchedulePanel';
 import { StyledAlertTypes } from '../XchangeAlerts/XchangeAlertsPage.style';
 
 const defaultDialogProps: DialogYesNoProps = {
@@ -222,7 +222,7 @@ const XchangeDetailsPage = () => {
           <Column lg="1">
             <IconButton
               iconProps={{ iconName: 'EditSolid12' }}
-              style={{ paddingBottom: '10px' }}
+              style={{ paddingBottom: '10px', position: 'relative', right: '5px', top: '1px' }}
               onClick={() => {
                 setSid(currentSid);
                 setOpenAlertsPanel(true);
@@ -295,7 +295,14 @@ const XchangeDetailsPage = () => {
               </Row>
             )}
             {allowedCommands && (
-            <ButtonAction id="__Add_Alert" iconName="add" onClick={() => setOpenAlertsPanel(true)}>
+            <ButtonAction
+              id="__Add_Alert"
+              iconName="add"
+              onClick={() => {
+                setSid('');
+                setOpenAlertsPanel(true)
+              }}
+            >
               Add alert
             </ButtonAction>
             )}
@@ -391,6 +398,7 @@ const XchangeDetailsPage = () => {
   useEffect(() => {
     if (detailsData?.xchangeConfig && !detailsLoading) {
       const { xchangeConfig } = detailsData;
+      console.log(xchangeConfig)
       setXchangeDataDetails(xchangeConfig);
 
       if (xchangeConfig.coreFilename) {
@@ -630,7 +638,7 @@ const XchangeDetailsPage = () => {
         isPanelOpen={openAlertsPanel}
         closePanel={setOpenAlertsPanel}
         sid={sid}
-        refreshXchangeDetails={setRefreshXchangeDetails}
+        refreshPage={setRefreshXchangeDetails}
         coreFilename={coreFilenameValue}
       />
       <JobGroupPanel
@@ -642,6 +650,8 @@ const XchangeDetailsPage = () => {
         isPanelOpen={openSchedulePanel}
         closePanel={setOpenSchedulePanel}
         xchangeConfigSid={xchangeDataDetails?.sid ?? ''}
+        refreshPage={setRefreshXchangeDetails}
+        schedule={true}
       />
       <DialogYesNo {...dialogProps} open={showDialog} />
     </LayoutDashboard>
