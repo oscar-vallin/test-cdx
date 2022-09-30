@@ -333,10 +333,17 @@ const XchangeDetailsPage = () => {
                   </Row>
                 )}
                 <Row>
-                  <Column>
-                    <Text>{schedule?.expectedRunSchedule}</Text>
-                  </Column>
+                  <Stack horizontal={true} horizontalAlign="space-between">
+                    <FontIcon iconName="ReminderTime" style={{ fontSize: '10px', fontWeight: 600, paddingRight: '8px'}} />
+                    <Text style={{ fontSize: '12px' }}>Expected to run</Text>
+                  </Stack>
                 </Row>
+                <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                  <Text style={{ fontSize: '12px' }}>{schedule?.expectedRunSchedule}</Text>
+                </Spacing>
+                <Spacing margin={{ bottom: 'normal' }}>
+                  <Text style={{ fontSize: '12px' }}>{schedule?.expectedCompletionTime}</Text>
+                </Spacing>
                 <Row>
                   <Column>
                     <ButtonLink
@@ -398,7 +405,6 @@ const XchangeDetailsPage = () => {
   useEffect(() => {
     if (detailsData?.xchangeConfig && !detailsLoading) {
       const { xchangeConfig } = detailsData;
-      console.log(xchangeConfig)
       setXchangeDataDetails(xchangeConfig);
 
       if (xchangeConfig.coreFilename) {
