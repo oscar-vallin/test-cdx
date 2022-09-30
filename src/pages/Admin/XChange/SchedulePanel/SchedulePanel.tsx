@@ -5,6 +5,7 @@ import {
   useUpdateXchangeScheduleMutation,
   useXchangeJobGroupFormLazyQuery,
   useCreateXchangeJobGroupMutation,
+  useUpdateXchangeJobGroupMutation,
   XchangeScheduleForm,
   XchangeJobGroupForm,
   ScheduleFrequency,
@@ -14,7 +15,8 @@ import {
   RelativeDay,
   DayOfWeek,
   ScheduleType,
-  UiOptions
+  UiOptions,
+  GqOperationResponse,
 } from 'src/data/services/graphql';
 import {
   PanelBody,
@@ -53,6 +55,7 @@ type ScheduleProps = {
     closePanel: (data: boolean) => void;
     dataSchedule?: XchangeSchedule,
     xchangeConfigSid: string,
+    xchangeJobGroupSid?: string;
     refreshPage: (data: boolean) => void;
     schedule?: boolean;
     xchangePorcessed?: string[];
@@ -109,7 +112,13 @@ const DefaulMonthsProps: MonthsProps = {
 };
 
 const SchedulePanel = ({
-  isPanelOpen, closePanel, xchangeConfigSid, refreshPage, schedule, xchangePorcessed,
+  isPanelOpen,
+  closePanel,
+  xchangeConfigSid,
+  refreshPage,
+  schedule,
+  xchangePorcessed,
+  xchangeJobGroupSid,
 }: ScheduleProps) => {
   const { orgSid } = useOrgSid();
   const Toast = useNotification();
@@ -151,7 +160,12 @@ const SchedulePanel = ({
   const [
     createJobGroup,
     { data: jobGroupCreated, loading: isLoadingCreateJobGroup, error: jobGroupCreatedError },
-  ] = useCreateXchangeJobGroupMutation()
+  ] = useCreateXchangeJobGroupMutation();
+
+  const [
+    updateJobGroup,
+    { data: jobGroupUpdated, loading: isLoadingUpdateJobGroup, error: jobGroupUpdatedError },
+  ] = useUpdateXchangeJobGroupMutation();
 
   const [
     scheduleUpdate,
@@ -171,6 +185,7 @@ const SchedulePanel = ({
     jobGroupForm({
       variables: {
         orgSid,
+        sid: xchangeJobGroupSid,
       },
     });
   };
@@ -187,74 +202,6 @@ const SchedulePanel = ({
     }
     setTotalSubscribers((prevValues) => prevValues.concat(showSubs));
   };
-
-  useEffect(() => {
-    if (isPanelOpen) {
-      fethData();
-    }
-  }, [isPanelOpen]);
-
-  useEffect(() => {
-    if (!isLoadingForm && formData) {
-      const { xchangeScheduleForm } = formData;
-      console.log(xchangeScheduleForm)
-      setXchangeSchedule(xchangeScheduleForm);
-      setOptions(xchangeScheduleForm?.options ?? []);
-      if (xchangeScheduleForm?.subscribers.value
-        && xchangeScheduleForm.subscribers.value.length > 0) {
-        subscribersList(xchangeScheduleForm.subscribers.value)
-      }
-      setScheduleFrequency(xchangeScheduleForm?.frequency.value?.value ?? '');
-      setScheduleType(xchangeScheduleForm?.scheduleType.value?.value ?? '');
-      setHasSilencePeriod(xchangeScheduleForm?.hasSilencePeriod?.value ?? true);
-      setHasSilencePeriodLabel(xchangeScheduleForm?.hasSilencePeriod?.label ?? '');
-      const monthsValues = xchangeScheduleForm?.options?.find((m) => m.key === 'Month');
-      const daysValues = xchangeScheduleForm?.options?.find((d) => d.key === 'DayOfWeek');
-      setEveryMonth(monthsValues?.values ?? []);
-      setEveryDay(daysValues?.values ?? []);
-    }
-  }, [formData, isLoadingForm]);
-
-  useEffect(() => {
-    if (!isLoadingJobGroup && jobGroupData) {
-      const { xchangeJobGroupForm } = jobGroupData;
-      setXchangeJobGroup(xchangeJobGroupForm);
-      setOptions(xchangeJobGroupForm?.options ?? []);
-      setScheduleFrequency(xchangeJobGroupForm?.frequency.value?.value ?? '');
-      setScheduleType(xchangeJobGroupForm?.scheduleType.value?.value ?? '');
-      setHasSilencePeriod(xchangeJobGroupForm?.hasSilencePeriod?.value ?? true);
-      setHasSilencePeriodLabel(xchangeJobGroupForm?.hasSilencePeriod?.label ?? '');
-      const monthsValues = xchangeJobGroupForm?.options?.find((m) => m.key === 'Month');
-      const daysValues = xchangeJobGroupForm?.options?.find((d) => d.key === 'DayOfWeek');
-      setEveryMonth(monthsValues?.values ?? []);
-      setEveryDay(daysValues?.values ?? []);
-    }
-  }, [jobGroupData, isLoadingJobGroup]);
-
-  useEffect(() => {
-    if (!isLoadingUpdate && updateData) {
-      console.log(updateData)
-      closePanel(false);
-      refreshPage(true);
-      Toast.success({ text: 'Schedule Updated' });
-    }
-  }, [updateData, isLoadingUpdate, updateError]);
-
-  useEffect(() => {
-    if (!isLoadingCreateJobGroup && jobGroupCreated) {
-      console.log(jobGroupCreated)
-      closePanel(false);
-      refreshPage(true);
-      Toast.success({ text: `Job Group ${jobGroupName} updated` });
-    }
-
-    if (!isLoadingCreateJobGroup && jobGroupCreatedError) {
-      console.log(jobGroupCreatedError)
-      // closePanel(false);
-      // refreshPage(true);
-      // Toast.success({ text: `Job Group ${jobGroupName} updated` });
-    }
-  }, [jobGroupCreated, isLoadingCreateJobGroup, jobGroupCreatedError])
 
   const handleMonths = (selectedMonth: boolean, month: string, end?: boolean) => {
     let currentMonth = month.toLocaleLowerCase();
@@ -282,6 +229,109 @@ const SchedulePanel = ({
     setDays((prevState) => prevState.filter((d) => d !== day));
     setEndRelativeDay(currentDay);
   };
+
+  useEffect(() => {
+    if (isPanelOpen) {
+      fethData();
+    }
+  }, [isPanelOpen]);
+
+  useEffect(() => {
+    if (!isLoadingForm && formData) {
+      const { xchangeScheduleForm } = formData;
+      setXchangeSchedule(xchangeScheduleForm);
+      setOptions(xchangeScheduleForm?.options ?? []);
+      xchangeScheduleForm?.months.value?.forEach((month) => {
+        const { name } = month;
+        DefaulMonthsProps[name] = true;
+        handleMonths(true, month.value);
+      })
+      xchangeScheduleForm?.days.value?.forEach((day) => {
+        const { name } = day;
+        DefaulDaysProps[name] = true;
+        handleDays(true, day.value);
+      });
+      if (xchangeScheduleForm?.subscribers.value
+        && xchangeScheduleForm.subscribers.value.length > 0) {
+        subscribersList(xchangeScheduleForm.subscribers.value)
+      }
+      setScheduleFrequency(xchangeScheduleForm?.frequency.value?.value ?? '');
+      setScheduleType(xchangeScheduleForm?.scheduleType.value?.value ?? '');
+      setHasSilencePeriod(xchangeScheduleForm?.hasSilencePeriod?.value ?? true);
+      setHasSilencePeriodLabel(xchangeScheduleForm?.hasSilencePeriod?.label ?? '');
+      const monthsValues = xchangeScheduleForm?.options?.find((m) => m.key === 'Month');
+      const daysValues = xchangeScheduleForm?.options?.find((d) => d.key === 'DayOfWeek');
+      setEveryMonth(monthsValues?.values ?? []);
+      setEveryDay(daysValues?.values ?? []);
+    }
+  }, [formData, isLoadingForm]);
+
+  useEffect(() => {
+    if (!isLoadingJobGroup && jobGroupData) {
+      const { xchangeJobGroupForm } = jobGroupData;
+      setXchangeJobGroup(xchangeJobGroupForm);
+      setOptions(xchangeJobGroupForm?.options ?? []);
+      xchangeJobGroupForm?.months.value?.forEach((month) => {
+        const { name } = month;
+        DefaulMonthsProps[name] = true;
+        handleMonths(true, month.value);
+      })
+      xchangeJobGroupForm?.days.value?.forEach((day) => {
+        const { name } = day;
+        DefaulDaysProps[name] = true;
+        handleDays(true, day.value);
+      });
+      setScheduleFrequency(xchangeJobGroupForm?.frequency.value?.value ?? '');
+      setScheduleType(xchangeJobGroupForm?.scheduleType.value?.value ?? '');
+      setHasSilencePeriod(xchangeJobGroupForm?.hasSilencePeriod?.value ?? true);
+      setHasSilencePeriodLabel(xchangeJobGroupForm?.hasSilencePeriod?.label ?? '');
+      const monthsValues = xchangeJobGroupForm?.options?.find((m) => m.key === 'Month');
+      const daysValues = xchangeJobGroupForm?.options?.find((d) => d.key === 'DayOfWeek');
+      setEveryMonth(monthsValues?.values ?? []);
+      setEveryDay(daysValues?.values ?? []);
+    }
+  }, [jobGroupData, isLoadingJobGroup]);
+
+  useEffect(() => {
+    const response = updateData?.updateXchangeSchedule;
+
+    if (updateData) {
+      const responseCode = response?.response;
+      if (responseCode === GqOperationResponse.Fail) {
+        Toast.error({ text: 'Error Updating Schedule' });
+      }
+
+      if (responseCode === GqOperationResponse.Success) {
+        closePanel(false);
+        refreshPage(true);
+        Toast.success({ text: 'Schedule Updated' });
+      }
+    }
+  }, [updateData, isLoadingUpdate, updateError]);
+
+  useEffect(() => {
+    if (!isLoadingCreateJobGroup && jobGroupCreated) {
+      closePanel(false);
+      refreshPage(true);
+      Toast.success({ text: `Job Group ${jobGroupName} created` });
+    }
+
+    if (!isLoadingCreateJobGroup && jobGroupCreatedError) {
+      Toast.error({ text: 'Error creating a job group' });
+    }
+  }, [jobGroupCreated, isLoadingCreateJobGroup, jobGroupCreatedError]);
+
+  useEffect(() => {
+    if (!isLoadingUpdateJobGroup && jobGroupUpdated) {
+      closePanel(false);
+      refreshPage(true);
+      Toast.success({ text: `Job Group ${jobGroupName} created` });
+    }
+
+    if (!isLoadingUpdateJobGroup && jobGroupUpdatedError) {
+      Toast.success({ text: 'Error updating a job group' });
+    }
+  }, [jobGroupUpdated, isLoadingUpdateJobGroup, jobGroupUpdatedError]);
 
   const selectedWeekly = () => (
     <Spacing margin={{ top: 'double', bottom: 'normal' }}>
@@ -366,29 +416,32 @@ const SchedulePanel = ({
     // eslint-disable-next-line no-unused-expressions
     type === 'NotScheduled' ? type = 'NotScheduled' : type = 'ExpectedToRun';
 
+    const scheduleValues = {
+      frequency: ScheduleFrequency[frecuency],
+      scheduleType: ScheduleType[type],
+      months,
+      days,
+      xchangeJobGroupSid,
+      endDayOfMonth: !endDayOfMonth ? undefined : +endDayOfMonth,
+      endDayOrdinal: DayOrdinal[endDayOrdinal],
+      endRelativeDay: RelativeDay[endRelativeDay],
+      endHour,
+      endMinute,
+      timezone: scheduleTimezone,
+      subscriberSids,
+      hasSilencePeriod,
+      silenceStartMonth: Month[silenceStartMonth],
+      silenceStartDay: !silenceStartDay ? undefined : +silenceStartDay,
+      silenceEndMonth: Month[silenceEndMonth],
+      silenceEndDay: !silenceEndDay ? undefined : +silenceEndDay,
+    };
+
     if (schedule) {
       scheduleUpdate({
         variables: {
           scheduleInput: {
             xchangeConfigSid,
-            schedule: {
-              frequency: ScheduleFrequency[frecuency],
-              scheduleType: ScheduleType[type],
-              months,
-              days,
-              endDayOfMonth: !endDayOfMonth ? undefined : +endDayOfMonth,
-              endDayOrdinal: DayOrdinal[endDayOrdinal],
-              endRelativeDay: RelativeDay[endRelativeDay],
-              endHour,
-              endMinute,
-              timezone: scheduleTimezone,
-              subscriberSids,
-              hasSilencePeriod,
-              silenceStartMonth: Month[silenceStartMonth],
-              silenceStartDay: !silenceStartDay ? undefined : +silenceStartDay,
-              silenceEndMonth: Month[silenceEndMonth],
-              silenceEndDay: !silenceEndDay ? undefined : +silenceEndDay,
-            },
+            schedule: scheduleValues,
           },
         },
       });
@@ -399,24 +452,7 @@ const SchedulePanel = ({
           jobGroupInput: {
             name: jobGroupName,
             orgSid,
-            schedule: {
-              frequency: ScheduleFrequency[frecuency],
-              scheduleType: ScheduleType[type],
-              months,
-              days,
-              endDayOfMonth: !endDayOfMonth ? undefined : +endDayOfMonth,
-              endDayOrdinal: DayOrdinal[endDayOrdinal],
-              endRelativeDay: RelativeDay[endRelativeDay],
-              endHour,
-              endMinute,
-              timezone: scheduleTimezone,
-              subscriberSids,
-              hasSilencePeriod,
-              silenceStartMonth: Month[silenceStartMonth],
-              silenceStartDay: !silenceStartDay ? undefined : +silenceStartDay,
-              silenceEndMonth: Month[silenceEndMonth],
-              silenceEndDay: !silenceEndDay ? undefined : +silenceEndDay,
-            },
+            schedule: scheduleValues,
           },
         },
       });
