@@ -62,11 +62,11 @@ const _ImplementationDeployPage = () => {
   const checkPollResult = (data: ImplementationPollQuery) => {
     const updatedLogs = data.implementationPoll ?? 0;
     if (updatedLogs > 0) {
-      console.log(`Updating Logs ${updatedLogs}`);
+      // console.log(`Updating Logs ${updatedLogs}`);
       setLastPolled(new Date());
       callImplLog();
     } else {
-      console.log(`Not updating: ${updatedLogs}`);
+      // console.log(`Not updating: ${updatedLogs}`);
     }
   };
 

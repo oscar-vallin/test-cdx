@@ -398,7 +398,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
     }
 
     if (!loadingMoveDown && errorMoveDown) {
-      console.log(errorMoveDown);
+      // console.log(errorMoveDown);
     }
   }, [dataMoveUp, loadingMoveUp, dataMoveDown, loadingMoveDown, errorMoveDown]);
 
