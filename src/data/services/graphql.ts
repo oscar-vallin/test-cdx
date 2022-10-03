@@ -3705,6 +3705,7 @@ export type XchangeFileTransmissionForm = {
 
 export type XchangeJobGroup = {
   __typename?: 'XchangeJobGroup';
+  sid?: Maybe<Scalars['ID']>;
   name?: Maybe<Scalars['String']>;
   schedule: XchangeSchedule;
   includedExchanges: Array<Scalars['String']>;
@@ -3737,6 +3738,7 @@ export type XchangeJobGroupForm = {
   silenceStartDay?: Maybe<UiSelectOneField>;
   silenceEndMonth?: Maybe<UiSelectOneField>;
   silenceEndDay?: Maybe<UiSelectOneField>;
+  includedExchanges: Array<Scalars['String']>;
   options?: Maybe<Array<UiOptions>>;
   commands?: Maybe<Array<WebCommand>>;
   response: GqOperationResponse;
@@ -7016,7 +7018,7 @@ export type XchangeJobGroupsQuery = (
       & FragmentPaginationInfoFragment
     ), nodes?: Maybe<Array<(
       { __typename?: 'XchangeJobGroup' }
-      & Pick<XchangeJobGroup, 'name' | 'includedExchanges'>
+      & Pick<XchangeJobGroup, 'sid' | 'name' | 'includedExchanges'>
       & { schedule: (
         { __typename?: 'XchangeSchedule' }
         & Pick<XchangeSchedule, 'scheduleType' | 'frequency' | 'xchangeJobGroupSid' | 'xchangeJobGroupName' | 'months' | 'days' | 'endDayOfMonth' | 'endDayOrdinal' | 'endRelativeDay' | 'endHour' | 'endMinute' | 'timezone' | 'hasSilencePeriod' | 'silenceStartMonth' | 'silenceStartDay' | 'silenceEndMonth' | 'silenceEndDay' | 'expectedRunSchedule' | 'expectedCompletionTime'>
@@ -7039,7 +7041,7 @@ export type XchangeJobGroupFormQuery = (
   { __typename?: 'Query' }
   & { xchangeJobGroupForm?: Maybe<(
     { __typename?: 'XchangeJobGroupForm' }
-    & Pick<XchangeJobGroupForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<XchangeJobGroupForm, 'sid' | 'includedExchanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
@@ -9522,7 +9524,7 @@ export type CreateXchangeJobGroupMutation = (
   { __typename?: 'Mutation' }
   & { createXchangeJobGroup?: Maybe<(
     { __typename?: 'XchangeJobGroupForm' }
-    & Pick<XchangeJobGroupForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<XchangeJobGroupForm, 'sid' | 'includedExchanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
@@ -9593,7 +9595,7 @@ export type UpdateXchangeJobGroupMutation = (
   { __typename?: 'Mutation' }
   & { updateXchangeJobGroup?: Maybe<(
     { __typename?: 'XchangeJobGroupForm' }
-    & Pick<XchangeJobGroupForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<XchangeJobGroupForm, 'sid' | 'includedExchanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { name: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
@@ -15493,6 +15495,7 @@ export const XchangeJobGroupsDocument = gql`
       ...fragmentPaginationInfo
     }
     nodes {
+      sid
       name
       schedule {
         scheduleType
@@ -15609,6 +15612,7 @@ export const XchangeJobGroupFormDocument = gql`
     silenceEndDay {
       ...fragmentUISelectOneField
     }
+    includedExchanges
     options {
       ...fragmentUIOptions
     }
@@ -20153,6 +20157,7 @@ export const CreateXchangeJobGroupDocument = gql`
     silenceEndDay {
       ...fragmentUISelectOneField
     }
+    includedExchanges
     options {
       ...fragmentUIOptions
     }
@@ -20251,6 +20256,7 @@ export const UpdateXchangeJobGroupDocument = gql`
     silenceEndDay {
       ...fragmentUISelectOneField
     }
+    includedExchanges
     options {
       ...fragmentUIOptions
     }
