@@ -1,5 +1,5 @@
 import React from 'react';
-import { IDropdownOption } from '@fluentui/react';
+import { IDropdownOption, ResponsiveMode } from '@fluentui/react';
 import { Maybe, UiOptions, UiSelectOneField } from 'src/data/services/graphql';
 import { InfoIcon } from 'src/components/badges/InfoIcon';
 import { buildDropdownOption } from './DropdownCommon';
@@ -14,10 +14,11 @@ type UIInputMultiSelectType = {
     disabled?: boolean;
     onChange?: (newValue?: string) => void | null;
     placeholder?: string;
+    optionNumber?: boolean;
   };
 
 export const UIFlatSelectOneField = ({
-  id, uiField, options, value, disabled, onChange, placeholder,
+  id, uiField, options, value, disabled, onChange, placeholder, optionNumber,
 }: UIInputMultiSelectType) => {
   const handleChange = (e: React.FormEvent<HTMLDivElement>, newValue?: IDropdownOption) => {
     if (onChange && newValue) {
@@ -55,10 +56,9 @@ export const UIFlatSelectOneField = ({
 
   return (
     <ThemeDropdown
+      dropdownWidth={!optionNumber ? 'auto' : 80}
       id={id}
-      style={{
-        width: '100%',
-      }}
+      calloutProps={{ calloutMaxHeight: 200 }}
       selectedKey={value}
       disabled={disabled}
       onRenderTitle={onRenderTitle}

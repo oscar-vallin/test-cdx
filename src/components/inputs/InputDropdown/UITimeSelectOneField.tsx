@@ -43,6 +43,7 @@ export const UITimeSelectOneField = ({
         borderBottomColor: 'blue',
         outline: 'none',
       }}
+      calloutProps={{ calloutMaxHeight: 200 }}
       selectedKey={value}
       placeholder={placeholder}
       onChange={handleChange}

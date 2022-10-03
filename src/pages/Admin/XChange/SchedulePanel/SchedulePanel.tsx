@@ -203,7 +203,7 @@ const SchedulePanel = ({
     setTotalSubscribers((prevValues) => prevValues.concat(showSubs));
   };
 
-  const handleMonths = (selectedMonth: boolean, month: string, end?: boolean) => {
+  const handleMonths = (selectedMonth: boolean, month: string) => {
     let currentMonth = month.toLocaleLowerCase();
     currentMonth = currentMonth.charAt(0).toUpperCase() + currentMonth.slice(1);
     if (selectedMonth) {
@@ -211,12 +211,6 @@ const SchedulePanel = ({
       return;
     }
     setMonths((prevState) => prevState.filter((m) => m !== month));
-
-    if (end) {
-      setSilenceEndMonth(currentMonth);
-    } else {
-      setSilenceStartMonth(currentMonth);
-    }
   };
 
   const handleDays = (selectedDay: boolean, day: string) => {
@@ -229,6 +223,12 @@ const SchedulePanel = ({
     setDays((prevState) => prevState.filter((d) => d !== day));
     setEndRelativeDay(currentDay);
   };
+
+  const handleLastValue = (value: string) => {
+    let currentValue = value.toLocaleLowerCase();
+    currentValue = currentValue.charAt(0).toUpperCase() + currentValue.slice(1);
+    return currentValue;
+  }
 
   useEffect(() => {
     if (isPanelOpen) {
@@ -245,7 +245,7 @@ const SchedulePanel = ({
         const { name } = month;
         DefaulMonthsProps[name] = true;
         handleMonths(true, month.value);
-      })
+      });
       xchangeScheduleForm?.days.value?.forEach((day) => {
         const { name } = day;
         DefaulDaysProps[name] = true;
@@ -409,30 +409,34 @@ const SchedulePanel = ({
       endHour = +scheduleTime.split(',')[0];
       endMinute = +scheduleTime.split(',')[1];
     }
-    let type = '';
+
     let frecuency = scheduleFrequency.toLocaleLowerCase();
     frecuency = frecuency.charAt(0).toUpperCase() + frecuency.slice(1);
     if (frecuency.includes('_')) frecuency = 'InGroup';
-    // eslint-disable-next-line no-unused-expressions
-    type === 'NotScheduled' ? type = 'NotScheduled' : type = 'ExpectedToRun';
+
+    const endRDay = handleLastValue(endRelativeDay);
+    const endOday = handleLastValue(endDayOrdinal);
+    const silenceSMonth = handleLastValue(silenceStartMonth);
+    const silenceEMonth = handleLastValue(silenceEndMonth);
 
     const scheduleValues = {
       frequency: ScheduleFrequency[frecuency],
-      scheduleType: ScheduleType[type],
+      scheduleType: scheduleType === ScheduleType.ExpectedToRun
+        ? ScheduleType.ExpectedToRun : ScheduleType.NotScheduled,
       months,
       days,
       xchangeJobGroupSid,
       endDayOfMonth: !endDayOfMonth ? undefined : +endDayOfMonth,
-      endDayOrdinal: DayOrdinal[endDayOrdinal],
-      endRelativeDay: RelativeDay[endRelativeDay],
+      endDayOrdinal: DayOrdinal[endOday],
+      endRelativeDay: RelativeDay[endRDay],
       endHour,
       endMinute,
       timezone: scheduleTimezone,
       subscriberSids,
       hasSilencePeriod,
-      silenceStartMonth: Month[silenceStartMonth],
+      silenceStartMonth: Month[silenceSMonth],
       silenceStartDay: !silenceStartDay ? undefined : +silenceStartDay,
-      silenceEndMonth: Month[silenceEndMonth],
+      silenceEndMonth: Month[silenceEMonth],
       silenceEndDay: !silenceEndDay ? undefined : +silenceEndDay,
     };
 
@@ -474,25 +478,24 @@ const SchedulePanel = ({
   const selectedCompletedTime = () => (
     <Spacing margin={{ top: 'normal' }}>
       <Row>
-        <Column lg="4">
+        <Column lg="3">
           <Text style={{ marginTop: '8px' }}>To be completed by</Text>
         </Column>
-        <Column lg="2">
+        <Column lg="3">
           <UITimeSelectOneField
             id="scheduleSelectTime"
             uiFieldHour={xchangeSchedule?.endHour}
             uiFieldMinute={xchangeSchedule?.endMinute}
-            placeholder="time"
             onChange={(_newValue) => setScheduleTime(_newValue ?? '')}
           />
         </Column>
-        <Column md="12" lg="5">
+        <Column lg="6">
           <Spacing margin={{ left: 'normal' }}>
             <UIFlatSelectOneField
               id="scheduleTimezone"
               uiField={renderUiField('timezone')}
+              value={scheduleTimezone}
               options={options}
-              placeholder="timezone"
               onChange={(_newValue) => setScheduleTimeZone(_newValue ?? '')}
             />
           </Spacing>
@@ -526,7 +529,6 @@ const SchedulePanel = ({
                 id="scheduleType"
                 uiField={renderUiField('scheduleType')}
                 options={options}
-                placeholder="Select a type"
                 value={scheduleType}
                 onChange={(_newValue) => setScheduleType(_newValue ?? '')}
               />
@@ -537,7 +539,6 @@ const SchedulePanel = ({
                 id="scheduleFrequency"
                 uiField={renderUiField('frequency')}
                 options={options}
-                placeholder="Select a frecuency"
                 value={scheduleFrequency}
                 onChange={(_newValue) => setScheduleFrequency(_newValue ?? '')}
               />
@@ -592,28 +593,19 @@ const SchedulePanel = ({
                     id="scheduleSelectTime"
                     uiField={renderUiField('endDayOfMonth')}
                     options={options}
+                    value={endDayOfMonth}
                     disabled={!toBeCompletedMonthy}
-                    placeholder="day"
                     onChange={(_newValue) => setEndDayOfMonth(_newValue ?? '')}
+                    optionNumber={true}
                   />
                   <span style={{ marginTop: '5px' }} />
                   <UIFlatSelectOneField
                     id="scheduleSelectTime"
                     uiField={renderUiField('endDayOrdinal')}
+                    value={endDayOrdinal}
                     options={options}
-                    placeholder="Ord"
                     disabled={toBeCompletedMonthy}
-                    onChange={(_newValue) => {
-                      if (_newValue === 'FIRST') {
-                        setEndDayOrdinal('First');
-                      } else if (_newValue === 'SECOND') {
-                        setEndDayOrdinal('Second')
-                      } else if (_newValue === 'THIRD') {
-                        setEndDayOrdinal('Third')
-                      } else {
-                        setEndDayOrdinal('Last');
-                      }
-                    }}
+                    onChange={(_newValue) => setEndDayOrdinal(_newValue ?? '')}
                   />
                 </Column>
                 <Column lg="4">
@@ -621,10 +613,10 @@ const SchedulePanel = ({
                   <UIFlatSelectOneField
                     id="scheduleSelectTime"
                     uiField={renderUiField('endRelativeDay')}
+                    value={endRelativeDay}
                     options={options}
-                    placeholder="Day"
                     disabled={toBeCompletedMonthy}
-                    onChange={(_newValue) => handleDays(false, _newValue ?? '')}
+                    onChange={(_newValue) => setEndRelativeDay(_newValue ?? '')}
                   />
                 </Column>
               </Row>
@@ -638,11 +630,15 @@ const SchedulePanel = ({
             <Text style={{ fontWeight: 'bold', paddingLeft: '5px' }}>Alert if not delivered by expected day</Text>
           </Spacing>
         </Stack.Item>
-        <SubscribersList
-          currentSubscribers={totalSubscribers}
-          totalSubscribers={setTotalSubscribers}
-          title={false}
-        />
+        <Row>
+          <Column>
+            <SubscribersList
+              currentSubscribers={totalSubscribers}
+              totalSubscribers={setTotalSubscribers}
+              title={false}
+            />
+          </Column>
+        </Row>
         <ButtonAction onClick={() => setAddSubscriberModal(true)} iconName="add">
           Add person to be notified
         </ButtonAction>
@@ -659,43 +655,45 @@ const SchedulePanel = ({
           <Spacing margin={{ left: 'normal' }}>
             {hasSilencePeriod && (
               <Stack horizontal={true}>
-                <Column lg="2">
+                <Column md="12" lg="2">
                   <UIFlatSelectOneField
                     id="scheduleStartMonth"
                     uiField={renderUiField('silenceStartMonth')}
+                    value={silenceStartMonth}
                     options={options}
-                    placeholder="month"
-                    onChange={(_newValue) => handleMonths(false, _newValue ?? '', false)}
+                    onChange={(_newValue) => setSilenceStartMonth(_newValue ?? '')}
                   />
                 </Column>
-                <Column lg="1">
+                <Column md="12" lg="2">
                   <UIFlatSelectOneField
                     id="scheduleStartDay"
                     uiField={renderUiField('silenceStartDay')}
+                    value={silenceStartDay}
                     options={options}
-                    placeholder="day"
                     onChange={(_newValue) => setSilenceStartDay(_newValue ?? '')}
+                    optionNumber={true}
                   />
                 </Column>
-                <Column lg="2">
-                  <span style={{ marginTop: '10px', marginLeft: '35px' }}> to</span>
+                <Column md="12" lg="2">
+                  <span style={{ marginTop: '10px' }}> to</span>
                 </Column>
-                <Column lg="2">
+                <Column md="12" lg="2">
                   <UIFlatSelectOneField
                     id="scheduleLastMonth"
                     uiField={renderUiField('silenceEndMonth')}
+                    value={silenceEndMonth}
                     options={options}
-                    placeholder="month"
-                    onChange={(_newValue) => handleMonths(false, _newValue ?? '', true)}
+                    onChange={(_newValue) => setSilenceEndMonth(_newValue ?? '')}
                   />
                 </Column>
-                <Column lg="1">
+                <Column md="12" lg="1">
                   <UIFlatSelectOneField
                     id="scheduleLastDay"
                     uiField={renderUiField('silenceEndDay')}
+                    value={silenceEndDay}
                     options={options}
-                    placeholder="day"
                     onChange={(_newValue) => setSilenceEndDay(_newValue ?? '')}
+                    optionNumber={true}
                   />
                 </Column>
               </Stack>

@@ -43,5 +43,8 @@ export const ThemeDropdown = styled(Dropdown)`
     color: ${({ theme }) => theme.colors.black};
     font-weight: ${({ theme }) => theme.fontWeights.bold};
   }
+  .ms-Dropdown-items {
+    height: 100px;
+  }
 
 `;
