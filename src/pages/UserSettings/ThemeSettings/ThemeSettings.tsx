@@ -82,16 +82,13 @@ const ThemeSettings = () => {
     }
   }, [themeResponse]);
 
-  const [selectedPaletteId, setSelectedPaletteId] = useState<string>();
+  const [selectedPaletteId, setSelectedPaletteId] = useState<string>("");
 
   useEffect(() => {
-    if (!loadingUserTheme && dataUserTheme?.userTheme) {
-      setSelectedPaletteId(dataUserTheme.userTheme?.dashThemeColor?.id ?? undefined);
+    const paletteId = dataUserTheme?.userTheme?.dashThemeColor?.id
+    if (!loadingUserTheme && paletteId) {
+      setSelectedPaletteId(paletteId);
     }
-
-    return () => {
-      setSelectedPaletteId(undefined);
-    };
   }, [dataUserTheme, loadingUserTheme]);
 
   const selectTheme = (paletteId: string) => {
