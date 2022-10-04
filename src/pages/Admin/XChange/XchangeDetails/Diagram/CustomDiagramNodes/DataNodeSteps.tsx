@@ -1,6 +1,6 @@
 import { useState, memo, useEffect } from 'react';
 import {
-  DirectionalHint, FontIcon, Stack, Text, TooltipHost,
+  DirectionalHint, FontIcon, Stack, TooltipHost,
 } from '@fluentui/react';
 import { Handle, Position } from 'react-flow-renderer';
 import { BrainCircuit24Regular } from '@fluentui/react-icons';
@@ -15,9 +15,16 @@ import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo
 import { Container, Row } from 'src/components/layouts';
 import { useNotification } from 'src/hooks/useNotification';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
+import { ButtonLink } from 'src/components/buttons';
 import Node from './Node';
 import { StyledQualifier, StyledSubTitleText } from '../../XchangeDetailsPage.styles';
 import { XchangeStepPanel } from '../../XchangeStepPanel/XchangeStepPanel';
+import {
+  StyledCopyIcon,
+  StyledTrashIcon,
+  StyledChevronUpIcon,
+  StyledChevronDownIcon,
+} from './Node.styles';
 
 const defaultDialogProps: DialogYesNoProps = {
   id: '__DiagramStep_Dlg',
@@ -77,11 +84,17 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
 
-  const [deleteXchangeStep, { data: dataDeleteStep, loading: loadingDeleteStep, error: errorDeleteStep }] = useQueryHandler(useDeleteXchangeStepMutation);
+  const [deleteXchangeStep,
+    { data: dataDeleteStep, loading: loadingDeleteStep, error: errorDeleteStep },
+  ] = useQueryHandler(useDeleteXchangeStepMutation);
 
-  const [moveUpXchangeStep, { data: dataMoveUp, loading: loadingMoveUp }] = useQueryHandler(useMoveUpXchangeStepMutation);
+  const [moveUpXchangeStep,
+    { data: dataMoveUp, loading: loadingMoveUp },
+  ] = useQueryHandler(useMoveUpXchangeStepMutation);
 
-  const [moveDownxchangeStep, { data: dataMoveDown, loading: loadingMoveDown, error: errorMoveDown }] = useQueryHandler(useMoveDownXchangeStepMutation);
+  const [moveDownxchangeStep,
+    { data: dataMoveDown, loading: loadingMoveDown, error: errorMoveDown },
+  ] = useQueryHandler(useMoveDownXchangeStepMutation);
 
   let iconName = data.icon;
   const subTitle = data.subTitle ?? '';
@@ -110,22 +123,6 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
   } else if (qualifier === 'PROD-OE') {
     width = '60px';
   }
-
-  const styleMoveUp = {
-    cursor: index > 0 ? 'pointer' : 'auto',
-    color: index > 0 ? '#000000' : '#dddddd',
-    padding: '10px',
-    fontSize: '10px',
-    marginBottom: '-2px',
-  };
-
-  const styleMoveDown = {
-    cursor: !lastNode ? 'pointer' : 'auto',
-    color: !lastNode ? '#000000' : '#dddddd',
-    padding: '10px',
-    fontSize: '10px',
-    marginTop: '-2px',
-  };
 
   const hanldeSourcePosition = () => {
     if (
@@ -173,12 +170,8 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
           }}
           >
             <TooltipHost content="Copy Step">
-              <FontIcon
+              <StyledCopyIcon
                 iconName="Copy"
-                style={{
-                  fontSize: '15px',
-                  cursor: 'pointer',
-                }}
                 onClick={() => {
                   setOpenPanel(true);
                   setHiddeIcon(false);
@@ -192,13 +185,8 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
           }}
           >
             <TooltipHost content="Delete">
-              <FontIcon
+              <StyledTrashIcon
                 iconName="Trash"
-                style={{
-                  fontSize: '15px',
-                  color: 'black',
-                  cursor: 'pointer',
-                }}
                 onClick={() => {
                   setOpenPanel(false);
                   setShowDialog(true);
@@ -209,10 +197,10 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
           </div>
           <div style={{ position: 'absolute', left: 251, bottom: 30 }}>
             <TooltipHost content={index > 0 ? 'Move up' : ''}>
-              <FontIcon
+              <StyledChevronUpIcon
                 aria-disabled={index === 0}
                 iconName="ChevronUp"
-                style={styleMoveUp}
+                firstIndex={index === 0}
                 onClick={() => {
                   setOpenPanel(false);
                   setHiddeIcon(true);
@@ -231,10 +219,10 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
           </div>
           <div style={{ position: 'absolute', left: 251, top: 30 }}>
             <TooltipHost content={lastNode ? '' : 'Move down'} directionalHint={DirectionalHint['bottomCenter']}>
-              <FontIcon
+              <StyledChevronDownIcon
                 aria-disabled={lastNode}
                 iconName="ChevronDown"
-                style={styleMoveDown}
+                lastNode={lastNode}
                 onClick={() => {
                   setOpenPanel(false);
                   setHiddeIcon(true);
@@ -296,19 +284,19 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
                 iconName={iconName}
               />
             )}
-            <Text style={styles}>
+            <ButtonLink underline style={styles}>
               {data.label}{' '}
               {subTitle && subTitle.trim() !== '' && subTitle.length > 28 ? (
                 <StyledSubTitleText>
                   <span style={{ fontSize: '10px' }}>{subTitle.substring(0, 28)}{' '}</span>
-                  <span style={{ position: 'relative', fontSize: '10px', bottom: '10px' }}>
+                  <span style={{ position: 'absolute', fontSize: '10px', top: '25px' }}>
                     {subTitle.substring(28, subTitle.length)}
                   </span>
                 </StyledSubTitleText>
               ) : (
                 <span style={{ fontSize: '10px' }}>{subTitle}</span>
               )}
-            </Text>
+            </ButtonLink>
           </Stack>
         </Row>
       </Container>
@@ -395,10 +383,6 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
 
     if (!loadingMoveDown && dataMoveDown) {
       refreshDetailsPage(true);
-    }
-
-    if (!loadingMoveDown && errorMoveDown) {
-      // console.log(errorMoveDown);
     }
   }, [dataMoveUp, loadingMoveUp, dataMoveDown, loadingMoveDown, errorMoveDown]);
 

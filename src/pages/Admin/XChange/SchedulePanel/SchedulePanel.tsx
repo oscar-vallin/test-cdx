@@ -35,6 +35,8 @@ import {
   SpinnerSize,
   Stack,
   Text,
+  MessageBar,
+  MessageBarType,
 } from '@fluentui/react';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { CircleSchedule } from 'src/components/circleSchedule';
@@ -54,11 +56,11 @@ type ScheduleProps = {
     isPanelOpen: boolean;
     closePanel: (data: boolean) => void;
     dataSchedule?: XchangeSchedule,
-    xchangeConfigSid: string,
+    xchangeConfigSid?: string,
     xchangeJobGroupSid?: string;
     refreshPage: (data: boolean) => void;
     schedule?: boolean;
-    xchangePorcessed?: string[];
+    xchangeProcessed?: string[];
 };
 
 type DaysProps = {
@@ -117,7 +119,7 @@ const SchedulePanel = ({
   xchangeConfigSid,
   refreshPage,
   schedule,
-  xchangePorcessed,
+  xchangeProcessed,
   xchangeJobGroupSid,
 }: ScheduleProps) => {
   const { orgSid } = useOrgSid();
@@ -148,6 +150,8 @@ const SchedulePanel = ({
   const [endDayOrdinal, setEndDayOrdinal] = useState('');
   const [endRelativeDay, setEndRelativeDay] = useState('');
   const [toBeCompletedMonthy, setToBeCompletedMonthy] = useState(true);
+  const [message, setMessage] = useState<string | null>();
+  const [messageType, setMessageType] = useState<MessageBarType>(MessageBarType.info);
 
   const [
     scheduleForm, { data: formData, loading: isLoadingForm },
@@ -176,12 +180,11 @@ const SchedulePanel = ({
     if (schedule) {
       scheduleForm({
         variables: {
-          xchangeConfigSid,
+          xchangeConfigSid: xchangeConfigSid ?? '',
         },
       });
       return;
     }
-
     jobGroupForm({
       variables: {
         orgSid,
@@ -203,7 +206,7 @@ const SchedulePanel = ({
     setTotalSubscribers((prevValues) => prevValues.concat(showSubs));
   };
 
-  const handleMonths = (selectedMonth: boolean, month: string, end?: boolean) => {
+  const handleMonths = (selectedMonth: boolean, month: string) => {
     let currentMonth = month.toLocaleLowerCase();
     currentMonth = currentMonth.charAt(0).toUpperCase() + currentMonth.slice(1);
     if (selectedMonth) {
@@ -211,12 +214,6 @@ const SchedulePanel = ({
       return;
     }
     setMonths((prevState) => prevState.filter((m) => m !== month));
-
-    if (end) {
-      setSilenceEndMonth(currentMonth);
-    } else {
-      setSilenceStartMonth(currentMonth);
-    }
   };
 
   const handleDays = (selectedDay: boolean, day: string) => {
@@ -229,6 +226,12 @@ const SchedulePanel = ({
     setDays((prevState) => prevState.filter((d) => d !== day));
     setEndRelativeDay(currentDay);
   };
+
+  const handleLastValue = (value: string) => {
+    let currentValue = value.toLocaleLowerCase();
+    currentValue = currentValue.charAt(0).toUpperCase() + currentValue.slice(1);
+    return currentValue;
+  }
 
   useEffect(() => {
     if (isPanelOpen) {
@@ -245,7 +248,7 @@ const SchedulePanel = ({
         const { name } = month;
         DefaulMonthsProps[name] = true;
         handleMonths(true, month.value);
-      })
+      });
       xchangeScheduleForm?.days.value?.forEach((day) => {
         const { name } = day;
         DefaulDaysProps[name] = true;
@@ -281,6 +284,7 @@ const SchedulePanel = ({
         DefaulDaysProps[name] = true;
         handleDays(true, day.value);
       });
+      setJobGroupName(xchangeJobGroupForm?.name.value ?? '');
       setScheduleFrequency(xchangeJobGroupForm?.frequency.value?.value ?? '');
       setScheduleType(xchangeJobGroupForm?.scheduleType.value?.value ?? '');
       setHasSilencePeriod(xchangeJobGroupForm?.hasSilencePeriod?.value ?? true);
@@ -297,8 +301,13 @@ const SchedulePanel = ({
 
     if (updateData) {
       const responseCode = response?.response;
+      const { updateXchangeSchedule } = updateData;
+      setXchangeSchedule(updateXchangeSchedule);
       if (responseCode === GqOperationResponse.Fail) {
-        Toast.error({ text: 'Error Updating Schedule' });
+        const errorMsg = updateXchangeSchedule?.errMsg
+          ?? 'Error occurred, please verify the information and try again.';
+        setMessageType(MessageBarType.error);
+        setMessage(errorMsg);
       }
 
       if (responseCode === GqOperationResponse.Success) {
@@ -306,6 +315,9 @@ const SchedulePanel = ({
         refreshPage(true);
         Toast.success({ text: 'Schedule Updated' });
       }
+    }
+    if (!isLoadingUpdate && updateError) {
+      Toast.error({ text: 'Error updating schedule' });
     }
   }, [updateData, isLoadingUpdate, updateError]);
 
@@ -322,14 +334,27 @@ const SchedulePanel = ({
   }, [jobGroupCreated, isLoadingCreateJobGroup, jobGroupCreatedError]);
 
   useEffect(() => {
-    if (!isLoadingUpdateJobGroup && jobGroupUpdated) {
-      closePanel(false);
-      refreshPage(true);
-      Toast.success({ text: `Job Group ${jobGroupName} created` });
-    }
+    const response = jobGroupUpdated?.updateXchangeJobGroup;
 
+    if (jobGroupUpdated) {
+      const responseCode = response?.response;
+      const { updateXchangeJobGroup } = jobGroupUpdated;
+      setXchangeJobGroup(updateXchangeJobGroup);
+      if (responseCode === GqOperationResponse.Fail) {
+        const errorMsg = updateXchangeJobGroup?.errMsg
+          ?? 'Error occurred, please verify the information and try again.';
+        setMessageType(MessageBarType.error);
+        setMessage(errorMsg);
+      }
+
+      if (responseCode === GqOperationResponse.Success) {
+        closePanel(false);
+        refreshPage(true);
+        Toast.success({ text: 'Job Group Updated' });
+      }
+    }
     if (!isLoadingUpdateJobGroup && jobGroupUpdatedError) {
-      Toast.success({ text: 'Error updating a job group' });
+      Toast.error({ text: 'Error updating job group' });
     }
   }, [jobGroupUpdated, isLoadingUpdateJobGroup, jobGroupUpdatedError]);
 
@@ -409,30 +434,34 @@ const SchedulePanel = ({
       endHour = +scheduleTime.split(',')[0];
       endMinute = +scheduleTime.split(',')[1];
     }
-    let type = '';
+
     let frecuency = scheduleFrequency.toLocaleLowerCase();
     frecuency = frecuency.charAt(0).toUpperCase() + frecuency.slice(1);
     if (frecuency.includes('_')) frecuency = 'InGroup';
-    // eslint-disable-next-line no-unused-expressions
-    type === 'NotScheduled' ? type = 'NotScheduled' : type = 'ExpectedToRun';
+
+    const endRDay = handleLastValue(endRelativeDay);
+    const endOday = handleLastValue(endDayOrdinal);
+    const silenceSMonth = handleLastValue(silenceStartMonth);
+    const silenceEMonth = handleLastValue(silenceEndMonth);
 
     const scheduleValues = {
       frequency: ScheduleFrequency[frecuency],
-      scheduleType: ScheduleType[type],
+      scheduleType: scheduleType === ScheduleType.ExpectedToRun
+        ? ScheduleType.ExpectedToRun : ScheduleType.NotScheduled,
       months,
       days,
       xchangeJobGroupSid,
       endDayOfMonth: !endDayOfMonth ? undefined : +endDayOfMonth,
-      endDayOrdinal: DayOrdinal[endDayOrdinal],
-      endRelativeDay: RelativeDay[endRelativeDay],
+      endDayOrdinal: DayOrdinal[endOday],
+      endRelativeDay: RelativeDay[endRDay],
       endHour,
       endMinute,
       timezone: scheduleTimezone,
       subscriberSids,
       hasSilencePeriod,
-      silenceStartMonth: Month[silenceStartMonth],
+      silenceStartMonth: Month[silenceSMonth],
       silenceStartDay: !silenceStartDay ? undefined : +silenceStartDay,
-      silenceEndMonth: Month[silenceEndMonth],
+      silenceEndMonth: Month[silenceEMonth],
       silenceEndDay: !silenceEndDay ? undefined : +silenceEndDay,
     };
 
@@ -440,22 +469,37 @@ const SchedulePanel = ({
       scheduleUpdate({
         variables: {
           scheduleInput: {
-            xchangeConfigSid,
+            xchangeConfigSid: xchangeConfigSid ?? '',
             schedule: scheduleValues,
           },
         },
       });
     }
-    if (!schedule && !xchangeConfigSid) {
-      createJobGroup({
-        variables: {
-          jobGroupInput: {
-            name: jobGroupName,
-            orgSid,
-            schedule: scheduleValues,
+    if (!schedule && !xchangeJobGroupSid) {
+      if (jobGroupName.trim() !== '') {
+        createJobGroup({
+          variables: {
+            jobGroupInput: {
+              name: jobGroupName,
+              orgSid,
+              schedule: scheduleValues,
+            },
           },
-        },
-      });
+        });
+      }
+    }
+    if (!schedule && xchangeJobGroupSid) {
+      if (jobGroupName.trim() !== '') {
+        updateJobGroup({
+          variables: {
+            jobGroupInput: {
+              sid: xchangeJobGroupSid ?? '',
+              name: jobGroupName,
+              schedule: scheduleValues,
+            },
+          },
+        });
+      }
     }
   };
 
@@ -469,7 +513,7 @@ const SchedulePanel = ({
     }
 
     return null;
-  }
+  };
 
   const selectedCompletedTime = () => (
     <Spacing margin={{ top: 'normal' }}>
@@ -482,17 +526,16 @@ const SchedulePanel = ({
             id="scheduleSelectTime"
             uiFieldHour={xchangeSchedule?.endHour}
             uiFieldMinute={xchangeSchedule?.endMinute}
-            placeholder="time"
             onChange={(_newValue) => setScheduleTime(_newValue ?? '')}
           />
         </Column>
-        <Column md="12" lg="5">
+        <Column lg="6">
           <Spacing margin={{ left: 'normal' }}>
             <UIFlatSelectOneField
               id="scheduleTimezone"
               uiField={renderUiField('timezone')}
+              value={scheduleTimezone}
               options={options}
-              placeholder="timezone"
               onChange={(_newValue) => setScheduleTimeZone(_newValue ?? '')}
             />
           </Spacing>
@@ -513,7 +556,6 @@ const SchedulePanel = ({
                   id="jobGroupName"
                   value={jobGroupName}
                   uiField={xchangeJobGroup?.name}
-                  placeholder="job group name"
                   onChange={(event, _newValue) => setJobGroupName(_newValue ?? '')}
                 />
               </Column>
@@ -526,7 +568,6 @@ const SchedulePanel = ({
                 id="scheduleType"
                 uiField={renderUiField('scheduleType')}
                 options={options}
-                placeholder="Select a type"
                 value={scheduleType}
                 onChange={(_newValue) => setScheduleType(_newValue ?? '')}
               />
@@ -537,7 +578,6 @@ const SchedulePanel = ({
                 id="scheduleFrequency"
                 uiField={renderUiField('frequency')}
                 options={options}
-                placeholder="Select a frecuency"
                 value={scheduleFrequency}
                 onChange={(_newValue) => setScheduleFrequency(_newValue ?? '')}
               />
@@ -549,7 +589,7 @@ const SchedulePanel = ({
     }
 
     return null;
-  }
+  };
 
   const renderBody = () => {
     if (isLoadingForm || isLoadingJobGroup) {
@@ -573,9 +613,9 @@ const SchedulePanel = ({
             {selectedMonthly()}
             <Spacing margin={{ top: 'normal' }}>
               <Row>
-                <Column lg="4">
+                <Column lg="4" right={!schedule}>
                   <Text style={{ marginTop: '8px' }}>
-                    {!schedule ? 'on' : 'To be completed by'}
+                    {!schedule ? 'On' : 'To be completed by'}
                   </Text>
                 </Column>
                 <ChoiceGroup
@@ -587,33 +627,24 @@ const SchedulePanel = ({
                   ]}
                   onChange={() => setToBeCompletedMonthy((prevState) => !prevState)}
                 />
-                <Column lg="2">
+                <Column lg="3">
                   <UIFlatSelectOneField
                     id="scheduleSelectTime"
                     uiField={renderUiField('endDayOfMonth')}
                     options={options}
+                    value={endDayOfMonth}
                     disabled={!toBeCompletedMonthy}
-                    placeholder="day"
                     onChange={(_newValue) => setEndDayOfMonth(_newValue ?? '')}
+                    optionNumber={true}
                   />
                   <span style={{ marginTop: '5px' }} />
                   <UIFlatSelectOneField
                     id="scheduleSelectTime"
                     uiField={renderUiField('endDayOrdinal')}
+                    value={endDayOrdinal}
                     options={options}
-                    placeholder="Ord"
                     disabled={toBeCompletedMonthy}
-                    onChange={(_newValue) => {
-                      if (_newValue === 'FIRST') {
-                        setEndDayOrdinal('First');
-                      } else if (_newValue === 'SECOND') {
-                        setEndDayOrdinal('Second')
-                      } else if (_newValue === 'THIRD') {
-                        setEndDayOrdinal('Third')
-                      } else {
-                        setEndDayOrdinal('Last');
-                      }
-                    }}
+                    onChange={(_newValue) => setEndDayOrdinal(_newValue ?? '')}
                   />
                 </Column>
                 <Column lg="4">
@@ -621,10 +652,10 @@ const SchedulePanel = ({
                   <UIFlatSelectOneField
                     id="scheduleSelectTime"
                     uiField={renderUiField('endRelativeDay')}
+                    value={endRelativeDay}
                     options={options}
-                    placeholder="Day"
                     disabled={toBeCompletedMonthy}
-                    onChange={(_newValue) => handleDays(false, _newValue ?? '')}
+                    onChange={(_newValue) => setEndRelativeDay(_newValue ?? '')}
                   />
                 </Column>
               </Row>
@@ -638,11 +669,15 @@ const SchedulePanel = ({
             <Text style={{ fontWeight: 'bold', paddingLeft: '5px' }}>Alert if not delivered by expected day</Text>
           </Spacing>
         </Stack.Item>
-        <SubscribersList
-          currentSubscribers={totalSubscribers}
-          totalSubscribers={setTotalSubscribers}
-          title={false}
-        />
+        <Row>
+          <Column>
+            <SubscribersList
+              currentSubscribers={totalSubscribers}
+              totalSubscribers={setTotalSubscribers}
+              title={false}
+            />
+          </Column>
+        </Row>
         <ButtonAction onClick={() => setAddSubscriberModal(true)} iconName="add">
           Add person to be notified
         </ButtonAction>
@@ -659,43 +694,51 @@ const SchedulePanel = ({
           <Spacing margin={{ left: 'normal' }}>
             {hasSilencePeriod && (
               <Stack horizontal={true}>
-                <Column lg="2">
+                <Column md="12" lg="2">
                   <UIFlatSelectOneField
                     id="scheduleStartMonth"
                     uiField={renderUiField('silenceStartMonth')}
+                    value={silenceStartMonth}
                     options={options}
-                    placeholder="month"
-                    onChange={(_newValue) => handleMonths(false, _newValue ?? '', false)}
+                    onChange={(_newValue) => setSilenceStartMonth(_newValue ?? '')}
                   />
                 </Column>
-                <Column lg="1">
+                <Column md="12" lg="3">
                   <UIFlatSelectOneField
                     id="scheduleStartDay"
                     uiField={renderUiField('silenceStartDay')}
+                    value={silenceStartDay}
                     options={options}
-                    placeholder="day"
                     onChange={(_newValue) => setSilenceStartDay(_newValue ?? '')}
+                    optionNumber={true}
                   />
                 </Column>
-                <Column lg="2">
-                  <span style={{ marginTop: '10px', marginLeft: '35px' }}> to</span>
+                <Column md="12" lg="2">
+                  <span
+                    style={{
+                      marginTop: '10px',
+                      marginRight: '40px',
+                    }}
+                  > to
+                  </span>
                 </Column>
-                <Column lg="2">
+                <Column md="12" lg="2">
                   <UIFlatSelectOneField
                     id="scheduleLastMonth"
                     uiField={renderUiField('silenceEndMonth')}
+                    value={silenceEndMonth}
                     options={options}
-                    placeholder="month"
-                    onChange={(_newValue) => handleMonths(false, _newValue ?? '', true)}
+                    onChange={(_newValue) => setSilenceEndMonth(_newValue ?? '')}
                   />
                 </Column>
-                <Column lg="1">
+                <Column md="12" lg="3">
                   <UIFlatSelectOneField
                     id="scheduleLastDay"
                     uiField={renderUiField('silenceEndDay')}
+                    value={silenceEndDay}
                     options={options}
-                    placeholder="day"
                     onChange={(_newValue) => setSilenceEndDay(_newValue ?? '')}
+                    optionNumber={true}
                   />
                 </Column>
               </Stack>
@@ -706,8 +749,8 @@ const SchedulePanel = ({
         <Spacing margin={{ top: 'normal' }}>
           <Stack>
             <Text style={{ fontWeight: 'bolder' }}>Xchange porcessed in this groups</Text>
-            {xchangePorcessed && xchangePorcessed.length > 0 ? (
-              xchangePorcessed?.map((xchange, indexXchange) => (
+            {xchangeProcessed && xchangeProcessed.length > 0 ? (
+              xchangeProcessed?.map((xchange, indexXchange) => (
                 <Text key={indexXchange}>{xchange}</Text>
               ))
             ) : (
@@ -761,11 +804,26 @@ const SchedulePanel = ({
       isOpen={isPanelOpen}
       onRenderFooterContent={renderPanelFooter}
       onDismiss={() => {
+        setXchangeJobGroup(null);
+        setXchangeSchedule(null);
+        setMessage(null);
         closePanel(false);
       }}
     >
       <PanelBody>
         <Container>
+          {message && (
+          <Spacing margin={{ bottom: 'normal' }}>
+            <MessageBar
+              id="__OrgPanel_Msg"
+              messageBarType={messageType}
+              isMultiline
+              onDismiss={() => setMessage(undefined)}
+            >
+              {message}
+            </MessageBar>
+          </Spacing>
+          )}
           {renderTopBody()}
           {scheduleType !== 'NOT_SCHEDULED' && renderBody()}
         </Container>

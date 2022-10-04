@@ -11,6 +11,8 @@ import { useNotification } from 'src/hooks/useNotification';
 import Node from './Node';
 import { StyledQualifier, StyledSFTP } from '../../XchangeDetailsPage.styles';
 import { XchangeTransmissionPanel } from '../../XchangeTransmissionPanel/XchangeTransmissionPanel';
+import { StyledCopyIcon, StyledTrashIcon } from './Node.styles';
+import { ButtonLink } from 'src/components/buttons';
 
 const defaultDialogProps: DialogYesNoProps = {
   id: '__DiagramTransmission_Dlg',
@@ -43,7 +45,9 @@ const DataNodeTransmissions = ({ data, id }) => {
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
 
-  const [deleteXchangeFileTransmission, { data: dataDelete, loading: loadingDelete }] = useQueryHandler(
+  const [deleteXchangeFileTransmission, 
+    { data: dataDelete, loading: loadingDelete },
+  ] = useQueryHandler(
     useDeleteXchangeFileTransmissionMutation,
   );
 
@@ -89,12 +93,8 @@ const DataNodeTransmissions = ({ data, id }) => {
           }}
           >
             <TooltipHost content="Copy Step">
-              <FontIcon
+              <StyledCopyIcon
                 iconName="Copy"
-                style={{
-                  fontSize: '15px',
-                  cursor: 'pointer',
-                }}
                 onClick={() => {
                   setOpenPanel(true);
                   setOptionXchangeTransmission('copy');
@@ -107,13 +107,8 @@ const DataNodeTransmissions = ({ data, id }) => {
           }}
           >
             <TooltipHost content="Delete" directionalHint={DirectionalHint['rightCenter']}>
-              <FontIcon
+              <StyledTrashIcon
                 iconName="Trash"
-                style={{
-                  fontSize: '15px',
-                  color: 'black',
-                  cursor: 'pointer',
-                }}
                 onClick={() => {
                   setShowDialog(true);
                   setOpenPanel(false);
@@ -181,9 +176,9 @@ const DataNodeTransmissions = ({ data, id }) => {
               <StyledSFTP>
                 <Text style={{ fontWeight: 700, color: '#666666' }}>{protocol}</Text>
               </StyledSFTP>
-              <Text style={{ lineHeight: '38px', width: '200px' }} variant="small">
-                {host}
-              </Text>
+              <ButtonLink underline style={{ lineHeight: '38px', width: '200px' }}>
+                <span style={{ fontSize: '12px' }}>{host}</span>
+              </ButtonLink>
             </Stack>
           </Row>
         </Container>

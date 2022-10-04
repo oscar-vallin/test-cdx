@@ -325,19 +325,20 @@ const XchangeDetailsPage = () => {
                     />
                   </Stack>
                 </Row>
-                {schedule?.scheduleType === 'NOT_SCHEDULED' && (
+                {schedule?.scheduleType === 'NOT_SCHEDULED' ? (
                   <Row>
                     <EmptyMessage size="normal">
                       {'<none>'}
                     </EmptyMessage>
                   </Row>
+                ) : (
+                  <Row>
+                    <Stack horizontal={true} horizontalAlign="space-between">
+                      <FontIcon iconName="ReminderTime" style={{ fontSize: '10px', fontWeight: 600, paddingRight: '8px'}} />
+                      <Text style={{ fontSize: '12px' }}>Expected to run</Text>
+                    </Stack>
+                  </Row>
                 )}
-                <Row>
-                  <Stack horizontal={true} horizontalAlign="space-between">
-                    <FontIcon iconName="ReminderTime" style={{ fontSize: '10px', fontWeight: 600, paddingRight: '8px'}} />
-                    <Text style={{ fontSize: '12px' }}>Expected to run</Text>
-                  </Stack>
-                </Row>
                 <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                   <Text style={{ fontSize: '12px' }}>{schedule?.expectedRunSchedule}</Text>
                 </Spacing>

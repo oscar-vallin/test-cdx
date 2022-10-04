@@ -1,10 +1,14 @@
 import React from 'react';
-import { IDropdownOption } from '@fluentui/react';
+import {
+  FontIcon,
+  IDropdownOption,
+  Stack,
+  TooltipHost,
+} from '@fluentui/react';
 import { Maybe, UiOptions, UiSelectOneField } from 'src/data/services/graphql';
 import { buildDropdownTimeOption } from './DropdownCommon';
-import { ThemeDropdown } from './InputDropdown.styles';
+import { StyledError, ThemeDropdown } from './InputDropdown.styles';
 import { TIME } from './TimeValues';
-import { EmptyValue, FieldValue } from '../InputText/InputText.styles';
 
 type UIInputMultiSelectType = {
     id: string;
@@ -25,29 +29,45 @@ export const UITimeSelectOneField = ({
     }
   };
 
-  const renderReadOnlyValues = () => <EmptyValue>&lt;empty&gt;</EmptyValue>;
+  const onRenderError = () => {
+    if (uiFieldHour?.errMsg) {
+      return (
+        <StyledError>
+          <TooltipHost id={`${id}-error`} content={uiFieldHour.errMsg}>
+            <FontIcon iconName="Warning" style={{ color: 'red' }} />
+          </TooltipHost>
+        </StyledError>
+      );
+    }
+    if (uiFieldMinute?.errMsg) {
+      return (
+        <StyledError>
+          <TooltipHost id={`${id}-error`} content={uiFieldMinute.errMsg}>
+            <FontIcon iconName="Warning" style={{ color: 'red' }} />
+          </TooltipHost>
+        </StyledError>
+      );
+    }
+    return null;
+  }
 
   if (uiFieldMinute?.visible === false || uiFieldHour?.visible === false) {
     return null;
   }
 
-  if (uiFieldHour?.readOnly || uiFieldMinute?.readOnly) {
-    return <FieldValue>{renderReadOnlyValues()}</FieldValue>
-  }
-
   return (
-    <ThemeDropdown
-      id={id}
-      style={{
-        width: '100px',
-        borderBottomColor: 'blue',
-        outline: 'none',
-      }}
-      selectedKey={value}
-      placeholder={placeholder}
-      onChange={handleChange}
-      multiSelect={false}
-      options={buildDropdownTimeOption(TIME)}
-    />
+    <Stack>
+      <ThemeDropdown
+        id={id}
+        dropdownWidth="auto"
+        calloutProps={{ calloutMaxHeight: 200 }}
+        selectedKey={value}
+        placeholder={placeholder}
+        onChange={handleChange}
+        multiSelect={false}
+        options={buildDropdownTimeOption(TIME)}
+      />
+      {onRenderError()}
+    </Stack>
   );
 };

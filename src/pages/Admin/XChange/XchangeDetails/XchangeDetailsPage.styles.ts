@@ -119,4 +119,5 @@ export const StyledProcessValueText = styled(Text)`
 export const StyledSubTitleText = styled.div`
   margin-top: -5px;
   height: 22px;
+  text-decoration: none !important;
 `;
