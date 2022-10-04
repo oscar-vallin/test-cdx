@@ -48,3 +48,8 @@ export const ThemeDropdown = styled(Dropdown)`
   }
 
 `;
+
+export const StyledError = styled.div`
+  position: relative;
+  right: 12px;
+`

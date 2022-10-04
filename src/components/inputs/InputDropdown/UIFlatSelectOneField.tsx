@@ -1,10 +1,15 @@
 import React from 'react';
-import { IDropdownOption, ResponsiveMode } from '@fluentui/react';
+import {
+  FontIcon,
+  IDropdownOption,
+  IStackTokens,
+  Stack,
+  TooltipHost,
+} from '@fluentui/react';
 import { Maybe, UiOptions, UiSelectOneField } from 'src/data/services/graphql';
 import { InfoIcon } from 'src/components/badges/InfoIcon';
 import { buildDropdownOption } from './DropdownCommon';
-import { ThemeDropdown } from './InputDropdown.styles';
-import { EmptyValue, FieldValue } from '../InputText/InputText.styles';
+import { ThemeDropdown, StyledError } from './InputDropdown.styles';
 
 type UIInputMultiSelectType = {
     id: string;
@@ -37,35 +42,41 @@ export const UIFlatSelectOneField = ({
         <span>{option.text}</span>
       </div>
     );
+  };
+
+  const onRenderError = () => {
+    if (uiField?.errMsg) {
+      return (
+        <StyledError>
+          <TooltipHost id={`${id}-error`} content={uiField.errMsg}>
+            <FontIcon iconName="Warning" style={{ color: 'red' }} />
+          </TooltipHost>
+        </StyledError>
+      );
+    }
+    return null;
   }
 
   if (uiField?.visible === false) {
     return null;
   }
 
-  const renderReadOnlyValues = () => {
-    if (uiField?.value) {
-      return uiField?.value.name ?? uiField?.value.value;
-    }
-    return <EmptyValue>&lt;empty&gt;</EmptyValue>;
-  };
-
-  if (uiField?.readOnly) {
-    return <FieldValue>{renderReadOnlyValues()}</FieldValue>
-  }
-
+  const stackTokens: IStackTokens = { childrenGap: 20 };
   return (
-    <ThemeDropdown
-      dropdownWidth={!optionNumber ? 'auto' : 80}
-      id={id}
-      calloutProps={{ calloutMaxHeight: 200 }}
-      selectedKey={value}
-      disabled={disabled}
-      onRenderTitle={onRenderTitle}
-      onChange={handleChange}
-      multiSelect={false}
-      placeholder={placeholder}
-      options={buildDropdownOption(uiField, options)}
-    />
+    <Stack horizontal tokens={stackTokens} verticalAlign="end">
+      <ThemeDropdown
+        dropdownWidth={!optionNumber ? 'auto' : 80}
+        id={id}
+        calloutProps={{ calloutMaxHeight: 200 }}
+        selectedKey={value}
+        disabled={disabled}
+        onRenderTitle={onRenderTitle}
+        onChange={handleChange}
+        multiSelect={false}
+        placeholder={placeholder}
+        options={buildDropdownOption(uiField, options)}
+      />
+      {onRenderError()}
+    </Stack>
   );
 };
