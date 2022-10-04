@@ -19,8 +19,8 @@ import { LayoutDashboard } from 'src/layouts/LayoutDashboard'
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { EmptyState } from 'src/containers/states';
-import { SchedulePanel } from '../SchedulePanel';
 import { ButtonLink } from 'src/components/buttons';
+import { SchedulePanel } from '../SchedulePanel';
 
 const JobGroups = () => {
   const { orgSid } = useOrgSid();
@@ -51,7 +51,6 @@ const JobGroups = () => {
     if (!isLoadingJobGroups && jobGroupsData) {
       setXchangeJobGroups(jobGroupsData.xchangeJobGroups);
       setNodesjobGroups(jobGroupsData.xchangeJobGroups?.nodes ?? []);
-      console.log(jobGroupsData)
     }
   }, [jobGroupsData, isLoadingJobGroups]);
 
@@ -93,7 +92,8 @@ const JobGroups = () => {
       id="__JobGroup"
       iconProps={{ iconName: 'ReminderTime' }}
       onClick={() => {
-        setIsOpenPanel(true)
+        setCurrentSid('');
+        setIsOpenPanel(true);
       }}
     >
       Create Job Group
@@ -109,7 +109,13 @@ const JobGroups = () => {
     return (
       <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
         {column?.key === 'name' && (
-          <ButtonLink underline>
+          <ButtonLink
+            underline
+            onClick={() => {
+              setCurrentSid(item?.sid ?? '');
+              setIsOpenPanel(true);
+            }}
+          >
             {columnVal}
           </ButtonLink>
         )}
@@ -171,10 +177,10 @@ const JobGroups = () => {
       <SchedulePanel
         isPanelOpen={isOpenPanel}
         closePanel={setIsOpenPanel}
-        xchangeConfigSid={currentSid}
+        xchangeJobGroupSid={currentSid}
         refreshPage={setRefreshJobGroup}
         schedule={false}
-        xchangePorcessed={[]}
+        xchangeProcessed={[]}
       />
     </LayoutDashboard>
   );
