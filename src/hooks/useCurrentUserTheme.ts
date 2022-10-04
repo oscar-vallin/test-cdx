@@ -3,15 +3,11 @@ import { useEffect } from 'react';
 
 import { ThemeFontSize, useSetOwnDashThemeFontSizeMutation, useUserThemeLazyQuery } from 'src/data/services/graphql';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
-import { useSessionStore } from '../store/SessionStore';
 import { useThemeStore } from '../store/ThemeStore';
 
-export const useCurrentUserTheme = () => {
-  const SessionStore = useSessionStore();
+export const useCurrentUserTheme = (onFetchComplete?: () => void) => {
   const ThemeStore = useThemeStore();
   const handleError = ErrorHandler();
-
-  const { isAuthenticated } = SessionStore.status;
 
   const [callUserThemeQuery, { data: dataTheme, loading: loadingTheme }] = useUserThemeLazyQuery();
   const [callSetOwnDashFontSize, { data: dataUpdatedFont, loading: loadingFont, error: errorFont }] = useSetOwnDashThemeFontSizeMutation();
@@ -21,9 +17,11 @@ export const useCurrentUserTheme = () => {
   }, [errorFont, handleError]);
 
   const fetchTheme = () => {
-    if (isAuthenticated) {
-      callUserThemeQuery({ variables: { themeColorMode: null } });
-    }
+    callUserThemeQuery({
+      variables: {
+        themeColorMode: null,
+      },
+    });
   };
 
   useEffect(() => {
@@ -31,6 +29,9 @@ export const useCurrentUserTheme = () => {
       return;
     }
     ThemeStore.changeThemeColors(dataTheme?.userTheme?.dashThemeColor);
+    if (onFetchComplete) {
+      onFetchComplete();
+    }
   }, [dataTheme, loadingTheme]);
 
   useEffect(() => {

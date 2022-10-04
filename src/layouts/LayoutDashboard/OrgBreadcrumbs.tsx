@@ -1,10 +1,12 @@
 import { IBreadcrumbItem } from '@fluentui/react/lib/Breadcrumb';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
+import { useActiveDomainUseCase } from 'src/use-cases/ActiveDomain';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { SmallBreadcrumbs } from './LayoutDashboard.styles';
 
 export const OrgBreadcrumbs = () => {
   const { orgSid } = useOrgSid();
+  const ActiveDomain = useActiveDomainUseCase();
   const ActiveDomainStore = useActiveDomainStore();
 
   const items = ActiveDomainStore?.domainOrg?.current?.subNavItems ?? [];
@@ -17,7 +19,7 @@ export const OrgBreadcrumbs = () => {
           key: item.orgSid,
           text: item.label,
           isCurrentItem,
-          onClick: isCurrentItem ? undefined : () => ActiveDomainStore?.setCurrentOrg(item),
+          onClick: isCurrentItem ? undefined : () => ActiveDomain.setCurrentOrg(item.orgSid),
         };
       })
       .reverse();

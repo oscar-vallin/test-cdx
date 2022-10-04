@@ -1,14 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect } from 'react';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import { ThemeProvider as FluentThemeProvider, createTheme } from '@fluentui/react';
+import { createTheme, ThemeProvider as FluentThemeProvider } from '@fluentui/react';
 
 import '@fluentui/react/dist/css/fabric.css';
-
-import { useCurrentUserTheme } from 'src/hooks/useCurrentUserTheme';
-import { useSessionStore } from 'src/store/SessionStore';
 import { useThemeStore } from 'src/store/ThemeStore';
-import { LoadingPage } from 'src/pages/Loading/LoadingPage';
 import { ThemeFontSize } from 'src/data/services/graphql';
 
 const sizes = {
@@ -18,18 +13,7 @@ const sizes = {
 };
 
 export const ThemeContextProvider = ({ children }) => {
-  const SessionStore = useSessionStore();
   const ThemeStore = useThemeStore();
-
-  const { isLoadingTheme, fetchTheme } = useCurrentUserTheme();
-
-  useEffect(() => {
-    const { isAuthenticated } = SessionStore.status;
-
-    if (isAuthenticated) {
-      fetchTheme();
-    }
-  }, [SessionStore.user.token]);
 
   const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
     * {
@@ -83,14 +67,8 @@ export const ThemeContextProvider = ({ children }) => {
   return (
     <ThemeProvider theme={ThemeStore.userTheme}>
       <FluentThemeProvider theme={createFluentTheme()}>
-        {isLoadingTheme ? (
-          <LoadingPage />
-        ) : (
-          <>
-            <GlobalStyle fontSize={ThemeStore.userTheme.themeFontSize ?? ThemeFontSize.Medium} />
-            {children}
-          </>
-        )}
+        <GlobalStyle fontSize={ThemeStore.userTheme.themeFontSize ?? ThemeFontSize.Medium} />
+        {children}
       </FluentThemeProvider>
     </ThemeProvider>
   );

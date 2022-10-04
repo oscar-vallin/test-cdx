@@ -14,7 +14,7 @@ import {
 
 import { useExternalOrgsLazyQuery, SortDirection, Organization } from 'src/data/services/graphql';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
-import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
+import { useActiveDomainUseCase } from 'src/use-cases/ActiveDomain';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { ROUTE_EXTERNAL_ORGS } from 'src/data/constants/RouteConstants';
 import { useOrgSid } from 'src/hooks/useOrgSid';
@@ -26,7 +26,7 @@ import { PageBody } from 'src/components/layouts/Column';
 
 const ExternalOrgsPage = () => {
   const { orgSid } = useOrgSid();
-  const ActiveDomainStore = useActiveDomainStore();
+  const ActiveDomain = useActiveDomainUseCase();
 
   const [orgs, setOrgs] = useState<Organization[]>([]);
   const [externalOrganizationQuery, { data, loading }] = useQueryHandler(useExternalOrgsLazyQuery);
@@ -49,9 +49,7 @@ const ExternalOrgsPage = () => {
   }, [orgSid]);
 
   const changeActiveOrg = (org?: Organization) => {
-    ActiveDomainStore.setCurrentOrg({
-      orgSid: org?.sid,
-    });
+    ActiveDomain.setCurrentOrg(org?.sid);
   };
 
   const onRenderOrgName = (item?: Organization, index = 0) => (

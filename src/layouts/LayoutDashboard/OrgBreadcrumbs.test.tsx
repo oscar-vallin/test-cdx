@@ -5,6 +5,11 @@ import { OrgBreadcrumbs } from './OrgBreadcrumbs';
 jest.mock('src/store/ActiveDomainStore', () => ({
   useActiveDomainStore: mockUseActiveDomainStore,
 }));
+jest.mock('src/use-cases/ActiveDomain',() => ({
+  useActiveDomainUseCase: () => ({
+    setCurrentOrg: jest.fn(),
+  }),
+}));
 jest.mock('src/hooks/useOrgSid', () => ({
   useOrgSid: () => ({
     orgSid: 8,

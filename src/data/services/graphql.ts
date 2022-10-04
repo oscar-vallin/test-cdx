@@ -185,6 +185,7 @@ export type ArchiveFileType = {
 };
 
 export enum CdxWebAppDomain {
+  MainMenu = 'MAIN_MENU',
   Dashboard = 'DASHBOARD',
   Organization = 'ORGANIZATION'
 }
@@ -662,8 +663,6 @@ export type DiagramCoordinates = {
 export type DomainNavInput = {
   orgSid: Scalars['ID'];
   ownerId?: Maybe<Scalars['ID']>;
-  appDomain: CdxWebAppDomain;
-  selectedPage?: Maybe<CdxWebPage>;
 };
 
 export type EnrollmentStat = {
@@ -1821,7 +1820,6 @@ export type Query = {
   dashboardPeriodCounts?: Maybe<DashboardPeriodCounts>;
   usersForOrg?: Maybe<UserConnection>;
   currentUser?: Maybe<CurrentUserInfo>;
-  currentOrgNav?: Maybe<WebNav>;
   userTheme?: Maybe<DashTheme>;
   findUserByEmail?: Maybe<UserAccount>;
   userAccountForm?: Maybe<UserAccountForm>;
@@ -2021,11 +2019,6 @@ export type QueryUsersForOrgArgs = {
   orgSid: Scalars['ID'];
   userFilter?: Maybe<UserFilterInput>;
   pageableInput?: Maybe<PageableInput>;
-};
-
-
-export type QueryCurrentOrgNavArgs = {
-  orgInput?: Maybe<OrgSidInput>;
 };
 
 
@@ -3305,6 +3298,7 @@ export type WebCommand = {
 
 export type WebNav = {
   __typename?: 'WebNav';
+  orgSid?: Maybe<Scalars['ID']>;
   orgId?: Maybe<Scalars['String']>;
   label?: Maybe<Scalars['String']>;
   /** page: WebPage to nave to, blank if this only has subnavs */
@@ -4022,7 +4016,7 @@ export type FragmentWebPageFragment = (
 
 export type FragmentWebNavFragment = (
   { __typename?: 'WebNav' }
-  & Pick<WebNav, 'orgId' | 'label' | 'appDomain'>
+  & Pick<WebNav, 'orgSid' | 'orgId' | 'label' | 'appDomain'>
   & { page?: Maybe<(
     { __typename?: 'WebPage' }
     & FragmentWebPageFragment
@@ -4865,26 +4859,6 @@ export type CurrentUserQuery = (
         & Pick<UserSession, 'id' | 'orgId' | 'orgSid' | 'orgName' | 'userId' | 'firstNm' | 'pollInterval' | 'defaultAuthorities'>
       )> }
     )> }
-  )> }
-);
-
-export type CurrentOrgNavQueryVariables = Exact<{
-  orgInput?: Maybe<OrgSidInput>;
-}>;
-
-
-export type CurrentOrgNavQuery = (
-  { __typename?: 'Query' }
-  & { currentOrgNav?: Maybe<(
-    { __typename?: 'WebNav' }
-    & Pick<WebNav, 'orgId' | 'label' | 'appDomain'>
-    & { page?: Maybe<(
-      { __typename?: 'WebPage' }
-      & FragmentWebPageFragment
-    )>, subNavItems?: Maybe<Array<(
-      { __typename?: 'WebNav' }
-      & FragmentWebNavFragment
-    )>> }
   )> }
 );
 
@@ -6120,6 +6094,14 @@ export type NavigateToNewDomainQuery = (
       { __typename?: 'WebNav' }
       & { subNavItems?: Maybe<Array<(
         { __typename?: 'WebNav' }
+        & { subNavItems?: Maybe<Array<(
+          { __typename?: 'WebNav' }
+          & Pick<WebNav, 'label'>
+          & { page?: Maybe<(
+            { __typename?: 'WebPage' }
+            & Pick<WebPage, 'type'>
+          )> }
+        )>> }
         & FragmentWebNavFragment
       )>> }
       & FragmentWebNavFragment
@@ -7246,6 +7228,14 @@ export type PasswordLoginMutation = (
         { __typename?: 'WebNav' }
         & { subNavItems?: Maybe<Array<(
           { __typename?: 'WebNav' }
+          & { subNavItems?: Maybe<Array<(
+            { __typename?: 'WebNav' }
+            & Pick<WebNav, 'label'>
+            & { page?: Maybe<(
+              { __typename?: 'WebPage' }
+              & Pick<WebPage, 'type'>
+            )> }
+          )>> }
           & FragmentWebNavFragment
         )>> }
         & FragmentWebNavFragment
@@ -9840,6 +9830,7 @@ export const FragmentWebPageFragmentDoc = gql`
     ${UnionNvpFragmentDoc}`;
 export const FragmentWebNavFragmentDoc = gql`
     fragment fragmentWebNav on WebNav {
+  orgSid
   orgId
   label
   page {
@@ -11477,48 +11468,6 @@ export function useCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
 export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
 export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
-export const CurrentOrgNavDocument = gql`
-    query CurrentOrgNav($orgInput: OrgSidInput) {
-  currentOrgNav(orgInput: $orgInput) {
-    orgId
-    label
-    page {
-      ...fragmentWebPage
-    }
-    appDomain
-    subNavItems {
-      ...fragmentWebNav
-    }
-  }
-}
-    ${FragmentWebPageFragmentDoc}
-${FragmentWebNavFragmentDoc}`;
-
-/**
- * __useCurrentOrgNavQuery__
- *
- * To run a query within a React component, call `useCurrentOrgNavQuery` and pass it any options that fit your needs.
- * When your component renders, `useCurrentOrgNavQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCurrentOrgNavQuery({
- *   variables: {
- *      orgInput: // value for 'orgInput'
- *   },
- * });
- */
-export function useCurrentOrgNavQuery(baseOptions?: Apollo.QueryHookOptions<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>) {
-        return Apollo.useQuery<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>(CurrentOrgNavDocument, baseOptions);
-      }
-export function useCurrentOrgNavLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>) {
-          return Apollo.useLazyQuery<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>(CurrentOrgNavDocument, baseOptions);
-        }
-export type CurrentOrgNavQueryHookResult = ReturnType<typeof useCurrentOrgNavQuery>;
-export type CurrentOrgNavLazyQueryHookResult = ReturnType<typeof useCurrentOrgNavLazyQuery>;
-export type CurrentOrgNavQueryResult = Apollo.QueryResult<CurrentOrgNavQuery, CurrentOrgNavQueryVariables>;
 export const UserThemeDocument = gql`
     query UserTheme($themeColorMode: ThemeColorMode) {
   userTheme(themeColorMode: $themeColorMode) {
@@ -13926,6 +13875,12 @@ export const NavigateToNewDomainDocument = gql`
       ...fragmentWebNav
       subNavItems {
         ...fragmentWebNav
+        subNavItems {
+          label
+          page {
+            type
+          }
+        }
       }
     }
   }
@@ -15917,6 +15872,12 @@ export const PasswordLoginDocument = gql`
         ...fragmentWebNav
         subNavItems {
           ...fragmentWebNav
+          subNavItems {
+            label
+            page {
+              type
+            }
+          }
         }
       }
     }

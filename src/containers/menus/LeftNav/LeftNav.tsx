@@ -2,6 +2,7 @@ import { useHistory } from 'react-router';
 import { ActionButton } from '@fluentui/react';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
+import { useActiveDomainUseCase } from 'src/use-cases/ActiveDomain';
 import { getRouteByApiId, ROUTE_XCHANGE_DETAILS } from 'src/data/constants/RouteConstants';
 import { NavItemType, NavPanel } from 'src/containers/menus/LeftNav/NavPanel';
 import { theme } from 'src/styles/themes/theme';
@@ -17,6 +18,7 @@ type LeftNavProps = {
 export const LeftNav = ({ menuOptionSelected, isOpen }: LeftNavProps) => {
   const history = useHistory();
   const { orgSid } = useOrgSid();
+  const ActiveDomain = useActiveDomainUseCase();
   const ActiveDomainStore = useActiveDomainStore();
 
   const renderOrgNavigation = () => {
@@ -28,7 +30,7 @@ export const LeftNav = ({ menuOptionSelected, isOpen }: LeftNavProps) => {
           id: `__NavToOrg_${item.orgSid}`,
           label: item.label,
           selected: item.destination === menuOptionSelected,
-          onClick: () => ActiveDomainStore?.setCurrentOrg(item),
+          onClick: () => ActiveDomain.setCurrentOrg(item.orgSid),
         }));
 
       return (
@@ -41,7 +43,7 @@ export const LeftNav = ({ menuOptionSelected, isOpen }: LeftNavProps) => {
               id: '__ReturnHome',
               label: 'Return to my organization',
               selected: false,
-              onClick: () => ActiveDomainStore.setCurrentOrg(ActiveDomainStore.domainOrg.origin),
+              onClick: () => ActiveDomain.setCurrentOrg(ActiveDomainStore.domainOrg.origin.orgSid),
               className: 'return-home',
             },
           ]}

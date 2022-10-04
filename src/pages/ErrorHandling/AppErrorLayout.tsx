@@ -6,6 +6,7 @@ import {
 import { Column } from 'src/components/layouts';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { Button } from 'src/components/buttons';
+import { useActiveDomainUseCase } from 'src/use-cases/ActiveDomain';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 
 type AppErrorLayoutType = {
@@ -14,6 +15,7 @@ type AppErrorLayoutType = {
 };
 
 const AppErrorLayout = ({ id, children }: AppErrorLayoutType) => {
+  const ActiveDomain = useActiveDomainUseCase();
   const ActiveDomainStore = useActiveDomainStore();
 
   return (
@@ -32,7 +34,7 @@ const AppErrorLayout = ({ id, children }: AppErrorLayoutType) => {
                 <Column>
                   <Button
                     onClick={() => {
-                      ActiveDomainStore.setCurrentOrg(ActiveDomainStore.domainOrg.origin);
+                      ActiveDomain.setCurrentOrg(ActiveDomainStore.domainOrg.origin.orgSid);
                     }}
                   >
                     Click here to return home

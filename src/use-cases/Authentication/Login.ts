@@ -1,9 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { useSessionStore } from 'src/store/SessionStore';
-import { LoginStepType, useBeginLoginMutation, usePasswordLoginMutation } from 'src/data/services/graphql';
+import {
+  LoginStepType,
+  useBeginLoginMutation,
+  usePasswordLoginMutation,
+} from 'src/data/services/graphql';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { useCSRFToken } from 'src/hooks/useCSRFToken';
+import { useCurrentUserTheme } from 'src/hooks/useCurrentUserTheme';
+import { useActiveDomainUseCase } from 'src/use-cases/ActiveDomain';
 
 type LoginState = {
   step: string;
@@ -27,10 +33,23 @@ export const useLoginUseCase = () => {
   const { callCSRFController, setCSRFToken } = useCSRFToken();
 
   const [retries, setRetries] = useState(0);
+  const [fetchedTheme, setFetchedTheme] = useState(false);
+  const [fetchedNav, setFetchedNav] = useState(false);
   const [state, setState] = useState({ ...INITIAL_STATE });
   const [userId, setUserId] = useState<string>();
 
-  const [verifyUserId, { data: verifiedUserId, loading: isVerifyingUserId, error: userIdVerificationError }] = useBeginLoginMutation();
+  const [verifyUserId, {
+    data: verifiedUserId,
+    loading: isVerifyingUserId,
+    error: userIdVerificationError,
+  }] = useBeginLoginMutation();
+
+  const { fetchTheme } = useCurrentUserTheme(
+    () => { setFetchedTheme(true) },
+  );
+  const { performNavUpdate } = useActiveDomainUseCase(
+    () => { setFetchedNav(true) },
+  );
 
   const [
     verifyUserCredentials,
@@ -119,6 +138,25 @@ export const useLoginUseCase = () => {
 
   useEffect(() => {
     if (userSession?.passwordLogin?.step === LoginStepType.Complete) {
+      const organization = {
+        type: userSession.passwordLogin.loginCompleteDomain?.type,
+        orgSid: userSession.passwordLogin.tokenUser?.session?.orgSid,
+        destination: userSession.passwordLogin.loginCompleteDomain?.selectedPage,
+        label: userSession.passwordLogin.tokenUser?.session?.orgName,
+        orgId: userSession.passwordLogin.tokenUser?.session?.orgId,
+        subNavItems: [],
+      };
+
+      const { orgSid } = organization;
+
+      fetchTheme();
+      performNavUpdate({ orgSid });
+    }
+  }, [userSession]);
+
+  useEffect(() => {
+    // Wait for the login to happen and for the navigation and theme queries to be done
+    if (userSession && fetchedTheme && fetchedNav) {
       const { passwordLogin } = userSession;
       const organization = {
         type: passwordLogin?.loginCompleteDomain?.type,
@@ -141,7 +179,7 @@ export const useLoginUseCase = () => {
       ActiveDomainStore.setOriginOrg(organization);
       ActiveDomainStore.setCurrentOrg(organization);
     }
-  }, [userSession]);
+  }, [fetchedTheme, fetchedNav, userSession]);
 
   return {
     performUserIdVerification, performUserAuthentication, returnToInitialStep, state,
