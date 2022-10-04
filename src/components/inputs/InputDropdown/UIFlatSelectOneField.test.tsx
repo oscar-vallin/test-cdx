@@ -70,7 +70,7 @@ describe('Select One UI Input', () => {
         expectNoIcons(wrapper);
       });
 
-      it('Read Only Field', () => {
+      it('Error message in dropdown field', () => {
         const wrapper = mountWithTheme(
           <UIFlatSelectOneField
             id="selectOne"
@@ -80,15 +80,13 @@ describe('Select One UI Input', () => {
               ...fullField,
               readOnly: true,
               value: null,
-              errMsg: null,
+              errMsg: 'Please fill out all required* fields',
             }}
             placeholder="-- All --"
             options={uiOptions}
           />
         );
     
-        const html = wrapper.html();
-        expect(wrapper.find('span')).toHaveLength(1);
-        expect(html).toContain('empty');
+        expect(wrapper.find("i[data-icon-name='Warning']")).toHaveLength(1);
       });
 })  
