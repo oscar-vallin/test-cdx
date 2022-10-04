@@ -35,6 +35,8 @@ import {
   SpinnerSize,
   Stack,
   Text,
+  MessageBar,
+  MessageBarType,
 } from '@fluentui/react';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { CircleSchedule } from 'src/components/circleSchedule';
@@ -54,11 +56,11 @@ type ScheduleProps = {
     isPanelOpen: boolean;
     closePanel: (data: boolean) => void;
     dataSchedule?: XchangeSchedule,
-    xchangeConfigSid: string,
+    xchangeConfigSid?: string,
     xchangeJobGroupSid?: string;
     refreshPage: (data: boolean) => void;
     schedule?: boolean;
-    xchangePorcessed?: string[];
+    xchangeProcessed?: string[];
 };
 
 type DaysProps = {
@@ -117,7 +119,7 @@ const SchedulePanel = ({
   xchangeConfigSid,
   refreshPage,
   schedule,
-  xchangePorcessed,
+  xchangeProcessed,
   xchangeJobGroupSid,
 }: ScheduleProps) => {
   const { orgSid } = useOrgSid();
@@ -148,6 +150,8 @@ const SchedulePanel = ({
   const [endDayOrdinal, setEndDayOrdinal] = useState('');
   const [endRelativeDay, setEndRelativeDay] = useState('');
   const [toBeCompletedMonthy, setToBeCompletedMonthy] = useState(true);
+  const [message, setMessage] = useState<string | null>();
+  const [messageType, setMessageType] = useState<MessageBarType>(MessageBarType.info);
 
   const [
     scheduleForm, { data: formData, loading: isLoadingForm },
@@ -176,12 +180,11 @@ const SchedulePanel = ({
     if (schedule) {
       scheduleForm({
         variables: {
-          xchangeConfigSid,
+          xchangeConfigSid: xchangeConfigSid ?? '',
         },
       });
       return;
     }
-
     jobGroupForm({
       variables: {
         orgSid,
@@ -281,6 +284,7 @@ const SchedulePanel = ({
         DefaulDaysProps[name] = true;
         handleDays(true, day.value);
       });
+      setJobGroupName(xchangeJobGroupForm?.name.value ?? '');
       setScheduleFrequency(xchangeJobGroupForm?.frequency.value?.value ?? '');
       setScheduleType(xchangeJobGroupForm?.scheduleType.value?.value ?? '');
       setHasSilencePeriod(xchangeJobGroupForm?.hasSilencePeriod?.value ?? true);
@@ -297,8 +301,13 @@ const SchedulePanel = ({
 
     if (updateData) {
       const responseCode = response?.response;
+      const { updateXchangeSchedule } = updateData;
+      setXchangeSchedule(updateXchangeSchedule);
       if (responseCode === GqOperationResponse.Fail) {
-        Toast.error({ text: 'Error Updating Schedule' });
+        const errorMsg = updateXchangeSchedule?.errMsg
+          ?? 'Error occurred, please verify the information and try again.';
+        setMessageType(MessageBarType.error);
+        setMessage(errorMsg);
       }
 
       if (responseCode === GqOperationResponse.Success) {
@@ -306,6 +315,9 @@ const SchedulePanel = ({
         refreshPage(true);
         Toast.success({ text: 'Schedule Updated' });
       }
+    }
+    if (!isLoadingUpdate && updateError) {
+      Toast.error({ text: 'Error updating schedule' });
     }
   }, [updateData, isLoadingUpdate, updateError]);
 
@@ -322,14 +334,27 @@ const SchedulePanel = ({
   }, [jobGroupCreated, isLoadingCreateJobGroup, jobGroupCreatedError]);
 
   useEffect(() => {
-    if (!isLoadingUpdateJobGroup && jobGroupUpdated) {
-      closePanel(false);
-      refreshPage(true);
-      Toast.success({ text: `Job Group ${jobGroupName} created` });
-    }
+    const response = jobGroupUpdated?.updateXchangeJobGroup;
 
+    if (jobGroupUpdated) {
+      const responseCode = response?.response;
+      const { updateXchangeJobGroup } = jobGroupUpdated;
+      setXchangeJobGroup(updateXchangeJobGroup);
+      if (responseCode === GqOperationResponse.Fail) {
+        const errorMsg = updateXchangeJobGroup?.errMsg
+          ?? 'Error occurred, please verify the information and try again.';
+        setMessageType(MessageBarType.error);
+        setMessage(errorMsg);
+      }
+
+      if (responseCode === GqOperationResponse.Success) {
+        closePanel(false);
+        refreshPage(true);
+        Toast.success({ text: 'Job Group Updated' });
+      }
+    }
     if (!isLoadingUpdateJobGroup && jobGroupUpdatedError) {
-      Toast.success({ text: 'Error updating a job group' });
+      Toast.error({ text: 'Error updating job group' });
     }
   }, [jobGroupUpdated, isLoadingUpdateJobGroup, jobGroupUpdatedError]);
 
@@ -444,22 +469,37 @@ const SchedulePanel = ({
       scheduleUpdate({
         variables: {
           scheduleInput: {
-            xchangeConfigSid,
+            xchangeConfigSid: xchangeConfigSid ?? '',
             schedule: scheduleValues,
           },
         },
       });
     }
-    if (!schedule && !xchangeConfigSid) {
-      createJobGroup({
-        variables: {
-          jobGroupInput: {
-            name: jobGroupName,
-            orgSid,
-            schedule: scheduleValues,
+    if (!schedule && !xchangeJobGroupSid) {
+      if (jobGroupName.trim() !== '') {
+        createJobGroup({
+          variables: {
+            jobGroupInput: {
+              name: jobGroupName,
+              orgSid,
+              schedule: scheduleValues,
+            },
           },
-        },
-      });
+        });
+      }
+    }
+    if (!schedule && xchangeJobGroupSid) {
+      if (jobGroupName.trim() !== '') {
+        updateJobGroup({
+          variables: {
+            jobGroupInput: {
+              sid: xchangeJobGroupSid ?? '',
+              name: jobGroupName,
+              schedule: scheduleValues,
+            },
+          },
+        });
+      }
     }
   };
 
@@ -473,15 +513,15 @@ const SchedulePanel = ({
     }
 
     return null;
-  }
+  };
 
   const selectedCompletedTime = () => (
     <Spacing margin={{ top: 'normal' }}>
       <Row>
-        <Column lg="3">
+        <Column lg="4">
           <Text style={{ marginTop: '8px' }}>To be completed by</Text>
         </Column>
-        <Column lg="3">
+        <Column lg="2">
           <UITimeSelectOneField
             id="scheduleSelectTime"
             uiFieldHour={xchangeSchedule?.endHour}
@@ -516,7 +556,6 @@ const SchedulePanel = ({
                   id="jobGroupName"
                   value={jobGroupName}
                   uiField={xchangeJobGroup?.name}
-                  placeholder="job group name"
                   onChange={(event, _newValue) => setJobGroupName(_newValue ?? '')}
                 />
               </Column>
@@ -550,7 +589,7 @@ const SchedulePanel = ({
     }
 
     return null;
-  }
+  };
 
   const renderBody = () => {
     if (isLoadingForm || isLoadingJobGroup) {
@@ -574,9 +613,9 @@ const SchedulePanel = ({
             {selectedMonthly()}
             <Spacing margin={{ top: 'normal' }}>
               <Row>
-                <Column lg="4">
+                <Column lg="4" right={!schedule}>
                   <Text style={{ marginTop: '8px' }}>
-                    {!schedule ? 'on' : 'To be completed by'}
+                    {!schedule ? 'On' : 'To be completed by'}
                   </Text>
                 </Column>
                 <ChoiceGroup
@@ -588,7 +627,7 @@ const SchedulePanel = ({
                   ]}
                   onChange={() => setToBeCompletedMonthy((prevState) => !prevState)}
                 />
-                <Column lg="2">
+                <Column lg="3">
                   <UIFlatSelectOneField
                     id="scheduleSelectTime"
                     uiField={renderUiField('endDayOfMonth')}
@@ -664,7 +703,7 @@ const SchedulePanel = ({
                     onChange={(_newValue) => setSilenceStartMonth(_newValue ?? '')}
                   />
                 </Column>
-                <Column md="12" lg="2">
+                <Column md="12" lg="3">
                   <UIFlatSelectOneField
                     id="scheduleStartDay"
                     uiField={renderUiField('silenceStartDay')}
@@ -675,7 +714,13 @@ const SchedulePanel = ({
                   />
                 </Column>
                 <Column md="12" lg="2">
-                  <span style={{ marginTop: '10px' }}> to</span>
+                  <span
+                    style={{
+                      marginTop: '10px',
+                      marginRight: '40px',
+                    }}
+                  > to
+                  </span>
                 </Column>
                 <Column md="12" lg="2">
                   <UIFlatSelectOneField
@@ -686,7 +731,7 @@ const SchedulePanel = ({
                     onChange={(_newValue) => setSilenceEndMonth(_newValue ?? '')}
                   />
                 </Column>
-                <Column md="12" lg="1">
+                <Column md="12" lg="3">
                   <UIFlatSelectOneField
                     id="scheduleLastDay"
                     uiField={renderUiField('silenceEndDay')}
@@ -704,8 +749,8 @@ const SchedulePanel = ({
         <Spacing margin={{ top: 'normal' }}>
           <Stack>
             <Text style={{ fontWeight: 'bolder' }}>Xchange porcessed in this groups</Text>
-            {xchangePorcessed && xchangePorcessed.length > 0 ? (
-              xchangePorcessed?.map((xchange, indexXchange) => (
+            {xchangeProcessed && xchangeProcessed.length > 0 ? (
+              xchangeProcessed?.map((xchange, indexXchange) => (
                 <Text key={indexXchange}>{xchange}</Text>
               ))
             ) : (
@@ -759,11 +804,26 @@ const SchedulePanel = ({
       isOpen={isPanelOpen}
       onRenderFooterContent={renderPanelFooter}
       onDismiss={() => {
+        setXchangeJobGroup(null);
+        setXchangeSchedule(null);
+        setMessage(null);
         closePanel(false);
       }}
     >
       <PanelBody>
         <Container>
+          {message && (
+          <Spacing margin={{ bottom: 'normal' }}>
+            <MessageBar
+              id="__OrgPanel_Msg"
+              messageBarType={messageType}
+              isMultiline
+              onDismiss={() => setMessage(undefined)}
+            >
+              {message}
+            </MessageBar>
+          </Spacing>
+          )}
           {renderTopBody()}
           {scheduleType !== 'NOT_SCHEDULED' && renderBody()}
         </Container>
