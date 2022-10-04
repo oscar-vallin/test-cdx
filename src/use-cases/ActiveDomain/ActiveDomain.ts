@@ -1,16 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 import { CdxWebAppDomain, useNavigateToNewDomainLazyQuery } from 'src/data/services/graphql';
-import { useSessionStore } from 'src/store/SessionStore';
 import { ROUTES } from 'src/data/constants/RouteConstants';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 
 export const useActiveDomainUseCase = (onFetchComplete?: () => void) => {
   const ActiveDomainStore = useActiveDomainStore();
-  const SessionStore = useSessionStore();
 
-  const history = useHistory();
+  const handleError = ErrorHandler();
 
   const [fetchDomain, {
     data: domainData,
@@ -19,10 +17,8 @@ export const useActiveDomainUseCase = (onFetchComplete?: () => void) => {
   }] = useNavigateToNewDomainLazyQuery();
 
   const handleSessionTimeout = (error?: any) => {
-    if (window.location.pathname !== ROUTES.ROUTE_LOGIN.URL
-      && error?.networkError?.statusCode === 403) {
-      SessionStore.setGlobalError('Your session has expired please login again.');
-      history.push(ROUTES.ROUTE_LOGIN.URL);
+    if (window.location.pathname !== ROUTES.ROUTE_LOGIN.URL) {
+      handleError(error);
     }
   };
 
@@ -48,7 +44,6 @@ export const useActiveDomainUseCase = (onFetchComplete?: () => void) => {
   });
 
   useEffect(() => {
-    // console.log(domainData);
     if (!domainLoading && domainData) {
       const topNav = domainData
         .navigateToNewDomain
