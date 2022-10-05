@@ -17,6 +17,11 @@ jest.mock('react-router', () => ({
 jest.mock('src/store/ActiveDomainStore', () => ({
   useActiveDomainStore: mockUseActiveDomainStore,
 }));
+jest.mock('src/use-cases/ActiveDomain',() => ({
+  useActiveDomainUseCase: () => ({
+    setCurrentOrg: jest.fn(),
+  }),
+}));
 
 describe('Left Navigation menu', () => {
   it('Rendering the menu', () => {

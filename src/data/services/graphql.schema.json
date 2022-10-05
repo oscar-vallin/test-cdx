@@ -1623,6 +1623,12 @@
         "interfaces": null,
         "enumValues": [
           {
+            "name": "MAIN_MENU",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "DASHBOARD",
             "description": null,
             "isDeprecated": false,
@@ -6066,34 +6072,6 @@
             "type": {
               "kind": "SCALAR",
               "name": "ID",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "appDomain",
-            "description": null,
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "ENUM",
-                "name": "CDXWebAppDomain",
-                "ofType": null
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "selectedPage",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "CDXWebPage",
               "ofType": null
             },
             "defaultValue": null,
@@ -14682,31 +14660,6 @@
             "type": {
               "kind": "OBJECT",
               "name": "CurrentUserInfo",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "currentOrgNav",
-            "description": null,
-            "args": [
-              {
-                "name": "orgInput",
-                "description": null,
-                "type": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "OrgSidInput",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "WebNav",
               "ofType": null
             },
             "isDeprecated": false,
@@ -25898,6 +25851,18 @@
         "name": "WebNav",
         "description": null,
         "fields": [
+          {
+            "name": "orgSid",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "orgId",
             "description": null,

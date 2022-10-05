@@ -29,6 +29,7 @@ import {
   UiBooleanField,
 } from 'src/data/services/graphql';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
+import { useActiveDomainUseCase } from 'src/use-cases/ActiveDomain';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { ROUTE_ACTIVE_ORGS } from 'src/data/constants/RouteConstants';
@@ -43,6 +44,7 @@ import { useTableFilters } from 'src/hooks/useTableFilters';
 
 const ActiveOrgsPage = () => {
   const { orgSid: orgOwnerSid } = useOrgSid();
+  const ActiveDomain = useActiveDomainUseCase();
   const ActiveDomainStore = useActiveDomainStore();
   const [orgs, setOrgs] = useState<Organization[]>([]);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
@@ -61,9 +63,7 @@ const ActiveOrgsPage = () => {
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
 
   const changeActiveOrg = (org?: Organization) => {
-    ActiveDomainStore.setCurrentOrg({
-      orgSid: org?.sid,
-    });
+    ActiveDomain.setCurrentOrg(org?.sid);
   };
 
   const onRenderItemColumn = (item?: Organization, index?: number, column?: IColumn) => {

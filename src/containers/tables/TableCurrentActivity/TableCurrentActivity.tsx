@@ -11,7 +11,7 @@ import {
 } from 'src/data/services/graphql';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useHistory } from 'react-router-dom';
-import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
+import { useActiveDomainUseCase } from 'src/use-cases/ActiveDomain';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { TableFilters } from '../TableFilters';
 import { Container, TableContainer } from './TableActivity.styles';
@@ -20,7 +20,7 @@ import { TableActivity } from './TableActivity';
 const TablesCurrentActivity = ({ id = 'TableCurrentActivity' }) => {
   const { orgSid } = useOrgSid();
   const history = useHistory();
-  const ActiveDomainStore = useActiveDomainStore();
+  const ActiveDomain = useActiveDomainUseCase();
   const handleError = ErrorHandler();
 
   const { searchText, startDate, endDate } = useTableFilters('Name, Id, Last Activity');
@@ -106,9 +106,7 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity' }) => {
     const _urlParams = new URLSearchParams(window.location.search);
     const _startDate = _urlParams.get('startDate');
     const _endDate = _urlParams.get('endDate');
-    ActiveDomainStore.setCurrentOrg({
-      orgSid: _orgSid,
-    });
+    ActiveDomain.setCurrentOrg(_orgSid);
     history.push(`/file-status?orgSid=${_orgSid}&startDate=${_startDate}&endDate=${_endDate}`);
   };
 

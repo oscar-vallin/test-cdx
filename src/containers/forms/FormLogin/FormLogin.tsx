@@ -43,7 +43,8 @@ const FormLogin = ({ id }: FormLoginProps): ReactElement => {
     if (state.reset) {
       setValues({ ...INITIAL_STATE });
       SessionStore.setGlobalError(null);
-    } else if (state.error) {
+    }
+    if (state.error) {
       SessionStore.setGlobalError(state.error);
     } else if (state.data) {
       SessionStore.setGlobalError(null);
@@ -58,8 +59,8 @@ const FormLogin = ({ id }: FormLoginProps): ReactElement => {
   const renderGlobalError = () => {
     if (SessionStore.globalError) {
       return (
-        <StyledRow>
-          <MessageBar id="__Global_Error" messageBarType={MessageBarType.error} isMultiline>
+        <StyledRow id="__Global_Error">
+          <MessageBar messageBarType={MessageBarType.error} isMultiline>
             {SessionStore.globalError}
           </MessageBar>
         </StyledRow>
@@ -150,13 +151,19 @@ const FormLogin = ({ id }: FormLoginProps): ReactElement => {
                 {isValidEmail && (
                   <StyledRow id={`${id}__Card__Row--sublabel`}>
                     <Column id={`${id}__Card__Row__Column--label`}>
-                      <ButtonLink onClick={() => setForgotPassword(true)}>Forgot your password?</ButtonLink>
+                      <ButtonLink onClick={() => setForgotPassword(true)}>
+                        Forgot your password?
+                      </ButtonLink>
                     </Column>
                   </StyledRow>
                 )}
 
                 {forgotPassword && (
-                  <ForgotPasswordModal isOpen={setForgotPassword} open={forgotPassword} currentUserId={values.userId} />
+                  <ForgotPasswordModal
+                    isOpen={setForgotPassword}
+                    open={forgotPassword}
+                    currentUserId={values.userId}
+                  />
                 )}
               </Column>
             </StyledRow>

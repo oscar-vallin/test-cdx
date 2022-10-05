@@ -2,6 +2,7 @@ import { ReactElement, useState } from 'react';
 import { useHistory, useLocation } from 'react-router';
 import { Icon, IContextualMenuItem } from '@fluentui/react';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
+import { useActiveDomainUseCase } from 'src/use-cases/ActiveDomain';
 import { ProfileMenu } from 'src/containers/menus/ProfileMenu';
 import { getRouteByApiId, ROUTE_USER_SETTINGS } from 'src/data/constants/RouteConstants';
 import { useCurrentUserTheme } from 'src/hooks/useCurrentUserTheme';
@@ -34,6 +35,7 @@ const AppHeader = ({ onMenuButtonClick, hasLeftMenu = true }: AppHeaderProps): R
   const { orgSid, startDate, endDate } = useOrgSid();
   const ThemeStore = useThemeStore();
   const { user } = useSessionStore();
+  const ActiveDomain = useActiveDomainUseCase();
   const ActiveDomainStore = useActiveDomainStore();
 
   const { setFontSize } = useCurrentUserTheme();
@@ -145,7 +147,7 @@ const AppHeader = ({ onMenuButtonClick, hasLeftMenu = true }: AppHeaderProps): R
         <StyledNavButton
           id="__ProfileMenu_Home_button"
           onClick={() => {
-            ActiveDomainStore.setCurrentOrg(ActiveDomainStore.domainOrg.origin);
+            ActiveDomain.setCurrentOrg(ActiveDomainStore.domainOrg.origin.orgSid);
           }}
           title="Home"
           aria-label="Home"
