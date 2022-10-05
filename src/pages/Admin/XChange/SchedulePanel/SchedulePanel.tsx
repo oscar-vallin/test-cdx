@@ -945,7 +945,7 @@ const SchedulePanel = ({
           )}
           {renderTopBody()}
           {scheduleType !== ScheduleType.NotScheduled && (
-            <div>
+            <>
               {ScheduleFrequency.InGroup === scheduleFrequency ? (
                 <>
                   {renderJobGroupList()}
@@ -962,7 +962,7 @@ const SchedulePanel = ({
               ) : (
                 renderBody()
               )}
-            </div>
+            </>
           )}
         </Container>
       </PanelBody>
