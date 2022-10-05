@@ -51,6 +51,7 @@ export const NavPanel = ({
               onExpand();
             }
           }}
+          className={isOpen ? 'is-expanded' : ''}
         >
           {label}
         </ActionButton>
