@@ -332,28 +332,30 @@ const XchangeDetailsPage = () => {
                     </EmptyMessage>
                   </Row>
                 ) : (
-                  <Row>
-                    <Stack horizontal={true} horizontalAlign="space-between">
-                      <FontIcon iconName="ReminderTime" style={{ fontSize: '10px', fontWeight: 600, paddingRight: '8px'}} />
-                      <Text style={{ fontSize: '12px' }}>Expected to run</Text>
-                    </Stack>
-                  </Row>
+                  <>
+                    <Row>
+                      <Stack horizontal={true} horizontalAlign="space-between">
+                        <FontIcon iconName="ReminderTime" style={{ fontSize: '10px', fontWeight: 600, paddingRight: '8px'}} />
+                        <Text style={{ fontSize: '12px' }}>Expected to run</Text>
+                      </Stack>
+                    </Row>
+                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                      <Text style={{ fontSize: '12px' }}>{schedule?.expectedRunSchedule}</Text>
+                    </Spacing>
+                    <Spacing margin={{ bottom: 'normal' }}>
+                      <Text style={{ fontSize: '12px' }}>{schedule?.expectedCompletionTime}</Text>
+                    </Spacing>
+                    <Row>
+                      <Column>
+                        <ButtonLink
+                          onClick={() => setOpenJobGroup(true)}
+                        >
+                          {schedule?.xchangeJobGroupName}
+                        </ButtonLink>
+                      </Column>
+                    </Row>
+                  </>
                 )}
-                <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                  <Text style={{ fontSize: '12px' }}>{schedule?.expectedRunSchedule}</Text>
-                </Spacing>
-                <Spacing margin={{ bottom: 'normal' }}>
-                  <Text style={{ fontSize: '12px' }}>{schedule?.expectedCompletionTime}</Text>
-                </Spacing>
-                <Row>
-                  <Column>
-                    <ButtonLink
-                      onClick={() => setOpenJobGroup(true)}
-                    >
-                      {schedule?.xchangeJobGroupName}
-                    </ButtonLink>
-                  </Column>
-                </Row>
               </Container>
             </CardStyled>
           </Spacing>
@@ -658,7 +660,7 @@ const XchangeDetailsPage = () => {
         closePanel={setOpenSchedulePanel}
         xchangeConfigSid={xchangeDataDetails?.sid ?? ''}
         refreshPage={setRefreshXchangeDetails}
-        schedule={true}
+        typeSchedule={true}
       />
       <DialogYesNo {...dialogProps} open={showDialog} />
     </LayoutDashboard>

@@ -179,7 +179,7 @@ const JobGroups = () => {
         closePanel={setIsOpenPanel}
         xchangeJobGroupSid={currentSid}
         refreshPage={setRefreshJobGroup}
-        schedule={false}
+        typeSchedule={false}
         xchangeProcessed={[]}
       />
     </LayoutDashboard>

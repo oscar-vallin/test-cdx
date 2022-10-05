@@ -6,6 +6,7 @@ import {
   useXchangeJobGroupFormLazyQuery,
   useCreateXchangeJobGroupMutation,
   useUpdateXchangeJobGroupMutation,
+  useXchangeJobGroupsLazyQuery,
   XchangeScheduleForm,
   XchangeJobGroupForm,
   ScheduleFrequency,
@@ -17,6 +18,7 @@ import {
   ScheduleType,
   UiOptions,
   GqOperationResponse,
+  XchangeJobGroupConnection,
 } from 'src/data/services/graphql';
 import {
   PanelBody,
@@ -37,20 +39,24 @@ import {
   Text,
   MessageBar,
   MessageBarType,
+  TooltipHost,
+  DirectionalHint,
 } from '@fluentui/react';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { CircleSchedule } from 'src/components/circleSchedule';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { SubscribersList } from 'src/components/subscribers/SubscribersList';
 import { AddSubscriberModal } from 'src/containers/modals/AddSubsciberModal/AddSubscriberModal';
-import { ButtonAction } from 'src/components/buttons';
+import { ButtonAction, ButtonLink } from 'src/components/buttons';
 import { UIFlatSelectOneField } from 'src/components/inputs/InputDropdown/UIFlatSelectOneField';
 import { Column, Container, Row } from 'src/components/layouts';
 import { UITimeSelectOneField } from 'src/components/inputs/InputDropdown/UITimeSelectOneField';
 import { useNotification } from 'src/hooks/useNotification';
 import { UIInputText } from 'src/components/inputs/InputText';
 import { EmptyMessage } from 'src/containers/tables/TableCurrentActivity/TableActivity.styles';
+import { EmptyState } from 'src/containers/states';
 import { SubscriberOptionProps } from '../XchangeAlerts/XchangeAlertsPanel/XchangeAlertsPanel';
+import { StyledText, StyledXchanges } from './SchedulePanel.styles';
 
 type ScheduleProps = {
     isPanelOpen: boolean;
@@ -59,7 +65,7 @@ type ScheduleProps = {
     xchangeConfigSid?: string,
     xchangeJobGroupSid?: string;
     refreshPage: (data: boolean) => void;
-    schedule?: boolean;
+    typeSchedule: boolean;
     xchangeProcessed?: string[];
 };
 
@@ -118,14 +124,16 @@ const SchedulePanel = ({
   closePanel,
   xchangeConfigSid,
   refreshPage,
-  schedule,
+  typeSchedule,
   xchangeProcessed,
   xchangeJobGroupSid,
 }: ScheduleProps) => {
   const { orgSid } = useOrgSid();
   const Toast = useNotification();
+  const [schedule, setSchedule] = useState<boolean>();
   const [xchangeSchedule, setXchangeSchedule] = useState<XchangeScheduleForm | null>();
   const [xchangeJobGroup, setXchangeJobGroup] = useState<XchangeJobGroupForm | null>();
+  const [xchangeJobGroups, setXchangeJobGroups] = useState<XchangeJobGroupConnection | null>();
   const [options, setOptions] = useState<UiOptions[]>([]);
   const [currentDaySelected, setCurrentDaySelected] = useState<DaysProps>(DefaulDaysProps);
   const [currentMonthSelected, setCurrentMonthSelected] = useState<MonthsProps>(DefaulMonthsProps);
@@ -158,6 +166,11 @@ const SchedulePanel = ({
   ] = useXchangeScheduleFormLazyQuery();
 
   const [
+    jobGroupList,
+    { data: jobGroupListData, loading: isLoadingListJobGroup },
+  ] = useXchangeJobGroupsLazyQuery();
+
+  const [
     jobGroupForm, { data: jobGroupData, loading: isLoadingJobGroup },
   ] = useXchangeJobGroupFormLazyQuery();
 
@@ -177,7 +190,7 @@ const SchedulePanel = ({
   ] = useUpdateXchangeScheduleMutation();
 
   const fethData = () => {
-    if (schedule) {
+    if (typeSchedule) {
       scheduleForm({
         variables: {
           xchangeConfigSid: xchangeConfigSid ?? '',
@@ -189,6 +202,14 @@ const SchedulePanel = ({
       variables: {
         orgSid,
         sid: xchangeJobGroupSid,
+      },
+    });
+  };
+
+  const fethJobGroupData = () => {
+    jobGroupForm({
+      variables: {
+        orgSid,
       },
     });
   };
@@ -235,6 +256,7 @@ const SchedulePanel = ({
 
   useEffect(() => {
     if (isPanelOpen) {
+      setSchedule(typeSchedule);
       fethData();
     }
   }, [isPanelOpen]);
@@ -297,6 +319,16 @@ const SchedulePanel = ({
   }, [jobGroupData, isLoadingJobGroup]);
 
   useEffect(() => {
+    if (ScheduleFrequency.InGroup === scheduleFrequency) {
+      jobGroupList({
+        variables: {
+          orgSid,
+        },
+      });
+    }
+  }, [scheduleFrequency]);
+
+  useEffect(() => {
     const response = updateData?.updateXchangeSchedule;
 
     if (updateData) {
@@ -357,6 +389,13 @@ const SchedulePanel = ({
       Toast.error({ text: 'Error updating job group' });
     }
   }, [jobGroupUpdated, isLoadingUpdateJobGroup, jobGroupUpdatedError]);
+
+  useEffect(() => {
+    if (!isLoadingListJobGroup && jobGroupListData) {
+      const { xchangeJobGroups: xchangeJobGroupList } = jobGroupListData;
+      setXchangeJobGroups(xchangeJobGroupList);
+    }
+  }, [jobGroupListData, isLoadingListJobGroup]);
 
   const selectedWeekly = () => (
     <Spacing margin={{ top: 'double', bottom: 'normal' }}>
@@ -589,6 +628,86 @@ const SchedulePanel = ({
     }
 
     return null;
+  };
+
+  const renderJobGroupList = () => {
+    if (isLoadingListJobGroup) {
+      return (
+        <Spacing margin={{ top: 'double' }}>
+          <Spinner size={SpinnerSize.large} label="Loading job group list" />
+        </Spacing>
+      );
+    }
+    const scheduleTooltiphost = (currentSchedule?: XchangeSchedule) => (
+      <>
+        <Stack horizontal>
+          <FontIcon
+            iconName="CalendarMirrored"
+            style={{
+              fontSize: '10px',
+              fontWeight: 600,
+              marginTop: '1px',
+              paddingRight: '8px',
+            }}
+          />
+          <StyledText>{currentSchedule?.scheduleType}</StyledText>
+        </Stack>
+        <Stack>
+          <StyledText>{currentSchedule?.expectedRunSchedule}</StyledText>
+          <StyledText>{currentSchedule?.expectedCompletionTime}</StyledText>
+        </Stack>
+      </>
+    );
+
+    if (xchangeJobGroups?.nodes && xchangeJobGroups.nodes?.length > 0) {
+      return (
+        <Spacing margin={{ top: 'double' }}>
+          <ChoiceGroup
+            options={
+              xchangeJobGroups.nodes.map((jobGroup, indexJobGroup) => ({
+                key: `${jobGroup.name}-${indexJobGroup}`,
+                text: jobGroup.name ?? '',
+                onRenderLabel: (props) => (
+                  <Spacing margin={{ left: 'double' }} key={`${jobGroup.name}-label-${indexJobGroup}`}>
+                    <Text style={{ marginRight: '10px' }}>{jobGroup.name}</Text>
+                      <TooltipHost
+                        directionalHint={DirectionalHint.rightCenter}
+                        content={scheduleTooltiphost(jobGroup.schedule)}
+                        >
+                        <FontIcon 
+                          iconName="Info" 
+                          style={{
+                            fontSize: '12px', 
+                            color: '#121829', 
+                            fontWeight: 700,
+                            cursor: 'pointer',
+                          }}
+                        />
+                      </TooltipHost>
+                    </Spacing>
+                ),
+                onRenderField: (props, render) => (
+                  <>
+                    {render!(props)}
+                    <StyledXchanges>
+                      {jobGroup.includedExchanges.map((xchange, indexXchange) => (
+                        <li key={`${xchange}-${indexXchange}`}>{xchange}</li>
+                      ))}
+                    </StyledXchanges>
+                   </>
+                  ),
+              }))
+            }
+          />
+        </Spacing>
+      );
+    }
+
+    return (
+      <EmptyState
+        description="There are no configured Job Groups"
+      />
+    );
   };
 
   const renderBody = () => {
@@ -825,7 +944,26 @@ const SchedulePanel = ({
           </Spacing>
           )}
           {renderTopBody()}
-          {scheduleType !== 'NOT_SCHEDULED' && renderBody()}
+          {scheduleType !== ScheduleType.NotScheduled && (
+            <div>
+              {ScheduleFrequency.InGroup === scheduleFrequency ? (
+                <>
+                  {renderJobGroupList()}
+                  <ButtonLink
+                    underline
+                    onClick={() => {
+                      setSchedule((prevState) => !prevState);
+                      fethJobGroupData();
+                    }}
+                  >
+                    Create a new Job Group
+                  </ButtonLink>
+                </>
+              ) : (
+                renderBody()
+              )}
+            </div>
+          )}
         </Container>
       </PanelBody>
       {addSubscriberModal && (
