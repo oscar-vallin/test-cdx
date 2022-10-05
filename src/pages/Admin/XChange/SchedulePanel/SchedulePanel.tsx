@@ -39,6 +39,8 @@ import {
   Text,
   MessageBar,
   MessageBarType,
+  TooltipHost,
+  DirectionalHint,
 } from '@fluentui/react';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { CircleSchedule } from 'src/components/circleSchedule';
@@ -54,6 +56,7 @@ import { UIInputText } from 'src/components/inputs/InputText';
 import { EmptyMessage } from 'src/containers/tables/TableCurrentActivity/TableActivity.styles';
 import { EmptyState } from 'src/containers/states';
 import { SubscriberOptionProps } from '../XchangeAlerts/XchangeAlertsPanel/XchangeAlertsPanel';
+import { StyledText, StyledXchanges } from './SchedulePanel.styles';
 
 type ScheduleProps = {
     isPanelOpen: boolean;
@@ -635,32 +638,68 @@ const SchedulePanel = ({
         </Spacing>
       );
     }
+    const scheduleTooltiphost = (currentSchedule?: XchangeSchedule) => (
+      <>
+        <Stack horizontal>
+          <FontIcon
+            iconName="CalendarMirrored"
+            style={{
+              fontSize: '10px',
+              fontWeight: 600,
+              marginTop: '1px',
+              paddingRight: '8px',
+            }}
+          />
+          <StyledText>{currentSchedule?.scheduleType}</StyledText>
+        </Stack>
+        <Stack>
+          <StyledText>{currentSchedule?.expectedRunSchedule}</StyledText>
+          <StyledText>{currentSchedule?.expectedCompletionTime}</StyledText>
+        </Stack>
+      </>
+    );
+
     if (xchangeJobGroups?.nodes && xchangeJobGroups.nodes?.length > 0) {
       return (
-        <ChoiceGroup 
-         options={[
-          {
-            key: 'list',
-            text: 'list',
-            styles: { choiceFieldWrapper: { marginTop: '10px', width: '100%' } },
-            onRenderField: (props, render) => (
-              <>
-              {render!(props)}
-              <>
-                <div>
-                  <ul>
-                    <li>oscar</li>
-                    <li>daniel</li>
-                    <li>pepe</li>
-                    <li>carlos</li>
-                  </ul>
-                </div>
-              </>
-              </>
-            ),
-          },
-         ]}
-        />
+        <Spacing margin={{ top: 'double' }}>
+          <ChoiceGroup
+            options={
+              xchangeJobGroups.nodes.map((jobGroup, indexJobGroup) => ({
+                key: `${jobGroup.name}-${indexJobGroup}`,
+                text: jobGroup.name ?? '',
+                onRenderLabel: (props) => (
+                  <Spacing margin={{ left: 'double' }} key={`${jobGroup.name}-label-${indexJobGroup}`}>
+                    <Text style={{ marginRight: '10px' }}>{jobGroup.name}</Text>
+                      <TooltipHost
+                        directionalHint={DirectionalHint.rightCenter}
+                        content={scheduleTooltiphost(jobGroup.schedule)}
+                        >
+                        <FontIcon 
+                          iconName="Info" 
+                          style={{
+                            fontSize: '12px', 
+                            color: '#121829', 
+                            fontWeight: 700,
+                            cursor: 'pointer',
+                          }}
+                        />
+                      </TooltipHost>
+                    </Spacing>
+                ),
+                onRenderField: (props, render) => (
+                  <>
+                    {render!(props)}
+                    <StyledXchanges>
+                      {jobGroup.includedExchanges.map((xchange, indexXchange) => (
+                        <li key={`${xchange}-${indexXchange}`}>{xchange}</li>
+                      ))}
+                    </StyledXchanges>
+                   </>
+                  ),
+              }))
+            }
+          />
+        </Spacing>
       );
     }
 
@@ -906,21 +945,24 @@ const SchedulePanel = ({
           )}
           {renderTopBody()}
           {scheduleType !== ScheduleType.NotScheduled && (
-            <>
+            <div>
               {ScheduleFrequency.InGroup === scheduleFrequency ? (
                 <>
                   {renderJobGroupList()}
-                  <ButtonLink underline onClick={() => {
-                    setSchedule((prevState) => !prevState);
-                    fethJobGroupData();
-                  }}>
+                  <ButtonLink
+                    underline
+                    onClick={() => {
+                      setSchedule((prevState) => !prevState);
+                      fethJobGroupData();
+                    }}
+                  >
                     Create a new Job Group
                   </ButtonLink>
                 </>
               ) : (
                 renderBody()
               )}
-            </>
+            </div>
           )}
         </Container>
       </PanelBody>
