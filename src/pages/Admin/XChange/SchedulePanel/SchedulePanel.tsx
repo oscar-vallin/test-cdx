@@ -584,50 +584,53 @@ const SchedulePanel = ({
   );
 
   const renderTopBody = () => {
-    if (!isLoadingForm && !isLoadingJobGroup) {
+    if (isLoadingForm || isLoadingJobGroup) {
       return (
-        <>
-          <Row>
-            {!schedule && (
-            <Spacing margin={{ bottom: 'normal' }}>
-              <Column>
-                <UIInputText
-                  id="jobGroupName"
-                  value={jobGroupName}
-                  uiField={xchangeJobGroup?.name}
-                  onChange={(event, _newValue) => setJobGroupName(_newValue ?? '')}
-                />
-              </Column>
-            </Spacing>
-            )}
-          </Row>
-          <Row>
-            <Column lg="4">
-              <UIFlatSelectOneField
-                id="scheduleType"
-                uiField={renderUiField('scheduleType')}
-                options={options}
-                value={scheduleType}
-                onChange={(_newValue) => setScheduleType(_newValue ?? '')}
-              />
-            </Column>
-            {scheduleType !== 'NOT_SCHEDULED' && !isLoadingForm && (
-            <Column lg="4">
-              <UIFlatSelectOneField
-                id="scheduleFrequency"
-                uiField={renderUiField('frequency')}
-                options={options}
-                value={scheduleFrequency}
-                onChange={(_newValue) => setScheduleFrequency(_newValue ?? '')}
-              />
-            </Column>
-            )}
-          </Row>
-        </>
-      )
+        <Spacing margin={{ top: 'double' }}>
+          <Spinner size={SpinnerSize.large} label="Loading schedule panel" />
+        </Spacing>
+      );
     }
-
-    return null;
+    return (
+      <>
+        <Row>
+          {!schedule && (
+          <Spacing margin={{ bottom: 'normal' }}>
+            <Column>
+              <UIInputText
+                id="jobGroupName"
+                value={jobGroupName}
+                uiField={xchangeJobGroup?.name}
+                onChange={(event, _newValue) => setJobGroupName(_newValue ?? '')}
+              />
+            </Column>
+          </Spacing>
+          )}
+        </Row>
+        <Row>
+          <Column lg="4">
+            <UIFlatSelectOneField
+              id="scheduleType"
+              uiField={renderUiField('scheduleType')}
+              options={options}
+              value={scheduleType}
+              onChange={(_newValue) => setScheduleType(_newValue ?? '')}
+            />
+          </Column>
+          {scheduleType !== 'NOT_SCHEDULED' && !isLoadingForm && (
+          <Column lg="4">
+            <UIFlatSelectOneField
+              id="scheduleFrequency"
+              uiField={renderUiField('frequency')}
+              options={options}
+              value={scheduleFrequency}
+              onChange={(_newValue) => setScheduleFrequency(_newValue ?? '')}
+            />
+          </Column>
+          )}
+        </Row>
+      </>
+    )
   };
 
   const renderJobGroupList = () => {
@@ -923,8 +926,9 @@ const SchedulePanel = ({
       isOpen={isPanelOpen}
       onRenderFooterContent={renderPanelFooter}
       onDismiss={() => {
-        setXchangeJobGroup(null);
-        setXchangeSchedule(null);
+        setCurrentMonthSelected(DefaulMonthsProps);
+        setCurrentDaySelected(DefaulDaysProps);
+        setDays([]);
         setMessage(null);
         closePanel(false);
       }}
@@ -944,20 +948,22 @@ const SchedulePanel = ({
           </Spacing>
           )}
           {renderTopBody()}
-          {scheduleType !== ScheduleType.NotScheduled && (
+          {scheduleType !== ScheduleType.NotScheduled && scheduleType !== '' && (
             <>
               {ScheduleFrequency.InGroup === scheduleFrequency ? (
                 <>
                   {renderJobGroupList()}
-                  <ButtonLink
-                    underline
-                    onClick={() => {
-                      setSchedule((prevState) => !prevState);
-                      fethJobGroupData();
-                    }}
-                  >
-                    Create a new Job Group
-                  </ButtonLink>
+                  <Spacing margin={{ top: 'normal' }}>
+                    <ButtonLink
+                      underline
+                      onClick={() => {
+                        setSchedule((prevState) => !prevState);
+                        fethJobGroupData();
+                      }}
+                    >
+                      Create a new Job Group
+                    </ButtonLink>
+                  </Spacing>
                 </>
               ) : (
                 renderBody()
