@@ -63,7 +63,7 @@ export const useActiveDomainUseCase = (onFetchComplete?: () => void) => {
 
       const orgSubNavItems = orgTrail?.subNavItems?.map(parseToStoreObj);
       ActiveDomainStore.setCurrentOrg({
-        orgSubNavItems,
+        subNavItems: orgSubNavItems,
         label: orgTrail?.label,
         orgId: orgTrail?.orgId,
         orgSid: orgTrail?.orgSid,
