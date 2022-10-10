@@ -4,8 +4,6 @@ import {
   DialogFooter,
   PrimaryButton,
   SearchBox,
-  Spinner,
-  SpinnerSize,
   Stack,
   Text,
 } from '@fluentui/react';
@@ -34,8 +32,10 @@ type AddSubscriberModalProps = {
 const AddSubscriberModal = ({
   isOpen, orgSid, addSubscribers, currentSubscribers,
 }: AddSubscriberModalProps) => {
-  const [userQuickSearch, { data: quickSearchData, loading: quickSearchLoading }] = useUserQuickSearchLazyQuery();
-  const [createUser, { data: createUserData, loading: createUserLoading }] = useCreateUserMutation();
+  const [userQuickSearch,
+    { data: quickSearchData, loading: quickSearchLoading }] = useUserQuickSearchLazyQuery();
+  const [createUser,
+    { data: createUserData, loading: createUserLoading }] = useCreateUserMutation();
   const [currentSubscriber, setCurrentSubscriber] = useState('');
   const [subscriberFound, setSubsciberFound] = useState<SubscriberOptionProps | null>();
   const [addNewAccount, setAddNewAccount] = useState(false);
@@ -59,14 +59,6 @@ const AddSubscriberModal = ({
   }, [createUserData, createUserLoading]);
 
   const doSearch = () => {
-    if (quickSearchLoading) {
-      return (
-        <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-          <Spinner size={SpinnerSize.small} />
-        </Spacing>
-      );
-    }
-
     if (quickSearchData?.userQuickSearch?.length && quickSearchData.userQuickSearch.length > 0) {
       const subscribers = quickSearchData.userQuickSearch;
       return subscribers.map((subscriber, index) => (
@@ -89,20 +81,16 @@ const AddSubscriberModal = ({
       ));
     }
 
-    if (quickSearchData?.userQuickSearch && !addNewAccount) {
-      return (
-        <Spacing margin={{ left: 'normal', top: 'normal', bottom: 'normal' }}>
-          <Stack>
-            <Text>No matching account found</Text>
-            <ButtonLink id="__Add_NewAccount" style={{ paddingTop: '10px' }} onClick={() => setAddNewAccount(true)}>
-              Add a new account
-            </ButtonLink>
-          </Stack>
-        </Spacing>
-      );
-    }
-
-    return null;
+    return (
+      <Spacing margin={{ left: 'normal', top: 'normal', bottom: 'normal' }}>
+        <Stack>
+          <Text>No matching account found</Text>
+          <ButtonLink id="__Add_NewAccount" style={{ paddingTop: '10px' }} onClick={() => setAddNewAccount(true)}>
+            Add a new account
+          </ButtonLink>
+        </Stack>
+      </Spacing>
+    );
   };
 
   const renderBody = () => (
