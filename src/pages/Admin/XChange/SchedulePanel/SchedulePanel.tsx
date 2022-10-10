@@ -157,7 +157,6 @@ const SchedulePanel = ({
   const [endDayOfMonth, setEndDayOfMonth] = useState('');
   const [endDayOrdinal, setEndDayOrdinal] = useState('');
   const [endRelativeDay, setEndRelativeDay] = useState('');
-  const [toBeCompletedMonthy, setToBeCompletedMonthy] = useState(true);
   const [message, setMessage] = useState<string | null>();
   const [messageType, setMessageType] = useState<MessageBarType>(MessageBarType.info);
 
@@ -670,23 +669,23 @@ const SchedulePanel = ({
               xchangeJobGroups.nodes.map((jobGroup, indexJobGroup) => ({
                 key: `${jobGroup.name}-${indexJobGroup}`,
                 text: jobGroup.name ?? '',
-                onRenderLabel: (props) => (
+                onRenderLabel: () => (
                   <Spacing margin={{ left: 'double' }} key={`${jobGroup.name}-label-${indexJobGroup}`}>
                     <Text style={{ marginRight: '10px' }}>{jobGroup.name}</Text>
                     <TooltipHost
                         directionalHint={DirectionalHint.rightCenter}
                         content={scheduleTooltiphost(jobGroup.schedule)}
-                        >
-                        <FontIcon 
-                          iconName="Info" 
-                          style={{
-                            fontSize: '12px', 
-                            color: '#121829', 
-                            fontWeight: 700,
-                            cursor: 'pointer',
-                          }}
-                        />
-                      </TooltipHost>
+                    >
+                      <FontIcon
+                        iconName="Info"
+                        style={{
+                          fontSize: '12px',
+                          color: '#121829',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                        }}
+                      />
+                    </TooltipHost>
                   </Spacing>
                 ),
                 onRenderField: (props, render) => (
@@ -698,7 +697,7 @@ const SchedulePanel = ({
                       ))}
                     </StyledXchanges>
                   </>
-                  ),
+                ),
               }))
             }
           />
@@ -755,14 +754,14 @@ const SchedulePanel = ({
                               <Text style={{ marginTop: '8px' }}>Day</Text>
                             </Stack>
                           </Spacing>
-                        )
+                        ),
                       },
                       {
-                        key:'relOrdDay',
+                        key: 'relOrdDay',
                         text: '',
                         onRenderLabel: (props) => (
                           <Spacing margin={{ left: 'double' }}>
-                            <Stack horizontal horizontalAlign='space-around'>
+                            <Stack horizontal horizontalAlign="space-around">
                               <UIFlatSelectOneField
                                 id="scheduleSelectTime"
                                 uiField={renderUiField('endDayOrdinal')}
@@ -781,7 +780,7 @@ const SchedulePanel = ({
                               />
                             </Stack>
                           </Spacing>
-                        )
+                        ),
                       },
                     ]}
                   />
