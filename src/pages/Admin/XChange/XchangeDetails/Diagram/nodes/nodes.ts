@@ -1,10 +1,10 @@
 export function InitialNodes(data) {
   const postionTransmissions = [
-    { x: 0, y: 530 },
+    { x: 10, y: 530 },
     { x: 270, y: 530 },
     { x: 540, y: 530 },
     { x: 820, y: 530 },
-    { x: 0, y: 700 },
+    { x: 10, y: 700 },
     { x: 270, y: 700 },
     { x: 540, y: 700 },
     { x: 820, y: 700 },
@@ -14,7 +14,7 @@ export function InitialNodes(data) {
   const initialSteps = data.steps.map((step, index: number) => {
     const values = {};
     const lastNode = index === data.steps.length - 1;
-    let positionX = 0;
+    let positionX = 10;
     let positionY = 50;
 
     if (step.position.x === 1 || step.position.x === 2) {
@@ -82,7 +82,6 @@ export function InitialNodes(data) {
       xchangeFileProcessSid: null,
     };
     values['position'] = { x: positionX, y: positionY };
-
     return values;
   });
 

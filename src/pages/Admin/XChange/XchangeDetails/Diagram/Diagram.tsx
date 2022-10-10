@@ -10,6 +10,7 @@ import {
 import DataNodeSteps from './CustomDiagramNodes/DataNodeSteps';
 import DataNodeTransmissions from './CustomDiagramNodes/DataNodeTransmissions';
 import { InitialNodes } from './nodes/nodes';
+import { NodeParent } from './nodes/parentNode';
 import { InitialEdges } from './edges/edges';
 import { XchangeStepPanel } from '../XchangeStepPanel/XchangeStepPanel';
 import { XchangeTransmissionPanel } from '../XchangeTransmissionPanel/XchangeTransmissionPanel';
@@ -30,8 +31,9 @@ const Diagram = ({
   data, refreshDetailsPage, xchangeFileProcessSid, allowedCommands,
 }: DiagramProps) => {
   const { initialNodes } = InitialNodes(data);
+  const { nodeWithParents } = NodeParent(initialNodes);
   const { initialEdges } = InitialEdges(data);
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState(nodeWithParents);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
   const [openStepPanel, setOpenStepPanel] = useState(false);
@@ -145,7 +147,7 @@ const Diagram = ({
   };
 
   useEffect(() => {
-    setNodes(initialNodes);
+    setNodes(nodeWithParents);
     setEdges(initialEdges);
   }, [data, showIcons]);
 
