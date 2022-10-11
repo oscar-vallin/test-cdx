@@ -9,6 +9,7 @@ const defaultProps = {
   onChangeDate: () => null,
   items: [],
   onChangeView: () => null,
+  onChangeToday: () => null,
 };
 
 describe('ScheduleMonth', () => {

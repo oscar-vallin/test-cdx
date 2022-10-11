@@ -22,6 +22,7 @@ type ScheduleMonthType = {
   items: ScheduleOccurrence[];
   onChangeDate: (d: Date) => void;
   onChangeView: (viewName: string) => void;
+  onChangeToday: (t: Date) => void;
 };
 
 export const ScheduleMonth = ({
@@ -31,6 +32,7 @@ export const ScheduleMonth = ({
   items,
   onChangeDate,
   onChangeView,
+  onChangeToday,
 }: ScheduleMonthType) => {
   const [dates, setDates] = useState({
     currentMonth: currentDate,
@@ -116,7 +118,10 @@ export const ScheduleMonth = ({
             isSameDay={isSameDay(day, currentDate)}
             isSelectedDate={isSameDay(day, dates.selectedDate)}
             key={`day_${i}_${day}`}
-            onClick={() => handleChangeDate(cloneDay)}
+            onClick={() => {
+              onChangeToday(cloneDay)
+              handleChangeDate(cloneDay)
+            }}
           >
             <CalendarBodyCellNumber id={`CalendarBodyCellNumber_${i}_${day}`} key={`cell_${i}_${day}`}>
               {isSameMonth(day, dates.monthStart) && !isSameDay(day, currentDate)

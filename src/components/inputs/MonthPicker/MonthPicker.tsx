@@ -10,6 +10,7 @@ import { Container } from './MonthPicker.styles';
 type MonthPickerProps = {
   open?: boolean;
   value?: Date;
+  onTodayValue?: Date;
   onSelect?: (date: Date) => void;
   showDates?: boolean;
   isMonthPickerVisible?: boolean;
@@ -67,6 +68,7 @@ let dateRangeString = null as any;
 export const MonthPicker = ({
   open,
   value,
+  onTodayValue,
   onSelect,
   showDates = false,
   dateRangeType = DateRangeType.Month,
@@ -86,6 +88,7 @@ export const MonthPicker = ({
   const [selectedDate, setSelectedDate] = useState<Date>(value ?? new Date());
 
   const onSelectDate = (date: Date, dateRangeArray?: Date[]) => {
+    // console.log(date)
     setSelectedDate(date);
     setSelectedDateRange(dateRangeArray);
     if (onSelect) {
@@ -182,6 +185,7 @@ export const MonthPicker = ({
       )}
       <Calendar
         className="cdx-cal"
+        today={onTodayValue ?? new Date()}
         data-testid="Calendar"
         onSelectDate={onSelectDate}
         onDismiss={onCalendarDismiss}

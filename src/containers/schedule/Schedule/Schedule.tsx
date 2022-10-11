@@ -29,6 +29,7 @@ const Schedule = ({ id }) => {
   const history = useHistory();
   const [currentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(startDate ? new Date(`${startDate}T00:00:00.000`) : new Date());
+  const [selectedToday, setSelectedToday] = useState(new Date());
   const [currentView, setCurrentView] = useState(hash ?? 'month');
   const { items } = useScheduleItems(orgSid, {
     rangeStart: startOfMonth(selectedDate),
@@ -85,6 +86,7 @@ const Schedule = ({ id }) => {
         items={items}
         onChangeDate={handleChangeDate}
         onChangeView={handleChangeView}
+        onChangeToday={setSelectedToday}
       />
     );
   };
@@ -104,6 +106,7 @@ const Schedule = ({ id }) => {
             id={id}
             selectedDate={selectedDate}
             currentView={currentView}
+            selectedToday={selectedToday}
             onChangeView={handleChangeView}
             onChangeDate={handleChangeDate}
           />

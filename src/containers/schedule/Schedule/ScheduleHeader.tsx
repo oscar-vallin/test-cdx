@@ -25,12 +25,13 @@ type ScheduleHeaderType = {
   id: string;
   currentView: string;
   selectedDate: Date;
+  selectedToday: Date;
   onChangeDate: (d: Date) => void;
   onChangeView: (view: string) => void;
 };
 
 export const ScheduleHeader = ({
-  id, currentView, selectedDate, onChangeDate, onChangeView,
+  id, currentView, selectedDate, selectedToday, onChangeDate, onChangeView,
 }: ScheduleHeaderType) => {
   const headerMonthFormat = 'MMMM';
   const headerYearFormat = 'yyyy';
@@ -201,6 +202,7 @@ export const ScheduleHeader = ({
             onClickOutside={handleOnOutsideClick}
             open={calendarOpen}
             value={selectedDate}
+            onTodayValue={selectedToday}
             onSelect={handleChangeDate}
             dateRangeType={DateRangeType.Month}
           />

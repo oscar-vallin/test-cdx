@@ -8,6 +8,7 @@ const defaultProps = {
   currentView: 'month',
   currentDate: new Date(),
   selectedDate: new Date(),
+  selectedToday: new Date(),
   onChangeView,
 };
 
