@@ -106,26 +106,18 @@ export const LeftNav = ({ menuOptionSelected, isOpen }: LeftNavProps) => {
       return <MenuSeparator key={`adminNav_separator_${index}`} />;
     }
 
-    if (menuOptionSelected === ROUTE_XCHANGE_DETAILS.API_ID && navItem.label === 'Xchange Profile') {
-      if (navItem.subNavItems.length < 6) {
-        const positionOne = navItem.subNavItems[0];
-        navItem.subNavItems.shift();
-        navItem.subNavItems.unshift({
+    const subNavItems: any[] = [];
+    navItem.subNavItems.forEach((subNavItem) => {
+      subNavItems.push(subNavItem);
+      if (menuOptionSelected === ROUTE_XCHANGE_DETAILS.API_ID && subNavItem.label === 'Xchanges') {
+        subNavItems.push({
           label: 'Details',
-          destination: 'XCHANGE_DETAILS',
-          orgSid: positionOne.orgSid,
+          destination: ROUTE_XCHANGE_DETAILS.API_ID,
+          orgSid,
           subNavItems: undefined,
-        });
-        navItem.subNavItems.unshift(positionOne);
+        })
       }
-    } else if (menuOptionSelected !== ROUTE_XCHANGE_DETAILS.API_ID && navItem.label === 'Xchange Profile') {
-      if (navItem.subNavItems.length > 5) {
-        const positionOne = navItem.subNavItems[0];
-        navItem.subNavItems.shift();
-        navItem.subNavItems.shift();
-        navItem.subNavItems.unshift(positionOne);
-      }
-    }
+    });
 
     return (
       <NavPanel
@@ -133,7 +125,7 @@ export const LeftNav = ({ menuOptionSelected, isOpen }: LeftNavProps) => {
         key={`adminNav_${index}`}
         label={navItem.label}
         elements={
-            navItem.subNavItems?.map((subNav) => {
+            subNavItems.map((subNav) => {
               if (subNav.destination === menuOptionSelected) navItem.isExpanded = true;
               return {
                 id: `__Nav_${subNav.destination}`,

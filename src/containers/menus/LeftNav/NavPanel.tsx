@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ActionButton } from '@fluentui/react';
 import { theme } from 'src/styles/themes/theme';
+import { ThemeStore } from 'src/store/ThemeStore';
 import { NavHeader, NavList, NavListItem } from './LeftNav.styles';
 
 export type NavItemType = {
@@ -64,11 +65,10 @@ export const NavPanel = ({
                 <ActionButton
                   id={elem.id}
                   iconProps={{
-                    iconName: elem.label === 'Details' ? 'ArrowTallUpRight' : '',
+                    iconName: elem.label === 'Details' ? 'ChildOf' : '',
                     style: {
                       marginTop: '5px',
-                      transform: 'rotate(45deg)',
-                      color: theme.colors.black,
+                      color: ThemeStore.userTheme.colors.black,
                       fontWeight: theme.fontWeights.bold,
                     },
                   }}
