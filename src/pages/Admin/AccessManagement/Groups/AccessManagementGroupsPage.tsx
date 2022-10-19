@@ -215,7 +215,7 @@ const AccessManagementGroupsContainer = () => {
 
     if (column.key === 'members') {
       return (
-        <TooltipHost content={`${item.members} Users are assigned to this specialization`}>
+        <TooltipHost content={`${item.members} Users are assigned to this group`}>
           <People20Filled
             style={{ color: theme.colors.themePrimary, cursor: 'pointer' }}
             onClick={() => {
