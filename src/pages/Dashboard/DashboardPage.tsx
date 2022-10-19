@@ -29,7 +29,12 @@ import {
 import { DashboardErrorsTable } from 'src/pages/Dashboard/DashboardErrorsTable';
 import { TransmissionsByVendorTable } from 'src/pages/Dashboard/TransmissionsByVendorTable';
 import { DashboardTransmissionsTable } from 'src/pages/Dashboard/DashboardTransmissionsTable';
-import { DateRangeButton, StyledRow } from './DashboardPage.styles';
+import {
+  DateRangeButton,
+  RowDateRange,
+  StyledColumn,
+  StyledRow,
+} from './DashboardPage.styles';
 
 const DATE_OPTION_NAME = {
   today: 'today',
@@ -184,19 +189,23 @@ const DashboardPage = () => {
         label: 'Custom',
       },
     ];
-    return dateOptions.map((option, index) => (
-      <Spacing margin={{ left: 'normal' }} key={index}>
-        <DateRangeButton
-          id={`__Button-${option.id}`}
-          key={`Button-${option.id}`}
-          variant={option.selected ? 'primary' : 'secondary'}
-          selected={option.selected}
-          onClick={() => handleChangeDate(option.id)}
-        >
-          {option.label}
-        </DateRangeButton>
-      </Spacing>
-    ));
+    return (
+      <RowDateRange>
+        {dateOptions.map((option, index) => (
+          <Spacing margin={{ left: 'normal', bottom: 'normal' }} key={index}>
+            <DateRangeButton
+              id={`__Button-${option.id}`}
+              key={`Button-${option.id}`}
+              variant={option.selected ? 'primary' : 'secondary'}
+              selected={option.selected}
+              onClick={() => handleChangeDate(option.id)}
+            >
+              {option.label}
+            </DateRangeButton>
+          </Spacing>
+        ))}
+      </RowDateRange>
+    );
   };
 
   const pageFallBack = () => (
@@ -273,12 +282,12 @@ const DashboardPage = () => {
         <PageHeader spacing="0">
           <Container>
             <Row center>
-              <Column lg="6" direction="row">
+              <StyledColumn lg="6" direction="row">
                 <PageTitle id="__Page_Title" title="Dashboard" subTitle="Summary" />
-              </Column>
-              <Column lg="6" direction="row" right>
+              </StyledColumn>
+              <StyledColumn sm={12} lg="6" direction="row" right>
                 {renderDateButtons()}
-              </Column>
+              </StyledColumn>
             </Row>
 
             <br />

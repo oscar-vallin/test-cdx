@@ -1,12 +1,29 @@
 import styled from 'styled-components';
 import { Row as LayoutRow } from 'src/components/layouts/Row';
+import { device } from 'src/styles/GlobalStyles';
 import { Button } from 'src/components/buttons';
 import { Text } from 'src/components/typography';
 import { Link } from 'react-router-dom';
+import { Column as LayoutColumn } from 'src/components/layouts';
 
 export const StyledRow = styled(LayoutRow)`
   transform: translateY(-25px);
 `;
+
+export const RowDateRange = styled(LayoutRow)`
+  @media ${device.mobileL} {
+    flex-wrap: nowrap;
+    
+  }
+`;
+
+export const StyledColumn = styled(LayoutColumn)`
+  width: 100%;
+  @media (min-width: 770px) {
+    width: 50%;
+  }
+}
+`
 
 export const DateRangeButton = styled(Button)<DateRangeButtonProps>`
   background: ${({ selected, theme }) => (selected ? theme.colors.themePrimary : theme.colors.infoBackground)};
