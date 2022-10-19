@@ -7,7 +7,12 @@ import { LoginPage } from './Login';
 import { UserSettingsPage } from './UserSettings';
 import { DashboardPage } from './Dashboard';
 import {
-  FileStatusPage, ArchivePage, SchedulePage, TransmissionsPage, ErrorsPage,
+  FileStatusPage,
+  ArchivePage,
+  SchedulePage,
+  TransmissionsPage,
+  ErrorsPage,
+  VisualizationsPage,
 } from './WorkPacket';
 import { AccessDenied, PageNotFound } from './ErrorHandling';
 import { ActiveOrgsPage } from './Admin/Organizations';
@@ -73,6 +78,9 @@ export const Routes = () => (
     </AuthRoute>
     <AuthRoute path={ROUTES.ROUTE_ERRORS.URL}>
       <ErrorsPage />
+    </AuthRoute>
+    <AuthRoute path={ROUTES.ROUTE_VISUALIZATIONS.URL}>
+      <VisualizationsPage />
     </AuthRoute>
     <AuthRoute path={ROUTES.ROUTE_ACCESS_MANAGEMENT_GROUPS.URL}>
       <AccessManagementGroupsPage />
