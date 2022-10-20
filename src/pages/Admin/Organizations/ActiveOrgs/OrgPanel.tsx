@@ -1,16 +1,13 @@
-import {
-  MessageBar, MessageBarType, PanelType, Spinner, SpinnerSize, Stack,
-} from '@fluentui/react';
+import { MessageBar, MessageBarType, PanelType, Spinner, SpinnerSize, Stack, } from '@fluentui/react';
 import { Column } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { LightSeparator } from 'src/components/separators/Separator';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import React, { useEffect, useState } from 'react';
-import {
-  PanelBody, PanelHeader, PanelTitle, ThemedPanel,
-} from 'src/layouts/Panels/Panels.styles';
+import { PanelBody, PanelHeader, PanelTitle, ThemedPanel, } from 'src/layouts/Panels/Panels.styles';
 import {
   CdxWebCommandType,
+  ErrorSeverity,
   GqOperationResponse,
   OrganizationForm,
   OrgType,
@@ -262,31 +259,44 @@ export const OrgPanel = ({
   );
 
   const doSave = () => {
-    if (!selectedOrgSid) {
-      createOrg({
-        variables: {
-          orgInfo: {
-            orgId: orgState.orgId ?? '',
-            name: orgState.name ?? '',
-            orgType: orgState.orgType ?? OrgType.IntegrationSponsor,
-            mv1Id: orgState.mv1Id ? +orgState.mv1Id : undefined,
-            mv1Folder: orgState.mv1Folder,
-            orgOwnerSid,
-          },
-        },
-      }).then();
+    const orgType = orgState.orgType;
+    if (!orgType) {
+      const form = JSON.parse(JSON.stringify(orgForm));
+      if (form.orgType) {
+        form.orgType.errSeverity = ErrorSeverity.Error;
+        form.orgType.errCode = 'REQUIRED_FIELDS_MISSING';
+        form.orgType.errMsg = `${form.orgType.label} is Required`;
+        setMessageType(MessageBarType.error);
+        setMessage('Please fill out all required* fields');
+        setOrgForm(form);
+      }
     } else {
-      updateOrg({
-        variables: {
-          orgInfo: {
-            orgSid: selectedOrgSid,
-            name: orgState.name ?? '',
-            orgType: orgState.orgType ?? OrgType.IntegrationSponsor,
-            mv1Id: orgState.mv1Id ? +orgState.mv1Id : undefined,
-            mv1Folder: orgState.mv1Folder,
+      if (!selectedOrgSid) {
+        createOrg({
+          variables: {
+            orgInfo: {
+              orgId: orgState.orgId ?? '',
+              name: orgState.name ?? '',
+              orgType,
+              mv1Id: orgState.mv1Id ? +orgState.mv1Id : undefined,
+              mv1Folder: orgState.mv1Folder,
+              orgOwnerSid,
+            },
           },
-        },
-      }).then();
+        }).then();
+      } else {
+        updateOrg({
+          variables: {
+            orgInfo: {
+              orgSid: selectedOrgSid,
+              name: orgState.name ?? '',
+              orgType,
+              mv1Id: orgState.mv1Id ? +orgState.mv1Id : undefined,
+              mv1Folder: orgState.mv1Folder,
+            },
+          },
+        }).then();
+      }
     }
 
     return null;
