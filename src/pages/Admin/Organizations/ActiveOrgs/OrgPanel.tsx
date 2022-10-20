@@ -1,10 +1,22 @@
-import { MessageBar, MessageBarType, PanelType, Spinner, SpinnerSize, Stack, } from '@fluentui/react';
+import {
+  MessageBar,
+  MessageBarType,
+  PanelType,
+  Spinner,
+  SpinnerSize,
+  Stack,
+} from '@fluentui/react';
 import { Column } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { LightSeparator } from 'src/components/separators/Separator';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import React, { useEffect, useState } from 'react';
-import { PanelBody, PanelHeader, PanelTitle, ThemedPanel, } from 'src/layouts/Panels/Panels.styles';
+import {
+  PanelBody,
+  PanelHeader,
+  PanelTitle,
+  ThemedPanel,
+} from 'src/layouts/Panels/Panels.styles';
 import {
   CdxWebCommandType,
   ErrorSeverity,
@@ -60,10 +72,26 @@ export const OrgPanel = ({
   const [messageType, setMessageType] = useState<MessageBarType>(MessageBarType.info);
   const [message, setMessage] = useState<string | undefined>();
 
-  const [fetchOrgForm, { data: dataForm, loading: loadingForm, error: errorForm }] = useOrganizationFormLazyQuery();
-  const [fetchOrg, { data: dataOrg, loading: loadingOrg, error: errorOrg }] = useFindOrganizationLazyQuery();
-  const [createOrg, { data: dataCreateOrg, loading: loadingCreate, error: errorCreate }] = useCreateOrgMutation();
-  const [updateOrg, { data: dataUpdateOrg, loading: loadingUpdate, error: errorUpdate }] = useUpdateOrgMutation();
+  const [fetchOrgForm, {
+    data: dataForm,
+    loading: loadingForm,
+    error: errorForm,
+  }] = useOrganizationFormLazyQuery();
+  const [fetchOrg, {
+    data: dataOrg,
+    loading: loadingOrg,
+    error: errorOrg,
+  }] = useFindOrganizationLazyQuery();
+  const [createOrg, {
+    data: dataCreateOrg,
+    loading: loadingCreate,
+    error: errorCreate,
+  }] = useCreateOrgMutation();
+  const [updateOrg, {
+    data: dataUpdateOrg,
+    loading: loadingUpdate,
+    error: errorUpdate,
+  }] = useUpdateOrgMutation();
   const Toast = useNotification();
   const handleError = ErrorHandler();
 
@@ -259,7 +287,7 @@ export const OrgPanel = ({
   );
 
   const doSave = () => {
-    const orgType = orgState.orgType;
+    const { orgType } = orgState;
     if (!orgType) {
       const form = JSON.parse(JSON.stringify(orgForm));
       if (form.orgType) {
@@ -305,7 +333,8 @@ export const OrgPanel = ({
   const renderPanelFooter = () => {
     const commands = orgForm?.commands;
     const command = commands?.find(
-      (cmd) => cmd?.commandType === CdxWebCommandType.Create || cmd?.commandType === CdxWebCommandType.Update,
+      (cmd) => cmd?.commandType === CdxWebCommandType.Create
+        || cmd?.commandType === CdxWebCommandType.Update,
     );
     if (command) {
       return (
