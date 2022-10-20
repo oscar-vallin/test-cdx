@@ -188,7 +188,7 @@ const VisualizationsPage = () => {
         <Line
           activeDot={{
             onMouseOver(e, payload) { customMouseOver(e, payload, s) },
-            r: 7,
+            r: 6,
           }}
           isAnimationActive={false}
           dataKey="count"
@@ -254,12 +254,12 @@ const VisualizationsPage = () => {
     return (
       <Spacing margin={{ left: 'normal' }}>
         <LineChart
-          width={1000}
+          width={1100}
           height={400}
           onMouseLeave={() => setShowTooltip(false)}
         >
           <XAxis dataKey="month" allowDuplicatedCategory={false} tick={false} />
-          <YAxis dataKey="count" domain={[0, 'auto']} />
+          <YAxis dataKey="count" domain={[10, 'auto']} />
           <Tooltip
             cursor={false}
             content={<Custooltip />}
@@ -289,7 +289,7 @@ const VisualizationsPage = () => {
             {renderChart()}
           </Row>
           <Row>
-            <Stack horizontal={true} horizontalAlign="space-between" style={{ width: '80%' }}>
+            <Stack horizontal={true} horizontalAlign="space-between" style={{ width: '90%' }}>
               {months.map((month, monthIndex) => (
                 <div key={monthIndex}>
                   {months.length - 1 === monthIndex ? (
@@ -319,7 +319,7 @@ const VisualizationsPage = () => {
               ))}
             </Stack>
             <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-              <Stack horizontal={true} horizontalAlign="space-between" style={{ width: '80%', backgroundColor: '#f3f2f1' }}>
+              <Stack horizontal={true} horizontalAlign="space-between" style={{ width: '90%', backgroundColor: '#f3f2f1' }}>
                 <span style={{ position: 'absolute' }}>Total</span>
                 {countMonth.map((count, countIndex) => (
                   <Text style={styles} key={countIndex}>{count}</Text>
