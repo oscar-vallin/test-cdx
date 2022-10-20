@@ -17,7 +17,6 @@ import {
   Tooltip,
   Line,
   YAxis,
-  Legend,
 } from 'recharts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import {
@@ -260,7 +259,7 @@ const VisualizationsPage = () => {
           onMouseLeave={() => setShowTooltip(false)}
         >
           <XAxis dataKey="month" allowDuplicatedCategory={false} tick={false} />
-          <YAxis dataKey="count" />
+          <YAxis dataKey="count" domain={[0, 'auto']} />
           <Tooltip
             cursor={false}
             content={<Custooltip />}
@@ -271,7 +270,7 @@ const VisualizationsPage = () => {
         </LineChart>
       </Spacing>
     )
-  }
+  };
 
   return (
     <LayoutDashboard id="PageVisualizations" menuOptionSelected={ROUTES.ROUTE_VISUALIZATIONS.API_ID}>
