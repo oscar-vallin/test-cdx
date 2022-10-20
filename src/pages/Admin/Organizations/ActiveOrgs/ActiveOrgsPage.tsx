@@ -273,7 +273,7 @@ const ActiveOrgsPage = () => {
         <Container>
           <Row>
             <Column lg="6" direction="row">
-              <PageTitle id="__Page_Title" title="Active orgs" />
+              <PageTitle id="__Page_Title" title="Active Orgs" />
             </Column>
             <Column lg="6" right>
               {createOrgButton()}
