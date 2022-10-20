@@ -127,4 +127,25 @@ describe('Select One UI Input', () => {
 
     expectInfoWarningIcons(wrapper);
   });
+
+  it('Auto select one option', () => {
+    const onChange = jest.fn();
+    const wrapper = mountWithTheme(
+      <UIInputSelectOne
+        id="selectOne"
+        value={undefined}
+        onChange={onChange}
+        uiField={{
+          ...fullField,
+          options: 'OneOption',
+          value: null,
+        }}
+        placeholder="-- All --"
+        options={uiOptions}
+      />
+    );
+
+    expect(wrapper.find('ComboBox[id="selectOne"]').props()['selectedKey']).toEqual('7');
+    expect(onChange).toHaveBeenCalledWith('7');
+  });
 });
