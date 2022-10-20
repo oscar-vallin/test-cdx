@@ -28,8 +28,8 @@ import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { endOfMonth } from 'date-fns';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 import { DataColumn, useSortableColumns } from 'src/containers/tables';
-import { shortMonths } from '../VisualizationsPage';
 import { Spacing } from 'src/components/spacings/Spacing';
+import { shortMonths } from '../VisualizationsPage';
 
 type VisualizationPanelProps = {
   isPanelOpen: boolean;
@@ -286,6 +286,7 @@ const VisualizationPanel = ({
       headerText={`${shortMonths[currentMonth]} ${new Date().getFullYear()} Transmissions for ${orgName}`}
       isOpen={isPanelOpen}
       onDismiss={() => {
+        setTransmissionsVendor([]);
         closePanel(false);
       }}
     >
