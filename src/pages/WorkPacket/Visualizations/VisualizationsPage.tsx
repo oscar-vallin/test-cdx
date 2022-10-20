@@ -278,7 +278,7 @@ const VisualizationsPage = () => {
         <Container>
           <Row>
             <Column lg="6" direction="row">
-              <PageTitle id="__Page__Title_Visualizations" title="Validations" />
+              <PageTitle id="__Page__Title_Visualizations" title="Visualizations" />
             </Column>
           </Row>
         </Container>
