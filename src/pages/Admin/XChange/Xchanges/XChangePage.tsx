@@ -106,6 +106,7 @@ const XChangePage = () => {
   const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
   const [activeCmd, setActiveCmd] = useState<WebCommand | null>();
+  const [alertsCmd, setAlertsCmd] = useState<WebCommand | null>();
   const [editComment, setEditComment] = useState(false);
   const [comment, setComment] = useState<string | null>();
   const [refreshDataXchange, setRefreshDataXchange] = useState(false);
@@ -289,8 +290,11 @@ const XChangePage = () => {
       setUpdateCmd(_updateCmd);
       const _createCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
       setCreateCmd(_createCmd);
-      const _activeCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Activate);
+      const _activeCmd = pageCommands
+        ?.find((cmd) => cmd?.commandType === CdxWebCommandType.Activate);
       setActiveCmd(_activeCmd);
+      const _alertsCmd = pageCommands?.find((cmd) => cmd?.endPoint === 'xchangeProfileAlerts');
+      setAlertsCmd(_alertsCmd);
     }
   }, [dataXchange, loadingXchange]);
 
@@ -629,21 +633,28 @@ const XChangePage = () => {
     return !editComment;
   };
 
+  const alertsLink = (body: string | React.ReactElement) => {
+    if (alertsCmd) {
+      return <ButtonLink to={`/xchange-alerts?orgSid=${orgSid}`}>{body}</ButtonLink>;
+    }
+    return <Text>{body}</Text>;
+  };
+
   const cardBox = () => (
     <>
       <CardStyled>
-        <ButtonLink to={`/xchange-alerts?orgSid=${orgSid}`}>
-          <FontIcon iconName="Ringer" style={{ margin: '10px 6px 0 6px' }} />
-          Alerts
-        </ButtonLink>
+        {alertsLink(
+          <>
+            <FontIcon iconName="Ringer" style={{ margin: '10px 6px 0 6px' }} />
+            Alerts
+          </>,
+        )}
         <Spacing margin="normal">
           <Row>
             <Text style={{ fontWeight: 'bold' }}>Alert on all Xchanges</Text>
           </Row>
           <Spacing margin="normal" />
-          <ButtonLink to={`/xchange-alerts?orgSid=${orgSid}`}>
-            ({globalXchangeAlerts?.numSubscribers}) Subscribers
-          </ButtonLink>
+          { alertsLink(`(${globalXchangeAlerts?.numSubscribers}) Subscribers`) }
         </Spacing>
         <Spacing margin="normal">
           <Row>
@@ -654,16 +665,10 @@ const XChangePage = () => {
             <Spacing margin={{ bottom: 'normal' }} key={index}>
               <Row>
                 <Column lg="7">
-                  <ButtonLink to={`/xchange-alerts?orgSid=${orgSid}`} style={{ fontSize: '12px' }}>
-                    {' '}
-                    {individualXchange.coreFilename}{' '}
-                  </ButtonLink>
+                  { alertsLink(` ${individualXchange.coreFilename} `) }
                 </Column>
                 <Column lg="4">
-                  <ButtonLink to={`/xchange-alerts?orgSid=${orgSid}`} style={{ fontSize: '12px' }}>
-                    {' '}
-                    ({individualXchange.numSubscribers}) Subscribers
-                  </ButtonLink>
+                  { alertsLink(` (${globalXchangeAlerts?.numSubscribers}) Subscribers`) }
                 </Column>
               </Row>
             </Spacing>
