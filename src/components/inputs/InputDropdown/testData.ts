@@ -34,6 +34,15 @@ export const uiOptions: UiOptions[] = [
     key: 'ignoreMeToo',
     values: [],
   },
+  {
+    key: 'OneOption',
+    values: [
+      {
+        value: '7',
+        label: 'Seven',
+      },
+    ]
+  },
 ];
 
 export const expectNoIcons = (wrapper) => {

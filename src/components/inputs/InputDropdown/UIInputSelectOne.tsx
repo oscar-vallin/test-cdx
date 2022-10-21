@@ -46,6 +46,16 @@ export const UIInputSelectOne = ({
     );
   }
 
+  const comboBoxOptions = buildComboBoxOptions(uiField, options);
+
+  // If there is only one option, pre select that option
+  if (!value && comboBoxOptions.length === 1) {
+    value = comboBoxOptions[0]?.key?.toString() ?? undefined;
+    if (value && onChange) {
+      onChange(value);
+    }
+  }
+
   return (
     <ThemedComboBox
       id={id}
