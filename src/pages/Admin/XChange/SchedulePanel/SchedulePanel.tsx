@@ -342,6 +342,8 @@ const SchedulePanel = ({
       }
 
       if (responseCode === GqOperationResponse.Success) {
+        setTotalSubscribers([]);
+        setMessage(null);
         closePanel(false);
         refreshPage(true);
         Toast.success({ text: 'Schedule Updated' });
@@ -354,6 +356,8 @@ const SchedulePanel = ({
 
   useEffect(() => {
     if (!isLoadingCreateJobGroup && jobGroupCreated) {
+      setTotalSubscribers([]);
+      setMessage(null);
       closePanel(false);
       refreshPage(true);
       Toast.success({ text: `Job Group ${jobGroupName} created` });
@@ -379,6 +383,8 @@ const SchedulePanel = ({
       }
 
       if (responseCode === GqOperationResponse.Success) {
+        setTotalSubscribers([]);
+        setMessage(null);
         closePanel(false);
         refreshPage(true);
         Toast.success({ text: 'Job Group Updated' });
