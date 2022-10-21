@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Checkbox } from '@fluentui/react';
+import { Checkbox, Stack } from '@fluentui/react';
 
 export const StyledCheckbox = styled(Checkbox)<CheckboxProps>`
     margin-left: 50px;
@@ -26,4 +26,10 @@ export const StyledTooltip = styled.div`
       text-align: center;
       padding-top: 10px;
     }
+`;
+
+export const StyledTotal = styled(Stack)`
+  width: 91%;
+  background-color: #f3f2f1;
+  padding: 4px;
 `;

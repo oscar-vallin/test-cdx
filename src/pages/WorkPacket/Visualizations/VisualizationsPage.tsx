@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import {
-  MonthCount,
   useWpTransmissionCountBySponsorLazyQuery,
   Organization,
 } from 'src/data/services/graphql';
@@ -28,23 +27,29 @@ import {
 import { PageBody } from 'src/components/layouts/Column';
 import { ButtonLink } from 'src/components/buttons';
 import { theme } from 'src/styles/themes/theme';
-import { StyledCheckbox, StyledTooltip } from './Visualizations.style';
+import { StyledCheckbox, StyledTooltip, StyledTotal } from './Visualizations.style';
 import { VisualizationPanel } from './visualizationPanel';
 
 export const shortMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const INITIAL_COUNT_TOTAL = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-const colors = ['blue', 'green'];
+const colors = ['transparent', 'blue', 'green'];
 const CURRENT_MONTH = new Date().getMonth();
+
+type DataProps = {
+  month: string;
+  year: number;
+  count: number;
+}
 
 type DataSubClientProps = {
   name?: string;
-  data?: MonthCount[];
+  data?: DataProps[];
   organization?: Organization,
 };
 
 const styles = {
-  marginLeft: '50px',
-  paddingLeft: '20px',
+  marginLeft: '43px',
+  paddingLeft: '15px',
 };
 
 const VisualizationsPage = () => {
@@ -53,14 +58,16 @@ const VisualizationsPage = () => {
   const [months, setMonths] = useState<string[]>([]);
   const [countMonth, setCountMonth] = useState(new Array(...INITIAL_COUNT_TOTAL));
   const [countTotal, setCountTotal] = useState(new Array(...INITIAL_COUNT_TOTAL));
-  const [subClientsCheckBox, setSubClientsCheckBox] = useState({});
+  const [subClientsCheckBox, setSubClientsCheckBox] = useState({
+    default: true,
+  });
   const [selectAll, setSelectAll] = useState(false);
   const [selectNone, setSelectNone] = useState(false);
   const [isOpenPanel, setIsopenPanel] = useState(false);
   const [orgIdOrg, setOrgIdOrg] = useState('');
   const [currentOrg, setCurrentOrg] = useState();
   const [totalTransByMonth, setTotalTransByMonth] = useState(0);
-  const [currentMonth, setCurrentMonth] = useState(0);
+  const [currentMonth, setCurrentMonth] = useState('');
   const [tooltipPosition, setTooltipPosition] = useState({
     y: 0,
     x: 0,
@@ -93,38 +100,12 @@ const VisualizationsPage = () => {
       return;
     }
 
-    subClients.forEach(({ name }) => setSubClientsCheckBox({ [name ?? '']: false }));
+    subClients.forEach(({ name }) => setSubClientsCheckBox((prevState) => ({ ...prevState, [name ?? '']: false })));
   };
 
   useEffect(() => {
     fetchData()
   }, []);
-
-  const getSubClientsData = (subC) => {
-    if (subC.length > 0) {
-      for (let subClient = 0; subClient < subC.length; subClient++) {
-        const diff = subClient > 0 ? 10 : 0;
-        const currentSubClients: DataSubClientProps = {};
-        currentSubClients['name'] = subC[subClient]['organization']['name'];
-        currentSubClients['organization'] = subC[subClient]['organization'];
-        setSubClientsCheckBox((prevState) => ({
-          ...prevState,
-          [subC[subClient]['organization']['name']]: true,
-        }));
-        const monthCounts = subC[subClient].monthCounts ?? [];
-        const data: MonthCount[] = [];
-        for (let dataSClient = 0; dataSClient < monthCounts.length; dataSClient++) {
-          const currentSubClient:MonthCount = { month: 0, count: 0, year: 0 };
-          currentSubClient['month'] = monthCounts[dataSClient].month;
-          currentSubClient['count'] = monthCounts[dataSClient].count + diff;
-          currentSubClient['year'] = monthCounts[dataSClient].year;
-          data.push(currentSubClient)
-        }
-        currentSubClients['data'] = data;
-        setSubClients((prevState) => prevState.concat(currentSubClients));
-      }
-    }
-  };
 
   const monthList = () => {
     const m: string[] = [];
@@ -142,8 +123,57 @@ const VisualizationsPage = () => {
     return m;
   };
 
+  const defaultXValues = () => {
+    const orderedMonth = monthList();
+    const DefaultSubClient = {
+      name: 'default',
+      data: [
+        { month: orderedMonth[0], count: 0, year: 0 },
+        { month: orderedMonth[1], count: 0, year: 0 },
+        { month: orderedMonth[2], count: 0, year: 0 },
+        { month: orderedMonth[3], count: 0, year: 0 },
+        { month: orderedMonth[4], count: 0, year: 0 },
+        { month: orderedMonth[5], count: 0, year: 0 },
+        { month: orderedMonth[6], count: 0, year: 0 },
+        { month: orderedMonth[7], count: 0, year: 0 },
+        { month: orderedMonth[8], count: 0, year: 0 },
+        { month: orderedMonth[9], count: 0, year: 0 },
+        { month: orderedMonth[10], count: 0, year: 0 },
+        { month: orderedMonth[11], count: 0, year: 0 }],
+    };
+    setSubClients((prevState) => prevState.concat(DefaultSubClient));
+  }
+
+  const getSubClientsData = (subC) => {
+    if (subC.length > 0) {
+      defaultXValues();
+      for (let subClient = 0; subClient < subC.length; subClient++) {
+        const diff = subClient > 0 ? 10 : 0;
+        const currentSubClients: DataSubClientProps = {};
+        currentSubClients['name'] = subC[subClient]['organization']['name'];
+        currentSubClients['organization'] = subC[subClient]['organization'];
+        setSubClientsCheckBox((prevState) => ({
+          ...prevState,
+          [subC[subClient]['organization']['name']]: true,
+        }));
+        const monthCounts = subC[subClient].monthCounts ?? [];
+        const data: DataProps[] = [];
+        for (let dataSClient = 0; dataSClient < monthCounts.length; dataSClient++) {
+          const currentSubClient:DataProps = { month: '', count: 0, year: 0 };
+          currentSubClient['month'] = shortMonths[monthCounts[dataSClient].month - 1];
+          currentSubClient['count'] = monthCounts[dataSClient].count + diff;
+          currentSubClient['year'] = monthCounts[dataSClient].year;
+          data.push(currentSubClient)
+        }
+        currentSubClients['data'] = data;
+        setSubClients((prevState) => prevState.concat(currentSubClients));
+      }
+    }
+  };
+
   const sumTotalTransmissions = (sdata) => {
-    const aux = 11 - CURRENT_MONTH;
+    const firstMonth = sdata[0].month
+    const aux = 11 - CURRENT_MONTH + firstMonth - 1;
     const total = countMonth;
     for (let data = 0; data < sdata.length; data++) {
       total[aux + data] += sdata[data].count;
@@ -188,7 +218,7 @@ const VisualizationsPage = () => {
         <Line
           activeDot={{
             onMouseOver(e, payload) { customMouseOver(e, payload, s) },
-            r: 6,
+            r: sIndex === 0 ? 0 : 6,
           }}
           isAnimationActive={false}
           dataKey="count"
@@ -225,7 +255,7 @@ const VisualizationsPage = () => {
           <Stack>
             <Text variant="small">
               <Text style={{ fontWeight: 'bold' }} variant="small">{totalTransByMonth} </Text>
-              Transmissions in {shortMonths[currentMonth - 1]} { year}{' '}
+              Transmissions in {currentMonth} { year}{' '}
               {' '} {currentOrg}
             </Text>
             <ButtonLink
@@ -289,63 +319,81 @@ const VisualizationsPage = () => {
             {renderChart()}
           </Row>
           <Row>
-            <Stack horizontal={true} horizontalAlign="space-between" style={{ width: '90%' }}>
-              {months.map((month, monthIndex) => (
-                <div key={monthIndex}>
-                  {months.length - 1 === monthIndex ? (
-                    <Text
-                      style={{
-                        marginLeft: '43px',
-                        paddingLeft: '15px',
-                        color: theme.colors.themePrimary,
-                        fontWeight: 600,
-                      }}
-                    >
-                      {month}
-                    </Text>
+            <Spacing margin={{ left: 'double' }}>
+              <Stack horizontal={true} horizontalAlign="space-between" style={{ width: '90%' }}>
+                {months.map((month, monthIndex) => (
+                  <div key={monthIndex}>
+                    {months.length - 1 === monthIndex ? (
+                      <Text
+                        style={{
+                          marginLeft: '45px',
+                          padding: 'auto',
+                          color: theme.colors.themePrimary,
+                          fontWeight: 600,
+                        }}
+                      >
+                        {month}
+                      </Text>
 
-                  ) : (
-                    <Text
-                      style={{
-                        marginLeft: '43px',
-                        paddingLeft: '15px',
-                        fontWeight: 500,
-                      }}
-                    >
-                      {month}
-                    </Text>
-                  )}
-                </div>
-              ))}
-            </Stack>
-            <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-              <Stack horizontal={true} horizontalAlign="space-between" style={{ width: '90%', backgroundColor: '#f3f2f1' }}>
-                <span style={{ position: 'absolute' }}>Total</span>
-                {countMonth.map((count, countIndex) => (
-                  <Text style={styles} key={countIndex}>{count}</Text>
+                    ) : (
+                      <Text
+                        style={{
+                          marginLeft: '45px',
+                          paddingLeft: 'auto',
+                          fontWeight: 500,
+                        }}
+                      >
+                        {month}
+                      </Text>
+                    )}
+                  </div>
                 ))}
               </Stack>
+            </Spacing>
+          </Row>
+          <Row>
+            <Spacing margin={{ top: 'normal', bottom: 'normal', left: 'double' }}>
+              <StyledTotal horizontal={true} horizontalAlign="space-between">
+                <span style={{ position: 'absolute' }}>Totals</span>
+                {countMonth.map((count, countIndex) => (
+                  <div>
+                    <Column lg="2" key={countIndex}>
+                      <Text
+                        style={{
+                          marginLeft: `${43 - countIndex}px`,
+                        }}
+                      >
+                        {count}
+                      </Text>
+                    </Column>
+                  </div>
+                ))}
+              </StyledTotal>
             </Spacing>
           </Row>
           <Row>
             <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
               <Stack horizontal={true}>
                 {subClients.map((subC, subCIndex) => (
-                  <StyledCheckbox
-                    key={`${subC.name}-${subCIndex + 1}`}
-                    label={subC.name}
-                    checked={subClientsCheckBox[subC.name ?? '']}
-                    onChange={(event, isChecked) => {
-                      setSubClientsCheckBox({
-                        ...subClientsCheckBox,
-                        [subC.name ?? '']: isChecked,
-                      });
-                      setSelectNone(false);
-                      setSelectAll(false);
-                      currentTotalTransmissions(subC, isChecked);
-                    }}
-                    color={colors[subCIndex]}
-                  />
+                  <div>
+                    {subCIndex > 0 && (
+                      <StyledCheckbox
+                        key={`${subC.name}-${subCIndex + 1}`}
+                        label={subC.name}
+                        checked={subClientsCheckBox[subC.name ?? '']}
+                        onChange={(event, isChecked) => {
+                          setSubClientsCheckBox({
+                            ...subClientsCheckBox,
+                            [subC.name ?? '']: isChecked,
+                          });
+                          setSelectNone(false);
+                          setSelectAll(false);
+                          currentTotalTransmissions(subC, isChecked);
+                        }}
+                        color={colors[subCIndex]}
+                      />
+                    )}
+                  </div>
                 ))}
               </Stack>
             </Spacing>
@@ -387,7 +435,7 @@ const VisualizationsPage = () => {
         closePanel={setIsopenPanel}
         orgName={currentOrg}
         orgId={orgIdOrg}
-        currentMonth={currentMonth}
+        currentMonth={shortMonths.indexOf(currentMonth)}
       />
     </LayoutDashboard>
   );
