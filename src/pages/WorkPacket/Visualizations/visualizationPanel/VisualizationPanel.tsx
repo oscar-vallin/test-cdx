@@ -60,7 +60,9 @@ const VisualizationPanel = ({
     { data: transmissionTableData, loading: isLoadingTransmissionTable },
   ] = useWpTransmissionsLazyQuery();
 
-  const end = endOfMonth(new Date('2022-11-30T06:00:00.000Z'));
+  const currentdate = new Date();
+  const start = new Date(currentdate.getFullYear(), currentMonth);
+  const end = new Date(currentdate.getFullYear(), currentMonth + 1);
 
   const COLORS = ['#8884d8', '#82ca9d', '#FFBB28', '#FF8042', '#AF19FF'];
 
@@ -120,13 +122,11 @@ const VisualizationPanel = ({
   const tableFilters = useTableFilters('Delivered On, Vendor, Spec, Billing Units, Total Records');
   const { columns } = useSortableColumns(tableFilters, columnOptions);
   const fetchData = () => {
-    let s = new Date();
-    s = new Date(s.getFullYear(), currentMonth);
     transmissionVendor({
       variables: {
         orgSid,
         dateRange: {
-          rangeStart: s,
+          rangeStart: start,
           rangeEnd: end,
         },
       },
@@ -134,15 +134,13 @@ const VisualizationPanel = ({
   };
 
   const fetchDataTable = () => {
-    let s = new Date();
-    s = new Date(s.getFullYear(), currentMonth);
     transmissionTable({
       variables: {
         orgSid,
         filter: {
           searchText: null,
           dateRange: {
-            rangeStart: s,
+            rangeStart: start,
             rangeEnd: end,
           },
           planSponsorId: orgId,
