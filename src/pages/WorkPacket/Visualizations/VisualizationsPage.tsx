@@ -126,7 +126,11 @@ const VisualizationsPage = () => {
       return;
     }
 
-    subClients.forEach(({ name }) => setSubClientsCheckBox((prevState) => ({ ...prevState, [name ?? '']: false })));
+    subClients.forEach(({ name }, index) => {
+      if (index > 0) {
+        setSubClientsCheckBox((prevState) => ({ ...prevState, [name ?? '']: false }));
+      }
+    });
   };
 
   useEffect(() => {
