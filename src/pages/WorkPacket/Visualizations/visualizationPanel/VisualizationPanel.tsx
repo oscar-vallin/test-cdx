@@ -1,8 +1,9 @@
-import { useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import {
   MonthCount,
   Organization,
   useWpTransmissionCountByVendorLazyQuery,
+  useWpTransmissionCountBySponsorLazyQuery,
   useWpTransmissionsLazyQuery,
   WpTransmission,
 } from 'src/data/services/graphql';
@@ -22,10 +23,9 @@ import {
   SpinnerSize,
   Stack,
 } from '@fluentui/react';
-import { ThemedPanel } from 'src/layouts/Panels/Panels.styles';
+import { PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
-import { endOfMonth } from 'date-fns';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 import { DataColumn, useSortableColumns } from 'src/containers/tables';
 import { Spacing } from 'src/components/spacings/Spacing';
@@ -37,6 +37,7 @@ type VisualizationPanelProps = {
   orgName?: string;
   orgId?: string;
   currentMonth: number;
+  typeTransmissions?: string | number;
 };
 
 type TotalTransmissionProps = {
@@ -47,22 +48,49 @@ type TotalTransmissionProps = {
 }
 
 const VisualizationPanel = ({
-  isPanelOpen, closePanel, orgName, orgId, currentMonth,
+  isPanelOpen, closePanel, orgName, orgId, currentMonth, typeTransmissions,
 }: VisualizationPanelProps) => {
   const { orgSid } = useOrgSid();
   const [transmissionsVendor, setTransmissionsVendor] = useState<TotalTransmissionProps[]>([]);
   const [nodes, setNodes] = useState<WpTransmission[]>();
   const [transmissionVendor,
-    { data: transmissionVendorData, loading: isLoadingTransmissinVendor },
+    { data: transmissionVendorData, loading: isLoadingTransmissionVendor },
   ] = useQueryHandler(useWpTransmissionCountByVendorLazyQuery);
+
+  const [transmissionSponsor,
+    { data: transmissionSponsorData, loading: isLoadingTransmissionSponsor },
+  ] = useQueryHandler(useWpTransmissionCountBySponsorLazyQuery);
 
   const [transmissionTable,
     { data: transmissionTableData, loading: isLoadingTransmissionTable },
   ] = useWpTransmissionsLazyQuery();
 
-  const end = endOfMonth(new Date('2022-11-30T06:00:00.000Z'));
+  const currentdate = new Date();
+  const start = new Date(currentdate.getFullYear(), currentMonth);
+  const end = new Date(currentdate.getFullYear(), currentMonth + 1);
 
   const COLORS = ['#8884d8', '#82ca9d', '#FFBB28', '#FF8042', '#AF19FF'];
+
+  const vendor: DataColumn = {
+    name: 'Vendor',
+    key: 'vendorId',
+    fieldName: 'vendorId',
+    minWidth: 60,
+    isPadded: true,
+    dataType: 'string',
+    sortable: true,
+    filterable: false,
+  };
+  const sponsor: DataColumn = {
+    name: 'Sponsor',
+    key: 'planSponsorId',
+    fieldName: 'planSponsorId',
+    minWidth: 60,
+    isPadded: true,
+    dataType: 'string',
+    sortable: true,
+    filterable: false,
+  };
 
   const columnOptions: DataColumn[] = [
     {
@@ -75,16 +103,7 @@ const VisualizationPanel = ({
       sortable: true,
       filterable: false,
     },
-    {
-      name: 'Vendor',
-      key: 'vendorId',
-      fieldName: 'vendorId',
-      minWidth: 60,
-      isPadded: true,
-      dataType: 'string',
-      sortable: true,
-      filterable: false,
-    },
+    typeTransmissions === 'sponsor' ? vendor : sponsor,
     {
       name: 'Spec',
       key: 'specId',
@@ -117,16 +136,34 @@ const VisualizationPanel = ({
     },
   ];
 
-  const tableFilters = useTableFilters('Delivered On, Vendor, Spec, Billing Units, Total Records');
+  const tableFilters = useTableFilters(
+    `Delivered On, 
+    ${typeTransmissions === 'sponsor' && 'Vendor'}, 
+    ${typeTransmissions === 'vendor' && 'Sponsor'}, 
+    Spec, 
+    Billing Units, 
+    Total Records`,
+  );
   const { columns } = useSortableColumns(tableFilters, columnOptions);
   const fetchData = () => {
-    let s = new Date();
-    s = new Date(s.getFullYear(), currentMonth);
-    transmissionVendor({
+    if (typeTransmissions === 'sponsor') {
+      transmissionVendor({
+        variables: {
+          orgSid,
+          dateRange: {
+            rangeStart: start,
+            rangeEnd: end,
+          },
+        },
+      });
+      return;
+    }
+
+    transmissionSponsor({
       variables: {
         orgSid,
         dateRange: {
-          rangeStart: s,
+          rangeStart: start,
           rangeEnd: end,
         },
       },
@@ -134,19 +171,19 @@ const VisualizationPanel = ({
   };
 
   const fetchDataTable = () => {
-    let s = new Date();
-    s = new Date(s.getFullYear(), currentMonth);
+    const planSponsorId = typeTransmissions === 'sponsor' ? orgId : null;
+    const vendorId = typeTransmissions === 'vendor' ? orgId : null;
     transmissionTable({
       variables: {
         orgSid,
         filter: {
           searchText: null,
           dateRange: {
-            rangeStart: s,
+            rangeStart: start,
             rangeEnd: end,
           },
-          planSponsorId: orgId,
-          vendorId: null,
+          planSponsorId,
+          vendorId,
           inboundFilename: null,
           outboundFilename: null,
           specId: null,
@@ -159,10 +196,11 @@ const VisualizationPanel = ({
 
   useEffect(() => {
     if (isPanelOpen) {
+      setTransmissionsVendor([]);
       fetchData();
       fetchDataTable();
     }
-  }, [isPanelOpen]);
+  }, [isPanelOpen, tableFilters.searchText.delayedValue, tableFilters.pagingParams]);
 
   const getTransmissionVendorData = (data) => {
     for (let organization = 0; organization < data.length; organization++) {
@@ -178,11 +216,18 @@ const VisualizationPanel = ({
   };
 
   useEffect(() => {
-    if (!isLoadingTransmissinVendor && transmissionVendorData) {
+    if (!isLoadingTransmissionVendor && transmissionVendorData) {
       const { wpTransmissionCountByVendor } = transmissionVendorData;
       getTransmissionVendorData(wpTransmissionCountByVendor);
     }
-  }, [transmissionVendorData, isLoadingTransmissinVendor]);
+  }, [transmissionVendorData, isLoadingTransmissionVendor]);
+
+  useEffect(() => {
+    if (!isLoadingTransmissionSponsor && transmissionSponsorData) {
+      const { wpTransmissionCountBySponsor } = transmissionSponsorData;
+      getTransmissionVendorData(wpTransmissionCountBySponsor);
+    }
+  }, [transmissionSponsorData, isLoadingTransmissionSponsor])
 
   useEffect(() => {
     if (!isLoadingTransmissionTable && transmissionTableData) {
@@ -219,7 +264,9 @@ const VisualizationPanel = ({
     } else if (column?.key === 'billingCount') {
       columnVal = node.billingCount ?? 0;
     } else if (column?.key === 'totalRecords') {
-      columnVal = node.totalRecords ?? 0
+      columnVal = node.totalRecords ?? 0;
+    } else if (column?.key === 'planSponsorId') {
+      columnVal = node.planSponsorId ?? '';
     }
     return (
       <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
@@ -229,7 +276,7 @@ const VisualizationPanel = ({
   }
 
   const renderBody = () => {
-    if (isLoadingTransmissinVendor) {
+    if (isLoadingTransmissionVendor || isLoadingTransmissionSponsor) {
       return (
         <Spacing margin={{ top: 'double' }}>
           <Spinner size={SpinnerSize.large} label="Loading visualization panel" />
@@ -264,6 +311,11 @@ const VisualizationPanel = ({
             align="center"
             wrapperStyle={{
               marginTop: '45px',
+              fontSize: '12px',
+              maxWidth: '150px',
+              marginLeft: '25px',
+              paddingBottom: '8px',
+              width: '100%',
             }}
           />
         </PieChart>
@@ -277,13 +329,23 @@ const VisualizationPanel = ({
         />
       </>
     )
-  }
+  };
+
+  const renderPanelHeader = () => (
+    <PanelHeader id="__PanelHeader">
+      <Stack horizontal styles={{ root: { height: 44 } }}>
+        <PanelTitle id="__CreateGroup_Panel_Title" variant="bold" size="large">
+          {`${shortMonths[currentMonth]} ${new Date().getFullYear()} ${typeTransmissions === 'sponsor' ? 'Transmissions for' : 'sent to'} ${orgName}`}
+        </PanelTitle>
+      </Stack>
+    </PanelHeader>
+  );
 
   return (
     <ThemedPanel
       closeButtonAriaLabel="Close"
       type={PanelType.medium}
-      headerText={`${shortMonths[currentMonth]} ${new Date().getFullYear()} Transmissions for ${orgName}`}
+      onRenderHeader={renderPanelHeader}
       isOpen={isPanelOpen}
       onDismiss={() => {
         setTransmissionsVendor([]);

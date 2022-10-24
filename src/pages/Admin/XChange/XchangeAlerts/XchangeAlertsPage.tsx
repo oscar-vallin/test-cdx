@@ -176,9 +176,13 @@ const XchangeAlertsPage = () => {
     setShowDialog(false);
   };
 
-  const showUnsavedChangesDialog = (currentSid: string, xchangeTypeAlert: string) => {
+  const showUnsavedChangesDialog = (
+    currentSid: string,
+    xchangeTypeAlert: string,
+    title?: string,
+  ) => {
     const updatedDialog = { ...defaultDialogProps };
-    updatedDialog.message = 'Are you sure you want to delete this Alert?';
+    updatedDialog.message = `Are you sure you want to delete this Alert ${title} ?`;
 
     updatedDialog.onYes = () => {
       hideDialog();
@@ -204,7 +208,12 @@ const XchangeAlertsPage = () => {
     setShowDialog(true);
   };
 
-  const userPermissionsIcons = (commands: WebCommand[], currentSid: string, type: string, corefilename?: string) => {
+  const userPermissionsIcons = (
+    commands: WebCommand[],
+    currentSid: string,
+    type: string,
+    corefilename?: string,
+  ) => {
     const _updateCmd = commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
     const _deleteCmd = commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Delete);
 
@@ -225,7 +234,9 @@ const XchangeAlertsPage = () => {
           <IconButton
             iconProps={{ iconName: 'Trash' }}
             style={{ paddingBottom: '10px' }}
-            onClick={() => showUnsavedChangesDialog(currentSid, type)}
+            onClick={() => {
+              showUnsavedChangesDialog(currentSid, type, corefilename);
+            }}
           />
         )}
       </>
@@ -278,7 +289,7 @@ const XchangeAlertsPage = () => {
                     </Row>
                     {typesAlertsRender(globalAlerts?.alertTypes ?? [])}
                     <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                      <Text variant="bold">Suscribers:</Text>
+                      <Text variant="bold">Subscribers:</Text>
                     </Spacing>
                     <Spacing margin={{ bottom: 'double' }}>
                       {globalAlerts?.subscribers?.map((subscriber, globalSubsIndex: number) => (
@@ -323,7 +334,7 @@ const XchangeAlertsPage = () => {
                     {filenameQualifier(individualAlerts.filenameQualifier ?? '', individualAlerts?.coreFilename ?? '')}
                     {typesAlertsRender(individualAlerts?.alertTypes ?? [])}
                     <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                      <Text variant="bold">Suscribers:</Text>
+                      <Text variant="bold">Subscribers:</Text>
                     </Spacing>
                     {individualAlerts?.subscribers?.map(
                       (subscriber, individualSubsIndex: number) => (
