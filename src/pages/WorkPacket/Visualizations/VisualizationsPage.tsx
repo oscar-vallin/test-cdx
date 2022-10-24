@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
   useWpTransmissionCountBySponsorLazyQuery,
+  useWpTransmissionCountByVendorLazyQuery,
   Organization,
 } from 'src/data/services/graphql';
 import { Column, Container, Row } from 'src/components/layouts';
@@ -23,16 +24,22 @@ import {
   SpinnerSize,
   Stack,
   Text,
+  IDropdownOption,
 } from '@fluentui/react';
 import { PageBody } from 'src/components/layouts/Column';
 import { ButtonLink } from 'src/components/buttons';
 import { theme } from 'src/styles/themes/theme';
-import { StyledCheckbox, StyledTooltip, StyledTotal } from './Visualizations.style';
+import {
+  StyledCheckbox,
+  StyledTooltip,
+  StyledTotal,
+  StyledTransnmissionsType,
+} from './Visualizations.style';
 import { VisualizationPanel } from './visualizationPanel';
 
 export const shortMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const INITIAL_COUNT_TOTAL = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-const colors = ['transparent', 'blue', 'green'];
+const colors = ['transparent', 'blue', 'green', 'yellow', 'gray', 'pink'];
 const CURRENT_MONTH = new Date().getMonth();
 
 type DataProps = {
@@ -55,9 +62,11 @@ const styles = {
 const VisualizationsPage = () => {
   const { orgSid } = useOrgSid();
   const [subClients, setSubClients] = useState<DataSubClientProps[]>([]);
+  const [typeOfTransmissions, setTypeOfTransmissions] = useState<IDropdownOption>();
   const [months, setMonths] = useState<string[]>([]);
   const [countMonth, setCountMonth] = useState(new Array(...INITIAL_COUNT_TOTAL));
   const [countTotal, setCountTotal] = useState(new Array(...INITIAL_COUNT_TOTAL));
+  const [yAxisValue, setYAxisValue] = useState(0);
   const [subClientsCheckBox, setSubClientsCheckBox] = useState({
     default: true,
   });
@@ -77,12 +86,29 @@ const VisualizationsPage = () => {
   const end = endOfMonth(new Date('2022-11-30T06:00:00.000Z'));
   const [
     transmissioncountBySponsor,
-    { data: transmissionCountData, loading: isLoadingTransmissionCount },
+    { data: transmissionSponsorData, loading: isLoadingTransmissionSponsor },
   ] = useWpTransmissionCountBySponsorLazyQuery();
+
+  const [
+    transmissioncountByVendor,
+    { data: transmissionVendorData, loading: isLoadingTransmissionVendor },
+  ] = useWpTransmissionCountByVendorLazyQuery();
 
   const fetchData = () => {
     let s = new Date();
     s = new Date(s.getFullYear(), 0);
+    if (typeOfTransmissions?.key === 'vendor') {
+      transmissioncountByVendor({
+        variables: {
+          orgSid,
+          dateRange: {
+            rangeStart: s,
+            rangeEnd: end,
+          },
+        },
+      })
+      return;
+    }
     transmissioncountBySponsor({
       variables: {
         orgSid,
@@ -104,8 +130,10 @@ const VisualizationsPage = () => {
   };
 
   useEffect(() => {
-    fetchData()
-  }, []);
+    if (typeOfTransmissions) {
+      fetchData();
+    }
+  }, [typeOfTransmissions]);
 
   const monthList = () => {
     const m: string[] = [];
@@ -145,10 +173,11 @@ const VisualizationsPage = () => {
   }
 
   const getSubClientsData = (subC) => {
+    setSubClients([]);
+    let highestNumber = subC[0].monthCounts[0].count;
     if (subC.length > 0) {
       defaultXValues();
       for (let subClient = 0; subClient < subC.length; subClient++) {
-        const diff = subClient > 0 ? 10 : 0;
         const currentSubClients: DataSubClientProps = {};
         currentSubClients['name'] = subC[subClient]['organization']['name'];
         currentSubClients['organization'] = subC[subClient]['organization'];
@@ -161,13 +190,17 @@ const VisualizationsPage = () => {
         for (let dataSClient = 0; dataSClient < monthCounts.length; dataSClient++) {
           const currentSubClient:DataProps = { month: '', count: 0, year: 0 };
           currentSubClient['month'] = shortMonths[monthCounts[dataSClient].month - 1];
-          currentSubClient['count'] = monthCounts[dataSClient].count + diff;
+          currentSubClient['count'] = monthCounts[dataSClient].count;
+          if (monthCounts[dataSClient].count > highestNumber) {
+            highestNumber = monthCounts[dataSClient].count;
+          }
           currentSubClient['year'] = monthCounts[dataSClient].year;
           data.push(currentSubClient)
         }
         currentSubClients['data'] = data;
         setSubClients((prevState) => prevState.concat(currentSubClients));
       }
+      setYAxisValue(highestNumber + 5)
     }
   };
 
@@ -234,8 +267,8 @@ const VisualizationsPage = () => {
   };
 
   useEffect(() => {
-    if (!isLoadingTransmissionCount && transmissionCountData) {
-      const { wpTransmissionCountBySponsor } = transmissionCountData;
+    if (!isLoadingTransmissionSponsor && transmissionSponsorData) {
+      const { wpTransmissionCountBySponsor } = transmissionSponsorData;
       if (wpTransmissionCountBySponsor && wpTransmissionCountBySponsor.length > 0) {
         getSubClientsData(wpTransmissionCountBySponsor);
         wpTransmissionCountBySponsor.forEach((organization) => {
@@ -244,7 +277,20 @@ const VisualizationsPage = () => {
       }
       monthList();
     }
-  }, [transmissionCountData, isLoadingTransmissionCount]);
+  }, [transmissionSponsorData, isLoadingTransmissionSponsor]);
+
+  useEffect(() => {
+    if (!isLoadingTransmissionVendor && transmissionVendorData) {
+      const { wpTransmissionCountByVendor } = transmissionVendorData;
+      if (wpTransmissionCountByVendor && wpTransmissionCountByVendor.length > 0) {
+        getSubClientsData(wpTransmissionCountByVendor);
+        wpTransmissionCountByVendor.forEach((organization) => {
+          sumTotalTransmissions(organization?.monthCounts);
+        });
+      }
+      monthList();
+    }
+  }, [transmissionVendorData, isLoadingTransmissionVendor]);
 
   // eslint-disable-next-line react/no-unstable-nested-components
   const Custooltip = () => {
@@ -260,6 +306,7 @@ const VisualizationsPage = () => {
             </Text>
             <ButtonLink
               onClick={() => {
+                setShowTooltip(false);
                 setIsopenPanel(true);
               }}
             >
@@ -273,7 +320,7 @@ const VisualizationsPage = () => {
   };
 
   const renderChart = () => {
-    if (isLoadingTransmissionCount) {
+    if (isLoadingTransmissionSponsor) {
       return (
         <Spacing margin={{ top: 'double' }}>
           <Spinner size={SpinnerSize.large} label="Loading visualization page" />
@@ -282,14 +329,26 @@ const VisualizationsPage = () => {
     }
 
     return (
-      <Spacing margin={{ left: 'normal' }}>
+      <Spacing margin={{ left: 'normal', top: 'double' }}>
         <LineChart
-          width={1100}
+          width={1070}
           height={400}
           onMouseLeave={() => setShowTooltip(false)}
         >
-          <XAxis dataKey="month" allowDuplicatedCategory={false} tick={false} />
-          <YAxis dataKey="count" domain={[10, 'auto']} />
+          <XAxis
+            dataKey="month"
+            allowDuplicatedCategory={false}
+            tick={false}
+          />
+          <YAxis
+            dataKey="count"
+            domain={
+              [
+                0,
+                yAxisValue,
+              ]
+            }
+          />
           <Tooltip
             cursor={false}
             content={<Custooltip />}
@@ -301,6 +360,11 @@ const VisualizationsPage = () => {
       </Spacing>
     )
   };
+
+  const dropdownOptions = [
+    { key: 'vendor', text: 'Transmissions by vendor per month' },
+    { key: 'sponsor', text: 'Transmissions by sponsor per month' },
+  ];
 
   return (
     <LayoutDashboard id="PageVisualizations" menuOptionSelected={ROUTES.ROUTE_VISUALIZATIONS.API_ID}>
@@ -315,58 +379,53 @@ const VisualizationsPage = () => {
       </PageHeader>
       <PageBody>
         <Container>
+          <StyledTransnmissionsType
+            dropdownWidth="auto"
+            label=""
+            selectedKey={typeOfTransmissions ? typeOfTransmissions.key : undefined}
+            options={dropdownOptions}
+            onChange={(e, _newValue) => {
+              if (_newValue?.key !== typeOfTransmissions?.key) {
+                setCountTotal(new Array(...INITIAL_COUNT_TOTAL));
+                setCountMonth(new Array(...INITIAL_COUNT_TOTAL));
+                setTypeOfTransmissions(_newValue);
+              }
+            }}
+          />
           <Row>
             {renderChart()}
           </Row>
           <Row>
             <Spacing margin={{ left: 'double' }}>
-              <Stack horizontal={true} horizontalAlign="space-between" style={{ width: '90%' }}>
+              <StyledTotal horizontal={true} horizontalAlign="center">
                 {months.map((month, monthIndex) => (
-                  <div key={monthIndex}>
+                  <Spacing padding={{ left: 'double' }} key={monthIndex}>
                     {months.length - 1 === monthIndex ? (
                       <Text
-                        style={{
-                          marginLeft: '45px',
-                          padding: 'auto',
-                          color: theme.colors.themePrimary,
-                          fontWeight: 600,
-                        }}
+                        style={{ color: theme.colors.themePrimary, fontWeight: 500 }}
                       >
                         {month}
                       </Text>
-
                     ) : (
-                      <Text
-                        style={{
-                          marginLeft: '45px',
-                          paddingLeft: 'auto',
-                          fontWeight: 500,
-                        }}
-                      >
+                      <Text>
                         {month}
                       </Text>
                     )}
-                  </div>
+                  </Spacing>
                 ))}
-              </Stack>
+              </StyledTotal>
             </Spacing>
           </Row>
           <Row>
             <Spacing margin={{ top: 'normal', bottom: 'normal', left: 'double' }}>
-              <StyledTotal horizontal={true} horizontalAlign="space-between">
-                <span style={{ position: 'absolute' }}>Totals</span>
+              <StyledTotal horizontal={true} horizontalAlign="center" backGround={true}>
+                <span style={{ position: 'absolute', left: '45px', fontWeight: 500 }}>Totals</span>
                 {countMonth.map((count, countIndex) => (
-                  <div>
-                    <Column lg="2" key={countIndex}>
-                      <Text
-                        style={{
-                          marginLeft: `${43 - countIndex}px`,
-                        }}
-                      >
-                        {count}
-                      </Text>
-                    </Column>
-                  </div>
+                  <Spacing padding={{ left: 'double' }} key={countIndex}>
+                    <Text>
+                      {count}
+                    </Text>
+                  </Spacing>
                 ))}
               </StyledTotal>
             </Spacing>
@@ -375,7 +434,7 @@ const VisualizationsPage = () => {
             <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
               <Stack horizontal={true}>
                 {subClients.map((subC, subCIndex) => (
-                  <div>
+                  <div key={subCIndex}>
                     {subCIndex > 0 && (
                       <StyledCheckbox
                         key={`${subC.name}-${subCIndex + 1}`}
@@ -436,6 +495,7 @@ const VisualizationsPage = () => {
         orgName={currentOrg}
         orgId={orgIdOrg}
         currentMonth={shortMonths.indexOf(currentMonth)}
+        typeTransmissions={typeOfTransmissions?.key}
       />
     </LayoutDashboard>
   );

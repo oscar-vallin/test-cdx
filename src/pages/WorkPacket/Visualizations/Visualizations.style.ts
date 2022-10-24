@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Checkbox, Stack } from '@fluentui/react';
+import { Checkbox, Dropdown, Stack } from '@fluentui/react';
 
 export const StyledCheckbox = styled(Checkbox)<CheckboxProps>`
     margin-left: 50px;
@@ -28,8 +28,44 @@ export const StyledTooltip = styled.div`
     }
 `;
 
-export const StyledTotal = styled(Stack)`
-  width: 91%;
-  background-color: #f3f2f1;
-  padding: 4px;
+export const StyledTotal = styled(Stack)<StyledTotalProps>`
+  width: 93%;
+  text-align: center;
+  padding: ${(({ backGround }) => (backGround ? '7px 0' : null))};
+  padding-left: 0px;
+  padding-right: 45px;
+  background-color: ${(({ backGround }) => (backGround ? '#f3f2f1' : null))};
+
+  span {
+    font-weight: ${(({ backGround }) => (backGround ? 500 : null))};
+    ;
+  }
 `;
+
+type StyledTotalProps = {
+  backGround?: boolean;
+};
+
+export const StyledTransnmissionsType = styled(Dropdown)`
+.ms-Dropdown {
+  background-color: ${({ theme }) => theme.colors.white};
+  border-color: ${({ theme }) => theme.colors.white};
+  outline: none;
+
+  & span: first-child {
+    border-color: ${({ theme }) => theme.colors.white};
+    border-width: 2px;
+    padding-right: 58px;
+    font-size: 1.35em;
+  }
+  &::after {
+    border-color: ${({ theme }) => theme.colors.white};
+    border-width: 2px;
+  }
+  [data-icon-name='ChevronDown'] {
+    font-weight: ${({ theme }) => theme.fontWeights.bold};
+    font-size: 0.85em;
+  }
+
+}
+`
