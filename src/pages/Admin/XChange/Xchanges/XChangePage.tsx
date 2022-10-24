@@ -558,22 +558,18 @@ const XChangePage = () => {
   ];
 
   const renderCreateButton = () => {
-    if (dataXchange && !requiresConversion) {
+    if (dataXchange && activeCmd && !requiresConversion) {
       return (
         <PrimaryButton
           id="__Publish"
           iconProps={{ iconName: 'FileHTML' }}
-          onClick={() => {
-            if (activeCmd) {
-              showUnsavedChangesDialog();
-            }
-          }}
+          onClick={() => showUnsavedChangesDialog()}
         >
           Publish
         </PrimaryButton>
       );
     }
-    if (dataXchange && requiresConversion) {
+    if (dataXchange && requiresConversion && updateCmd) {
       return (
         <PrimaryButton
           id="__Convert-NewFormat"
