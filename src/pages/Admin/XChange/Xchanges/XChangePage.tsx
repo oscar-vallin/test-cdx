@@ -647,24 +647,49 @@ const XChangePage = () => {
         )}
         <Spacing margin="normal">
           <Row>
-            <Text style={{ fontWeight: 'bold' }}>Alert on all Xchanges</Text>
+            <Column lg="9">
+              <Text style={{ fontWeight: 'bold' }}>Alert on all Xchanges</Text>
+            </Column>
+            <Column lg="3">
+              { alertsLink(
+                <TooltipHost
+                  style={{ whiteSpace: 'pre-wrap' }}
+                  // eslint-disable-next-line @typescript-eslint/no-empty-function
+                  onMouseLeave={() => {}}
+                  content={`${globalXchangeAlerts?.numSubscribers} user(s) are configured to be notified`}
+                  calloutProps={{ gapSpace: 0 }}
+                >
+                  {` (${globalXchangeAlerts?.numSubscribers})`}
+                </TooltipHost>,
+              ) }
+            </Column>
           </Row>
-          <Spacing margin="normal" />
-          { alertsLink(`(${globalXchangeAlerts?.numSubscribers}) Subscribers`) }
         </Spacing>
         <Spacing margin="normal">
           <Row>
-            <Text style={{ fontWeight: 'bold' }}>Individual Xchange Alerts</Text>
+            <Column lg="12">
+              <Text style={{ fontWeight: 'bold' }}>Individual Xchange Alerts</Text>
+            </Column>
           </Row>
           <Spacing margin="normal" />
           {individualXchangeAlerts?.map((individualXchange: XchangeAlertsProps, index: number) => (
             <Spacing margin={{ bottom: 'normal' }} key={index}>
               <Row>
-                <Column lg="7">
+                <Column lg="9">
                   { alertsLink(` ${individualXchange.coreFilename} `) }
                 </Column>
-                <Column lg="4">
-                  { alertsLink(` (${globalXchangeAlerts?.numSubscribers}) Subscribers`) }
+                <Column lg="3">
+                  { alertsLink(
+                    <TooltipHost
+                      style={{ whiteSpace: 'pre-wrap' }}
+                      // eslint-disable-next-line @typescript-eslint/no-empty-function
+                      onMouseLeave={() => {}}
+                      content={`${individualXchange.numSubscribers} user(s) are configured to be notified`}
+                      calloutProps={{ gapSpace: 0 }}
+                    >
+                      {` (${individualXchange.numSubscribers})`}
+                    </TooltipHost>,
+                  ) }
                 </Column>
               </Row>
             </Spacing>
