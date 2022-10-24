@@ -218,6 +218,7 @@ export enum CdxWebPage {
   Visualizations = 'VISUALIZATIONS',
   OrgActivity = 'ORG_ACTIVITY',
   ActiveOrgs = 'ACTIVE_ORGS',
+  DeletedOrgs = 'DELETED_ORGS',
   ExternalOrgs = 'EXTERNAL_ORGS',
   ActiveUsers = 'ACTIVE_USERS',
   ExternalUsers = 'EXTERNAL_USERS',
@@ -678,7 +679,8 @@ export enum Environment {
   Test = 'TEST',
   Uat = 'UAT',
   Prod = 'PROD',
-  All = 'ALL'
+  All = 'ALL',
+  Undetermined = 'UNDETERMINED'
 }
 
 export enum ErrorSeverity {
@@ -877,6 +879,7 @@ export type Mutation = {
   createOrg?: Maybe<OrganizationForm>;
   updateOrg?: Maybe<OrganizationForm>;
   deactivateOrg?: Maybe<GqOperationResponse>;
+  activateOrg?: Maybe<GqOperationResponse>;
   updateOrgSecurity?: Maybe<OrgSecurityForm>;
   createAccessPolicy?: Maybe<AccessPolicyForm>;
   updateAccessPolicy?: Maybe<AccessPolicyForm>;
@@ -998,6 +1001,11 @@ export type MutationUpdateOrgArgs = {
 
 
 export type MutationDeactivateOrgArgs = {
+  orgSid: Scalars['ID'];
+};
+
+
+export type MutationActivateOrgArgs = {
   orgSid: Scalars['ID'];
 };
 
@@ -1786,6 +1794,8 @@ export type QualityChecks = {
   fieldCreationWarningCount?: Maybe<Scalars['Int']>;
   fieldCreationErrorCount?: Maybe<Scalars['Int']>;
   fieldCreationInfoCount?: Maybe<Scalars['Int']>;
+  errorRecordPercentage?: Maybe<Scalars['Float']>;
+  errorWarningRecordPercentage?: Maybe<Scalars['Float']>;
   accStructReqError?: Maybe<StatType>;
   clientSpecificReqError?: Maybe<StatType>;
   accStructTruncError?: Maybe<StatType>;
@@ -4461,7 +4471,7 @@ export type WorkPacketStatusDetailsQuery = (
       )>> }
     )>, qualityChecks?: Maybe<(
       { __typename?: 'QualityChecks' }
-      & Pick<QualityChecks, 'totalRecordCount' | 'fieldCreationWarningCount' | 'fieldCreationErrorCount' | 'fieldCreationInfoCount' | 'hasMoreEvents'>
+      & Pick<QualityChecks, 'totalRecordCount' | 'fieldCreationWarningCount' | 'fieldCreationErrorCount' | 'fieldCreationInfoCount' | 'errorRecordPercentage' | 'errorWarningRecordPercentage' | 'hasMoreEvents'>
       & { sequenceCreationEvent?: Maybe<Array<(
         { __typename?: 'SequenceCreationEvent' }
         & Pick<SequenceCreationEvent, 'context' | 'unitId'>
@@ -7406,6 +7416,16 @@ export type DeactivateOrgMutationVariables = Exact<{
 export type DeactivateOrgMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'deactivateOrg'>
+);
+
+export type ActivateOrgMutationVariables = Exact<{
+  orgSid: Scalars['ID'];
+}>;
+
+
+export type ActivateOrgMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'activateOrg'>
 );
 
 export type UpdateOrgSecurityMutationVariables = Exact<{
@@ -10625,6 +10645,8 @@ export const WorkPacketStatusDetailsDocument = gql`
       fieldCreationWarningCount
       fieldCreationErrorCount
       fieldCreationInfoCount
+      errorRecordPercentage
+      errorWarningRecordPercentage
       accStructReqError {
         ...fragmentStatType
       }
@@ -16262,6 +16284,36 @@ export function useDeactivateOrgMutation(baseOptions?: Apollo.MutationHookOption
 export type DeactivateOrgMutationHookResult = ReturnType<typeof useDeactivateOrgMutation>;
 export type DeactivateOrgMutationResult = Apollo.MutationResult<DeactivateOrgMutation>;
 export type DeactivateOrgMutationOptions = Apollo.BaseMutationOptions<DeactivateOrgMutation, DeactivateOrgMutationVariables>;
+export const ActivateOrgDocument = gql`
+    mutation ActivateOrg($orgSid: ID!) {
+  activateOrg(orgSid: $orgSid)
+}
+    `;
+export type ActivateOrgMutationFn = Apollo.MutationFunction<ActivateOrgMutation, ActivateOrgMutationVariables>;
+
+/**
+ * __useActivateOrgMutation__
+ *
+ * To run a mutation, you first call `useActivateOrgMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useActivateOrgMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [activateOrgMutation, { data, loading, error }] = useActivateOrgMutation({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *   },
+ * });
+ */
+export function useActivateOrgMutation(baseOptions?: Apollo.MutationHookOptions<ActivateOrgMutation, ActivateOrgMutationVariables>) {
+        return Apollo.useMutation<ActivateOrgMutation, ActivateOrgMutationVariables>(ActivateOrgDocument, baseOptions);
+      }
+export type ActivateOrgMutationHookResult = ReturnType<typeof useActivateOrgMutation>;
+export type ActivateOrgMutationResult = Apollo.MutationResult<ActivateOrgMutation>;
+export type ActivateOrgMutationOptions = Apollo.BaseMutationOptions<ActivateOrgMutation, ActivateOrgMutationVariables>;
 export const UpdateOrgSecurityDocument = gql`
     mutation UpdateOrgSecurity($orgSecurityInfo: UpdateOrgSecurityInput!) {
   updateOrgSecurity(orgSecurityInfo: $orgSecurityInfo) {
