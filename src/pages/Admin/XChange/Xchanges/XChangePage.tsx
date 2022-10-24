@@ -569,7 +569,7 @@ const XChangePage = () => {
         </PrimaryButton>
       );
     }
-    if (dataXchange && requiresConversion) {
+    if (dataXchange && requiresConversion && updateCmd) {
       return (
         <PrimaryButton
           id="__Convert-NewFormat"
