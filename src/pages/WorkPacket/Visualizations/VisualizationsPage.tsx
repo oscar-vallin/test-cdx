@@ -64,6 +64,7 @@ const VisualizationsPage = () => {
   const [subClients, setSubClients] = useState<DataSubClientProps[]>([]);
   const [typeOfTransmissions, setTypeOfTransmissions] = useState<IDropdownOption>();
   const [months, setMonths] = useState<string[]>([]);
+  const [monthIncurrent, setMonthInCurrent] = useState(0);
   const [countMonth, setCountMonth] = useState(new Array(...INITIAL_COUNT_TOTAL));
   const [countTotal, setCountTotal] = useState(new Array(...INITIAL_COUNT_TOTAL));
   const [yAxisValue, setYAxisValue] = useState(0);
@@ -134,9 +135,7 @@ const VisualizationsPage = () => {
   };
 
   useEffect(() => {
-    if (typeOfTransmissions) {
-      fetchData();
-    }
+    fetchData();
   }, [typeOfTransmissions]);
 
   const monthList = () => {
@@ -174,7 +173,7 @@ const VisualizationsPage = () => {
         { month: orderedMonth[11], count: 0, year: 0 }],
     };
     setSubClients((prevState) => prevState.concat(DefaultSubClient));
-  }
+  };
 
   const getSubClientsData = (subC) => {
     setSubClients([]);
@@ -191,6 +190,9 @@ const VisualizationsPage = () => {
         }));
         const monthCounts = subC[subClient].monthCounts ?? [];
         const data: DataProps[] = [];
+        if (subC[subClient].monthCounts[0].month > monthIncurrent) {
+          setMonthInCurrent(subC[subClient].monthCounts[0].month);
+        }
         for (let dataSClient = 0; dataSClient < monthCounts.length; dataSClient++) {
           const currentSubClient:DataProps = { month: '', count: 0, year: 0 };
           currentSubClient['month'] = shortMonths[monthCounts[dataSClient].month - 1];
@@ -331,7 +333,7 @@ const VisualizationsPage = () => {
         </Spacing>
       );
     }
-
+    console.log(monthIncurrent)
     return (
       <Spacing margin={{ left: 'normal', top: 'double' }}>
         <LineChart
@@ -386,6 +388,7 @@ const VisualizationsPage = () => {
           <StyledTransnmissionsType
             dropdownWidth="auto"
             label=""
+            defaultSelectedKey="sponsor"
             selectedKey={typeOfTransmissions ? typeOfTransmissions.key : undefined}
             options={dropdownOptions}
             onChange={(e, _newValue) => {
@@ -411,9 +414,22 @@ const VisualizationsPage = () => {
                         {month}
                       </Text>
                     ) : (
-                      <Text>
-                        {month}
-                      </Text>
+                      <div>
+                        {monthIndex > monthIncurrent ? (
+                          <Text
+                            style={{color: theme.colors.neutralPrimary, fontWeight: 500 }}
+                          >
+                            {month}
+                          </Text>
+
+                        ) : (
+                          <Text
+                            style={{color: theme.colors.neutralTertiary, fontWeight: 500 }}
+                          >
+                            {month}
+                          </Text>
+                        )}
+                      </div>
                     )}
                   </Spacing>
                 ))}
