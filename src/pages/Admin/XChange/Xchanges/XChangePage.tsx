@@ -82,7 +82,8 @@ const XChangePage = () => {
     useXchangeProfileLazyQuery,
   );
 
-  const [xchangeProfileComment, { data: dataComment, loading: loadingComment }] = useQueryHandler(
+  const [xchangeProfileComment,
+    { data: dataComment, loading: loadingComment }] = useQueryHandler(
     useUpdateXchangeProfileCommentMutation,
   );
 
@@ -106,6 +107,7 @@ const XChangePage = () => {
   const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
   const [activeCmd, setActiveCmd] = useState<WebCommand | null>();
+  const [deactivateCmd, setDeactivateCmd] = useState<WebCommand | null>();
   const [alertsCmd, setAlertsCmd] = useState<WebCommand | null>();
   const [editComment, setEditComment] = useState(false);
   const [comment, setComment] = useState<string | null>();
@@ -293,6 +295,9 @@ const XChangePage = () => {
       const _activeCmd = pageCommands
         ?.find((cmd) => cmd?.commandType === CdxWebCommandType.Activate);
       setActiveCmd(_activeCmd);
+      const _deactivateCmd = pageCommands
+        ?.find((cmd) => cmd?.commandType === CdxWebCommandType.Deactivate);
+      setDeactivateCmd(_deactivateCmd);
       const _alertsCmd = pageCommands?.find((cmd) => cmd?.endPoint === 'xchangeProfileAlerts');
       setAlertsCmd(_alertsCmd);
     }
@@ -313,7 +318,7 @@ const XChangePage = () => {
   useEffect(() => {
     if (!isLoadingPublish && publishData) {
       setRefreshDataXchange(true);
-      Toast.success({ text: 'Alert has been deleted' });
+      Toast.success({ text: 'Xchange profile published' });
     }
     if (!isLoadingPublish && publishError) {
       Toast.error({ text: 'There was an error publish the xchange profile' });
@@ -485,21 +490,24 @@ const XChangePage = () => {
           </TooltipHost>
         );
       }
-      return (
-        <TooltipHost content="Inactive" directionalHint={DirectionalHint.rightCenter}>
-          <FontIcon
-            style={{ fontSize: '18px', cursor: 'pointer', color: 'rgb(161, 159, 157)' }}
-            iconName="StatusCircleBlock"
-            onClick={() => {
-              showUnsavedChangesDeactivateAndActiveDialog(
-                item.active,
-                item.sid,
-                item.coreFilename,
-              );
-            }}
-          />
-        </TooltipHost>
-      )
+
+      if (deactivateCmd) {
+        return (
+          <TooltipHost content="Inactive" directionalHint={DirectionalHint.rightCenter}>
+            <FontIcon
+              style={{ fontSize: '18px', cursor: 'pointer', color: 'rgb(161, 159, 157)' }}
+              iconName="StatusCircleBlock"
+              onClick={() => {
+                showUnsavedChangesDeactivateAndActiveDialog(
+                  item.active,
+                  item.sid,
+                  item.coreFilename,
+                );
+              }}
+            />
+          </TooltipHost>
+        );
+      }
     }
     return null;
   };
@@ -701,7 +709,7 @@ const XChangePage = () => {
           <ContainerInput>
             <Row>
               <Column lg="6">
-                <Text style={{ fontWeight: 'bold', marginTop: '10px' }}>Comments</Text>
+                <Text style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>Comments</Text>
               </Column>
               {!requiresConversion && editComment ? (
                 <>
@@ -726,10 +734,12 @@ const XChangePage = () => {
                 </>
               ) : (
                 <Column lg="6" right>
-                  <IconButton
-                    iconProps={{ iconName: 'EditSolid12' }}
-                    onClick={() => setEditComment(updateCmd !== undefined && true)}
-                  />
+                  {!requiresConversion && updateCmd && (
+                    <IconButton
+                      iconProps={{ iconName: 'EditSolid12' }}
+                      onClick={() => setEditComment(updateCmd !== undefined && true)}
+                    />
+                  )}
                 </Column>
               )}
             </Row>
