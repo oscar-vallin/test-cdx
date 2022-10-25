@@ -10,6 +10,7 @@ import {
   Text,
   TooltipHost,
 } from '@fluentui/react';
+import { Comment20Filled } from '@fluentui/react-icons';
 import {
   PanelBody, PanelHeader, PanelTitle, ThemedPanel,
 } from 'src/layouts/Panels/Panels.styles';
@@ -36,9 +37,9 @@ import { UIInputCheck } from 'src/components/inputs/InputCheck';
 import { ButtonLink } from 'src/components/buttons';
 import { TestFileTransmissionModal } from 'src/containers/modals/TestFileTransmissionModal';
 import { theme } from 'src/styles/themes/theme';
-import { Comment20Filled } from '@fluentui/react-icons';
 import { UIInputTextArea } from 'src/components/inputs/InputTextArea';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
+import { ThemeStore } from 'src/store/ThemeStore';
 
 type XchangeTransmissionPanelProps = {
   isPanelOpen: boolean;
@@ -101,7 +102,10 @@ const XchangeTransmissionPanel = ({
   xchangeFileProcessSid,
 }: XchangeTransmissionPanelProps) => {
   const Toast = useNotification();
-  const [xchangeFileTransmission, setXchangeFileTransmission] = useState<XchangeFileTransmissionForm>();
+  const [
+    xchangeFileTransmission,
+    setXchangeFileTransmission,
+  ] = useState<XchangeFileTransmissionForm>();
   const [authKeyName, setAuthKeyName] = useState('');
   const [authKeyPassphrase, setAuthKeyPassphrase] = useState('');
   const [filenameQualifiers, setFilenameQualifiers] = useState<string[]>();
@@ -386,7 +390,11 @@ const XchangeTransmissionPanel = ({
               content={comments ? 'This File Transmission has comments. Click to see them.' : 'Click to add a comment'}
             >
               <Comment20Filled
-                style={comments ? { color: '#cdcd00', cursor: 'pointer' } : { color: 'gray', cursor: 'pointer' }}
+                style={comments ? {
+                  color: ThemeStore.userTheme.colors.yellow, cursor: 'pointer',
+                } : {
+                  color: ThemeStore.userTheme.colors.neutralTertiaryAlt, cursor: 'pointer',
+                }}
                 onClick={() => {
                   setOpenUpdateComments(true);
                 }}
@@ -395,7 +403,11 @@ const XchangeTransmissionPanel = ({
           )}
           {!closeTooltipHost && (
             <Comment20Filled
-              style={comments ? { color: '#cdcd00', cursor: 'pointer' } : { color: 'gray', cursor: 'pointer' }}
+              style={comments ? {
+                color: ThemeStore.userTheme.colors.yellow, cursor: 'pointer',
+              } : {
+                color: ThemeStore.userTheme.colors.neutralTertiaryAlt, cursor: 'pointer',
+              }}
               onClick={() => {
                 setOpenUpdateComments(true);
               }}
@@ -434,20 +446,24 @@ const XchangeTransmissionPanel = ({
         <TooltipHost
           directionalHintForRTL={DirectionalHint['bottomAutoEdge']}
           closeDelay={5000000}
-          style={{ background: '#cdcd00', width: '400px', padding: '0 10px 10px 10px' }}
+          style={{ background: ThemeStore.userTheme.colors.yellow, width: '400px', padding: '0 10px 10px 10px' }}
           tooltipProps={{
             calloutProps: {
               styles: {
-                beak: { background: '#cdcd00' },
-                beakCurtain: { background: '#cdcd00' },
-                calloutMain: { background: '#cdcd00' },
+                beak: { background: ThemeStore.userTheme.colors.yellow },
+                beakCurtain: { background: ThemeStore.userTheme.colors.yellow },
+                calloutMain: { background: ThemeStore.userTheme.colors.yellow },
               },
             },
           }}
           content={updateComment()}
         >
           <Comment20Filled
-            style={comments ? { color: '#cdcd00', cursor: 'pointer' } : { color: 'gray', cursor: 'pointer' }}
+            style={comments ? {
+              color: ThemeStore.userTheme.colors.yellow, cursor: 'pointer',
+            } : {
+              color: ThemeStore.userTheme.colors.neutralTertiaryAlt, cursor: 'pointer',
+            }}
           />
         </TooltipHost>
       );
@@ -899,8 +915,12 @@ const XchangeTransmissionPanel = ({
       }
       if (dataFileTransmissionForm.xchangeFileTransmissionForm?.commands) {
         const pageCommands = dataFileTransmissionForm.xchangeFileTransmissionForm?.commands;
-        const _updateCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
-        const _createCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
+        const _updateCmd = pageCommands?.find(
+          (cmd) => cmd?.commandType === CdxWebCommandType.Update,
+        );
+        const _createCmd = pageCommands?.find(
+          (cmd) => cmd?.commandType === CdxWebCommandType.Create,
+        );
         setUpdateCmd(_updateCmd);
         setCreateCmd(_createCmd);
         if (_updateCmd) {

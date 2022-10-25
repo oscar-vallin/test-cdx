@@ -22,6 +22,7 @@ export type ThemeColorsType = {
   black: string;
   white: string;
   red: string;
+  yellow: string;
   custom: {
     severeError: string;
     error: string;

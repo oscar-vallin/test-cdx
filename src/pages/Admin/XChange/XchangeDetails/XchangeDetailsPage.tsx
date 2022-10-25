@@ -41,6 +41,12 @@ import { UIInputTextArea } from 'src/components/inputs/InputTextArea';
 import { ButtonAction, ButtonLink } from 'src/components/buttons';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { EmptyMessage } from 'src/containers/tables/TableCurrentActivity/TableActivity.styles';
+import { ThemeStore } from 'src/store/ThemeStore';
+import { Diagram } from './Diagram/Diagram';
+import { XchangeAlertsPanel } from '../XchangeAlerts/XchangeAlertsPanel/XchangeAlertsPanel';
+import { JobGroupPanel } from './JobGroupPanel/JobGroupPanel';
+import { SchedulePanel } from '../SchedulePanel';
+import { StyledAlertTypes } from '../XchangeAlerts/XchangeAlertsPage.style';
 import {
   CardStyled,
   StyledColumTabs,
@@ -48,11 +54,6 @@ import {
   StyledProcessValueText,
   StyledQualifier,
 } from './XchangeDetailsPage.styles';
-import { Diagram } from './Diagram/Diagram';
-import { XchangeAlertsPanel } from '../XchangeAlerts/XchangeAlertsPanel/XchangeAlertsPanel';
-import { JobGroupPanel } from './JobGroupPanel/JobGroupPanel';
-import { SchedulePanel } from '../SchedulePanel';
-import { StyledAlertTypes } from '../XchangeAlerts/XchangeAlertsPage.style';
 
 const defaultDialogProps: DialogYesNoProps = {
   id: '__XchangeDetails_Dlg',
@@ -222,7 +223,12 @@ const XchangeDetailsPage = () => {
           <Column lg="1">
             <IconButton
               iconProps={{ iconName: 'EditSolid12' }}
-              style={{ paddingBottom: '10px', position: 'relative', right: '5px', top: '1px' }}
+              style={{
+                paddingBottom: '10px',
+                position: 'relative',
+                right: '5px',
+                top: '1px',
+              }}
               onClick={() => {
                 setSid(currentSid);
                 setOpenAlertsPanel(true);
@@ -335,7 +341,14 @@ const XchangeDetailsPage = () => {
                   <>
                     <Row>
                       <Stack horizontal={true} horizontalAlign="space-between">
-                        <FontIcon iconName="ReminderTime" style={{ fontSize: '10px', fontWeight: 600, paddingRight: '8px'}} />
+                        <FontIcon
+                          iconName="ReminderTime"
+                          style={{
+                            fontSize: '10px',
+                            fontWeight: 600,
+                            paddingRight: '8px',
+                          }}
+                        />
                         <Text style={{ fontSize: '12px' }}>Expected to run</Text>
                       </Stack>
                     </Row>
@@ -532,9 +545,9 @@ const XchangeDetailsPage = () => {
       color: '',
     };
     if (comments) {
-      styles.color = '#cdcd00';
+      styles.color = ThemeStore.userTheme.colors.yellow;
     } else {
-      styles.color = 'gray';
+      styles.color = ThemeStore.userTheme.colors.neutralTertiaryAlt;
     }
     if (!openUpdateComments && detailsData) {
       return (
@@ -582,13 +595,13 @@ const XchangeDetailsPage = () => {
         <TooltipHost
           directionalHintForRTL={DirectionalHint['bottomAutoEdge']}
           closeDelay={5000000}
-          style={{ background: '#cdcd00', width: '400px', padding: '0 10px 10px 10px' }}
+          style={{ background: ThemeStore.userTheme.colors.yellow, width: '400px', padding: '0 10px 10px 10px' }}
           tooltipProps={{
             calloutProps: {
               styles: {
-                beak: { background: '#cdcd00' },
-                beakCurtain: { background: '#cdcd00' },
-                calloutMain: { background: '#cdcd00' },
+                beak: { background: ThemeStore.userTheme.colors.yellow },
+                beakCurtain: { background: ThemeStore.userTheme.colors.yellow },
+                calloutMain: { background: ThemeStore.userTheme.colors.yellow },
               },
             },
           }}
@@ -628,7 +641,7 @@ const XchangeDetailsPage = () => {
                   <StyledProcessValueText variant="large">
                     {process.vendor.value?.name}-{process.specId.value}
                   </StyledProcessValueText>
-                  <StyledButtonAction fontSize={24} id="__Add_FileProcess" iconName="add" title="Add File Process"/>
+                  <StyledButtonAction fontSize={24} id="__Add_FileProcess" iconName="add" title="Add File Process" />
                 </StyledColumTabs>
               ))}
           </Row>
