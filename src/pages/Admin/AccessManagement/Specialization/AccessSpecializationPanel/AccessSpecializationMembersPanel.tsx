@@ -18,6 +18,7 @@ import {
 } from '@fluentui/react';
 import { PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
 import { Spacing } from 'src/components/spacings/Spacing';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { ButtonLink } from 'src/components/buttons';
 import { UpdateUserPanel, useUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers';
 import { useUsersLists } from 'src/pages/Admin/Users/useUsersList';
@@ -52,8 +53,17 @@ const AccessSpecializationMembersPanel = ({
 
   const [
     accessSpecializationMembers,
-    { data: specializationMembersData, loading: isLoadingSpecializationMembers },
+    {
+      data: specializationMembersData,
+      loading: isLoadingSpecializationMembers,
+      error: errorSpecializationMembers,
+    },
   ] = useAccessSpecializationMembersLazyQuery();
+  const handleError = ErrorHandler();
+
+  useEffect(() => {
+    handleError(errorSpecializationMembers);
+  }, [errorSpecializationMembers]);
 
   const updateUserPanel = useUpdateUserPanel();
 

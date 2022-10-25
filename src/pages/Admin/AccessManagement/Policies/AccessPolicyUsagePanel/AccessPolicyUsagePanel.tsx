@@ -21,6 +21,7 @@ import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { ButtonLink } from 'src/components/buttons';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { DataColumn, useSortableColumns } from 'src/containers/tables';
 import { AccessPolicyGroupPanel } from '../../Groups/AccessPolicyGroup';
 
@@ -40,7 +41,7 @@ const AccessPolicyUsagePanel = ({
   const [isGroupPanelOpen, setIsGroupPanelOpen] = useState(false);
   const [
     policyUsages,
-    { data: accesUsages, loading: isLoadingAccessUsages },
+    { data: accessUsages, loading: isLoadingAccessUsages, error: errorUsages },
   ] = useAccessPolicyUsagesLazyQuery();
   const [apiAmGroupsForOrg] = useAccessPolicyGroupsForOrgLazyQuery();
   const [fetchTemplates] = useAccessPolicyGroupTemplatesLazyQuery({
@@ -48,6 +49,12 @@ const AccessPolicyUsagePanel = ({
       orgSid,
     },
   });
+
+  const handleError = ErrorHandler();
+
+  useEffect(() => {
+    handleError(errorUsages);
+  }, [errorUsages]);
 
   const fetchData = () => {
     apiAmGroupsForOrg({ variables: { orgSid } });
@@ -102,10 +109,10 @@ const AccessPolicyUsagePanel = ({
   }, [isOpen, tableFilters.pagingParams]);
 
   useEffect(() => {
-    if (!isLoadingAccessUsages && accesUsages) {
-      setAccessPolicyUsages(accesUsages.accessPolicyUsages);
+    if (!isLoadingAccessUsages && accessUsages) {
+      setAccessPolicyUsages(accessUsages.accessPolicyUsages);
     }
-  }, [accesUsages, isLoadingAccessUsages]);
+  }, [accessUsages, isLoadingAccessUsages]);
 
   const onRenderItemColumn = (item: AccessGroupUsage, index?: number, column?: IColumn) => {
     let columnVal: string | undefined;

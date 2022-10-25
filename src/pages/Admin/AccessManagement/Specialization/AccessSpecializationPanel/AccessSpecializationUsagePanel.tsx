@@ -19,6 +19,7 @@ import {
 import { useTableFilters } from 'src/hooks/useTableFilters';
 import { DataColumn, useSortableColumns } from 'src/containers/tables';
 import { Spacing } from 'src/components/spacings/Spacing';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { ButtonLink } from 'src/components/buttons';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { AccessPolicyGroupPanel } from '../../Groups/AccessPolicyGroup';
@@ -48,8 +49,17 @@ const AccessSpecializationUsagePanel = ({
   });
   const [
     accessSpecializationUsages,
-    { data: accessSpecializationData, loading: isLoadingAccessSpecialization },
+    {
+      data: accessSpecializationData,
+      loading: isLoadingAccessSpecialization,
+      error: errorSpecializationUsages,
+    },
   ] = useAccessSpecializationUsagesLazyQuery();
+  const handleError = ErrorHandler();
+
+  useEffect(() => {
+    handleError(errorSpecializationUsages);
+  }, [errorSpecializationUsages]);
 
   const fetchData = () => {
     apiAmGroupsForOrg({ variables: { orgSid } });

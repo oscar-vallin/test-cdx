@@ -22,6 +22,7 @@ import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useUsersLists } from 'src/pages/Admin/Users/useUsersList';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { ButtonLink } from 'src/components/buttons';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { UpdateUserPanel, useUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers';
 import { AccessPolicyGroupPanel } from '../../Groups/AccessPolicyGroup';
 import { MembersList } from '../../MembersList/MembersList';
@@ -49,8 +50,13 @@ const AccessPolicyMembersPanel = ({
   });
   const [
     policyMembers,
-    { data: accessMembers, loading: isLoadingAccessMembers },
+    { data: accessMembers, loading: isLoadingAccessMembers, error: errorAccessMembers },
   ] = useAccessPolicyMembersLazyQuery();
+  const handleError = ErrorHandler();
+
+  useEffect(() => {
+    handleError(errorAccessMembers);
+  }, [errorAccessMembers]);
 
   const updateUserPanel = useUpdateUserPanel();
 

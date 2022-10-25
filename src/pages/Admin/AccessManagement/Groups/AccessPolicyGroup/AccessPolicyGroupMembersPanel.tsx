@@ -13,6 +13,7 @@ import { PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.
 import { useAccessPolicyGroupMembersLazyQuery, AccessMember, ActiveEnum } from 'src/data/services/graphql';
 import { useUsersLists } from 'src/pages/Admin/Users/useUsersList';
 import { Spacing } from 'src/components/spacings/Spacing';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { ButtonLink } from 'src/components/buttons';
 import { UpdateUserPanel, useUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers';
 import { MembersList } from '../../MembersList/MembersList';
@@ -35,8 +36,17 @@ const AccessPolicyGroupMembersPanel = ({
 
   const [
     policyMembers,
-    { data: accessPolicyGroupMembersData, loading: isLoadingAccessGroupMembers },
+    {
+      data: accessPolicyGroupMembersData,
+      loading: isLoadingAccessGroupMembers,
+      error: errorAccessGroupMembers,
+    },
   ] = useAccessPolicyGroupMembersLazyQuery();
+  const handleError = ErrorHandler();
+
+  useEffect(() => {
+    handleError(errorAccessGroupMembers);
+  }, [errorAccessGroupMembers]);
 
   const updateUserPanel = useUpdateUserPanel();
 
