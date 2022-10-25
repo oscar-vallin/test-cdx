@@ -35,6 +35,7 @@ import { PageBody } from 'src/components/layouts/Column';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { FileUploadDialog } from 'src/pages/Admin/XChange/XchangeDetails/FileUpload/FileUploadDialog';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
+import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { ROUTE_XCHANGE_DETAILS } from 'src/data/constants/RouteConstants';
 import { Comment20Filled } from '@fluentui/react-icons';
 import { UIInputTextArea } from 'src/components/inputs/InputTextArea';
@@ -83,6 +84,7 @@ const XchangeDetailsPage = () => {
   const [allowedCommands, setAllowedCommands] = useState(false);
   const [refreshXchangeDetails, setRefreshXchangeDetails] = useState(false);
   const [comments, setComments] = useState('');
+  const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
   const [openUpdateComments, setOpenUpdateComments] = useState(false);
   const [closeTooltipHost, setCloseTooltipHost] = useState(true);
   const [sid, setSid] = useState('');
@@ -99,7 +101,7 @@ const XchangeDetailsPage = () => {
   ] = useDeleteXchangeConfigAlertMutation();
 
   const [updateXchangeComment, { data: commentData, loading: isLoadingComment },
-  ] = useUpdateXchangeConfigCommentMutation();
+  ] = useQueryHandler(useUpdateXchangeConfigCommentMutation);
   const [showFileUpload, setShowFileUpload] = useState(false);
   const handleError = ErrorHandler();
 
@@ -222,7 +224,12 @@ const XchangeDetailsPage = () => {
           <Column lg="1">
             <IconButton
               iconProps={{ iconName: 'EditSolid12' }}
-              style={{ paddingBottom: '10px', position: 'relative', right: '5px', top: '1px' }}
+              style={{
+                paddingBottom: '10px',
+                position: 'relative',
+                right: '5px',
+                top: '1px',
+              }}
               onClick={() => {
                 setSid(currentSid);
                 setOpenAlertsPanel(true);
@@ -335,7 +342,7 @@ const XchangeDetailsPage = () => {
                   <>
                     <Row>
                       <Stack horizontal={true} horizontalAlign="space-between">
-                        <FontIcon iconName="ReminderTime" style={{ fontSize: '10px', fontWeight: 600, paddingRight: '8px'}} />
+                        <FontIcon iconName="ReminderTime" style={{ fontSize: '10px', fontWeight: 600, paddingRight: '8px' }} />
                         <Text style={{ fontSize: '12px' }}>Expected to run</Text>
                       </Stack>
                     </Row>
@@ -434,6 +441,10 @@ const XchangeDetailsPage = () => {
 
       if (xchangeConfig.comments) {
         setComments(xchangeConfig.comments.value ?? '');
+        const pageCommands = xchangeConfig?.commands;
+        const _updateCmd = pageCommands
+          ?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update && cmd.endPoint === 'updateXchangeConfigComment');
+        setUpdateCmd(_updateCmd);
       }
 
       if (xchangeConfig.commands && xchangeConfig.commands.length > 0) {
@@ -609,7 +620,9 @@ const XchangeDetailsPage = () => {
             <Column lg="6">
               <Stack horizontal={true} horizontalAlign="space-between">
                 <PageTitle id="__Page__Title__Details" title="Xchange Details" />
-                <div ref={wrapperRef}>{!detailsLoading && tooltipHostComments()}</div>
+                {updateCmd && (
+                  <div ref={wrapperRef}>{!detailsLoading && tooltipHostComments()}</div>
+                )}
               </Stack>
             </Column>
             <Column lg="6" right>
