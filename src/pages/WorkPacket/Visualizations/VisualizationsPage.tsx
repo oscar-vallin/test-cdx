@@ -333,7 +333,7 @@ const VisualizationsPage = () => {
         </Spacing>
       );
     }
-    console.log(monthIncurrent)
+    // console.log(monthIncurrent)
     return (
       <Spacing margin={{ left: 'normal', top: 'double' }}>
         <LineChart
@@ -416,15 +416,19 @@ const VisualizationsPage = () => {
                     ) : (
                       <div>
                         {monthIndex > monthIncurrent ? (
-                          <Text
-                            style={{color: ThemeStore.userTheme.colors.neutralPrimary, fontWeight: 500 }}
+                          <Text style={{
+                            color: ThemeStore.userTheme.colors.neutralPrimary,
+                            fontWeight: 500,
+                          }}
                           >
                             {month}
                           </Text>
 
                         ) : (
-                          <Text
-                            style={{color: ThemeStore.userTheme.colors.neutralTertiary, fontWeight: 500 }}
+                          <Text style={{
+                            color: ThemeStore.userTheme.colors.neutralTertiary,
+                            fontWeight: 500,
+                          }}
                           >
                             {month}
                           </Text>
