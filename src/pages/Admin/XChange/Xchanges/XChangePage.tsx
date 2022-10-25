@@ -48,7 +48,6 @@ import {
   StyledButtonAction,
   StyledIconsComments,
 } from './XchangePage.styles';
-import { ErrorHandler } from 'src/utils/ErrorHandler';
 
 type TooltipsProps = {
   hasAlerts: string;
@@ -84,7 +83,7 @@ const XChangePage = () => {
   );
 
   const [xchangeProfileComment,
-    { data: dataComment, loading: loadingComment, error: commentError }] = useQueryHandler(
+    { data: dataComment, loading: loadingComment }] = useQueryHandler(
     useUpdateXchangeProfileCommentMutation,
   );
 
@@ -116,11 +115,6 @@ const XChangePage = () => {
   const [isPreviewPanelOpen, setIsPreviewPanelOpen] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
-  const handleError = ErrorHandler();
-
-  useEffect(() => {
-    handleError(commentError);
-  }, [commentError]);
 
   const fetchData = () => {
     xchangeProfile({
