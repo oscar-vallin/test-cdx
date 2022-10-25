@@ -417,14 +417,14 @@ const VisualizationsPage = () => {
                       <div>
                         {monthIndex > monthIncurrent ? (
                           <Text
-                            style={{color: theme.colors.neutralPrimary, fontWeight: 500 }}
+                            style={{color: ThemeStore.userTheme.colors.neutralPrimary, fontWeight: 500 }}
                           >
                             {month}
                           </Text>
 
                         ) : (
                           <Text
-                            style={{color: theme.colors.neutralTertiary, fontWeight: 500 }}
+                            style={{color: ThemeStore.userTheme.colors.neutralTertiary, fontWeight: 500 }}
                           >
                             {month}
                           </Text>
