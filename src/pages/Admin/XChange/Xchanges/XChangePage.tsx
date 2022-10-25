@@ -48,6 +48,7 @@ import {
   StyledButtonAction,
   StyledIconsComments,
 } from './XchangePage.styles';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 
 type TooltipsProps = {
   hasAlerts: string;
@@ -82,7 +83,8 @@ const XChangePage = () => {
     useXchangeProfileLazyQuery,
   );
 
-  const [xchangeProfileComment, { data: dataComment, loading: loadingComment }] = useQueryHandler(
+  const [xchangeProfileComment,
+    { data: dataComment, loading: loadingComment, error: commentError }] = useQueryHandler(
     useUpdateXchangeProfileCommentMutation,
   );
 
@@ -114,6 +116,11 @@ const XChangePage = () => {
   const [isPreviewPanelOpen, setIsPreviewPanelOpen] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
+  const handleError = ErrorHandler();
+
+  useEffect(() => {
+    handleError(commentError);
+  }, [commentError]);
 
   const fetchData = () => {
     xchangeProfile({
@@ -277,7 +284,6 @@ const XChangePage = () => {
 
   useEffect(() => {
     if (!loadingXchange && dataXchange) {
-      console.log(dataXchange)
       setXchanges(dataXchange.xchangeProfile.xchanges);
       setTooltipContent(dataXchange.xchangeProfile.tooltips);
       setGlobalXchangeAlerts(dataXchange.xchangeProfile.globalXchangeAlerts);
