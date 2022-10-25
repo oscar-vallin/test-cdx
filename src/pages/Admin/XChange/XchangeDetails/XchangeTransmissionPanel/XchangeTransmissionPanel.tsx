@@ -36,7 +36,6 @@ import { InputText, UIInputText } from 'src/components/inputs/InputText';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
 import { ButtonLink } from 'src/components/buttons';
 import { TestFileTransmissionModal } from 'src/containers/modals/TestFileTransmissionModal';
-import { theme } from 'src/styles/themes/theme';
 import { UIInputTextArea } from 'src/components/inputs/InputTextArea';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { ThemeStore } from 'src/store/ThemeStore';
@@ -863,7 +862,7 @@ const XchangeTransmissionPanel = ({
         style={{ marginLeft: '10px' }}
         iconProps={{
           iconName: 'Phone',
-          style: { color: theme.colors.black, fontWeight: theme.fontWeights.bold },
+          style: { color: ThemeStore.userTheme.colors.black, fontWeight: ThemeStore.userTheme.fontWeights.bold },
         }}
         text="Test Configuration"
         onClick={() => setTestFileTransmissionModal(true)}

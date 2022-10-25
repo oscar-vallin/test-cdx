@@ -15,13 +15,13 @@ import {
   DetailsList,
   TooltipHost,
 } from '@fluentui/react';
-
+import { People20Filled, PeopleAudience20Filled } from '@fluentui/react-icons';
+import { ThemeStore } from 'src/store/ThemeStore';
 import { EmptyState } from 'src/containers/states';
 import { useNotification } from 'src/hooks/useNotification';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Button } from 'src/components/buttons';
 import { Row, Column, Container } from 'src/components/layouts';
-import { People20Filled, PeopleAudience20Filled } from '@fluentui/react-icons';
 import { PageTitle } from 'src/components/typography';
 
 import {
@@ -40,7 +40,6 @@ import { ROUTE_ACCESS_MANAGEMENT_SPECIALIZATION } from 'src/data/constants/Route
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { PageBody } from 'src/components/layouts/Column';
-import { theme } from 'src/styles/themes/theme';
 import {
   AccessSpecializationPanel,
   AccessSpecializationMembersPanel,
@@ -119,7 +118,7 @@ const AccessManagementSpecializationPage = () => {
             content={`${item?.members} Users are assigned to this specialization`}
           >
             <People20Filled
-              style={{ color: theme.colors.themePrimary, cursor: 'pointer' }}
+              style={{ color: ThemeStore.userTheme.colors.themePrimary, cursor: 'pointer' }}
               onClick={() => {
                 setSelectedAccessId(item.sid);
                 setCurrentName(item?.name ?? '');
@@ -136,7 +135,7 @@ const AccessManagementSpecializationPage = () => {
             content={`This specialization is used in  ${item?.groupUsages} Access Policy Group(s)`}
           >
             <PeopleAudience20Filled
-              style={{ color: theme.colors.themePrimary, cursor: 'pointer' }}
+              style={{ color: ThemeStore.userTheme.colors.themePrimary, cursor: 'pointer' }}
               onClick={() => {
                 setSelectedAccessId(item.sid);
                 setCurrentName(item?.name ?? '');
