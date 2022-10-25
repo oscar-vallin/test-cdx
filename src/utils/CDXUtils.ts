@@ -36,7 +36,8 @@ function prettyEnumValue(enumValue?) {
   return enumValue
     .toString()
     .replace(/_/g, ' ')
-    .replace(/(?<=[A-Z])[A-Z]+/g, (str) => str.toLowerCase());
+    .toLowerCase()
+    .replace(/\b\w/g, (str) => str.toUpperCase());
 }
 
 export {

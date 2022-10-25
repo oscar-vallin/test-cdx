@@ -13,6 +13,7 @@ export const ThemedComboBox = styled(ComboBox)`
 `;
 
 export const ThemeDropdown = styled(Dropdown)`
+  min-width: 80px;
   .ms-Dropdown {
     background-color: ${({ theme }) => theme.colors.white};
     border-color: ${({ theme }) => theme.colors.white};

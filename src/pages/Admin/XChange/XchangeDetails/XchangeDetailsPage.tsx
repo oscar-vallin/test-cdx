@@ -641,11 +641,7 @@ const XchangeDetailsPage = () => {
                   <StyledProcessValueText variant="large">
                     {process.vendor.value?.name}-{process.specId.value}
                   </StyledProcessValueText>
-                  <StyledButtonAction fontSize={28} id="__Add_FileProcess" iconName="add">
-                    <Text variant="large" style={{ fontWeight: 'bold' }}>
-                      Add File Process
-                    </Text>
-                  </StyledButtonAction>
+                  <StyledButtonAction fontSize={24} id="__Add_FileProcess" iconName="add" title="Add File Process"/>
                 </StyledColumTabs>
               ))}
           </Row>
