@@ -5,8 +5,6 @@ import {
   IColumn,
   PanelType,
   SelectionMode,
-  Spinner,
-  SpinnerSize,
   Stack,
 } from '@fluentui/react';
 import { PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
@@ -19,7 +17,6 @@ import {
 } from 'src/data/services/graphql';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useTableFilters } from 'src/hooks/useTableFilters';
-import { Spacing } from 'src/components/spacings/Spacing';
 import { ButtonLink } from 'src/components/buttons';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { DataColumn, useSortableColumns } from 'src/containers/tables';
@@ -137,41 +134,26 @@ const AccessPolicyUsagePanel = ({
     return <ButtonLink>{columnVal}</ButtonLink>;
   };
 
-  const renderPanelHeader = () => {
-    if (!isLoadingAccessUsages) {
-      return (
-        <PanelHeader id="__PanelHeader">
-          <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
-            <PanelTitle id="__AccessPolicyUsages_Panel_Title" variant="bold" size="large">
-              {currentName} - usage ({accessPolicyUsages?.nodes?.length})
-            </PanelTitle>
-          </Stack>
-        </PanelHeader>
-      );
-    }
-    return null;
-  };
+  const renderPanelHeader = () => (
+    <PanelHeader id="__PanelHeader">
+      <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
+        <PanelTitle id="__AccessPolicyUsages_Panel_Title" variant="bold" size="large">
+          {currentName} - usage ({accessPolicyUsages?.nodes?.length})
+        </PanelTitle>
+      </Stack>
+    </PanelHeader>
+  );
 
-  const renderBody = () => {
-    if (isLoadingAccessUsages) {
-      return (
-        <Spacing margin={{ top: 'double' }}>
-          <Spinner size={SpinnerSize.large} label="Loading access policy usages" />
-        </Spacing>
-      );
-    }
-
-    return (
-      <DetailsList
-        items={accessPolicyUsages?.nodes ?? []}
-        selectionMode={SelectionMode.none}
-        columns={columns}
-        layoutMode={DetailsListLayoutMode.justified}
-        onRenderItemColumn={onRenderItemColumn}
-        isHeaderVisible
-      />
-    );
-  };
+  const renderBody = () => (
+    <DetailsList
+      items={accessPolicyUsages?.nodes ?? []}
+      selectionMode={SelectionMode.none}
+      columns={columns}
+      layoutMode={DetailsListLayoutMode.justified}
+      onRenderItemColumn={onRenderItemColumn}
+      isHeaderVisible
+    />
+  );
 
   return (
     <ThemedPanel
