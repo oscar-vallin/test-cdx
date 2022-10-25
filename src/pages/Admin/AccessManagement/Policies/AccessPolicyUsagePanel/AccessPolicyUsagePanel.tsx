@@ -175,6 +175,7 @@ const AccessPolicyUsagePanel = ({
 
   return (
     <ThemedPanel
+      id="__AccessPolicyUsage_Panel"
       closeButtonAriaLabel="Close"
       type={PanelType.medium}
       onRenderHeader={renderPanelHeader}

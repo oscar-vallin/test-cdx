@@ -152,6 +152,7 @@ const AccessPolicyGroupMembersPanel = ({
 
   return (
     <ThemedPanel
+      id="__AccessPolicyGroupMembers_Panel"
       closeButtonAriaLabel="Close"
       type={PanelType.large}
       onRenderHeader={renderPanelHeader}

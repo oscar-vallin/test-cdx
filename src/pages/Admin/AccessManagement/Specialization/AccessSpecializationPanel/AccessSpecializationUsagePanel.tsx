@@ -167,6 +167,7 @@ const AccessSpecializationUsagePanel = ({
 
   return (
     <ThemedPanel
+      id="__AccessSpecializationUsage_Panel"
       closeButtonAriaLabel="Close"
       type={PanelType.smallFixedFar}
       onRenderHeader={renderPanelHeader}

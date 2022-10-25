@@ -102,7 +102,7 @@ const AccessManagementSpecializationPage = () => {
       case 'name':
         return (
           <Link
-            id={`__AccessSpecialization__Name_Field_${index + 1}`}
+            id={`__${item?.name?.split(' ').join('_')}_Link`}
             onClick={() => {
               setSelectedAccessId(item.sid);
               setIsPanelOpen(true);
@@ -113,11 +113,9 @@ const AccessManagementSpecializationPage = () => {
         );
       case 'members':
         return (
-          <TooltipHost
-            id={`__AccessSpecializationMembers__Name_Field_${index + 1}`}
-            content={`${item?.members} Users are assigned to this specialization`}
-          >
+          <TooltipHost content={`${item?.members} Users are assigned to this specialization`}>
             <People20Filled
+              id={`__${item?.name?.split(' ').join('_')}_Members`}
               style={{ color: ThemeStore.userTheme.colors.themePrimary, cursor: 'pointer' }}
               onClick={() => {
                 setSelectedAccessId(item.sid);
@@ -130,11 +128,9 @@ const AccessManagementSpecializationPage = () => {
         );
       case 'groupUsages':
         return (
-          <TooltipHost
-            id={`__AccessSpecializationUsage__Name_Field_${index + 1}`}
-            content={`This specialization is used in  ${item?.groupUsages} Access Policy Group(s)`}
-          >
+          <TooltipHost content={`This specialization is used in  ${item?.groupUsages} Access Policy Group(s)`}>
             <PeopleAudience20Filled
+              id={`__${item?.name?.split(' ').join('_')}_Usages`}
               style={{ color: ThemeStore.userTheme.colors.themePrimary, cursor: 'pointer' }}
               onClick={() => {
                 setSelectedAccessId(item.sid);
@@ -149,7 +145,7 @@ const AccessManagementSpecializationPage = () => {
         if (deleteCmd) {
           return (
             <StyledCommandButton
-              id={`DeleteBtn__${index + 1}`}
+              id={`__${item?.name?.split(' ').join('_')}_Delete`}
               title={deleteCmd.label ?? undefined}
               ariaLabel={deleteCmd.label ?? undefined}
               iconProps={{ iconName: 'Delete' }}

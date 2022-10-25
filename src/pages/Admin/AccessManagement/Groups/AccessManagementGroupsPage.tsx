@@ -200,7 +200,7 @@ const AccessManagementGroupsContainer = () => {
         <>
           &nbsp;
           <ButtonLink
-            id={`__AccessManagement__Name_Field_${index + 1}`}
+            id={`__${item?.name?.split(' ').join('_')}_Link`}
             onClick={() => {
               setSelectedGroupId(item.sid);
               setIsPanelOpen(true);
@@ -216,6 +216,7 @@ const AccessManagementGroupsContainer = () => {
       return (
         <TooltipHost content={`${item.members} Users are assigned to this group`}>
           <People20Filled
+            id={`__${item?.name?.split(' ').join('_')}_Members`}
             style={{ color: ThemeStore.userTheme.colors.themePrimary, cursor: 'pointer' }}
             onClick={() => {
               setSelectedGroupId(item.sid);

@@ -191,6 +191,7 @@ const AccessSpecializationMembersPanel = ({
 
   return (
     <ThemedPanel
+      id="__AccessSpecializationMembers_Panel"
       closeButtonAriaLabel="Close"
       type={PanelType.large}
       onRenderHeader={renderPanelHeader}

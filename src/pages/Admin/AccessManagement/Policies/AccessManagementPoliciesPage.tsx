@@ -129,7 +129,7 @@ const _AccessManagementPoliciesPage = () => {
       case 'name':
         return (
           <Link
-            id={`__${item?.name?.split(' ').join('_')}`}
+            id={`__${item?.name?.split(' ').join('_')}_Link`}
             onClick={() => {
               setSelectedPolicyId(item?.sid);
               setIsPanelOpen(true);
@@ -142,6 +142,7 @@ const _AccessManagementPoliciesPage = () => {
         return (
           <TooltipHost content={`${item?.members} Users are assigned to this policy`}>
             <People20Filled
+              id={`__${item?.name?.split(' ').join('_')}_Members`}
               style={{ color: ThemeStore.userTheme.colors.themePrimary, cursor: 'pointer' }}
               onClick={() => {
                 setSelectedPolicyId(item?.sid);
@@ -156,6 +157,7 @@ const _AccessManagementPoliciesPage = () => {
         return (
           <TooltipHost content={`This policy is used in ${item?.groupUsages} Access Policy Groups`}>
             <PeopleAudience20Filled
+              id={`__${item?.name?.split(' ').join('_')}_Usages`}
               style={{ color: ThemeStore.userTheme.colors.themePrimary, cursor: 'pointer' }}
               onClick={() => {
                 setSelectedPolicyId(item?.sid);
