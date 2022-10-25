@@ -455,7 +455,7 @@ const XChangePage = () => {
                       cursor: 'pointer',
                     }}
                     aria-describedby="XchangeUnpublishedChanges-Icon"
-                    iconName="6PointStar"
+                    iconName="AsteriskSolid"
                   />
                 </TooltipHost>
               )}
@@ -780,7 +780,7 @@ const XChangePage = () => {
                       cursor: 'pointer',
                       margin: '5px 0 0 8px',
                     }}
-                    iconName="6PointStar"
+                    iconName="AsteriskSolid"
                   />
                 </TooltipHost>
               )}
