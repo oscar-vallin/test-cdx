@@ -130,10 +130,16 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
       || data.position.x === 1
       || ((sourceBottom === '1' || sourceBottom === '0') && data.label === 'Semantic Map')
     ) {
-      return <Handle type="source" id={id} position={Position['Bottom']} />;
+      return <Handle type="source" id={id} position={Position['Bottom']} style={{ background: 'none', border: 'white' }} />;
+    }
+    if (index === 0) {
+      return <Handle type="source" id={id} position={Position['Bottom']} style={{ background: 'none', border: 'white' }} />;
+    }
+    if (index > 0) {
+      return <Handle type="source" id={id} position={Position['Left']} style={{ background: 'none', border: 'white' }} />;
     }
 
-    return <Handle type="source" id={id} position={Position['Left']} />;
+    return null;
   };
 
   const hideDialog = () => {
@@ -249,7 +255,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
   const renderNode = () => (
     <>
       {renderHoverIcons()}
-      <Handle type="target" id={id} position={Position['Top']} />
+      <Handle type="target" id={id} position={Position['Top']} style={{ background: 'none', border: 'white' }} />
       <Container>
         <Row>
           <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>

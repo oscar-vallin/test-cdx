@@ -8,11 +8,11 @@ import { Handle, Position } from 'react-flow-renderer';
 import { Container, Row } from 'src/components/layouts';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useNotification } from 'src/hooks/useNotification';
+import { ButtonLink } from 'src/components/buttons';
 import Node from './Node';
 import { StyledQualifier, StyledSFTP } from '../../XchangeDetailsPage.styles';
 import { XchangeTransmissionPanel } from '../../XchangeTransmissionPanel/XchangeTransmissionPanel';
 import { StyledCopyIcon, StyledTrashIcon } from './Node.styles';
-import { ButtonLink } from 'src/components/buttons';
 
 const defaultDialogProps: DialogYesNoProps = {
   id: '__DiagramTransmission_Dlg',
@@ -130,7 +130,7 @@ const DataNodeTransmissions = ({ data, id }) => {
       return (
         <>
           {renderHoverIcons()}
-          <Handle type="target" id={id} position={Position['Top']} />
+          <Handle type="target" id={id} position={Position['Top']} style={{ background: 'none', border: 'white' }} />
           <Container>
             <Row>
               <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
@@ -169,7 +169,7 @@ const DataNodeTransmissions = ({ data, id }) => {
     return (
       <>
         {renderHoverIcons()}
-        <Handle type="target" id={id} position={Position['Top']} />
+        <Handle type="target" id={id} position={Position['Top']} style={{ background: 'none', border: 'white' }}/>
         <Container>
           <Row>
             <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
