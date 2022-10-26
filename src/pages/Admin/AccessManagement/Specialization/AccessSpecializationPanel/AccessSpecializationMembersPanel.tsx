@@ -151,7 +151,7 @@ const AccessSpecializationMembersPanel = ({
   };
 
   const renderPanelHeader = () => (
-    <PanelHeader id="__PanelHeader">
+    <PanelHeader id="__AccessSpecializationMembers_PanelHeader">
       <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
         <PanelTitle id="__AccessSpecializationMembers_Panel_Title" variant="bold" size="large">
           {currentName} - members ({members?.length})

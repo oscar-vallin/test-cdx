@@ -54,7 +54,7 @@ const SpecialInstructionPanel = ({
   }, [data, loading]);
 
   const renderPanelHeader = () => (
-    <PanelHeader id="__PanelHeader">
+    <PanelHeader id="__SpecialInstruction_PanelHeader">
       <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
         <PanelTitle id="__SpecialInstruction_Panel_Title" variant="bold" size="large">
           Add special instruction

@@ -471,7 +471,7 @@ const XchangeTransmissionPanel = ({
   };
 
   const renderPanelHeader = () => (
-    <PanelHeader id="__PanelHeader">
+    <PanelHeader id="__FileTransmission_PanelHeader">
       <Container>
         <Row>
           <Column lg="4">

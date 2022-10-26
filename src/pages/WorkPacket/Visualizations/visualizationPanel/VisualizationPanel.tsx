@@ -332,9 +332,9 @@ const VisualizationPanel = ({
   };
 
   const renderPanelHeader = () => (
-    <PanelHeader id="__PanelHeader">
+    <PanelHeader id="__Visualization_PanelHeader">
       <Stack horizontal styles={{ root: { height: 44 } }}>
-        <PanelTitle id="__CreateGroup_Panel_Title" variant="bold" size="large">
+        <PanelTitle id="__Visualization_Panel_Title" variant="bold" size="large">
           {`${shortMonths[currentMonth]} ${new Date().getFullYear()} ${typeTransmissions === 'sponsor' ? 'Transmissions for' : 'sent to'} ${orgName}`}
         </PanelTitle>
       </Stack>

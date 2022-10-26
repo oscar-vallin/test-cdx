@@ -396,7 +396,7 @@ const AccessPolicyGroupPanel = ({
   };
 
   const renderPanelHeader = () => (
-    <PanelHeader id="__PanelHeader">
+    <PanelHeader id="__CreateGroup_PanelHeader">
       <Column lg="12">
         <Stack horizontal styles={{ root: { height: 44 } }}>
           <PanelTitle id="__CreateGroup_Panel_Title" variant="bold" size="large">
