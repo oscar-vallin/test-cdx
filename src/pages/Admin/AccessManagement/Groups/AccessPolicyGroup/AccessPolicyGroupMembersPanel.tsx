@@ -5,14 +5,12 @@ import {
   IColumn,
   PanelType,
   SelectionMode,
-  Spinner,
-  SpinnerSize,
   Stack,
 } from '@fluentui/react';
 import { PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
 import { useAccessPolicyGroupMembersLazyQuery, AccessMember, ActiveEnum } from 'src/data/services/graphql';
 import { useUsersLists } from 'src/pages/Admin/Users/useUsersList';
-import { Spacing } from 'src/components/spacings/Spacing';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { ButtonLink } from 'src/components/buttons';
 import { UpdateUserPanel, useUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers';
 import { MembersList } from '../../MembersList/MembersList';
@@ -35,8 +33,17 @@ const AccessPolicyGroupMembersPanel = ({
 
   const [
     policyMembers,
-    { data: accessPolicyGroupMembersData, loading: isLoadingAccessGroupMembers },
+    {
+      data: accessPolicyGroupMembersData,
+      loading: isLoadingAccessGroupMembers,
+      error: errorAccessGroupMembers,
+    },
   ] = useAccessPolicyGroupMembersLazyQuery();
+  const handleError = ErrorHandler();
+
+  useEffect(() => {
+    handleError(errorAccessGroupMembers);
+  }, [errorAccessGroupMembers]);
 
   const updateUserPanel = useUpdateUserPanel();
 
@@ -104,44 +111,30 @@ const AccessPolicyGroupMembersPanel = ({
     );
   };
 
-  const renderPanelHeader = () => {
-    if (!isLoadingAccessGroupMembers) {
-      return (
-        <PanelHeader id="__PanelHeader">
-          <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
-            <PanelTitle id="__AccessPolicyGroupMembers_Panel_Title" variant="bold" size="large">
-              {currentName} - members ({groupMembers?.length ?? 0})
-            </PanelTitle>
-          </Stack>
-        </PanelHeader>
-      );
-    }
-    return null;
-  };
+  const renderPanelHeader = () => (
+    <PanelHeader id="__AccessPolicyGroupMembers_PanelHeader">
+      <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
+        <PanelTitle id="__AccessPolicyGroupMembers_Panel_Title" variant="bold" size="large">
+          {currentName} - members ({groupMembers?.length ?? 0})
+        </PanelTitle>
+      </Stack>
+    </PanelHeader>
+  );
 
-  const renderBody = () => {
-    if (isLoadingAccessGroupMembers) {
-      return (
-        <Spacing margin={{ top: 'double' }}>
-          <Spinner size={SpinnerSize.large} label="Loading access policy group members" />
-        </Spacing>
-      );
-    }
-
-    return (
-      <DetailsList
-        items={groupMembers ?? []}
-        selectionMode={SelectionMode.none}
-        columns={columns}
-        layoutMode={DetailsListLayoutMode.justified}
-        onRenderItemColumn={onRenderItemColumn}
-        isHeaderVisible
-      />
-    );
-  };
+  const renderBody = () => (
+    <DetailsList
+      items={groupMembers ?? []}
+      selectionMode={SelectionMode.none}
+      columns={columns}
+      layoutMode={DetailsListLayoutMode.justified}
+      onRenderItemColumn={onRenderItemColumn}
+      isHeaderVisible
+    />
+  );
 
   return (
     <ThemedPanel
+      id="__AccessPolicyGroupMembers_Panel"
       closeButtonAriaLabel="Close"
       type={PanelType.large}
       onRenderHeader={renderPanelHeader}

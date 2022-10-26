@@ -15,13 +15,13 @@ import {
   DetailsList,
   TooltipHost,
 } from '@fluentui/react';
-
+import { People20Filled, PeopleAudience20Filled } from '@fluentui/react-icons';
+import { ThemeStore } from 'src/store/ThemeStore';
 import { EmptyState } from 'src/containers/states';
 import { useNotification } from 'src/hooks/useNotification';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Button } from 'src/components/buttons';
 import { Row, Column, Container } from 'src/components/layouts';
-import { People20Filled, PeopleAudience20Filled } from '@fluentui/react-icons';
 import { PageTitle } from 'src/components/typography';
 
 import {
@@ -40,7 +40,6 @@ import { ROUTE_ACCESS_MANAGEMENT_SPECIALIZATION } from 'src/data/constants/Route
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { PageBody } from 'src/components/layouts/Column';
-import { theme } from 'src/styles/themes/theme';
 import {
   AccessSpecializationPanel,
   AccessSpecializationMembersPanel,
@@ -103,7 +102,7 @@ const AccessManagementSpecializationPage = () => {
       case 'name':
         return (
           <Link
-            id={`__AccessSpecialization__Name_Field_${index + 1}`}
+            id={`__${item?.name?.split(' ').join('_')}_Link`}
             onClick={() => {
               setSelectedAccessId(item.sid);
               setIsPanelOpen(true);
@@ -114,12 +113,10 @@ const AccessManagementSpecializationPage = () => {
         );
       case 'members':
         return (
-          <TooltipHost
-            id={`__AccessSpecializationMembers__Name_Field_${index + 1}`}
-            content={`${item?.members} Users are assigned to this specialization`}
-          >
+          <TooltipHost content={`${item?.members} Users are assigned to this specialization`}>
             <People20Filled
-              style={{ color: theme.colors.themePrimary, cursor: 'pointer' }}
+              id={`__${item?.name?.split(' ').join('_')}_Members`}
+              style={{ color: ThemeStore.userTheme.colors.themePrimary, cursor: 'pointer' }}
               onClick={() => {
                 setSelectedAccessId(item.sid);
                 setCurrentName(item?.name ?? '');
@@ -131,12 +128,10 @@ const AccessManagementSpecializationPage = () => {
         );
       case 'groupUsages':
         return (
-          <TooltipHost
-            id={`__AccessSpecializationUsage__Name_Field_${index + 1}`}
-            content={`This specialization is used in  ${item?.groupUsages} Access Policy Group(s)`}
-          >
+          <TooltipHost content={`This specialization is used in  ${item?.groupUsages} Access Policy Group(s)`}>
             <PeopleAudience20Filled
-              style={{ color: theme.colors.themePrimary, cursor: 'pointer' }}
+              id={`__${item?.name?.split(' ').join('_')}_Usages`}
+              style={{ color: ThemeStore.userTheme.colors.themePrimary, cursor: 'pointer' }}
               onClick={() => {
                 setSelectedAccessId(item.sid);
                 setCurrentName(item?.name ?? '');
@@ -150,7 +145,7 @@ const AccessManagementSpecializationPage = () => {
         if (deleteCmd) {
           return (
             <StyledCommandButton
-              id={`DeleteBtn__${index + 1}`}
+              id={`__${item?.name?.split(' ').join('_')}_Delete`}
               title={deleteCmd.label ?? undefined}
               ariaLabel={deleteCmd.label ?? undefined}
               iconProps={{ iconName: 'Delete' }}

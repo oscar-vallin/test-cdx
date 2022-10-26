@@ -1,17 +1,5 @@
 import { useState, useEffect } from 'react';
 import {
-  useWpTransmissionCountBySponsorLazyQuery,
-  useWpTransmissionCountByVendorLazyQuery,
-  Organization,
-} from 'src/data/services/graphql';
-import { Column, Container, Row } from 'src/components/layouts';
-import { PageTitle } from 'src/components/typography';
-import { PageHeader } from 'src/containers/headers/PageHeader';
-import { ROUTES } from 'src/data/constants/RouteConstants'
-import { LayoutDashboard } from 'src/layouts/LayoutDashboard'
-import { useOrgSid } from 'src/hooks/useOrgSid';
-import { endOfMonth } from 'date-fns';
-import {
   LineChart,
   BarChart,
   Bar,
@@ -28,8 +16,21 @@ import {
   Text,
   IDropdownOption,
 } from '@fluentui/react';
+import {
+  useWpTransmissionCountBySponsorLazyQuery,
+  useWpTransmissionCountByVendorLazyQuery,
+  Organization,
+} from 'src/data/services/graphql';
+import { Column, Container, Row } from 'src/components/layouts';
+import { PageTitle } from 'src/components/typography';
+import { PageHeader } from 'src/containers/headers/PageHeader';
+import { ROUTES } from 'src/data/constants/RouteConstants'
+import { LayoutDashboard } from 'src/layouts/LayoutDashboard'
+import { useOrgSid } from 'src/hooks/useOrgSid';
+import { endOfMonth } from 'date-fns';
 import { PageBody } from 'src/components/layouts/Column';
 import { ButtonLink } from 'src/components/buttons';
+import { ThemeStore } from 'src/store/ThemeStore';
 import { theme } from 'src/styles/themes/theme';
 import {
   StyledCheckbox,
@@ -77,7 +78,7 @@ const VisualizationsPage = () => {
   });
   const [selectAll, setSelectAll] = useState(false);
   const [selectNone, setSelectNone] = useState(false);
-  const [isOpenPanel, setIsopenPanel] = useState(false);
+  const [isOpenPanel, setIsOpenPanel] = useState(false);
   const [orgIdOrg, setOrgIdOrg] = useState('');
   const [currentOrg, setCurrentOrg] = useState();
   const [totalTransByMonth, setTotalTransByMonth] = useState(0);
@@ -361,7 +362,7 @@ const VisualizationsPage = () => {
             <ButtonLink
               onClick={() => {
                 setShowTooltip(false);
-                setIsopenPanel(true);
+                setIsOpenPanel(true);
               }}
             >
               details
@@ -519,7 +520,7 @@ const VisualizationsPage = () => {
                   <Spacing padding={{ left: 'double' }} key={monthIndex}>
                     {months.length - 1 === monthIndex ? (
                       <Text
-                        style={{ color: theme.colors.themePrimary, fontWeight: 500 }}
+                        style={{ color: ThemeStore.userTheme.colors.themePrimary, fontWeight: 500 }}
                       >
                         {month}
                       </Text>
@@ -627,7 +628,7 @@ const VisualizationsPage = () => {
       {isOpenPanel && (
         <VisualizationPanel
           isPanelOpen={isOpenPanel}
-          closePanel={setIsopenPanel}
+          closePanel={setIsOpenPanel}
           orgName={currentOrg}
           orgId={orgIdOrg}
           currentMonth={shortMonths.indexOf(currentMonth)}

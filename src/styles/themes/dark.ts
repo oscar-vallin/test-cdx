@@ -24,6 +24,7 @@ export const darkTheme: ThemeColorsType = {
   black: '#f8f8f8',
   white: '#1f1f1f',
   red: '#e33136',
+  yellow: '#f2c94c',
   custom: {
     severeError: '#FA4100',
     error: '#a80000',

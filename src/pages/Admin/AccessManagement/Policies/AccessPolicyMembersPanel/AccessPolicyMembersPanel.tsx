@@ -5,8 +5,6 @@ import {
   IColumn,
   PanelType,
   SelectionMode,
-  Spinner,
-  SpinnerSize,
   Stack,
 } from '@fluentui/react';
 import { PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
@@ -20,8 +18,8 @@ import {
 } from 'src/data/services/graphql';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useUsersLists } from 'src/pages/Admin/Users/useUsersList';
-import { Spacing } from 'src/components/spacings/Spacing';
 import { ButtonLink } from 'src/components/buttons';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { UpdateUserPanel, useUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers';
 import { AccessPolicyGroupPanel } from '../../Groups/AccessPolicyGroup';
 import { MembersList } from '../../MembersList/MembersList';
@@ -49,8 +47,13 @@ const AccessPolicyMembersPanel = ({
   });
   const [
     policyMembers,
-    { data: accessMembers, loading: isLoadingAccessMembers },
+    { data: accessMembers, loading: isLoadingAccessMembers, error: errorAccessMembers },
   ] = useAccessPolicyMembersLazyQuery();
+  const handleError = ErrorHandler();
+
+  useEffect(() => {
+    handleError(errorAccessMembers);
+  }, [errorAccessMembers]);
 
   const updateUserPanel = useUpdateUserPanel();
 
@@ -142,44 +145,30 @@ const AccessPolicyMembersPanel = ({
     );
   };
 
-  const renderPanelHeader = () => {
-    if (!isLoadingAccessMembers) {
-      return (
-        <PanelHeader id="__PanelHeader">
-          <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
-            <PanelTitle id="__AccessPolicyMembers_Panel_Title" variant="bold" size="large">
-              {currentName} - members ({accessPolicyMembers?.nodes?.length})
-            </PanelTitle>
-          </Stack>
-        </PanelHeader>
-      );
-    }
-    return null;
-  };
+  const renderPanelHeader = () => (
+    <PanelHeader id="__AccessPolicyMembers_PanelHeader">
+      <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
+        <PanelTitle id="__AccessPolicyMembers_Panel_Title" variant="bold" size="large">
+          {currentName} - members ({accessPolicyMembers?.nodes?.length})
+        </PanelTitle>
+      </Stack>
+    </PanelHeader>
+  );
 
-  const renderBody = () => {
-    if (isLoadingAccessMembers) {
-      return (
-        <Spacing margin={{ top: 'double' }}>
-          <Spinner size={SpinnerSize.large} label="Loading access policy members" />
-        </Spacing>
-      );
-    }
-
-    return (
-      <DetailsList
-        items={accessPolicyMembers?.nodes ?? []}
-        selectionMode={SelectionMode.none}
-        columns={columns}
-        layoutMode={DetailsListLayoutMode.justified}
-        onRenderItemColumn={onRenderItemColumn}
-        isHeaderVisible
-      />
-    );
-  };
+  const renderBody = () => (
+    <DetailsList
+      items={accessPolicyMembers?.nodes ?? []}
+      selectionMode={SelectionMode.none}
+      columns={columns}
+      layoutMode={DetailsListLayoutMode.justified}
+      onRenderItemColumn={onRenderItemColumn}
+      isHeaderVisible
+    />
+  );
 
   return (
     <ThemedPanel
+      id="__AccessPolicyMembers_Panel"
       closeButtonAriaLabel="Close"
       type={PanelType.large}
       onRenderHeader={renderPanelHeader}

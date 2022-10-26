@@ -275,7 +275,7 @@ export const OrgPanel = ({
   );
 
   const renderPanelHeader = () => (
-    <PanelHeader id="__PanelHeader">
+    <PanelHeader id="__Org_PanelHeader">
       <Column lg="12">
         <Stack horizontal styles={{ root: { height: 44 } }}>
           <PanelTitle id="__Org_Panel_Title" variant="bold" size="large">

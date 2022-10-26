@@ -27,6 +27,7 @@ import { PageBody } from 'src/components/layouts/Column';
 import { ButtonLink } from 'src/components/buttons';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
+import { ThemeStore } from 'src/store/ThemeStore';
 import { DownloadLink } from 'src/containers/tables/WorkPacketTable.styles';
 import { NamingConventionsPanel, WherePlaceExtractsPanel, SpecialInstructionPanel } from './NamingPanel';
 
@@ -230,7 +231,7 @@ const NamingPage = () => {
         position: 'relative',
         top: '5px',
         right: '5px',
-        color: '#cdcd00',
+        color: ThemeStore.userTheme.colors.yellow,
       }}
     />
   );

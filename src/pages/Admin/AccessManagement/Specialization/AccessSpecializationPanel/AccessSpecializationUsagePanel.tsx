@@ -5,8 +5,6 @@ import {
   IColumn,
   PanelType,
   SelectionMode,
-  Spinner,
-  SpinnerSize,
   Stack,
 } from '@fluentui/react';
 import { PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
@@ -18,7 +16,7 @@ import {
 } from 'src/data/services/graphql';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 import { DataColumn, useSortableColumns } from 'src/containers/tables';
-import { Spacing } from 'src/components/spacings/Spacing';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { ButtonLink } from 'src/components/buttons';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { AccessPolicyGroupPanel } from '../../Groups/AccessPolicyGroup';
@@ -48,8 +46,17 @@ const AccessSpecializationUsagePanel = ({
   });
   const [
     accessSpecializationUsages,
-    { data: accessSpecializationData, loading: isLoadingAccessSpecialization },
+    {
+      data: accessSpecializationData,
+      loading: isLoadingAccessSpecialization,
+      error: errorSpecializationUsages,
+    },
   ] = useAccessSpecializationUsagesLazyQuery();
+  const handleError = ErrorHandler();
+
+  useEffect(() => {
+    handleError(errorSpecializationUsages);
+  }, [errorSpecializationUsages]);
 
   const fetchData = () => {
     apiAmGroupsForOrg({ variables: { orgSid } });
@@ -98,20 +105,15 @@ const AccessSpecializationUsagePanel = ({
     }
   }, [accessSpecializationData, isLoadingAccessSpecialization]);
 
-  const renderPanelHeader = () => {
-    if (!isLoadingAccessSpecialization) {
-      return (
-        <PanelHeader id="__PanelHeader">
-          <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
-            <PanelTitle id="__AccessSpecializationUsages_Panel_Title" variant="bold" size="large">
-              {currentName} - usage ({usages?.length})
-            </PanelTitle>
-          </Stack>
-        </PanelHeader>
-      );
-    }
-    return null;
-  };
+  const renderPanelHeader = () => (
+    <PanelHeader id="__AccessSpecializationUsages_PanelHeader">
+      <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
+        <PanelTitle id="__AccessSpecializationUsages_Panel_Title" variant="bold" size="large">
+          {currentName} - usage ({usages?.length})
+        </PanelTitle>
+      </Stack>
+    </PanelHeader>
+  );
 
   const onRenderItemColumn = (item: AccessGroupUsage, index?: number, column?: IColumn) => {
     let columnVal: string | undefined;
@@ -134,29 +136,20 @@ const AccessSpecializationUsagePanel = ({
     return <ButtonLink>{columnVal}</ButtonLink>;
   };
 
-  const renderBody = () => {
-    if (isLoadingAccessSpecialization) {
-      return (
-        <Spacing margin={{ top: 'double' }}>
-          <Spinner size={SpinnerSize.large} label="Loading access specialization usages" />
-        </Spacing>
-      );
-    }
-
-    return (
-      <DetailsList
-        items={usages ?? []}
-        selectionMode={SelectionMode.none}
-        columns={columns}
-        layoutMode={DetailsListLayoutMode.justified}
-        onRenderItemColumn={onRenderItemColumn}
-        isHeaderVisible
-      />
-    );
-  };
+  const renderBody = () => (
+    <DetailsList
+      items={usages ?? []}
+      selectionMode={SelectionMode.none}
+      columns={columns}
+      layoutMode={DetailsListLayoutMode.justified}
+      onRenderItemColumn={onRenderItemColumn}
+      isHeaderVisible
+    />
+  );
 
   return (
     <ThemedPanel
+      id="__AccessSpecializationUsage_Panel"
       closeButtonAriaLabel="Close"
       type={PanelType.smallFixedFar}
       onRenderHeader={renderPanelHeader}

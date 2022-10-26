@@ -16,13 +16,14 @@ import {
   DetailsList,
   TooltipHost,
 } from '@fluentui/react';
+import { People20Filled, PeopleAudience20Filled } from '@fluentui/react-icons';
 import { EmptyState } from 'src/containers/states';
 import { useNotification } from 'src/hooks/useNotification';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Button } from 'src/components/buttons';
 import { Row, Column, Container } from 'src/components/layouts';
-import { People20Filled, PeopleAudience20Filled } from '@fluentui/react-icons';
 import { PageTitle } from 'src/components/typography';
+import { ThemeStore } from 'src/store/ThemeStore';
 
 import {
   useAccessPolicyTemplatesLazyQuery,
@@ -40,7 +41,6 @@ import { ROUTE_ACCESS_MANAGEMENT_POLICIES } from 'src/data/constants/RouteConsta
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { PageBody } from 'src/components/layouts/Column';
-import { theme } from 'src/styles/themes/theme';
 import { StyledCommandButton } from '../AccessManagement.styles';
 import { AccessPolicyPanel } from './AccessPolicyPanel';
 import { AccessPolicyMembersPanel } from './AccessPolicyMembersPanel';
@@ -79,17 +79,25 @@ const _AccessManagementPoliciesPage = () => {
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>();
 
   const [policies, setPolicies] = useState<Maybe<AccessPolicy>[] | null>();
-  const [fetchTemplatePolicies, { data: templatePolicies, loading: isLoadingTemplatePolicies }] = useQueryHandler(
-    useAccessPolicyTemplatesLazyQuery,
-  );
+  const [
+    fetchTemplatePolicies,
+    {
+      data: templatePolicies,
+      loading: isLoadingTemplatePolicies,
+    },
+  ] = useQueryHandler(useAccessPolicyTemplatesLazyQuery);
 
   const [templatePolicyMenu, setTemplatePolicyMenu] = useState<IContextualMenuItem[]>([]);
 
   const [accessPoliciesForOrg, { data, loading, error }] = useAccessPoliciesForOrgLazyQuery();
   // Linter Issue.  useRemoveAmPolicyMutation??
-  const [removeAccessPolicy, { data: removeResponse, loading: isRemovingPolicy }] =
-    // eslint-disable-next-line no-undef
-    useQueryHandler(useDeleteAccessPolicyMutation);
+  const [
+    removeAccessPolicy,
+    {
+      data: removeResponse,
+      loading: isRemovingPolicy,
+    },
+  ] = useQueryHandler(useDeleteAccessPolicyMutation);
 
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
   const [deleteCmd, setDeleteCmd] = useState<WebCommand | null>();
@@ -121,7 +129,7 @@ const _AccessManagementPoliciesPage = () => {
       case 'name':
         return (
           <Link
-            id={`__${item?.name?.split(' ').join('_')}`}
+            id={`__${item?.name?.split(' ').join('_')}_Link`}
             onClick={() => {
               setSelectedPolicyId(item?.sid);
               setIsPanelOpen(true);
@@ -134,7 +142,8 @@ const _AccessManagementPoliciesPage = () => {
         return (
           <TooltipHost content={`${item?.members} Users are assigned to this policy`}>
             <People20Filled
-              style={{ color: theme.colors.themePrimary, cursor: 'pointer' }}
+              id={`__${item?.name?.split(' ').join('_')}_Members`}
+              style={{ color: ThemeStore.userTheme.colors.themePrimary, cursor: 'pointer' }}
               onClick={() => {
                 setSelectedPolicyId(item?.sid);
                 setCurrentName(item?.name ?? '');
@@ -148,7 +157,8 @@ const _AccessManagementPoliciesPage = () => {
         return (
           <TooltipHost content={`This policy is used in ${item?.groupUsages} Access Policy Groups`}>
             <PeopleAudience20Filled
-              style={{ color: theme.colors.themePrimary, cursor: 'pointer' }}
+              id={`__${item?.name?.split(' ').join('_')}_Usages`}
+              style={{ color: ThemeStore.userTheme.colors.themePrimary, cursor: 'pointer' }}
               onClick={() => {
                 setSelectedPolicyId(item?.sid);
                 setCurrentName(item?.name ?? '');
@@ -188,17 +198,19 @@ const _AccessManagementPoliciesPage = () => {
   }, [orgSid]);
 
   useEffect(() => {
-    let templates: IContextualMenuItem[] = templatePolicies?.accessPolicyTemplates?.map((policy) => ({
-      key: policy.value,
-      text: policy.label,
-      style: {
-        padding: '0 5px 0 15px',
-      },
-      onClick: (event, item) => {
-        setSelectedTemplateId(item.key);
-        setIsPanelOpen(true);
-      },
-    })) || [];
+    let templates: IContextualMenuItem[] = templatePolicies?.accessPolicyTemplates?.map(
+      (policy) => ({
+        key: policy.value,
+        text: policy.label,
+        style: {
+          padding: '0 5px 0 15px',
+        },
+        onClick: (event, item) => {
+          setSelectedTemplateId(item.key);
+          setIsPanelOpen(true);
+        },
+      })
+    ) || [];
 
     if (templates.length > 0) {
       templates = [

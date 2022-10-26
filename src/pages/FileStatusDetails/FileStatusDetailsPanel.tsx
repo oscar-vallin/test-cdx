@@ -367,7 +367,7 @@ const FileStatusDetailsPanel = (
   };
 
   const renderPanelHeader = () => (
-    <PanelHeader id="__PanelHeader">
+    <PanelHeader id="__FileStatusDetails_PanelHeader">
       <Column lg="12">
         <Stack
           horizontal={true}

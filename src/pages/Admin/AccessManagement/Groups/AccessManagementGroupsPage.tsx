@@ -12,6 +12,7 @@ import {
   SpinnerSize,
   TooltipHost,
 } from '@fluentui/react';
+import { People20Filled } from '@fluentui/react-icons';
 import { EmptyState } from 'src/containers/states';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { useNotification } from 'src/hooks/useNotification';
@@ -19,7 +20,6 @@ import { Column, Container, Row } from 'src/components/layouts';
 import { Button, ButtonLink } from 'src/components/buttons';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { PageTitle } from 'src/components/typography';
-import { People20Filled } from '@fluentui/react-icons';
 import {
   AccessPolicyGroup,
   CdxWebCommandType,
@@ -29,14 +29,13 @@ import {
   useAccessPolicyGroupTemplatesLazyQuery,
   WebCommand,
 } from 'src/data/services/graphql';
-
+import { ThemeStore } from 'src/store/ThemeStore';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { ROUTE_ACCESS_MANAGEMENT_GROUPS } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { PageBody } from 'src/components/layouts/Column';
-import { theme } from 'src/styles/themes/theme';
 import { useAccessManagementGroupsPageService } from './AccessManagementGroupsPage.service';
 import { StyledCommandButton } from '../AccessManagement.styles';
 import { AccessPolicyGroupPanel, AccessPolicyGroupMembersPanel } from './AccessPolicyGroup';
@@ -201,7 +200,7 @@ const AccessManagementGroupsContainer = () => {
         <>
           &nbsp;
           <ButtonLink
-            id={`__AccessManagement__Name_Field_${index + 1}`}
+            id={`__${item?.name?.split(' ').join('_')}_Link`}
             onClick={() => {
               setSelectedGroupId(item.sid);
               setIsPanelOpen(true);
@@ -217,7 +216,8 @@ const AccessManagementGroupsContainer = () => {
       return (
         <TooltipHost content={`${item.members} Users are assigned to this group`}>
           <People20Filled
-            style={{ color: theme.colors.themePrimary, cursor: 'pointer' }}
+            id={`__${item?.name?.split(' ').join('_')}_Members`}
+            style={{ color: ThemeStore.userTheme.colors.themePrimary, cursor: 'pointer' }}
             onClick={() => {
               setSelectedGroupId(item.sid);
               setCurrentName(item.name);

@@ -12,12 +12,10 @@ import {
   IColumn,
   PanelType,
   SelectionMode,
-  Spinner,
-  SpinnerSize,
   Stack,
 } from '@fluentui/react';
 import { PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
-import { Spacing } from 'src/components/spacings/Spacing';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { ButtonLink } from 'src/components/buttons';
 import { UpdateUserPanel, useUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers';
 import { useUsersLists } from 'src/pages/Admin/Users/useUsersList';
@@ -52,8 +50,17 @@ const AccessSpecializationMembersPanel = ({
 
   const [
     accessSpecializationMembers,
-    { data: specializationMembersData, loading: isLoadingSpecializationMembers },
+    {
+      data: specializationMembersData,
+      loading: isLoadingSpecializationMembers,
+      error: errorSpecializationMembers,
+    },
   ] = useAccessSpecializationMembersLazyQuery();
+  const handleError = ErrorHandler();
+
+  useEffect(() => {
+    handleError(errorSpecializationMembers);
+  }, [errorSpecializationMembers]);
 
   const updateUserPanel = useUpdateUserPanel();
 
@@ -143,44 +150,30 @@ const AccessSpecializationMembersPanel = ({
     );
   };
 
-  const renderPanelHeader = () => {
-    if (!isLoadingSpecializationMembers) {
-      return (
-        <PanelHeader id="__PanelHeader">
-          <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
-            <PanelTitle id="__AccessSpecializationMembers_Panel_Title" variant="bold" size="large">
-              {currentName} - members ({members?.length})
-            </PanelTitle>
-          </Stack>
-        </PanelHeader>
-      );
-    }
-    return null;
-  };
+  const renderPanelHeader = () => (
+    <PanelHeader id="__AccessSpecializationMembers_PanelHeader">
+      <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
+        <PanelTitle id="__AccessSpecializationMembers_Panel_Title" variant="bold" size="large">
+          {currentName} - members ({members?.length})
+        </PanelTitle>
+      </Stack>
+    </PanelHeader>
+  );
 
-  const renderBody = () => {
-    if (isLoadingSpecializationMembers) {
-      return (
-        <Spacing margin={{ top: 'double' }}>
-          <Spinner size={SpinnerSize.large} label="Loading access specialization members" />
-        </Spacing>
-      );
-    }
-
-    return (
-      <DetailsList
-        items={members ?? []}
-        selectionMode={SelectionMode.none}
-        columns={columns}
-        layoutMode={DetailsListLayoutMode.justified}
-        onRenderItemColumn={onRenderItemColumn}
-        isHeaderVisible
-      />
-    );
-  };
+  const renderBody = () => (
+    <DetailsList
+      items={members ?? []}
+      selectionMode={SelectionMode.none}
+      columns={columns}
+      layoutMode={DetailsListLayoutMode.justified}
+      onRenderItemColumn={onRenderItemColumn}
+      isHeaderVisible
+    />
+  );
 
   return (
     <ThemedPanel
+      id="__AccessSpecializationMembers_Panel"
       closeButtonAriaLabel="Close"
       type={PanelType.large}
       onRenderHeader={renderPanelHeader}

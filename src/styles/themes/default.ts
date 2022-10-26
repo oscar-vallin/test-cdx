@@ -24,6 +24,7 @@ export const defaultTheme: ThemeColorsType = {
   black: '#121829',
   white: '#fefefe',
   red: '#a4262c',
+  yellow: '#f2c94c',
   custom: {
     severeError: '#FA4100',
     error: '#a80000',
