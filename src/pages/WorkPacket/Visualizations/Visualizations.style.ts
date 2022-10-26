@@ -29,11 +29,11 @@ export const StyledTooltip = styled.div`
 `;
 
 export const StyledTotal = styled(Stack)<StyledTotalProps>`
-  width: 93%;
+  width: ${(({ linechart }) => (linechart ? '93%' : '90%'))};
   text-align: center;
   padding: ${(({ backGround }) => (backGround ? '7px 0' : null))};
-  padding-left: 0px;
-  padding-right: 45px;
+  padding-left: ${(({ linechart }) => (linechart ? '15px' : '50px'))};
+  padding-right: ${(({ linechart }) => (linechart ? '40px' : '45px'))};
   background-color: ${(({ backGround }) => (backGround ? '#f3f2f1' : null))};
 
   span {
@@ -44,6 +44,7 @@ export const StyledTotal = styled(Stack)<StyledTotalProps>`
 
 type StyledTotalProps = {
   backGround?: boolean;
+  linechart?: boolean;
 };
 
 export const StyledTransnmissionsType = styled(Dropdown)`
@@ -56,7 +57,8 @@ export const StyledTransnmissionsType = styled(Dropdown)`
     border-color: ${({ theme }) => theme.colors.white};
     border-width: 2px;
     padding-right: 58px;
-    font-size: 1.35em;
+    font-size: 1.15em;
+    font-weight: 500;
   }
   &::after {
     border-color: ${({ theme }) => theme.colors.white};

@@ -139,7 +139,6 @@ const VisualizationPanel = ({
   const tableFilters = useTableFilters(
     `Delivered On, 
     ${typeTransmissions === 'sponsor' && 'Vendor'}, 
-    ${typeTransmissions === 'vendor' && 'Sponsor'}, 
     Spec, 
     Billing Units, 
     Total Records`,
