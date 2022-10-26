@@ -1,5 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, memo } from 'react';
+import React, {
+  useState,
+  useEffect,
+  memo,
+  CSSProperties,
+} from 'react';
 
 import {
   PrimaryButton,
@@ -125,6 +130,10 @@ const _AccessManagementPoliciesPage = () => {
 
   const onRenderItemColumn = (item?: AccessPolicy, index?: number, column?: IColumn) => {
     const key = column?.key ?? '';
+    let tooltip: string;
+    let style: CSSProperties;
+    const groupCount = item?.groupUsages ?? 0;
+
     switch (key) {
       case 'name':
         return (
@@ -139,33 +148,69 @@ const _AccessManagementPoliciesPage = () => {
           </Link>
         );
       case 'members':
+        if (item?.members === 0) {
+          tooltip = '0 Users are assigned to this policy';
+          style = {
+            color: ThemeStore.userTheme.colors.neutralTertiary,
+          };
+        } else {
+          if (item?.members === 1) {
+            tooltip = '1 User is assigned to this policy';
+          } else {
+            tooltip = `${item?.members} Users are assigned to this policy`;
+          }
+          style = {
+            color: ThemeStore.userTheme.colors.themePrimary,
+            cursor: 'pointer',
+          };
+        }
         return (
-          <TooltipHost content={`${item?.members} Users are assigned to this policy`}>
+          <TooltipHost content={tooltip}>
             <People20Filled
               id={`__${item?.name?.split(' ').join('_')}_Members`}
-              style={{ color: ThemeStore.userTheme.colors.themePrimary, cursor: 'pointer' }}
+              style={style}
               onClick={() => {
-                setSelectedPolicyId(item?.sid);
-                setCurrentName(item?.name ?? '');
-                setIsPanelMembersOpen(true);
+                if ((item?.members ?? 0) > 0) {
+                  setSelectedPolicyId(item?.sid);
+                  setCurrentName(item?.name ?? '');
+                  setIsPanelMembersOpen(true);
+                }
               }}
             />
             <span style={{ position: 'relative', bottom: '4px' }}>&nbsp;( {item?.members} )</span>
           </TooltipHost>
         );
       case 'groupUsages':
+        if (groupCount === 0) {
+          tooltip = 'This policy is not used in any Access Policy Groups';
+          style = {
+            color: ThemeStore.userTheme.colors.neutralTertiary,
+          };
+        } else {
+          if (groupCount === 1) {
+            tooltip = 'This policy is used in 1 Access Policy Group';
+          } else {
+            tooltip = `This policy is used in ${groupCount} Access Policy Groups`;
+          }
+          style = {
+            color: ThemeStore.userTheme.colors.themePrimary,
+            cursor: 'pointer',
+          };
+        }
         return (
-          <TooltipHost content={`This policy is used in ${item?.groupUsages} Access Policy Groups`}>
+          <TooltipHost content={tooltip}>
             <PeopleAudience20Filled
               id={`__${item?.name?.split(' ').join('_')}_Usages`}
-              style={{ color: ThemeStore.userTheme.colors.themePrimary, cursor: 'pointer' }}
+              style={style}
               onClick={() => {
-                setSelectedPolicyId(item?.sid);
-                setCurrentName(item?.name ?? '');
-                setIsPanelUsageOpen(true);
+                if (groupCount > 0) {
+                  setSelectedPolicyId(item?.sid);
+                  setCurrentName(item?.name ?? '');
+                  setIsPanelUsageOpen(true);
+                }
               }}
             />
-            <span style={{ position: 'relative', bottom: '6px' }}>&nbsp;( {item?.groupUsages} )</span>
+            <span style={{ position: 'relative', bottom: '6px' }}>&nbsp;( {groupCount} )</span>
           </TooltipHost>
         );
       case 'tmpl':
@@ -209,7 +254,7 @@ const _AccessManagementPoliciesPage = () => {
           setSelectedTemplateId(item.key);
           setIsPanelOpen(true);
         },
-      })
+      }),
     ) || [];
 
     if (templates.length > 0) {
