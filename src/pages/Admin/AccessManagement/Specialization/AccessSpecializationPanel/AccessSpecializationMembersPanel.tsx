@@ -86,7 +86,7 @@ const AccessSpecializationMembersPanel = ({
     if (isOpen) {
       getspecializationMembers();
     }
-  }, [isOpen]);
+  }, [isOpen, tableFilters.pagingParams]);
 
   useEffect(() => {
     if (!isLoadingSpecializationMembers && specializationMembersData) {

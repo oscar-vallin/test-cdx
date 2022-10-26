@@ -64,7 +64,7 @@ const AccessPolicyUsagePanel = ({
     {
       name: 'Organization',
       key: 'organization',
-      fieldName: 'org',
+      fieldName: 'orgName',
       minWidth: 100,
       maxWidth: 255,
       isPadded: true,
@@ -75,7 +75,7 @@ const AccessPolicyUsagePanel = ({
     {
       name: 'Access Policy Group',
       key: 'accessPolicyGroups',
-      fieldName: 'group',
+      fieldName: 'groupName',
       minWidth: 100,
       maxWidth: 255,
       isPadded: true,
