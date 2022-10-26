@@ -1,5 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState,
+  useEffect,
+  CSSProperties,
+} from 'react';
 
 import {
   PrimaryButton,
@@ -98,6 +102,11 @@ const AccessManagementSpecializationPage = () => {
   };
 
   const onRenderItemColumn = (item, index, column) => {
+    let tooltip: string;
+    let style: CSSProperties;
+    const memberCount = item?.members ?? 0;
+    const groupCount = item?.groupUsages ?? 0;
+
     switch (column.key) {
       case 'name':
         return (
@@ -112,30 +121,66 @@ const AccessManagementSpecializationPage = () => {
           </Link>
         );
       case 'members':
+        if (memberCount === 0) {
+          tooltip = '0 Users are assigned to this specialization';
+          style = {
+            color: ThemeStore.userTheme.colors.neutralTertiary,
+          };
+        } else {
+          if (memberCount === 1) {
+            tooltip = '1 User is assigned to this specialization';
+          } else {
+            tooltip = `${memberCount} Users are assigned to this specialization`;
+          }
+          style = {
+            color: ThemeStore.userTheme.colors.themePrimary,
+            cursor: 'pointer',
+          };
+        }
         return (
-          <TooltipHost content={`${item?.members} Users are assigned to this specialization`}>
+          <TooltipHost content={tooltip}>
             <People20Filled
               id={`__${item?.name?.split(' ').join('_')}_Members`}
-              style={{ color: ThemeStore.userTheme.colors.themePrimary, cursor: 'pointer' }}
+              style={style}
               onClick={() => {
-                setSelectedAccessId(item.sid);
-                setCurrentName(item?.name ?? '');
-                setIsPanelMembersOpen(true);
+                if (memberCount > 0) {
+                  setSelectedAccessId(item.sid);
+                  setCurrentName(item?.name ?? '');
+                  setIsPanelMembersOpen(true);
+                }
               }}
             />
             <span style={{ position: 'relative', bottom: '4px' }}>&nbsp;( {item?.members} )</span>
           </TooltipHost>
         );
       case 'groupUsages':
+        if (groupCount === 0) {
+          tooltip = 'This specialization is not used in any Access Policy Groups';
+          style = {
+            color: ThemeStore.userTheme.colors.neutralTertiary,
+          };
+        } else {
+          if (groupCount === 1) {
+            tooltip = 'This specialization is used in 1 Access Policy Group';
+          } else {
+            tooltip = `This specialization is used in ${item?.groupUsages} Access Policy Groups`;
+          }
+          style = {
+            color: ThemeStore.userTheme.colors.themePrimary,
+            cursor: 'pointer',
+          };
+        }
         return (
-          <TooltipHost content={`This specialization is used in  ${item?.groupUsages} Access Policy Group(s)`}>
+          <TooltipHost content={tooltip}>
             <PeopleAudience20Filled
               id={`__${item?.name?.split(' ').join('_')}_Usages`}
-              style={{ color: ThemeStore.userTheme.colors.themePrimary, cursor: 'pointer' }}
+              style={style}
               onClick={() => {
-                setSelectedAccessId(item.sid);
-                setCurrentName(item?.name ?? '');
-                setIsPanelUsageOpen(true);
+                if (groupCount > 0) {
+                  setSelectedAccessId(item.sid);
+                  setCurrentName(item?.name ?? '');
+                  setIsPanelUsageOpen(true);
+                }
               }}
             />
             <span style={{ position: 'relative', bottom: '6px' }}>&nbsp;( {item?.groupUsages} )</span>

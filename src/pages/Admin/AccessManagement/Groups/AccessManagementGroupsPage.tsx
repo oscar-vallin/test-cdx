@@ -1,5 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { memo, useEffect, useState } from 'react';
+import React, {
+  CSSProperties,
+  memo,
+  useEffect,
+  useState,
+} from 'react';
 
 import {
   DetailsList,
@@ -172,6 +177,8 @@ const AccessManagementGroupsContainer = () => {
   };
 
   const onRenderItemColumn = (item, index, column) => {
+    let tooltip: string;
+    let style: CSSProperties;
     if (column.key === 'tmpl') {
       return item.tmpl ? <FontIcon id={`__template_${index + 1}`} iconName="Completed" /> : <span />;
     }
@@ -213,15 +220,33 @@ const AccessManagementGroupsContainer = () => {
     }
 
     if (column.key === 'members') {
+      if (item.members === 0) {
+        tooltip = '0 Users are assigned to this group';
+        style = {
+          color: ThemeStore.userTheme.colors.neutralTertiary,
+        };
+      } else {
+        if (item.members === 1) {
+          tooltip = '1 User is assigned to this group';
+        } else {
+          tooltip = `${item.members} Users are assigned to this group`;
+        }
+        style = {
+          color: ThemeStore.userTheme.colors.themePrimary,
+          cursor: 'pointer',
+        };
+      }
       return (
-        <TooltipHost content={`${item.members} Users are assigned to this group`}>
+        <TooltipHost content={tooltip}>
           <People20Filled
             id={`__${item?.name?.split(' ').join('_')}_Members`}
-            style={{ color: ThemeStore.userTheme.colors.themePrimary, cursor: 'pointer' }}
+            style={style}
             onClick={() => {
-              setSelectedGroupId(item.sid);
-              setCurrentName(item.name);
-              setIsPanelMembersOpen(true);
+              if (item.members > 0) {
+                setSelectedGroupId(item.sid);
+                setCurrentName(item.name);
+                setIsPanelMembersOpen(true);
+              }
             }}
           />
           <span style={{ position: 'relative', bottom: '4px' }}>&nbsp;( {item?.members} )</span>
