@@ -57,7 +57,7 @@ export const StyledNavIcon = styled(Icon)`
   margin: ${({ theme }) => `0 ${theme.spacing.small} 0 0`};
 `;
 
-export const StyledNav = styled.nav`
+export const HideForMobile = styled.nav`
   display: none;
 
   @media all and ${device.laptop} {

@@ -25,7 +25,6 @@ import { People20Filled, PeopleAudience20Filled } from '@fluentui/react-icons';
 import { EmptyState } from 'src/containers/states';
 import { useNotification } from 'src/hooks/useNotification';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
-import { Button } from 'src/components/buttons';
 import { Row, Column, Container } from 'src/components/layouts';
 import { PageTitle } from 'src/components/typography';
 import { ThemeStore } from 'src/store/ThemeStore';
@@ -43,6 +42,7 @@ import {
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { ROUTE_ACCESS_MANAGEMENT_POLICIES } from 'src/data/constants/RouteConstants';
+import { HideForMobile } from 'src/styles/GlobalStyles';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { PageBody } from 'src/components/layouts/Column';
@@ -307,13 +307,15 @@ const _AccessManagementPoliciesPage = () => {
   const createPolicyButton = () => {
     if (createCmd) {
       return (
-        <Button
-          split={!isLoadingTemplatePolicies && templatePolicyMenu.length > 0}
+        <PrimaryButton
           id="CreatePolicyButton"
-          variant="primary"
+          split={!isLoadingTemplatePolicies && templatePolicyMenu.length > 0}
+          iconProps={{ iconName: 'AddToShoppingList' }}
           onClick={() => {
             setIsPanelOpen(true);
           }}
+          ariaLabel={createCmd.label ?? undefined}
+          title={createCmd.label ?? undefined}
           {...(!isLoadingTemplatePolicies && templatePolicyMenu.length > 0
             ? {
               menuProps: {
@@ -325,8 +327,8 @@ const _AccessManagementPoliciesPage = () => {
             }
             : {})}
         >
-          {createCmd.label}
-        </Button>
+          <HideForMobile>{createCmd.label}</HideForMobile>
+        </PrimaryButton>
       );
     }
     return null;
@@ -361,10 +363,10 @@ const _AccessManagementPoliciesPage = () => {
           <PageHeader id="__AccessPoliciesHeader">
             <Container>
               <Row>
-                <Column lg="6" direction="row">
+                <Column sm="6" direction="row">
                   <PageTitle id="__Page_Title" title="Access Policies" />
                 </Column>
-                <Column lg="6" right>
+                <Column sm="6" right>
                   {createPolicyButton()}
                 </Column>
               </Row>

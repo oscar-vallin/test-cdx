@@ -3,7 +3,7 @@ import { DatePicker } from '@fluentui/react';
 import { FormLabel } from 'src/components/labels/FormLabel';
 import { DateState } from 'src/hooks/useDateValue';
 import { DayPickerStrings, firstDayOfWeek } from 'src/components/inputs/DateConstants';
-import { Row, Column } from './InputDateRange.styles';
+import { Row, LeftColumn, RightColumn } from './InputDateRange.styles';
 
 type InputDateRangeProps = {
   startDate: DateState;
@@ -19,9 +19,15 @@ const today = new Date();
 const tomorrow = new Date(today);
 tomorrow.setDate(tomorrow.getDate() + 1);
 
-const InputDateRange = ({ startDate, endDate, showLabels = true }: InputDateRangeProps): ReactElement => (
+const InputDateRange = (
+  {
+    startDate,
+    endDate,
+    showLabels = true,
+  }: InputDateRangeProps,
+): ReactElement => (
   <Row id="InputDateRange--Row">
-    <Column id="InputDateRange--Column--From" lg="6" direction="column">
+    <LeftColumn id="InputDateRange--Column--From" sm="6" direction="column">
       {showLabels && <FormLabel label="From" required={true} />}
       <DatePicker
         id="Input__From__Date"
@@ -38,8 +44,8 @@ const InputDateRange = ({ startDate, endDate, showLabels = true }: InputDateRang
         allowTextInput
         style={{ width: '100%' }}
       />
-    </Column>
-    <Column id="InputDateRange--Column--To" lg="6">
+    </LeftColumn>
+    <RightColumn id="InputDateRange--Column--To" sm="6">
       {showLabels && <FormLabel label="To" required={true} />}
       <DatePicker
         id="Input__To__Date"
@@ -56,7 +62,7 @@ const InputDateRange = ({ startDate, endDate, showLabels = true }: InputDateRang
         allowTextInput
         style={{ width: '100%' }}
       />
-    </Column>
+    </RightColumn>
   </Row>
 );
 

@@ -41,6 +41,7 @@ import { UIInputCheck } from 'src/components/inputs/InputCheck';
 import { ThemedSearchBox } from 'src/components/inputs/SearchBox/ThemedSearchBox.styles';
 import { DataColumn, useSortableColumns } from 'src/containers/tables';
 import { useTableFilters } from 'src/hooks/useTableFilters';
+import { HideForMobile } from 'src/styles/GlobalStyles';
 
 const ActiveOrgsPage = () => {
   const { orgSid: orgOwnerSid } = useOrgSid();
@@ -170,7 +171,12 @@ const ActiveOrgsPage = () => {
 
   useEffect(() => {
     fetchData();
-  }, [orgOwnerSid, tableFilters.searchText.delayedValue, searchAllOrgsFilter, tableFilters.pagingParams]);
+  }, [
+    orgOwnerSid,
+    tableFilters.searchText.delayedValue,
+    searchAllOrgsFilter,
+    tableFilters.pagingParams,
+  ]);
 
   const onPageChange = (pageNumber: number) => {
     tableFilters.pagingParams.pageNumber = pageNumber;
@@ -208,8 +214,9 @@ const ActiveOrgsPage = () => {
             setIsPanelOpen(true);
           }}
           ariaLabel={createCmd.label ?? undefined}
+          title={createCmd.label ?? undefined}
         >
-          {createCmd.label}
+          <HideForMobile>{createCmd.label}</HideForMobile>
         </PrimaryButton>
       );
     }
@@ -272,10 +279,10 @@ const ActiveOrgsPage = () => {
       <PageHeader id="__ActiveOrgsHeader">
         <Container>
           <Row>
-            <Column lg="6" direction="row">
+            <Column sm="6" direction="row">
               <PageTitle id="__Page_Title" title="Active Orgs" />
             </Column>
-            <Column lg="6" right>
+            <Column sm="6" right>
               {createOrgButton()}
             </Column>
           </Row>
@@ -296,7 +303,9 @@ const ActiveOrgsPage = () => {
                   placeholder="Search"
                 />
               </Column>
-              {showCheckbox()}
+              <Column lg="6">
+                {showCheckbox()}
+              </Column>
             </Stack>
           </Row>
           <Row>{renderBody()}</Row>

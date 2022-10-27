@@ -124,10 +124,10 @@ const ExternalUsersPage = () => {
       <PageHeader id="__ExternalUsersHeader">
         <Container>
           <Row>
-            <Column lg="6" direction="row">
+            <Column sm="6" direction="row">
               <PageTitle id="__Page_Title" title="External Users" />
             </Column>
-            <Column lg="6" right>
+            <Column sm="6" right>
               <span>{renderAssignExternalUserButton()}</span>
             </Column>
           </Row>
