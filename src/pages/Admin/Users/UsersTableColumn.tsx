@@ -22,6 +22,7 @@ export const useUsersTableColumns = (selectedColumns: UsersTableColumns[]) => {
       dataType: 'string',
       sortable: true,
       filterable: false,
+      flexGrow: 1,
     },
     {
       data: UsersTableColumns.LAST_NAME,
@@ -36,6 +37,7 @@ export const useUsersTableColumns = (selectedColumns: UsersTableColumns[]) => {
       dataType: 'string',
       sortable: true,
       filterable: false,
+      flexGrow: 1,
     },
     {
       data: UsersTableColumns.EMAIL,
@@ -47,6 +49,7 @@ export const useUsersTableColumns = (selectedColumns: UsersTableColumns[]) => {
       dataType: 'string',
       sortable: true,
       filterable: false,
+      flexGrow: 1,
     },
     {
       data: UsersTableColumns.ORGANIZATION,
@@ -58,6 +61,7 @@ export const useUsersTableColumns = (selectedColumns: UsersTableColumns[]) => {
       dataType: 'string',
       sortable: true,
       filterable: false,
+      flexGrow: 1,
     },
     {
       data: UsersTableColumns.ACCESS_POLICY_GROUPS,
@@ -69,6 +73,7 @@ export const useUsersTableColumns = (selectedColumns: UsersTableColumns[]) => {
       dataType: 'string',
       sortable: true,
       filterable: false,
+      flexGrow: 1,
     },
   ];
 

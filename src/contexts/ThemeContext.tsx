@@ -5,6 +5,7 @@ import { createTheme, ThemeProvider as FluentThemeProvider } from '@fluentui/rea
 import '@fluentui/react/dist/css/fabric.css';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { ThemeFontSize } from 'src/data/services/graphql';
+import { device } from 'src/styles/GlobalStyles';
 
 const sizes = {
   SMALL: '.75rem',
@@ -36,6 +37,15 @@ export const ThemeContextProvider = ({ children }) => {
 
     [class*="ms-DetailsRow"] {
       font-size: ${ThemeStore.userTheme.fontSizes.normal};
+    }
+    
+    div.ms-DetailsHeader-cell.hide-for-mobile,
+    div.ms-DetailsRow-cell.hide-for-mobile {
+      display: none;
+      
+      @media ${device.tablet} {
+        display: inline-block;
+      }
     }
   `;
 

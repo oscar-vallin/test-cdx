@@ -23,6 +23,7 @@ import {
   useXchangeNamingConventionsLazyQuery,
   XchangeConfigNamingConvention,
 } from 'src/data/services/graphql';
+import { HideForMobile } from 'src/styles/GlobalStyles';
 import { PageBody } from 'src/components/layouts/Column';
 import { ButtonLink } from 'src/components/buttons';
 import { Spacing } from 'src/components/spacings/Spacing';
@@ -230,6 +231,8 @@ const NamingPage = () => {
       minWidth: 150,
       maxWidth: 200,
       flexGrow: 1,
+      headerClassName: 'hide-for-mobile',
+      className: 'hide-for-mobile',
     },
     {
       name: 'UAT / Internal Testing',
@@ -356,10 +359,10 @@ const NamingPage = () => {
       <PageHeader>
         <Container>
           <Row>
-            <Column lg="6" direction="row">
+            <Column lg="6" sm="10" direction="row">
               <PageTitle id="__Page__Title_Naming_Conventions" title="Xchange Naming Conventions" />
             </Column>
-            <Column lg="6" right>
+            <Column lg="6" sm="2" right>
               <Text size="large" right>
                 <DownloadLink
                   target="_new"
@@ -367,7 +370,7 @@ const NamingPage = () => {
                   title="Download naming conventions as an MS Word document"
                 >
                   <Icon iconName="WordDocument" style={{ paddingRight: '5px' }} />
-                  Download
+                  <HideForMobile>Download</HideForMobile>
                 </DownloadLink>
               </Text>
             </Column>
