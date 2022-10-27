@@ -16,6 +16,7 @@ export const CenteredWrapper = styled(Box)`
   justify-content: center;
   min-width: 300px;
   max-width: 600px;
+  padding-bottom: 30vh;
 
   @media ${device.tablet} {
     width: 45vw;
