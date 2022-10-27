@@ -1,3 +1,5 @@
+import styled from 'styled-components';
+
 export const screenSize = {
   mobileS: '320px',
   mobileM: '375px',
@@ -18,3 +20,11 @@ export const device = {
   desktop: `(min-width: ${screenSize.desktop})`,
   desktopL: `(min-width: ${screenSize.desktop})`,
 };
+
+export const HideForMobile = styled.span`
+  display: none;
+  
+  @media ${device.tablet} {
+    display: inline;
+  }
+`;

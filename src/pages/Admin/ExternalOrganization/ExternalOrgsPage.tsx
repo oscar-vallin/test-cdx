@@ -136,7 +136,7 @@ const ExternalOrgsPage = () => {
   };
   return (
     <LayoutDashboard id="PageActiveOrgs" menuOptionSelected={ROUTE_EXTERNAL_ORGS.API_ID} showMenu={false}>
-      <PageHeader id="__ActiveOrgsHeader">
+      <PageHeader id="__ExternalActiveOrgsHeader">
         <Container>
           <Row>
             <Column lg="6" direction="row">
