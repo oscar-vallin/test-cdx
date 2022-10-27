@@ -281,6 +281,10 @@ const SchedulePanel = ({
       }
       setScheduleFrequency(xchangeScheduleForm?.frequency.value?.value ?? '');
       setScheduleType(xchangeScheduleForm?.scheduleType.value?.value ?? '');
+      setScheduleTimeZone(xchangeScheduleForm?.timezone.value?.value ?? '');
+      const hour = xchangeScheduleForm?.endHour.value?.value;
+      const minutes = xchangeScheduleForm?.endMinute.value?.value;
+      setScheduleTime(`${hour},${minutes}`);
       setHasSilencePeriod(xchangeScheduleForm?.hasSilencePeriod?.value ?? true);
       setHasSilencePeriodLabel(xchangeScheduleForm?.hasSilencePeriod?.label ?? '');
       const monthsValues = xchangeScheduleForm?.options?.find((m) => m.key === 'Month');
@@ -570,6 +574,7 @@ const SchedulePanel = ({
             id="scheduleSelectTime"
             uiFieldHour={xchangeSchedule?.endHour}
             uiFieldMinute={xchangeSchedule?.endMinute}
+            value={scheduleTime}
             onChange={(_newValue) => setScheduleTime(_newValue ?? '')}
           />
         </Column>
