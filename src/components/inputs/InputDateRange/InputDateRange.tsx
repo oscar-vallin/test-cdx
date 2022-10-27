@@ -19,7 +19,13 @@ const today = new Date();
 const tomorrow = new Date(today);
 tomorrow.setDate(tomorrow.getDate() + 1);
 
-const InputDateRange = ({ startDate, endDate, showLabels = true }: InputDateRangeProps): ReactElement => (
+const InputDateRange = (
+  {
+    startDate,
+    endDate,
+    showLabels = true,
+  }: InputDateRangeProps,
+): ReactElement => (
   <Row id="InputDateRange--Row">
     <LeftColumn id="InputDateRange--Column--From" sm="6" direction="column">
       {showLabels && <FormLabel label="From" required={true} />}

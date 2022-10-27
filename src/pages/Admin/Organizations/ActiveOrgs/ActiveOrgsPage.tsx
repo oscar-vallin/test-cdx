@@ -171,7 +171,12 @@ const ActiveOrgsPage = () => {
 
   useEffect(() => {
     fetchData();
-  }, [orgOwnerSid, tableFilters.searchText.delayedValue, searchAllOrgsFilter, tableFilters.pagingParams]);
+  }, [
+    orgOwnerSid,
+    tableFilters.searchText.delayedValue,
+    searchAllOrgsFilter,
+    tableFilters.pagingParams,
+  ]);
 
   const onPageChange = (pageNumber: number) => {
     tableFilters.pagingParams.pageNumber = pageNumber;

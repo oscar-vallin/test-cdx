@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { Box } from '../Box';
 import { device } from 'src/styles/GlobalStyles';
+import { Box } from '../Box';
 
 export const StyledBox = styled(Box)`
   align-items: flex-start;
