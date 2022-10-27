@@ -19,7 +19,8 @@ type AccessPolicyMembersProps = {
   isOpen: boolean;
   closePanel: (data: boolean) => void;
   selectedGroupId: string;
-  currentName: string;
+  currentName?: string;
+  members?: number;
 };
 
 const AccessPolicyGroupMembersPanel = ({
@@ -27,6 +28,7 @@ const AccessPolicyGroupMembersPanel = ({
   closePanel,
   selectedGroupId,
   currentName,
+  members,
 }: AccessPolicyMembersProps) => {
   const { tableFilters, columns } = MembersList({ organization: true, accessPolicyGroups: false });
   const [groupMembers, setGroupMembers] = useState<AccessMember[] | null>();
@@ -115,7 +117,7 @@ const AccessPolicyGroupMembersPanel = ({
     <PanelHeader id="__AccessPolicyGroupMembers_PanelHeader">
       <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
         <PanelTitle id="__AccessPolicyGroupMembers_Panel_Title" variant="bold" size="large">
-          {currentName} - members ({groupMembers?.length ?? 0})
+          {currentName} - members ( {members} )
         </PanelTitle>
       </Stack>
     </PanelHeader>

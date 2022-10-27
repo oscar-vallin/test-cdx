@@ -15,12 +15,14 @@ import {
   ActiveEnum,
   useAccessPolicyGroupsForOrgLazyQuery,
   useAccessPolicyGroupTemplatesLazyQuery,
+  PaginationInfo,
 } from 'src/data/services/graphql';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useUsersLists } from 'src/pages/Admin/Users/useUsersList';
 import { ButtonLink } from 'src/components/buttons';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { UpdateUserPanel, useUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers';
+import { Paginator } from 'src/components/tables/Paginator';
 import { AccessPolicyGroupPanel } from '../../Groups/AccessPolicyGroup';
 import { MembersList } from '../../MembersList/MembersList';
 
@@ -29,10 +31,11 @@ type AccessPolicyMembersProps = {
   closePanel: (data: boolean) => void;
   selectedPolicyId: string;
   currentName: string;
+  members?: number;
 };
 
 const AccessPolicyMembersPanel = ({
-  isOpen, closePanel, selectedPolicyId, currentName,
+  isOpen, closePanel, selectedPolicyId, currentName, members,
 }: AccessPolicyMembersProps) => {
   const { orgSid } = useOrgSid();
   const { tableFilters, columns } = MembersList({ organization: true, accessPolicyGroups: true });
@@ -49,6 +52,12 @@ const AccessPolicyMembersPanel = ({
     policyMembers,
     { data: accessMembers, loading: isLoadingAccessMembers, error: errorAccessMembers },
   ] = useAccessPolicyMembersLazyQuery();
+  const [pagingInfo, setPagingInfo] = useState<PaginationInfo>({
+    pageNumber: 0,
+    pageSize: 100,
+    totalElements: 0,
+    totalPages: 0,
+  });
   const handleError = ErrorHandler();
 
   useEffect(() => {
@@ -84,6 +93,11 @@ const AccessPolicyMembersPanel = ({
   useEffect(() => {
     if (!isLoadingAccessMembers && accessMembers) {
       setAccessPolicyMembers(accessMembers?.accessPolicyMembers);
+
+      const newPaginInfo = accessMembers.accessPolicyMembers?.paginationInfo;
+      if (newPaginInfo) {
+        setPagingInfo(newPaginInfo);
+      }
     }
   }, [accessMembers, isLoadingAccessMembers]);
 
@@ -96,6 +110,15 @@ const AccessPolicyMembersPanel = ({
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableFilters.searchText.delayedValue]);
+
+  const onPageChange = (pageNumber: number) => {
+    tableFilters.pagingParams.pageNumber = pageNumber;
+    tableFilters.setPagingParams({
+      pageNumber,
+      pageSize: 100,
+      sort: tableFilters.pagingParams.sort,
+    });
+  };
 
   const onRenderItemColumn = (item: AccessMember, index?: number, column?: IColumn) => {
     let columnVal: string | undefined;
@@ -149,21 +172,24 @@ const AccessPolicyMembersPanel = ({
     <PanelHeader id="__AccessPolicyMembers_PanelHeader">
       <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
         <PanelTitle id="__AccessPolicyMembers_Panel_Title" variant="bold" size="large">
-          {currentName} - members ({accessPolicyMembers?.nodes?.length})
+          {currentName} - members ( {members} )
         </PanelTitle>
       </Stack>
     </PanelHeader>
   );
 
   const renderBody = () => (
-    <DetailsList
-      items={accessPolicyMembers?.nodes ?? []}
-      selectionMode={SelectionMode.none}
-      columns={columns}
-      layoutMode={DetailsListLayoutMode.justified}
-      onRenderItemColumn={onRenderItemColumn}
-      isHeaderVisible
-    />
+    <>
+      <DetailsList
+        items={accessPolicyMembers?.nodes ?? []}
+        selectionMode={SelectionMode.none}
+        columns={columns}
+        layoutMode={DetailsListLayoutMode.justified}
+        onRenderItemColumn={onRenderItemColumn}
+        isHeaderVisible
+      />
+      <Paginator id="__Paginator" pagingInfo={pagingInfo} onPageChange={onPageChange} />
+    </>
   );
 
   return (

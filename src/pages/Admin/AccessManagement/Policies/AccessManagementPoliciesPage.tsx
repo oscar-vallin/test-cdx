@@ -81,6 +81,7 @@ const _AccessManagementPoliciesPage = () => {
 
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
   const [selectedPolicyId, setSelectedPolicyId] = useState<string | null>();
+  const [totalMembers, setTotalmembers] = useState(0);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>();
 
   const [policies, setPolicies] = useState<Maybe<AccessPolicy>[] | null>();
@@ -173,6 +174,7 @@ const _AccessManagementPoliciesPage = () => {
                 if ((item?.members ?? 0) > 0) {
                   setSelectedPolicyId(item?.sid);
                   setCurrentName(item?.name ?? '');
+                  setTotalmembers(item?.members ?? 0);
                   setIsPanelMembersOpen(true);
                 }
               }}
@@ -206,6 +208,7 @@ const _AccessManagementPoliciesPage = () => {
                 if (groupCount > 0) {
                   setSelectedPolicyId(item?.sid);
                   setCurrentName(item?.name ?? '');
+                  setTotalmembers(item?.members ?? 0);
                   setIsPanelUsageOpen(true);
                 }
               }}
@@ -393,6 +396,7 @@ const _AccessManagementPoliciesPage = () => {
           closePanel={setIsPanelMembersOpen}
           selectedPolicyId={selectedPolicyId ?? ''}
           currentName={currentName}
+          members={totalMembers}
         />
 
         <AccessPolicyUsagePanel
