@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Link } from '@fluentui/react';
 import { Box as LayoutBox, Row as LayoutRow, Column as LayoutColumn } from 'src/components/layouts';
 import { Text as ComponentText } from 'src/components/typography/Text';
+import { device } from 'src/styles/GlobalStyles';
 
 type RowProps = {
   left?: boolean;
@@ -10,8 +11,12 @@ type RowProps = {
 };
 
 export const Container = styled(LayoutBox)`
-  padding: 0 20px;
+  padding: 0 10px;
   width: 100%;
+  
+  @media ${device.tablet} {
+    padding: 0 20px;
+  }
 `;
 
 export const Box = styled(LayoutBox)`
@@ -27,6 +32,7 @@ export const FilterSection = styled(LayoutRow)`
 
 export const StyledRow = styled(LayoutRow)`
   // padding: 15px;
+  margin: 0;
   .ms-ComboBox-container {
     width: 100%;
     label {
