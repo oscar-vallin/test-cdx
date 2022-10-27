@@ -77,6 +77,7 @@ const AccessManagementGroupsContainer = () => {
 
   const [apiAmGroupsForOrg, { data, loading, error }] = useAccessPolicyGroupsForOrgLazyQuery();
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>();
+  const [totalMembers, setTotalmembers] = useState(0);
   const handleError = ErrorHandler();
 
   const [
@@ -246,6 +247,7 @@ const AccessManagementGroupsContainer = () => {
               if (item.members > 0) {
                 setSelectedGroupId(item.sid);
                 setCurrentName(item.name);
+                setTotalmembers(item?.members ?? 0);
                 setIsPanelMembersOpen(true);
               }
             }}
@@ -398,6 +400,7 @@ const AccessManagementGroupsContainer = () => {
         closePanel={setIsPanelMembersOpen}
         selectedGroupId={selectedGroupId ?? ''}
         currentName={currentName}
+        members={totalMembers}
       />
 
       <AccessPolicyGroupPanel

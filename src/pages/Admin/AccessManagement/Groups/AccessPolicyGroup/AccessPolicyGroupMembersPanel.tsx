@@ -8,8 +8,11 @@ import {
   Stack,
 } from '@fluentui/react';
 import { PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
-import { useAccessPolicyGroupMembersLazyQuery, AccessMember, ActiveEnum } from 'src/data/services/graphql';
-import { useUsersLists } from 'src/pages/Admin/Users/useUsersList';
+import {
+  useAccessPolicyGroupMembersLazyQuery,
+  AccessMember,
+  CdxWebCommandType,
+} from 'src/data/services/graphql';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { ButtonLink } from 'src/components/buttons';
 import { UpdateUserPanel, useUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers';
@@ -19,7 +22,8 @@ type AccessPolicyMembersProps = {
   isOpen: boolean;
   closePanel: (data: boolean) => void;
   selectedGroupId: string;
-  currentName: string;
+  currentName?: string;
+  members?: number;
 };
 
 const AccessPolicyGroupMembersPanel = ({
@@ -27,6 +31,7 @@ const AccessPolicyGroupMembersPanel = ({
   closePanel,
   selectedGroupId,
   currentName,
+  members,
 }: AccessPolicyMembersProps) => {
   const { tableFilters, columns } = MembersList({ organization: true, accessPolicyGroups: false });
   const [groupMembers, setGroupMembers] = useState<AccessMember[] | null>();
@@ -46,8 +51,6 @@ const AccessPolicyGroupMembersPanel = ({
   }, [errorAccessGroupMembers]);
 
   const updateUserPanel = useUpdateUserPanel();
-
-  const userService = useUsersLists(ActiveEnum.Active);
 
   const getMembers = () => {
     policyMembers({
@@ -100,11 +103,18 @@ const AccessPolicyGroupMembersPanel = ({
       );
     }
 
+    const pageCommands = item.commands;
+    const _viewCmd = pageCommands?.find((cmd) => cmd.commandType === CdxWebCommandType.View);
+
     return (
       <ButtonLink
         style={{ overflow: 'hidden' }}
         title={columnVal}
-        onClick={() => updateUserPanel.showPanel(item.userAccountSid)}
+        onClick={() => {
+          if (_viewCmd) {
+            updateUserPanel.showPanel(item.userAccountSid);
+          }
+        }}
       >
         {columnVal}
       </ButtonLink>
@@ -115,7 +125,7 @@ const AccessPolicyGroupMembersPanel = ({
     <PanelHeader id="__AccessPolicyGroupMembers_PanelHeader">
       <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
         <PanelTitle id="__AccessPolicyGroupMembers_Panel_Title" variant="bold" size="large">
-          {currentName} - members ({groupMembers?.length ?? 0})
+          {currentName} - members ( {members} )
         </PanelTitle>
       </Stack>
     </PanelHeader>
@@ -145,13 +155,6 @@ const AccessPolicyGroupMembersPanel = ({
 
       <UpdateUserPanel
         useUpdateUserPanel={updateUserPanel}
-        onUpdateUser={() => {
-          userService.fetchUsers(
-            0,
-            tableFilters.pagingParams.sort,
-            tableFilters.searchText.delayedValue,
-          ).then();
-        }}
       />
     </ThemedPanel>
   );

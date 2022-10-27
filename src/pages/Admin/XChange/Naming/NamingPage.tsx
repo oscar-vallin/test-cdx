@@ -41,6 +41,8 @@ const NamingPage = () => {
   const [specialInstructionIcon, setSpecialInstructionIcon] = useState<number | null>(0);
   const [sid, setSid] = useState('');
   const [count, setCount] = useState(0);
+  const [increaseDelay, setIncreasedelay] = useState<number | undefined>(0);
+  const [delay, setDelay] = useState(false);
   const [specialInstruction, setSpecialInstruction] = useState('');
   const [filterConventions, setFilterConventions] = useState<XchangeConfigNamingConvention[]>([]);
   const [refreshNamingPage, setRefreshNamingPage] = useState(false);
@@ -97,6 +99,17 @@ const NamingPage = () => {
     }
   }, [namingConventions, isLoadingNaming]);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!delay) {
+        setIncreasedelay(undefined);
+      } else {
+        setIncreasedelay(1000);
+      }
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [delay])
+
   const tooltipGetSpecialInstruction = (instruction: string, conventionSid: string) => (
     <Spacing margin="normal">
       <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
@@ -151,7 +164,7 @@ const NamingPage = () => {
               display: 'flex',
               position: 'absolute',
               bottom: '10px',
-              left: '240px',
+              left: '220px',
             }}
             >
               <TooltipHost content="Add special instruction">
@@ -175,12 +188,22 @@ const NamingPage = () => {
           <Text ellipsis title={columnVal}>{columnVal}</Text>
         )}
         {column?.key !== 'extractType' && column?.key !== 'vendor' && item.specialInstructions && (
-          <TooltipHost content={tooltipGetSpecialInstruction(
-            item.specialInstructions,
-            item.sid,
-          )}
+          <TooltipHost
+            content={tooltipGetSpecialInstruction(
+              item.specialInstructions,
+              item.sid,
+            )}
+            closeDelay={increaseDelay}
+            onMouseLeave={() => setIncreasedelay(1000)}
           >
-            <FontIcon iconName="Info" style={{ cursor: 'pointer', color: 'blue' }} />
+            <FontIcon
+              iconName="Info"
+              style={{ cursor: 'pointer', color: 'blue' }}
+              onMouseOver={() => setIncreasedelay(3000)}
+              onMouseLeave={() => {
+                setDelay(true);
+              }}
+            />
           </TooltipHost>
         )}
       </Stack>
