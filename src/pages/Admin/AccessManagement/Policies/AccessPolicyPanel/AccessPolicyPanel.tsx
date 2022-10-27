@@ -454,7 +454,7 @@ const AccessPolicyPanel = ({
               }}
             />
           </Column>
-          <Column lg="3" sm="6">
+          <Column lg="3" sm="12">
             <UIInputCheck
               id="PolicyTmpl__Check"
               uiField={policyForm?.tmpl}
@@ -466,7 +466,7 @@ const AccessPolicyPanel = ({
               alignBottom={true}
             />
           </Column>
-          <Column lg="3" sm="6">
+          <Column lg="3" sm="12">
             {state.isTemplate && (
               <UIInputCheck
                 id="UseAsIs__Check"

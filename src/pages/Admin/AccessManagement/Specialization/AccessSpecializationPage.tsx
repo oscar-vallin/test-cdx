@@ -24,7 +24,6 @@ import { ThemeStore } from 'src/store/ThemeStore';
 import { EmptyState } from 'src/containers/states';
 import { useNotification } from 'src/hooks/useNotification';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
-import { Button } from 'src/components/buttons';
 import { Row, Column, Container } from 'src/components/layouts';
 import { PageTitle } from 'src/components/typography';
 
@@ -44,6 +43,7 @@ import { ROUTE_ACCESS_MANAGEMENT_SPECIALIZATION } from 'src/data/constants/Route
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { PageBody } from 'src/components/layouts/Column';
+import { HideForMobile } from 'src/styles/GlobalStyles';
 import {
   AccessSpecializationPanel,
   AccessSpecializationMembersPanel,
@@ -253,16 +253,17 @@ const AccessManagementSpecializationPage = () => {
   const renderCreateButton = () => {
     if (createCmd) {
       return (
-        <Button
+        <PrimaryButton
           id="create-access-specialization"
-          variant="primary"
-          aria-label={createCmd.label}
+          iconProps={{ iconName: 'Add' }}
+          aria-label={createCmd.label ?? undefined}
+          title={createCmd.label ?? undefined}
           onClick={() => {
             setIsPanelOpen(true);
           }}
         >
-          {createCmd.label}
-        </Button>
+          <HideForMobile>{createCmd.label}</HideForMobile>
+        </PrimaryButton>
       );
     }
     return null;
@@ -304,10 +305,10 @@ const AccessManagementSpecializationPage = () => {
         <PageHeader id="__AccessSpecHeader">
           <Container>
             <Row>
-              <Column lg="6" direction="row">
+              <Column lg="6" sm="8" direction="row">
                 <PageTitle id="__Page_Title" title="Access Specializations" />
               </Column>
-              <Column lg="6" right>
+              <Column lg="6" sm="4" right>
                 {renderCreateButton()}
               </Column>
             </Row>

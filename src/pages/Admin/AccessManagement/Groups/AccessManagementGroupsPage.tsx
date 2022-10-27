@@ -11,7 +11,7 @@ import {
   DetailsListLayoutMode,
   FontIcon,
   IContextualMenuItem,
-  IContextualMenuProps,
+  IContextualMenuProps, PrimaryButton,
   SelectionMode,
   Spinner,
   SpinnerSize,
@@ -22,7 +22,7 @@ import { EmptyState } from 'src/containers/states';
 import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { useNotification } from 'src/hooks/useNotification';
 import { Column, Container, Row } from 'src/components/layouts';
-import { Button, ButtonLink } from 'src/components/buttons';
+import { ButtonLink } from 'src/components/buttons';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { PageTitle } from 'src/components/typography';
 import {
@@ -34,6 +34,7 @@ import {
   useAccessPolicyGroupTemplatesLazyQuery,
   WebCommand,
 } from 'src/data/services/graphql';
+import { HideForMobile } from 'src/styles/GlobalStyles';
 import { ThemeStore } from 'src/store/ThemeStore';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { Spacing } from 'src/components/spacings/Spacing';
@@ -299,21 +300,21 @@ const AccessManagementGroupsContainer = () => {
     }
 
     return (
-      <Button
+      <PrimaryButton
         id="CreateGroupButton"
-        split={Boolean(numTemplates > 0)}
-        variant="primary"
+        iconProps={{ iconName: 'Add' }}
         aria-label={createCmd.label ?? undefined}
+        title={createCmd.label ?? undefined}
+        split={Boolean(numTemplates > 0)}
         onClick={() => {
           setSelectedGroupId(undefined);
           setTemplateId(undefined);
           setIsPanelOpen(true);
         }}
         menuProps={createMenuProps}
-        block={false}
       >
-        {createCmd.label}
-      </Button>
+        <HideForMobile>{createCmd.label}</HideForMobile>
+      </PrimaryButton>
     );
   };
 
@@ -360,10 +361,10 @@ const AccessManagementGroupsContainer = () => {
         <PageHeader id="__AccessGroupsHeader">
           <Container>
             <Row>
-              <Column lg="6" direction="row">
+              <Column lg="6" sm="8" direction="row">
                 <PageTitle id="__Page_Title" title="Access Policy Groups" />
               </Column>
-              <Column lg="6" right>
+              <Column lg="6" sm="4" right>
                 {renderCreateGroupButton(templatesData?.accessPolicyGroupTemplates)}
               </Column>
             </Row>
