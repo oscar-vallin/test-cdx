@@ -269,10 +269,10 @@ const AccessSpecializationPanel = ({
                     <Column lg="12">
                       <Spacing margin={{ bottom: 'normal' }}>
                         <Row>
-                          <Column lg="3">
+                          <Column lg="3" sm="5">
                             <Text variant="bold">{group.labelKey}</Text>
                           </Column>
-                          <Column lg="9">
+                          <Column lg="9" sm="7">
                             <Text variant="bold">{group.valueKey}</Text>
                           </Column>
                         </Row>
