@@ -18,7 +18,7 @@ import {
   StyledHeader,
   StyledIconButton,
   StyledMenuItem,
-  StyledNav,
+  HideForMobile,
   StyledNavButton,
   StyledNavIcon,
   StyledOverFlow,
@@ -69,8 +69,9 @@ const AppHeader = ({ onMenuButtonClick, hasLeftMenu = true }: AppHeaderProps): R
     },
   ];
 
-  const renderTopNavButtons = () => ActiveDomainStore.nav.dashboard.map((menuOption: { label: string; destination: string }) => {
-    const opt:
+  const renderTopNavButtons = () => ActiveDomainStore.nav.dashboard.map(
+    (menuOption: { label: string; destination: string }) => {
+      const opt:
         | {
             ID?: string;
             TITLE?: string;
@@ -80,29 +81,30 @@ const AppHeader = ({ onMenuButtonClick, hasLeftMenu = true }: AppHeaderProps): R
           }
         | any = getRouteByApiId(menuOption.label !== 'Admin' ? menuOption.destination : 'ADMIN');
 
-    return opt.MAIN_MENU ? (
-      <StyledNavButton
-        id={`__${menuOption.destination}_Tab`}
-        key={menuOption.destination}
-        data-e2e={menuOption.destination}
-        selected={location.pathname === opt.URL}
-        onClick={() => {
-          let dest = `${opt.URL}?orgSid=${orgSid}`;
-          if (startDate) {
-            dest += `&startDate=${startDate}`;
-          }
-          if (endDate) {
-            dest += `&endDate=${endDate}`;
-          }
-          history.push(dest);
+      return opt.MAIN_MENU ? (
+        <StyledNavButton
+          id={`__${menuOption.destination}_Tab`}
+          key={menuOption.destination}
+          data-e2e={menuOption.destination}
+          selected={location.pathname === opt.URL}
+          onClick={() => {
+            let dest = `${opt.URL}?orgSid=${orgSid}`;
+            if (startDate) {
+              dest += `&startDate=${startDate}`;
+            }
+            if (endDate) {
+              dest += `&endDate=${endDate}`;
+            }
+            history.push(dest);
 
-          return null;
-        }}
-      >
-        {menuOption.label}
-      </StyledNavButton>
-    ) : null;
-  });
+            return null;
+          }}
+        >
+          {menuOption.label}
+        </StyledNavButton>
+      ) : null;
+    },
+  );
 
   const renderOrgName = () => (
     <div className="HeaderBtnText">
@@ -136,7 +138,9 @@ const AppHeader = ({ onMenuButtonClick, hasLeftMenu = true }: AppHeaderProps): R
   };
 
   const renderMenuItem = (props) => (
-    <StyledMenuItem selected={ThemeStore.userTheme.themeFontSize === props.item.key}>{props.item.text}</StyledMenuItem>
+    <StyledMenuItem selected={ThemeStore.userTheme.themeFontSize === props.item.key}>
+      {props.item.text}
+    </StyledMenuItem>
   );
 
   return (
@@ -155,28 +159,31 @@ const AppHeader = ({ onMenuButtonClick, hasLeftMenu = true }: AppHeaderProps): R
           <Icon iconName="Home" />
         </StyledNavButton>
 
-        <StyledNav>{renderTopNavButtons()}</StyledNav>
+        <HideForMobile>
+          {renderTopNavButtons()}
+        </HideForMobile>
 
         <StyledDiv>
-          <StyledIconButton
-            id="__AppHeader_Help"
-            iconProps={{ iconName: 'Help' }}
-            title="Help"
-            aria-label="Help"
-            onClick={() => setIsShowHelp(!isShowHelp)}
-          />
+          <HideForMobile>
+            <StyledIconButton
+              id="__AppHeader_Help"
+              iconProps={{ iconName: 'Help' }}
+              title="Help"
+              aria-label="Help"
+              onClick={() => setIsShowHelp(!isShowHelp)}
+            />
 
-          <StyledIconButton
-            id="__ProfileMenu_Font_Buttons"
-            iconProps={{ iconName: 'Font' }}
-            title="Font sizes"
-            aria-label="Font sizes"
-            menuProps={{
-              items: settingsMenu,
-              contextualMenuItemAs: renderMenuItem,
-            }}
-          />
-
+            <StyledIconButton
+              id="__ProfileMenu_Font_Buttons"
+              iconProps={{ iconName: 'Font' }}
+              title="Font sizes"
+              aria-label="Font sizes"
+              menuProps={{
+                items: settingsMenu,
+                contextualMenuItemAs: renderMenuItem,
+              }}
+            />
+          </HideForMobile>
           <ProfileMenu id="__ProfileMenu" onUserSettings={openUserSettings} />
         </StyledDiv>
       </StyledHeader>
