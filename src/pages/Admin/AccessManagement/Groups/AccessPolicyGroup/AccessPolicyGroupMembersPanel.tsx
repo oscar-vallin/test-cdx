@@ -8,8 +8,11 @@ import {
   Stack,
 } from '@fluentui/react';
 import { PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
-import { useAccessPolicyGroupMembersLazyQuery, AccessMember, ActiveEnum } from 'src/data/services/graphql';
-import { useUsersLists } from 'src/pages/Admin/Users/useUsersList';
+import {
+  useAccessPolicyGroupMembersLazyQuery,
+  AccessMember,
+  CdxWebCommandType,
+} from 'src/data/services/graphql';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { ButtonLink } from 'src/components/buttons';
 import { UpdateUserPanel, useUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers';
@@ -48,8 +51,6 @@ const AccessPolicyGroupMembersPanel = ({
   }, [errorAccessGroupMembers]);
 
   const updateUserPanel = useUpdateUserPanel();
-
-  const userService = useUsersLists(ActiveEnum.Active);
 
   const getMembers = () => {
     policyMembers({
@@ -102,11 +103,18 @@ const AccessPolicyGroupMembersPanel = ({
       );
     }
 
+    const pageCommands = item.commands;
+    const _viewCmd = pageCommands?.find((cmd) => cmd.commandType === CdxWebCommandType.View);
+
     return (
       <ButtonLink
         style={{ overflow: 'hidden' }}
         title={columnVal}
-        onClick={() => updateUserPanel.showPanel(item.userAccountSid)}
+        onClick={() => {
+          if (_viewCmd) {
+            updateUserPanel.showPanel(item.userAccountSid);
+          }
+        }}
       >
         {columnVal}
       </ButtonLink>
@@ -147,13 +155,6 @@ const AccessPolicyGroupMembersPanel = ({
 
       <UpdateUserPanel
         useUpdateUserPanel={updateUserPanel}
-        onUpdateUser={() => {
-          userService.fetchUsers(
-            0,
-            tableFilters.pagingParams.sort,
-            tableFilters.searchText.delayedValue,
-          ).then();
-        }}
       />
     </ThemedPanel>
   );
