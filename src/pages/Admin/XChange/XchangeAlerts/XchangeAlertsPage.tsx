@@ -286,7 +286,7 @@ const XchangeAlertsPage = () => {
                 </StyledButtonAction>
               </Stack>
               <StyledSeparator color="#e6e6e6" />
-              {xchangeAlerts?.globalXchangeAlerts && xchangeAlerts?.globalXchangeAlerts.length <= 0 
+              {xchangeAlerts?.globalXchangeAlerts && xchangeAlerts?.globalXchangeAlerts.length <= 0
                 && (
                 <Text>There are no global alerts configured</Text>
                 )}
