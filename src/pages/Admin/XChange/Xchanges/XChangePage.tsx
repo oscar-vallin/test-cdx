@@ -716,7 +716,7 @@ const XChangePage = () => {
                   <Column lg="3" md={12}>
                     <StyledIconsComments>
                       <IconButton iconProps={{ iconName: 'Save' }} onClick={sendComment} />
-                      <Text variant="small">Save</Text>
+                      <Text style={{ cursor: 'pointer' }} variant="small" onClick={sendComment}>Save</Text>
                     </StyledIconsComments>
                   </Column>
                   <Column lg="3">
@@ -728,7 +728,15 @@ const XChangePage = () => {
                           setComment(dataXchange.xchangeProfile.comments);
                         }}
                       />
-                      <Text variant="small">Cancel</Text>
+                      <Text
+                        style={{ cursor: 'pointer' }}
+                        variant="small"
+                        onClick={() => {
+                          setEditComment(false);
+                          setComment(dataXchange.xchangeProfile.comments);
+                        }}
+                      >Cancel
+                      </Text>
                     </StyledIconsComments>
                   </Column>
                 </>
