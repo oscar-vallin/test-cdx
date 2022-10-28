@@ -179,10 +179,10 @@ const XchangeAlertsPage = () => {
   const showUnsavedChangesDialog = (
     currentSid: string,
     xchangeTypeAlert: string,
-    title?: string,
   ) => {
     const updatedDialog = { ...defaultDialogProps };
-    updatedDialog.message = `Are you sure you want to delete this Alert ${title} ?`;
+    updatedDialog.title = 'Delete Alert'
+    updatedDialog.message = 'Are you sure you want to delete this Alert?';
 
     updatedDialog.onYes = () => {
       hideDialog();
@@ -235,12 +235,26 @@ const XchangeAlertsPage = () => {
             iconProps={{ iconName: 'Trash' }}
             style={{ paddingBottom: '10px' }}
             onClick={() => {
-              showUnsavedChangesDialog(currentSid, type, corefilename);
+              showUnsavedChangesDialog(currentSid, type);
             }}
           />
         )}
       </>
     );
+  };
+
+  const updateIndividualAlert = (
+    commands: WebCommand[],
+    currentSid: string,
+    corefilename?: string,
+  ) => {
+    const _updateCmd = commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
+    if (_updateCmd) {
+      setSid(currentSid);
+      setCoreFilenameValue(corefilename ?? '')
+      setOpenAlertsPanel(true);
+    }
+    return null;
   };
 
   const renderAlerts = () => {
@@ -323,7 +337,13 @@ const XchangeAlertsPage = () => {
                       <Column lg="12">
                         <Stack horizontal={true} horizontalAlign="space-between">
                           <Stack.Item align="center" disableShrink>
-                            <ButtonLink underline style={{ fontWeight: 'bold', fontSize: '13.5px' }}>
+                            <ButtonLink
+                              underline
+                              style={{ fontWeight: 'bold', fontSize: '13.5px' }}
+                              onClick={() => {
+                                updateIndividualAlert(individualAlerts?.commands ?? [], individualAlerts.sid ?? '', individualAlerts.coreFilename ?? '');
+                              }}
+                            >
                               {individualAlerts.coreFilename}
                             </ButtonLink>
                             {userPermissionsIcons(individualAlerts?.commands ?? [], individualAlerts?.sid ?? '', 'config', individualAlerts.coreFilename ?? '')}
@@ -340,10 +360,22 @@ const XchangeAlertsPage = () => {
                       (subscriber, individualSubsIndex: number) => (
                         <Row key={individualSubsIndex}>
                           <Column lg="6">
-                            <ButtonLink>{subscriber.firstNm}</ButtonLink>
+                            <ButtonLink
+                              onClick={() => {
+                                updateIndividualAlert(individualAlerts?.commands ?? [], individualAlerts.sid ?? '', individualAlerts.coreFilename ?? '');
+                              }}
+                            >
+                              {subscriber.firstNm}
+                            </ButtonLink>
                           </Column>
                           <Column lg="6">
-                            <ButtonLink>{subscriber.email}</ButtonLink>
+                            <ButtonLink
+                              onClick={() => {
+                                updateIndividualAlert(individualAlerts?.commands ?? [], individualAlerts.sid ?? '', individualAlerts.coreFilename ?? '');
+                              }}
+                            >
+                              {subscriber.email}
+                            </ButtonLink>
                           </Column>
                         </Row>
                       ),

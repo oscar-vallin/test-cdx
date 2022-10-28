@@ -4,6 +4,7 @@ import {
   PrimaryButton,
   Spinner,
   SpinnerSize,
+  Stack,
 } from '@fluentui/react';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import {
@@ -19,17 +20,22 @@ import {
   CdxWebCommandType,
   UiSelectManyField,
 } from 'src/data/services/graphql';
-import { PanelBody, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
+import {
+  PanelBody,
+  PanelHeader,
+  PanelTitle,
+  ThemedPanel,
+} from 'src/layouts/Panels/Panels.styles';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { Column, Container, Row } from 'src/components/layouts';
 import { UIInputMultiSelect, UIInputSelectOne } from 'src/components/inputs/InputDropdown';
 import { ButtonAction, ButtonLink } from 'src/components/buttons';
+import { SubscribersList } from 'src/components/subscribers/SubscribersList';
 import { AddSubscriberModal } from 'src/containers/modals/AddSubsciberModal/AddSubscriberModal';
 import { useNotification } from 'src/hooks/useNotification';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { InputText } from 'src/components/inputs/InputText';
-import { SubscribersList } from 'src/components/subscribers';
 
 type XchangeAlertsPanelProps = {
   isPanelOpen: boolean;
@@ -248,10 +254,12 @@ const XchangeAlertsPanel = ({
     if (!alertProfileFormLoading && alertProfileFormData) {
       const { xchangeProfileAlertForm } = alertProfileFormData;
       setXchangeProfileAlert(xchangeProfileAlertForm);
-      if (xchangeProfileAlertForm?.alertTypes.value && xchangeProfileAlertForm?.alertTypes.value.length > 0) {
+      if (xchangeProfileAlertForm?.alertTypes.value
+        && xchangeProfileAlertForm?.alertTypes.value.length > 0) {
         setAlertTypesValue(xchangeProfileAlertForm?.alertTypes.value.map((alert) => alert.value));
       }
-      if (xchangeProfileAlertForm.subscribers.value && xchangeProfileAlertForm.subscribers.value.length > 0) {
+      if (xchangeProfileAlertForm.subscribers.value
+        && xchangeProfileAlertForm.subscribers.value.length > 0) {
         subscribersList(xchangeProfileAlertForm.subscribers.value);
       }
 
@@ -265,9 +273,11 @@ const XchangeAlertsPanel = ({
 
       if (xchangeProfileAlertForm?.commands) {
         const pageCommands = xchangeProfileAlertForm?.commands;
-        const _updateCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
+        const _updateCmd = pageCommands
+          ?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
         setUpdateCmd(_updateCmd);
-        const _createCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
+        const _createCmd = pageCommands
+          ?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
         setCreateCmd(_createCmd);
       }
     }
@@ -277,10 +287,12 @@ const XchangeAlertsPanel = ({
     if (!alertConfigFormLoading && alertConfigFormData) {
       const { xchangeConfigAlertForm } = alertConfigFormData;
       setXchangeConfigAlert(xchangeConfigAlertForm);
-      if (xchangeConfigAlertForm?.alertTypes.value && xchangeConfigAlertForm?.alertTypes.value.length > 0) {
+      if (xchangeConfigAlertForm?.alertTypes.value
+        && xchangeConfigAlertForm?.alertTypes.value.length > 0) {
         setAlertTypesValue(xchangeConfigAlertForm?.alertTypes.value.map((alert) => alert.value));
       }
-      if (xchangeConfigAlertForm.subscribers.value && xchangeConfigAlertForm.subscribers.value.length > 0) {
+      if (xchangeConfigAlertForm.subscribers.value
+        && xchangeConfigAlertForm.subscribers.value.length > 0) {
         subscribersList(xchangeConfigAlertForm.subscribers.value);
       }
 
@@ -299,9 +311,11 @@ const XchangeAlertsPanel = ({
 
       if (xchangeConfigAlertForm?.commands) {
         const pageCommands = xchangeConfigAlertForm?.commands;
-        const _updateCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
+        const _updateCmd = pageCommands
+          ?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
         setUpdateCmd(_updateCmd);
-        const _createCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
+        const _createCmd = pageCommands
+          ?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
         setCreateCmd(_createCmd);
       }
     }
@@ -440,11 +454,23 @@ const XchangeAlertsPanel = ({
     );
   };
 
+  const renderPanelHeader = () => (
+    <PanelHeader id="__XchangeAlert_PanelHeader">
+      <Container>
+        <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
+          <PanelTitle id="__AccessPolicyMembers_Panel_Title" variant="bold" size="large">
+            {updateCmd ? `Update Alert ${coreFilename}` : 'Create Alert'}
+          </PanelTitle>
+        </Stack>
+      </Container>
+    </PanelHeader>
+  );
+
   return (
     <ThemedPanel
       closeButtonAriaLabel="Close"
       type={PanelType.medium}
-      headerText={updateCmd ? 'Update Alert' : 'Create Alert'}
+      onRenderHeader={renderPanelHeader}
       isOpen={isPanelOpen}
       onDismiss={() => {
         onPanelClose();
