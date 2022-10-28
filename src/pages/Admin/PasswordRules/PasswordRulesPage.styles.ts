@@ -42,8 +42,9 @@ export const StyledDiv = styled.div`
     align-items: center;
     display: flex;
     justify-content: flex-start;
+    flex-wrap: wrap;
     font-size: 0.875rem;
-    white-space: nowrap;
+    white-space: wrap;
 
     .ms-TextField {
       margin: 0 5px;

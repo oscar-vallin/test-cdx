@@ -39,6 +39,7 @@ export type AccessMember = {
   firstNm: Scalars['String'];
   lastNm?: Maybe<Scalars['String']>;
   email: Scalars['String'];
+  active: Scalars['Boolean'];
   organization: Organization;
   accessPolicyGroups?: Maybe<Array<AccessPolicyGroup>>;
   commands?: Maybe<Array<WebCommand>>;
@@ -934,7 +935,7 @@ export type Mutation = {
   convertXchangeProfile?: Maybe<XchangeProfile>;
   updateXchangeProfileComment?: Maybe<GenericResponse>;
   publishXchangeProfile?: Maybe<GenericResponse>;
-  updateXchangeConfigExtractType?: Maybe<GenericResponse>;
+  updateXchangeConfigMeta?: Maybe<GenericResponse>;
   updateXchangeConfigComment?: Maybe<GenericResponse>;
   updateXchangeConfigInstruction?: Maybe<GenericResponse>;
   createXchangeStep?: Maybe<XchangeStepForm>;
@@ -1242,9 +1243,8 @@ export type MutationPublishXchangeProfileArgs = {
 };
 
 
-export type MutationUpdateXchangeConfigExtractTypeArgs = {
-  sid: Scalars['ID'];
-  extractType: ExtractType;
+export type MutationUpdateXchangeConfigMetaArgs = {
+  xchangeInput: UpdateXchangeConfigMetaInput;
 };
 
 
@@ -3029,6 +3029,13 @@ export type UpdateXchangeConfigAlertInput = {
   filenameQualifier?: Maybe<Scalars['String']>;
   alertTypes?: Maybe<Array<AlertType>>;
   subscriberSids?: Maybe<Array<Scalars['ID']>>;
+};
+
+export type UpdateXchangeConfigMetaInput = {
+  sid: Scalars['ID'];
+  coreFilename: Scalars['String'];
+  coreFilenamePattern: Scalars['String'];
+  extractType?: Maybe<ExtractType>;
 };
 
 export type UpdateXchangeFileTransmissionInput = {
@@ -5265,7 +5272,7 @@ export type AccessPolicyMembersQuery = (
       & FragmentPaginationInfoFragment
     ), nodes?: Maybe<Array<(
       { __typename?: 'AccessMember' }
-      & Pick<AccessMember, 'userAccountSid' | 'firstNm' | 'lastNm' | 'email'>
+      & Pick<AccessMember, 'userAccountSid' | 'firstNm' | 'lastNm' | 'email' | 'active'>
       & { organization: (
         { __typename?: 'Organization' }
         & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
@@ -5372,7 +5379,7 @@ export type AccessSpecializationMembersQuery = (
       & FragmentPaginationInfoFragment
     ), nodes?: Maybe<Array<(
       { __typename?: 'AccessMember' }
-      & Pick<AccessMember, 'userAccountSid' | 'firstNm' | 'lastNm' | 'email'>
+      & Pick<AccessMember, 'userAccountSid' | 'firstNm' | 'lastNm' | 'email' | 'active'>
       & { organization: (
         { __typename?: 'Organization' }
         & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
@@ -5479,7 +5486,7 @@ export type AccessPolicyGroupMembersQuery = (
       & FragmentPaginationInfoFragment
     ), nodes?: Maybe<Array<(
       { __typename?: 'AccessMember' }
-      & Pick<AccessMember, 'userAccountSid' | 'firstNm' | 'lastNm' | 'email'>
+      & Pick<AccessMember, 'userAccountSid' | 'firstNm' | 'lastNm' | 'email' | 'active'>
       & { organization: (
         { __typename?: 'Organization' }
         & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
@@ -8737,15 +8744,14 @@ export type PublishXchangeProfileMutation = (
   )> }
 );
 
-export type UpdateXchangeConfigExtractTypeMutationVariables = Exact<{
-  sid: Scalars['ID'];
-  extractType: ExtractType;
+export type UpdateXchangeConfigMetaMutationVariables = Exact<{
+  xchangeInput: UpdateXchangeConfigMetaInput;
 }>;
 
 
-export type UpdateXchangeConfigExtractTypeMutation = (
+export type UpdateXchangeConfigMetaMutation = (
   { __typename?: 'Mutation' }
-  & { updateXchangeConfigExtractType?: Maybe<(
+  & { updateXchangeConfigMeta?: Maybe<(
     { __typename?: 'GenericResponse' }
     & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { allMessages?: Maybe<Array<(
@@ -12199,6 +12205,7 @@ export const AccessPolicyMembersDocument = gql`
       firstNm
       lastNm
       email
+      active
       organization {
         sid
         name
@@ -12417,6 +12424,7 @@ export const AccessSpecializationMembersDocument = gql`
       firstNm
       lastNm
       email
+      active
       organization {
         sid
         name
@@ -12640,6 +12648,7 @@ export const AccessPolicyGroupMembersDocument = gql`
       firstNm
       lastNm
       email
+      active
       organization {
         sid
         name
@@ -18766,9 +18775,9 @@ export function usePublishXchangeProfileMutation(baseOptions?: Apollo.MutationHo
 export type PublishXchangeProfileMutationHookResult = ReturnType<typeof usePublishXchangeProfileMutation>;
 export type PublishXchangeProfileMutationResult = Apollo.MutationResult<PublishXchangeProfileMutation>;
 export type PublishXchangeProfileMutationOptions = Apollo.BaseMutationOptions<PublishXchangeProfileMutation, PublishXchangeProfileMutationVariables>;
-export const UpdateXchangeConfigExtractTypeDocument = gql`
-    mutation UpdateXchangeConfigExtractType($sid: ID!, $extractType: ExtractType!) {
-  updateXchangeConfigExtractType(sid: $sid, extractType: $extractType) {
+export const UpdateXchangeConfigMetaDocument = gql`
+    mutation UpdateXchangeConfigMeta($xchangeInput: UpdateXchangeConfigMetaInput!) {
+  updateXchangeConfigMeta(xchangeInput: $xchangeInput) {
     response
     errCode
     errMsg
@@ -18785,32 +18794,31 @@ export const UpdateXchangeConfigExtractTypeDocument = gql`
   }
 }
     ${UnionNvpFragmentDoc}`;
-export type UpdateXchangeConfigExtractTypeMutationFn = Apollo.MutationFunction<UpdateXchangeConfigExtractTypeMutation, UpdateXchangeConfigExtractTypeMutationVariables>;
+export type UpdateXchangeConfigMetaMutationFn = Apollo.MutationFunction<UpdateXchangeConfigMetaMutation, UpdateXchangeConfigMetaMutationVariables>;
 
 /**
- * __useUpdateXchangeConfigExtractTypeMutation__
+ * __useUpdateXchangeConfigMetaMutation__
  *
- * To run a mutation, you first call `useUpdateXchangeConfigExtractTypeMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateXchangeConfigExtractTypeMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUpdateXchangeConfigMetaMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateXchangeConfigMetaMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [updateXchangeConfigExtractTypeMutation, { data, loading, error }] = useUpdateXchangeConfigExtractTypeMutation({
+ * const [updateXchangeConfigMetaMutation, { data, loading, error }] = useUpdateXchangeConfigMetaMutation({
  *   variables: {
- *      sid: // value for 'sid'
- *      extractType: // value for 'extractType'
+ *      xchangeInput: // value for 'xchangeInput'
  *   },
  * });
  */
-export function useUpdateXchangeConfigExtractTypeMutation(baseOptions?: Apollo.MutationHookOptions<UpdateXchangeConfigExtractTypeMutation, UpdateXchangeConfigExtractTypeMutationVariables>) {
-        return Apollo.useMutation<UpdateXchangeConfigExtractTypeMutation, UpdateXchangeConfigExtractTypeMutationVariables>(UpdateXchangeConfigExtractTypeDocument, baseOptions);
+export function useUpdateXchangeConfigMetaMutation(baseOptions?: Apollo.MutationHookOptions<UpdateXchangeConfigMetaMutation, UpdateXchangeConfigMetaMutationVariables>) {
+        return Apollo.useMutation<UpdateXchangeConfigMetaMutation, UpdateXchangeConfigMetaMutationVariables>(UpdateXchangeConfigMetaDocument, baseOptions);
       }
-export type UpdateXchangeConfigExtractTypeMutationHookResult = ReturnType<typeof useUpdateXchangeConfigExtractTypeMutation>;
-export type UpdateXchangeConfigExtractTypeMutationResult = Apollo.MutationResult<UpdateXchangeConfigExtractTypeMutation>;
-export type UpdateXchangeConfigExtractTypeMutationOptions = Apollo.BaseMutationOptions<UpdateXchangeConfigExtractTypeMutation, UpdateXchangeConfigExtractTypeMutationVariables>;
+export type UpdateXchangeConfigMetaMutationHookResult = ReturnType<typeof useUpdateXchangeConfigMetaMutation>;
+export type UpdateXchangeConfigMetaMutationResult = Apollo.MutationResult<UpdateXchangeConfigMetaMutation>;
+export type UpdateXchangeConfigMetaMutationOptions = Apollo.BaseMutationOptions<UpdateXchangeConfigMetaMutation, UpdateXchangeConfigMetaMutationVariables>;
 export const UpdateXchangeConfigCommentDocument = gql`
     mutation UpdateXchangeConfigComment($sid: ID!, $comment: String!) {
   updateXchangeConfigComment(sid: $sid, comment: $comment) {

@@ -18,6 +18,7 @@ import {
   Link,
   DetailsList,
   TooltipHost,
+  IColumn,
 } from '@fluentui/react';
 import { People20Filled, PeopleAudience20Filled } from '@fluentui/react-icons';
 import { ThemeStore } from 'src/store/ThemeStore';
@@ -51,21 +52,45 @@ import {
 } from './AccessSpecializationPanel';
 import { StyledCommandButton } from '../AccessManagement.styles';
 
-const generateColumns = () => {
-  const createColumn = ({ name, key, minWidth }) => ({
-    name,
-    key,
-    fieldName: key,
-    data: 'string',
-    isPadded: true,
-    minWidth,
-  });
-
+const generateColumns = (): IColumn[] => {
   return [
-    createColumn({ name: 'Name', key: 'name', minWidth: 100 }),
-    createColumn({ name: '', key: 'members', minWidth: 110 }),
-    createColumn({ name: '', key: 'groupUsages', minWidth: 250 }),
-    createColumn({ name: '', key: 'actions', minWidth: 225 }),
+    {
+      name: 'Name',
+      fieldName: 'name',
+      key: 'name',
+      data: 'string',
+      minWidth: 100,
+      maxWidth: 500,
+      isPadded: true,
+      flexGrow: 1,
+    },
+    {
+      name: '',
+      fieldName: 'members',
+      key: 'members',
+      data: 'string',
+      minWidth: 90,
+      maxWidth: 90,
+      isPadded: false,
+    },
+    {
+      name: '',
+      fieldName: 'groupUsages',
+      key: 'groupUsages',
+      data: 'string',
+      minWidth: 90,
+      maxWidth: 90,
+      isPadded: false,
+    },
+    {
+      name: '',
+      fieldName: 'actions',
+      key: 'actions',
+      data: 'string',
+      minWidth: 50,
+      isPadded: false,
+      flexGrow: 2,
+    },
   ];
 };
 
@@ -189,16 +214,18 @@ const AccessManagementSpecializationPage = () => {
       case 'actions':
         if (deleteCmd) {
           return (
-            <StyledCommandButton
-              id={`__${item?.name?.split(' ').join('_')}_Delete`}
-              title={deleteCmd.label ?? undefined}
-              ariaLabel={deleteCmd.label ?? undefined}
-              iconProps={{ iconName: 'Delete' }}
-              onClick={() => {
-                setSelectedAccessId(item.sid);
-                setIsConfirmationHidden(false);
-              }}
-            />
+            <Column right>
+              <StyledCommandButton
+                id={`__${item?.name?.split(' ').join('_')}_Delete`}
+                title={deleteCmd.label ?? undefined}
+                ariaLabel={deleteCmd.label ?? undefined}
+                iconProps={{ iconName: 'Delete' }}
+                onClick={() => {
+                  setSelectedAccessId(item.sid);
+                  setIsConfirmationHidden(false);
+                }}
+              />
+            </Column>
           );
         }
         return <span />;
