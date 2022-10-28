@@ -24,7 +24,12 @@ export const ThemeContextProvider = ({ children }) => {
     }
 
     html {
-      font-size: ${({ fontSize }) => sizes[fontSize]};
+      /* Force a default 16px (18.5 * .875 = 16.18) font on mobile to prevent "zoom-in" on iOS */
+      font-size: 18.5px;      
+      
+      @media ${device.tablet} {
+        font-size: ${({ fontSize }) => sizes[fontSize]};      
+      }
     }
 
     body {

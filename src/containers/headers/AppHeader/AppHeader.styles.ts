@@ -100,17 +100,21 @@ export const StyledNavButton = styled.button<SelectableProps>`
 `;
 
 export const StyledIconButton = styled(IconButton)`
-  && {
-    border: none !important;
-    color: ${({ theme }) => theme.colors.white};
-    padding: 0px 8px;
-    min-width: 50px;
-    height: 100%;
+  border: none !important;
+  color: ${({ theme }) => theme.colors.white};
+  padding: 0px 8px;
+  min-width: 50px;
+  height: 100%;
+  display: none;
 
-    &:hover,
-    &.is-expanded {
-      background: rgba(0, 0, 0, 0.15);
-    }
+  &:hover,
+  &.is-expanded {
+    color: ${({ theme }) => theme.colors.white};
+    background: rgba(0, 0, 0, 0.15);
+  }
+  
+  @media ${device.tablet} {
+    display: inline-block;
   }
 `;
 

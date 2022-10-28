@@ -164,26 +164,24 @@ const AppHeader = ({ onMenuButtonClick, hasLeftMenu = true }: AppHeaderProps): R
         </HideForMobile>
 
         <StyledDiv>
-          <HideForMobile>
-            <StyledIconButton
-              id="__AppHeader_Help"
-              iconProps={{ iconName: 'Help' }}
-              title="Help"
-              aria-label="Help"
-              onClick={() => setIsShowHelp(!isShowHelp)}
-            />
+          <StyledIconButton
+            id="__AppHeader_Help"
+            iconProps={{ iconName: 'Help' }}
+            title="Help"
+            aria-label="Help"
+            onClick={() => setIsShowHelp(!isShowHelp)}
+          />
 
-            <StyledIconButton
-              id="__ProfileMenu_Font_Buttons"
-              iconProps={{ iconName: 'Font' }}
-              title="Font sizes"
-              aria-label="Font sizes"
-              menuProps={{
-                items: settingsMenu,
-                contextualMenuItemAs: renderMenuItem,
-              }}
-            />
-          </HideForMobile>
+          <StyledIconButton
+            id="__ProfileMenu_Font_Buttons"
+            iconProps={{ iconName: 'Font' }}
+            title="Font sizes"
+            aria-label="Font sizes"
+            menuProps={{
+              items: settingsMenu,
+              contextualMenuItemAs: renderMenuItem,
+            }}
+          />
           <ProfileMenu id="__ProfileMenu" onUserSettings={openUserSettings} />
         </StyledDiv>
       </StyledHeader>

@@ -57,7 +57,7 @@ export const CircleStyled = styled.div<CircleStyledProps>`
   color: ${({ color }) => color};
   text-align: center;
   font: 11px Arial, sans-serif;
-  cursor: pointer;
+  cursor: ${({ color }) => color === 'gray' ? 'default' : 'pointer'};
 `;
 
 type CircleStyledProps = {

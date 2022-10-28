@@ -31,18 +31,27 @@ import { endOfMonth } from 'date-fns';
 import { PageBody } from 'src/components/layouts/Column';
 import { ButtonLink } from 'src/components/buttons';
 import { ThemeStore } from 'src/store/ThemeStore';
-import { theme } from 'src/styles/themes/theme';
 import {
   StyledCheckbox,
   StyledTooltip,
   StyledTotal,
-  StyledTransnmissionsType,
+  StyledTransmissionsType,
 } from './Visualizations.style';
 import { VisualizationPanel } from './visualizationPanel';
 
 export const shortMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const INITIAL_COUNT_TOTAL = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-const colors = ['transparent', 'blue', 'green', 'yellow', 'gray', 'pink'];
+const COLORS = [
+  '#fd7f6f',
+  '#7eb0d5',
+  '#b2e061',
+  '#bd7ebe',
+  '#ffb55a',
+  '#ffee65',
+  '#beb9db',
+  '#fdcce5',
+  '#8bd3c7',
+];
 const CURRENT_MONTH = new Date().getMonth();
 
 type DataProps = {
@@ -218,7 +227,7 @@ const VisualizationsPage = () => {
     }
   };
 
-  const getdataBarChart = (subC) => {
+  const getDataBarChart = (subC) => {
     const orderedMonth = monthList();
     setSubClientsBarChart([]);
     let highestNumber = subC[0].monthCounts[0].count
@@ -312,7 +321,8 @@ const VisualizationsPage = () => {
           name={s.name}
           dot={false}
           key={s.name}
-          stroke={colors[sIndex]}
+          stroke={COLORS[sIndex]}
+          strokeWidth={2}
         />
       );
     }
@@ -324,7 +334,7 @@ const VisualizationsPage = () => {
       const { wpTransmissionCountBySponsor } = transmissionSponsorData;
       if (wpTransmissionCountBySponsor && wpTransmissionCountBySponsor.length > 0) {
         getSubClientsData(wpTransmissionCountBySponsor);
-        getdataBarChart(wpTransmissionCountBySponsor);
+        getDataBarChart(wpTransmissionCountBySponsor);
         wpTransmissionCountBySponsor.forEach((organization) => {
           sumTotalTransmissions(organization?.monthCounts);
         });
@@ -338,7 +348,7 @@ const VisualizationsPage = () => {
       const { wpTransmissionCountByVendor } = transmissionVendorData;
       if (wpTransmissionCountByVendor && wpTransmissionCountByVendor.length > 0) {
         getSubClientsData(wpTransmissionCountByVendor);
-        getdataBarChart(wpTransmissionCountByVendor);
+        getDataBarChart(wpTransmissionCountByVendor);
         wpTransmissionCountByVendor.forEach((organization) => {
           sumTotalTransmissions(organization?.monthCounts);
         });
@@ -347,8 +357,7 @@ const VisualizationsPage = () => {
     }
   }, [transmissionVendorData, isLoadingTransmissionVendor]);
 
-  // eslint-disable-next-line react/no-unstable-nested-components
-  const Custooltip = () => {
+  const customTooltip = () => {
     if (showTooltip) {
       const year = new Date().getFullYear();
       return (
@@ -397,7 +406,7 @@ const VisualizationsPage = () => {
             <YAxis />
             <Tooltip
               cursor={false}
-              content={<Custooltip />}
+              content={customTooltip()}
               position={{ x: tooltipPosition.x - 115, y: tooltipPosition.y - 50 }}
               wrapperStyle={{ pointeEvents: 'auto' }}
             />
@@ -408,7 +417,7 @@ const VisualizationsPage = () => {
                   key={`${s}-${i}`}
                   dataKey={s}
                   stackId="a"
-                  fill={colors[i]}
+                  fill={COLORS[i]}
                   onMouseOver={(data) => {
                     customMouseOverBarchart(data, subClients[i], s)
                   }}
@@ -442,7 +451,7 @@ const VisualizationsPage = () => {
           />
           <Tooltip
             cursor={false}
-            content={<Custooltip />}
+            content={customTooltip()}
             position={{ x: tooltipPosition.x - 98, y: tooltipPosition.y - 88 }}
             wrapperStyle={{ pointeEvents: 'auto' }}
           />
@@ -477,7 +486,7 @@ const VisualizationsPage = () => {
         <Container>
           <Row>
             <Column lg="6" direction="row">
-              <StyledTransnmissionsType
+              <StyledTransmissionsType
                 dropdownWidth="auto"
                 label=""
                 defaultSelectedKey="sponsor"
@@ -493,7 +502,7 @@ const VisualizationsPage = () => {
               />
             </Column>
             <Column lg="6" right>
-              <StyledTransnmissionsType
+              <StyledTransmissionsType
                 label=""
                 defaultSelectedKey="linechart"
                 selectedKey={graphicType ? graphicType.key : undefined}
@@ -514,7 +523,7 @@ const VisualizationsPage = () => {
               <StyledTotal
                 horizontal={true}
                 horizontalAlign="center"
-                linechart={graphicType?.key !== 'barchart'}
+                lineChart={graphicType?.key !== 'barchart'}
               >
                 {months.map((month, monthIndex) => (
                   <Spacing padding={{ left: 'double' }} key={monthIndex}>
@@ -528,14 +537,20 @@ const VisualizationsPage = () => {
                       <div>
                         {monthIndex > monthIncurrent ? (
                           <Text
-                            style={{ color: theme.colors.neutralPrimary, fontWeight: 500 }}
+                            style={{
+                              color: ThemeStore.userTheme.colors.neutralPrimary,
+                              fontWeight: 500,
+                            }}
                           >
                             {month}
                           </Text>
 
                         ) : (
                           <Text
-                            style={{ color: theme.colors.neutralTertiary, fontWeight: 500 }}
+                            style={{
+                              color: ThemeStore.userTheme.colors.neutralTertiary,
+                              fontWeight: 500,
+                            }}
                           >
                             {month}
                           </Text>
@@ -552,8 +567,8 @@ const VisualizationsPage = () => {
               <StyledTotal
                 horizontal={true}
                 horizontalAlign="center"
-                backGround={true}
-                linechart={graphicType?.key !== 'barchart'}
+                background={true}
+                lineChart={graphicType?.key !== 'barchart'}
               >
                 <span style={{ position: 'absolute', left: '35px', fontWeight: 500 }}>Totals</span>
                 {countMonth.map((count, countIndex) => (
@@ -585,7 +600,7 @@ const VisualizationsPage = () => {
                           setSelectAll(false);
                           currentTotalTransmissions(subC, isChecked);
                         }}
-                        color={colors[subCIndex]}
+                        color={COLORS[subCIndex]}
                       />
                     )}
                   </div>
