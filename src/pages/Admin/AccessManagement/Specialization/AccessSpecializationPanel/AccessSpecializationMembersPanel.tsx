@@ -5,6 +5,7 @@ import {
   ActiveEnum,
   useAccessPolicyGroupsForOrgLazyQuery,
   useAccessPolicyGroupTemplatesLazyQuery,
+  PaginationInfo,
 } from 'src/data/services/graphql';
 import {
   DetailsList,
@@ -18,6 +19,7 @@ import { PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { ButtonLink } from 'src/components/buttons';
 import { UpdateUserPanel, useUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers';
+import { Paginator } from 'src/components/tables/Paginator';
 import { useUsersLists } from 'src/pages/Admin/Users/useUsersList';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { AccessPolicyGroupPanel } from '../../Groups/AccessPolicyGroup';
@@ -56,6 +58,12 @@ const AccessSpecializationMembersPanel = ({
       error: errorSpecializationMembers,
     },
   ] = useAccessSpecializationMembersLazyQuery();
+  const [pagingInfo, setPagingInfo] = useState<PaginationInfo>({
+    pageNumber: 0,
+    pageSize: 100,
+    totalElements: 0,
+    totalPages: 0,
+  });
   const handleError = ErrorHandler();
 
   useEffect(() => {
@@ -91,6 +99,11 @@ const AccessSpecializationMembersPanel = ({
   useEffect(() => {
     if (!isLoadingSpecializationMembers && specializationMembersData) {
       setMembers(specializationMembersData.accessSpecializationMembers?.nodes);
+
+      const newPaginInfo = specializationMembersData.accessSpecializationMembers?.paginationInfo;
+      if (newPaginInfo) {
+        setPagingInfo(newPaginInfo);
+      }
     }
   }, [specializationMembersData, isLoadingSpecializationMembers]);
 
@@ -103,6 +116,15 @@ const AccessSpecializationMembersPanel = ({
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableFilters.searchText.delayedValue]);
+
+  const onPageChange = (pageNumber: number) => {
+    tableFilters.pagingParams.pageNumber = pageNumber;
+    tableFilters.setPagingParams({
+      pageNumber,
+      pageSize: 100,
+      sort: tableFilters.pagingParams.sort,
+    });
+  };
 
   const onRenderItemColumn = (item: AccessMember, index?: number, column?: IColumn) => {
     let columnVal: string | undefined;
@@ -161,14 +183,17 @@ const AccessSpecializationMembersPanel = ({
   );
 
   const renderBody = () => (
-    <DetailsList
-      items={members ?? []}
-      selectionMode={SelectionMode.none}
-      columns={columns}
-      layoutMode={DetailsListLayoutMode.justified}
-      onRenderItemColumn={onRenderItemColumn}
-      isHeaderVisible
-    />
+    <>
+      <DetailsList
+        items={members ?? []}
+        selectionMode={SelectionMode.none}
+        columns={columns}
+        layoutMode={DetailsListLayoutMode.justified}
+        onRenderItemColumn={onRenderItemColumn}
+        isHeaderVisible
+      />
+      <Paginator id="__Paginator" pagingInfo={pagingInfo} onPageChange={onPageChange} />
+    </>
   );
 
   return (
