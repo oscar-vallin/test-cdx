@@ -23,7 +23,15 @@ type ChartDonutProps = {
   onClickSlice?: (key: string) => void;
 };
 
-const COLORS = ['#0088FE', '#D0D0D0', '#FFAAAA', '#AADD00', '#EEAA00', '#DDCCFF', '#00AAAA'];
+const COLORS = [
+  '#0088FE',
+  '#D0D0D0',
+  '#FFAAAA',
+  '#AADD00',
+  '#EEAA00',
+  '#DDCCFF',
+  '#00AAAA',
+];
 
 const ChartDonut = ({
   id, label, size = 50, data, totalRecords, onClickSlice,

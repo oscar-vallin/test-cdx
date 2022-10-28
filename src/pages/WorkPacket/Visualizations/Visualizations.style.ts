@@ -17,7 +17,7 @@ export const StyledTooltip = styled.div`
     pointer-events: auto;
     width: 200px;
     height: 80px;
-    background-color: rgb(254, 254, 254);
+    background-color: ${(({ theme }) => theme.colors.white)};
     padding: 15px 2px;
     box-shadow: rgb(0 0 0 / 13%) 0px 3.2px 7.2px 0px, rgb(0 0 0 / 11%) 0px 0.6px 1.8px 0px;
     text-align: center;
@@ -29,25 +29,25 @@ export const StyledTooltip = styled.div`
 `;
 
 export const StyledTotal = styled(Stack)<StyledTotalProps>`
-  width: ${(({ linechart }) => (linechart ? '93%' : '90%'))};
+  width: ${(({ lineChart }) => (lineChart ? '93%' : '90%'))};
   text-align: center;
-  padding: ${(({ backGround }) => (backGround ? '7px 0' : null))};
-  padding-left: ${(({ linechart }) => (linechart ? '15px' : '50px'))};
-  padding-right: ${(({ linechart }) => (linechart ? '40px' : '45px'))};
-  background-color: ${(({ backGround }) => (backGround ? '#f3f2f1' : null))};
+  padding: ${(({ background }) => (background ? '7px 0' : null))};
+  padding-left: ${(({ lineChart }) => (lineChart ? '15px' : '50px'))};
+  padding-right: ${(({ lineChart }) => (lineChart ? '40px' : '45px'))};
+  background-color: ${(({ background, theme }) => (background ? theme.colors.neutralLighter : null))};
 
   span {
-    font-weight: ${(({ backGround }) => (backGround ? 500 : null))};
+    font-weight: ${(({ background }) => (background ? 500 : null))};
     ;
   }
 `;
 
 type StyledTotalProps = {
-  backGround?: boolean;
-  linechart?: boolean;
+  background?: boolean;
+  lineChart?: boolean;
 };
 
-export const StyledTransnmissionsType = styled(Dropdown)`
+export const StyledTransmissionsType = styled(Dropdown)`
 .ms-Dropdown {
   background-color: ${({ theme }) => theme.colors.white};
   border-color: ${({ theme }) => theme.colors.white};
