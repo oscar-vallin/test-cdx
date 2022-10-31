@@ -27,6 +27,7 @@ import {
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { InfoIcon } from 'src/components/badges/InfoIcon';
 import { format } from 'date-fns';
+import { ShowForMobile } from 'src/styles/GlobalStyles';
 import { Required } from 'src/components/labels/FormLabel/FormLabel.styles';
 import { LabelValue } from 'src/components/labels/LabelValue';
 import { ArchivesTab } from 'src/pages/FileStatusDetails/ArchivesTab/ArchivesTab';
@@ -46,7 +47,7 @@ import EnrollmentStatsTab from './EnrollmentStatsTab/EnrollmentStatsTab';
 import VendorCountStatsTab from './VendorCountStatsTab/VendorCountStatsTab';
 import { WorkPacketCommandButton } from './WorkPacketCommandButton';
 import {
-  FileMetaDetails, FileTitle, PanelFooter, ShadowBox,
+  FileMetaDetails, FileTitle, HeaderStack, PanelFooter, ShadowBox,
 } from './FileStatusDetails.styles';
 import { UseFileStatusDetailsPanel } from './useFileStatusDetailsPanel';
 import { useFileStatusDetailsPoll } from './useFileStatusDetailsPoll';
@@ -369,12 +370,11 @@ const FileStatusDetailsPanel = (
   const renderPanelHeader = () => (
     <PanelHeader id="__FileStatusDetails_PanelHeader">
       <Column lg="12">
-        <Stack
+        <HeaderStack
           horizontal={true}
           wrap={true}
           grow
           tokens={{ childrenGap: 10 }}
-          styles={{ root: { height: 44, marginLeft: '25px' } }}
         >
           <Stack.Item align="center">
             <FileTitle>{packet?.inboundFilename ?? packet?.workOrderId}</FileTitle>
@@ -389,14 +389,14 @@ const FileStatusDetailsPanel = (
               ariaLabel="Copy a link to this File Status Details"
             />
           </Stack.Item>
-          <Stack.Item align="center">
+          <Stack.Item align="center" className="hide-for-mobile">
             <Badge
               variant={getBadgeVariant(packet?.packetStatus)}
               label={packet?.packetStatus}
               pill
             />
           </Stack.Item>
-          <Stack.Item align="center">
+          <Stack.Item align="center" className="hide-for-mobile">
             <Badge variant="info" label={`Billing Units: ${packet?.populationCount ?? 'none'}`} pill />
             {packet?.suppressBilling && (
               <>
@@ -405,10 +405,10 @@ const FileStatusDetailsPanel = (
               </>
             )}
           </Stack.Item>
-          <Stack.Item align="center" grow>
+          <Stack.Item align="center" grow className="hide-for-mobile">
             <Text variant="muted">{renderReceivedDate()}</Text>
           </Stack.Item>
-        </Stack>
+        </HeaderStack>
       </Column>
     </PanelHeader>
   );
@@ -417,6 +417,25 @@ const FileStatusDetailsPanel = (
     <ShadowBox id="__FileMeta">
       <FileMetaDetails>
         <Stack horizontal={true} wrap={true} tokens={{ childrenGap: 15 }} grow={true}>
+          <Stack.Item className="show-for-mobile">
+            <Badge
+              variant={getBadgeVariant(packet?.packetStatus)}
+              label={packet?.packetStatus}
+              pill
+            />
+          </Stack.Item>
+          <Stack.Item className="show-for-mobile">
+            <Badge variant="info" label={`Billing Units: ${packet?.populationCount ?? 'none'}`} pill />
+            {packet?.suppressBilling && (
+              <>
+                <Required>*</Required>
+                <InfoIcon id="billingUnitInfo" tooltip="This exchange was not billed" />
+              </>
+            )}
+          </Stack.Item>
+          <Stack.Item className="show-for-mobile">
+            <Text variant="muted">{renderReceivedDate()}</Text>
+          </Stack.Item>
           <Stack.Item grow={1}>
             <LabelValue label="Vendor" value={packet?.vendorId} />
             <LabelValue label="Plan Sponsor" value={packet?.orgId} />

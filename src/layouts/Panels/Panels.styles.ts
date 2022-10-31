@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Text } from 'src/components/typography/Text';
 import { Panel } from '@fluentui/react';
+import { device } from 'src/styles/GlobalStyles';
 
 export const PanelTitle = styled(Text)`
   position: absolute;
@@ -47,5 +48,21 @@ export const ThemedPanel = styled(Panel)`
   }
   .ms-Overlay {
     cursor: auto;
+  }
+  .ms-Panel-content {
+    padding-left: 0;
+    padding-right: 0;
+    
+    @media ${device.tablet} {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+  }
+  .ms-CommandBar {
+    padding: 0;
+    
+    @media ${device.tablet} {
+      padding: 0px 14px 0px 24px;
+    }
   }
 `;

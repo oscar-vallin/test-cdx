@@ -52,6 +52,22 @@ export const ThemeContextProvider = ({ children }) => {
         display: inline-block;
       }
     }
+            
+    div.ms-StackItem.hide-for-mobile {
+      display: none;
+
+      @media ${device.tablet} {
+        display: block;
+      }      
+    }
+    
+    div.ms-StackItem.show-for-mobile {
+      display: block;
+
+      @media ${device.tablet} {
+        display: none;
+      }      
+    }
   `;
 
   type GlobalStyleProps = {

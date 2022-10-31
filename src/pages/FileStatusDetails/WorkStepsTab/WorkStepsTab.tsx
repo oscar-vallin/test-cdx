@@ -3,7 +3,6 @@
 import { ReactElement, useEffect, useState } from 'react';
 
 import { Row, Column } from 'src/components/layouts';
-import { Spacing } from 'src/components/spacings/Spacing';
 import { Timeline } from 'src/components/timelines/Timeline';
 import {
   GqOperationResponse,
@@ -12,6 +11,7 @@ import {
 } from 'src/data/services/graphql';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { useNotification } from 'src/hooks/useNotification';
+import { TabBody } from '../FileStatusDetails.styles';
 
 type WorkStepsTabProps = {
   packet?: WorkPacketStatusDetails;
@@ -55,13 +55,13 @@ const WorkStepsTab = ({ packet }: WorkStepsTabProps): ReactElement => {
   };
 
   return (
-    <Spacing padding="normal">
+    <TabBody>
       <Row>
         <Column xl={3}>
           <Timeline packet={packet} activeIndex={activeIndex} onClick={setActiveIndex} onRedo={onRedo} />
         </Column>
       </Row>
-    </Spacing>
+    </TabBody>
   );
 };
 
