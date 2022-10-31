@@ -10,7 +10,12 @@ import {
   Stack,
   Text,
 } from '@fluentui/react';
-import { useXchangeJobGroupsLazyQuery, XchangeJobGroupConnection, XchangeJobGroup } from 'src/data/services/graphql';
+import {
+  useXchangeJobGroupsLazyQuery,
+  XchangeJobGroup,
+  WebCommand,
+  CdxWebCommandType,
+} from 'src/data/services/graphql';
 import { Container, Row, Column } from 'src/components/layouts'
 import { PageTitle } from 'src/components/typography'
 import { PageHeader } from 'src/containers/headers/PageHeader'
@@ -24,8 +29,8 @@ import { SchedulePanel } from '../SchedulePanel';
 
 const JobGroups = () => {
   const { orgSid } = useOrgSid();
-  const [xchangeJobGroups, setXchangeJobGroups] = useState<XchangeJobGroupConnection | null>();
   const [nodesJobGroups, setNodesjobGroups] = useState<XchangeJobGroup[] | null>([]);
+  const [createCmd, setCreateCmd] = useState<WebCommand | null>();
   const [isOpenPanel, setIsOpenPanel] = useState(false);
   const [refreshJobGroupPage, setRefreshJobGroup] = useState(false);
   const [currentSid, setCurrentSid] = useState('');
@@ -49,8 +54,14 @@ const JobGroups = () => {
 
   useEffect(() => {
     if (!isLoadingJobGroups && jobGroupsData) {
-      setXchangeJobGroups(jobGroupsData.xchangeJobGroups);
-      setNodesjobGroups(jobGroupsData.xchangeJobGroups?.nodes ?? []);
+      const { xchangeJobGroups } = jobGroupsData;
+      setNodesjobGroups(xchangeJobGroups?.nodes ?? []);
+
+      if (xchangeJobGroups?.listPageInfo?.pageCommands) {
+        const pageCommands = xchangeJobGroups?.listPageInfo?.pageCommands;
+        const _createCmd = pageCommands.find((cmd) => cmd.commandType === CdxWebCommandType.Create);
+        setCreateCmd(_createCmd);
+      }
     }
   }, [jobGroupsData, isLoadingJobGroups]);
 
@@ -168,7 +179,7 @@ const JobGroups = () => {
               <PageTitle id="__Page_Title_Xchange_JobGroups" title="Xchange Job Groups" />
             </Column>
             <Column lg="6" right>
-              {renderCreateButton()}
+              {createCmd && renderCreateButton()}
             </Column>
           </Row>
           {renderBody()}

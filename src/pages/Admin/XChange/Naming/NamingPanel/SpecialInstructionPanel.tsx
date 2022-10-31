@@ -15,7 +15,7 @@ type SpecialInstructionProps = {
     sid: string,
     onCount: (data: number) => void;
     specialInstruction?: string,
-    hideIcon: (data: number | null) => void;
+    hideIcon: (data: string | null) => void;
     refreshNamingPage: (data: boolean) => void;
 };
 
@@ -57,7 +57,7 @@ const SpecialInstructionPanel = ({
     <PanelHeader id="__SpecialInstruction_PanelHeader">
       <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
         <PanelTitle id="__SpecialInstruction_Panel_Title" variant="bold" size="large">
-          Add special instruction
+          {specialInstruction?.trim() === '' ? 'Add' : 'Update'} special instruction
         </PanelTitle>
       </Stack>
     </PanelHeader>

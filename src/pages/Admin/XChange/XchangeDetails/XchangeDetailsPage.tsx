@@ -28,6 +28,7 @@ import {
   SpinnerSize,
   Stack,
   Text,
+  TextField,
   TooltipHost,
 } from '@fluentui/react';
 import { useNotification } from 'src/hooks/useNotification';
@@ -85,6 +86,7 @@ const XchangeDetailsPage = () => {
   const [allowedCommands, setAllowedCommands] = useState(false);
   const [refreshXchangeDetails, setRefreshXchangeDetails] = useState(false);
   const [comments, setComments] = useState('');
+  const [commands, setCommands] = useState<WebCommand[] | null>([]);
   const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
   const [openUpdateComments, setOpenUpdateComments] = useState(false);
   const [closeTooltipHost, setCloseTooltipHost] = useState(true);
@@ -215,9 +217,9 @@ const XchangeDetailsPage = () => {
     return null;
   };
 
-  const userPermissionsIcons = (commands: WebCommand[], currentSid: string) => {
-    const _updateCmd = commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
-    const _deleteCmd = commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Delete);
+  const userPermissionsIcons = (cmds: WebCommand[], currentSid: string) => {
+    const _updateCmd = cmds?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
+    const _deleteCmd = cmds?.find((cmd) => cmd?.commandType === CdxWebCommandType.Delete);
 
     return (
       <>
@@ -455,8 +457,9 @@ const XchangeDetailsPage = () => {
         setUpdateCmd(_updateCmd);
       }
 
-      if (xchangeConfig.commands && xchangeConfig.commands.length > 0) {
+      if (xchangeConfig.commands) {
         setAllowedCommands(true);
+        setCommands(xchangeConfig.commands);
       }
 
       if (xchangeConfig.schedule) {
@@ -538,6 +541,7 @@ const XchangeDetailsPage = () => {
           refreshDetailsPage={setRefreshXchangeDetails}
           xchangeFileProcessSid={xchangeFileProcessSid ?? ''}
           allowedCommands={allowedCommands}
+          commands={commands}
         />
       );
     }
@@ -583,23 +587,39 @@ const XchangeDetailsPage = () => {
       );
     }
 
-    const updatingComments = () => (
-      <UIInputTextArea
-        id="FileTransmissionComment"
-        uiField={detailsData?.xchangeConfig?.comments}
-        value={comments}
-        onChange={(event, newValue: any) => {
-          setComments(newValue ?? '');
-        }}
-        resizable={false}
-        rows={12}
-      />
-    );
+    const updatingComments = () => {
+      if (!updateCmd) {
+        return (
+          <TextField
+            id="FileTransmissionComment"
+            readOnly
+            value={comments}
+            label="Comments"
+            resizable={false}
+            multiline
+            rows={12}
+          />
+        )
+      }
+
+      return (
+        <UIInputTextArea
+          id="FileTransmissionComment"
+          uiField={detailsData?.xchangeConfig?.comments}
+          value={comments}
+          onChange={(event, newValue: any) => {
+            setComments(newValue ?? '');
+          }}
+          resizable={false}
+          rows={12}
+        />
+      )
+    };
 
     if (openUpdateComments) {
       return (
         <TooltipHost
-          directionalHintForRTL={DirectionalHint['bottomAutoEdge']}
+          directionalHintForRTL={DirectionalHint['bottomCenter']}
           closeDelay={5000000}
           style={{ background: ThemeStore.userTheme.colors.yellow, width: '400px', padding: '0 10px 10px 10px' }}
           tooltipProps={{
@@ -628,9 +648,7 @@ const XchangeDetailsPage = () => {
             <Column lg="6">
               <Stack horizontal={true} horizontalAlign="space-between">
                 <PageTitle id="__Page__Title__Details" title="Xchange Details" />
-                {updateCmd && (
-                  <div ref={wrapperRef}>{!detailsLoading && tooltipHostComments()}</div>
-                )}
+                <div ref={wrapperRef}>{!detailsLoading && tooltipHostComments()}</div>
               </Stack>
             </Column>
             <Column lg="6" right>

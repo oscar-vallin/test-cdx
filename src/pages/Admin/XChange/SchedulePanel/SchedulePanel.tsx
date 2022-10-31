@@ -19,6 +19,8 @@ import {
   UiOptions,
   GqOperationResponse,
   XchangeJobGroupConnection,
+  WebCommand,
+  CdxWebCommandType,
 } from 'src/data/services/graphql';
 import {
   PanelBody,
@@ -140,6 +142,7 @@ const SchedulePanel = ({
   const [days, setDays] = useState<DayOfWeek[]>([]);
   const [months, setMonths] = useState<Month[]>([]);
   const [jobGroupName, setJobGroupName] = useState('')
+  const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
   const [everyMonth, setEveryMonth] = useState<UiOption[]>([]);
   const [everyDay, setEveryDay] = useState<UiOption[]>([]);
   const [totalSubscribers, setTotalSubscribers] = useState<SubscriberOptionProps[]>([]);
@@ -297,6 +300,7 @@ const SchedulePanel = ({
   useEffect(() => {
     if (!isLoadingJobGroup && jobGroupData) {
       const { xchangeJobGroupForm } = jobGroupData;
+      console.log(xchangeJobGroupForm)
       setXchangeJobGroup(xchangeJobGroupForm);
       setOptions(xchangeJobGroupForm?.options ?? []);
       xchangeJobGroupForm?.months.value?.forEach((month) => {
@@ -318,6 +322,12 @@ const SchedulePanel = ({
       const daysValues = xchangeJobGroupForm?.options?.find((d) => d.key === 'DayOfWeek');
       setEveryMonth(monthsValues?.values ?? []);
       setEveryDay(daysValues?.values ?? []);
+
+      if (xchangeJobGroupForm?.commands) {
+        const pageCommands = xchangeJobGroupForm.commands;
+        const _updateCmd = pageCommands.find((cmd) => cmd.commandType === CdxWebCommandType.Update);
+        setUpdateCmd(_updateCmd);
+      }
     }
   }, [jobGroupData, isLoadingJobGroup]);
 
@@ -920,11 +930,28 @@ const SchedulePanel = ({
     </PanelHeader>
   );
 
-  const renderPanelFooter = () => (
-    <>
+  const renderSaveButton = () => {
+    if (xchangeJobGroup) {
+      if (xchangeJobGroup.sid && !updateCmd) {
+        return null;
+      }
+      return (
+        <PrimaryButton style={{ marginLeft: '20px' }} id="__Schedule_Button" onClick={saveSchedule}>
+          Save
+        </PrimaryButton>
+      );
+    }
+
+    return (
       <PrimaryButton style={{ marginLeft: '20px' }} id="__Schedule_Button" onClick={saveSchedule}>
         Save
       </PrimaryButton>
+    );
+  }
+
+  const renderPanelFooter = () => (
+    <>
+      {renderSaveButton()}
       {!schedule && xchangeConfigSid && (
         <DefaultButton
           style={{ marginLeft: '20px' }}

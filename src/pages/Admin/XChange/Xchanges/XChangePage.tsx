@@ -179,6 +179,7 @@ const XChangePage = () => {
     currentCorefilename: string,
   ) => {
     const updatedDialog = { ...defaultDialogProps };
+    updatedDialog.title = `${currentstatus ? 'Deactivate' : 'Activate'} Xchange`
     updatedDialog.message = `Are you sure you want to ${currentstatus ? 'deactivate' : 'activate'} this Xchange ${currentCorefilename}?`;
 
     updatedDialog.onYes = () => {
