@@ -85,13 +85,20 @@ const XchangeStepPanel = ({
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
 
-  const [xchangeStepForm, { data: dataAddStep, loading: loadingAddStep }] = useQueryHandler(useXchangeStepFormLazyQuery);
+  const [xchangeStepForm,
+    { data: dataAddStep, loading: loadingAddStep }] = useQueryHandler(useXchangeStepFormLazyQuery);
 
-  const [xchangeCopyStepForm, { data: dataCopyStep, loading: loadingCopyStep }] = useQueryHandler(useCopyXchangeStepLazyQuery);
+  const [xchangeCopyStepForm,
+    { data: dataCopyStep, loading: loadingCopyStep },
+  ] = useQueryHandler(useCopyXchangeStepLazyQuery);
 
-  const [updateXchangeStep, { data: dataUpdateStep, loading: loadingUpdateXchange, error: errorUpdateXchange }] = useQueryHandler(useUpdateXchangeStepMutation);
+  const [updateXchangeStep,
+    { data: dataUpdateStep, loading: loadingUpdateXchange, error: errorUpdateXchange },
+  ] = useQueryHandler(useUpdateXchangeStepMutation);
 
-  const [createXchangeStep, { data: dataCreateStep, loading: loadingCreateStep, error: errorCreateStep }] = useQueryHandler(useCreateXchangeStepMutation);
+  const [createXchangeStep,
+    { data: dataCreateStep, loading: loadingCreateStep, error: errorCreateStep },
+  ] = useQueryHandler(useCreateXchangeStepMutation);
 
   const getxmlData = () => {
     if (isPanelOpen) {
@@ -195,7 +202,30 @@ const XchangeStepPanel = ({
       );
     }
 
-    if (updateCmd || createCmd) {
+    if (optionXchangeStep === 'add' && createCmd) {
+      return (
+        <PanelBody>
+          <WizardBody>
+            <CodeMirror
+              height="400px"
+              style={{ border: '1px solid gray', fontWeight: 'bold', fontSize: '14px' }}
+              theme={myTheme}
+              basicSetup={setupOption}
+              extensions={[javascript({ jsx: true })]}
+              value={editXmlData ?? ''}
+              onChange={(value) => setEditXmlData(value)}
+            />
+          </WizardBody>
+          <WizardButtonRow>
+            <PrimaryButton id="__Xchange_AddStep_Button" iconProps={{ iconName: 'Save' }} onClick={saveStep}>
+              Save
+            </PrimaryButton>
+          </WizardButtonRow>
+        </PanelBody>
+      )
+    }
+
+    if (editXmlData) {
       return (
         <PanelBody>
           <WizardBody>
@@ -223,6 +253,7 @@ const XchangeStepPanel = ({
                 height="400px"
                 style={{ border: '1px solid gray', fontWeight: 'bold', fontSize: '14px' }}
                 theme={myTheme}
+                readOnly={!updateCmd}
                 basicSetup={setupOption}
                 extensions={[javascript({ jsx: true })]}
                 value={editXmlData ?? ''}
@@ -230,7 +261,7 @@ const XchangeStepPanel = ({
               />
             </>
           </WizardBody>
-          {(updateCmd || createCmd) && (
+          {(updateCmd) && (
             <WizardButtonRow>
               <PrimaryButton id="__Xchange_AddStep_Button" iconProps={{ iconName: 'Save' }} onClick={saveStep}>
                 Save
