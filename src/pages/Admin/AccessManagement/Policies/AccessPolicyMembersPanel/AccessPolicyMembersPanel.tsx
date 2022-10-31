@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import {
   DetailsList,
   DetailsListLayoutMode,
+  DirectionalHint,
   IColumn,
   PanelType,
   SelectionMode,
   Stack,
+  TooltipHost,
 } from '@fluentui/react';
 import { PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
 import {
@@ -20,9 +22,11 @@ import {
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useUsersLists } from 'src/pages/Admin/Users/useUsersList';
 import { ButtonLink } from 'src/components/buttons';
+import { PresenceBlocked16Regular } from '@fluentui/react-icons';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { UpdateUserPanel, useUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers';
 import { Paginator } from 'src/components/tables/Paginator';
+import { theme } from 'src/styles/themes/theme';
 import { AccessPolicyGroupPanel } from '../../Groups/AccessPolicyGroup';
 import { MembersList } from '../../MembersList/MembersList';
 
@@ -135,6 +139,17 @@ const AccessPolicyMembersPanel = ({
       columnVal = item.accessPolicyGroups ? item.accessPolicyGroups[0].name : '';
     }
 
+    const inactiveUser = (status: boolean) => {
+      if (!status) {
+        return (
+          <TooltipHost content="Inactive" directionalHintForRTL={DirectionalHint['bottomCenter']}>
+            <PresenceBlocked16Regular style={{ cursor: 'pointer', color: theme.colors.neutralQuaternary }} />
+          </TooltipHost>
+        )
+      }
+      return null;
+    };
+
     if (column?.key === 'accessPolicyGroups') {
       return (
         <ButtonLink
@@ -158,13 +173,16 @@ const AccessPolicyMembersPanel = ({
     }
 
     return (
-      <ButtonLink
-        style={{ overflow: 'hidden' }}
-        title={columnVal}
-        onClick={() => updateUserPanel.showPanel(item.userAccountSid)}
-      >
-        {columnVal}
-      </ButtonLink>
+      <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
+        <ButtonLink
+          style={{ overflow: 'hidden' }}
+          title={columnVal}
+          onClick={() => updateUserPanel.showPanel(item.userAccountSid)}
+        >
+          {columnVal}
+        </ButtonLink>
+        {column?.key === 'email' && inactiveUser(item.active)}
+      </Stack>
     );
   };
 
