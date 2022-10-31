@@ -50,6 +50,18 @@ const COLUMNS: IColumn[] = [
   },
 ].map((col) => ({ ...col, data: 'string', isPadded: true }));
 
+const errorColors = [
+  '#FA8072',
+  '#FF2400',
+  '#7C0A02',
+  '#ED2939',
+  '#CD5C5C',
+  '#C21807',
+  '#E0115F',
+  '#B22222',
+  '#960018',
+];
+
 type RowType = {
   status: string;
   employeeId?: string;
@@ -145,7 +157,11 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
     return data;
   };
 
-  const eventToRow = (status: string, recordEvent: RecordCreationEvent, fieldEvent: FieldCreationEvent): RowType => ({
+  const eventToRow = (
+    status: string,
+    recordEvent: RecordCreationEvent,
+    fieldEvent: FieldCreationEvent,
+  ): RowType => ({
     status,
     employeeId: recordEvent.unitId ?? '',
     employee: recordEvent.outerContext ?? '',
@@ -202,7 +218,8 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
         <>
           <Spacing margin={{ bottom: 'normal' }} />
           <MessageBar messageBarType={MessageBarType.warning}>
-            There are a large number of quality check messages. Not all messages are displayed here. Please click the
+            There are a large number of quality check messages.
+            Not all messages are displayed here. Please click the
             Download button to see the full list of quality check messages.
           </MessageBar>
         </>
@@ -312,7 +329,12 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
                       <DarkSeparator />
                     </Stack.Item>
                     <Stack.Item>
-                      <ChartDonut id="__Quality_Errors_Donut" size={70} data={errorData()} />
+                      <ChartDonut
+                        id="__Quality_Errors_Donut"
+                        size={70}
+                        data={errorData()}
+                        colorPalette={errorColors}
+                      />
                     </Stack.Item>
                   </Stack>
                 </Card>

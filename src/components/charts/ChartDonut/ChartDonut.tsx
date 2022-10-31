@@ -19,6 +19,7 @@ type ChartDonutProps = {
   label?: string;
   size?: number;
   data?: ChartDataType[];
+  colorPalette?: string[];
   totalRecords?: number;
   onClickSlice?: (key: string) => void;
 };
@@ -34,7 +35,7 @@ const COLORS = [
 ];
 
 const ChartDonut = ({
-  id, label, size = 50, data, totalRecords, onClickSlice,
+  id, label, size = 50, data, colorPalette = COLORS, totalRecords, onClickSlice,
 }: ChartDonutProps): ReactElement => {
   const ThemeStore = useThemeStore();
   const total = totalRecords ?? data?.reduce((sum, current) => sum + current.value, 0);
@@ -91,9 +92,9 @@ const ChartDonut = ({
   const calcCellColor = (index: number, chartData?: ChartDataType[]): string => {
     const dataLen = chartData?.length ?? 0;
     if (!chartData || dataLen === 0) {
-      return COLORS[0];
+      return colorPalette[0];
     }
-    return chartData[index % dataLen]?.color ?? COLORS[index % COLORS.length];
+    return chartData[index % dataLen]?.color ?? colorPalette[index % colorPalette.length];
   };
 
   return (
