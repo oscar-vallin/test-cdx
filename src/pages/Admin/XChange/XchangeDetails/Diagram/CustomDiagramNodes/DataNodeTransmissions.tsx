@@ -2,7 +2,11 @@ import React, { memo, useEffect, useState } from 'react';
 import {
   DirectionalHint, FontIcon, Stack, Text, TooltipHost,
 } from '@fluentui/react';
-import { useDeleteXchangeFileTransmissionMutation } from 'src/data/services/graphql';
+import {
+  CdxWebCommandType,
+  useDeleteXchangeFileTransmissionMutation,
+  WebCommand,
+} from 'src/data/services/graphql';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { Handle, Position } from 'react-flow-renderer';
 import { Container, Row } from 'src/components/layouts';
@@ -35,6 +39,7 @@ const DataNodeTransmissions = ({ data, id }) => {
     updateTransmission,
     xchangeFileProcessSid,
     refreshDetailsPage,
+    transmissionCommands,
   } = data;
 
   const Toast = useNotification();
@@ -42,10 +47,12 @@ const DataNodeTransmissions = ({ data, id }) => {
   const [openPanel, setOpenPanel] = useState(false);
   const [updateTransmissionPanel, setUpdateTransmissionPanel] = useState(false);
   const [optionXchangeTransmission, setOptionXchangeTransmission] = useState<string>();
+  const [addCmd, setAddCmd] = useState<WebCommand | null>();
+  const [deleteCmd, setDeleteCmd] = useState<WebCommand | null>();
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
 
-  const [deleteXchangeFileTransmission, 
+  const [deleteXchangeFileTransmission,
     { data: dataDelete, loading: loadingDelete },
   ] = useQueryHandler(
     useDeleteXchangeFileTransmissionMutation,
@@ -84,6 +91,15 @@ const DataNodeTransmissions = ({ data, id }) => {
     setShowDialog(true);
   };
 
+  const getCommands = () => {
+    const _copyTransm = transmissionCommands
+      ?.find((cmd) => cmd.endPoint === 'copyXchangeFileTransmission' && cmd.commandType === CdxWebCommandType.Add);
+    setAddCmd(_copyTransm);
+    const _deleteCmd = transmissionCommands
+      ?.find((cmd) => cmd.commandType === CdxWebCommandType.Delete);
+    setDeleteCmd(_deleteCmd);
+  };
+
   const renderHoverIcons = () => {
     if (showIcons) {
       return (
@@ -92,31 +108,35 @@ const DataNodeTransmissions = ({ data, id }) => {
             display: 'flex', position: 'absolute', bottom: 55, left: 180,
           }}
           >
-            <TooltipHost content="Copy Step">
-              <StyledCopyIcon
-                iconName="Copy"
-                onClick={() => {
-                  setOpenPanel(true);
-                  setOptionXchangeTransmission('copy');
-                }}
-              />
-            </TooltipHost>
+            {addCmd && (
+              <TooltipHost content="Copy Step">
+                <StyledCopyIcon
+                  iconName="Copy"
+                  onClick={() => {
+                    setOpenPanel(true);
+                    setOptionXchangeTransmission('copy');
+                  }}
+                />
+              </TooltipHost>
+            )}
           </div>
           <div style={{
             display: 'flex', position: 'absolute', bottom: 55, left: 210,
           }}
           >
-            <TooltipHost content="Delete" directionalHint={DirectionalHint['rightCenter']}>
-              <StyledTrashIcon
-                iconName="Trash"
-                onClick={() => {
-                  setShowDialog(true);
-                  setOpenPanel(false);
-                  setShowIcons(false);
-                  showUnsavedChangesDialog(host ?? '');
-                }}
-              />
-            </TooltipHost>
+            {deleteCmd && (
+              <TooltipHost content="Delete" directionalHint={DirectionalHint['rightCenter']}>
+                <StyledTrashIcon
+                  iconName="Trash"
+                  onClick={() => {
+                    setShowDialog(true);
+                    setOpenPanel(false);
+                    setShowIcons(false);
+                    showUnsavedChangesDialog(host ?? '');
+                  }}
+                />
+              </TooltipHost>
+            )}
           </div>
         </>
       );
@@ -169,7 +189,7 @@ const DataNodeTransmissions = ({ data, id }) => {
     return (
       <>
         {renderHoverIcons()}
-        <Handle type="target" id={id} position={Position['Top']} style={{ background: 'none', border: 'white' }}/>
+        <Handle type="target" id={id} position={Position['Top']} style={{ background: 'none', border: 'white' }} />
         <Container>
           <Row>
             <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
@@ -202,6 +222,10 @@ const DataNodeTransmissions = ({ data, id }) => {
       </>
     );
   };
+
+  useEffect(() => {
+    getCommands();
+  }, [transmissionCommands]);
 
   useEffect(() => {
     if (updateTransmissionPanel && !showDialog) {

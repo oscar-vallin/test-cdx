@@ -10,12 +10,15 @@ import {
   DiagramCoordinates,
   useMoveUpXchangeStepMutation,
   useMoveDownXchangeStepMutation,
+  WebCommand,
+  CdxWebCommandType,
 } from 'src/data/services/graphql';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { Container, Row } from 'src/components/layouts';
 import { useNotification } from 'src/hooks/useNotification';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { ButtonLink } from 'src/components/buttons';
+import { theme } from 'src/styles/themes/theme';
 import Node from './Node';
 import { StyledQualifier, StyledSubTitleText } from '../../XchangeDetailsPage.styles';
 import { XchangeStepPanel } from '../../XchangeStepPanel/XchangeStepPanel';
@@ -52,6 +55,7 @@ type DataProps = {
   updateStep: boolean;
   refreshDetailsPage: (data: boolean) => void;
   xchangeFileProcessSid?: string;
+  stepCommands: WebCommand[] | undefined;
 };
 
 type DataNodeProps = {
@@ -72,6 +76,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
     updateStep,
     refreshDetailsPage,
     xchangeFileProcessSid,
+    stepCommands,
   } = data;
 
   const Toast = useNotification();
@@ -81,6 +86,10 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
   const [hoverIcon, setHoverIcon] = useState(false);
   const [updateStepPanel, setUpdateStepPanel] = useState(false);
   const [optionXchangeStep, setOptionXchangeStep] = useState<string>();
+  const [addCmd, setAddCmd] = useState<WebCommand | null>();
+  const [deleteCmd, setDeleteCmd] = useState<WebCommand | null>();
+  const [updateMoveUpCmd, setUpdateMoveUpCmd] = useState<WebCommand | null>();
+  const [updateMoveDownCmd, setUpdateMoveDownCmd] = useState<WebCommand | null>();
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
 
@@ -114,7 +123,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
   }
 
   let width = '48px';
-  let color = 'blue';
+  let color = theme.colors.themePrimary;
 
   if (qualifier === 'StructErrors') {
     width = '75px';
@@ -130,13 +139,34 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
       || data.position.x === 1
       || ((sourceBottom === '1' || sourceBottom === '0') && data.label === 'Semantic Map')
     ) {
-      return <Handle type="source" id={id} position={Position['Bottom']} style={{ background: 'none', border: 'white' }} />;
+      return (
+        <Handle
+          type="source"
+          id={id}
+          position={Position['Bottom']}
+          style={{ background: 'none', border: theme.colors.white }}
+        />
+      );
     }
     if (index === 0) {
-      return <Handle type="source" id={id} position={Position['Bottom']} style={{ background: 'none', border: 'white' }} />;
+      return (
+        <Handle
+          type="source"
+          id={id}
+          position={Position['Bottom']}
+          style={{ background: 'none', border: theme.colors.white }}
+        />
+      );
     }
     if (index > 0) {
-      return <Handle type="source" id={id} position={Position['Left']} style={{ background: 'none', border: 'white' }} />;
+      return (
+        <Handle
+          type="source"
+          id={id}
+          position={Position['Left']}
+          style={{ background: 'none', border: theme.colors.white }}
+        />
+      )
     }
 
     return null;
@@ -167,6 +197,17 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
     setShowDialog(true);
   };
 
+  const getCommands = () => {
+    const _copyStep = stepCommands?.find((cmd) => cmd.endPoint === 'copyXchangeStep' && cmd.commandType === CdxWebCommandType.Add);
+    setAddCmd(_copyStep);
+    const _moveUp = stepCommands?.find((cmd) => cmd.endPoint === 'moveUpXchangeStep' && cmd.commandType === CdxWebCommandType.Update);
+    setUpdateMoveUpCmd(_moveUp);
+    const _moveDown = stepCommands?.find((cmd) => cmd.endPoint === 'moveDownXchangeStep' && cmd.commandType === CdxWebCommandType.Update);
+    setUpdateMoveDownCmd(_moveDown);
+    const _deleteCmd = stepCommands?.find((cmd) => cmd.commandType === CdxWebCommandType.Delete);
+    setDeleteCmd(_deleteCmd);
+  };
+
   const renderHoverIcons = () => {
     if (showIcons && hiddeIcon) {
       return (
@@ -175,6 +216,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
             display: 'flex', position: 'absolute', bottom: 55, left: 180,
           }}
           >
+            {addCmd && (
             <TooltipHost content="Copy Step">
               <StyledCopyIcon
                 iconName="Copy"
@@ -185,11 +227,13 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
                 }}
               />
             </TooltipHost>
+            )}
           </div>
           <div style={{
             display: 'flex', position: 'absolute', bottom: 55, left: 210,
           }}
           >
+            {deleteCmd && (
             <TooltipHost content="Delete">
               <StyledTrashIcon
                 iconName="Trash"
@@ -200,50 +244,55 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
                 }}
               />
             </TooltipHost>
+            )}
           </div>
           <div style={{ position: 'absolute', left: 251, bottom: 30 }}>
-            <TooltipHost content={index > 0 ? 'Move up' : ''}>
-              <StyledChevronUpIcon
-                aria-disabled={index === 0}
-                iconName="ChevronUp"
-                firstIndex={index === 0}
-                onClick={() => {
-                  setOpenPanel(false);
-                  setHiddeIcon(true);
-                  if (index > 0) {
-                    moveUpXchangeStep({
-                      variables: {
-                        xchangeFileProcessSid,
-                        sid,
-                      },
-                    });
-                  }
-                }}
-                onMouseMove={() => setHoverIcon(true)}
-              />
-            </TooltipHost>
+            {updateMoveUpCmd && (
+              <TooltipHost content={index > 0 ? 'Move up' : ''}>
+                <StyledChevronUpIcon
+                  aria-disabled={index === 0}
+                  iconName="ChevronUp"
+                  firstIndex={index === 0}
+                  onClick={() => {
+                    setOpenPanel(false);
+                    setHiddeIcon(true);
+                    if (index > 0) {
+                      moveUpXchangeStep({
+                        variables: {
+                          xchangeFileProcessSid,
+                          sid,
+                        },
+                      });
+                    }
+                  }}
+                  onMouseMove={() => setHoverIcon(true)}
+                />
+              </TooltipHost>
+            )}
           </div>
           <div style={{ position: 'absolute', left: 251, top: 30 }}>
-            <TooltipHost content={lastNode ? '' : 'Move down'} directionalHint={DirectionalHint['bottomCenter']}>
-              <StyledChevronDownIcon
-                aria-disabled={lastNode}
-                iconName="ChevronDown"
-                lastNode={lastNode}
-                onClick={() => {
-                  setOpenPanel(false);
-                  setHiddeIcon(true);
-                  if (!lastNode) {
-                    moveDownxchangeStep({
-                      variables: {
-                        xchangeFileProcessSid,
-                        sid,
-                      },
-                    });
-                  }
-                }}
-                onMouseMove={() => setHoverIcon(true)}
-              />
-            </TooltipHost>
+            {updateMoveDownCmd && (
+              <TooltipHost content={lastNode ? '' : 'Move down'} directionalHint={DirectionalHint['bottomCenter']}>
+                <StyledChevronDownIcon
+                  aria-disabled={lastNode}
+                  iconName="ChevronDown"
+                  lastNode={lastNode}
+                  onClick={() => {
+                    setOpenPanel(false);
+                    setHiddeIcon(true);
+                    if (!lastNode) {
+                      moveDownxchangeStep({
+                        variables: {
+                          xchangeFileProcessSid,
+                          sid,
+                        },
+                      });
+                    }
+                  }}
+                  onMouseMove={() => setHoverIcon(true)}
+                />
+              </TooltipHost>
+            )}
           </div>
         </>
       );
@@ -263,7 +312,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
               <BrainCircuit24Regular
                 aria-label="Brain"
                 style={{
-                  color: '#fff',
+                  color: theme.colors.white,
                   fontSize: '18px',
                   cursor: 'pointer',
                   width: '37px',
@@ -277,7 +326,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
             ) : (
               <FontIcon
                 style={{
-                  color: '#fff',
+                  color: theme.colors.white,
                   fontSize: '18px',
                   cursor: 'pointer',
                   width: '37px',
@@ -335,6 +384,10 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
       />
     </>
   );
+
+  useEffect(() => {
+    getCommands();
+  }, [stepCommands]);
 
   useEffect(() => {
     if (updateStepPanel && !showDialog && !hoverIcon) {

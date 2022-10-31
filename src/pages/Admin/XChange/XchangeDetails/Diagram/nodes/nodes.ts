@@ -80,6 +80,7 @@ export function InitialNodes(data) {
       updateStep: false,
       refreshDetailsPage: null,
       xchangeFileProcessSid: null,
+      stepCommads: null,
     };
     values['position'] = { x: positionX, y: positionY };
     return values;
@@ -101,6 +102,7 @@ export function InitialNodes(data) {
       protocol: transmission.protocol,
       host: transmission.host,
       qualifier: transmission.qualifier,
+      transmissionCommands: null,
     };
 
     values['position'] = { x: postionTransmissions[index]['x'], y: postionTransmissions[index]['y'] };

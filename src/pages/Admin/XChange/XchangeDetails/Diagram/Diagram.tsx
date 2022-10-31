@@ -3,7 +3,7 @@ import ReactFlow, {
   useNodesState, useEdgesState, addEdge, Connection, Edge,
 } from 'react-flow-renderer';
 import { Column, Container, Row } from 'src/components/layouts';
-import { XchangeDiagram } from 'src/data/services/graphql';
+import { WebCommand, XchangeDiagram } from 'src/data/services/graphql';
 import {
   StyledContainer, StyledHorizontalButtons, StyledText, StyledButtonAction,
 } from '../XchangeDetailsPage.styles';
@@ -24,11 +24,12 @@ type DiagramProps = {
   data: XchangeDiagram;
   refreshDetailsPage: (data: boolean) => void;
   xchangeFileProcessSid?: string;
+  commands: WebCommand[] | null;
   allowedCommands: boolean;
 };
 
 const Diagram = ({
-  data, refreshDetailsPage, xchangeFileProcessSid, allowedCommands,
+  data, refreshDetailsPage, xchangeFileProcessSid, allowedCommands, commands,
 }: DiagramProps) => {
   const { initialNodes } = InitialNodes(data);
   const { nodeWithParents } = NodeParent(initialNodes);
@@ -38,6 +39,8 @@ const Diagram = ({
 
   const [openStepPanel, setOpenStepPanel] = useState(false);
   const [openFilePanel, setOpenFilePanel] = useState(false);
+  const [stepCommands, setStepCommands] = useState<WebCommand[] | undefined>([]);
+  const [transmissionCommands, setTransmissionCommands] = useState<WebCommand[] | undefined>([]);
   const [optionXchangeStep, setOptionXchangeStep] = useState<string>();
   const [optionXchangeFileTransmission, setOptionXchangeFileTransmission] = useState<string>();
   const [showIcons, setShowIcons] = useState(false);
@@ -53,6 +56,7 @@ const Diagram = ({
           updateTransmission: true,
           refreshDetailsPage,
           xchangeFileProcessSid,
+          stepCommands,
         };
       }
       if (n.data.sid && n.data.index === node.data.index && node.type === 'dataNodeSteps') {
@@ -63,38 +67,12 @@ const Diagram = ({
           updateStep: true,
           refreshDetailsPage,
           xchangeFileProcessSid,
+          transmissionCommands,
         };
       }
       return n;
     }));
   };
-
-  // const showIconsEachNode = (event, node) => {
-  //   setNodes((nds) =>
-  //     nds.map((n) => {
-  //       if (node.type === 'dataNodeTransmissions' && n.data.sid && n.data.sid === node.data.sid) {
-  //         n.data = {
-  //           ...node.data,
-  //           hoverOverShowIcons: true,
-  //           updateTransmission: false,
-  //           refreshDetailsPage,
-  //           xchangeFileProcessSid,
-  //         };
-  //       }
-  //       if (n.data.sid && n.data.index === node.data.index && node.type === 'dataNodeSteps') {
-  //         n.data = {
-  //           ...node.data,
-  //           qualifier: node.data.qualifier,
-  //           hoverOverShowIcons: true,
-  //           updateStep: false,
-  //           refreshDetailsPage,
-  //           xchangeFileProcessSid,
-  //         };
-  //       }
-  //       return n;
-  //     })
-  //   );
-  // };
 
   const hideIcons = (event, node) => {
     setNodes((nds) => nds.map((n) => {
@@ -105,6 +83,7 @@ const Diagram = ({
           updateTransmission: false,
           refreshDetailsPage,
           xchangeFileProcessSid,
+          transmissionCommands,
         };
       }
       if (n.data.sid && n.data.index === node.data.index && node.type === 'dataNodeSteps') {
@@ -115,6 +94,7 @@ const Diagram = ({
           updateStep: false,
           refreshDetailsPage,
           xchangeFileProcessSid: null,
+          stepCommands,
         };
       }
       return n;
@@ -130,6 +110,7 @@ const Diagram = ({
           updateTransmission: false,
           refreshDetailsPage,
           xchangeFileProcessSid,
+          transmissionCommands,
         };
       }
       if (n.data.sid && n.data.index === node.data.index && node.type === 'dataNodeSteps') {
@@ -140,11 +121,30 @@ const Diagram = ({
           updateStep: false,
           refreshDetailsPage,
           xchangeFileProcessSid,
+          stepCommands,
         };
       }
       return n;
     }));
   };
+
+  const getCommands = () => {
+    commands?.forEach((cmd) => {
+      const step = cmd.endPoint?.slice(-4);
+      const transmission = cmd.endPoint?.slice(-12);
+
+      if (step === 'Step') {
+        setStepCommands((prevState) => prevState?.concat(cmd));
+      }
+      if (transmission === 'Transmission') {
+        setTransmissionCommands((prevState) => prevState?.concat(cmd))
+      }
+    })
+  };
+
+  useEffect(() => {
+    getCommands();
+  }, []);
 
   useEffect(() => {
     setNodes(nodeWithParents);
@@ -194,7 +194,6 @@ const Diagram = ({
               nodeTypes={nodeTypes}
               onNodeMouseLeave={hideIcons}
               onNodeMouseEnter={handleIcons}
-              // onNodeMouseMove={showIconsEachNode}
               onNodeClick={updateStep}
               zoomOnScroll={false}
               panOnScroll={false}
