@@ -20,7 +20,9 @@ import { ROUTE_XCHANGE_NAMING } from 'src/data/constants/RouteConstants';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import {
+  CdxWebCommandType,
   useXchangeNamingConventionsLazyQuery,
+  WebCommand,
   XchangeConfigNamingConvention,
 } from 'src/data/services/graphql';
 import { HideForMobile } from 'src/styles/GlobalStyles';
@@ -39,12 +41,13 @@ const NamingPage = () => {
   const ActiveDomainStore = useActiveDomainStore();
   const [conventions, setConventions] = useState<XchangeConfigNamingConvention[]>([]);
   const [searchConventions, setSearchConventions] = useState<string>('');
-  const [specialInstructionIcon, setSpecialInstructionIcon] = useState<number | null>(0);
+  const [specialInstructionIcon, setSpecialInstructionIcon] = useState<string | null>('');
   const [sid, setSid] = useState('');
   const [count, setCount] = useState(0);
   const [increaseDelay, setIncreasedelay] = useState<number | undefined>(0);
   const [delay, setDelay] = useState(false);
   const [specialInstruction, setSpecialInstruction] = useState('');
+  const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
   const [filterConventions, setFilterConventions] = useState<XchangeConfigNamingConvention[]>([]);
   const [refreshNamingPage, setRefreshNamingPage] = useState(false);
   const [isOpenConventionsPanel, setIsOpenConventionsPanel] = useState(false);
@@ -97,6 +100,12 @@ const NamingPage = () => {
   useEffect(() => {
     if (!isLoadingNaming && namingConventionsData) {
       setConventions(namingConventionsData.xchangeNamingConventions?.conventions ?? []);
+
+      if (namingConventionsData.xchangeNamingConventions?.commands) {
+        const pageCommands = namingConventionsData.xchangeNamingConventions?.commands;
+        const _updateCmd = pageCommands.find((cmd) => cmd.commandType === CdxWebCommandType.Update);
+        setUpdateCmd(_updateCmd);
+      }
     }
   }, [namingConventions, isLoadingNaming]);
 
@@ -118,6 +127,7 @@ const NamingPage = () => {
       </Spacing>
       <Text>{instruction}</Text>
       <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+        {updateCmd && (
         <ButtonLink onClick={() => {
           setSid(conventionSid);
           setSpecialInstruction(instruction);
@@ -126,6 +136,7 @@ const NamingPage = () => {
         }}
         >edit
         </ButtonLink>
+        )}
       </Spacing>
     </Spacing>
   );
@@ -147,10 +158,7 @@ const NamingPage = () => {
     } else if (column?.key === 'extractType') {
       columnVal = item.extractType ?? '';
     }
-    let index = 0;
-    if (itemIndex === 0 || itemIndex) {
-      index = itemIndex + 1;
-    }
+
     return (
       <Stack
         horizontal
@@ -158,7 +166,7 @@ const NamingPage = () => {
         tokens={{ childrenGap: 10 }}
         style={style}
       >
-        { column?.key === 'vendor' && index === specialInstructionIcon ? (
+        { column?.key === 'vendor' && item?.sid === specialInstructionIcon ? (
           <Stack.Item align="center" disableShrink>
             <Text ellipsis title={columnVal}>{columnVal}</Text>
             <div style={{
@@ -277,13 +285,13 @@ const NamingPage = () => {
     />
   );
 
-  const onItemInvoked = (item, itemIndex?: number) => {
-    let index = 0;
-    if (itemIndex === 0 || itemIndex) {
-      index = itemIndex + 1;
+  const onItemInvoked = (item) => {
+    if (!updateCmd) {
+      setSpecialInstructionIcon(null);
+      return;
     }
     if (count === 0) {
-      setSpecialInstructionIcon(index);
+      setSpecialInstructionIcon(item.sid);
     }
     setCount(0);
   };
