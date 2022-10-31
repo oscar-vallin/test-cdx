@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import {
-  DetailsList,
   DetailsListLayoutMode,
   IColumn,
   SearchBox,
@@ -32,7 +31,6 @@ import { Spacing } from 'src/components/spacings/Spacing';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { ThemeStore } from 'src/store/ThemeStore';
 import { DownloadLink } from 'src/containers/tables/WorkPacketTable.styles';
-import { theme } from 'src/styles/themes/theme';
 import { NamingConventionsPanel, WherePlaceExtractsPanel, SpecialInstructionPanel } from './NamingPanel';
 import { StyledNamingList } from './Naming.styles';
 
@@ -143,12 +141,8 @@ const NamingPage = () => {
 
   const onRenderItemColumn = (item, itemIndex?: number, column?: IColumn) => {
     let columnVal: string | undefined;
-    const style = {
-      background: '#fff',
-    }
     if (column?.key === 'vendor') {
       columnVal = item.vendor ?? '';
-      style.background = '#e1dfdd';
     } else if (column?.key === 'prodFilename') {
       columnVal = item.prodFilename ?? '';
     } else if (column?.key === 'testFilename') {
@@ -164,7 +158,6 @@ const NamingPage = () => {
         horizontal
         horizontalAlign="start"
         tokens={{ childrenGap: 10 }}
-        style={style}
       >
         { column?.key === 'vendor' && item?.sid === specialInstructionIcon ? (
           <Stack.Item align="center" disableShrink>
@@ -179,9 +172,8 @@ const NamingPage = () => {
               <TooltipHost content="Add special instruction">
                 <Notepad16Regular
                   style={{
-                    color: '#0078D4',
+                    color: ThemeStore.userTheme.colors.themePrimary,
                     cursor: 'pointer',
-                    background: theme.colors.neutralQuaternaryAlt,
                   }}
                   onClick={() => {
                     setSid(item.sid);
@@ -229,6 +221,7 @@ const NamingPage = () => {
       minWidth: 150,
       maxWidth: 200,
       flexGrow: 1,
+      className: 'vendor-name',
     },
     {
       name: 'Extract Type',
@@ -308,7 +301,7 @@ const NamingPage = () => {
     const conventionList = () => {
       if (filterConventions.length || searchConventions.trim() !== '') {
         return (
-          <DetailsList
+          <StyledNamingList
             items={filterConventions}
             columns={columns}
             selectionMode={SelectionMode.none}
@@ -329,7 +322,8 @@ const NamingPage = () => {
           onActiveItemChanged={onItemInvoked}
         />
       )
-    }
+    };
+
     return (
       <Stack>
         <Row>

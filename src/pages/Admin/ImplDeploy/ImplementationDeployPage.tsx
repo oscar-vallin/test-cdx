@@ -1,5 +1,10 @@
 import React, { memo, useEffect, useState } from 'react';
-import { Label, List } from '@fluentui/react';
+import {
+  Label,
+  List,
+  Spinner,
+  SpinnerSize,
+} from '@fluentui/react';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Column, Container } from 'src/components/layouts';
 import { PageTitle, Text } from 'src/components/typography';
@@ -89,6 +94,7 @@ const _ImplementationDeployPage = () => {
   }, []);
 
   const doDeploy = () => {
+    setStatus(ImplementationDeployStatus.InProgress);
     callImplDeploy().then();
   };
 
@@ -107,6 +113,8 @@ const _ImplementationDeployPage = () => {
         <Column lg="6">
           <Label>Status</Label>
           <Text>{prettyEnumValue(status)}</Text>
+          {status === ImplementationDeployStatus.InProgress
+            && <Spinner size={SpinnerSize.large} />}
         </Column>
         <Column lg="6">
           <Label>Last Deployment</Label>
@@ -123,7 +131,8 @@ const _ImplementationDeployPage = () => {
       <Row>
         <Column>
           <Text>
-            Click the <strong>Deploy</strong> button to begin deploying the latest updates to the Implementations
+            Click the <strong>Deploy</strong> button
+            to begin deploying the latest updates to the Implementations
           </Text>
         </Column>
       </Row>
