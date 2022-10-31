@@ -6,10 +6,14 @@ import {
   IColumn,
   SelectionMode,
 } from '@fluentui/react';
-import { Spacing } from 'src/components/spacings/Spacing';
 import { RecordCounts } from 'src/data/services/graphql';
 import { EmptyState } from 'src/containers/states';
-import { StatsFooter, StatsRow, StyledVendorHeaderRow } from '../FileStatusDetails.styles';
+import {
+  StatsFooter,
+  StatsRow,
+  StyledVendorHeaderRow,
+  TabBody
+} from '../FileStatusDetails.styles';
 
 const COLUMNS: IColumn[] = [
   { key: 'name', name: 'Record Name', fieldName: 'name' },
@@ -42,7 +46,7 @@ type VendorCountStatsTabProps = {
 const VendorCountStatsTab = ({ items }: VendorCountStatsTabProps): ReactElement => {
   if ((items?.recordCount?.length ?? 0) > 0) {
     return (
-      <Spacing padding="normal">
+      <TabBody>
         <DetailsList
           compact
           items={items?.recordCount || []}
@@ -55,7 +59,7 @@ const VendorCountStatsTab = ({ items }: VendorCountStatsTabProps): ReactElement 
           isHeaderVisible
           constrainMode={ConstrainMode.unconstrained}
         />
-      </Spacing>
+      </TabBody>
     );
   }
 

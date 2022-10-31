@@ -28,3 +28,11 @@ export const HideForMobile = styled.span`
     display: inline;
   }
 `;
+
+export const ShowForMobile = styled.span`
+  display: inline;
+  
+  @media ${device.tablet} {
+    display: none;
+  }
+`;

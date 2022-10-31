@@ -22,11 +22,12 @@ import {
   FieldCreationEvent, Maybe, RecordCreationEvent, WorkPacketStatusDetails,
 } from 'src/data/services/graphql';
 import { theme } from 'src/styles/themes/theme';
+import { HideForMobile } from 'src/styles/GlobalStyles';
 import { ChartDataType } from 'src/components/charts/ChartDonut/ChartDonut';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { Text } from 'src/components/typography';
 import { EmptyState } from 'src/containers/states';
-import { SuperScript, WhiteButton } from '../FileStatusDetails.styles';
+import { TabBody, WhiteButton } from '../FileStatusDetails.styles';
 import { QualityCheckMessage } from './QualityCheckMessage';
 
 const COLUMNS: IColumn[] = [
@@ -49,6 +50,18 @@ const COLUMNS: IColumn[] = [
     key: 'message', name: 'Message', fieldName: 'message', minWidth: 200, flexGrow: 1,
   },
 ].map((col) => ({ ...col, data: 'string', isPadded: true }));
+
+const errorColors = [
+  '#FA8072',
+  '#FF2400',
+  '#7C0A02',
+  '#ED2939',
+  '#CD5C5C',
+  '#C21807',
+  '#E0115F',
+  '#B22222',
+  '#960018',
+];
 
 type RowType = {
   status: string;
@@ -121,7 +134,12 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
   const hasErrors = totalNumErrors > 0;
 
   const totalRecords = qualityChecks?.totalRecordCount ?? 0;
-  const errorPercent = totalRecords === 0 ? 0 : (totalNumErrors / totalRecords) * 100;
+  let errorPercent: number;
+  if (qualityChecks?.errorRecordPercentage) {
+    errorPercent = qualityChecks?.errorRecordPercentage;
+  } else {
+    errorPercent = totalRecords === 0 ? 0 : (totalNumErrors / totalRecords) * 100;
+  }
 
   const addChartData = (data: ChartDataType[], name: string, key: string, count?: number) => {
     if (count && count > 0) {
@@ -145,7 +163,11 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
     return data;
   };
 
-  const eventToRow = (status: string, recordEvent: RecordCreationEvent, fieldEvent: FieldCreationEvent): RowType => ({
+  const eventToRow = (
+    status: string,
+    recordEvent: RecordCreationEvent,
+    fieldEvent: FieldCreationEvent,
+  ): RowType => ({
     status,
     employeeId: recordEvent.unitId ?? '',
     employee: recordEvent.outerContext ?? '',
@@ -202,7 +224,8 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
         <>
           <Spacing margin={{ bottom: 'normal' }} />
           <MessageBar messageBarType={MessageBarType.warning}>
-            There are a large number of quality check messages. Not all messages are displayed here. Please click the
+            There are a large number of quality check messages.
+            Not all messages are displayed here. Please click the
             Download button to see the full list of quality check messages.
           </MessageBar>
         </>
@@ -212,24 +235,25 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
   };
 
   const renderBody = () => (
-    <Spacing padding="normal">
+    <TabBody>
       {(hasQualityCheckStats || hasErrors) && (
         <FormRow>
           <Stack horizontal wrap tokens={{ childrenGap: 20 }}>
             {hasQualityCheckStats && (
               <Stack.Item>
-                <Card elevation="smallest">
+                <Card id="__Quality_Messages_Chart_Card" elevation="smallest">
                   <Stack tokens={{ childrenGap: 15 }}>
                     <Stack.Item>
-                      <Stack horizontal tokens={{ childrenGap: 15 }} verticalAlign="center">
+                      <Stack horizontal tokens={{ childrenGap: 5 }} verticalAlign="center">
                         <Stack.Item>
-                          <Text size="giant">
-                            {errorPercent > 0 && errorPercent < 1 ? 'Less than 1' : errorPercent.toFixed(2)}
+                          <Text variant="bold">
+                            {errorPercent > 0 && errorPercent < 1 ? 'Less than 1' : errorPercent.toFixed(2)}%
                           </Text>
-                          <SuperScript>%</SuperScript>
-                        </Stack.Item>
-                        <Stack.Item>
-                          <Text variant="muted">of the records contain errors</Text>
+                          <Text variant="muted">&nbsp;of the records&nbsp;</Text>
+                          <Text variant="bold">
+                            ({totalRecords})
+                          </Text>
+                          <Text variant="muted">&nbsp;contain errors</Text>
                         </Stack.Item>
                       </Stack>
                     </Stack.Item>
@@ -260,7 +284,6 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
                             color: ThemeStore.userTheme.colors.custom.info,
                           },
                         ]}
-                        totalRecords={totalRecords}
                         onClickSlice={(key: string) => {
                           switch (key) {
                             case 'ERROR': {
@@ -296,15 +319,12 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
             )}
             {hasErrors && (
               <Stack.Item>
-                <Card elevation="smallest">
+                <Card id="__Quality_Error_Chart_Card" elevation="smallest">
                   <Stack tokens={{ childrenGap: 15 }}>
                     <Stack.Item>
-                      <Stack horizontal tokens={{ childrenGap: 15 }} verticalAlign="center">
+                      <Stack horizontal tokens={{ childrenGap: 10 }} verticalAlign="center">
                         <Stack.Item grow={1}>
                           <Text variant="muted">Record error breakdown</Text>
-                        </Stack.Item>
-                        <Stack.Item>
-                          <Text size="giant">&nbsp;</Text>
                         </Stack.Item>
                       </Stack>
                     </Stack.Item>
@@ -312,7 +332,12 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
                       <DarkSeparator />
                     </Stack.Item>
                     <Stack.Item>
-                      <ChartDonut id="__Quality_Errors_Donut" size={70} data={errorData()} />
+                      <ChartDonut
+                        id="__Quality_Errors_Donut"
+                        size={70}
+                        data={errorData()}
+                        colorPalette={errorColors}
+                      />
                     </Stack.Item>
                   </Stack>
                 </Card>
@@ -331,7 +356,7 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
                 iconProps={{ iconName: 'ExcelDocument', style: { fontSize: theme.fontSizes.normal } }}
                 href={`${serverUrl}excel/qualitychecks?orgSid=${details?.orgSid}&workOrderID=${details?.workOrderId}`}
               >
-                Download
+                <HideForMobile>Download</HideForMobile>
               </WhiteButton>
             </Stack.Item>
             <Stack.Item grow={1}>
@@ -377,7 +402,7 @@ const QualityChecksTab = ({ details }: QualityChecksTabProps): ReactElement => {
           {renderQualityChecksTruncation()}
         </Card>
       </FormRow>
-    </Spacing>
+    </TabBody>
   );
 
   if (qualityChecks) {

@@ -11,7 +11,7 @@ export const StyledLi = styled.li<StyledLiProps>`
   display: flex;
   padding: ${({ theme }) => `${theme.spacing.normal}`};
   position: relative;
-  z-index: 1;
+  z-index: 0;
   background-color: ${({ theme, active }) => (active ? theme.colors.neutralLighter : 'inherit')};
 
   .item__status {

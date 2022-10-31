@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { DocumentCard } from '@fluentui/react';
+import { device } from 'src/styles/GlobalStyles';
 
 export const CardStyled = styled(DocumentCard)<CardStyledProps>`
   background: ${({ theme }) => theme.colors.neutralLighter};
@@ -9,11 +10,15 @@ export const CardStyled = styled(DocumentCard)<CardStyledProps>`
   font: ${({ theme }) => theme.fontStyles.normal};
   min-width: unset;
   max-width: unset;
-  padding: ${({ theme, spacing }) => theme.spacing[spacing]};
+  padding: 5px;
   width: 100%;
 
   &:hover {
     cursor: ${({ onClick }) => (onClick ? 'pointer' : 'auto')};
+  }
+  
+  @media ${device.tablet} {
+    padding: ${({ theme, spacing }) => theme.spacing[spacing]};    
   }
 
   .ms-DocumentCard {

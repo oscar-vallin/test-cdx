@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import { ActionButton, DetailsRow } from '@fluentui/react';
+import { ActionButton, DetailsRow, Stack } from '@fluentui/react';
 import { device } from 'src/styles/GlobalStyles';
-import { Text } from 'src/components/typography';
 
 export const ShadowBox = styled.div`
   box-shadow: ${({ theme }) => theme.boxShadows['smallest']};
@@ -11,16 +10,23 @@ export const ShadowBox = styled.div`
   min-width: unset;
   max-width: unset;
   padding: 10px 15px 15px;
-  margin: 0 20px 20px 20px;
+  margin: 0px 5px 20px 5px;
 
   .ms-CommandBar-primaryCommand {
     justify-content: flex-end;
   }
+  
+  @media ${device.tablet} {
+    margin: 0px 20px 20px 20px;
+  }
 `;
 
 export const FileMetaDetails = styled.div`
-  margin-top: 10px;
-  margin-left: 41px;
+
+  @media ${device.tablet} {
+    margin-top: 10px;
+    margin-left: 41px;
+  }
 `;
 
 export const FileTitle = styled.span`
@@ -116,11 +122,6 @@ export const StatsFooter = styled.div`
   }
 `;
 
-export const SuperScript = styled(Text)`
-  vertical-align: top;
-  padding-top: 0.5rem;
-`;
-
 export const WhiteButton = styled(ActionButton)`
   font-size: ${({ theme }) => theme.fontSizes.normal};
   font-weight: ${({ theme }) => theme.fontWeights.bold};
@@ -150,8 +151,27 @@ export const Archive = styled.div`
   }
 `;
 
+export const HeaderStack = styled(Stack)`
+  height: 44px;
+   
+  @media ${device.tablet} {
+    margin-left: 25px;
+  }
+`;
+
 export const PanelFooter = styled.div`
   & .ms-StackItem {
     margin-right: 10px;
   }
 `;
+
+export const TabBody = styled.div`
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 15px 0px;
+  
+  @media ${device.tablet} {
+    padding 15px;
+  }
+`
