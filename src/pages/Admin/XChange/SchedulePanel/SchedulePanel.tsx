@@ -151,15 +151,15 @@ const SchedulePanel = ({
   const [hasSilencePeriodLabel, setHasSilencePeriodLabel] = useState('')
   const [scheduleFrequency, setScheduleFrequency] = useState('');
   const [scheduleType, setScheduleType] = useState('');
-  const [scheduleTime, setScheduleTime] = useState('');
-  const [scheduleTimezone, setScheduleTimeZone] = useState('');
-  const [silenceStartMonth, setSilenceStartMonth] = useState('');
-  const [silenceStartDay, setSilenceStartDay] = useState('');
-  const [silenceEndMonth, setSilenceEndMonth] = useState('');
-  const [silenceEndDay, setSilenceEndDay] = useState('');
-  const [endDayOfMonth, setEndDayOfMonth] = useState('');
-  const [endDayOrdinal, setEndDayOrdinal] = useState('');
-  const [endRelativeDay, setEndRelativeDay] = useState('');
+  const [scheduleTime, setScheduleTime] = useState<string | null>('');
+  const [scheduleTimezone, setScheduleTimeZone] = useState<string | null>('');
+  const [silenceStartMonth, setSilenceStartMonth] = useState<string | null>('');
+  const [silenceStartDay, setSilenceStartDay] = useState<string | null>('');
+  const [silenceEndMonth, setSilenceEndMonth] = useState<string | null>('');
+  const [silenceEndDay, setSilenceEndDay] = useState<string | null>('');
+  const [endDayOfMonth, setEndDayOfMonth] = useState<string | null>('');
+  const [endDayOrdinal, setEndDayOrdinal] = useState<string | null>('');
+  const [endRelativeDay, setEndRelativeDay] = useState<string | null>('');
   const [message, setMessage] = useState<string | null>();
   const [messageType, setMessageType] = useState<MessageBarType>(MessageBarType.info);
 
@@ -266,6 +266,7 @@ const SchedulePanel = ({
   useEffect(() => {
     if (!isLoadingForm && formData) {
       const { xchangeScheduleForm } = formData;
+      console.log(xchangeScheduleForm)
       setXchangeSchedule(xchangeScheduleForm);
       setOptions(xchangeScheduleForm?.options ?? []);
       xchangeScheduleForm?.months.value?.forEach((month) => {
@@ -416,6 +417,23 @@ const SchedulePanel = ({
     }
   }, [jobGroupListData, isLoadingListJobGroup]);
 
+  useEffect(() => {
+    if (scheduleFrequency === ScheduleFrequency.Weekly) {
+      setEndDayOfMonth(null);
+      setEndRelativeDay(null);
+      setEndDayOrdinal(null);
+      setMonths([]);
+      setCurrentMonthSelected({ ...DefaulMonthsProps });
+    }
+
+    if (scheduleFrequency === ScheduleFrequency.Monthly) {
+      setScheduleTimeZone(null);
+      setScheduleTime(null);
+      setCurrentDaySelected({ ...DefaulDaysProps });
+      setDays([]);
+    }
+  }, [scheduleFrequency])
+
   const selectedWeekly = () => (
     <Spacing margin={{ top: 'double', bottom: 'normal' }}>
       <Stack horizontal={true} horizontalAlign="space-between">
@@ -497,10 +515,17 @@ const SchedulePanel = ({
     frecuency = frecuency.charAt(0).toUpperCase() + frecuency.slice(1);
     if (frecuency.includes('_')) frecuency = 'InGroup';
 
-    const endRDay = handleLastValue(endRelativeDay);
-    const endOday = handleLastValue(endDayOrdinal);
-    const silenceSMonth = handleLastValue(silenceStartMonth);
-    const silenceEMonth = handleLastValue(silenceEndMonth);
+    const endRDay = handleLastValue(endRelativeDay ?? '');
+    const endOday = handleLastValue(endDayOrdinal ?? '');
+    const silenceSMonth = handleLastValue(silenceStartMonth ?? '');
+    const silenceEMonth = handleLastValue(silenceEndMonth ?? '');
+
+    if (!hasSilencePeriod) {
+      setSilenceStartMonth(null);
+      setSilenceStartDay(null);
+      setSilenceEndMonth(null);
+      setSilenceEndDay(null);
+    }
 
     const scheduleValues = {
       frequency: ScheduleFrequency[frecuency],
@@ -509,7 +534,7 @@ const SchedulePanel = ({
       months,
       days,
       xchangeJobGroupSid,
-      endDayOfMonth: !endDayOfMonth ? undefined : +endDayOfMonth,
+      endDayOfMonth: !endDayOfMonth ? null : +endDayOfMonth,
       endDayOrdinal: DayOrdinal[endOday],
       endRelativeDay: RelativeDay[endRDay],
       endHour,
@@ -584,7 +609,7 @@ const SchedulePanel = ({
             id="scheduleSelectTime"
             uiFieldHour={xchangeSchedule?.endHour}
             uiFieldMinute={xchangeSchedule?.endMinute}
-            value={scheduleTime}
+            value={scheduleTime ?? ''}
             onChange={(_newValue) => setScheduleTime(_newValue ?? '')}
           />
         </Column>
@@ -593,7 +618,7 @@ const SchedulePanel = ({
             <UIFlatSelectOneField
               id="scheduleTimezone"
               uiField={renderUiField('timezone')}
-              value={scheduleTimezone}
+              value={scheduleTimezone ?? ''}
               options={options}
               onChange={(_newValue) => setScheduleTimeZone(_newValue ?? '')}
             />
@@ -767,7 +792,7 @@ const SchedulePanel = ({
                                 id="scheduleSelectTime"
                                 uiField={renderUiField('endDayOfMonth')}
                                 options={options}
-                                value={endDayOfMonth}
+                                value={endDayOfMonth ?? ''}
                                 disabled={!props?.checked}
                                 onChange={(_newValue) => setEndDayOfMonth(_newValue ?? '')}
                                 optionNumber={true}
@@ -786,7 +811,7 @@ const SchedulePanel = ({
                               <UIFlatSelectOneField
                                 id="scheduleSelectTime"
                                 uiField={renderUiField('endDayOrdinal')}
-                                value={endDayOrdinal}
+                                value={endDayOrdinal ?? ''}
                                 options={options}
                                 disabled={!props?.checked}
                                 onChange={(_newValue) => setEndDayOrdinal(_newValue ?? '')}
@@ -794,7 +819,7 @@ const SchedulePanel = ({
                               <UIFlatSelectOneField
                                 id="scheduleSelectTime"
                                 uiField={renderUiField('endRelativeDay')}
-                                value={endRelativeDay}
+                                value={endRelativeDay ?? ''}
                                 options={options}
                                 disabled={!props?.checked}
                                 onChange={(_newValue) => setEndRelativeDay(_newValue ?? '')}
@@ -845,7 +870,7 @@ const SchedulePanel = ({
                     <UIFlatSelectOneField
                       id="scheduleStartMonth"
                       uiField={renderUiField('silenceStartMonth')}
-                      value={silenceStartMonth}
+                      value={silenceStartMonth ?? ''}
                       options={options}
                       onChange={(_newValue) => setSilenceStartMonth(_newValue ?? '')}
                     />
@@ -854,7 +879,7 @@ const SchedulePanel = ({
                     <UIFlatSelectOneField
                       id="scheduleStartDay"
                       uiField={renderUiField('silenceStartDay')}
-                      value={silenceStartDay}
+                      value={silenceStartDay ?? ''}
                       options={options}
                       onChange={(_newValue) => setSilenceStartDay(_newValue ?? '')}
                       optionNumber={true}
@@ -873,7 +898,7 @@ const SchedulePanel = ({
                     <UIFlatSelectOneField
                       id="scheduleLastMonth"
                       uiField={renderUiField('silenceEndMonth')}
-                      value={silenceEndMonth}
+                      value={silenceEndMonth ?? ''}
                       options={options}
                       onChange={(_newValue) => setSilenceEndMonth(_newValue ?? '')}
                     />
@@ -882,7 +907,7 @@ const SchedulePanel = ({
                     <UIFlatSelectOneField
                       id="scheduleLastDay"
                       uiField={renderUiField('silenceEndDay')}
-                      value={silenceEndDay}
+                      value={silenceEndDay ?? ''}
                       options={options}
                       onChange={(_newValue) => setSilenceEndDay(_newValue ?? '')}
                       optionNumber={true}
