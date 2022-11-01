@@ -21,7 +21,7 @@ const SubscribersList = ({ totalSubscribers, currentSubscribers, title }: UserLi
 
   const columns: IColumn[] = [
     {
-      name: title ? 'Subscribers' : '',
+      name: title ? 'Notify' : '',
       key: 'name',
       fieldName: 'name',
       data: 'string',
