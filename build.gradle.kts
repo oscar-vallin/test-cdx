@@ -15,7 +15,7 @@ val awsSecretAccessKey:String  = (System.getenv("AWS_SECRET_ACCESS_KEY")?.toStri
 
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
 }
 
 node {
