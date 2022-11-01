@@ -22,6 +22,7 @@ import {
   ThemedPanel, PanelBody, WizardButtonRow, WizardBody,
 } from 'src/layouts/Panels/Panels.styles';
 import { Spacing } from 'src/components/spacings/Spacing';
+import { theme } from 'src/styles/themes/theme';
 
 type XchangeStepPanelProps = {
   isPanelOpen: boolean;
@@ -236,7 +237,7 @@ const XchangeStepPanel = ({
                   <IconButton
                     title={dataAddStep.xchangeStepForm.xml.info}
                     iconProps={{ iconName: 'Info' }}
-                    style={{ color: 'black' }}
+                    style={{ color: theme.colors.black }}
                   />
                 </>
               ) : (
@@ -245,7 +246,7 @@ const XchangeStepPanel = ({
                   <IconButton
                     title={dataCopyStep.copyXchangeStep.xml.info}
                     iconProps={{ iconName: 'Info' }}
-                    style={{ color: 'black' }}
+                    style={{ color: theme.colors.black }}
                   />
                 </>
               )}
