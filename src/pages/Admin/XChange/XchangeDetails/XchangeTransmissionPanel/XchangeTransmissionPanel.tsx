@@ -135,17 +135,25 @@ const XchangeTransmissionPanel = ({
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [testFileTransmissionModal, setTestFileTransmissionModal] = useState(false);
 
-  const [copyFileTransmission, { data: dataCopyTransmission, loading: loadingCopyTransmission }] = useQueryHandler(
+  const [copyFileTransmission,
+    { data: dataCopyTransmission, loading: loadingCopyTransmission }] = useQueryHandler(
     useCopyXchangeFileTransmissionLazyQuery,
   );
 
-  const [fileTransmissionForm, { data: dataFileTransmissionForm, loading: loadingFileTransmissionForm }] = useQueryHandler(useXchangeFileTransmissionFormLazyQuery);
+  const [fileTransmissionForm,
+    { data: dataFileTransmissionForm, loading: loadingFileTransmissionForm },
+  ] = useQueryHandler(useXchangeFileTransmissionFormLazyQuery);
 
-  const [createXchangeFileTransmission, { data: dataCreateFile, loading: loadingCreateFile, error: errorCreateFile }] = useQueryHandler(useCreateXchangeFileTransmissionMutation);
+  const [createXchangeFileTransmission,
+    { data: dataCreateFile, loading: loadingCreateFile, error: errorCreateFile },
+  ] = useQueryHandler(useCreateXchangeFileTransmissionMutation);
 
-  const [updateXchangeFileTransmission, { data: dataUpdateFile, loading: loadingUpdateFile, error: errorUpdateFile }] = useQueryHandler(useUpdateXchangeFileTransmissionMutation);
+  const [updateXchangeFileTransmission,
+    { data: dataUpdateFile, loading: loadingUpdateFile, error: errorUpdateFile },
+  ] = useQueryHandler(useUpdateXchangeFileTransmissionMutation);
 
-  const [previewFilenamePattern, { data: dataFilenamePattern, loading: loadingFilenamePattern }] = useQueryHandler(
+  const [previewFilenamePattern,
+    { data: dataFilenamePattern, loading: loadingFilenamePattern }] = useQueryHandler(
     usePreviewFilenamePatternLazyQuery,
   );
 
@@ -206,7 +214,8 @@ const XchangeTransmissionPanel = ({
               inherited: !overrides['folder'],
             },
             filenamePattern: {
-              value: overrides.filenamePattern ? filenamePattern : xchangeFileTransmission?.filenamePattern.value,
+              value: overrides.filenamePattern
+                ? filenamePattern : xchangeFileTransmission?.filenamePattern.value,
               inherited: !overrides['filenamePattern'],
             },
             stepWise: {
@@ -300,7 +309,15 @@ const XchangeTransmissionPanel = ({
           </ButtonLink>
         );
       }
-      return <ButtonLink onClick={() => setOverrides({ ...overrides, [file]: true })}>override</ButtonLink>;
+      return (
+        <ButtonLink
+          onClick={() => {
+            setOverrides({ ...overrides, [file]: true })
+          }}
+        >
+          override
+        </ButtonLink>
+      );
     }
 
     return null;
@@ -330,11 +347,19 @@ const XchangeTransmissionPanel = ({
 
   const keyBaseAuth = () => {
     if ((updateCmd || createCmd) && !showSSHKeys) {
-      return <ButtonLink onClick={() => setShowSShKeys(true)}>use key-based authentication</ButtonLink>;
+      return (
+        <ButtonLink onClick={() => setShowSShKeys(true)}>
+          use key-based authentication
+        </ButtonLink>
+      )
     }
 
     if (copyCmd && overrides.password) {
-      return <ButtonLink onClick={() => setShowSShKeys(true)}>use key-based authentication</ButtonLink>;
+      return (
+        <ButtonLink onClick={() => setShowSShKeys(true)}>
+          use key-based authentication
+        </ButtonLink>
+      )
     }
 
     return null;
@@ -622,7 +647,8 @@ const XchangeTransmissionPanel = ({
                         placeholder="Passphrase"
                         onChange={(event, newValue) => {
                           setAuthKeyPassphrase(newValue ?? '');
-                          if (xchangeFileTransmission.authKeyPassphrase.value?.trim() !== newValue?.trim()) {
+                          if (xchangeFileTransmission.authKeyPassphrase.value?.trim()
+                            !== newValue?.trim()) {
                             setUnsavedChanges(true);
                           } else {
                             setUnsavedChanges(false);
@@ -675,201 +701,233 @@ const XchangeTransmissionPanel = ({
 
     const parent = xchangeFileTransmission?.parent;
 
-    if (copyCmd || updateCmd || createCmd) {
-      return (
-        <PanelBody>
-          {parent && (
-            <FormRow>
-              {!detach && (
-                <Column lg="10">
-                  <span>
-                    Copied from{' '}
-                    <Text style={{ fontWeight: 'bold' }}>
-                      {parent.host} (
-                      {parent.filenameQualifiers
-                        ?.find((itm) => itm)
-                        ?.split('-')
-                        ?.reduce((prev, current) => current)}
-                      )
-                    </Text>
-                  </span>
-                </Column>
-              )}
-              <Column lg="2">
-                <ButtonLink
-                  onClick={() => {
-                    setDetach(true);
-                    setOverrides({
-                      protocol: true,
-                      host: true,
-                      port: true,
-                      userName: true,
-                      password: true,
-                      authKeyName: true,
-                      authKeyPassphrase: true,
-                      folder: true,
-                      filenamePattern: true,
-                      stepWise: true,
-                      encryptionKeyName: true,
-                    });
-                  }}
-                >
-                  detach
-                </ButtonLink>
+    if (optionXchangeTransmission) {
+      if (optionXchangeTransmission === 'add' && !createCmd) return null;
+    }
+    return (
+      <PanelBody>
+        {parent && (
+          <FormRow>
+            {!detach && (
+              <Column lg="10">
+                <span>
+                  Copied from{' '}
+                  <Text style={{ fontWeight: 'bold' }}>
+                    {parent.host} (
+                    {parent.filenameQualifiers
+                      ?.find((itm) => itm)
+                      ?.split('-')
+                      ?.reduce((prev, current) => current)}
+                    )
+                  </Text>
+                </span>
               </Column>
-            </FormRow>
-          )}
-          {xchangeFileTransmission?.filenameQualifiers.visible && (
-            <FormRow>
-              <Column lg="12">
-                {!customQualifier ? (
-                  <UIInputMultiSelect
-                    id="__filenameQualifier"
-                    value={filenameQualifiers ?? []}
-                    uiField={xchangeFileTransmission?.filenameQualifiers}
-                    options={xchangeFileTransmission?.options ?? []}
-                    onChange={(newValue) => {
-                      setFilenameQualifiers(newValue ?? []);
-                    }}
-                  />
-                ) : (
-                  <InputText
-                    id="__filenameQualifier"
-                    value={customFileQualifier}
-                    label={xchangeFileTransmission.filenameQualifiers?.label}
-                    info={xchangeFileTransmission.filenameQualifiers?.info ?? undefined}
-                    required={xchangeFileTransmission.filenameQualifiers.required}
-                    onChange={(event, newValue) => setCustomFileQualifier(newValue ?? '')}
-                  />
-                )}
+            )}
+            <Column lg="2">
+              <ButtonLink
+                onClick={() => {
+                  setDetach(true);
+                  setOverrides({
+                    protocol: true,
+                    host: true,
+                    port: true,
+                    userName: true,
+                    password: true,
+                    authKeyName: true,
+                    authKeyPassphrase: true,
+                    folder: true,
+                    filenamePattern: true,
+                    stepWise: true,
+                    encryptionKeyName: true,
+                  });
+                }}
+              >
+                detach
+              </ButtonLink>
+            </Column>
+          </FormRow>
+        )}
+        {xchangeFileTransmission?.filenameQualifiers.visible && (
+          <FormRow>
+            <Column lg="12">
+              {!customQualifier ? (
+                <UIInputMultiSelect
+                  id="__filenameQualifier"
+                  value={filenameQualifiers ?? []}
+                  uiField={xchangeFileTransmission?.filenameQualifiers}
+                  options={xchangeFileTransmission?.options ?? []}
+                  onChange={(newValue) => {
+                    setFilenameQualifiers(newValue ?? []);
+                  }}
+                />
+              ) : (
+                <InputText
+                  id="__filenameQualifier"
+                  value={customFileQualifier}
+                  label={xchangeFileTransmission.filenameQualifiers?.label}
+                  info={xchangeFileTransmission.filenameQualifiers?.info ?? undefined}
+                  required={xchangeFileTransmission.filenameQualifiers.required}
+                  onChange={(event, newValue) => setCustomFileQualifier(newValue ?? '')}
+                />
+              )}
+              {createCmd || updateCmd ? (
                 <ButtonLink onClick={() => setCustomQualifier((prevState) => !prevState)}>
                   use a custom qualifier
                 </ButtonLink>
+              ) : null}
+            </Column>
+          </FormRow>
+        )}
+        {xchangeFileTransmission?.protocol.visible && (
+          <FormRow>
+            <Column lg="12">
+              <UIInputSelectOne
+                id="protocol"
+                value={protocol}
+                uiField={overrideEnables(xchangeFileTransmission.protocol, 'protocol')}
+                options={xchangeFileTransmission?.options}
+                onChange={(newValue) => {
+                  setProtocol(newValue ?? '');
+                  if (newValue === 'ARCHIVE') {
+                    setChoseArchive(true);
+                  } else {
+                    setChoseArchive(false);
+                  }
+                  if (xchangeFileTransmission.protocol.value?.value !== newValue) {
+                    setUnsavedChanges(true);
+                  } else {
+                    setUnsavedChanges(false);
+                  }
+                }}
+              />
+              {enableUpdate('protocol', xchangeFileTransmission.protocol)}
+            </Column>
+          </FormRow>
+        )}
+        {optionArchive()}
+        {xchangeFileTransmission?.filenamePattern.visible && (
+          <FormRow>
+            <Column lg="12">
+              <UIInputText
+                id="fileNamePattern"
+                value={filenamePattern}
+                autocomplete="off"
+                uiField={overrideEnables(xchangeFileTransmission?.filenamePattern, 'filenamePattern')}
+                onChange={(event, newValue) => {
+                  setFilenamePattern(newValue ?? '');
+                  filenamePatternValue(newValue ?? '');
+                  if (xchangeFileTransmission.filenamePattern.value?.trim()
+                  !== newValue?.trim()) {
+                    setUnsavedChanges(true);
+                  } else {
+                    setUnsavedChanges(false);
+                  }
+                }}
+              />
+              {enableUpdate('filenamePattern', xchangeFileTransmission.filenamePattern)}
+              <Spacing margin={{ top: 'normal' }}>
+                <span style={{ color: '#605e5c', fontSize: '14px', fontWeight: 'bold' }}>
+                  Ex:{' '}
+                  <Text variant="small" style={{ color: '#a19f9d', fontWeight: 'bold' }}>
+                    {previewFilenamePatternValue}
+                  </Text>
+                </span>
+              </Spacing>
+            </Column>
+          </FormRow>
+        )}
+        {!choseArchive && (
+          <>
+            <FormRow>
+              <Column lg="6">
+                <UIInputCheck
+                  id="stepWise"
+                  uiField={overrideEnables(xchangeFileTransmission?.stepWise, 'stepWise')}
+                  value={stepWise}
+                  onChange={(event, _stepWise: any) => {
+                    setStepWise(_stepWise);
+                    if (xchangeFileTransmission?.stepWise.value !== _stepWise) {
+                      setUnsavedChanges(true);
+                    } else {
+                      setUnsavedChanges(false);
+                    }
+                  }}
+                />
+                {enableUpdate('stepWise', xchangeFileTransmission?.stepWise)}
               </Column>
             </FormRow>
-          )}
-          {xchangeFileTransmission?.protocol.visible && (
             <FormRow>
               <Column lg="12">
                 <UIInputSelectOne
-                  id="protocol"
-                  value={protocol}
-                  uiField={overrideEnables(xchangeFileTransmission.protocol, 'protocol')}
+                  id="vendorEncryptionKeyName"
+                  value={encryptionKeyName}
+                  uiField={overrideEnables(xchangeFileTransmission?.encryptionKeyName, 'encryptionKeyName')}
                   options={xchangeFileTransmission?.options}
                   onChange={(newValue) => {
-                    setProtocol(newValue ?? '');
-                    if (newValue === 'ARCHIVE') {
-                      setChoseArchive(true);
-                    } else {
-                      setChoseArchive(false);
-                    }
-                    if (xchangeFileTransmission.protocol.value?.value !== newValue) {
+                    setEncryptionKeyName(newValue ?? '');
+                    if (xchangeFileTransmission?.encryptionKeyName.value !== newValue?.trim()) {
                       setUnsavedChanges(true);
                     } else {
                       setUnsavedChanges(false);
                     }
                   }}
                 />
-                {enableUpdate('protocol', xchangeFileTransmission.protocol)}
+                {enableUpdate('encryptionKeyName', xchangeFileTransmission?.encryptionKeyName)}
               </Column>
             </FormRow>
-          )}
-          {optionArchive()}
-          {xchangeFileTransmission?.filenamePattern.visible && (
-            <FormRow>
-              <Column lg="12">
-                <UIInputText
-                  id="fileNamePattern"
-                  value={filenamePattern}
-                  autocomplete="off"
-                  uiField={overrideEnables(xchangeFileTransmission?.filenamePattern, 'filenamePattern')}
-                  onChange={(event, newValue) => {
-                    setFilenamePattern(newValue ?? '');
-                    filenamePatternValue(newValue ?? '');
-                    if (xchangeFileTransmission.filenamePattern.value?.trim() !== newValue?.trim()) {
-                      setUnsavedChanges(true);
-                    } else {
-                      setUnsavedChanges(false);
-                    }
-                  }}
-                />
-                {enableUpdate('filenamePattern', xchangeFileTransmission.filenamePattern)}
-                <Spacing margin={{ top: 'normal' }}>
-                  <span style={{ color: '#605e5c', fontSize: '14px', fontWeight: 'bold' }}>
-                    Ex:{' '}
-                    <Text variant="small" style={{ color: '#a19f9d', fontWeight: 'bold' }}>
-                      {previewFilenamePatternValue}
-                    </Text>
-                  </span>
-                </Spacing>
-              </Column>
-            </FormRow>
-          )}
+          </>
+        )}
+      </PanelBody>
+    );
+  };
+
+  const renderPanelFooter = () => {
+    if (loadingCopyTransmission || loadingFileTransmissionForm) {
+      return null;
+    }
+
+    if (updateCmd || createCmd) {
+      return (
+        <>
+          <PrimaryButton id="__Xchange_AddStep_Button" iconProps={{ iconName: 'Save' }} onClick={saveFileTransmission}>
+            Save
+          </PrimaryButton>
           {!choseArchive && (
-            <>
-              <FormRow>
-                <Column lg="6">
-                  <UIInputCheck
-                    id="stepWise"
-                    uiField={overrideEnables(xchangeFileTransmission?.stepWise, 'stepWise')}
-                    value={stepWise}
-                    onChange={(event, _stepWise: any) => {
-                      setStepWise(_stepWise);
-                      if (xchangeFileTransmission?.stepWise.value !== _stepWise) {
-                        setUnsavedChanges(true);
-                      } else {
-                        setUnsavedChanges(false);
-                      }
-                    }}
-                  />
-                  {enableUpdate('stepWise', xchangeFileTransmission?.stepWise)}
-                </Column>
-              </FormRow>
-              <FormRow>
-                <Column lg="12">
-                  <UIInputSelectOne
-                    id="vendorEncryptionKeyName"
-                    value={encryptionKeyName}
-                    uiField={overrideEnables(xchangeFileTransmission?.encryptionKeyName, 'encryptionKeyName')}
-                    options={xchangeFileTransmission?.options}
-                    onChange={(newValue) => {
-                      setEncryptionKeyName(newValue ?? '');
-                      if (xchangeFileTransmission?.encryptionKeyName.value !== newValue?.trim()) {
-                        setUnsavedChanges(true);
-                      } else {
-                        setUnsavedChanges(false);
-                      }
-                    }}
-                  />
-                  {enableUpdate('encryptionKeyName', xchangeFileTransmission?.encryptionKeyName)}
-                </Column>
-              </FormRow>
-            </>
+          <DefaultButton
+            style={{ marginLeft: '10px' }}
+            iconProps={{
+              iconName: 'Phone',
+              style: {
+                color: ThemeStore.userTheme.colors.black,
+                fontWeight: ThemeStore.userTheme.fontWeights.bold,
+              },
+            }}
+            text="Test Configuration"
+            onClick={() => setTestFileTransmissionModal(true)}
+          />
           )}
-        </PanelBody>
+        </>
+      )
+    }
+
+    if (optionXchangeTransmission === 'update' && !choseArchive) {
+      return (
+        <DefaultButton
+          style={{ marginLeft: '10px' }}
+          iconProps={{
+            iconName: 'Phone',
+            style: {
+              color: ThemeStore.userTheme.colors.black,
+              fontWeight: ThemeStore.userTheme.fontWeights.bold,
+            },
+          }}
+          text="Test Configuration"
+          onClick={() => setTestFileTransmissionModal(true)}
+        />
       );
     }
     return null;
   };
-
-  const renderPanelFooter = () => (
-    <>
-      <PrimaryButton id="__Xchange_AddStep_Button" iconProps={{ iconName: 'Save' }} onClick={saveFileTransmission}>
-        Save
-      </PrimaryButton>
-      {!choseArchive && (
-      <DefaultButton
-        style={{ marginLeft: '10px' }}
-        iconProps={{
-          iconName: 'Phone',
-          style: { color: ThemeStore.userTheme.colors.black, fontWeight: ThemeStore.userTheme.fontWeights.bold },
-        }}
-        text="Test Configuration"
-        onClick={() => setTestFileTransmissionModal(true)}
-      />
-      )}
-    </>
-  );
 
   useEffect(() => {
     if (isPanelOpen) {
@@ -880,14 +938,14 @@ const XchangeTransmissionPanel = ({
   useEffect(() => {
     if (!loadingCopyTransmission && dataCopyTransmission) {
       setOptionXchangeTransmission('copy');
-      // console.log(dataCopyTransmission?.copyXchangeFileTransmission);
       setXchangeFileTransmission(dataCopyTransmission?.copyXchangeFileTransmission);
       if (
         dataCopyTransmission.copyXchangeFileTransmission?.filenameQualifiers.value
         && dataCopyTransmission.copyXchangeFileTransmission?.filenameQualifiers.value.length > 0
       ) {
         setFilenameQualifiers(
-          dataCopyTransmission.copyXchangeFileTransmission.filenameQualifiers.value.map((file) => file.value) ?? [],
+          dataCopyTransmission.copyXchangeFileTransmission.filenameQualifiers.value
+            .map((file) => file.value) ?? [],
         );
       }
       if (dataCopyTransmission.copyXchangeFileTransmission?.commands) {
@@ -901,15 +959,19 @@ const XchangeTransmissionPanel = ({
   }, [dataCopyTransmission, loadingCopyTransmission]);
 
   useEffect(() => {
+    setOptionXchangeTransmission(optionXchangeTransmission ?? '')
+  }, [optionXchangeTransmission]);
+
+  useEffect(() => {
     if (!loadingFileTransmissionForm && dataFileTransmissionForm) {
-      setOptionXchangeTransmission('update');
       setXchangeFileTransmission(dataFileTransmissionForm.xchangeFileTransmissionForm);
       if (
         dataFileTransmissionForm.xchangeFileTransmissionForm?.filenameQualifiers.value
         && dataFileTransmissionForm.xchangeFileTransmissionForm?.filenameQualifiers.value.length > 0
       ) {
         setFilenameQualifiers(
-          [dataFileTransmissionForm.xchangeFileTransmissionForm.filenameQualifiers.value[0].value] ?? [],
+          [dataFileTransmissionForm.xchangeFileTransmissionForm.filenameQualifiers
+            .value[0].value] ?? [],
         );
       }
       if (dataFileTransmissionForm.xchangeFileTransmissionForm?.commands) {
@@ -922,11 +984,6 @@ const XchangeTransmissionPanel = ({
         );
         setUpdateCmd(_updateCmd);
         setCreateCmd(_createCmd);
-        if (_updateCmd) {
-          setOptionXchangeTransmission('update');
-        } else {
-          setOptionXchangeTransmission('add');
-        }
         setCopyCmd(null);
       }
     }
@@ -934,7 +991,6 @@ const XchangeTransmissionPanel = ({
 
   useEffect(() => {
     if (xchangeFileTransmission) {
-      // console.log(xchangeFileTransmission);
       const currentProtocol = xchangeFileTransmission.protocol.value?.value ?? '';
       if (currentProtocol === 'ARCHIVE') setChoseArchive(true);
       setProtocol(currentProtocol);
