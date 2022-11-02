@@ -262,7 +262,7 @@ const XchangeStepPanel = ({
               />
             </>
           </WizardBody>
-          {(updateCmd) && (
+          {(updateCmd || createCmd) && (
             <WizardButtonRow>
               <PrimaryButton id="__Xchange_AddStep_Button" iconProps={{ iconName: 'Save' }} onClick={saveStep}>
                 Save
