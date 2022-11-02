@@ -157,11 +157,11 @@ const VisualizationsPage = () => {
     let i = CURRENT_MONTH + 1;
     while (m.length < 11) {
       m.push(shortMonths[i]);
-      i++;
       if (i === 11) {
-        m.push(shortMonths[i]);
         i = 0;
+        m.push(shortMonths[i]);
       }
+      i++;
     }
     m.push(shortMonths[CURRENT_MONTH]);
     setMonths(m);
