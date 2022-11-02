@@ -706,7 +706,7 @@ const XchangeTransmissionPanel = ({
     }
     return (
       <PanelBody>
-        {parent && (
+        {parent && optionXchangeTransmission === 'copy' && (
           <FormRow>
             {!detach && (
               <Column lg="10">
@@ -886,7 +886,7 @@ const XchangeTransmissionPanel = ({
       return null;
     }
 
-    if (updateCmd || createCmd) {
+    if (updateCmd || createCmd || copyCmd) {
       return (
         <>
           <PrimaryButton id="__Xchange_AddStep_Button" iconProps={{ iconName: 'Save' }} onClick={saveFileTransmission}>
@@ -959,7 +959,7 @@ const XchangeTransmissionPanel = ({
   }, [dataCopyTransmission, loadingCopyTransmission]);
 
   useEffect(() => {
-    setOptionXchangeTransmission(optionXchangeTransmission ?? '')
+    setOptionXchangeTransmission(optionXchangeTransmission ?? '');
   }, [optionXchangeTransmission]);
 
   useEffect(() => {
