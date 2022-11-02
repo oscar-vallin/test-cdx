@@ -1016,7 +1016,7 @@ const SchedulePanel = ({
           {message && (
           <Spacing margin={{ bottom: 'normal' }}>
             <MessageBar
-              id="__OrgPanel_Msg"
+              id="__SchedulePanel_Msg"
               messageBarType={messageType}
               isMultiline
               onDismiss={() => setMessage(undefined)}
