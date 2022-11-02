@@ -178,6 +178,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
 
   const showUnsavedChangesDialog = (title: string) => {
     const updatedDialog = { ...defaultDialogProps };
+    updatedDialog.title = 'Delete Step';
     updatedDialog.message = `Are you sure you want to delete this Xchange step ${title}?`;
 
     updatedDialog.onYes = () => {
