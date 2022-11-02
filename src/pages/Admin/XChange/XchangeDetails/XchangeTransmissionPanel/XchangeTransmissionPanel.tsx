@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import {
   DefaultButton,
   DirectionalHint,
+  MessageBar,
+  MessageBarType,
   PanelType,
   PrimaryButton,
   Spinner,
@@ -24,6 +26,7 @@ import {
   CdxWebCommandType,
   WebCommand,
   UiField,
+  GqOperationResponse,
 } from 'src/data/services/graphql';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { useNotification } from 'src/hooks/useNotification';
@@ -106,6 +109,7 @@ const XchangeTransmissionPanel = ({
     setXchangeFileTransmission,
   ] = useState<XchangeFileTransmissionForm>();
   const [authKeyName, setAuthKeyName] = useState('');
+  const [createFileTransmission, setCreateFileTransmission] = useState(false);
   const [authKeyPassphrase, setAuthKeyPassphrase] = useState('');
   const [filenameQualifiers, setFilenameQualifiers] = useState<string[]>();
   const [customFileQualifier, setCustomFileQualifier] = useState('');
@@ -134,6 +138,8 @@ const XchangeTransmissionPanel = ({
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [testFileTransmissionModal, setTestFileTransmissionModal] = useState(false);
+  const [message, setMessage] = useState<string | null>();
+  const [messageType, setMessageType] = useState<MessageBarType>(MessageBarType.info);
 
   const [copyFileTransmission,
     { data: dataCopyTransmission, loading: loadingCopyTransmission }] = useQueryHandler(
@@ -185,20 +191,24 @@ const XchangeTransmissionPanel = ({
             parentSid: detach ? null : xchangeFileTransmission?.parent?.sid,
             filenameQualifiers: customQualifier ? customFileQualifier : filenameQualifiers,
             protocol: {
-              value: overrides.protocol ? protocol : xchangeFileTransmission?.protocol.value?.value,
+              value: overrides.protocol || createFileTransmission ? protocol
+                : xchangeFileTransmission?.protocol.value?.value,
               inherited: !overrides['protocol'],
             },
             host: {
-              value: overrides.host ? host : xchangeFileTransmission?.host.value,
+              value: overrides.host || createFileTransmission ? host
+                : xchangeFileTransmission?.host.value,
               inherited: !overrides['host'],
             },
             port: { value: port, inherited: !overrides['port'] },
             userName: {
-              value: overrides.userName ? userName : xchangeFileTransmission?.userName.value,
+              value: overrides.userName || createFileTransmission ? userName
+                : xchangeFileTransmission?.userName.value,
               inherited: !overrides['userName'],
             },
             password: {
-              value: overrides.password ? password : xchangeFileTransmission?.password.value,
+              value: overrides.password || createFileTransmission ? password
+                : xchangeFileTransmission?.password.value,
               inherited: !overrides['password'],
             },
             authKeyName: {
@@ -210,20 +220,22 @@ const XchangeTransmissionPanel = ({
               inherited: !overrides['authKeyPassphrase'],
             },
             folder: {
-              value: overrides.folder ? folder : xchangeFileTransmission?.folder.value,
+              value: overrides.folder || createFileTransmission ? folder
+                : xchangeFileTransmission?.folder.value,
               inherited: !overrides['folder'],
             },
             filenamePattern: {
-              value: overrides.filenamePattern
+              value: overrides.filenamePattern || createFileTransmission
                 ? filenamePattern : xchangeFileTransmission?.filenamePattern.value,
               inherited: !overrides['filenamePattern'],
             },
             stepWise: {
-              value: overrides.stepWise ? stepWise : xchangeFileTransmission?.stepWise.value,
+              value: overrides.stepWise || createFileTransmission ? stepWise
+                : xchangeFileTransmission?.stepWise.value,
               inherited: !overrides['stepWise'],
             },
             encryptionKeyName: {
-              value: overrides.encryptionKeyName
+              value: overrides.encryptionKeyName || createFileTransmission
                 ? encryptionKeyName
                 : xchangeFileTransmission?.encryptionKeyName?.value?.value,
               inherited: !overrides['encryptionKeyName'],
@@ -374,6 +386,7 @@ const XchangeTransmissionPanel = ({
     updatedDialog.onYes = () => {
       hideDialog();
       closePanel(false);
+      setMessage(null);
       setXchangeFileTransmission(undefined);
       setShowIcons(false);
       setUnsavedChanges(false);
@@ -395,6 +408,7 @@ const XchangeTransmissionPanel = ({
       showUnsavedChangesDialog();
     } else {
       closePanel(false);
+      setMessage(null);
       setXchangeFileTransmission(undefined);
       setShowIcons(false);
       setOverrides(DefaultOverrideProps);
@@ -707,6 +721,18 @@ const XchangeTransmissionPanel = ({
     }
     return (
       <PanelBody>
+        {message && (
+          <Spacing margin={{ bottom: 'normal' }}>
+            <MessageBar
+              id="__TransmissionPanel_Msg"
+              messageBarType={messageType}
+              isMultiline
+              onDismiss={() => setMessage(undefined)}
+            >
+              {message}
+            </MessageBar>
+          </Spacing>
+        )}
         {parent && optionXchangeTransmission === 'copy' && (
           <FormRow>
             {!detach && (
@@ -961,6 +987,9 @@ const XchangeTransmissionPanel = ({
 
   useEffect(() => {
     setOptionXchangeTransmission(optionXchangeTransmission ?? '');
+    if (optionXchangeTransmission === 'add') {
+      setCreateFileTransmission(true);
+    }
   }, [optionXchangeTransmission]);
 
   useEffect(() => {
@@ -1024,10 +1053,23 @@ const XchangeTransmissionPanel = ({
   }, [dataFilenamePattern, loadingFilenamePattern]);
 
   useEffect(() => {
-    if (!loadingCreateFile && dataCreateFile) {
-      refreshDetailsPage(true);
-      Toast.success({ text: 'File transmission added' });
-      closePanel(false);
+    const response = dataCreateFile?.createXchangeFileTransmission;
+    if (dataCreateFile) {
+      const responseCode = response?.response;
+      setXchangeFileTransmission(dataCreateFile?.createXchangeFileTransmission);
+      if (responseCode === GqOperationResponse.Fail) {
+        const errorMsg = dataCreateFile?.createXchangeFileTransmissio?.errMsg
+          ?? 'Error occurred, please verify the information and try again.';
+        setMessageType(MessageBarType.error);
+        setMessage(errorMsg);
+      }
+
+      if (responseCode === GqOperationResponse.Success) {
+        refreshDetailsPage(true);
+        closePanel(false);
+        setMessage(null);
+        Toast.success({ text: 'File transmission added' });
+      }
     }
 
     if (!loadingCreateFile && errorCreateFile) {
