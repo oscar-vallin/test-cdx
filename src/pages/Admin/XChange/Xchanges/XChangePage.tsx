@@ -474,7 +474,7 @@ const XChangePage = () => {
 
   const onRenderAction = (item) => {
     if (!requiresConversion) {
-      if (item.active) {
+      if (item.active && deactivateCmd) {
         return (
           <TooltipHost content="Deactivate" directionalHint={DirectionalHint.rightCenter}>
             <FontIcon
