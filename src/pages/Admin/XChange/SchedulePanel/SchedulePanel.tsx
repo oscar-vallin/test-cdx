@@ -57,6 +57,7 @@ import { useNotification } from 'src/hooks/useNotification';
 import { UIInputText } from 'src/components/inputs/InputText';
 import { EmptyMessage } from 'src/containers/tables/TableCurrentActivity/TableActivity.styles';
 import { EmptyState } from 'src/containers/states';
+import { useThemeStore } from 'src/store/ThemeStore';
 import { SubscriberOptionProps } from '../XchangeAlerts/XchangeAlertsPanel/XchangeAlertsPanel';
 import { StyledText, StyledXchanges } from './SchedulePanel.styles';
 
@@ -132,6 +133,7 @@ const SchedulePanel = ({
 }: ScheduleProps) => {
   const { orgSid } = useOrgSid();
   const Toast = useNotification();
+  const ThemeStore = useThemeStore();
   const [schedule, setSchedule] = useState<boolean>();
   const [xchangeSchedule, setXchangeSchedule] = useState<XchangeScheduleForm | null>();
   const [xchangeJobGroup, setXchangeJobGroup] = useState<XchangeJobGroupForm | null>();
@@ -266,7 +268,6 @@ const SchedulePanel = ({
   useEffect(() => {
     if (!isLoadingForm && formData) {
       const { xchangeScheduleForm } = formData;
-      console.log(xchangeScheduleForm)
       setXchangeSchedule(xchangeScheduleForm);
       setOptions(xchangeScheduleForm?.options ?? []);
       xchangeScheduleForm?.months.value?.forEach((month) => {
@@ -301,7 +302,6 @@ const SchedulePanel = ({
   useEffect(() => {
     if (!isLoadingJobGroup && jobGroupData) {
       const { xchangeJobGroupForm } = jobGroupData;
-      console.log(xchangeJobGroupForm)
       setXchangeJobGroup(xchangeJobGroupForm);
       setOptions(xchangeJobGroupForm?.options ?? []);
       xchangeJobGroupForm?.months.value?.forEach((month) => {
@@ -837,7 +837,16 @@ const SchedulePanel = ({
           )}
           <Stack.Item>
             <Spacing margin={{ top: 'double' }}>
-              <FontIcon iconName="Ringer" style={{ marginTop: '50px', fontWeight: 'bold' }} />
+              <FontIcon
+                style={{
+                  color: ThemeStore.userTheme.colors.black,
+                  marginTop: '50px',
+                  fontSize: '15px',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                }}
+                iconName="Ringer"
+              />
               <Text style={{ fontWeight: 'bold', paddingLeft: '5px' }}>Alert if not delivered by expected day</Text>
             </Spacing>
           </Stack.Item>
@@ -886,13 +895,13 @@ const SchedulePanel = ({
                     />
                   </Column>
                   <Column md="12" lg="2">
-                    <span
+                    <Text
                       style={{
                         marginTop: '10px',
                         marginRight: '40px',
                       }}
                     > to
-                    </span>
+                    </Text>
                   </Column>
                   <Column md="12" lg="2">
                     <UIFlatSelectOneField

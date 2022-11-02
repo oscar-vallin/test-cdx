@@ -4,7 +4,7 @@ export const StyledCircle = styled.span<StyledCircleProps>`
   height: 50px;
   width: 50px;
   display: inline-block;
-  background: ${({ theme, selected }) => (selected ? theme.colors.themePrimary : '#f3f2f1')};
+  background: ${({ theme, selected }) => (selected ? theme.colors.themePrimary : theme.colors.neutralLight)};
   border-radius: 50%;
   padding: 14px 7px 10px 7px;
   border: none;
