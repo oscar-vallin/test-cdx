@@ -431,7 +431,7 @@ const XchangeAlertsPanel = ({
             </Column>
           </Row>
           <ButtonAction onClick={() => setAddSubscriberModal(true)} iconName="add">
-            Add Subscriber
+            Add person to be notified
           </ButtonAction>
           <Spacing margin={{ top: 'normal' }}>
             <PrimaryButton

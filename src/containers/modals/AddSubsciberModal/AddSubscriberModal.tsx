@@ -112,7 +112,7 @@ const AddSubscriberModal = ({
             setSubsciberFound(null);
           }
         }}
-        placeholder="Search Susbscriber"
+        placeholder="Search for user"
       />
       {addNewAccount && (
         <>

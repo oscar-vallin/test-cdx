@@ -18,13 +18,19 @@ import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useNotification } from 'src/hooks/useNotification';
 import { PageBody } from 'src/components/layouts/Column';
 import { Spacing } from 'src/components/spacings/Spacing';
+import { LightSeparator } from 'src/components/separators/Separator';
 import {
-  IconButton, Spinner, SpinnerSize, Stack,
+  IconButton,
+  Spinner,
+  SpinnerSize,
+  Stack,
 } from '@fluentui/react';
 import { ButtonLink } from 'src/components/buttons';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import {
-  StyledEnvironment, StyledAlertTypes, StyledButtonAction, StyledSeparator,
+  StyledEnvironment,
+  StyledAlertTypes,
+  StyledButtonAction,
 } from './XchangeAlertsPage.style';
 import { StyledQualifier } from '../XchangeDetails/XchangeDetailsPage.styles';
 import { XchangeAlertsPanel } from './XchangeAlertsPanel/XchangeAlertsPanel';
@@ -243,7 +249,7 @@ const XchangeAlertsPage = () => {
     );
   };
 
-  const updateIndividualAlert = (
+  const updateAlert = (
     commands: WebCommand[],
     currentSid: string,
     corefilename?: string,
@@ -285,7 +291,7 @@ const XchangeAlertsPage = () => {
                   Add Alert
                 </StyledButtonAction>
               </Stack>
-              <StyledSeparator color="#e6e6e6" />
+              <LightSeparator />
               {xchangeAlerts?.globalXchangeAlerts && xchangeAlerts?.globalXchangeAlerts.length <= 0
                 && (
                 <Text>There are no global alerts configured</Text>
@@ -295,24 +301,34 @@ const XchangeAlertsPage = () => {
                   <Spacing key={globalAlertsIndex}>
                     <Row>
                       <Column lg="2">
-                        {globalAlerts?.filenameQualifier && (
-                          <StyledEnvironment>{globalAlerts?.filenameQualifier}</StyledEnvironment>
-                        )}
+                        <StyledEnvironment>All environments</StyledEnvironment>
                       </Column>
                       {userPermissionsIcons(globalAlerts?.commands ?? [], globalAlerts?.sid ?? '', 'profile')}
                     </Row>
                     {typesAlertsRender(globalAlerts?.alertTypes ?? [])}
                     <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                      <Text variant="bold">Subscribers:</Text>
+                      <Text variant="bold">Notify:</Text>
                     </Spacing>
                     <Spacing margin={{ bottom: 'double' }}>
                       {globalAlerts?.subscribers?.map((subscriber, globalSubsIndex: number) => (
                         <Row key={globalSubsIndex}>
                           <Column lg="6">
-                            <ButtonLink>{subscriber.email}</ButtonLink>
+                            <ButtonLink
+                              onClick={() => {
+                                updateAlert(globalAlerts?.commands ?? [], globalAlerts.sid ?? '', '');
+                              }}
+                            >
+                              {subscriber.email}
+                            </ButtonLink>
                           </Column>
                           <Column lg="6">
-                            <ButtonLink>{subscriber.firstNm}</ButtonLink>
+                            <ButtonLink
+                              onClick={() => {
+                                updateAlert(globalAlerts?.commands ?? [], globalAlerts.sid ?? '', '');
+                              }}
+                            >
+                              {subscriber.firstNm}
+                            </ButtonLink>
                           </Column>
                         </Row>
                       ))}
@@ -324,7 +340,7 @@ const XchangeAlertsPage = () => {
             <Column lg="6">
               <Text variant="bold">Alerts on individual Xchanges</Text>
               <Spacing margin={{ top: 'normal' }}>
-                <StyledSeparator color="#e6e6e6" />
+                <LightSeparator />
               </Spacing>
               {xchangeAlerts?.individualXchangeAlerts
                 && xchangeAlerts?.individualXchangeAlerts.length <= 0 && (
@@ -341,7 +357,7 @@ const XchangeAlertsPage = () => {
                               underline
                               style={{ fontWeight: 'bold', fontSize: '13.5px' }}
                               onClick={() => {
-                                updateIndividualAlert(individualAlerts?.commands ?? [], individualAlerts.sid ?? '', individualAlerts.coreFilename ?? '');
+                                updateAlert(individualAlerts?.commands ?? [], individualAlerts.sid ?? '', individualAlerts.coreFilename ?? '');
                               }}
                             >
                               {individualAlerts.coreFilename}
@@ -354,7 +370,7 @@ const XchangeAlertsPage = () => {
                     {filenameQualifier(individualAlerts.filenameQualifier ?? '', individualAlerts?.coreFilename ?? '')}
                     {typesAlertsRender(individualAlerts?.alertTypes ?? [])}
                     <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                      <Text variant="bold">Subscribers:</Text>
+                      <Text variant="bold">Notify:</Text>
                     </Spacing>
                     {individualAlerts?.subscribers?.map(
                       (subscriber, individualSubsIndex: number) => (
@@ -362,7 +378,7 @@ const XchangeAlertsPage = () => {
                           <Column lg="6">
                             <ButtonLink
                               onClick={() => {
-                                updateIndividualAlert(individualAlerts?.commands ?? [], individualAlerts.sid ?? '', individualAlerts.coreFilename ?? '');
+                                updateAlert(individualAlerts?.commands ?? [], individualAlerts.sid ?? '', individualAlerts.coreFilename ?? '');
                               }}
                             >
                               {subscriber.firstNm}
@@ -371,7 +387,7 @@ const XchangeAlertsPage = () => {
                           <Column lg="6">
                             <ButtonLink
                               onClick={() => {
-                                updateIndividualAlert(individualAlerts?.commands ?? [], individualAlerts.sid ?? '', individualAlerts.coreFilename ?? '');
+                                updateAlert(individualAlerts?.commands ?? [], individualAlerts.sid ?? '', individualAlerts.coreFilename ?? '');
                               }}
                             >
                               {subscriber.email}
