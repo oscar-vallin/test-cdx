@@ -296,6 +296,7 @@ const XchangeTransmissionPanel = ({
   };
 
   const enableUpdate = (file: string, typeInput?) => {
+    if (typeInput.readOnly === true) return null;
     if (typeInput && typeInput.inheritedFrom) {
       if (overrides[file] || detach) {
         return (
@@ -544,7 +545,7 @@ const XchangeTransmissionPanel = ({
                     }
                   }}
                 />
-                {enableUpdate('host', xchangeFileTransmission.host)}
+                {updateCmd && enableUpdate('host', xchangeFileTransmission.host)}
               </Column>
             )}
             {xchangeFileTransmission?.port.visible && (
@@ -564,7 +565,7 @@ const XchangeTransmissionPanel = ({
                     }
                   }}
                 />
-                {enableUpdate('port', xchangeFileTransmission.port)}
+                {updateCmd && enableUpdate('port', xchangeFileTransmission.port)}
               </Column>
             )}
           </FormRow>
@@ -586,7 +587,7 @@ const XchangeTransmissionPanel = ({
                     }
                   }}
                 />
-                {enableUpdate('userName', xchangeFileTransmission.userName)}
+                {updateCmd && enableUpdate('userName', xchangeFileTransmission.userName)}
               </Column>
             </FormRow>
           )}
@@ -610,7 +611,7 @@ const XchangeTransmissionPanel = ({
                       }
                     }}
                   />
-                  {enableUpdate('password', xchangeFileTransmission.password)}
+                  {updateCmd && enableUpdate('password', xchangeFileTransmission.password)}
                   {keyBaseAuth()}
                 </Column>
               </FormRow>
@@ -633,7 +634,7 @@ const XchangeTransmissionPanel = ({
                         }}
                         placeholder="(no key selected)"
                       />
-                      {enableUpdate('authKeyName', xchangeFileTransmission.authKeyName)}
+                      {updateCmd && enableUpdate('authKeyName', xchangeFileTransmission.authKeyName)}
                     </Column>
                   </FormRow>
                   <FormRow>
@@ -655,7 +656,7 @@ const XchangeTransmissionPanel = ({
                           }
                         }}
                       />
-                      {enableUpdate('authKeyPassphrase', xchangeFileTransmission.authKeyPassphrase)}
+                      {updateCmd && enableUpdate('authKeyPassphrase', xchangeFileTransmission.authKeyPassphrase)}
                     </Column>
                   </FormRow>
                 </>
@@ -679,7 +680,7 @@ const XchangeTransmissionPanel = ({
                     }
                   }}
                 />
-                {enableUpdate('folder', xchangeFileTransmission.folder)}
+                {updateCmd && enableUpdate('folder', xchangeFileTransmission.folder)}
               </Column>
             </FormRow>
           )}
@@ -706,7 +707,7 @@ const XchangeTransmissionPanel = ({
     }
     return (
       <PanelBody>
-        {parent && (
+        {parent && optionXchangeTransmission === 'copy' && (
           <FormRow>
             {!detach && (
               <Column lg="10">
@@ -824,7 +825,7 @@ const XchangeTransmissionPanel = ({
                   }
                 }}
               />
-              {enableUpdate('filenamePattern', xchangeFileTransmission.filenamePattern)}
+              {updateCmd && enableUpdate('filenamePattern', xchangeFileTransmission.filenamePattern)}
               <Spacing margin={{ top: 'normal' }}>
                 <span style={{ color: '#605e5c', fontSize: '14px', fontWeight: 'bold' }}>
                   Ex:{' '}
@@ -853,7 +854,7 @@ const XchangeTransmissionPanel = ({
                     }
                   }}
                 />
-                {enableUpdate('stepWise', xchangeFileTransmission?.stepWise)}
+                {updateCmd && enableUpdate('stepWise', xchangeFileTransmission?.stepWise)}
               </Column>
             </FormRow>
             <FormRow>
@@ -872,7 +873,7 @@ const XchangeTransmissionPanel = ({
                     }
                   }}
                 />
-                {enableUpdate('encryptionKeyName', xchangeFileTransmission?.encryptionKeyName)}
+                {updateCmd && enableUpdate('encryptionKeyName', xchangeFileTransmission?.encryptionKeyName)}
               </Column>
             </FormRow>
           </>
@@ -886,7 +887,7 @@ const XchangeTransmissionPanel = ({
       return null;
     }
 
-    if (updateCmd || createCmd) {
+    if (updateCmd || createCmd || copyCmd) {
       return (
         <>
           <PrimaryButton id="__Xchange_AddStep_Button" iconProps={{ iconName: 'Save' }} onClick={saveFileTransmission}>
@@ -959,7 +960,7 @@ const XchangeTransmissionPanel = ({
   }, [dataCopyTransmission, loadingCopyTransmission]);
 
   useEffect(() => {
-    setOptionXchangeTransmission(optionXchangeTransmission ?? '')
+    setOptionXchangeTransmission(optionXchangeTransmission ?? '');
   }, [optionXchangeTransmission]);
 
   useEffect(() => {

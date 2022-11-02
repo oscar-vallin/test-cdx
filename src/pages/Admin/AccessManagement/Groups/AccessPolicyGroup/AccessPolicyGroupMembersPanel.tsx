@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import {
   DetailsList,
   DetailsListLayoutMode,
+  DirectionalHint,
   IColumn,
   PanelType,
   SelectionMode,
   Stack,
+  TooltipHost,
 } from '@fluentui/react';
 import { PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
 import {
@@ -18,6 +20,8 @@ import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { ButtonLink } from 'src/components/buttons';
 import { UpdateUserPanel, useUpdateUserPanel } from 'src/pages/Admin/Users/UpdateUsers';
 import { Paginator } from 'src/components/tables/Paginator';
+import { PresenceBlocked16Regular } from '@fluentui/react-icons';
+import { theme } from 'src/styles/themes/theme';
 import { MembersList } from '../../MembersList/MembersList';
 
 type AccessPolicyMembersProps = {
@@ -117,6 +121,17 @@ const AccessPolicyGroupMembersPanel = ({
       columnVal = item.organization.name ?? '';
     }
 
+    const inactiveUser = (status: boolean) => {
+      if (!status) {
+        return (
+          <TooltipHost content="Inactive" directionalHintForRTL={DirectionalHint['bottomCenter']}>
+            <PresenceBlocked16Regular style={{ cursor: 'pointer', color: theme.colors.neutralQuaternary }} />
+          </TooltipHost>
+        )
+      }
+      return null;
+    };
+
     if (column?.key === 'organization') {
       return (
         <ButtonLink style={{ overflow: 'hidden' }} title={columnVal}>
@@ -129,17 +144,20 @@ const AccessPolicyGroupMembersPanel = ({
     const _viewCmd = pageCommands?.find((cmd) => cmd.commandType === CdxWebCommandType.View);
 
     return (
-      <ButtonLink
-        style={{ overflow: 'hidden' }}
-        title={columnVal}
-        onClick={() => {
-          if (_viewCmd) {
-            updateUserPanel.showPanel(item.userAccountSid);
-          }
-        }}
-      >
-        {columnVal}
-      </ButtonLink>
+      <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
+        <ButtonLink
+          style={{ overflow: 'hidden' }}
+          title={columnVal}
+          onClick={() => {
+            if (_viewCmd) {
+              updateUserPanel.showPanel(item.userAccountSid);
+            }
+          }}
+        >
+          {columnVal}
+        </ButtonLink>
+        {column?.key === 'email' && inactiveUser(item.active)}
+      </Stack>
     );
   };
 
