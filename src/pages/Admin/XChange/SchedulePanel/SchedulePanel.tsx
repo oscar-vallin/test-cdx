@@ -139,8 +139,8 @@ const SchedulePanel = ({
   const [xchangeJobGroup, setXchangeJobGroup] = useState<XchangeJobGroupForm | null>();
   const [xchangeJobGroups, setXchangeJobGroups] = useState<XchangeJobGroupConnection | null>();
   const [options, setOptions] = useState<UiOptions[]>([]);
-  const [currentDaySelected, setCurrentDaySelected] = useState<DaysProps>(DefaulDaysProps);
-  const [currentMonthSelected, setCurrentMonthSelected] = useState<MonthsProps>(DefaulMonthsProps);
+  const [currentDaySelected, setCurrentDaySelected] = useState<DaysProps>({ ...DefaulDaysProps });
+  const [currentMonthSelected, setCurrentMonthSelected] = useState<MonthsProps>({ ...DefaulMonthsProps });
   const [days, setDays] = useState<DayOfWeek[]>([]);
   const [months, setMonths] = useState<Month[]>([]);
   const [jobGroupName, setJobGroupName] = useState('')
@@ -272,12 +272,12 @@ const SchedulePanel = ({
       setOptions(xchangeScheduleForm?.options ?? []);
       xchangeScheduleForm?.months.value?.forEach((month) => {
         const { name } = month;
-        DefaulMonthsProps[name] = true;
+        currentMonthSelected[name] = true;
         handleMonths(true, month.value);
       });
       xchangeScheduleForm?.days.value?.forEach((day) => {
         const { name } = day;
-        DefaulDaysProps[name] = true;
+        currentDaySelected[name] = true;
         handleDays(true, day.value);
       });
       if (xchangeScheduleForm?.subscribers.value
@@ -287,10 +287,13 @@ const SchedulePanel = ({
       setScheduleFrequency(xchangeScheduleForm?.frequency.value?.value ?? '');
       setScheduleType(xchangeScheduleForm?.scheduleType.value?.value ?? '');
       setScheduleTimeZone(xchangeScheduleForm?.timezone.value?.value ?? '');
+      setEndDayOfMonth(xchangeScheduleForm?.endDayOfMonth.value?.value ?? '');
+      setEndDayOrdinal(xchangeScheduleForm?.endDayOrdinal.value?.value ?? '');
+      setEndRelativeDay(xchangeScheduleForm?.endRelativeDay.value?.value ?? '');
       const hour = xchangeScheduleForm?.endHour.value?.value;
       const minutes = xchangeScheduleForm?.endMinute.value?.value;
       setScheduleTime(`${hour},${minutes}`);
-      setHasSilencePeriod(xchangeScheduleForm?.hasSilencePeriod?.value ?? true);
+      setHasSilencePeriod(xchangeScheduleForm?.hasSilencePeriod?.value ?? false);
       setHasSilencePeriodLabel(xchangeScheduleForm?.hasSilencePeriod?.label ?? '');
       const monthsValues = xchangeScheduleForm?.options?.find((m) => m.key === 'Month');
       const daysValues = xchangeScheduleForm?.options?.find((d) => d.key === 'DayOfWeek');
@@ -306,18 +309,25 @@ const SchedulePanel = ({
       setOptions(xchangeJobGroupForm?.options ?? []);
       xchangeJobGroupForm?.months.value?.forEach((month) => {
         const { name } = month;
-        DefaulMonthsProps[name] = true;
+        currentMonthSelected[name] = true;
         handleMonths(true, month.value);
       })
       xchangeJobGroupForm?.days.value?.forEach((day) => {
         const { name } = day;
-        DefaulDaysProps[name] = true;
+        currentDaySelected[name] = true;
         handleDays(true, day.value);
       });
       setJobGroupName(xchangeJobGroupForm?.name.value ?? '');
       setScheduleFrequency(xchangeJobGroupForm?.frequency.value?.value ?? '');
       setScheduleType(xchangeJobGroupForm?.scheduleType.value?.value ?? '');
-      setHasSilencePeriod(xchangeJobGroupForm?.hasSilencePeriod?.value ?? true);
+      setScheduleTimeZone(xchangeJobGroupForm?.timezone.value?.value ?? '');
+      setEndDayOfMonth(xchangeJobGroupForm?.endDayOfMonth.value?.value ?? '');
+      setEndDayOrdinal(xchangeJobGroupForm?.endDayOrdinal.value?.value ?? '');
+      setEndRelativeDay(xchangeJobGroupForm?.endRelativeDay.value?.value ?? '');
+      const hour = xchangeJobGroupForm?.endHour.value?.value;
+      const minutes = xchangeJobGroupForm?.endMinute.value?.value;
+      setScheduleTime(`${hour},${minutes}`);
+      setHasSilencePeriod(xchangeJobGroupForm?.hasSilencePeriod?.value ?? false);
       setHasSilencePeriodLabel(xchangeJobGroupForm?.hasSilencePeriod?.label ?? '');
       const monthsValues = xchangeJobGroupForm?.options?.find((m) => m.key === 'Month');
       const daysValues = xchangeJobGroupForm?.options?.find((d) => d.key === 'DayOfWeek');
@@ -370,12 +380,25 @@ const SchedulePanel = ({
   }, [updateData, isLoadingUpdate, updateError]);
 
   useEffect(() => {
-    if (!isLoadingCreateJobGroup && jobGroupCreated) {
-      setTotalSubscribers([]);
-      setMessage(null);
-      closePanel(false);
-      refreshPage(true);
-      Toast.success({ text: `Job Group ${jobGroupName} created` });
+    const response = jobGroupCreated?.createXchangeJobGroup;
+    if (jobGroupCreated) {
+      const responseCode = response?.response;
+      const { createXchangeJobGroup } = jobGroupCreated;
+      setXchangeJobGroup(createXchangeJobGroup);
+      if (responseCode === GqOperationResponse.Fail) {
+        const errorMsg = createXchangeJobGroup?.errMsg
+          ?? 'Error occurred, please verify the information and try again.';
+        setMessageType(MessageBarType.error);
+        setMessage(errorMsg);
+      }
+
+      if (responseCode === GqOperationResponse.Success) {
+        setTotalSubscribers([]);
+        setMessage(null);
+        closePanel(false);
+        refreshPage(true);
+        Toast.success({ text: `Job Group ${jobGroupName} created` });
+      }
     }
 
     if (!isLoadingCreateJobGroup && jobGroupCreatedError) {
@@ -416,23 +439,6 @@ const SchedulePanel = ({
       setXchangeJobGroups(xchangeJobGroupList);
     }
   }, [jobGroupListData, isLoadingListJobGroup]);
-
-  useEffect(() => {
-    if (scheduleFrequency === ScheduleFrequency.Weekly) {
-      setEndDayOfMonth(null);
-      setEndRelativeDay(null);
-      setEndDayOrdinal(null);
-      setMonths([]);
-      setCurrentMonthSelected({ ...DefaulMonthsProps });
-    }
-
-    if (scheduleFrequency === ScheduleFrequency.Monthly) {
-      setScheduleTimeZone(null);
-      setScheduleTime(null);
-      setCurrentDaySelected({ ...DefaulDaysProps });
-      setDays([]);
-    }
-  }, [scheduleFrequency])
 
   const selectedWeekly = () => (
     <Spacing margin={{ top: 'double', bottom: 'normal' }}>
@@ -520,26 +526,20 @@ const SchedulePanel = ({
     const silenceSMonth = handleLastValue(silenceStartMonth ?? '');
     const silenceEMonth = handleLastValue(silenceEndMonth ?? '');
 
-    if (!hasSilencePeriod) {
-      setSilenceStartMonth(null);
-      setSilenceStartDay(null);
-      setSilenceEndMonth(null);
-      setSilenceEndDay(null);
-    }
-
     const scheduleValues = {
       frequency: ScheduleFrequency[frecuency],
       scheduleType: scheduleType === ScheduleType.ExpectedToRun
         ? ScheduleType.ExpectedToRun : ScheduleType.NotScheduled,
-      months,
-      days,
+      months: scheduleFrequency === ScheduleFrequency.Weekly ? null : months,
+      days: scheduleFrequency === ScheduleFrequency.Monthly ? null : days,
       xchangeJobGroupSid,
-      endDayOfMonth: !endDayOfMonth ? null : +endDayOfMonth,
-      endDayOrdinal: DayOrdinal[endOday],
-      endRelativeDay: RelativeDay[endRDay],
-      endHour,
-      endMinute,
-      timezone: scheduleTimezone,
+      endDayOfMonth: !endDayOfMonth || scheduleFrequency === ScheduleFrequency.Weekly
+        ? null : +endDayOfMonth,
+      endDayOrdinal: scheduleFrequency === ScheduleFrequency.Weekly ? null : DayOrdinal[endOday],
+      endRelativeDay: scheduleFrequency === ScheduleFrequency.Weekly ? null : RelativeDay[endRDay],
+      endHour: scheduleFrequency === ScheduleFrequency.Monthly ? null : endHour,
+      endMinute: scheduleFrequency === ScheduleFrequency.Monthly ? null : endMinute,
+      timezone: scheduleFrequency === ScheduleFrequency.Monthly ? null : scheduleTimezone,
       subscriberSids,
       hasSilencePeriod,
       silenceStartMonth: Month[silenceSMonth],
@@ -549,6 +549,11 @@ const SchedulePanel = ({
     };
 
     if (schedule) {
+      if (scheduleFrequency === ScheduleFrequency.Monthly) {
+        scheduleValues.endHour = endHour;
+        scheduleValues.endMinute = endMinute;
+        scheduleValues.timezone = scheduleTimezone;
+      }
       scheduleUpdate({
         variables: {
           scheduleInput: {
@@ -559,6 +564,11 @@ const SchedulePanel = ({
       });
     }
     if (!schedule && !xchangeJobGroupSid) {
+      if (scheduleFrequency === ScheduleFrequency.Monthly) {
+        scheduleValues.endHour = endHour;
+        scheduleValues.endMinute = endMinute;
+        scheduleValues.timezone = scheduleTimezone;
+      }
       if (jobGroupName.trim() !== '') {
         createJobGroup({
           variables: {
@@ -875,7 +885,7 @@ const SchedulePanel = ({
             <Spacing margin={{ left: 'normal' }}>
               {hasSilencePeriod && (
                 <Stack horizontal={true}>
-                  <Column md="12" lg="2">
+                  <Column md="12" lg="3">
                     <UIFlatSelectOneField
                       id="scheduleStartMonth"
                       uiField={renderUiField('silenceStartMonth')}
@@ -884,7 +894,7 @@ const SchedulePanel = ({
                       onChange={(_newValue) => setSilenceStartMonth(_newValue ?? '')}
                     />
                   </Column>
-                  <Column md="12" lg="3">
+                  <Column md="12" lg="2">
                     <UIFlatSelectOneField
                       id="scheduleStartDay"
                       uiField={renderUiField('silenceStartDay')}
@@ -898,12 +908,13 @@ const SchedulePanel = ({
                     <Text
                       style={{
                         marginTop: '10px',
-                        marginRight: '40px',
+                        marginLeft: '35px',
+                        textAlign: 'center',
                       }}
                     > to
                     </Text>
                   </Column>
-                  <Column md="12" lg="2">
+                  <Column md="12" lg="3">
                     <UIFlatSelectOneField
                       id="scheduleLastMonth"
                       uiField={renderUiField('silenceEndMonth')}
@@ -912,7 +923,7 @@ const SchedulePanel = ({
                       onChange={(_newValue) => setSilenceEndMonth(_newValue ?? '')}
                     />
                   </Column>
-                  <Column md="12" lg="3">
+                  <Column md="12" lg="1">
                     <UIFlatSelectOneField
                       id="scheduleLastDay"
                       uiField={renderUiField('silenceEndDay')}
@@ -1004,8 +1015,8 @@ const SchedulePanel = ({
       isOpen={isPanelOpen}
       onRenderFooterContent={renderPanelFooter}
       onDismiss={() => {
-        setCurrentMonthSelected(DefaulMonthsProps);
-        setCurrentDaySelected(DefaulDaysProps);
+        setCurrentMonthSelected({ ...DefaulMonthsProps });
+        setCurrentDaySelected({ ...DefaulDaysProps });
         setTotalSubscribers([]);
         setMessage(null);
         closePanel(false);
