@@ -940,7 +940,7 @@ const SchedulePanel = ({
           {!schedule && (
           <Spacing margin={{ top: 'normal' }}>
             <Stack>
-              <Text style={{ fontWeight: 'bolder' }}>Xchange porcessed in this groups</Text>
+              <Text style={{ fontWeight: 'bolder' }}>Xchange processed in this groups</Text>
               {xchangeProcessed && xchangeProcessed.length > 0 ? (
                 xchangeProcessed?.map((xchange, indexXchange) => (
                   <Text key={indexXchange}>{xchange}</Text>

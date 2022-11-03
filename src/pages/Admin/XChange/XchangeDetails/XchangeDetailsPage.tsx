@@ -272,7 +272,7 @@ const XchangeDetailsPage = () => {
                 <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                   <Row>
                     <Column lg="2">
-                      <Text style={{ fontWeight: 'bold' }}>Subscribers:</Text>
+                      <Text style={{ fontWeight: 'bold' }}>Notify:</Text>
                     </Column>
                   </Row>
                 </Spacing>

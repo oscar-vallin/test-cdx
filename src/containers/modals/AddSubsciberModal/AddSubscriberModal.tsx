@@ -190,7 +190,7 @@ const AddSubscriberModal = ({
   );
 
   return (
-    <Dialog hidden={false} dialogContentProps={{ title: 'Add Subscriber' }} minWidth="500px">
+    <Dialog hidden={false} dialogContentProps={{ title: 'Add person to be notified' }} minWidth="500px">
       {renderBody()}
       {currentSubscriber.trim() !== '' && !addNewAccount && !subscriberFound && (
         <StyledSubsOptions>{doSearch()}</StyledSubsOptions>
