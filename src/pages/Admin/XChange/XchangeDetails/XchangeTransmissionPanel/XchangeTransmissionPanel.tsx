@@ -852,14 +852,16 @@ const XchangeTransmissionPanel = ({
                 }}
               />
               {updateCmd && enableUpdate('filenamePattern', xchangeFileTransmission.filenamePattern)}
-              <Spacing margin={{ top: 'normal' }}>
-                <span style={{ color: '#605e5c', fontSize: '14px', fontWeight: 'bold' }}>
-                  Ex:{' '}
-                  <Text variant="small" style={{ color: '#a19f9d', fontWeight: 'bold' }}>
-                    {previewFilenamePatternValue}
-                  </Text>
-                </span>
-              </Spacing>
+              {updateCmd && !xchangeFileTransmission.filenamePattern.readOnly && (
+                <Spacing margin={{ top: 'normal' }}>
+                  <span style={{ color: '#605e5c', fontSize: '14px', fontWeight: 'bold' }}>
+                    Ex:{' '}
+                    <Text variant="small" style={{ color: '#a19f9d', fontWeight: 'bold' }}>
+                      {previewFilenamePatternValue}
+                    </Text>
+                  </span>
+                </Spacing>
+              )}
             </Column>
           </FormRow>
         )}
