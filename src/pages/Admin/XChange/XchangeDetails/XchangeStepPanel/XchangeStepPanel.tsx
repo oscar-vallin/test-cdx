@@ -313,6 +313,7 @@ const XchangeStepPanel = ({
       const xmlValue = addFormatToXml(dataCopyStep.copyXchangeStep.xml.value);
       setEditXmlData(xmlValue);
       setPreviousXmlDate(xmlValue);
+      setOptionXchangeStep('copy');
     }
 
     if (dataCopyStep?.copyXchangeStep) {
@@ -350,6 +351,10 @@ const XchangeStepPanel = ({
       Toast.error({ text: 'There was an error to update step' });
     }
   }, [dataUpdateStep, loadingUpdateXchange, errorUpdateXchange]);
+
+  useEffect(() => {
+    setOptionXchangeStep(optionXchangeStep ?? '')
+  }, [optionXchangeStep])
 
   return (
     <>
