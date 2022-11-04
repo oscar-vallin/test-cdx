@@ -31,6 +31,7 @@ import {
 import {
   Checkbox,
   ChoiceGroup,
+  IChoiceGroupOption,
   DefaultButton,
   FontIcon,
   PanelType,
@@ -525,6 +526,7 @@ const SchedulePanel = ({
     const endOday = handleLastValue(endDayOrdinal ?? '');
     const silenceSMonth = handleLastValue(silenceStartMonth ?? '');
     const silenceEMonth = handleLastValue(silenceEndMonth ?? '');
+    const timezone = scheduleFrequency === ScheduleFrequency.Monthly ? undefined : scheduleTimezone;
 
     const scheduleValues = {
       frequency: ScheduleFrequency[frecuency],
@@ -539,7 +541,7 @@ const SchedulePanel = ({
       endRelativeDay: scheduleFrequency === ScheduleFrequency.Weekly ? null : RelativeDay[endRDay],
       endHour: scheduleFrequency === ScheduleFrequency.Monthly ? null : endHour,
       endMinute: scheduleFrequency === ScheduleFrequency.Monthly ? null : endMinute,
-      timezone: scheduleFrequency === ScheduleFrequency.Monthly ? null : scheduleTimezone,
+      timezone: scheduleFrequency === ScheduleFrequency.Monthly ? undefined : scheduleTimezone,
       subscriberSids,
       hasSilencePeriod,
       silenceStartMonth: Month[silenceSMonth],
@@ -549,11 +551,6 @@ const SchedulePanel = ({
     };
 
     if (schedule) {
-      if (scheduleFrequency === ScheduleFrequency.Monthly) {
-        scheduleValues.endHour = endHour;
-        scheduleValues.endMinute = endMinute;
-        scheduleValues.timezone = scheduleTimezone;
-      }
       scheduleUpdate({
         variables: {
           scheduleInput: {
@@ -582,6 +579,11 @@ const SchedulePanel = ({
       }
     }
     if (!schedule && xchangeJobGroupSid) {
+      if (scheduleFrequency === ScheduleFrequency.Monthly) {
+        scheduleValues.endHour = endHour;
+        scheduleValues.endMinute = endMinute;
+        scheduleValues.timezone = scheduleTimezone;
+      }
       if (jobGroupName.trim() !== '') {
         updateJobGroup({
           variables: {
@@ -736,7 +738,7 @@ const SchedulePanel = ({
                         iconName="Info"
                         style={{
                           fontSize: '12px',
-                          color: '#121829',
+                          color: ThemeStore.userTheme.colors.custom.info,
                           fontWeight: 700,
                           cursor: 'pointer',
                         }}
@@ -768,6 +770,10 @@ const SchedulePanel = ({
     );
   };
 
+  function _onChange(ev: React.FormEvent<HTMLInputElement>, option: IChoiceGroupOption): void {
+    console.dir(option);
+  };
+
   const renderBody = () => {
     if (!isLoadingForm || !isLoadingJobGroup) {
       return (
@@ -790,7 +796,7 @@ const SchedulePanel = ({
                   </Column>
                   <ChoiceGroup
                     style={{ paddingBottom: '20px' }}
-                    defaultSelectedKey="singleDay"
+                    defaultSelectedKey={endDayOfMonth ? 'singleDay' : 'relOrdDay'}
                     options={[
                       {
                         key: 'singleDay',
@@ -804,7 +810,11 @@ const SchedulePanel = ({
                                 options={options}
                                 value={endDayOfMonth ?? ''}
                                 disabled={!props?.checked}
-                                onChange={(_newValue) => setEndDayOfMonth(_newValue ?? '')}
+                                onChange={(_newValue) => {
+                                  setEndDayOfMonth(_newValue ?? '');
+                                  setEndDayOrdinal(null);
+                                  setEndRelativeDay(null);
+                                }}
                                 optionNumber={true}
                               />
                               <Text style={{ marginTop: '8px' }}>Day</Text>
@@ -824,7 +834,10 @@ const SchedulePanel = ({
                                 value={endDayOrdinal ?? ''}
                                 options={options}
                                 disabled={!props?.checked}
-                                onChange={(_newValue) => setEndDayOrdinal(_newValue ?? '')}
+                                onChange={(_newValue) =>{
+                                  setEndDayOrdinal(_newValue ?? '');
+                                  setEndDayOfMonth(null);
+                                }}
                               />
                               <UIFlatSelectOneField
                                 id="scheduleSelectTime"
