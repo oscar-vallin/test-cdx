@@ -68,7 +68,6 @@ export const ScheduleSubHeader = ({
   };
 
   const _renderSubHeader = () => {
-    const dateFormat = 'EEEE';
     const days: ReactElement[] = [];
     const _currentDay = selectedDate ?? currentDate;
 
@@ -121,7 +120,8 @@ export const ScheduleSubHeader = ({
       } else {
         days.push(
           <DayOfWeek id={`__MonthSubHeader_${i}`} key={`day_${i}`}>
-            <Text size="small">{format(day, dateFormat)}</Text>
+            <Text size="small" hideForMobile={true}>{format(day, 'EEEE')}</Text>
+            <Text size="small" showForMobile={true}>{format(day, 'E')}</Text>
           </DayOfWeek>,
         );
       }

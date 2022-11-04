@@ -148,13 +148,14 @@ export const HeaderYear = styled.span`
 `;
 
 export const CalendarBodyCellNumber = styled.span`
-  font-size: ${FONT_LARGE};
+  font-size: ${FONT_NORMAL};
   line-height: 1;
   font-weight: 700;
   margin: 5px;
 
   @media ${device.tablet} {
     margin: 10px;
+    font-size: ${FONT_LARGE};
   }
 `;
 
