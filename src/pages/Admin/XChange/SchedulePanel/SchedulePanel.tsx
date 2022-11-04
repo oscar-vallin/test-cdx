@@ -770,10 +770,6 @@ const SchedulePanel = ({
     );
   };
 
-  function _onChange(ev: React.FormEvent<HTMLInputElement>, option: IChoiceGroupOption): void {
-    console.dir(option);
-  };
-
   const renderBody = () => {
     if (!isLoadingForm || !isLoadingJobGroup) {
       return (
