@@ -74,7 +74,7 @@ const styles = {
 const VisualizationsPage = () => {
   const { orgSid } = useOrgSid();
   const [subClients, setSubClients] = useState<DataSubClientProps[]>([]);
-  const [typeOfTransmissions, setTypeOfTransmissions] = useState<IDropdownOption>();
+  const [typeOfTransmissions, setTypeOfTransmissions] = useState<IDropdownOption | undefined>({ key: 'sponsor', text: 'Transmissions by vendor per month' });
   const [graphicType, setGraphicType] = useState<IDropdownOption>();
   const [subClientBarChart, setSubClientsBarChart] = useState<any[]>([]);
   const [months, setMonths] = useState<string[]>([]);
@@ -357,7 +357,8 @@ const VisualizationsPage = () => {
     }
   }, [transmissionVendorData, isLoadingTransmissionVendor]);
 
-  const customTooltip = () => {
+  const customTooltip = ({ payload }) => {
+    if (payload.name === 'default') return null;
     if (showTooltip) {
       const year = new Date().getFullYear();
       return (
@@ -406,7 +407,7 @@ const VisualizationsPage = () => {
             <YAxis />
             <Tooltip
               cursor={false}
-              content={customTooltip()}
+              content={customTooltip}
               position={{ x: tooltipPosition.x - 115, y: tooltipPosition.y - 50 }}
               wrapperStyle={{ pointeEvents: 'auto' }}
             />
@@ -451,7 +452,7 @@ const VisualizationsPage = () => {
           />
           <Tooltip
             cursor={false}
-            content={customTooltip()}
+            content={customTooltip}
             position={{ x: tooltipPosition.x - 98, y: tooltipPosition.y - 88 }}
             wrapperStyle={{ pointeEvents: 'auto' }}
           />
@@ -489,7 +490,6 @@ const VisualizationsPage = () => {
               <StyledTransmissionsType
                 dropdownWidth="auto"
                 label=""
-                defaultSelectedKey="sponsor"
                 selectedKey={typeOfTransmissions ? typeOfTransmissions.key : undefined}
                 options={typeTransmissions}
                 onChange={(e, _newValue) => {

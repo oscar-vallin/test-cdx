@@ -313,6 +313,7 @@ const XchangeStepPanel = ({
       const xmlValue = addFormatToXml(dataCopyStep.copyXchangeStep.xml.value);
       setEditXmlData(xmlValue);
       setPreviousXmlDate(xmlValue);
+      setOptionXchangeStep('copy');
     }
 
     if (dataCopyStep?.copyXchangeStep) {
@@ -327,7 +328,14 @@ const XchangeStepPanel = ({
   }, [editXmlData]);
 
   useEffect(() => {
-    const message = optionXchangeStep === 'add' ? 'added' : 'updated';
+    let message = '';
+    if (optionXchangeStep === 'add') {
+      message = 'added';
+    } else if (optionXchangeStep === 'copy') {
+      message = 'copied';
+    } else {
+      message = 'updated';
+    }
     if (!loadingCreateStep && dataCreateStep) {
       refreshDetailsPage(true);
       Toast.success({ text: `Xchange step ${message}` });
@@ -350,6 +358,10 @@ const XchangeStepPanel = ({
       Toast.error({ text: 'There was an error to update step' });
     }
   }, [dataUpdateStep, loadingUpdateXchange, errorUpdateXchange]);
+
+  useEffect(() => {
+    setOptionXchangeStep(optionXchangeStep ?? '')
+  }, [optionXchangeStep])
 
   return (
     <>
