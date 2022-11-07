@@ -10,8 +10,9 @@ import {
   WeekBodyRow,
   SWeekHour,
   SWeekHourContainer,
-  CellItem,
   WeekDaysWrapper,
+  DesktopCellItem,
+  MobileCellItem,
 } from './Schedule.styles';
 
 type ScheduleWeekProps = {
@@ -48,10 +49,19 @@ export const ScheduleWeek = ({
     const dayRows = allItems.filter((_item) => isSameHour(parseISO(_item.timeScheduled), _day));
 
     return dayRows?.map((_item, index) => (
-      <CellItem key={`cell_${_day}_${index}`} title={_item.resource}>
+      <DesktopCellItem key={`cell_${_day}_${index}`} title={_item.resource}>
         {_item.resource}
-      </CellItem>
+      </DesktopCellItem>
     ));
+  };
+
+  const renderItemCount = (_day: Date, allItems: ScheduleOccurrence[]) => {
+    const dayRows = allItems.filter((_item) => isSameHour(parseISO(_item.timeScheduled), _day));
+    const count = dayRows.length;
+    if (count > 0) {
+      return <MobileCellItem>{count}</MobileCellItem>;
+    }
+    return null;
   };
 
   //
@@ -66,7 +76,10 @@ export const ScheduleWeek = ({
         key={`dow_${day}`}
         onClick={() => handleChangeDate(day)}
       >
-        <WeekBodyCellNumber id={`DayOfWeekBodyCellNumber-${id}`}>{renderItems(day, items)}</WeekBodyCellNumber>
+        <WeekBodyCellNumber id={`DayOfWeekBodyCellNumber-${id}`}>
+          {renderItems(day, items)}
+          {renderItemCount(day, items)}
+        </WeekBodyCellNumber>
       </DayOfWeekContainer>
     );
   };

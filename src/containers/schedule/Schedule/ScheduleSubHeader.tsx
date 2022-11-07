@@ -3,6 +3,7 @@ import {
   addDays, endOfMonth, endOfWeek, format, isSameDay, isSameMonth, startOfMonth, startOfWeek,
 } from 'date-fns';
 
+import { HideForMobile } from 'src/styles/GlobalStyles';
 import { Text } from 'src/components/typography';
 import {
   DayOfWeek,
@@ -116,8 +117,11 @@ export const ScheduleSubHeader = ({
             onClick={() => clickWeekHeader(day)}
           >
             <WeekViewNumber>
-              {isCurrentDate || isStartMonth || isEndMonth ? format(day, 'MMM d') : format(day, 'd')}
+              {(isCurrentDate || isStartMonth || isEndMonth) && (
+                <HideForMobile>{format(_currentDay, 'MMM')}</HideForMobile>
+              )}
             </WeekViewNumber>
+            <WeekViewNumber>{format(day, 'd')}</WeekViewNumber>
             <WeekViewDayName isSameMonth={isCurrentMonth}>{format(day, 'EEE')}</WeekViewDayName>
           </WeekViewContainer>,
         );
