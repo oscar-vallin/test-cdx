@@ -1,66 +1,17 @@
-export function InitialNodes(data) {
-  const postionTransmissions = [
-    { x: 0, y: 530 },
-    { x: 270, y: 530 },
-    { x: 540, y: 530 },
-    { x: 820, y: 530 },
-    { x: 10, y: 700 },
-    { x: 270, y: 700 },
-    { x: 540, y: 700 },
-    { x: 820, y: 700 },
-    { x: 820, y: 700 },
-    { x: 820, y: 700 },
-  ];
-  const initialSteps = data.steps.map((step, index: number) => {
+import { XchangeDiagram, XchangeDiagramFileTransmission, XchangeDiagramStep } from 'src/data/services/graphql';
+
+export function InitialNodes(data: XchangeDiagram) {
+  const xchangeSteps = data.steps ? data.steps : [];
+  const xhcnageTransmissions = data.transmissions ? data.transmissions : [];
+  const initialSteps = xchangeSteps.map((step: XchangeDiagramStep, index: number) => {
     const values = {};
-    const lastNode = index === data.steps.length - 1;
-    let positionX = 0;
-    let positionY = 50;
-
-    if (step.position.x === 1 || step.position.x === 2) {
-      positionX = 290;
-    }
-
-    if (data.steps.length === 3) {
-      if (step.position.y === 1) {
-        positionY = 185;
-      } else if (step.position.y === 2) {
-        positionY = 350;
-      }
-    }
-
-    if (data.steps.length === 4) {
-      if (step.position.y === 1) {
-        positionY = 150;
-      } else if (step.position.y === 2) {
-        positionY = 275;
-      } else if (step.position.y === 3) {
-        positionY = 400;
-      }
-    }
-
-    if (data.steps.length === 5) {
-      if (step.position.y === 1) {
-        positionY = 145;
-      } else if (step.position.y === 2) {
-        positionY = 235;
-      } else if (step.position.y === 3) {
-        positionY = 335;
-      } else if (step.position.y === 4) {
-        positionY = 430;
-      }
-    }
-
-    if (data.steps.length > 5) {
-      if (step.position.y === 1 && data.steps.length > 4) {
-        positionY = 145;
-      } else if (step.position.y === 2 && data.steps.length > 4) {
-        positionY = 210;
-      } else if (step.position.y === 3 && data.steps.length > 4) {
-        positionY = 300;
-      } else if (step.position.y === 4 && data.steps.length > 4) {
-        positionY = 400;
-      }
+    const lastNode = index === xchangeSteps.length - 1;
+    const positionX = step.position.x * 300;
+    let positionY = 0;
+    if (step.position.y === 0) {
+      positionY = 50;
+    } else {
+      positionY = (step.position.y + 0.2) * 120;
     }
 
     values['id'] = step.key;
@@ -86,29 +37,32 @@ export function InitialNodes(data) {
     return values;
   });
 
-  const initialTransmissions = data.transmissions.map((transmission, index: number) => {
-    const values = {};
-    const lastTrans = data.transmissions.length - 1 === index;
-    values['id'] = transmission.key;
-    values['type'] = 'dataNodeTransmissions';
-    values['data'] = {
-      lastTrans,
-      sid: transmission.sid,
-      hoverOverShowIcons: false,
-      updateTransmission: false,
-      position: transmission.position,
-      refreshDetailsPage: null,
-      xchangeFileProcessSid: null,
-      protocol: transmission.protocol,
-      host: transmission.host,
-      qualifier: transmission.qualifier,
-      transmissionCommands: null,
-    };
+  const initialTransmissions = xhcnageTransmissions
+    .map((transmission:XchangeDiagramFileTransmission, index: number) => {
+      const values = {};
+      const positionX = transmission.position.x * 265;
+      const positionY = (transmission.position.y + 0.2) * 120;
+      const lastTrans = xhcnageTransmissions.length - 1 === index;
+      values['id'] = transmission.key;
+      values['type'] = 'dataNodeTransmissions';
+      values['data'] = {
+        lastTrans,
+        sid: transmission.sid,
+        hoverOverShowIcons: false,
+        updateTransmission: false,
+        position: transmission.position,
+        refreshDetailsPage: null,
+        xchangeFileProcessSid: null,
+        protocol: transmission.protocol,
+        host: transmission.host,
+        qualifier: transmission.qualifier,
+        transmissionCommands: null,
+      };
 
-    values['position'] = { x: postionTransmissions[index]['x'], y: postionTransmissions[index]['y'] };
+      values['position'] = { x: positionX, y: positionY };
 
-    return values;
-  });
+      return values;
+    });
 
   return { initialNodes: [...initialSteps, ...initialTransmissions] };
 }

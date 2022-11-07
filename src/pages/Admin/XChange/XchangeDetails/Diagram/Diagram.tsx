@@ -40,6 +40,7 @@ const Diagram = ({
   const [openStepPanel, setOpenStepPanel] = useState(false);
   const [openFilePanel, setOpenFilePanel] = useState(false);
   const [stepCommands, setStepCommands] = useState<WebCommand[] | undefined>([]);
+  const [totalHeight, setTotalHeight] = useState(0);
   const [transmissionCommands, setTransmissionCommands] = useState<WebCommand[] | undefined>([]);
   const [optionXchangeStep, setOptionXchangeStep] = useState<string>();
   const [optionXchangeFileTransmission, setOptionXchangeFileTransmission] = useState<string>();
@@ -144,7 +145,9 @@ const Diagram = ({
 
   useEffect(() => {
     getCommands();
-  }, []);
+    const height = initialNodes[initialNodes.length - 1]['data'].position.y;
+    setTotalHeight(height * 150);
+  }, [data]);
 
   useEffect(() => {
     setNodes(nodeWithParents);
@@ -187,7 +190,7 @@ const Diagram = ({
           </StyledHorizontalButtons>
         </Column>
         <Column lg="10">
-          <StyledContainer>
+          <StyledContainer height={totalHeight}>
             <ReactFlow
               nodes={nodes}
               edges={edges}
