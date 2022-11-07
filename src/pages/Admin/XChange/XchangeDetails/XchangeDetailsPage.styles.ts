@@ -31,13 +31,14 @@ export const StyledColumTabs = styled(Column)`
 `;
 
 export const StyledContainer = styled.div<DemoCanvasWidgetProps>`
-  height: 650px;
+  height: ${({ height }) => (height ? `${height}px` : '750px')};
   min-width: 1070px;
   width: 100%;
   background-color: ${({ theme }) => theme.colors.white};
 `;
 type DemoCanvasWidgetProps = {
   color?: string;
+  height?: number;
   background?: string;
 };
 

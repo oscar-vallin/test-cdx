@@ -9,33 +9,30 @@ export const StyledNode = styled.div`
     height: 55px;
 
     &:hover {
-        background: #f3f2f1;
+        background: ${({ theme }) => theme.colors.neutralLighter};
+        border: 2px solid ${({ theme }) => theme.colors.themeDark};
     }
 `;
 
 export const StyledTrashIcon = styled(FontIcon)`
-    font-size: 15px;
-    color: black;
+    font-size: 14px;
+    color: ${({ theme }) => theme.colors.black};
     cursor: pointer;
-
+    padding: 3.5px;
+    border-radius: 50px;
     &:hover {
-        background-color: #B2BEB5;
-        border-radius: 50px;
-        font-size: 14px;
-        padding: 4px 4px 4px 4.5px;
+        background-color: ${({ theme }) => theme.colors.neutralTertiary};
         color: ${({ theme }) => theme.colors.white};
     }
 `;
 export const StyledCopyIcon = styled(FontIcon)`
-    font-size: 15px;
-    color: black;
+    font-size: 14px;
+    color: ${({ theme }) => theme.colors.black};
     cursor: pointer;
-
+    padding: 3.5px;
+    border-radius: 50px;
     &:hover {
-        background-color: #B2BEB5;
-        border-radius: 50px;
-        font-size: 14px;
-        padding: 4px 4px 4px 4.5px;
+        background-color: ${({ theme }) => theme.colors.neutralTertiary};
         color: ${({ theme }) => theme.colors.white};
     }
 `;
@@ -49,7 +46,7 @@ export const StyledChevronUpIcon = styled(FontIcon)<StyledChevronUpProps>`
     padding: 4px;
     margin-bottom: -2px;
     &:hover {
-      background-color: ${({ firstIndex }) => (firstIndex ? '' : '#B2BEB5')};
+      background-color: ${({ theme, firstIndex }) => (firstIndex ? '' : theme.colors.neutralTertiary)};
     }
 `;
 export const StyledChevronDownIcon = styled(FontIcon)<StyledChevronDownProps>`
@@ -61,7 +58,7 @@ export const StyledChevronDownIcon = styled(FontIcon)<StyledChevronDownProps>`
     padding: 4px;
     margin-bottom: -2px;
     &:hover {
-      background-color: ${({ lastNode }) => (lastNode ? '' : '#B2BEB5')};
+      background-color: ${({ theme, lastNode }) => (lastNode ? '' : theme.colors.neutralTertiary)};
     }
 `;
 
