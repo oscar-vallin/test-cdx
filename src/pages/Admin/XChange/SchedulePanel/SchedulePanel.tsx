@@ -31,7 +31,6 @@ import {
 import {
   Checkbox,
   ChoiceGroup,
-  IChoiceGroupOption,
   DefaultButton,
   FontIcon,
   PanelType,
@@ -526,7 +525,6 @@ const SchedulePanel = ({
     const endOday = handleLastValue(endDayOrdinal ?? '');
     const silenceSMonth = handleLastValue(silenceStartMonth ?? '');
     const silenceEMonth = handleLastValue(silenceEndMonth ?? '');
-    const timezone = scheduleFrequency === ScheduleFrequency.Monthly ? undefined : scheduleTimezone;
 
     const scheduleValues = {
       frequency: ScheduleFrequency[frecuency],
