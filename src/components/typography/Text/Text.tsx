@@ -28,6 +28,8 @@ type TextProps = {
   bold?: boolean;
   className?: string;
   ellipsis?: boolean;
+  hideForMobile?: boolean;
+  showForMobile?: boolean;
 } & typeof defaultProps;
 
 const Text = ({
@@ -43,6 +45,8 @@ const Text = ({
   breakWord,
   title,
   ellipsis,
+  hideForMobile = false,
+  showForMobile = false,
   ...props
 }: TextProps): ReactElement => (
   <StyledText
@@ -58,6 +62,8 @@ const Text = ({
     size={size}
     className="Text"
     ellipsis={ellipsis ?? false}
+    hideForMobile={hideForMobile}
+    showForMobile={showForMobile}
     {...props}
   >
     {children}

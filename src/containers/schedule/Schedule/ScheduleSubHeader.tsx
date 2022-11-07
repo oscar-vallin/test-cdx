@@ -3,6 +3,7 @@ import {
   addDays, endOfMonth, endOfWeek, format, isSameDay, isSameMonth, startOfMonth, startOfWeek,
 } from 'date-fns';
 
+import { HideForMobile } from 'src/styles/GlobalStyles';
 import { Text } from 'src/components/typography';
 import {
   DayOfWeek,
@@ -68,7 +69,6 @@ export const ScheduleSubHeader = ({
   };
 
   const _renderSubHeader = () => {
-    const dateFormat = 'EEEE';
     const days: ReactElement[] = [];
     const _currentDay = selectedDate ?? currentDate;
 
@@ -80,7 +80,11 @@ export const ScheduleSubHeader = ({
 
       return (
         <RowWeek id={id} key={id}>
-          <DayViewContainer key={_currentDay?.toDateString()} isSameDay={isCurrentDate} isSameMonth={isCurrentMonth}>
+          <DayViewContainer
+            key={_currentDay?.toDateString()}
+            isSameDay={isCurrentDate}
+            isSameMonth={isCurrentMonth}
+          >
             <WeekViewNumber>
               {isCurrentDate || isStartMonth || isEndMonth ? format(_currentDay, 'MMM d') : format(_currentDay, 'd')}
             </WeekViewNumber>
@@ -113,15 +117,19 @@ export const ScheduleSubHeader = ({
             onClick={() => clickWeekHeader(day)}
           >
             <WeekViewNumber>
-              {isCurrentDate || isStartMonth || isEndMonth ? format(day, 'MMM d') : format(day, 'd')}
+              {(isCurrentDate || isStartMonth || isEndMonth) && (
+                <HideForMobile>{format(_currentDay, 'MMM')}</HideForMobile>
+              )}
             </WeekViewNumber>
+            <WeekViewNumber>{format(day, 'd')}</WeekViewNumber>
             <WeekViewDayName isSameMonth={isCurrentMonth}>{format(day, 'EEE')}</WeekViewDayName>
           </WeekViewContainer>,
         );
       } else {
         days.push(
           <DayOfWeek id={`__MonthSubHeader_${i}`} key={`day_${i}`}>
-            <Text size="small">{format(day, dateFormat)}</Text>
+            <Text size="small" hideForMobile={true}>{format(day, 'EEEE')}</Text>
+            <Text size="small" showForMobile={true}>{format(day, 'E')}</Text>
           </DayOfWeek>,
         );
       }

@@ -165,6 +165,11 @@ export enum ActiveEnum {
   All = 'ALL'
 }
 
+export type AlertSelectionInput = {
+  sid: Scalars['ID'];
+  subscriptionType: SubscriptionType;
+};
+
 export enum AlertType {
   All = 'ALL',
   AllFailures = 'ALL_FAILURES',
@@ -183,6 +188,20 @@ export type ArchiveFileType = {
   __typename?: 'ArchiveFileType';
   value: Scalars['String'];
   label?: Maybe<Scalars['String']>;
+};
+
+export type AvailableAlert = {
+  __typename?: 'AvailableAlert';
+  sid: Scalars['ID'];
+  subscriptionType: SubscriptionType;
+  name: Scalars['String'];
+  info?: Maybe<Scalars['String']>;
+};
+
+export type AvailableAlerts = {
+  __typename?: 'AvailableAlerts';
+  processingAlerts?: Maybe<Array<AvailableAlert>>;
+  schedules?: Maybe<Array<AvailableAlert>>;
 };
 
 export enum CdxWebAppDomain {
@@ -892,6 +911,7 @@ export type Mutation = {
   createAccessPolicyGroup?: Maybe<AccessPolicyGroupForm>;
   updateAccessPolicyGroup?: Maybe<AccessPolicyGroupForm>;
   deleteAccessPolicyGroup?: Maybe<GqOperationResponse>;
+  updateMyProfile?: Maybe<UserAccountForm>;
   createUser?: Maybe<UserAccountForm>;
   updateUser?: Maybe<UserAccountForm>;
   updateUserAccessPolicyGroups?: Maybe<UserAccountForm>;
@@ -957,6 +977,8 @@ export type Mutation = {
   updateXchangeSchedule?: Maybe<XchangeScheduleForm>;
   createXchangeJobGroup?: Maybe<XchangeJobGroupForm>;
   updateXchangeJobGroup?: Maybe<XchangeJobGroupForm>;
+  subscribeToAlert?: Maybe<GenericResponse>;
+  deleteMyAlert?: Maybe<GenericResponse>;
 };
 
 
@@ -1063,6 +1085,11 @@ export type MutationUpdateAccessPolicyGroupArgs = {
 
 export type MutationDeleteAccessPolicyGroupArgs = {
   policyGroupSid: Scalars['ID'];
+};
+
+
+export type MutationUpdateMyProfileArgs = {
+  userInfo: UpdateMyProfileInput;
 };
 
 
@@ -1356,6 +1383,32 @@ export type MutationCreateXchangeJobGroupArgs = {
 
 export type MutationUpdateXchangeJobGroupArgs = {
   jobGroupInput: UpdateXchangeJobGroupInput;
+};
+
+
+export type MutationSubscribeToAlertArgs = {
+  alertInput?: Maybe<AlertSelectionInput>;
+};
+
+
+export type MutationDeleteMyAlertArgs = {
+  alertInput: AlertSelectionInput;
+};
+
+export type MyAlert = {
+  __typename?: 'MyAlert';
+  sid: Scalars['ID'];
+  subscriptionType: SubscriptionType;
+  name: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  alertTypes?: Maybe<Array<AlertType>>;
+  info?: Maybe<Scalars['String']>;
+};
+
+export type MyAlerts = {
+  __typename?: 'MyAlerts';
+  alerts?: Maybe<Array<MyAlert>>;
+  commands?: Maybe<Array<WebCommand>>;
 };
 
 export type Nvp = NvpStr | NvpId;
@@ -1832,6 +1885,7 @@ export type Query = {
   currentUser?: Maybe<CurrentUserInfo>;
   userTheme?: Maybe<DashTheme>;
   findUserByEmail?: Maybe<UserAccount>;
+  myProfile?: Maybe<UserAccountForm>;
   userAccountForm?: Maybe<UserAccountForm>;
   findUserAccount?: Maybe<UserAccountForm>;
   userAccountAuditLogs?: Maybe<UserAccountLogConnection>;
@@ -1913,6 +1967,8 @@ export type Query = {
   xchangeScheduleForm?: Maybe<XchangeScheduleForm>;
   xchangeJobGroups?: Maybe<XchangeJobGroupConnection>;
   xchangeJobGroupForm?: Maybe<XchangeJobGroupForm>;
+  myAlerts?: Maybe<MyAlerts>;
+  findAvailableAlerts?: Maybe<AvailableAlerts>;
   topLevelOntologyClasses: Array<OntologyClass>;
   findOntologyClass?: Maybe<OntologyClass>;
   searchOntology: Array<OntologyClass>;
@@ -2708,6 +2764,13 @@ export type SubscriptionFtpTestArgs = {
   sendTestFile?: Maybe<SftpTestSendTestFile>;
 };
 
+export enum SubscriptionType {
+  XchangeProfile = 'XCHANGE_PROFILE',
+  XchangeConfig = 'XCHANGE_CONFIG',
+  XchangeSchedule = 'XCHANGE_SCHEDULE',
+  JobGroupSchedule = 'JOB_GROUP_SCHEDULE'
+}
+
 export enum TestFileStrategy {
   Upload = 'UPLOAD',
   Generate = 'GENERATE'
@@ -2967,6 +3030,12 @@ export type UpdateDefaultDashThemeInput = {
   themeFontSize?: Maybe<ThemeFontSize>;
   themeColorMode?: Maybe<ThemeColorMode>;
   themeColorSid?: Maybe<Scalars['ID']>;
+};
+
+export type UpdateMyProfileInput = {
+  email: Scalars['String'];
+  firstNm: Scalars['String'];
+  lastNm?: Maybe<Scalars['String']>;
 };
 
 export type UpdateOrgInput = {
@@ -4916,6 +4985,52 @@ export type FindUserByEmailQuery = (
         { __typename?: 'AccessPolicy' }
         & FragmentAccessPolicyFragment
       )>> }
+    )>> }
+  )> }
+);
+
+export type MyProfileQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyProfileQuery = (
+  { __typename?: 'Query' }
+  & { myProfile?: Maybe<(
+    { __typename?: 'UserAccountForm' }
+    & Pick<UserAccountForm, 'sid' | 'accessGrantOrgNames' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { email?: Maybe<(
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    )>, active?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    )>, person?: Maybe<(
+      { __typename?: 'PersonForm' }
+      & Pick<PersonForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { firstNm: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ), lastNm: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ) }
+    )>, organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
+    ), accessPolicyGroups?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    )>, sendActivationEmail?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    )>, lastLogin?: Maybe<(
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
+    )>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>, options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
     )>> }
   )> }
 );
@@ -7102,6 +7217,40 @@ export type XchangeJobGroupFormQuery = (
   )> }
 );
 
+export type MyAlertsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyAlertsQuery = (
+  { __typename?: 'Query' }
+  & { myAlerts?: Maybe<(
+    { __typename?: 'MyAlerts' }
+    & { alerts?: Maybe<Array<(
+      { __typename?: 'MyAlert' }
+      & Pick<MyAlert, 'sid' | 'subscriptionType' | 'name' | 'description' | 'alertTypes' | 'info'>
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type FindAvailableAlertsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FindAvailableAlertsQuery = (
+  { __typename?: 'Query' }
+  & { findAvailableAlerts?: Maybe<(
+    { __typename?: 'AvailableAlerts' }
+    & { processingAlerts?: Maybe<Array<(
+      { __typename?: 'AvailableAlert' }
+      & Pick<AvailableAlert, 'sid' | 'subscriptionType' | 'name' | 'info'>
+    )>>, schedules?: Maybe<Array<(
+      { __typename?: 'AvailableAlert' }
+      & Pick<AvailableAlert, 'sid' | 'subscriptionType' | 'name' | 'info'>
+    )>> }
+  )> }
+);
+
 export type TopLevelOntologyClassesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -7757,6 +7906,54 @@ export type DeleteAccessPolicyGroupMutationVariables = Exact<{
 export type DeleteAccessPolicyGroupMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'deleteAccessPolicyGroup'>
+);
+
+export type UpdateMyProfileMutationVariables = Exact<{
+  userInfo: UpdateMyProfileInput;
+}>;
+
+
+export type UpdateMyProfileMutation = (
+  { __typename?: 'Mutation' }
+  & { updateMyProfile?: Maybe<(
+    { __typename?: 'UserAccountForm' }
+    & Pick<UserAccountForm, 'sid' | 'accessGrantOrgNames' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { email?: Maybe<(
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    )>, active?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    )>, person?: Maybe<(
+      { __typename?: 'PersonForm' }
+      & Pick<PersonForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { firstNm: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ), lastNm: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ) }
+    )>, organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
+    ), accessPolicyGroups?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    )>, sendActivationEmail?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    )>, lastLogin?: Maybe<(
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
+    )>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>, options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>> }
+  )> }
 );
 
 export type CreateUserMutationVariables = Exact<{
@@ -9673,6 +9870,54 @@ export type UpdateXchangeJobGroupMutation = (
   )> }
 );
 
+export type SubscribeToAlertMutationVariables = Exact<{
+  alertInput?: Maybe<AlertSelectionInput>;
+}>;
+
+
+export type SubscribeToAlertMutation = (
+  { __typename?: 'Mutation' }
+  & { subscribeToAlert?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
+  )> }
+);
+
+export type DeleteMyAlertMutationVariables = Exact<{
+  alertInput: AlertSelectionInput;
+}>;
+
+
+export type DeleteMyAlertMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteMyAlert?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
+  )> }
+);
+
 export const FragmentStatTypeFragmentDoc = gql`
     fragment fragmentStatType on StatType {
   count
@@ -11585,6 +11830,84 @@ export function useFindUserByEmailLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type FindUserByEmailQueryHookResult = ReturnType<typeof useFindUserByEmailQuery>;
 export type FindUserByEmailLazyQueryHookResult = ReturnType<typeof useFindUserByEmailLazyQuery>;
 export type FindUserByEmailQueryResult = Apollo.QueryResult<FindUserByEmailQuery, FindUserByEmailQueryVariables>;
+export const MyProfileDocument = gql`
+    query MyProfile {
+  myProfile {
+    sid
+    email {
+      ...fragmentUIStringField
+    }
+    active {
+      ...fragmentUIBooleanField
+    }
+    person {
+      sid
+      firstNm {
+        ...fragmentUIStringField
+      }
+      lastNm {
+        ...fragmentUIStringField
+      }
+      errCode
+      errMsg
+      errSeverity
+    }
+    organization {
+      ...fragmentUIReadOnlyField
+    }
+    accessPolicyGroups {
+      ...fragmentUISelectManyField
+    }
+    accessGrantOrgNames
+    sendActivationEmail {
+      ...fragmentUIBooleanField
+    }
+    lastLogin {
+      ...fragmentUIReadOnlyField
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    options {
+      ...fragmentUIOptions
+    }
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentWebCommandFragmentDoc}
+${FragmentUiOptionsFragmentDoc}`;
+
+/**
+ * __useMyProfileQuery__
+ *
+ * To run a query within a React component, call `useMyProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyProfileQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMyProfileQuery(baseOptions?: Apollo.QueryHookOptions<MyProfileQuery, MyProfileQueryVariables>) {
+        return Apollo.useQuery<MyProfileQuery, MyProfileQueryVariables>(MyProfileDocument, baseOptions);
+      }
+export function useMyProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyProfileQuery, MyProfileQueryVariables>) {
+          return Apollo.useLazyQuery<MyProfileQuery, MyProfileQueryVariables>(MyProfileDocument, baseOptions);
+        }
+export type MyProfileQueryHookResult = ReturnType<typeof useMyProfileQuery>;
+export type MyProfileLazyQueryHookResult = ReturnType<typeof useMyProfileLazyQuery>;
+export type MyProfileQueryResult = Apollo.QueryResult<MyProfileQuery, MyProfileQueryVariables>;
 export const UserAccountFormDocument = gql`
     query UserAccountForm($orgSid: ID!) {
   userAccountForm(orgSid: $orgSid) {
@@ -15644,6 +15967,91 @@ export function useXchangeJobGroupFormLazyQuery(baseOptions?: Apollo.LazyQueryHo
 export type XchangeJobGroupFormQueryHookResult = ReturnType<typeof useXchangeJobGroupFormQuery>;
 export type XchangeJobGroupFormLazyQueryHookResult = ReturnType<typeof useXchangeJobGroupFormLazyQuery>;
 export type XchangeJobGroupFormQueryResult = Apollo.QueryResult<XchangeJobGroupFormQuery, XchangeJobGroupFormQueryVariables>;
+export const MyAlertsDocument = gql`
+    query MyAlerts {
+  myAlerts {
+    alerts {
+      sid
+      subscriptionType
+      name
+      description
+      alertTypes
+      info
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+  }
+}
+    ${FragmentWebCommandFragmentDoc}`;
+
+/**
+ * __useMyAlertsQuery__
+ *
+ * To run a query within a React component, call `useMyAlertsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyAlertsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyAlertsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMyAlertsQuery(baseOptions?: Apollo.QueryHookOptions<MyAlertsQuery, MyAlertsQueryVariables>) {
+        return Apollo.useQuery<MyAlertsQuery, MyAlertsQueryVariables>(MyAlertsDocument, baseOptions);
+      }
+export function useMyAlertsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyAlertsQuery, MyAlertsQueryVariables>) {
+          return Apollo.useLazyQuery<MyAlertsQuery, MyAlertsQueryVariables>(MyAlertsDocument, baseOptions);
+        }
+export type MyAlertsQueryHookResult = ReturnType<typeof useMyAlertsQuery>;
+export type MyAlertsLazyQueryHookResult = ReturnType<typeof useMyAlertsLazyQuery>;
+export type MyAlertsQueryResult = Apollo.QueryResult<MyAlertsQuery, MyAlertsQueryVariables>;
+export const FindAvailableAlertsDocument = gql`
+    query FindAvailableAlerts {
+  findAvailableAlerts {
+    processingAlerts {
+      sid
+      subscriptionType
+      name
+      info
+    }
+    schedules {
+      sid
+      subscriptionType
+      name
+      info
+    }
+  }
+}
+    `;
+
+/**
+ * __useFindAvailableAlertsQuery__
+ *
+ * To run a query within a React component, call `useFindAvailableAlertsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindAvailableAlertsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindAvailableAlertsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFindAvailableAlertsQuery(baseOptions?: Apollo.QueryHookOptions<FindAvailableAlertsQuery, FindAvailableAlertsQueryVariables>) {
+        return Apollo.useQuery<FindAvailableAlertsQuery, FindAvailableAlertsQueryVariables>(FindAvailableAlertsDocument, baseOptions);
+      }
+export function useFindAvailableAlertsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindAvailableAlertsQuery, FindAvailableAlertsQueryVariables>) {
+          return Apollo.useLazyQuery<FindAvailableAlertsQuery, FindAvailableAlertsQueryVariables>(FindAvailableAlertsDocument, baseOptions);
+        }
+export type FindAvailableAlertsQueryHookResult = ReturnType<typeof useFindAvailableAlertsQuery>;
+export type FindAvailableAlertsLazyQueryHookResult = ReturnType<typeof useFindAvailableAlertsLazyQuery>;
+export type FindAvailableAlertsQueryResult = Apollo.QueryResult<FindAvailableAlertsQuery, FindAvailableAlertsQueryVariables>;
 export const TopLevelOntologyClassesDocument = gql`
     query TopLevelOntologyClasses {
   topLevelOntologyClasses {
@@ -16927,6 +17335,84 @@ export function useDeleteAccessPolicyGroupMutation(baseOptions?: Apollo.Mutation
 export type DeleteAccessPolicyGroupMutationHookResult = ReturnType<typeof useDeleteAccessPolicyGroupMutation>;
 export type DeleteAccessPolicyGroupMutationResult = Apollo.MutationResult<DeleteAccessPolicyGroupMutation>;
 export type DeleteAccessPolicyGroupMutationOptions = Apollo.BaseMutationOptions<DeleteAccessPolicyGroupMutation, DeleteAccessPolicyGroupMutationVariables>;
+export const UpdateMyProfileDocument = gql`
+    mutation UpdateMyProfile($userInfo: UpdateMyProfileInput!) {
+  updateMyProfile(userInfo: $userInfo) {
+    sid
+    email {
+      ...fragmentUIStringField
+    }
+    active {
+      ...fragmentUIBooleanField
+    }
+    person {
+      sid
+      firstNm {
+        ...fragmentUIStringField
+      }
+      lastNm {
+        ...fragmentUIStringField
+      }
+      errCode
+      errMsg
+      errSeverity
+    }
+    organization {
+      ...fragmentUIReadOnlyField
+    }
+    accessPolicyGroups {
+      ...fragmentUISelectManyField
+    }
+    accessGrantOrgNames
+    sendActivationEmail {
+      ...fragmentUIBooleanField
+    }
+    lastLogin {
+      ...fragmentUIReadOnlyField
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    options {
+      ...fragmentUIOptions
+    }
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentWebCommandFragmentDoc}
+${FragmentUiOptionsFragmentDoc}`;
+export type UpdateMyProfileMutationFn = Apollo.MutationFunction<UpdateMyProfileMutation, UpdateMyProfileMutationVariables>;
+
+/**
+ * __useUpdateMyProfileMutation__
+ *
+ * To run a mutation, you first call `useUpdateMyProfileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateMyProfileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateMyProfileMutation, { data, loading, error }] = useUpdateMyProfileMutation({
+ *   variables: {
+ *      userInfo: // value for 'userInfo'
+ *   },
+ * });
+ */
+export function useUpdateMyProfileMutation(baseOptions?: Apollo.MutationHookOptions<UpdateMyProfileMutation, UpdateMyProfileMutationVariables>) {
+        return Apollo.useMutation<UpdateMyProfileMutation, UpdateMyProfileMutationVariables>(UpdateMyProfileDocument, baseOptions);
+      }
+export type UpdateMyProfileMutationHookResult = ReturnType<typeof useUpdateMyProfileMutation>;
+export type UpdateMyProfileMutationResult = Apollo.MutationResult<UpdateMyProfileMutation>;
+export type UpdateMyProfileMutationOptions = Apollo.BaseMutationOptions<UpdateMyProfileMutation, UpdateMyProfileMutationVariables>;
 export const CreateUserDocument = gql`
     mutation CreateUser($userInfo: CreateUserInput!, $personInfo: CreatePersonInput!) {
   createUser(userInfo: $userInfo, personInfo: $personInfo) {
@@ -20321,3 +20807,91 @@ export function useUpdateXchangeJobGroupMutation(baseOptions?: Apollo.MutationHo
 export type UpdateXchangeJobGroupMutationHookResult = ReturnType<typeof useUpdateXchangeJobGroupMutation>;
 export type UpdateXchangeJobGroupMutationResult = Apollo.MutationResult<UpdateXchangeJobGroupMutation>;
 export type UpdateXchangeJobGroupMutationOptions = Apollo.BaseMutationOptions<UpdateXchangeJobGroupMutation, UpdateXchangeJobGroupMutationVariables>;
+export const SubscribeToAlertDocument = gql`
+    mutation SubscribeToAlert($alertInput: AlertSelectionInput) {
+  subscribeToAlert(alertInput: $alertInput) {
+    response
+    errCode
+    errMsg
+    errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export type SubscribeToAlertMutationFn = Apollo.MutationFunction<SubscribeToAlertMutation, SubscribeToAlertMutationVariables>;
+
+/**
+ * __useSubscribeToAlertMutation__
+ *
+ * To run a mutation, you first call `useSubscribeToAlertMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSubscribeToAlertMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [subscribeToAlertMutation, { data, loading, error }] = useSubscribeToAlertMutation({
+ *   variables: {
+ *      alertInput: // value for 'alertInput'
+ *   },
+ * });
+ */
+export function useSubscribeToAlertMutation(baseOptions?: Apollo.MutationHookOptions<SubscribeToAlertMutation, SubscribeToAlertMutationVariables>) {
+        return Apollo.useMutation<SubscribeToAlertMutation, SubscribeToAlertMutationVariables>(SubscribeToAlertDocument, baseOptions);
+      }
+export type SubscribeToAlertMutationHookResult = ReturnType<typeof useSubscribeToAlertMutation>;
+export type SubscribeToAlertMutationResult = Apollo.MutationResult<SubscribeToAlertMutation>;
+export type SubscribeToAlertMutationOptions = Apollo.BaseMutationOptions<SubscribeToAlertMutation, SubscribeToAlertMutationVariables>;
+export const DeleteMyAlertDocument = gql`
+    mutation DeleteMyAlert($alertInput: AlertSelectionInput!) {
+  deleteMyAlert(alertInput: $alertInput) {
+    response
+    errCode
+    errMsg
+    errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export type DeleteMyAlertMutationFn = Apollo.MutationFunction<DeleteMyAlertMutation, DeleteMyAlertMutationVariables>;
+
+/**
+ * __useDeleteMyAlertMutation__
+ *
+ * To run a mutation, you first call `useDeleteMyAlertMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteMyAlertMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteMyAlertMutation, { data, loading, error }] = useDeleteMyAlertMutation({
+ *   variables: {
+ *      alertInput: // value for 'alertInput'
+ *   },
+ * });
+ */
+export function useDeleteMyAlertMutation(baseOptions?: Apollo.MutationHookOptions<DeleteMyAlertMutation, DeleteMyAlertMutationVariables>) {
+        return Apollo.useMutation<DeleteMyAlertMutation, DeleteMyAlertMutationVariables>(DeleteMyAlertDocument, baseOptions);
+      }
+export type DeleteMyAlertMutationHookResult = ReturnType<typeof useDeleteMyAlertMutation>;
+export type DeleteMyAlertMutationResult = Apollo.MutationResult<DeleteMyAlertMutation>;
+export type DeleteMyAlertMutationOptions = Apollo.BaseMutationOptions<DeleteMyAlertMutation, DeleteMyAlertMutationVariables>;

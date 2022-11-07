@@ -141,6 +141,45 @@ export const CellItem = styled.div`
   margin-bottom: 5px;
 `;
 
+export const DesktopCellItem = styled.div`
+  font-size: ${FONT_SMALL};
+  width: calc(100% - 10px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: ${COLOR_DARK};
+  color: ${COLOR_NEUTRAL_LIGHTER};
+  border-radius: 3px;
+  margin-left: 5px;
+  margin-right: 5px;
+  padding: 0 5px;
+  margin-bottom: 5px;
+  display: none;
+  
+  @media ${device.tablet} {
+    display: block;
+  }
+`;
+
+export const MobileCellItem = styled.div`
+  font-size: ${FONT_SMALL};
+  width: calc(100% - 10px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: ${COLOR_DARK};
+  color: ${COLOR_NEUTRAL_LIGHTER};
+  border-radius: 15px;
+  margin: 5px;
+  padding: 5px;
+  display: block;
+  text-align: center;
+  
+  @media ${device.tablet} {
+    display: none;
+  }
+`;
+
 export const HeaderYear = styled.span`
   font-weight: normal;
   font-size: ${FONT_XLARGE};
@@ -148,13 +187,14 @@ export const HeaderYear = styled.span`
 `;
 
 export const CalendarBodyCellNumber = styled.span`
-  font-size: ${FONT_LARGE};
+  font-size: ${FONT_NORMAL};
   line-height: 1;
   font-weight: 700;
   margin: 5px;
 
   @media ${device.tablet} {
     margin: 10px;
+    font-size: ${FONT_LARGE};
   }
 `;
 
