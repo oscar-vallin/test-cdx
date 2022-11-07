@@ -12,7 +12,7 @@ import {
 } from 'date-fns';
 import { SchedOccurStatusEnum, ScheduleOccurrence } from 'src/data/services/graphql';
 import {
-  Body, CalendarBodyCell, CalendarBodyCellNumber, MonthBodyRow, CellItem,
+  Body, CalendarBodyCell, CalendarBodyCellNumber, MonthBodyRow, DesktopCellItem, MobileCellItem,
 } from './Schedule.styles';
 
 type ScheduleMonthType = {
@@ -75,10 +75,21 @@ export const ScheduleMonth = ({
     }
 
     return dayRows.map((_item, index) => (
-      <CellItem key={`cell_${day}_${index}`} title={_item.resource}>
+      <DesktopCellItem key={`cell_${day}_${index}`} title={_item.resource}>
         {_item.resource}
-      </CellItem>
+      </DesktopCellItem>
     ));
+  };
+
+  const renderItemCount = (day: Date, allItems: ScheduleOccurrence[]) => {
+    const dayRows = allItems.filter((_item) => isSameDay(parseISO(_item.timeScheduled), day));
+    const numItems = dayRows.length;
+    if (numItems > 0) {
+      return (
+        <MobileCellItem>{numItems}</MobileCellItem>
+      );
+    }
+    return null;
   };
 
   // *
@@ -129,6 +140,7 @@ export const ScheduleMonth = ({
                 : formattedDateNotValid}
             </CalendarBodyCellNumber>
             {renderItems(day, items)}
+            {renderItemCount(day, items)}
           </CalendarBodyCell>,
         );
 
