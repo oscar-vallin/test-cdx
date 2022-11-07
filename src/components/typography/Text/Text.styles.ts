@@ -8,7 +8,7 @@ const variants = (theme) => ({
 
 export const StyledText = styled.span<StyledTextProps>`
   color: ${({ theme, variant }) => variants(theme)[variant] || theme.colors.neutralPrimary};
-  display: ${({ hideForMobile }) => hideForMobile ? 'none' : 'inline-block'};
+  display: ${({ hideForMobile }) => (hideForMobile ? 'none' : 'inline-block')};
   font: ${({ theme }) => theme.fontStyles.normal};
   font-size: ${({ theme, size }) => theme.fontSizes[size]};
   font-weight: ${({ theme, variant }) => theme.fontWeights[variant]};
@@ -19,15 +19,15 @@ export const StyledText = styled.span<StyledTextProps>`
     return 'start';
   }};
   text-transform: ${({ transform }) => transform};
-  overflow: ${({ ellipsis }) => ellipsis ? 'hidden' : 'visible'};
-  text-overflow: ${({ ellipsis }) => ellipsis ? 'ellipsis' : 'clip'};
+  overflow: ${({ ellipsis }) => (ellipsis ? 'hidden' : 'visible')};
+  text-overflow: ${({ ellipsis }) => (ellipsis ? 'ellipsis' : 'clip')};
   word-break: ${({ breakWord }) => `break-${breakWord}`};
   width: ${({ center, right }) => (center || right ? '100%' : 'auto')};
   line-height: normal;
  
   @media ${device.tablet} {
-    ${({ hideForMobile }) => hideForMobile ? 'display: inline-block;' : ''}
-    ${({ showForMobile }) => showForMobile ? 'display: none;' : ''}
+    ${({ hideForMobile }) => (hideForMobile ? 'display: inline-block;' : '')}
+    ${({ showForMobile }) => (showForMobile ? 'display: none;' : '')}
   }
 `;
 
