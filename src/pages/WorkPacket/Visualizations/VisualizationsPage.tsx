@@ -7,6 +7,7 @@ import {
   Tooltip,
   Line,
   YAxis,
+  ResponsiveContainer,
 } from 'recharts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import {
@@ -97,6 +98,7 @@ const VisualizationsPage = () => {
     x: 0,
   });
   const [showTooltip, setShowTooltip] = useState(false);
+  const [currentSubOrg, setCurrentSubOrg] = useState('');
 
   const end = endOfMonth(new Date('2022-11-30T06:00:00.000Z'));
   const [
@@ -313,9 +315,10 @@ const VisualizationsPage = () => {
         <Line
           activeDot={{
             onMouseOver(e, payload) { customMouseOver(e, payload, s) },
-            r: sIndex === 0 ? 0 : 6,
+            r: s.name === currentSubOrg ? 6 : null,
           }}
           isAnimationActive={false}
+          onMouseOver={(e) => setCurrentSubOrg(e.name)}
           dataKey="count"
           data={s.data}
           name={s.name}
@@ -397,67 +400,71 @@ const VisualizationsPage = () => {
       const sc = Object.keys(subClientsCheckBox);
       return (
         <Spacing margin={{ left: 'normal', top: 'double' }}>
-          <BarChart
-            width={1070}
-            height={400}
-            data={subClientBarChart}
-            barCategoryGap={55}
-          >
-            <XAxis dataKey="month" tick={false} />
-            <YAxis />
-            <Tooltip
-              cursor={false}
-              content={customTooltip}
-              position={{ x: tooltipPosition.x - 115, y: tooltipPosition.y - 50 }}
-              wrapperStyle={{ pointeEvents: 'auto' }}
-            />
-            {sc.map((s, i) => subClientsCheckBox[s]
-              // eslint-disable-next-line no-return-assign
-              && (
-                <Bar
-                  key={`${s}-${i}`}
-                  dataKey={s}
-                  stackId="a"
-                  fill={COLORS[i]}
-                  onMouseOver={(data) => {
-                    customMouseOverBarchart(data, subClients[i], s)
-                  }}
-                />
-              ))}
-          </BarChart>
+          <ResponsiveContainer width="95%" height={400}>
+            <BarChart
+              width={1070}
+              height={400}
+              data={subClientBarChart}
+              barCategoryGap={55}
+            >
+              <XAxis dataKey="month" tick={false} />
+              <YAxis />
+              <Tooltip
+                cursor={false}
+                content={customTooltip}
+                position={{ x: tooltipPosition.x - 115, y: tooltipPosition.y - 50 }}
+                wrapperStyle={{ pointeEvents: 'auto' }}
+              />
+              {sc.map((s, i) => subClientsCheckBox[s]
+                // eslint-disable-next-line no-return-assign
+                && (
+                  <Bar
+                    key={`${s}-${i}`}
+                    dataKey={s}
+                    stackId="a"
+                    fill={COLORS[i]}
+                    onMouseOver={(data) => {
+                      customMouseOverBarchart(data, subClients[i], s)
+                    }}
+                  />
+                ))}
+            </BarChart>
+          </ResponsiveContainer>
         </Spacing>
       )
     }
 
     return (
-      <Spacing margin={{ left: 'normal', top: 'double' }}>
-        <LineChart
-          width={1070}
-          height={400}
-          onMouseLeave={() => setShowTooltip(false)}
-        >
-          <XAxis
-            dataKey="month"
-            allowDuplicatedCategory={false}
-            tick={false}
-          />
-          <YAxis
-            dataKey="count"
-            domain={
-              [
-                0,
-                yAxisValue,
-              ]
-            }
-          />
-          <Tooltip
-            cursor={false}
-            content={customTooltip}
-            position={{ x: tooltipPosition.x - 98, y: tooltipPosition.y - 88 }}
-            wrapperStyle={{ pointeEvents: 'auto' }}
-          />
-          {subClients.map((s, sIndex) => renderLine(s, sIndex))}
-        </LineChart>
+      <Spacing margin={{ left: 'double', top: 'double' }}>
+        <ResponsiveContainer width="95%" height={400}>
+          <LineChart
+            width={600}
+            height={400}
+            onMouseLeave={() => setShowTooltip(false)}
+          >
+            <XAxis
+              dataKey="month"
+              allowDuplicatedCategory={false}
+              tick={false}
+            />
+            <YAxis
+              dataKey="count"
+              domain={
+                [
+                  0,
+                  yAxisValue,
+                ]
+              }
+            />
+            <Tooltip
+              cursor={false}
+              content={customTooltip}
+              position={{ x: tooltipPosition.x - 98, y: tooltipPosition.y - 88 }}
+              wrapperStyle={{ pointeEvents: 'auto' }}
+            />
+            {subClients.map((s, sIndex) => renderLine(s, sIndex))}
+          </LineChart>
+        </ResponsiveContainer>
       </Spacing>
     );
   };
@@ -570,7 +577,7 @@ const VisualizationsPage = () => {
                 background={true}
                 lineChart={graphicType?.key !== 'barchart'}
               >
-                <span style={{ position: 'absolute', left: '35px', fontWeight: 500 }}>Totals</span>
+                <span style={{ position: 'absolute', left: '50px', fontWeight: 500 }}>Totals</span>
                 {countMonth.map((count, countIndex) => (
                   <Spacing padding={{ left: 'double' }} key={countIndex}>
                     <Text>

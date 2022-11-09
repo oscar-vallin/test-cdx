@@ -29,16 +29,26 @@ export const StyledTooltip = styled.div`
 `;
 
 export const StyledTotal = styled(Stack)<StyledTotalProps>`
-  width: ${(({ lineChart }) => (lineChart ? '93%' : '90%'))};
+  width: 96%;
   text-align: center;
   padding: ${(({ background }) => (background ? '7px 0' : null))};
-  padding-left: ${(({ lineChart }) => (lineChart ? '15px' : '50px'))};
-  padding-right: ${(({ lineChart }) => (lineChart ? '40px' : '45px'))};
+  padding-left: ${(({ lineChart }) => (lineChart ? '5px' : '30px'))};
+  padding-right: ${(({ lineChart }) => (lineChart ? '5px' : '50px'))};
+  margin-left: ${(({ lineChart }) => (lineChart ? '20px' : '20px'))};
   background-color: ${(({ background, theme }) => (background ? theme.colors.neutralLighter : null))};
+
+  @media (min-width: 1537px) {
+    width: ${(({ lineChart }) => (lineChart ? '97%' : '96%'))};
+    padding-left: ${(({ lineChart }) => (lineChart ? '0px' : '50px'))};
+    padding-right: ${(({ lineChart }) => (lineChart ? '0px' : '45px'))};
+    margin-left: 10px;
+  };
 
   span {
     font-weight: ${(({ background }) => (background ? 500 : null))};
-    ;
+    @media (min-width: 1537px) {
+      margin-right: 7px;
+    };
   }
 `;
 
