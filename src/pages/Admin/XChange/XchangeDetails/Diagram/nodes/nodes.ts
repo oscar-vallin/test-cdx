@@ -6,12 +6,13 @@ export function InitialNodes(data: XchangeDiagram) {
   const initialSteps = xchangeSteps.map((step: XchangeDiagramStep, index: number) => {
     const values = {};
     const lastNode = index === xchangeSteps.length - 1;
-    const positionX = step.position.x * 300;
-    let positionY = 0;
+    let positionX = step.position.x * 300;
+    if (step.position.x === 0) {
+      positionX = 10;
+    }
+    let positionY = (step.position.y + 0.2) * 117;
     if (step.position.y === 0) {
       positionY = 50;
-    } else {
-      positionY = (step.position.y + 0.2) * 120;
     }
 
     values['id'] = step.key;
@@ -40,7 +41,10 @@ export function InitialNodes(data: XchangeDiagram) {
   const initialTransmissions = xhcnageTransmissions
     .map((transmission:XchangeDiagramFileTransmission, index: number) => {
       const values = {};
-      const positionX = transmission.position.x * 265;
+      let positionX = transmission.position.x * 265;
+      if (transmission.position.x === 0) {
+        positionX = 10;
+      }
       const positionY = (transmission.position.y + 0.2) * 120;
       const lastTrans = xhcnageTransmissions.length - 1 === index;
       values['id'] = transmission.key;

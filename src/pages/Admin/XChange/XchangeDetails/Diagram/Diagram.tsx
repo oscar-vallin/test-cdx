@@ -32,7 +32,7 @@ const Diagram = ({
   data, refreshDetailsPage, xchangeFileProcessSid, allowedCommands, commands,
 }: DiagramProps) => {
   const { initialNodes } = InitialNodes(data);
-  const { nodeWithParents } = NodeParent(initialNodes);
+  const { nodeWithParents } = NodeParent(initialNodes, data.stepGroups);
   const { initialEdges } = InitialEdges(data);
   const [nodes, setNodes, onNodesChange] = useNodesState(nodeWithParents);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);

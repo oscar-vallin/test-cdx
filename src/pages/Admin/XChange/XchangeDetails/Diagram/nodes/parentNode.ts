@@ -1,33 +1,41 @@
-export function NodeParent(nodes) {
+import { useThemeStore } from 'src/store/ThemeStore';
+
+export function NodeParent(nodes, stepGroups) {
+  const ThemeStore = useThemeStore();
   const semanticMapNodes = nodes.filter((node) => node.data.label === 'Semantic Map');
   const allNodes = nodes.filter((node) => node.data.label !== 'Semantic Map');
-
-  if (semanticMapNodes.length === 2) {
+  if (stepGroups.length > 0) {
     const parentBackground: any[] = [];
-    const parent = {
-      id: 'parent-1',
-      type: 'group',
-      data: { sid: '' },
-      position: { x: 0, y: 0 },
-      // className: 'light',
-      style: {
-        backgroundColor: '#B2BEB5',
-        height: 85,
-        width: 550,
-        border: 'none',
-        borderRadius: '10px',
-      },
-    };
-    const y = (semanticMapNodes[0]['position']['y'] - 15);
-    if (semanticMapNodes[0]['position']['y'] !== semanticMapNodes[1]['position']['y']) {
-      parent.style.width = 275;
-      parent.style.height = 187;
-    }
+    stepGroups.forEach((group) => {
+      const parent = {
+        id: 'parent-1',
+        type: 'group',
+        data: { sid: '' },
+        position: { x: group.start.x * 290, y: (group.start.y + 0.2) * 110 },
+        className: 'light',
+        style: {
+          backgroundColor: ThemeStore.userTheme.colors.neutralTertiary,
+          height: 0,
+          width: 0,
+          border: 'none',
+          borderRadius: '10px',
+        },
+      };
+      if (group.end.x === group.start.x) {
+        parent.style.width = 275;
+      } else {
+        parent.style.width = ((group.end.x + 1) * 250) + 72;
+      }
+      if (group.end.y === group.start.y) {
+        parent.style.height = 100;
+      } else {
+        parent.style.height = 1 * 55 + 155;
+      }
+      parentBackground.push(parent);
+      parentBackground.push(semanticMapNodes[0]);
+      parentBackground.push(semanticMapNodes[1]);
+    });
 
-    parent.position.y = y;
-    parentBackground.push(parent);
-    parentBackground.push(semanticMapNodes[0]);
-    parentBackground.push(semanticMapNodes[1]);
     return {
       nodeWithParents: [...parentBackground, ...allNodes],
     }
