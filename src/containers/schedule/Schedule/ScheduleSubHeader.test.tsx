@@ -16,13 +16,13 @@ describe('Schedule Subheader Test...', () => {
 
     expect(wrapper.find('div[id^="__WeekSubHeader"]')).toHaveLength(0);
 
-    expect(wrapper.find('span[id="__MonthSubHeader_0"]').text()).toEqual('Sunday');
-    expect(wrapper.find('span[id="__MonthSubHeader_1"]').text()).toEqual('Monday');
-    expect(wrapper.find('span[id="__MonthSubHeader_2"]').text()).toEqual('Tuesday');
-    expect(wrapper.find('span[id="__MonthSubHeader_3"]').text()).toEqual('Wednesday');
-    expect(wrapper.find('span[id="__MonthSubHeader_4"]').text()).toEqual('Thursday');
-    expect(wrapper.find('span[id="__MonthSubHeader_5"]').text()).toEqual('Friday');
-    expect(wrapper.find('span[id="__MonthSubHeader_6"]').text()).toEqual('Saturday');
+    expect(wrapper.find('span[id="__MonthSubHeader_0"] span').first().text()).toEqual('Sunday');
+    expect(wrapper.find('span[id="__MonthSubHeader_1"] span').first().text()).toEqual('Monday');
+    expect(wrapper.find('span[id="__MonthSubHeader_2"] span').first().text()).toEqual('Tuesday');
+    expect(wrapper.find('span[id="__MonthSubHeader_3"] span').first().text()).toEqual('Wednesday');
+    expect(wrapper.find('span[id="__MonthSubHeader_4"] span').first().text()).toEqual('Thursday');
+    expect(wrapper.find('span[id="__MonthSubHeader_5"] span').first().text()).toEqual('Friday');
+    expect(wrapper.find('span[id="__MonthSubHeader_6"] span').first().text()).toEqual('Saturday');
   });
 
   it('Week View', () => {
@@ -37,7 +37,7 @@ describe('Schedule Subheader Test...', () => {
 
     expect(wrapper.find('div[id="__WeekSubHeader_0"]').text()).toEqual('19Sun');
     expect(wrapper.find('div[id="__WeekSubHeader_1"]').text()).toEqual('20Mon');
-    expect(wrapper.find('div[id="__WeekSubHeader_2"]').text()).toEqual('Jun 21Tue');
+    expect(wrapper.find('div[id="__WeekSubHeader_2"]').text()).toEqual('Jun21Tue');
     expect(wrapper.find('div[id="__WeekSubHeader_3"]').text()).toEqual('22Wed');
     expect(wrapper.find('div[id="__WeekSubHeader_4"]').text()).toEqual('23Thu');
     expect(wrapper.find('div[id="__WeekSubHeader_5"]').text()).toEqual('24Fri');
