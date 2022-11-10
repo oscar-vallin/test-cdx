@@ -11,7 +11,7 @@ export function NodeParent(nodes, stepGroups) {
         id: 'parent-1',
         type: 'group',
         data: { sid: '' },
-        position: { x: group.start.x * 290, y: (group.start.y + 0.2) * 110 },
+        position: { x: group.start.x * 290, y: (group.start.y) * 110 },
         className: 'light',
         style: {
           backgroundColor: ThemeStore.userTheme.colors.neutralTertiary,
@@ -27,7 +27,7 @@ export function NodeParent(nodes, stepGroups) {
         parent.style.width = ((group.end.x + 1) * 250) + 72;
       }
       if (group.end.y === group.start.y) {
-        parent.style.height = 100;
+        parent.style.height = 95;
       } else {
         parent.style.height = 1 * 55 + 155;
       }

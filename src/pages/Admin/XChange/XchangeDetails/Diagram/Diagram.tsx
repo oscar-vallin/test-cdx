@@ -145,8 +145,11 @@ const Diagram = ({
 
   useEffect(() => {
     getCommands();
-    const height = initialNodes[initialNodes.length - 1]['data'].position.y;
-    setTotalHeight(height * 150);
+    setTotalHeight(0);
+    let height = initialNodes[initialNodes.length - 1]['data'].position.y;
+    height = height === 1 ? 2 : height;
+    height *= 150;
+    setTotalHeight(height);
   }, [data]);
 
   useEffect(() => {

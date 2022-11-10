@@ -10,9 +10,9 @@ export function InitialNodes(data: XchangeDiagram) {
     if (step.position.x === 0) {
       positionX = 10;
     }
-    let positionY = (step.position.y + 0.2) * 117;
+    let positionY = (step.position.y + 0.2) * 110;
     if (step.position.y === 0) {
-      positionY = 50;
+      positionY = 40;
     }
 
     values['id'] = step.key;
@@ -33,6 +33,7 @@ export function InitialNodes(data: XchangeDiagram) {
       refreshDetailsPage: null,
       xchangeFileProcessSid: null,
       stepCommads: null,
+      coordinates: data.steps,
     };
     values['position'] = { x: positionX, y: positionY };
     return values;

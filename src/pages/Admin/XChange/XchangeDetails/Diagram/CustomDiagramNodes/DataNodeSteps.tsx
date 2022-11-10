@@ -12,6 +12,7 @@ import {
   useMoveDownXchangeStepMutation,
   WebCommand,
   CdxWebCommandType,
+  XchangeDiagramStep,
 } from 'src/data/services/graphql';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { Container, Row } from 'src/components/layouts';
@@ -50,6 +51,7 @@ type DataProps = {
   qualifier?: string;
   connectors: DiagramConnector[];
   position: DiagramCoordinates;
+  coordinates: XchangeDiagramStep[];
   info?: string;
   hoverOverShowIcons: boolean;
   updateStep: boolean;
@@ -77,6 +79,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
     refreshDetailsPage,
     xchangeFileProcessSid,
     stepCommands,
+    coordinates,
   } = data;
 
   const Toast = useNotification();
@@ -136,6 +139,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
   const hanldeSourcePosition = () => {
     if (
       trans
+      || index === 0
       || data.position.x === 1
       || ((sourceBottom === '1' || sourceBottom === '0') && data.label === 'Semantic Map')
     ) {
@@ -148,7 +152,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
         />
       );
     }
-    if (index === 0) {
+    if (coordinates[2] && (coordinates[2].position.x === 0 || coordinates[3].position.x === 0)) {
       return (
         <Handle
           type="source"
@@ -163,7 +167,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
         <Handle
           type="source"
           id={id}
-          position={Position['Left']}
+          position={Position['Right']}
           style={{ background: 'none', border: theme.colors.white }}
         />
       )
