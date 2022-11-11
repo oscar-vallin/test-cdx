@@ -1,6 +1,5 @@
 import {
   DefaultButton,
-  Dialog,
   DialogFooter,
   PrimaryButton,
   SearchBox,
@@ -14,7 +13,7 @@ import { useUserQuickSearchLazyQuery, useCreateUserMutation } from 'src/data/ser
 import { InputText } from 'src/components/inputs/InputText';
 import { MessageBar } from 'src/components/notifications/MessageBar';
 import { SubscriberOptionProps } from 'src/pages/Admin/XChange/XchangeAlerts/XchangeAlertsPanel/XchangeAlertsPanel';
-import { StyledSubsOptions } from './AddSubscriberModal.styles';
+import { StyledDialog, StyledSubsOptions } from './AddSubscriberModal.styles';
 
 const defaultProps = {
   isOpen: (data: boolean) => {},
@@ -190,13 +189,13 @@ const AddSubscriberModal = ({
   );
 
   return (
-    <Dialog hidden={false} dialogContentProps={{ title: 'Add person to be notified' }} minWidth="500px">
+    <StyledDialog hidden={false} dialogContentProps={{ title: 'Add person to be notified' }} minWidth="500px">
       {renderBody()}
       {currentSubscriber.trim() !== '' && !addNewAccount && !subscriberFound && (
         <StyledSubsOptions>{doSearch()}</StyledSubsOptions>
       )}
       <DialogFooter>{renderButtons()}</DialogFooter>
-    </Dialog>
+    </StyledDialog>
   );
 };
 
