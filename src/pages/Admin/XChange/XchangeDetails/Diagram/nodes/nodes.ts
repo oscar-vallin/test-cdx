@@ -12,7 +12,7 @@ export function InitialNodes(data: XchangeDiagram) {
     }
     let positionY = (step.position.y + 0.2) * 110;
     if (step.position.y === 0) {
-      positionY = 40;
+      positionY = 30;
     }
 
     values['id'] = step.key;

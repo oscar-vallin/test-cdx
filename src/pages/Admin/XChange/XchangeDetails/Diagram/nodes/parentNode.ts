@@ -19,6 +19,7 @@ export function NodeParent(nodes, stepGroups) {
           width: 0,
           border: 'none',
           borderRadius: '10px',
+          zIndex: -1,
         },
       };
       if (group.end.x === group.start.x) {
