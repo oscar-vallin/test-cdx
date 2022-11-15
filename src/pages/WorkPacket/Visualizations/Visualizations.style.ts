@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Checkbox, Dropdown, Stack } from '@fluentui/react';
+import { device } from 'src/styles/GlobalStyles';
 
 export const StyledCheckbox = styled(Checkbox)<CheckboxProps>`
     margin-left: 50px;
@@ -32,11 +33,18 @@ export const StyledTotal = styled(Stack)<StyledTotalProps>`
   width: 97%;
   text-align: center;
   padding: ${(({ background }) => (background ? '7px 0' : null))};
-  padding-left: ${(({ lineChart }) => (lineChart ? '0px' : '18px'))};
-  padding-right: ${(({ lineChart }) => (lineChart ? '23px' : '70px'))};
-  margin-left: ${(({ lineChart }) => (lineChart ? '20px' : '28px'))};
+  padding-left: ${(({ lineChart }) => (lineChart ? '18px' : '18px'))};
+  padding-right: ${(({ lineChart }) => (lineChart ? '70px' : '70px'))};
+  margin-left: ${(({ lineChart }) => (lineChart ? '36px' : '33px'))};
   background-color: ${(({ background, theme }) => (background ? theme.colors.neutralLighter : null))};
 
+  @media ${device.mobileL} {
+    flex-flow: row nowrap;    
+  }
+  @media (min-width: 1550px) {
+    width: 99%;
+    margin-left: ${(({ lineChart }) => (lineChart ? '13px' : '33px'))};
+  }
   span {
     font-weight: ${(({ background }) => (background ? 500 : null))};
     

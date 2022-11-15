@@ -82,14 +82,12 @@ const VisualizationsPage = () => {
   const [monthIncurrent, setMonthInCurrent] = useState(0);
   const [countMonth, setCountMonth] = useState(new Array(...INITIAL_COUNT_TOTAL));
   const [countTotal, setCountTotal] = useState(new Array(...INITIAL_COUNT_TOTAL));
-  const [yAxisValue, setYAxisValue] = useState(0);
-  const [subClientsCheckBox, setSubClientsCheckBox] = useState({
-    default: true,
-  });
+  const [subClientsCheckBox, setSubClientsCheckBox] = useState({});
   const [selectAll, setSelectAll] = useState(false);
   const [selectNone, setSelectNone] = useState(false);
   const [isOpenPanel, setIsOpenPanel] = useState(false);
   const [orgIdOrg, setOrgIdOrg] = useState('');
+  const [currentYear, setCurrentYear] = useState(0);
   const [currentOrg, setCurrentOrg] = useState();
   const [totalTransByMonth, setTotalTransByMonth] = useState(0);
   const [currentMonth, setCurrentMonth] = useState('');
@@ -100,7 +98,7 @@ const VisualizationsPage = () => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [currentSubOrg, setCurrentSubOrg] = useState('');
 
-  const end = endOfMonth(new Date('2022-11-30T06:00:00.000Z'));
+  const end = endOfMonth(new Date());
   const [
     transmissioncountBySponsor,
     { data: transmissionSponsorData, loading: isLoadingTransmissionSponsor },
@@ -113,7 +111,7 @@ const VisualizationsPage = () => {
 
   const fetchData = () => {
     let s = new Date();
-    s = new Date(s.getFullYear(), 0);
+    s = new Date(s.getFullYear() - 1, CURRENT_MONTH);
     if (typeOfTransmissions?.key === 'vendor') {
       transmissioncountByVendor({
         variables: {
@@ -139,14 +137,12 @@ const VisualizationsPage = () => {
 
   const handleSubClientOfCheckbox = (currentState: boolean) => {
     if (currentState) {
-      subClients.forEach(({ name }) => setSubClientsCheckBox((prevState) => ({ ...prevState, [name ?? '']: true })));
+      subClients.forEach(({ organization }) => setSubClientsCheckBox((prevState) => ({ ...prevState, [organization?.name ?? '']: true })));
       return;
     }
 
-    subClients.forEach(({ name }, index) => {
-      if (index > 0) {
-        setSubClientsCheckBox((prevState) => ({ ...prevState, [name ?? '']: false }));
-      }
+    subClients.forEach(({ organization }) => {
+      setSubClientsCheckBox((prevState) => ({ ...prevState, [organization?.name ?? '']: false }));
     });
   };
 
@@ -170,69 +166,24 @@ const VisualizationsPage = () => {
     return m;
   };
 
-  const defaultXValues = () => {
-    const orderedMonth = monthList();
-    const DefaultSubClient = {
-      name: 'default',
-      data: [
-        { month: orderedMonth[0], count: 0, year: 0 },
-        { month: orderedMonth[1], count: 0, year: 0 },
-        { month: orderedMonth[2], count: 0, year: 0 },
-        { month: orderedMonth[3], count: 0, year: 0 },
-        { month: orderedMonth[4], count: 0, year: 0 },
-        { month: orderedMonth[5], count: 0, year: 0 },
-        { month: orderedMonth[6], count: 0, year: 0 },
-        { month: orderedMonth[7], count: 0, year: 0 },
-        { month: orderedMonth[8], count: 0, year: 0 },
-        { month: orderedMonth[9], count: 0, year: 0 },
-        { month: orderedMonth[10], count: 0, year: 0 },
-        { month: orderedMonth[11], count: 0, year: 0 }],
-    };
-    setSubClients((prevState) => prevState.concat(DefaultSubClient));
-  };
-
   const getSubClientsData = (subC) => {
     setSubClients([]);
-    setSubClientsCheckBox({
-      default: true,
-    });
-    let highestNumber = subC[0].monthCounts[0].count;
     if (subC.length > 0) {
-      defaultXValues();
       for (let subClient = 0; subClient < subC.length; subClient++) {
-        const currentSubClients: DataSubClientProps = {};
-        currentSubClients['name'] = subC[subClient]['organization']['name'];
-        currentSubClients['organization'] = subC[subClient]['organization'];
         setSubClientsCheckBox((prevState) => ({
           ...prevState,
           [subC[subClient]['organization']['name']]: true,
         }));
-        const monthCounts = subC[subClient].monthCounts ?? [];
-        const data: DataProps[] = [];
-        if (subC[subClient].monthCounts[0].month > monthIncurrent) {
-          setMonthInCurrent(subC[subClient].monthCounts[0].month);
-        }
-        for (let dataSClient = 0; dataSClient < monthCounts.length; dataSClient++) {
-          const currentSubClient:DataProps = { month: '', count: 0, year: 0 };
-          currentSubClient['month'] = shortMonths[monthCounts[dataSClient].month - 1];
-          currentSubClient['count'] = monthCounts[dataSClient].count;
-          if (monthCounts[dataSClient].count > highestNumber) {
-            highestNumber = monthCounts[dataSClient].count;
-          }
-          currentSubClient['year'] = monthCounts[dataSClient].year;
-          data.push(currentSubClient)
-        }
-        currentSubClients['data'] = data;
-        setSubClients((prevState) => prevState.concat(currentSubClients));
+        const aux = subC[subClient].monthCounts.shift();
+        subC[subClient].monthCounts.push(aux);
+        setSubClients(subC);
       }
-      setYAxisValue(highestNumber + 5)
     }
   };
 
   const getDataBarChart = (subC) => {
     const orderedMonth = monthList();
     setSubClientsBarChart([]);
-    let highestNumber = subC[0].monthCounts[0].count
     const subClientdata: any[] = [];
     let data = {};
     for (let month = 0; month < orderedMonth.length; month++) {
@@ -247,49 +198,45 @@ const VisualizationsPage = () => {
         const index = subClientdata.map((object) => object.month)
           .indexOf(shortMonths[monthCounts[m].month - 1]);
         subClientdata[index][subC[subClient]['organization']['name']] = monthCounts[m].count;
-        if (monthCounts[m].count > highestNumber) {
-          highestNumber = monthCounts[m].count;
-        }
+        subClientdata[index]['year'] = monthCounts[m].year;
       }
     }
     setSubClientsBarChart(subClientdata);
   };
 
   const sumTotalTransmissions = (sdata) => {
-    const firstMonth = sdata[0].month
-    const aux = 11 - CURRENT_MONTH + firstMonth - 1;
     const total = countMonth;
     for (let data = 0; data < sdata.length; data++) {
-      total[aux + data] += sdata[data].count;
+      total[data] += sdata[data].count;
     }
     setCountTotal(total);
     setCountMonth(total);
   };
 
-  const currentTotalTransmissions = (s: DataSubClientProps, checked?: boolean) => {
-    const aux = 11 - CURRENT_MONTH;
+  const currentTotalTransmissions = (s, checked?: boolean) => {
     const total = countMonth;
-    const length = s.data?.length ?? 0
+    const length = s.monthCounts?.length ?? 0
     for (let data = 0; data < length; data++) {
       if (checked) {
-        total[aux + data] += s['data'] ? s['data'][data].count : 0;
+        total[data] += s['monthCounts'] ? s['monthCounts'][data].count : 0;
       } else {
-        total[aux + data] -= s['data'] ? s['data'][data].count : 0;
+        total[data] -= s['monthCounts'] ? s['monthCounts'][data].count : 0;
       }
     }
     setCountMonth(total);
   };
 
   const customMouseOver = (e, payload, s) => {
-    const { count, month } = payload.payload;
+    const { count, month, year } = payload.payload;
     setTotalTransByMonth(count);
-    setCurrentMonth(month);
+    setCurrentYear(year);
+    setCurrentMonth(shortMonths[month - 1]);
     setTooltipPosition({
       x: payload.cx,
       y: payload.cy,
     });
     const { orgId } = s.organization;
-    const { name } = s;
+    const { name } = s.organization;
     setOrgIdOrg(orgId);
     setCurrentOrg(name);
     setShowTooltip(true);
@@ -298,6 +245,7 @@ const VisualizationsPage = () => {
   const customMouseOverBarchart = (data, org, orgName) => {
     setTotalTransByMonth(data[orgName])
     setCurrentMonth(data.month);
+    setCurrentYear(data.year);
     setTooltipPosition({
       x: data.x,
       y: data.y,
@@ -308,22 +256,22 @@ const VisualizationsPage = () => {
     setShowTooltip(true);
   };
 
-  const renderLine = (s: DataSubClientProps, sIndex) => {
-    const name = s.name ?? '';
+  const renderLine = (s, sIndex) => {
+    const name = s.organization?.name ?? '';
     if (selectAll || (subClientsCheckBox[name] && !selectNone)) {
       return (
         <Line
           activeDot={{
             onMouseOver(e, payload) { customMouseOver(e, payload, s) },
-            r: s.name === currentSubOrg ? 6 : null,
+            r: s.organization.name === currentSubOrg ? 6 : null,
           }}
           isAnimationActive={false}
           onMouseOver={(e) => setCurrentSubOrg(e.name)}
           dataKey="count"
-          data={s.data}
-          name={s.name}
+          data={s.monthCounts}
+          name={s.organization?.name}
           dot={false}
-          key={s.name}
+          key={s.organization?.name}
           stroke={COLORS[sIndex]}
           strokeWidth={2}
         />
@@ -360,16 +308,14 @@ const VisualizationsPage = () => {
     }
   }, [transmissionVendorData, isLoadingTransmissionVendor]);
 
-  const customTooltip = ({ payload }) => {
-    if (payload.name === 'default') return null;
+  const customTooltip = () => {
     if (showTooltip) {
-      const year = new Date().getFullYear();
       return (
         <StyledTooltip>
           <Stack>
             <Text variant="small">
               <Text style={{ fontWeight: 'bold' }} variant="small">{totalTransByMonth} </Text>
-              Transmissions in {currentMonth} { year}{' '}
+              Transmissions in {currentMonth} { currentYear}{' '}
               {' '} {currentOrg}
             </Text>
             <ButtonLink
@@ -446,15 +392,11 @@ const VisualizationsPage = () => {
               dataKey="month"
               allowDuplicatedCategory={false}
               tick={false}
+              padding={{ left: 37, right: 40 }}
             />
             <YAxis
               dataKey="count"
-              domain={
-                [
-                  0,
-                  yAxisValue,
-                ]
-              }
+              padding={{ top: 40, bottom: 0 }}
             />
             <Tooltip
               cursor={false}
@@ -528,8 +470,6 @@ const VisualizationsPage = () => {
           <Row>
             <Spacing margin={{ left: 'normal' }}>
               <StyledTotal
-                horizontal={true}
-                horizontalAlign="center"
                 lineChart={graphicType?.key !== 'barchart'}
               >
                 {months.map((month, monthIndex) => (
@@ -572,12 +512,10 @@ const VisualizationsPage = () => {
           <Row>
             <Spacing margin={{ top: 'normal', bottom: 'normal', left: 'normal' }}>
               <StyledTotal
-                horizontal={true}
-                horizontalAlign="center"
                 background={true}
                 lineChart={graphicType?.key !== 'barchart'}
               >
-                <span style={{ position: 'absolute', left: '50px', fontWeight: 500 }}>Totals</span>
+                <span style={{ position: 'absolute', left: '70px', fontWeight: 500 }}>Totals</span>
                 {countMonth.map((count, countIndex) => (
                   <Spacing padding={{ left: 'double' }} key={countIndex}>
                     <Text>
@@ -593,23 +531,21 @@ const VisualizationsPage = () => {
               <Stack horizontal={true}>
                 {subClients.map((subC, subCIndex) => (
                   <div key={subCIndex}>
-                    {subCIndex > 0 && (
-                      <StyledCheckbox
-                        key={`${subC.name}-${subCIndex + 1}`}
-                        label={subC.name}
-                        checked={subClientsCheckBox[subC.name ?? '']}
-                        onChange={(event, isChecked) => {
-                          setSubClientsCheckBox({
-                            ...subClientsCheckBox,
-                            [subC.name ?? '']: isChecked,
-                          });
-                          setSelectNone(false);
-                          setSelectAll(false);
-                          currentTotalTransmissions(subC, isChecked);
-                        }}
-                        color={COLORS[subCIndex]}
-                      />
-                    )}
+                    <StyledCheckbox
+                      key={`${subC?.organization?.name}-${subCIndex + 1}`}
+                      label={subC?.organization?.name ?? ''}
+                      checked={subClientsCheckBox[subC.organization?.name ?? '']}
+                      onChange={(event, isChecked) => {
+                        setSubClientsCheckBox({
+                          ...subClientsCheckBox,
+                          [subC?.organization?.name ?? '']: isChecked,
+                        });
+                        setSelectNone(false);
+                        setSelectAll(false);
+                        currentTotalTransmissions(subC, isChecked);
+                      }}
+                      color={COLORS[subCIndex]}
+                    />
                   </div>
                 ))}
               </Stack>
