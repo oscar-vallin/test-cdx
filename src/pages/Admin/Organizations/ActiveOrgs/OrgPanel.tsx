@@ -279,7 +279,7 @@ export const OrgPanel = ({
       <Column lg="12">
         <Stack horizontal styles={{ root: { height: 44 } }}>
           <PanelTitle id="__Org_Panel_Title" variant="bold" size="large">
-            {!selectedOrgSid ? 'New Organization' : 'Update Organization'}
+            {!selectedOrgSid ? 'New Organization' : orgState.orgId}
           </PanelTitle>
         </Stack>
       </Column>
@@ -360,7 +360,7 @@ export const OrgPanel = ({
         id="org-panel"
         closeButtonAriaLabel="Close"
         type={PanelType.medium}
-        headerText={!selectedOrgSid ? 'New Organization' : 'Update Organization'}
+        headerText={!selectedOrgSid ? 'New Organization' : orgState.orgId}
         onRenderHeader={renderPanelHeader}
         onRenderFooterContent={renderPanelFooter}
         isOpen={isOpen}
