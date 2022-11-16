@@ -133,7 +133,12 @@ export const StyledMenuItem = styled.div<SelectableProps>`
 `;
 
 export const StyledOverFlow = styled.div`
-  max-width: 180px;
+  max-width: 150px;
   width: 100%;
   overflow: hidden;
+  @media all and ${device.mobileL} {
+    max-width: 180px;
+
+  }
+  
 `;
