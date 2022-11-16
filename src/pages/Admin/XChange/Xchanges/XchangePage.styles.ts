@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { DocumentCard } from '@fluentui/react';
 import { ButtonAction } from 'src/components/buttons';
+import { device } from 'src/styles/GlobalStyles';
 
 export const CardStyled = styled(DocumentCard)`
   background: ${({ theme }) => theme.colors.neutralLighter};
@@ -11,7 +12,12 @@ export const CardStyled = styled(DocumentCard)`
   max-width: unset;
   min-height: 200px;
   width: 100%;
+  margin-top: 90px;
   bottom: 70px;
+
+  @media ${device.tablet} {
+    margin-top: 0;    
+  }
 
   .ms-DocumentCard {
     &:hover {
