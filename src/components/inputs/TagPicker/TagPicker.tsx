@@ -67,6 +67,9 @@ const CDXTagPicker = ({
         onChange={onChange}
         resolveDelay={debounce}
         getTextFromItem={getTextFromItem}
+        onBlur={() => {
+          picker.current.input.current._updateValue('');
+        }}
         pickerSuggestionsProps={
           pickerProps || {
             suggestionsHeaderText: 'Search',
