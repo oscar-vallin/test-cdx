@@ -528,7 +528,7 @@ const VisualizationsPage = () => {
           <Row>
             <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
               <Stack horizontal={true}>
-                {subClients.map((subC, subCIndex) => (
+                {subClients.length > 1 && subClients.map((subC, subCIndex) => (
                   <div key={subCIndex}>
                     <StyledCheckbox
                       key={`${subC?.organization?.name}-${subCIndex + 1}`}
@@ -551,34 +551,36 @@ const VisualizationsPage = () => {
             </Spacing>
           </Row>
           <Row>
-            <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-              <Stack horizontal={true} style={{ width: '80%' }}>
-                <ButtonLink
-                  underline
-                  style={styles}
-                  onClick={() => {
-                    handleSubClientOfCheckbox(true);
-                    setCountMonth(countTotal);
-                    setSelectNone(false);
-                    setSelectAll(true);
-                  }}
-                >
-                  Select all
-                </ButtonLink>
-                <ButtonLink
-                  underline
-                  style={styles}
-                  onClick={() => {
-                    handleSubClientOfCheckbox(false);
-                    setCountMonth(new Array(...INITIAL_COUNT_TOTAL));
-                    setSelectAll(false);
-                    setSelectNone(true);
-                  }}
-                >
-                  Select none
-                </ButtonLink>
-              </Stack>
-            </Spacing>
+            {subClients.length > 1 && (
+              <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                <Stack horizontal={true} style={{ width: '80%' }}>
+                  <ButtonLink
+                    underline
+                    style={styles}
+                    onClick={() => {
+                      handleSubClientOfCheckbox(true);
+                      setCountMonth(countTotal);
+                      setSelectNone(false);
+                      setSelectAll(true);
+                    }}
+                  >
+                    Select all
+                  </ButtonLink>
+                  <ButtonLink
+                    underline
+                    style={styles}
+                    onClick={() => {
+                      handleSubClientOfCheckbox(false);
+                      setCountMonth(new Array(...INITIAL_COUNT_TOTAL));
+                      setSelectAll(false);
+                      setSelectNone(true);
+                    }}
+                  >
+                    Select none
+                  </ButtonLink>
+                </Stack>
+              </Spacing>
+            )}
           </Row>
         </Container>
       </PageBody>
