@@ -1,6 +1,16 @@
 import { useEffect, useState } from 'react';
 import {
-  IconButton, PanelType, PrimaryButton, Spinner, SpinnerSize, Text,
+  FontIcon,
+  IconButton,
+  MessageBarType,
+  MessageBar,
+  PanelType,
+  PrimaryButton,
+  Spinner,
+  SpinnerSize,
+  Stack,
+  Text,
+  TooltipHost,
 } from '@fluentui/react';
 import CodeMirror, { BasicSetupOptions } from '@uiw/react-codemirror';
 import { createTheme } from '@uiw/codemirror-themes';
@@ -14,12 +24,13 @@ import {
   useUpdateXchangeStepMutation,
   CdxWebCommandType,
   WebCommand,
+  GqOperationResponse,
 } from 'src/data/services/graphql';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { useNotification } from 'src/hooks/useNotification';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import {
-  ThemedPanel, PanelBody, WizardButtonRow, WizardBody,
+  ThemedPanel, PanelBody, WizardButtonRow, WizardBody, PanelHeader, PanelTitle,
 } from 'src/layouts/Panels/Panels.styles';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { theme } from 'src/styles/themes/theme';
@@ -85,6 +96,9 @@ const XchangeStepPanel = ({
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
+  const [message, setMessage] = useState<string | null>();
+  const [messageType, setMessageType] = useState<MessageBarType>(MessageBarType.info);
+  const [infoMessage, setInfoMessage] = useState('');
 
   const [xchangeStepForm,
     { data: dataAddStep, loading: loadingAddStep }] = useQueryHandler(useXchangeStepFormLazyQuery);
@@ -133,6 +147,7 @@ const XchangeStepPanel = ({
     updatedDialog.onYes = () => {
       hideDialog();
       closePanel(false);
+      setMessage(null);
       setUnsavedChanges(false);
       setShowIcons(false);
       setEditXmlData('');
@@ -150,6 +165,7 @@ const XchangeStepPanel = ({
       showUnsavedChangesDialog();
     } else {
       closePanel(false);
+      setMessage(null);
       setShowIcons(false);
       setOptionXchangeStep('');
     }
@@ -206,6 +222,18 @@ const XchangeStepPanel = ({
     if (optionXchangeStep === 'add' && createCmd) {
       return (
         <PanelBody>
+          {message && (
+          <Spacing margin={{ bottom: 'normal' }}>
+            <MessageBar
+              id="__StepPanel_Msg"
+              messageBarType={messageType}
+              isMultiline
+              onDismiss={() => setMessage(undefined)}
+            >
+              {message}
+            </MessageBar>
+          </Spacing>
+          )}
           <WizardBody>
             <CodeMirror
               height="400px"
@@ -276,14 +304,34 @@ const XchangeStepPanel = ({
   };
 
   const renderPanelHeaderText = () => {
-    if (!loadingAddStep && !loadingCopyStep) {
-      if (optionXchangeStep === 'add') {
-        return xchangeStepTitle;
-      }
-
-      return `${!createCmd ? xchangeStepTitle : `Copy of ${xchangeStepTitle}`}`;
+    let title = xchangeStepTitle;
+    if (!updateCmd && optionXchangeStep !== 'add') {
+      title = `Copy of ${xchangeStepTitle}`
     }
-    return undefined;
+
+    if (loadingAddStep || loadingCopyStep) return null;
+    return (
+      <PanelHeader>
+        <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
+          <PanelTitle id="__XchangeStep_Panel_Title" variant="bold" size="large">
+            {title}
+            {message && (
+              <TooltipHost content={infoMessage}>
+                <FontIcon
+                  iconName="Warning12"
+                  style={{
+                    color: theme.colors.custom.error,
+                    fontSize: '16px',
+                    marginLeft: '10px',
+                    cursor: 'pointer',
+                  }}
+                />
+              </TooltipHost>
+            )}
+          </PanelTitle>
+        </Stack>
+      </PanelHeader>
+    )
   };
 
   useEffect(() => {
@@ -320,6 +368,7 @@ const XchangeStepPanel = ({
       const pageCommands = dataCopyStep?.copyXchangeStep?.commands;
       const _createCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
       setCreateCmd(_createCmd);
+      setUpdateCmd(null);
     }
   }, [dataCopyStep, loadingCopyStep]);
 
@@ -328,22 +377,35 @@ const XchangeStepPanel = ({
   }, [editXmlData]);
 
   useEffect(() => {
-    let message = '';
+    let stepMessage = '';
     if (optionXchangeStep === 'add') {
-      message = 'added';
+      stepMessage = 'added';
     } else if (optionXchangeStep === 'copy') {
-      message = 'copied';
+      stepMessage = 'copied';
     } else {
-      message = 'updated';
+      stepMessage = 'updated';
     }
-    if (!loadingCreateStep && dataCreateStep) {
-      refreshDetailsPage(true);
-      Toast.success({ text: `Xchange step ${message}` });
-      closePanel(false);
+    const response = dataCreateStep?.createXchangeStep;
+
+    if (dataCreateStep) {
+      const responseCode = response?.response;
+      if (responseCode === GqOperationResponse.Fail) {
+        const errorMsg = dataCreateStep?.createXchangeStep?.errMsg
+          ?? 'Error occurred, please verify the information and try again.';
+        setMessageType(MessageBarType.error);
+        setMessage(errorMsg);
+        const info = dataCreateStep?.createXchangeStep?.xml.info;
+        setInfoMessage(info);
+      }
+      if (responseCode === GqOperationResponse.Success) {
+        refreshDetailsPage(true);
+        Toast.success({ text: `Xchange step ${stepMessage}` });
+        closePanel(false);
+      }
     }
 
     if (!loadingCreateStep && errorCreateStep) {
-      Toast.error({ text: `There was an error to ${message} step` });
+      Toast.error({ text: `There was an error to ${stepMessage} step` });
     }
   }, [dataCreateStep, loadingCreateStep, errorCreateStep]);
 
@@ -368,7 +430,7 @@ const XchangeStepPanel = ({
       <ThemedPanel
         closeButtonAriaLabel="Close"
         type={PanelType.medium}
-        headerText={renderPanelHeaderText()}
+        onRenderHeader={renderPanelHeaderText}
         isOpen={isPanelOpen}
         onDismiss={() => {
           onPanelClose();
