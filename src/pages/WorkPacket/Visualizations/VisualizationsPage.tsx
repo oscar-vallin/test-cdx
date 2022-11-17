@@ -82,7 +82,7 @@ const VisualizationsPage = () => {
   const [monthIncurrent, setMonthInCurrent] = useState(0);
   const [countMonth, setCountMonth] = useState(new Array(...INITIAL_COUNT_TOTAL));
   const [countTotal, setCountTotal] = useState(new Array(...INITIAL_COUNT_TOTAL));
-  const [subClientsCheckBox, setSubClientsCheckBox] = useState({});
+  const [subClientsCheckBox, setSubClientsCheckBox]: any = useState(null);
   const [selectAll, setSelectAll] = useState(false);
   const [selectNone, setSelectNone] = useState(false);
   const [isOpenPanel, setIsOpenPanel] = useState(false);
@@ -343,7 +343,6 @@ const VisualizationsPage = () => {
     }
 
     if (graphicType?.key === 'barchart') {
-      const sc = Object.keys(subClientsCheckBox);
       return (
         <Spacing margin={{ left: 'normal', top: 'double' }}>
           <ResponsiveContainer width="95%" height={400}>
@@ -361,16 +360,16 @@ const VisualizationsPage = () => {
                 position={{ x: tooltipPosition.x - 115, y: tooltipPosition.y - 50 }}
                 wrapperStyle={{ pointeEvents: 'auto' }}
               />
-              {sc.map((s, i) => subClientsCheckBox[s]
+              {subClients.map((s, i) => subClientsCheckBox[s.organization?.name ?? '']
                 // eslint-disable-next-line no-return-assign
                 && (
                   <Bar
-                    key={`${s}-${i}`}
-                    dataKey={s}
+                    key={`${s.organization?.orgId}-${i}`}
+                    dataKey={s.organization?.name}
                     stackId="a"
                     fill={COLORS[i]}
                     onMouseOver={(data) => {
-                      customMouseOverBarchart(data, subClients[i], s)
+                      customMouseOverBarchart(data, subClients[i], s.organization?.name)
                     }}
                   />
                 ))}
