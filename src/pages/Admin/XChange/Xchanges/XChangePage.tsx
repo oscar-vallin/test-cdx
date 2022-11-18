@@ -645,127 +645,132 @@ const XChangePage = () => {
     return <Text>{body}</Text>;
   };
 
-  const cardBox = () => (
-    <>
-      <CardStyled>
-        {alertsLink(
-          <>
-            <FontIcon iconName="Ringer" style={{ margin: '10px 6px 0 6px' }} />
-            Alerts
-          </>,
-        )}
-        <Spacing margin="normal">
-          <Row>
-            <Column lg="9">
-              <Text style={{ fontWeight: 'bold' }}>Alert on all Xchanges</Text>
-            </Column>
-            <Column lg="3">
-              { alertsLink(
-                <TooltipHost
-                  style={{ whiteSpace: 'pre-wrap' }}
-                  // eslint-disable-next-line @typescript-eslint/no-empty-function
-                  onMouseLeave={() => {}}
-                  content={`${globalXchangeAlerts?.numSubscribers} user(s) are configured to be notified`}
-                  calloutProps={{ gapSpace: 0 }}
-                >
-                  {` (${globalXchangeAlerts?.numSubscribers})`}
-                </TooltipHost>,
-              ) }
-            </Column>
-          </Row>
-        </Spacing>
-        <Spacing margin="normal">
-          <Row>
-            <Column lg="12">
-              <Text style={{ fontWeight: 'bold' }}>Individual Xchange Alerts</Text>
-            </Column>
-          </Row>
-          <Spacing margin="normal" />
-          {individualXchangeAlerts?.map((individualXchange: XchangeAlertsProps, index: number) => (
-            <Spacing margin={{ bottom: 'normal' }} key={index}>
-              <Row>
-                <Column lg="9">
-                  { alertsLink(` ${individualXchange.coreFilename} `) }
-                </Column>
-                <Column lg="3">
-                  { alertsLink(
-                    <TooltipHost
-                      style={{ whiteSpace: 'pre-wrap' }}
-                      // eslint-disable-next-line @typescript-eslint/no-empty-function
-                      onMouseLeave={() => {}}
-                      content={`${individualXchange.numSubscribers} user(s) are configured to be notified`}
-                      calloutProps={{ gapSpace: 0 }}
-                    >
-                      {` (${individualXchange.numSubscribers})`}
-                    </TooltipHost>,
-                  ) }
-                </Column>
-              </Row>
-            </Spacing>
-          ))}
-        </Spacing>
-      </CardStyled>
-      <Spacing margin={{ top: 'normal' }}>
+  const cardBox = () => {
+    if (loadingXchange) return null;
+
+    return (
+
+      <>
         <CardStyled>
-          <ContainerInput>
+          {alertsLink(
+            <>
+              <FontIcon iconName="Ringer" style={{ margin: '10px 6px 0 6px' }} />
+              Alerts
+            </>,
+          )}
+          <Spacing margin="normal">
             <Row>
-              <Column lg="6">
-                <Text style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>Comments</Text>
+              <Column lg="9">
+                <Text style={{ fontWeight: 'bold' }}>Alert on all Xchanges</Text>
               </Column>
-              {!requiresConversion && editComment ? (
-                <>
-                  <Column lg="3" md={12}>
-                    <StyledIconsComments>
-                      <IconButton iconProps={{ iconName: 'Save' }} onClick={sendComment} />
-                      <Text style={{ cursor: 'pointer' }} variant="small" onClick={sendComment}>Save</Text>
-                    </StyledIconsComments>
+              <Column lg="3">
+                { alertsLink(
+                  <TooltipHost
+                    style={{ whiteSpace: 'pre-wrap' }}
+                    // eslint-disable-next-line @typescript-eslint/no-empty-function
+                    onMouseLeave={() => {}}
+                    content={`${globalXchangeAlerts?.numSubscribers} user(s) are configured to be notified`}
+                    calloutProps={{ gapSpace: 0 }}
+                  >
+                    {` (${globalXchangeAlerts?.numSubscribers})`}
+                  </TooltipHost>,
+                ) }
+              </Column>
+            </Row>
+          </Spacing>
+          <Spacing margin="normal">
+            <Row>
+              <Column lg="12">
+                <Text style={{ fontWeight: 'bold' }}>Individual Xchange Alerts</Text>
+              </Column>
+            </Row>
+            <Spacing margin="normal" />
+            {individualXchangeAlerts?.map((individualXchange: XchangeAlertsProps, index: number) => (
+              <Spacing margin={{ bottom: 'normal' }} key={index}>
+                <Row>
+                  <Column lg="9">
+                    { alertsLink(` ${individualXchange.coreFilename} `) }
                   </Column>
                   <Column lg="3">
-                    <StyledIconsComments>
-                      <IconButton
-                        iconProps={{ iconName: 'Cancel' }}
-                        onClick={() => {
-                          setEditComment(false);
-                          setComment(dataXchange.xchangeProfile.comments);
-                        }}
-                      />
-                      <Text
-                        style={{ cursor: 'pointer' }}
-                        variant="small"
-                        onClick={() => {
-                          setEditComment(false);
-                          setComment(dataXchange.xchangeProfile.comments);
-                        }}
-                      >Cancel
-                      </Text>
-                    </StyledIconsComments>
+                    { alertsLink(
+                      <TooltipHost
+                        style={{ whiteSpace: 'pre-wrap' }}
+                        // eslint-disable-next-line @typescript-eslint/no-empty-function
+                        onMouseLeave={() => {}}
+                        content={`${individualXchange.numSubscribers} user(s) are configured to be notified`}
+                        calloutProps={{ gapSpace: 0 }}
+                      >
+                        {` (${individualXchange.numSubscribers})`}
+                      </TooltipHost>,
+                    ) }
                   </Column>
-                </>
-              ) : (
-                <Column lg="6" right>
-                  {!requiresConversion && updateCmd && (
-                    <IconButton
-                      iconProps={{ iconName: 'EditSolid12' }}
-                      onClick={() => setEditComment(updateCmd !== undefined && true)}
-                    />
-                  )}
-                </Column>
-              )}
-            </Row>
-            <TextField
-              multiline
-              borderless={true}
-              readOnly={readonlyComments()}
-              resizable={false}
-              value={comment ?? ''}
-              rows={7}
-              onChange={(event, newValue) => setComment(newValue ?? '')}
-            />
-          </ContainerInput>
+                </Row>
+              </Spacing>
+            ))}
+          </Spacing>
         </CardStyled>
-      </Spacing>
-    </>
-  );
+        <Spacing margin={{ top: 'normal' }}>
+          <CardStyled>
+            <ContainerInput>
+              <Row>
+                <Column lg="6">
+                  <Text style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>Comments</Text>
+                </Column>
+                {!requiresConversion && editComment ? (
+                  <>
+                    <Column lg="3" md={12}>
+                      <StyledIconsComments>
+                        <IconButton iconProps={{ iconName: 'Save' }} onClick={sendComment} />
+                        <Text style={{ cursor: 'pointer' }} variant="small" onClick={sendComment}>Save</Text>
+                      </StyledIconsComments>
+                    </Column>
+                    <Column lg="3">
+                      <StyledIconsComments>
+                        <IconButton
+                          iconProps={{ iconName: 'Cancel' }}
+                          onClick={() => {
+                            setEditComment(false);
+                            setComment(dataXchange.xchangeProfile.comments);
+                          }}
+                        />
+                        <Text
+                          style={{ cursor: 'pointer' }}
+                          variant="small"
+                          onClick={() => {
+                            setEditComment(false);
+                            setComment(dataXchange.xchangeProfile.comments);
+                          }}
+                        >Cancel
+                        </Text>
+                      </StyledIconsComments>
+                    </Column>
+                  </>
+                ) : (
+                  <Column lg="6" right>
+                    {!requiresConversion && updateCmd && (
+                      <IconButton
+                        iconProps={{ iconName: 'EditSolid12' }}
+                        onClick={() => setEditComment(updateCmd !== undefined && true)}
+                      />
+                    )}
+                  </Column>
+                )}
+              </Row>
+              <TextField
+                multiline
+                borderless={true}
+                readOnly={readonlyComments()}
+                resizable={false}
+                value={comment ?? ''}
+                rows={7}
+                onChange={(event, newValue) => setComment(newValue ?? '')}
+              />
+            </ContainerInput>
+          </CardStyled>
+        </Spacing>
+      </>
+    )
+  };
 
   return (
     <LayoutDashboard id="XChangePage" menuOptionSelected={ROUTE_XCHANGE_LIST.API_ID}>
