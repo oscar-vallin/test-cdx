@@ -27,7 +27,6 @@ import {
   Text,
 } from '@fluentui/react';
 import { PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
-import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 import { useThemeStore } from 'src/store/ThemeStore';
@@ -39,6 +38,7 @@ import { shortMonths } from '../VisualizationsPage';
 type VisualizationPanelProps = {
   isPanelOpen: boolean;
   closePanel: (data: boolean) => void;
+  orgSid: string;
   orgName?: string;
   orgId?: string;
   currentMonth: number;
@@ -53,12 +53,12 @@ type TotalTransmissionProps = {
 }
 
 const VisualizationPanel = ({
-  isPanelOpen, closePanel, orgName, orgId, currentMonth, typeTransmissions,
+  isPanelOpen, closePanel, orgSid, orgName, orgId, currentMonth, typeTransmissions,
 }: VisualizationPanelProps) => {
-  const { orgSid } = useOrgSid();
   const ThemeStore = useThemeStore();
   const [transmissionsVendor, setTransmissionsVendor] = useState<TotalTransmissionProps[]>([]);
   const [nodes, setNodes] = useState<WpTransmission[]>();
+  const [totalTransmissions, setTotalTransmissions] = useState(0);
   const [activeIndex, setActiveIndex] = useState<number>();
 
   const onMouseOver = (slice, index) => {
@@ -217,7 +217,7 @@ const VisualizationPanel = ({
     }
   }, [isPanelOpen, tableFilters.searchText.delayedValue, tableFilters.pagingParams]);
 
-  const getTransmissionVendorData = (data) => {
+  const loadTransmissionVendorData = (data) => {
     for (let organization = 0; organization < data.length; organization++) {
       const orgVendorData: TotalTransmissionProps = {};
       orgVendorData.monthCounts = data[organization].monthCounts;
@@ -233,14 +233,14 @@ const VisualizationPanel = ({
   useEffect(() => {
     if (!isLoadingTransmissionVendor && transmissionVendorData) {
       const { wpTransmissionCountByVendor } = transmissionVendorData;
-      getTransmissionVendorData(wpTransmissionCountByVendor);
+      loadTransmissionVendorData(wpTransmissionCountByVendor);
     }
   }, [transmissionVendorData, isLoadingTransmissionVendor]);
 
   useEffect(() => {
     if (!isLoadingTransmissionSponsor && transmissionSponsorData) {
       const { wpTransmissionCountBySponsor } = transmissionSponsorData;
-      getTransmissionVendorData(wpTransmissionCountBySponsor);
+      loadTransmissionVendorData(wpTransmissionCountBySponsor);
     }
   }, [transmissionSponsorData, isLoadingTransmissionSponsor])
 
@@ -250,6 +250,7 @@ const VisualizationPanel = ({
       if (wpTransmissions?.nodes && wpTransmissions.nodes.length > 0) {
         setNodes(wpTransmissions?.nodes);
       }
+      setTotalTransmissions(wpTransmissions?.paginationInfo?.totalElements ?? 0);
     }
   }, [transmissionTableData, isLoadingTransmissionTable]);
 
@@ -393,7 +394,7 @@ const VisualizationPanel = ({
     <PanelHeader id="__Visualization_PanelHeader">
       <Stack horizontal styles={{ root: { height: 44 } }}>
         <PanelTitle id="__Visualization_Panel_Title" variant="bold" size="large">
-          {`${shortMonths[currentMonth]} ${new Date().getFullYear()} ${typeTransmissions === 'sponsor' ? 'Transmissions for' : 'sent to'} ${orgName}`}
+          {`${shortMonths[currentMonth]} ${new Date().getFullYear()} ${typeTransmissions === 'sponsor' ? 'Transmissions for' : 'sent to'} ${orgName}`} ({totalTransmissions})
         </PanelTitle>
       </Stack>
     </PanelHeader>

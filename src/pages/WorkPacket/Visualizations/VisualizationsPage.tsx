@@ -17,6 +17,7 @@ import {
   IDropdownOption, Icon,
 } from '@fluentui/react';
 import {
+  Organization,
   useWpTransmissionCountBySponsorLazyQuery,
   useWpTransmissionCountByVendorLazyQuery,
   WpTransmissionSummary,
@@ -76,9 +77,8 @@ const VisualizationsPage = () => {
   const [selectAll, setSelectAll] = useState(false);
   const [selectNone, setSelectNone] = useState(false);
   const [isOpenPanel, setIsOpenPanel] = useState(false);
-  const [orgIdOrg, setOrgIdOrg] = useState('');
+  const [selectedOrg, setSelectedOrg] = useState<Organization | undefined>(undefined);
   const [currentYear, setCurrentYear] = useState(0);
-  const [currentOrg, setCurrentOrg] = useState();
   const [totalTransByMonth, setTotalTransByMonth] = useState(0);
   const [currentMonth, setCurrentMonth] = useState('');
   const [tooltipPosition, setTooltipPosition] = useState({
@@ -230,10 +230,7 @@ const VisualizationsPage = () => {
       x: payload.cx,
       y: payload.cy,
     });
-    const { orgId } = s.organization;
-    const { name } = s.organization;
-    setOrgIdOrg(orgId);
-    setCurrentOrg(name);
+    setSelectedOrg(s.organization);
     setShowTooltip(true);
   };
 
@@ -245,9 +242,7 @@ const VisualizationsPage = () => {
       x: data.x,
       y: data.y,
     });
-    const { orgId } = org.organization;
-    setOrgIdOrg(orgId);
-    setCurrentOrg(orgName);
+    setSelectedOrg(org);
     setShowTooltip(true);
   };
 
@@ -311,7 +306,7 @@ const VisualizationsPage = () => {
             <Text size="small">
               <Text variant="bold" size="small">{totalTransByMonth}&nbsp; </Text>
               Transmissions in {currentMonth} { currentYear}{' '}
-              {' '} {currentOrg}
+              {' '} {selectedOrg?.name}
             </Text>
             <ButtonLink
               onClick={() => {
@@ -611,8 +606,9 @@ const VisualizationsPage = () => {
         <VisualizationPanel
           isPanelOpen={isOpenPanel}
           closePanel={setIsOpenPanel}
-          orgName={currentOrg}
-          orgId={orgIdOrg}
+          orgSid={selectedOrg?.sid ?? ''}
+          orgName={selectedOrg?.name ?? ''}
+          orgId={selectedOrg?.orgId}
           currentMonth={shortMonths.indexOf(currentMonth)}
           typeTransmissions={typeOfTransmissions?.key}
         />
