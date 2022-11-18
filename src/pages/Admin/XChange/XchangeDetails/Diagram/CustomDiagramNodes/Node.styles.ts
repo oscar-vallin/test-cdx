@@ -47,6 +47,7 @@ export const StyledChevronUpIcon = styled(FontIcon)<StyledChevronUpProps>`
     margin-bottom: -2px;
     &:hover {
       background-color: ${({ theme, firstIndex }) => (firstIndex ? '' : theme.colors.neutralTertiary)};
+      color: ${({ theme }) => theme.colors.white};
     }
 `;
 export const StyledChevronDownIcon = styled(FontIcon)<StyledChevronDownProps>`
@@ -59,6 +60,7 @@ export const StyledChevronDownIcon = styled(FontIcon)<StyledChevronDownProps>`
     margin-bottom: -2px;
     &:hover {
       background-color: ${({ theme, lastNode }) => (lastNode ? '' : theme.colors.neutralTertiary)};
+      color: ${({ theme }) => theme.colors.white};
     }
 `;
 
