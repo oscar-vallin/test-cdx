@@ -538,7 +538,7 @@ const XchangeDetailsPage = () => {
 
   const renderDiagram = () => {
     if (!detailsLoading && dataDiagram) {
-      console.log(dataDiagram)
+      // console.log(dataDiagram)
       const xchangeFileProcessSid = xchangeDataDetails?.processes ? xchangeDataDetails?.processes[0].sid : '';
       return (
         <Diagram
