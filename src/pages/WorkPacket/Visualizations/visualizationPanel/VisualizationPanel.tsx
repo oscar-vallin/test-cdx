@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import chroma from 'chroma-js';
 import {
   MonthCount,
   Organization,
@@ -12,6 +13,7 @@ import {
   Pie,
   Cell,
   Legend,
+  Sector,
 } from 'recharts';
 import {
   DetailsList,
@@ -22,13 +24,16 @@ import {
   Spinner,
   SpinnerSize,
   Stack,
+  Text,
 } from '@fluentui/react';
 import { PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useTableFilters } from 'src/hooks/useTableFilters';
+import { useThemeStore } from 'src/store/ThemeStore';
 import { DataColumn, useSortableColumns } from 'src/containers/tables';
 import { Spacing } from 'src/components/spacings/Spacing';
+import { ButtonLink } from 'src/components/buttons';
 import { shortMonths } from '../VisualizationsPage';
 
 type VisualizationPanelProps = {
@@ -51,8 +56,19 @@ const VisualizationPanel = ({
   isPanelOpen, closePanel, orgName, orgId, currentMonth, typeTransmissions,
 }: VisualizationPanelProps) => {
   const { orgSid } = useOrgSid();
+  const ThemeStore = useThemeStore();
   const [transmissionsVendor, setTransmissionsVendor] = useState<TotalTransmissionProps[]>([]);
   const [nodes, setNodes] = useState<WpTransmission[]>();
+  const [activeIndex, setActiveIndex] = useState<number>();
+
+  const onMouseOver = (slice, index) => {
+    setActiveIndex(index);
+  };
+
+  const onMouseLeave = () => {
+    setActiveIndex(undefined);
+  };
+
   const [transmissionVendor,
     { data: transmissionVendorData, loading: isLoadingTransmissionVendor },
   ] = useQueryHandler(useWpTransmissionCountByVendorLazyQuery);
@@ -65,9 +81,9 @@ const VisualizationPanel = ({
     { data: transmissionTableData, loading: isLoadingTransmissionTable },
   ] = useWpTransmissionsLazyQuery();
 
-  const currentdate = new Date();
-  const start = new Date(currentdate.getFullYear(), currentMonth);
-  const end = new Date(currentdate.getFullYear(), currentMonth + 1);
+  const currentDate = new Date();
+  const start = new Date(currentDate.getFullYear(), currentMonth);
+  const end = new Date(currentDate.getFullYear(), currentMonth + 1);
 
   const COLORS = ['#8884d8', '#82ca9d', '#FFBB28', '#FF8042', '#AF19FF'];
 
@@ -238,9 +254,9 @@ const VisualizationPanel = ({
   }, [transmissionTableData, isLoadingTransmissionTable]);
 
   const updateDateFormat = (date: Date) => {
-    const currentDate = new Date(date);
-    let hour = currentDate.getHours();
-    let minutes: string = currentDate.getMinutes().toString();
+    const now = new Date(date);
+    let hour = now.getHours();
+    let minutes: string = now.getMinutes().toString();
     const format = hour >= 12 ? 'PM' : 'AM';
     hour %= 12;
     hour = hour || 12;
@@ -254,8 +270,8 @@ const VisualizationPanel = ({
     if (column?.key === 'deliveredOn') {
       const delivered = node.deliveredOn;
       const currentTime = updateDateFormat(delivered);
-      const currentDate = new Date(delivered).toLocaleDateString();
-      columnVal = `${currentDate} ${currentTime}`;
+      const now = new Date(delivered).toLocaleDateString();
+      columnVal = `${now} ${currentTime}`;
     } else if (column?.key === 'vendorId') {
       columnVal = node.vendorId ?? '';
     } else if (column?.key === 'specId') {
@@ -273,6 +289,42 @@ const VisualizationPanel = ({
       </Stack>
     )
   }
+
+  const renderLegendText = (value: string, entry: any, index: number) => (
+    <ButtonLink
+      onMouseOver={() => onMouseOver(entry, index)}
+      onMouseLeave={() => onMouseLeave()}
+      onClick={() => {
+
+      }}
+    >
+      <Text style={{
+        fontSize: ThemeStore.userTheme.fontSizes.small,
+        fontWeight: index === activeIndex ? 'bold' : 'normal',
+        color: index === activeIndex ? chroma(entry.color).darken().saturate(2).hex() : entry.color,
+      }}
+      >
+        {value} ({entry.payload.value})
+      </Text>
+    </ButtonLink>
+  );
+
+  const renderActiveShape = (props) => {
+    const {
+      cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill,
+    } = props;
+    return (
+      <Sector
+        cx={cx}
+        cy={cy}
+        innerRadius={innerRadius}
+        outerRadius={outerRadius}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        fill={chroma(fill).darken().saturate(2).hex()}
+      />
+    );
+  };
 
   const renderBody = () => {
     if (isLoadingTransmissionVendor || isLoadingTransmissionSponsor) {
@@ -295,6 +347,10 @@ const VisualizationPanel = ({
             cy="40%"
             outerRadius={80}
             fill="#8884d8"
+            activeIndex={activeIndex}
+            activeShape={renderActiveShape}
+            onMouseOver={onMouseOver}
+            onMouseLeave={onMouseLeave}
           >
             {transmissionsVendor?.map((entry, index) => (
               <Cell
@@ -315,7 +371,10 @@ const VisualizationPanel = ({
               marginLeft: '25px',
               paddingBottom: '8px',
               width: '100%',
+              overflow: 'visible',
+              whiteSpace: 'nowrap',
             }}
+            formatter={renderLegendText}
           />
         </PieChart>
         <DetailsList
