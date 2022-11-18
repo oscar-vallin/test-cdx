@@ -3,15 +3,12 @@ import { MarkerType } from 'react-flow-renderer';
 export function InitialEdges(data) {
   const initialEdges = data.connectors.map((connector) => {
     const values = {};
-
-    if (connector.fromKey !== 'step-2' || connector.toKey !== 'step-3-1') {
-      values['id'] = `${connector.fromKey}-${connector.toKey}`;
-      values['source'] = connector.fromKey;
-      values['target'] = connector.toKey;
-      values['markerEnd'] = { type: MarkerType.ArrowClosed, color: '#0078D4' };
-      values['type'] = 'smoothstep';
-      values['style'] = { strokeWidth: 3, stroke: '#0078D4' };
-    }
+    values['id'] = `${connector.fromKey}-${connector.toKey}`;
+    values['source'] = connector.fromKey;
+    values['target'] = connector.toKey;
+    values['markerEnd'] = { type: MarkerType.ArrowClosed, color: '#0078D4' };
+    values['type'] = 'smoothstep';
+    values['style'] = { strokeWidth: 3, stroke: '#0078D4' };
 
     return values;
   });
