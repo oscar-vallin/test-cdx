@@ -135,6 +135,7 @@ const XchangeDetailsPage = () => {
 
   const showUnsavedChangesDialog = (currentSid: string) => {
     const updatedDialog = { ...defaultDialogProps };
+    updatedDialog.title = 'Delete Alert';
     updatedDialog.message = 'Are you sure you want to delete this Alert?';
 
     updatedDialog.onYes = () => {
@@ -199,12 +200,15 @@ const XchangeDetailsPage = () => {
   const filenameQualifier = (qualifierType: string, coreFilename: string) => {
     const qualifier = qualifierType.replace(`${coreFilename}-`, '');
     if (qualifier) {
-      let width = '40px';
+      let width: number | string = qualifier.length * 8;
+      width = `${width}px`;
       let color = 'blue';
-      if (qualifier === 'TEST') {
+      if (qualifier === 'TEST' || qualifier === 'TEST-OE') {
         color = 'orange';
-      } else if (qualifier === 'PROD-OE') {
-        width = '60px';
+        width = '50px';
+      }
+      if (qualifier === 'PROD') {
+        width = '50px';
       }
 
       return (
@@ -534,6 +538,7 @@ const XchangeDetailsPage = () => {
 
   const renderDiagram = () => {
     if (!detailsLoading && dataDiagram) {
+      console.log(dataDiagram)
       const xchangeFileProcessSid = xchangeDataDetails?.processes ? xchangeDataDetails?.processes[0].sid : '';
       return (
         <Diagram

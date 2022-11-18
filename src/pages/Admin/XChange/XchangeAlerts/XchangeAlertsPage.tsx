@@ -151,15 +151,15 @@ const XchangeAlertsPage = () => {
   const filenameQualifier = (qualifierType: string, coreFilename: string) => {
     const qualifier = qualifierType.replace(`${coreFilename}-`, '');
     if (qualifier) {
-      let width = '48px';
+      let width: number | string = qualifier.length * 8;
+      width = `${width}px`;
       let color = 'blue';
-      if (qualifier === 'TEST') {
+      if (qualifier === 'TEST' || qualifier === 'TEST-OE') {
         color = 'orange';
-      } else if (qualifier === 'PROD-OE') {
-        width = '60px';
-      } else if (qualifier === 'TEST-OE') {
-        width = '60px';
-        color = 'orange';
+        width = '50px';
+      }
+      if (qualifier === 'PROD') {
+        width = '50px';
       }
 
       return (

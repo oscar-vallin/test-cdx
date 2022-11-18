@@ -307,6 +307,12 @@ const XchangeAlertsPanel = ({
       if (xchangeConfigAlertForm?.filenameQualifier.value
         && xchangeConfigAlertForm?.filenameQualifier.value.value) {
         setFilenameQualifier(xchangeConfigAlertForm?.filenameQualifier.value.value ?? '');
+        const filenameQualifierValue = xchangeConfigAlertForm?.filenameQualifier.value.value;
+        const customQualifierValue = xchangeConfigAlertForm.options
+          .find((opt) => opt.key === 'filenameQualifier').values.find((val) => val.value === filenameQualifierValue)
+        if (!customQualifierValue && filenameQualifierValue) {
+          setCustomQualifier(true);
+        }
       }
 
       if (xchangeConfigAlertForm?.commands) {
