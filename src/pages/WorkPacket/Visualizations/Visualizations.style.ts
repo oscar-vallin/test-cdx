@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Checkbox, Dropdown, Stack } from '@fluentui/react';
 import { device } from 'src/styles/GlobalStyles';
+import { Text } from 'src/components/typography/Text';
 
 export const StyledCheckbox = styled(Checkbox)<CheckboxProps>`
     margin-left: 50px;
@@ -19,7 +20,7 @@ export const StyledTooltip = styled.div`
     width: 200px;
     height: 80px;
     background-color: ${(({ theme }) => theme.colors.white)};
-    padding: 15px 2px;
+    padding: 15px 10px;
     box-shadow: rgb(0 0 0 / 13%) 0px 3.2px 7.2px 0px, rgb(0 0 0 / 11%) 0px 0.6px 1.8px 0px;
     text-align: center;
 
@@ -79,4 +80,14 @@ export const StyledTransmissionsType = styled(Dropdown)`
   }
 
 }
-`
+`;
+
+export const CurrentMonth = styled(Text)`
+  color: ${({ theme }) => theme.colors.themePrimary};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
+`;
+
+export const PriorYearMonth = styled(Text)`
+  color: ${({ theme }) => theme.colors.neutralTertiary};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
+`;

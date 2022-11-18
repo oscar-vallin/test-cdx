@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactElement } from 'react';
 import {
   LineChart,
   BarChart,
@@ -14,8 +14,7 @@ import {
   Spinner,
   SpinnerSize,
   Stack,
-  Text,
-  IDropdownOption,
+  IDropdownOption, Icon,
 } from '@fluentui/react';
 import {
   useWpTransmissionCountBySponsorLazyQuery,
@@ -23,16 +22,19 @@ import {
   Organization,
 } from 'src/data/services/graphql';
 import { Column, Container, Row } from 'src/components/layouts';
-import { PageTitle } from 'src/components/typography';
+import { Text, PageTitle } from 'src/components/typography';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ROUTES } from 'src/data/constants/RouteConstants'
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard'
 import { useOrgSid } from 'src/hooks/useOrgSid';
-import { endOfMonth } from 'date-fns';
+import { toUTC } from 'src/hooks/useTableFilters';
+import { endOfMonth, format } from 'date-fns';
 import { PageBody } from 'src/components/layouts/Column';
 import { ButtonLink } from 'src/components/buttons';
-import { ThemeStore } from 'src/store/ThemeStore';
+import { DownloadLink } from 'src/containers/tables/WorkPacketTable.styles';
 import {
+  CurrentMonth,
+  PriorYearMonth,
   StyledCheckbox,
   StyledTooltip,
   StyledTotal,
@@ -79,7 +81,7 @@ const VisualizationsPage = () => {
   const [graphicType, setGraphicType] = useState<IDropdownOption>();
   const [subClientBarChart, setSubClientsBarChart] = useState<any[]>([]);
   const [months, setMonths] = useState<string[]>([]);
-  const [monthIncurrent, setMonthInCurrent] = useState(0);
+  const [monthInCurrent, setMonthInCurrent] = useState(0);
   const [countMonth, setCountMonth] = useState(new Array(...INITIAL_COUNT_TOTAL));
   const [countTotal, setCountTotal] = useState(new Array(...INITIAL_COUNT_TOTAL));
   const [subClientsCheckBox, setSubClientsCheckBox]: any = useState(null);
@@ -98,38 +100,44 @@ const VisualizationsPage = () => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [currentSubOrg, setCurrentSubOrg] = useState('');
 
-  const end = endOfMonth(new Date());
+  const endRange = endOfMonth(new Date());
+  const startRange = (): Date => {
+    const s = new Date();
+    s.setMonth(s.getMonth() - 11);
+    s.setDate(1);
+    s.setHours(0, 0, 0, 0);
+    return s;
+  };
+
   const [
-    transmissioncountBySponsor,
+    transmissionCountBySponsor,
     { data: transmissionSponsorData, loading: isLoadingTransmissionSponsor },
   ] = useWpTransmissionCountBySponsorLazyQuery();
 
   const [
-    transmissioncountByVendor,
+    transmissionCountByVendor,
     { data: transmissionVendorData, loading: isLoadingTransmissionVendor },
   ] = useWpTransmissionCountByVendorLazyQuery();
 
   const fetchData = () => {
-    let s = new Date();
-    s = new Date(s.getFullYear() - 1, CURRENT_MONTH);
     if (typeOfTransmissions?.key === 'vendor') {
-      transmissioncountByVendor({
+      transmissionCountByVendor({
         variables: {
           orgSid,
           dateRange: {
-            rangeStart: s,
-            rangeEnd: end,
+            rangeStart: startRange(),
+            rangeEnd: endRange,
           },
         },
       })
       return;
     }
-    transmissioncountBySponsor({
+    transmissionCountBySponsor({
       variables: {
         orgSid,
         dateRange: {
-          rangeStart: s,
-          rangeEnd: end,
+          rangeStart: startRange(),
+          rangeEnd: endRange,
         },
       },
     });
@@ -313,8 +321,8 @@ const VisualizationsPage = () => {
       return (
         <StyledTooltip>
           <Stack>
-            <Text variant="small">
-              <Text style={{ fontWeight: 'bold' }} variant="small">{totalTransByMonth} </Text>
+            <Text size="small">
+              <Text variant="bold" size="small">{totalTransByMonth}&nbsp; </Text>
               Transmissions in {currentMonth} { currentYear}{' '}
               {' '} {currentOrg}
             </Text>
@@ -410,6 +418,41 @@ const VisualizationsPage = () => {
     );
   };
 
+  const renderDownloadLink = (totalRecords: number): ReactElement => {
+    const dateFormat = "yyyy-MM-dd'T'HH:mm:ss";
+    const graphQLUrl = process.env.REACT_APP_API_SERVER;
+    const serverUrl = graphQLUrl?.replace('/graphql', '') ?? '';
+
+    if (totalRecords > 0) {
+      let url = `${serverUrl}excel/`;
+      if (typeOfTransmissions?.key === 'vendor') {
+        url += 'transmissionCountByVendor'
+      } else {
+        url += 'transmissionCountBySponsor'
+      }
+      const rangeStart = format(toUTC(startRange()), dateFormat);
+      const rangeEnd = format(toUTC(endRange), dateFormat);
+
+      url += `?orgSid=${orgSid}&rangeStart=${rangeStart}&rangeEnd=${rangeEnd}`
+      if (graphicType?.key === 'barchart') {
+        url += '&chartType=bar'
+      } else {
+        url += '&chartType=line'
+      }
+      return (
+        <DownloadLink
+          target="_new"
+          href={url}
+          title="Download chart as Excel"
+        >
+          <Icon iconName="ExcelDocument" /> Download
+        </DownloadLink>
+      );
+    }
+
+    return <span />;
+  };
+
   const typeTransmissions = [
     { key: 'vendor', text: 'Transmissions by vendor per month' },
     { key: 'sponsor', text: 'Transmissions by sponsor per month' },
@@ -425,8 +468,13 @@ const VisualizationsPage = () => {
       <PageHeader>
         <Container>
           <Row>
-            <Column lg="6" direction="row">
+            <Column sm="6" direction="row">
               <PageTitle id="__Page__Title_Visualizations" title="Visualizations" />
+            </Column>
+            <Column sm="6" right>
+              <Text size="large">
+                { renderDownloadLink(countTotal.length) }
+              </Text>
             </Column>
           </Row>
         </Container>
@@ -474,32 +522,20 @@ const VisualizationsPage = () => {
                 {months.map((month, monthIndex) => (
                   <Spacing padding={{ left: 'double' }} key={monthIndex}>
                     {months.length - 1 === monthIndex ? (
-                      <Text
-                        style={{ color: ThemeStore.userTheme.colors.themePrimary, fontWeight: 500 }}
-                      >
+                      <CurrentMonth>
                         {month}
-                      </Text>
+                      </CurrentMonth>
                     ) : (
                       <div>
-                        {monthIndex > monthIncurrent ? (
-                          <Text
-                            style={{
-                              color: ThemeStore.userTheme.colors.neutralPrimary,
-                              fontWeight: 500,
-                            }}
-                          >
+                        {monthIndex > monthInCurrent ? (
+                          <Text variant="bold">
                             {month}
                           </Text>
 
                         ) : (
-                          <Text
-                            style={{
-                              color: ThemeStore.userTheme.colors.neutralTertiary,
-                              fontWeight: 500,
-                            }}
-                          >
+                          <PriorYearMonth>
                             {month}
-                          </Text>
+                          </PriorYearMonth>
                         )}
                       </div>
                     )}
