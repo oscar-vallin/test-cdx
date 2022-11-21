@@ -629,6 +629,7 @@ const VisualizationsPage = () => {
         <VisualizationPanel
           isPanelOpen={isOpenPanel}
           closePanel={setIsOpenPanel}
+          parentOrgSid={orgSid}
           orgSid={selectedOrgSid ?? ''}
           orgName={selectedOrg?.name ?? ''}
           orgId={typeOfTransmissions === 'sponsor' ? selectedOrg?.orgId : undefined}

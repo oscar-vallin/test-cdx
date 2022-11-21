@@ -42,9 +42,9 @@ export const WorkPacketListPage = ({
   const [totalRecords, setTotalRecords] = useState(0);
   const [pageTitle, setPageTitle] = useState('');
   const fileStatusDetailsPanel = useFileStatusDetailsPanel();
+  const urlParams = new URLSearchParams(window.location.search);
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
     const fsOrgSid = urlParams.get('fsOrgSid');
     const tab = urlParams.get('tab');
     const workOrderId = urlParams.get('workOrderId');
@@ -54,7 +54,21 @@ export const WorkPacketListPage = ({
     }
   }, [fileStatusDetailsPanel]);
 
-  const tableFilters = useTableFilters('Extract Name, Status, Vendor, etc.', defaultSort);
+  const planSponsorId = urlParams.get('planSponsorId');
+  const vendorId = urlParams.get('vendorId');
+  const preFilters = {};
+  if (planSponsorId) {
+    preFilters['planSponsorId'] = planSponsorId;
+  }
+  if (vendorId) {
+    preFilters['vendorId'] = vendorId;
+  }
+
+  const tableFilters = useTableFilters(
+    'Extract Name, Status, Vendor, etc.',
+    defaultSort,
+    preFilters,
+  );
 
   const handleSetPageTitle = (title: string) => {
     setPageTitle(title);

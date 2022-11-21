@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import chroma from 'chroma-js';
+import { endOfMonth } from 'date-fns';
 import {
   MonthCount,
   Organization,
@@ -30,14 +31,17 @@ import { PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.
 import { useTableFilters } from 'src/hooks/useTableFilters';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
+import { yyyyMMdd } from 'src/utils/CDXUtils';
 import { DataColumn, useSortableColumns } from 'src/containers/tables';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { ButtonLink } from 'src/components/buttons';
+import { Column, Row } from 'src/components/layouts';
 import { shortMonths } from '../VisualizationsPage';
 
 type VisualizationPanelProps = {
   isPanelOpen: boolean;
   closePanel: (data: boolean) => void;
+  parentOrgSid: string;
   orgSid: string;
   orgName?: string;
   orgId?: string;
@@ -57,6 +61,7 @@ type TotalTransmissionProps = {
 const VisualizationPanel = ({
   isPanelOpen,
   closePanel,
+  parentOrgSid,
   orgSid,
   orgName,
   orgId,
@@ -117,7 +122,7 @@ const VisualizationPanel = ({
   }, [errorTransmissionsBySponsor]);
 
   const start = new Date(currentYear, currentMonth);
-  const end = new Date(currentYear, currentMonth + 1);
+  const end = endOfMonth(start);
 
   const COLORS = ['#8884d8', '#82ca9d', '#FFBB28', '#FF8042', '#AF19FF'];
 
@@ -376,6 +381,12 @@ const VisualizationPanel = ({
       );
     }
 
+    let additionalFilter: string;
+    if (typeTransmissions === 'vendor') {
+      additionalFilter = `&vendorId=${vendorId}`;
+    } else {
+      additionalFilter = `&planSponsorId=${orgId}`;
+    }
     return (
       <>
         <PieChart width={500} height={200}>
@@ -418,6 +429,15 @@ const VisualizationPanel = ({
             formatter={renderLegendText}
           />
         </PieChart>
+        <Row>
+          <Column lg="12" right>
+            <ButtonLink
+              to={`/transmissions?orgSid=${parentOrgSid}&startDate=${yyyyMMdd(start)}&endDate=${yyyyMMdd(end)}${additionalFilter}`}
+            >
+              Full List
+            </ButtonLink>
+          </Column>
+        </Row>
         <DetailsList
           items={nodes ?? []}
           columns={columns}
