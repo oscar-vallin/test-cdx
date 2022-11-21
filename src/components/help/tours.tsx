@@ -64,6 +64,12 @@ export const topNavTour: TourStep[] = [
     content: 'This shows files which have errored during processing.',
   },
   {
+    target: '#__VISUALIZATIONS_Tab',
+    title: 'Visualizations',
+    calloutDirection: DirectionalHint.bottomCenter,
+    content: 'This shows a chart of transmissions over the last 12 months.'
+  },
+  {
     target: '#__ProfileMenu_Font_Buttons',
     title: 'Font sizes',
     calloutDirection: DirectionalHint.bottomRightEdge,
