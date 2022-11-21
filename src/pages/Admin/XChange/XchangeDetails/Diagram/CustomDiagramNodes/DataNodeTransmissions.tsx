@@ -17,6 +17,7 @@ import Node from './Node';
 import { StyledQualifier, StyledSFTP } from '../../XchangeDetailsPage.styles';
 import { XchangeTransmissionPanel } from '../../XchangeTransmissionPanel/XchangeTransmissionPanel';
 import { StyledCopyIcon, StyledTrashIcon } from './Node.styles';
+import { theme } from 'src/styles/themes/theme';
 
 const defaultDialogProps: DialogYesNoProps = {
   id: '__DiagramTransmission_Dlg',
@@ -59,7 +60,7 @@ const DataNodeTransmissions = ({ data, id }) => {
   );
 
   let width = '48px';
-  let color = 'blue';
+  let color = theme.colors.themePrimary;
 
   if (qualifier === 'TEST') {
     color = 'orange';
