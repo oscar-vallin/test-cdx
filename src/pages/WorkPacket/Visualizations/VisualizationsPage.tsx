@@ -68,9 +68,9 @@ const VisualizationsPage = () => {
   const ThemeStore = useThemeStore();
   const { orgSid } = useOrgSid();
   const [series, setSeries] = useState<WpTransmissionSummary[]>([]);
+  const [barChartSeries, setBarChartSeries] = useState<any[]>([]);
   const [typeOfTransmissions, setTypeOfTransmissions] = useState<IDropdownOption | undefined>({ key: 'sponsor', text: 'Transmissions by vendor per month' });
   const [graphicType, setGraphicType] = useState<IDropdownOption>();
-  const [subClientBarChart, setSubClientsBarChart] = useState<any[]>([]);
   const [months, setMonths] = useState<string[]>([]);
   const [monthInCurrent, setMonthInCurrent] = useState(0);
   const [countMonth, setCountMonth] = useState(new Array(...INITIAL_COUNT_TOTAL));
@@ -178,27 +178,27 @@ const VisualizationsPage = () => {
     }
   };
 
-  const setBarChartData = (subC) => {
+  const setBarChartData = (data: WpTransmissionSummary[]) => {
     const orderedMonth = monthList();
-    setSubClientsBarChart([]);
-    const subClientdata: any[] = [];
-    let data = {};
+    setBarChartSeries([]);
+    const chartData: any[] = [];
+    let _data = {};
     for (let month = 0; month < orderedMonth.length; month++) {
-      data = {};
-      data['month'] = orderedMonth[month];
-      subClientdata.push(data);
+      _data = {};
+      _data['month'] = orderedMonth[month];
+      chartData.push(_data);
     }
 
-    for (let i = 0; i < subC.length; i++) {
-      const monthCounts = subC[i].monthCounts ?? [];
+    for (let i = 0; i < data.length; i++) {
+      const monthCounts = data[i].monthCounts ?? [];
       for (let m = 0; m < monthCounts.length; m++) {
-        const index = subClientdata.map((object) => object.month)
+        const index = chartData.map((object) => object.month)
           .indexOf(shortMonths[monthCounts[m].month - 1]);
-        subClientdata[index][subC[i]['organization']['name']] = monthCounts[m].count;
-        subClientdata[index]['year'] = monthCounts[m].year;
+        chartData[index][data[i].organization?.orgId] = monthCounts[m].count;
+        chartData[index]['year'] = monthCounts[m].year;
       }
     }
-    setSubClientsBarChart(subClientdata);
+    setBarChartSeries(chartData);
   };
 
   const sumTotalTransmissions = (sdata) => {
@@ -236,8 +236,8 @@ const VisualizationsPage = () => {
     setShowTooltip(true);
   };
 
-  const customMouseOverBarchart = (data, org, orgName) => {
-    setTotalTransByMonth(data[orgName])
+  const customMouseOverBarchart = (data, org: Organization) => {
+    setTotalTransByMonth(data[org?.orgId])
     setCurrentMonth(data.month);
     setCurrentYear(data.year);
     setTooltipPosition({
@@ -347,7 +347,7 @@ const VisualizationsPage = () => {
             <BarChart
               width={1070}
               height={400}
-              data={subClientBarChart}
+              data={barChartSeries}
               barCategoryGap={55}
             >
               <XAxis dataKey="month" tick={false} />
@@ -360,15 +360,14 @@ const VisualizationsPage = () => {
                 isAnimationActive={false}
               />
               {series.map((s, i) => orgsSelected[s.organization?.orgId ?? '']
-                // eslint-disable-next-line no-return-assign
                 && (
                   <Bar
                     key={`${s.organization?.orgId}-${i}`}
-                    dataKey={s.organization?.name}
+                    dataKey={s.organization?.orgId}
                     stackId="a"
                     fill={COLORS[i]}
                     onMouseOver={(data) => {
-                      customMouseOverBarchart(data, series[i], s.organization?.name)
+                      customMouseOverBarchart(data, series[i].organization)
                     }}
                   />
                 ))}
