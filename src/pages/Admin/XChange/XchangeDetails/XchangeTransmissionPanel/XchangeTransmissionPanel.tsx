@@ -1001,10 +1001,18 @@ const XchangeTransmissionPanel = ({
         dataFileTransmissionForm.xchangeFileTransmissionForm?.filenameQualifiers.value
         && dataFileTransmissionForm.xchangeFileTransmissionForm?.filenameQualifiers.value.length > 0
       ) {
-        setFilenameQualifiers(
-          [dataFileTransmissionForm.xchangeFileTransmissionForm.filenameQualifiers
-            .value[0].value] ?? [],
-        );
+        const fileTransmissionValue = dataFileTransmissionForm.xchangeFileTransmissionForm
+          .filenameQualifiers.value[0].value;
+        const customQualifierValue = dataFileTransmissionForm.xchangeFileTransmissionForm.options
+          .find((opt) => opt.key === 'filenameQualifier').values.find((val) => val.value === fileTransmissionValue);
+        if (customQualifierValue) {
+          setFilenameQualifiers(
+            [fileTransmissionValue] ?? [],
+          );
+        } else {
+          setCustomQualifier(true);
+          setCustomFileQualifier(fileTransmissionValue);
+        }
       }
       if (dataFileTransmissionForm.xchangeFileTransmissionForm?.commands) {
         const pageCommands = dataFileTransmissionForm.xchangeFileTransmissionForm?.commands;

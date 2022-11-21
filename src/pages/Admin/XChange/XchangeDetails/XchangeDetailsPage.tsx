@@ -200,7 +200,7 @@ const XchangeDetailsPage = () => {
   const filenameQualifier = (qualifierType: string, coreFilename: string) => {
     const qualifier = qualifierType.replace(`${coreFilename}-`, '');
     if (qualifier) {
-      let width: number | string = qualifier.length * 8;
+      let width: number | string = qualifier.length * 9;
       width = `${width}px`;
       let color = 'blue';
       if (qualifier === 'TEST' || qualifier === 'TEST-OE') {
@@ -538,7 +538,6 @@ const XchangeDetailsPage = () => {
 
   const renderDiagram = () => {
     if (!detailsLoading && dataDiagram) {
-      console.log(dataDiagram)
       const xchangeFileProcessSid = xchangeDataDetails?.processes ? xchangeDataDetails?.processes[0].sid : '';
       return (
         <Diagram

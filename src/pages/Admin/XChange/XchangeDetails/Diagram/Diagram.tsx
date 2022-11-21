@@ -31,7 +31,7 @@ type DiagramProps = {
 const Diagram = ({
   data, refreshDetailsPage, xchangeFileProcessSid, allowedCommands, commands,
 }: DiagramProps) => {
-  const { initialNodes } = InitialNodes(data);
+  const { initialNodes, largestCoordinate } = InitialNodes(data);
   const { nodeWithParents } = NodeParent(initialNodes, data.stepGroups);
   const { initialEdges } = InitialEdges(data);
   const [nodes, setNodes, onNodesChange] = useNodesState(nodeWithParents);
@@ -146,7 +146,7 @@ const Diagram = ({
   useEffect(() => {
     getCommands();
     setTotalHeight(0);
-    let height = initialNodes[initialNodes.length - 1]['data'].position.y;
+    let height = largestCoordinate;
     height = height === 1 ? 2 : height;
     height *= 150;
     setTotalHeight(height);

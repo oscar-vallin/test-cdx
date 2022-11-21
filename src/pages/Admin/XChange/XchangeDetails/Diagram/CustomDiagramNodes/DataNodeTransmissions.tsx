@@ -58,13 +58,18 @@ const DataNodeTransmissions = ({ data, id }) => {
     useDeleteXchangeFileTransmissionMutation,
   );
 
-  let width = '48px';
+  let width = `${qualifier && qualifier.length * 9}px`;
   let color = 'blue';
 
-  if (qualifier === 'TEST') {
+  if (qualifier === 'TEST' || qualifier === 'TEST-OE') {
     color = 'orange';
-  } else if (qualifier === 'PROD-OE' || qualifier === 'TEST-OE') {
+    width = '50px';
+  }
+  if (qualifier === 'PROD-OE' || qualifier === 'TEST-OE') {
     width = '60px';
+  }
+  if (qualifier === 'PROD') {
+    width = '50px';
   }
   const hideDialog = () => {
     setShowDialog(false);
@@ -150,7 +155,7 @@ const DataNodeTransmissions = ({ data, id }) => {
       return (
         <>
           {renderHoverIcons()}
-          <Handle type="target" id={id} position={Position['Top']} style={{ background: 'none', border: 'white' }} />
+          <Handle isConnectable={true} type="target" id={id} position={Position['Top']} style={{ background: 'none', border: 'white' }} />
           <Container>
             <Row>
               <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
@@ -170,6 +175,7 @@ const DataNodeTransmissions = ({ data, id }) => {
                 />
                 <Text style={{ lineHeight: '36px' }}>[archive]</Text>
               </Stack>
+              <Handle isConnectable={true} type="source" id={id} position={Position['Top']} style={{ background: 'none', border: 'white' }} />
             </Row>
             <XchangeTransmissionPanel
               isPanelOpen={openPanel}
@@ -182,6 +188,11 @@ const DataNodeTransmissions = ({ data, id }) => {
               xchangeFileTransmissionSid={sid}
             />
           </Container>
+          {qualifier && (
+          <StyledQualifier position={true} left={true} top={true} color={color} width={width}>
+            {qualifier}
+          </StyledQualifier>
+          )}
         </>
       );
     }
@@ -200,6 +211,7 @@ const DataNodeTransmissions = ({ data, id }) => {
                 <span style={{ fontSize: '12px' }}>{host}</span>
               </ButtonLink>
             </Stack>
+            <Handle isConnectable={true} type="source" id={id} position={Position['Top']} style={{ background: 'none', border: 'white' }} />
           </Row>
         </Container>
         {qualifier && (
