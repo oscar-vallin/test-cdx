@@ -30,6 +30,7 @@ import { PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 import { useThemeStore } from 'src/store/ThemeStore';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { DataColumn, useSortableColumns } from 'src/containers/tables';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { ButtonLink } from 'src/components/buttons';
@@ -57,6 +58,7 @@ const VisualizationPanel = ({
   isPanelOpen, closePanel, orgSid, orgName, orgId, currentMonth, currentYear, typeTransmissions,
 }: VisualizationPanelProps) => {
   const ThemeStore = useThemeStore();
+  const handleError = ErrorHandler();
   const [transmissionsVendor, setTransmissionsVendor] = useState<TotalTransmissionProps[]>([]);
   const [nodes, setNodes] = useState<WpTransmission[]>();
   const [totalTransmissions, setTotalTransmissions] = useState(0);
@@ -70,17 +72,25 @@ const VisualizationPanel = ({
     setActiveIndex(undefined);
   };
 
-  const [transmissionVendor,
+  const [callTransmissionsByVendor,
     { data: transmissionVendorData, loading: isLoadingTransmissionVendor },
   ] = useQueryHandler(useWpTransmissionCountByVendorLazyQuery);
 
-  const [transmissionSponsor,
+  const [callTransmissionsBySponsor,
     { data: transmissionSponsorData, loading: isLoadingTransmissionSponsor },
   ] = useQueryHandler(useWpTransmissionCountBySponsorLazyQuery);
 
-  const [transmissionTable,
-    { data: transmissionTableData, loading: isLoadingTransmissionTable },
+  const [callTransmissionsTableData,
+    {
+      data: transmissionTableData,
+      loading: isLoadingTransmissionTable,
+      error: errorTransmissionsTableData,
+    },
   ] = useWpTransmissionsLazyQuery();
+
+  useEffect(() => {
+    handleError(errorTransmissionsTableData);
+  }, [errorTransmissionsTableData]);
 
   const start = new Date(currentYear, currentMonth);
   const end = new Date(currentYear, currentMonth + 1);
@@ -162,7 +172,7 @@ const VisualizationPanel = ({
   const { columns } = useSortableColumns(tableFilters, columnOptions);
   const fetchData = () => {
     if (typeTransmissions === 'sponsor') {
-      transmissionVendor({
+      callTransmissionsByVendor({
         variables: {
           orgSid,
           dateRange: {
@@ -174,7 +184,7 @@ const VisualizationPanel = ({
       return;
     }
 
-    transmissionSponsor({
+    callTransmissionsBySponsor({
       variables: {
         orgSid,
         dateRange: {
@@ -188,7 +198,7 @@ const VisualizationPanel = ({
   const fetchDataTable = () => {
     const planSponsorId = typeTransmissions === 'sponsor' ? orgId : null;
     const vendorId = typeTransmissions === 'vendor' ? orgId : null;
-    transmissionTable({
+    callTransmissionsTableData({
       variables: {
         orgSid,
         filter: {
@@ -338,7 +348,7 @@ const VisualizationPanel = ({
 
     return (
       <>
-        <PieChart width={500} height={250}>
+        <PieChart width={500} height={200}>
           <Pie
             data={transmissionsVendor}
             color="#000000"
@@ -366,7 +376,7 @@ const VisualizationPanel = ({
             verticalAlign="center"
             align="center"
             wrapperStyle={{
-              marginTop: '45px',
+              marginTop: '35px',
               fontSize: '12px',
               maxWidth: '150px',
               marginLeft: '25px',

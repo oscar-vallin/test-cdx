@@ -14,7 +14,7 @@ import {
   Spinner,
   SpinnerSize,
   Stack,
-  IDropdownOption, Icon,
+  Icon,
 } from '@fluentui/react';
 import {
   Organization,
@@ -69,8 +69,8 @@ const VisualizationsPage = () => {
   const { orgSid } = useOrgSid();
   const [series, setSeries] = useState<WpTransmissionSummary[]>([]);
   const [barChartSeries, setBarChartSeries] = useState<any[]>([]);
-  const [typeOfTransmissions, setTypeOfTransmissions] = useState<IDropdownOption | undefined>({ key: 'sponsor', text: 'Transmissions by vendor per month' });
-  const [graphicType, setGraphicType] = useState<IDropdownOption>();
+  const [typeOfTransmissions, setTypeOfTransmissions] = useState<string | undefined>('sponsor');
+  const [graphicType, setGraphicType] = useState<string | undefined>('linechart');
   const [months, setMonths] = useState<string[]>([]);
   const [monthInCurrent, setMonthInCurrent] = useState(0);
   const [countMonth, setCountMonth] = useState(new Array(...INITIAL_COUNT_TOTAL));
@@ -79,6 +79,7 @@ const VisualizationsPage = () => {
   const [selectAll, setSelectAll] = useState(false);
   const [selectNone, setSelectNone] = useState(false);
   const [isOpenPanel, setIsOpenPanel] = useState(false);
+  const [selectedOrgSid, setSelectedOrgSid] = useState<string | undefined | null>();
   const [selectedOrg, setSelectedOrg] = useState<Organization | undefined>(undefined);
   const [currentYear, setCurrentYear] = useState(0);
   const [totalTransByMonth, setTotalTransByMonth] = useState(0);
@@ -110,7 +111,7 @@ const VisualizationsPage = () => {
   ] = useWpTransmissionCountByVendorLazyQuery();
 
   const fetchData = () => {
-    if (typeOfTransmissions?.key === 'vendor') {
+    if (typeOfTransmissions === 'vendor') {
       transmissionCountByVendor({
         variables: {
           orgSid,
@@ -233,6 +234,11 @@ const VisualizationsPage = () => {
       y: payload.cy,
     });
     setSelectedOrg(s.organization);
+    if (typeOfTransmissions === 'vendor') {
+      setSelectedOrgSid(orgSid);
+    } else {
+      setSelectedOrgSid(s.organization.sid);
+    }
     setShowTooltip(true);
   };
 
@@ -245,6 +251,11 @@ const VisualizationsPage = () => {
       y: data.y,
     });
     setSelectedOrg(org);
+    if (typeOfTransmissions === 'vendor') {
+      setSelectedOrgSid(orgSid);
+    } else {
+      setSelectedOrgSid(org.sid);
+    }
     setShowTooltip(true);
   };
 
@@ -340,7 +351,7 @@ const VisualizationsPage = () => {
       );
     }
 
-    if (graphicType?.key === 'barchart') {
+    if (graphicType === 'barchart') {
       return (
         <Spacing margin={{ left: 'normal', top: 'double' }}>
           <ResponsiveContainer width="95%" height={400}>
@@ -416,7 +427,7 @@ const VisualizationsPage = () => {
 
     if (totalRecords > 0) {
       let url = `${serverUrl}excel/`;
-      if (typeOfTransmissions?.key === 'vendor') {
+      if (typeOfTransmissions === 'vendor') {
         url += 'transmissionCountByVendor'
       } else {
         url += 'transmissionCountBySponsor'
@@ -425,7 +436,7 @@ const VisualizationsPage = () => {
       const rangeEnd = format(toUTC(endRange), dateFormat);
 
       url += `?orgSid=${orgSid}&rangeStart=${rangeStart}&rangeEnd=${rangeEnd}`
-      if (graphicType?.key === 'barchart') {
+      if (graphicType === 'barchart') {
         url += '&chartType=bar'
       } else {
         url += '&chartType=line'
@@ -477,13 +488,13 @@ const VisualizationsPage = () => {
               <StyledTransmissionsType
                 dropdownWidth="auto"
                 label=""
-                selectedKey={typeOfTransmissions ? typeOfTransmissions.key : undefined}
+                selectedKey={typeOfTransmissions}
                 options={typeTransmissions}
                 onChange={(e, _newValue) => {
-                  if (_newValue?.key !== typeOfTransmissions?.key) {
+                  if (_newValue?.key !== typeOfTransmissions) {
                     setCountTotal(new Array(...INITIAL_COUNT_TOTAL));
                     setCountMonth(new Array(...INITIAL_COUNT_TOTAL));
-                    setTypeOfTransmissions(_newValue);
+                    setTypeOfTransmissions(_newValue?.key?.toString());
                   }
                 }}
               />
@@ -492,11 +503,11 @@ const VisualizationsPage = () => {
               <StyledTransmissionsType
                 label=""
                 defaultSelectedKey="linechart"
-                selectedKey={graphicType ? graphicType.key : undefined}
+                selectedKey={graphicType}
                 options={graphicOptions}
                 onChange={(e, _newValue) => {
-                  if (_newValue?.key !== graphicType?.key) {
-                    setGraphicType(_newValue);
+                  if (_newValue?.key !== graphicType) {
+                    setGraphicType(_newValue?.key?.toString());
                   }
                 }}
               />
@@ -508,7 +519,7 @@ const VisualizationsPage = () => {
           <Row>
             <Spacing margin={{ left: 'normal' }}>
               <StyledTotal
-                lineChart={graphicType?.key !== 'barchart'}
+                lineChart={graphicType !== 'barchart'}
               >
                 {months.map((month, monthIndex) => (
                   <Spacing padding={{ left: 'double' }} key={monthIndex}>
@@ -539,7 +550,7 @@ const VisualizationsPage = () => {
             <Spacing margin={{ top: 'normal', bottom: 'normal', left: 'normal' }}>
               <StyledTotal
                 background={true}
-                lineChart={graphicType?.key !== 'barchart'}
+                lineChart={graphicType !== 'barchart'}
               >
                 <span style={{ position: 'absolute', left: '70px', fontWeight: 500 }}>Totals</span>
                 {countMonth.map((count, countIndex) => (
@@ -615,12 +626,12 @@ const VisualizationsPage = () => {
         <VisualizationPanel
           isPanelOpen={isOpenPanel}
           closePanel={setIsOpenPanel}
-          orgSid={selectedOrg?.sid ?? ''}
+          orgSid={selectedOrgSid ?? ''}
           orgName={selectedOrg?.name ?? ''}
           orgId={selectedOrg?.orgId}
           currentMonth={shortMonths.indexOf(currentMonth)}
           currentYear={currentYear}
-          typeTransmissions={typeOfTransmissions?.key}
+          typeTransmissions={typeOfTransmissions}
         />
       )}
     </LayoutDashboard>
