@@ -56,7 +56,6 @@ import {
   StyledProcessValueText,
   StyledQualifier,
 } from './XchangeDetailsPage.styles';
-import { theme } from 'src/styles/themes/theme';
 
 const defaultDialogProps: DialogYesNoProps = {
   id: '__XchangeDetails_Dlg',
@@ -203,7 +202,7 @@ const XchangeDetailsPage = () => {
     if (qualifier) {
       let width: number | string = qualifier.length * 9;
       width = `${width}px`;
-      let color = theme.colors.themePrimary;
+      let color = ThemeStore.userTheme.colors.themePrimary;
       if (qualifier === 'TEST' || qualifier === 'TEST-OE') {
         color = 'orange';
         width = '50px';
