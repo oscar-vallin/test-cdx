@@ -15,10 +15,11 @@ export const StyledNode = styled.div`
 `;
 
 export const StyledTrashIcon = styled(FontIcon)`
-    font-size: 14px;
+    font-size: 13px;
     color: ${({ theme }) => theme.colors.black};
     cursor: pointer;
     padding: 3.5px;
+    background-color: #f3f2f1;
     border-radius: 50px;
     &:hover {
         background-color: ${({ theme }) => theme.colors.neutralTertiary};
@@ -26,9 +27,10 @@ export const StyledTrashIcon = styled(FontIcon)`
     }
 `;
 export const StyledCopyIcon = styled(FontIcon)`
-    font-size: 14px;
+    font-size: 13px;
     color: ${({ theme }) => theme.colors.black};
     cursor: pointer;
+    background-color: #f3f2f1;
     padding: 3.5px;
     border-radius: 50px;
     &:hover {
