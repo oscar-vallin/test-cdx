@@ -610,6 +610,7 @@ const VisualizationsPage = () => {
           orgName={selectedOrg?.name ?? ''}
           orgId={selectedOrg?.orgId}
           currentMonth={shortMonths.indexOf(currentMonth)}
+          currentYear={currentYear}
           typeTransmissions={typeOfTransmissions?.key}
         />
       )}

@@ -42,6 +42,7 @@ type VisualizationPanelProps = {
   orgName?: string;
   orgId?: string;
   currentMonth: number;
+  currentYear: number;
   typeTransmissions?: string | number;
 };
 
@@ -53,7 +54,7 @@ type TotalTransmissionProps = {
 }
 
 const VisualizationPanel = ({
-  isPanelOpen, closePanel, orgSid, orgName, orgId, currentMonth, typeTransmissions,
+  isPanelOpen, closePanel, orgSid, orgName, orgId, currentMonth, currentYear, typeTransmissions,
 }: VisualizationPanelProps) => {
   const ThemeStore = useThemeStore();
   const [transmissionsVendor, setTransmissionsVendor] = useState<TotalTransmissionProps[]>([]);
@@ -81,9 +82,8 @@ const VisualizationPanel = ({
     { data: transmissionTableData, loading: isLoadingTransmissionTable },
   ] = useWpTransmissionsLazyQuery();
 
-  const currentDate = new Date();
-  const start = new Date(currentDate.getFullYear(), currentMonth);
-  const end = new Date(currentDate.getFullYear(), currentMonth + 1);
+  const start = new Date(currentYear, currentMonth);
+  const end = new Date(currentYear, currentMonth + 1);
 
   const COLORS = ['#8884d8', '#82ca9d', '#FFBB28', '#FF8042', '#AF19FF'];
 
@@ -394,7 +394,7 @@ const VisualizationPanel = ({
     <PanelHeader id="__Visualization_PanelHeader">
       <Stack horizontal styles={{ root: { height: 44 } }}>
         <PanelTitle id="__Visualization_Panel_Title" variant="bold" size="large">
-          {`${shortMonths[currentMonth]} ${new Date().getFullYear()} ${typeTransmissions === 'sponsor' ? 'Transmissions for' : 'sent to'} ${orgName}`} ({totalTransmissions})
+          {`${shortMonths[currentMonth]} ${currentYear} ${typeTransmissions === 'sponsor' ? 'Transmissions for' : 'sent to'} ${orgName}`} ({totalTransmissions})
         </PanelTitle>
       </Stack>
     </PanelHeader>
