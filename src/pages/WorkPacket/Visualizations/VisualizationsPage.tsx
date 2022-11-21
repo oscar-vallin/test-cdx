@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactElement } from 'react';
 import {
   LineChart,
   BarChart,
@@ -14,25 +14,27 @@ import {
   Spinner,
   SpinnerSize,
   Stack,
-  Text,
-  IDropdownOption,
+  IDropdownOption, Icon,
 } from '@fluentui/react';
 import {
   useWpTransmissionCountBySponsorLazyQuery,
   useWpTransmissionCountByVendorLazyQuery,
-  Organization,
+  WpTransmissionSummary,
 } from 'src/data/services/graphql';
 import { Column, Container, Row } from 'src/components/layouts';
-import { PageTitle } from 'src/components/typography';
+import { Text, PageTitle } from 'src/components/typography';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ROUTES } from 'src/data/constants/RouteConstants'
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard'
 import { useOrgSid } from 'src/hooks/useOrgSid';
-import { endOfMonth } from 'date-fns';
+import { toUTC } from 'src/hooks/useTableFilters';
+import { endOfMonth, format } from 'date-fns';
 import { PageBody } from 'src/components/layouts/Column';
 import { ButtonLink } from 'src/components/buttons';
-import { ThemeStore } from 'src/store/ThemeStore';
+import { DownloadLink } from 'src/containers/tables/WorkPacketTable.styles';
 import {
+  CurrentMonth,
+  PriorYearMonth,
   StyledCheckbox,
   StyledTooltip,
   StyledTotal,
@@ -55,18 +57,6 @@ const COLORS = [
 ];
 const CURRENT_MONTH = new Date().getMonth();
 
-type DataProps = {
-  month: string;
-  year: number;
-  count: number;
-}
-
-type DataSubClientProps = {
-  name?: string;
-  data?: DataProps[];
-  organization?: Organization,
-};
-
 const styles = {
   marginLeft: '43px',
   paddingLeft: '15px',
@@ -74,15 +64,15 @@ const styles = {
 
 const VisualizationsPage = () => {
   const { orgSid } = useOrgSid();
-  const [subClients, setSubClients] = useState<DataSubClientProps[]>([]);
+  const [series, setSeries] = useState<WpTransmissionSummary[]>([]);
   const [typeOfTransmissions, setTypeOfTransmissions] = useState<IDropdownOption | undefined>({ key: 'sponsor', text: 'Transmissions by vendor per month' });
   const [graphicType, setGraphicType] = useState<IDropdownOption>();
   const [subClientBarChart, setSubClientsBarChart] = useState<any[]>([]);
   const [months, setMonths] = useState<string[]>([]);
-  const [monthIncurrent, setMonthInCurrent] = useState(0);
+  const [monthInCurrent, setMonthInCurrent] = useState(0);
   const [countMonth, setCountMonth] = useState(new Array(...INITIAL_COUNT_TOTAL));
   const [countTotal, setCountTotal] = useState(new Array(...INITIAL_COUNT_TOTAL));
-  const [subClientsCheckBox, setSubClientsCheckBox]: any = useState(null);
+  const [orgsSelected, setOrgsSelected]: any = useState({});
   const [selectAll, setSelectAll] = useState(false);
   const [selectNone, setSelectNone] = useState(false);
   const [isOpenPanel, setIsOpenPanel] = useState(false);
@@ -98,38 +88,44 @@ const VisualizationsPage = () => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [currentSubOrg, setCurrentSubOrg] = useState('');
 
-  const end = endOfMonth(new Date());
+  const endRange = endOfMonth(new Date());
+  const startRange = (): Date => {
+    const s = new Date();
+    s.setMonth(s.getMonth() - 11);
+    s.setDate(1);
+    s.setHours(0, 0, 0, 0);
+    return s;
+  };
+
   const [
-    transmissioncountBySponsor,
+    transmissionCountBySponsor,
     { data: transmissionSponsorData, loading: isLoadingTransmissionSponsor },
   ] = useWpTransmissionCountBySponsorLazyQuery();
 
   const [
-    transmissioncountByVendor,
+    transmissionCountByVendor,
     { data: transmissionVendorData, loading: isLoadingTransmissionVendor },
   ] = useWpTransmissionCountByVendorLazyQuery();
 
   const fetchData = () => {
-    let s = new Date();
-    s = new Date(s.getFullYear() - 1, CURRENT_MONTH);
     if (typeOfTransmissions?.key === 'vendor') {
-      transmissioncountByVendor({
+      transmissionCountByVendor({
         variables: {
           orgSid,
           dateRange: {
-            rangeStart: s,
-            rangeEnd: end,
+            rangeStart: startRange(),
+            rangeEnd: endRange,
           },
         },
       })
       return;
     }
-    transmissioncountBySponsor({
+    transmissionCountBySponsor({
       variables: {
         orgSid,
         dateRange: {
-          rangeStart: s,
-          rangeEnd: end,
+          rangeStart: startRange(),
+          rangeEnd: endRange,
         },
       },
     });
@@ -137,12 +133,12 @@ const VisualizationsPage = () => {
 
   const handleSubClientOfCheckbox = (currentState: boolean) => {
     if (currentState) {
-      subClients.forEach(({ organization }) => setSubClientsCheckBox((prevState) => ({ ...prevState, [organization?.name ?? '']: true })));
+      series.forEach(({ organization }) => setOrgsSelected((prevState) => ({ ...prevState, [organization?.orgId ?? '']: true })));
       return;
     }
 
-    subClients.forEach(({ organization }) => {
-      setSubClientsCheckBox((prevState) => ({ ...prevState, [organization?.name ?? '']: false }));
+    series.forEach(({ organization }) => {
+      setOrgsSelected((prevState) => ({ ...prevState, [organization?.orgId ?? '']: false }));
     });
   };
 
@@ -166,22 +162,21 @@ const VisualizationsPage = () => {
     return m;
   };
 
-  const getSubClientsData = (subC) => {
-    setSubClients([]);
-    if (subC.length > 0) {
-      for (let subClient = 0; subClient < subC.length; subClient++) {
-        setSubClientsCheckBox((prevState) => ({
+  const setLineChartData = (data: WpTransmissionSummary[]) => {
+    setSeries([]);
+    if (data.length > 0) {
+      for (let i = 0; i < data.length; i++) {
+        const orgId = data[i].organization?.orgId ?? '';
+        setOrgsSelected((prevState) => ({
           ...prevState,
-          [subC[subClient]['organization']['name']]: true,
+          [orgId]: true,
         }));
-        const aux = subC[subClient].monthCounts.shift();
-        subC[subClient].monthCounts.push(aux);
-        setSubClients(subC);
       }
+      setSeries(data);
     }
   };
 
-  const getDataBarChart = (subC) => {
+  const setBarChartData = (subC) => {
     const orderedMonth = monthList();
     setSubClientsBarChart([]);
     const subClientdata: any[] = [];
@@ -192,12 +187,12 @@ const VisualizationsPage = () => {
       subClientdata.push(data);
     }
 
-    for (let subClient = 0; subClient < subC.length; subClient++) {
-      const monthCounts = subC[subClient].monthCounts ?? [];
+    for (let i = 0; i < subC.length; i++) {
+      const monthCounts = subC[i].monthCounts ?? [];
       for (let m = 0; m < monthCounts.length; m++) {
         const index = subClientdata.map((object) => object.month)
           .indexOf(shortMonths[monthCounts[m].month - 1]);
-        subClientdata[index][subC[subClient]['organization']['name']] = monthCounts[m].count;
+        subClientdata[index][subC[i]['organization']['name']] = monthCounts[m].count;
         subClientdata[index]['year'] = monthCounts[m].year;
       }
     }
@@ -256,9 +251,9 @@ const VisualizationsPage = () => {
     setShowTooltip(true);
   };
 
-  const renderLine = (s, sIndex) => {
-    const name = s.organization?.name ?? '';
-    if (selectAll || (subClientsCheckBox[name] && !selectNone)) {
+  const renderLine = (s: WpTransmissionSummary, sIndex: number) => {
+    const orgId = s.organization?.orgId ?? '';
+    if (selectAll || (orgsSelected[orgId] && !selectNone)) {
       return (
         <Line
           activeDot={{
@@ -271,7 +266,7 @@ const VisualizationsPage = () => {
           data={s.monthCounts}
           name={s.organization?.name}
           dot={false}
-          key={s.organization?.name}
+          key={orgId}
           stroke={COLORS[sIndex]}
           strokeWidth={2}
         />
@@ -284,8 +279,8 @@ const VisualizationsPage = () => {
     if (!isLoadingTransmissionSponsor && transmissionSponsorData) {
       const { wpTransmissionCountBySponsor } = transmissionSponsorData;
       if (wpTransmissionCountBySponsor && wpTransmissionCountBySponsor.length > 0) {
-        getSubClientsData(wpTransmissionCountBySponsor);
-        getDataBarChart(wpTransmissionCountBySponsor);
+        setLineChartData(wpTransmissionCountBySponsor);
+        setBarChartData(wpTransmissionCountBySponsor);
         wpTransmissionCountBySponsor.forEach((organization) => {
           sumTotalTransmissions(organization?.monthCounts);
         });
@@ -298,8 +293,8 @@ const VisualizationsPage = () => {
     if (!isLoadingTransmissionVendor && transmissionVendorData) {
       const { wpTransmissionCountByVendor } = transmissionVendorData;
       if (wpTransmissionCountByVendor && wpTransmissionCountByVendor.length > 0) {
-        getSubClientsData(wpTransmissionCountByVendor);
-        getDataBarChart(wpTransmissionCountByVendor);
+        setLineChartData(wpTransmissionCountByVendor);
+        setBarChartData(wpTransmissionCountByVendor);
         wpTransmissionCountByVendor.forEach((organization) => {
           sumTotalTransmissions(organization?.monthCounts);
         });
@@ -313,8 +308,8 @@ const VisualizationsPage = () => {
       return (
         <StyledTooltip>
           <Stack>
-            <Text variant="small">
-              <Text style={{ fontWeight: 'bold' }} variant="small">{totalTransByMonth} </Text>
+            <Text size="small">
+              <Text variant="bold" size="small">{totalTransByMonth}&nbsp; </Text>
               Transmissions in {currentMonth} { currentYear}{' '}
               {' '} {currentOrg}
             </Text>
@@ -360,7 +355,7 @@ const VisualizationsPage = () => {
                 position={{ x: tooltipPosition.x - 115, y: tooltipPosition.y - 50 }}
                 wrapperStyle={{ pointeEvents: 'auto' }}
               />
-              {subClients.map((s, i) => subClientsCheckBox[s.organization?.name ?? '']
+              {series.map((s, i) => orgsSelected[s.organization?.orgId ?? '']
                 // eslint-disable-next-line no-return-assign
                 && (
                   <Bar
@@ -369,7 +364,7 @@ const VisualizationsPage = () => {
                     stackId="a"
                     fill={COLORS[i]}
                     onMouseOver={(data) => {
-                      customMouseOverBarchart(data, subClients[i], s.organization?.name)
+                      customMouseOverBarchart(data, series[i], s.organization?.name)
                     }}
                   />
                 ))}
@@ -403,11 +398,46 @@ const VisualizationsPage = () => {
               position={{ x: tooltipPosition.x - 98, y: tooltipPosition.y - 88 }}
               wrapperStyle={{ pointeEvents: 'auto' }}
             />
-            {subClients.map((s, sIndex) => renderLine(s, sIndex))}
+            {series.map((s, sIndex) => renderLine(s, sIndex))}
           </LineChart>
         </ResponsiveContainer>
       </Spacing>
     );
+  };
+
+  const renderDownloadLink = (totalRecords: number): ReactElement => {
+    const dateFormat = "yyyy-MM-dd'T'HH:mm:ss";
+    const graphQLUrl = process.env.REACT_APP_API_SERVER;
+    const serverUrl = graphQLUrl?.replace('/graphql', '') ?? '';
+
+    if (totalRecords > 0) {
+      let url = `${serverUrl}excel/`;
+      if (typeOfTransmissions?.key === 'vendor') {
+        url += 'transmissionCountByVendor'
+      } else {
+        url += 'transmissionCountBySponsor'
+      }
+      const rangeStart = format(toUTC(startRange()), dateFormat);
+      const rangeEnd = format(toUTC(endRange), dateFormat);
+
+      url += `?orgSid=${orgSid}&rangeStart=${rangeStart}&rangeEnd=${rangeEnd}`
+      if (graphicType?.key === 'barchart') {
+        url += '&chartType=bar'
+      } else {
+        url += '&chartType=line'
+      }
+      return (
+        <DownloadLink
+          target="_new"
+          href={url}
+          title="Download chart as Excel"
+        >
+          <Icon iconName="ExcelDocument" /> Download
+        </DownloadLink>
+      );
+    }
+
+    return <span />;
   };
 
   const typeTransmissions = [
@@ -425,8 +455,13 @@ const VisualizationsPage = () => {
       <PageHeader>
         <Container>
           <Row>
-            <Column lg="6" direction="row">
+            <Column sm="6" direction="row">
               <PageTitle id="__Page__Title_Visualizations" title="Visualizations" />
+            </Column>
+            <Column sm="6" right>
+              <Text size="large">
+                { renderDownloadLink(countTotal.length) }
+              </Text>
             </Column>
           </Row>
         </Container>
@@ -474,32 +509,20 @@ const VisualizationsPage = () => {
                 {months.map((month, monthIndex) => (
                   <Spacing padding={{ left: 'double' }} key={monthIndex}>
                     {months.length - 1 === monthIndex ? (
-                      <Text
-                        style={{ color: ThemeStore.userTheme.colors.themePrimary, fontWeight: 500 }}
-                      >
+                      <CurrentMonth>
                         {month}
-                      </Text>
+                      </CurrentMonth>
                     ) : (
                       <div>
-                        {monthIndex > monthIncurrent ? (
-                          <Text
-                            style={{
-                              color: ThemeStore.userTheme.colors.neutralPrimary,
-                              fontWeight: 500,
-                            }}
-                          >
+                        {monthIndex > monthInCurrent ? (
+                          <Text variant="bold">
                             {month}
                           </Text>
 
                         ) : (
-                          <Text
-                            style={{
-                              color: ThemeStore.userTheme.colors.neutralTertiary,
-                              fontWeight: 500,
-                            }}
-                          >
+                          <PriorYearMonth>
                             {month}
-                          </Text>
+                          </PriorYearMonth>
                         )}
                       </div>
                     )}
@@ -528,16 +551,16 @@ const VisualizationsPage = () => {
           <Row>
             <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
               <Stack horizontal={true}>
-                {subClients.length > 1 && subClients.map((subC, subCIndex) => (
+                {series.length > 1 && series.map((subC, subCIndex) => (
                   <div key={subCIndex}>
                     <StyledCheckbox
-                      key={`${subC?.organization?.name}-${subCIndex + 1}`}
+                      key={`${subC?.organization?.orgId}-${subCIndex + 1}`}
                       label={subC?.organization?.name ?? ''}
-                      checked={subClientsCheckBox[subC.organization?.name ?? '']}
+                      checked={orgsSelected[subC.organization?.orgId ?? '']}
                       onChange={(event, isChecked) => {
-                        setSubClientsCheckBox({
-                          ...subClientsCheckBox,
-                          [subC?.organization?.name ?? '']: isChecked,
+                        setOrgsSelected({
+                          ...orgsSelected,
+                          [subC?.organization?.orgId ?? '']: isChecked,
                         });
                         setSelectNone(false);
                         setSelectAll(false);
@@ -551,7 +574,7 @@ const VisualizationsPage = () => {
             </Spacing>
           </Row>
           <Row>
-            {subClients.length > 1 && (
+            {series.length > 1 && (
               <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                 <Stack horizontal={true} style={{ width: '80%' }}>
                   <ButtonLink

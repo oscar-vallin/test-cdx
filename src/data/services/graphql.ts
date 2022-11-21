@@ -1874,8 +1874,8 @@ export type Query = {
   workPacketStatusesPoll?: Maybe<Scalars['Int']>;
   wpProcessErrors?: Maybe<WpProcessErrorConnection>;
   wpTransmissions?: Maybe<WpTransmissionConnection>;
-  wpTransmissionCountBySponsor?: Maybe<Array<Maybe<WpTransmissionSummary>>>;
-  wpTransmissionCountByVendor?: Maybe<Array<Maybe<WpTransmissionSummary>>>;
+  wpTransmissionCountBySponsor?: Maybe<Array<WpTransmissionSummary>>;
+  wpTransmissionCountByVendor?: Maybe<Array<WpTransmissionSummary>>;
   scheduleOccurrences?: Maybe<ScheduleOccurrenceConnection>;
   /** Get the dashboard period counts for a fixed set of common periods, (today, yesterday, this month, last month) */
   dashboardPeriods?: Maybe<DashboardPeriods>;
@@ -2662,6 +2662,8 @@ export type ScheduleOccurrence = {
   __typename?: 'ScheduleOccurrence';
   resource: Scalars['String'];
   scheduleId?: Maybe<Scalars['ID']>;
+  jobGroupId?: Maybe<Scalars['ID']>;
+  jobGroupName?: Maybe<Scalars['String']>;
   orgSid: Scalars['ID'];
   timeScheduled?: Maybe<Scalars['DateTime']>;
   schedOccurStatus: SchedOccurStatusEnum;
@@ -4737,7 +4739,7 @@ export type WpTransmissionCountBySponsorQueryVariables = Exact<{
 
 export type WpTransmissionCountBySponsorQuery = (
   { __typename?: 'Query' }
-  & { wpTransmissionCountBySponsor?: Maybe<Array<Maybe<(
+  & { wpTransmissionCountBySponsor?: Maybe<Array<(
     { __typename?: 'WPTransmissionSummary' }
     & { organization: (
       { __typename?: 'Organization' }
@@ -4746,7 +4748,7 @@ export type WpTransmissionCountBySponsorQuery = (
       { __typename?: 'MonthCount' }
       & Pick<MonthCount, 'month' | 'year' | 'count'>
     )>> }
-  )>>> }
+  )>> }
 );
 
 export type WpTransmissionCountByVendorQueryVariables = Exact<{
@@ -4757,7 +4759,7 @@ export type WpTransmissionCountByVendorQueryVariables = Exact<{
 
 export type WpTransmissionCountByVendorQuery = (
   { __typename?: 'Query' }
-  & { wpTransmissionCountByVendor?: Maybe<Array<Maybe<(
+  & { wpTransmissionCountByVendor?: Maybe<Array<(
     { __typename?: 'WPTransmissionSummary' }
     & { organization: (
       { __typename?: 'Organization' }
@@ -4766,7 +4768,7 @@ export type WpTransmissionCountByVendorQuery = (
       { __typename?: 'MonthCount' }
       & Pick<MonthCount, 'month' | 'year' | 'count'>
     )>> }
-  )>>> }
+  )>> }
 );
 
 export type ScheduleOccurrencesQueryVariables = Exact<{
@@ -4785,7 +4787,7 @@ export type ScheduleOccurrencesQuery = (
       & FragmentPaginationInfoFragment
     ), nodes?: Maybe<Array<(
       { __typename?: 'ScheduleOccurrence' }
-      & Pick<ScheduleOccurrence, 'resource' | 'scheduleId' | 'orgSid' | 'timeScheduled' | 'schedOccurStatus' | 'schedOccurStatusLabel'>
+      & Pick<ScheduleOccurrence, 'resource' | 'scheduleId' | 'jobGroupId' | 'jobGroupName' | 'orgSid' | 'timeScheduled' | 'schedOccurStatus' | 'schedOccurStatusLabel'>
       & { runOccurrences?: Maybe<Array<(
         { __typename?: 'ScheduleRunOccurrence' }
         & Pick<ScheduleRunOccurrence, 'workOrderId' | 'timeRan' | 'status' | 'statusLabel'>
@@ -11416,6 +11418,8 @@ export const ScheduleOccurrencesDocument = gql`
     nodes {
       resource
       scheduleId
+      jobGroupId
+      jobGroupName
       orgSid
       timeScheduled
       schedOccurStatus

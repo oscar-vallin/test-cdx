@@ -14897,9 +14897,13 @@
               "kind": "LIST",
               "name": null,
               "ofType": {
-                "kind": "OBJECT",
-                "name": "WPTransmissionSummary",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "WPTransmissionSummary",
+                  "ofType": null
+                }
               }
             },
             "isDeprecated": false,
@@ -14946,9 +14950,13 @@
               "kind": "LIST",
               "name": null,
               "ofType": {
-                "kind": "OBJECT",
-                "name": "WPTransmissionSummary",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "WPTransmissionSummary",
+                  "ofType": null
+                }
               }
             },
             "isDeprecated": false,
@@ -19578,6 +19586,30 @@
             "type": {
               "kind": "SCALAR",
               "name": "ID",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "jobGroupId",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "jobGroupName",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
