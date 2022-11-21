@@ -27,6 +27,7 @@ import { Text, PageTitle } from 'src/components/typography';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ROUTES } from 'src/data/constants/RouteConstants'
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard'
+import { useThemeStore } from 'src/store/ThemeStore';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { toUTC } from 'src/hooks/useTableFilters';
 import { endOfMonth, format } from 'date-fns';
@@ -64,6 +65,7 @@ const styles = {
 };
 
 const VisualizationsPage = () => {
+  const ThemeStore = useThemeStore();
   const { orgSid } = useOrgSid();
   const [series, setSeries] = useState<WpTransmissionSummary[]>([]);
   const [typeOfTransmissions, setTypeOfTransmissions] = useState<IDropdownOption | undefined>({ key: 'sponsor', text: 'Transmissions by vendor per month' });
@@ -86,7 +88,7 @@ const VisualizationsPage = () => {
     x: 0,
   });
   const [showTooltip, setShowTooltip] = useState(false);
-  const [currentSubOrg, setCurrentSubOrg] = useState('');
+  const [activeLine, setActiveLine] = useState('');
 
   const endRange = endOfMonth(new Date());
   const startRange = (): Date => {
@@ -221,7 +223,7 @@ const VisualizationsPage = () => {
     setCountMonth(total);
   };
 
-  const customMouseOver = (e, payload, s) => {
+  const customMouseOver = (e, payload, s: WpTransmissionSummary) => {
     const { count, month, year } = payload.payload;
     setTotalTransByMonth(count);
     setCurrentYear(year);
@@ -253,10 +255,10 @@ const VisualizationsPage = () => {
         <Line
           activeDot={{
             onMouseOver(e, payload) { customMouseOver(e, payload, s) },
-            r: s.organization.name === currentSubOrg ? 6 : null,
+            r: s.organization.name === activeLine ? 6 : null,
           }}
           isAnimationActive={false}
-          onMouseOver={(e) => setCurrentSubOrg(e.name)}
+          onMouseOver={(e) => setActiveLine(e.name)}
           dataKey="count"
           data={s.monthCounts}
           name={s.organization?.name}
@@ -299,23 +301,29 @@ const VisualizationsPage = () => {
   }, [transmissionVendorData, isLoadingTransmissionVendor]);
 
   const customTooltip = () => {
+    const showDetailsLink = totalTransByMonth > 0;
     if (showTooltip) {
       return (
         <StyledTooltip>
           <Stack>
-            <Text size="small">
+            <Text size="small" center="true">
               <Text variant="bold" size="small">{totalTransByMonth}&nbsp; </Text>
               Transmissions in {currentMonth} { currentYear}{' '}
-              {' '} {selectedOrg?.name}
+              {' for '} {selectedOrg?.name}
             </Text>
-            <ButtonLink
-              onClick={() => {
-                setShowTooltip(false);
-                setIsOpenPanel(true);
-              }}
-            >
-              details
-            </ButtonLink>
+            {showDetailsLink && (
+              <ButtonLink
+                onClick={() => {
+                  setShowTooltip(false);
+                  setIsOpenPanel(true);
+                }}
+                style={{
+                  fontSize: ThemeStore.userTheme.fontSizes.small,
+                }}
+              >
+                details
+              </ButtonLink>
+            )}
           </Stack>
         </StyledTooltip>
       );
@@ -349,6 +357,7 @@ const VisualizationsPage = () => {
                 content={customTooltip}
                 position={{ x: tooltipPosition.x - 115, y: tooltipPosition.y - 50 }}
                 wrapperStyle={{ pointeEvents: 'auto' }}
+                isAnimationActive={false}
               />
               {series.map((s, i) => orgsSelected[s.organization?.orgId ?? '']
                 // eslint-disable-next-line no-return-assign
@@ -392,6 +401,7 @@ const VisualizationsPage = () => {
               content={customTooltip}
               position={{ x: tooltipPosition.x - 98, y: tooltipPosition.y - 88 }}
               wrapperStyle={{ pointeEvents: 'auto' }}
+              isAnimationActive={false}
             />
             {series.map((s, sIndex) => renderLine(s, sIndex))}
           </LineChart>
