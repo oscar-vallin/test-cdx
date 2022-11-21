@@ -27,7 +27,6 @@ import {
   Text,
 } from '@fluentui/react';
 import { PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
-import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
@@ -42,6 +41,7 @@ type VisualizationPanelProps = {
   orgSid: string;
   orgName?: string;
   orgId?: string;
+  vendorId?: string;
   currentMonth: number;
   currentYear: number;
   typeTransmissions?: string | number;
@@ -55,7 +55,15 @@ type TotalTransmissionProps = {
 }
 
 const VisualizationPanel = ({
-  isPanelOpen, closePanel, orgSid, orgName, orgId, currentMonth, currentYear, typeTransmissions,
+  isPanelOpen,
+  closePanel,
+  orgSid,
+  orgName,
+  orgId,
+  vendorId,
+  currentMonth,
+  currentYear,
+  typeTransmissions,
 }: VisualizationPanelProps) => {
   const ThemeStore = useThemeStore();
   const handleError = ErrorHandler();
@@ -73,12 +81,20 @@ const VisualizationPanel = ({
   };
 
   const [callTransmissionsByVendor,
-    { data: transmissionVendorData, loading: isLoadingTransmissionVendor },
-  ] = useQueryHandler(useWpTransmissionCountByVendorLazyQuery);
+    {
+      data: transmissionVendorData,
+      loading: isLoadingTransmissionVendor,
+      error: errorTransmissionByVendor,
+    },
+  ] = useWpTransmissionCountByVendorLazyQuery();
 
   const [callTransmissionsBySponsor,
-    { data: transmissionSponsorData, loading: isLoadingTransmissionSponsor },
-  ] = useQueryHandler(useWpTransmissionCountBySponsorLazyQuery);
+    {
+      data: transmissionSponsorData,
+      loading: isLoadingTransmissionSponsor,
+      error: errorTransmissionsBySponsor,
+    },
+  ] = useWpTransmissionCountBySponsorLazyQuery();
 
   const [callTransmissionsTableData,
     {
@@ -91,6 +107,14 @@ const VisualizationPanel = ({
   useEffect(() => {
     handleError(errorTransmissionsTableData);
   }, [errorTransmissionsTableData]);
+
+  useEffect(() => {
+    handleError(errorTransmissionByVendor);
+  }, [errorTransmissionByVendor]);
+
+  useEffect(() => {
+    handleError(errorTransmissionsBySponsor);
+  }, [errorTransmissionsBySponsor]);
 
   const start = new Date(currentYear, currentMonth);
   const end = new Date(currentYear, currentMonth + 1);
@@ -175,9 +199,13 @@ const VisualizationPanel = ({
       callTransmissionsByVendor({
         variables: {
           orgSid,
-          dateRange: {
-            rangeStart: start,
-            rangeEnd: end,
+          filter: {
+            dateRange: {
+              rangeStart: start,
+              rangeEnd: end,
+            },
+            planSponsorId: orgId,
+            vendorId,
           },
         },
       });
@@ -187,17 +215,19 @@ const VisualizationPanel = ({
     callTransmissionsBySponsor({
       variables: {
         orgSid,
-        dateRange: {
-          rangeStart: start,
-          rangeEnd: end,
+        filter: {
+          dateRange: {
+            rangeStart: start,
+            rangeEnd: end,
+          },
+          planSponsorId: orgId,
+          vendorId,
         },
       },
     });
   };
 
   const fetchDataTable = () => {
-    const planSponsorId = typeTransmissions === 'sponsor' ? orgId : null;
-    const vendorId = typeTransmissions === 'vendor' ? orgId : null;
     callTransmissionsTableData({
       variables: {
         orgSid,
@@ -207,7 +237,7 @@ const VisualizationPanel = ({
             rangeStart: start,
             rangeEnd: end,
           },
-          planSponsorId,
+          planSponsorId: orgId,
           vendorId,
           inboundFilename: null,
           outboundFilename: null,

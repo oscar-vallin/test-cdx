@@ -115,9 +115,11 @@ const VisualizationsPage = () => {
       transmissionCountByVendor({
         variables: {
           orgSid,
-          dateRange: {
-            rangeStart: startRange(),
-            rangeEnd: endRange,
+          filter: {
+            dateRange: {
+              rangeStart: startRange(),
+              rangeEnd: endRange,
+            },
           },
         },
       })
@@ -126,9 +128,11 @@ const VisualizationsPage = () => {
     transmissionCountBySponsor({
       variables: {
         orgSid,
-        dateRange: {
-          rangeStart: startRange(),
-          rangeEnd: endRange,
+        filter: {
+          dateRange: {
+            rangeStart: startRange(),
+            rangeEnd: endRange,
+          },
         },
       },
     });
@@ -502,7 +506,6 @@ const VisualizationsPage = () => {
             <Column lg="6" right>
               <StyledTransmissionsType
                 label=""
-                defaultSelectedKey="linechart"
                 selectedKey={graphicType}
                 options={graphicOptions}
                 onChange={(e, _newValue) => {
@@ -628,7 +631,8 @@ const VisualizationsPage = () => {
           closePanel={setIsOpenPanel}
           orgSid={selectedOrgSid ?? ''}
           orgName={selectedOrg?.name ?? ''}
-          orgId={selectedOrg?.orgId}
+          orgId={typeOfTransmissions === 'sponsor' ? selectedOrg?.orgId : undefined}
+          vendorId={typeOfTransmissions === 'vendor' ? selectedOrg?.orgId : undefined}
           currentMonth={shortMonths.indexOf(currentMonth)}
           currentYear={currentYear}
           typeTransmissions={typeOfTransmissions}

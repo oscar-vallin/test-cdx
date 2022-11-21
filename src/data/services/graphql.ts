@@ -2053,13 +2053,13 @@ export type QueryWpTransmissionsArgs = {
 
 export type QueryWpTransmissionCountBySponsorArgs = {
   orgSid: Scalars['ID'];
-  dateRange: DateTimeRangeInput;
+  filter: WpTransmissionFilter;
 };
 
 
 export type QueryWpTransmissionCountByVendorArgs = {
   orgSid: Scalars['ID'];
-  dateRange: DateTimeRangeInput;
+  filter: WpTransmissionFilter;
 };
 
 
@@ -4733,7 +4733,7 @@ export type WpTransmissionsQuery = (
 
 export type WpTransmissionCountBySponsorQueryVariables = Exact<{
   orgSid: Scalars['ID'];
-  dateRange: DateTimeRangeInput;
+  filter: WpTransmissionFilter;
 }>;
 
 
@@ -4753,7 +4753,7 @@ export type WpTransmissionCountBySponsorQuery = (
 
 export type WpTransmissionCountByVendorQueryVariables = Exact<{
   orgSid: Scalars['ID'];
-  dateRange: DateTimeRangeInput;
+  filter: WpTransmissionFilter;
 }>;
 
 
@@ -11316,8 +11316,8 @@ export type WpTransmissionsQueryHookResult = ReturnType<typeof useWpTransmission
 export type WpTransmissionsLazyQueryHookResult = ReturnType<typeof useWpTransmissionsLazyQuery>;
 export type WpTransmissionsQueryResult = Apollo.QueryResult<WpTransmissionsQuery, WpTransmissionsQueryVariables>;
 export const WpTransmissionCountBySponsorDocument = gql`
-    query WpTransmissionCountBySponsor($orgSid: ID!, $dateRange: DateTimeRangeInput!) {
-  wpTransmissionCountBySponsor(orgSid: $orgSid, dateRange: $dateRange) {
+    query WpTransmissionCountBySponsor($orgSid: ID!, $filter: WPTransmissionFilter!) {
+  wpTransmissionCountBySponsor(orgSid: $orgSid, filter: $filter) {
     organization {
       sid
       name
@@ -11347,7 +11347,7 @@ export const WpTransmissionCountBySponsorDocument = gql`
  * const { data, loading, error } = useWpTransmissionCountBySponsorQuery({
  *   variables: {
  *      orgSid: // value for 'orgSid'
- *      dateRange: // value for 'dateRange'
+ *      filter: // value for 'filter'
  *   },
  * });
  */
@@ -11361,8 +11361,8 @@ export type WpTransmissionCountBySponsorQueryHookResult = ReturnType<typeof useW
 export type WpTransmissionCountBySponsorLazyQueryHookResult = ReturnType<typeof useWpTransmissionCountBySponsorLazyQuery>;
 export type WpTransmissionCountBySponsorQueryResult = Apollo.QueryResult<WpTransmissionCountBySponsorQuery, WpTransmissionCountBySponsorQueryVariables>;
 export const WpTransmissionCountByVendorDocument = gql`
-    query WpTransmissionCountByVendor($orgSid: ID!, $dateRange: DateTimeRangeInput!) {
-  wpTransmissionCountByVendor(orgSid: $orgSid, dateRange: $dateRange) {
+    query WpTransmissionCountByVendor($orgSid: ID!, $filter: WPTransmissionFilter!) {
+  wpTransmissionCountByVendor(orgSid: $orgSid, filter: $filter) {
     organization {
       sid
       name
@@ -11392,7 +11392,7 @@ export const WpTransmissionCountByVendorDocument = gql`
  * const { data, loading, error } = useWpTransmissionCountByVendorQuery({
  *   variables: {
  *      orgSid: // value for 'orgSid'
- *      dateRange: // value for 'dateRange'
+ *      filter: // value for 'filter'
  *   },
  * });
  */
