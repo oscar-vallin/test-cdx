@@ -368,6 +368,10 @@ const SchedulePanel = ({
 
       if (responseCode === GqOperationResponse.Success) {
         setTotalSubscribers([]);
+        setCurrentDaySelected({ ...DefaulDaysProps });
+        setCurrentMonthSelected({ ...DefaulMonthsProps });
+        setMonths([]);
+        setDays([]);
         setMessage(null);
         closePanel(false);
         refreshPage(true);
@@ -394,6 +398,10 @@ const SchedulePanel = ({
 
       if (responseCode === GqOperationResponse.Success) {
         setTotalSubscribers([]);
+        setCurrentDaySelected({ ...DefaulDaysProps });
+        setCurrentMonthSelected({ ...DefaulMonthsProps });
+        setMonths([]);
+        setDays([]);
         setMessage(null);
         closePanel(false);
         refreshPage(true);
@@ -422,6 +430,10 @@ const SchedulePanel = ({
 
       if (responseCode === GqOperationResponse.Success) {
         setTotalSubscribers([]);
+        setCurrentDaySelected({ ...DefaulDaysProps });
+        setCurrentMonthSelected({ ...DefaulMonthsProps });
+        setMonths([]);
+        setDays([]);
         setMessage(null);
         closePanel(false);
         refreshPage(true);
@@ -564,17 +576,15 @@ const SchedulePanel = ({
         scheduleValues.endMinute = endMinute;
         scheduleValues.timezone = scheduleTimezone;
       }
-      if (jobGroupName.trim() !== '') {
-        createJobGroup({
-          variables: {
-            jobGroupInput: {
-              name: jobGroupName,
-              orgSid,
-              schedule: scheduleValues,
-            },
+      createJobGroup({
+        variables: {
+          jobGroupInput: {
+            name: jobGroupName,
+            orgSid,
+            schedule: scheduleValues,
           },
-        });
-      }
+        },
+      });
     }
     if (!schedule && xchangeJobGroupSid) {
       if (scheduleFrequency === ScheduleFrequency.Monthly) {
@@ -582,17 +592,15 @@ const SchedulePanel = ({
         scheduleValues.endMinute = endMinute;
         scheduleValues.timezone = scheduleTimezone;
       }
-      if (jobGroupName.trim() !== '') {
-        updateJobGroup({
-          variables: {
-            jobGroupInput: {
-              sid: xchangeJobGroupSid ?? '',
-              name: jobGroupName,
-              schedule: scheduleValues,
-            },
+      updateJobGroup({
+        variables: {
+          jobGroupInput: {
+            sid: xchangeJobGroupSid ?? '',
+            name: jobGroupName,
+            schedule: scheduleValues,
           },
-        });
-      }
+        },
+      });
     }
   };
 
@@ -672,7 +680,7 @@ const SchedulePanel = ({
               onChange={(_newValue) => setScheduleType(_newValue ?? '')}
             />
           </Column>
-          {scheduleType !== 'NOT_SCHEDULED' && !isLoadingForm && (
+          {scheduleType && scheduleType !== 'NOT_SCHEDULED' && (
           <Column lg="4">
             <UIFlatSelectOneField
               id="scheduleFrequency"
@@ -1024,6 +1032,8 @@ const SchedulePanel = ({
       onDismiss={() => {
         setCurrentMonthSelected({ ...DefaulMonthsProps });
         setCurrentDaySelected({ ...DefaulDaysProps });
+        setMonths([]);
+        setDays([]);
         setTotalSubscribers([]);
         setMessage(null);
         closePanel(false);
