@@ -1,4 +1,4 @@
 import { WalkThrough } from './WalkThrough';
-import { topNavTour } from './tours';
+import { topNavTour, fileStatusDetailsTour } from './tours';
 
-export { WalkThrough, topNavTour };
+export { WalkThrough, topNavTour, fileStatusDetailsTour };

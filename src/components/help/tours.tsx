@@ -67,7 +67,7 @@ export const topNavTour: TourStep[] = [
     target: '#__VISUALIZATIONS_Tab',
     title: 'Visualizations',
     calloutDirection: DirectionalHint.bottomCenter,
-    content: 'This shows a chart of transmissions over the last 12 months.'
+    content: 'This shows a chart of transmissions over the last 12 months.',
   },
   {
     target: '#__ProfileMenu_Font_Buttons',
@@ -82,8 +82,73 @@ export const topNavTour: TourStep[] = [
     content: (
       <>
         <div>This is the Profile Menu</div>
-        <div>Here you can change your password, change your personal CDX theme, or logout of CDX.</div>
+        <div>
+          Here you can change your password, change your personal CDX theme, or logout of CDX.
+        </div>
       </>
     ),
+  },
+];
+
+export const fileStatusDetailsTour: TourStep[] = [
+  {
+    target: '#__Badge_Status',
+    title: 'Xchange Status',
+    calloutDirection: DirectionalHint.bottomLeftEdge,
+    content: 'This is the current status of this Xchange.',
+  },
+  {
+    target: '#__Badge_BillingUnits',
+    title: 'Billing Units',
+    calloutDirection: DirectionalHint.bottomLeftEdge,
+    content: 'This is the number of billable subscribers in this file.',
+  },
+  {
+    target: '#__DeliveredFileInfo',
+    title: 'Delivered File',
+    calloutDirection: DirectionalHint.leftCenter,
+    content: 'This shows information about the file delivered to the vendor.',
+  },
+  {
+    target: '#__FTP_Info',
+    title: 'File Transport',
+    calloutDirection: DirectionalHint.leftCenter,
+    content: 'This is information about the file transport configuration used to deliver the file to the vendor.',
+  },
+  {
+    target: '#__Enrollment_Stats',
+    title: 'Enrollment Stats',
+    calloutDirection: DirectionalHint.bottomLeftEdge,
+    content: 'This shows a summary of the inbound and outbound files per plan. This is useful to ensure that the correct file and spec were used in this Xchange.',
+  },
+  {
+    target: '#__Vendor_Count_Stats',
+    title: 'Vendor Count Stats',
+    calloutDirection: DirectionalHint.bottomLeftEdge,
+    content: 'This shows a high level counts of the records in the file sent to the Vendor.',
+  },
+  {
+    target: '#__Work_Steps',
+    title: 'Work Steps',
+    calloutDirection: DirectionalHint.bottomLeftEdge,
+    content: 'This shows the individual steps taken during the processing of the file in this Xchange.',
+  },
+  {
+    target: '#__Quality_Checks',
+    title: 'Quality Checks',
+    calloutDirection: DirectionalHint.bottomLeftEdge,
+    content: 'This shows any data quality issues detected in the inbound file which has affected processing of the file.',
+  },
+  {
+    target: '#__Archives',
+    title: 'Archives',
+    calloutDirection: DirectionalHint.bottomLeftEdge,
+    content: 'This shows the various files at each point during the processing of this Xchange.',
+  },
+  {
+    target: '#__Audit_Log',
+    title: 'Audit Log',
+    calloutDirection: DirectionalHint.bottomLeftEdge,
+    content: 'This shows a log of operations users have performed on this Xchange which includes file access and any actions taken such as reprocessing the file.',
   },
 ];
