@@ -18,8 +18,8 @@ export const StyledTrashIcon = styled(FontIcon)`
     font-size: 13px;
     color: ${({ theme }) => theme.colors.black};
     cursor: pointer;
-    padding: 3.5px;
-    background-color: #f3f2f1;
+    padding: 3.6px;
+    background-color: ${({ theme }) => theme.colors.neutralLighter};
     border-radius: 50px;
     &:hover {
         background-color: ${({ theme }) => theme.colors.neutralTertiary};
@@ -30,7 +30,7 @@ export const StyledCopyIcon = styled(FontIcon)`
     font-size: 13px;
     color: ${({ theme }) => theme.colors.black};
     cursor: pointer;
-    background-color: #f3f2f1;
+    background-color: ${({ theme }) => theme.colors.neutralLighter};
     padding: 3.5px;
     border-radius: 50px;
     &:hover {
@@ -41,10 +41,10 @@ export const StyledCopyIcon = styled(FontIcon)`
 
 export const StyledChevronUpIcon = styled(FontIcon)<StyledChevronUpProps>`
     font-size: 10px;
-    color: ${({ firstIndex }) => (!firstIndex ? '#000000' : '#dddddd')};
+    color: ${({ theme, firstIndex }) => (!firstIndex ? theme.colors.black : '#dddddd')};
     cursor: ${({ firstIndex }) => (firstIndex ? 'auto' : 'pointer')};
     border-radius: 50px;
-    background-color: #f3f2f1;
+    background-color: ${({ theme }) => theme.colors.neutralLighter};
     padding: 4px;
     margin-bottom: -2px;
     &:hover {
@@ -54,10 +54,10 @@ export const StyledChevronUpIcon = styled(FontIcon)<StyledChevronUpProps>`
 `;
 export const StyledChevronDownIcon = styled(FontIcon)<StyledChevronDownProps>`
     font-size: 10px;
-    color: ${({ lastNode }) => (!lastNode ? '#000000' : '#dddddd')};
+    color: ${({ theme, lastNode }) => (!lastNode ? theme.colors.black : '#dddddd')};
     cursor: ${({ lastNode }) => (lastNode ? 'auto' : 'pointer')};
     border-radius: 50px;
-    background-color: #f3f2f1;
+    background-color: ${({ theme }) => theme.colors.neutralLighter};
     padding: 4px;
     margin-bottom: -2px;
     &:hover {
