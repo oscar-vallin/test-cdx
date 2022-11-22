@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import chroma from 'chroma-js';
+import { endOfMonth } from 'date-fns';
 import {
   MonthCount,
   Organization,
@@ -12,6 +14,7 @@ import {
   Pie,
   Cell,
   Legend,
+  Sector,
 } from 'recharts';
 import {
   DetailsList,
@@ -22,21 +25,29 @@ import {
   Spinner,
   SpinnerSize,
   Stack,
+  Text,
 } from '@fluentui/react';
 import { PanelHeader, PanelTitle, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
-import { useOrgSid } from 'src/hooks/useOrgSid';
-import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useTableFilters } from 'src/hooks/useTableFilters';
+import { useThemeStore } from 'src/store/ThemeStore';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
+import { yyyyMMdd } from 'src/utils/CDXUtils';
 import { DataColumn, useSortableColumns } from 'src/containers/tables';
 import { Spacing } from 'src/components/spacings/Spacing';
+import { ButtonLink } from 'src/components/buttons';
+import { Column, Row } from 'src/components/layouts';
 import { shortMonths } from '../VisualizationsPage';
 
 type VisualizationPanelProps = {
   isPanelOpen: boolean;
   closePanel: (data: boolean) => void;
+  parentOrgSid: string;
+  orgSid: string;
   orgName?: string;
   orgId?: string;
+  vendorId?: string;
   currentMonth: number;
+  currentYear: number;
   typeTransmissions?: string | number;
 };
 
@@ -48,26 +59,70 @@ type TotalTransmissionProps = {
 }
 
 const VisualizationPanel = ({
-  isPanelOpen, closePanel, orgName, orgId, currentMonth, typeTransmissions,
+  isPanelOpen,
+  closePanel,
+  parentOrgSid,
+  orgSid,
+  orgName,
+  orgId,
+  vendorId,
+  currentMonth,
+  currentYear,
+  typeTransmissions,
 }: VisualizationPanelProps) => {
-  const { orgSid } = useOrgSid();
+  const ThemeStore = useThemeStore();
+  const handleError = ErrorHandler();
   const [transmissionsVendor, setTransmissionsVendor] = useState<TotalTransmissionProps[]>([]);
   const [nodes, setNodes] = useState<WpTransmission[]>();
-  const [transmissionVendor,
-    { data: transmissionVendorData, loading: isLoadingTransmissionVendor },
-  ] = useQueryHandler(useWpTransmissionCountByVendorLazyQuery);
+  const [totalTransmissions, setTotalTransmissions] = useState(0);
+  const [activeIndex, setActiveIndex] = useState<number>();
 
-  const [transmissionSponsor,
-    { data: transmissionSponsorData, loading: isLoadingTransmissionSponsor },
-  ] = useQueryHandler(useWpTransmissionCountBySponsorLazyQuery);
+  const onMouseOver = (slice, index) => {
+    setActiveIndex(index);
+  };
 
-  const [transmissionTable,
-    { data: transmissionTableData, loading: isLoadingTransmissionTable },
+  const onMouseLeave = () => {
+    setActiveIndex(undefined);
+  };
+
+  const [callTransmissionsByVendor,
+    {
+      data: transmissionVendorData,
+      loading: isLoadingTransmissionVendor,
+      error: errorTransmissionByVendor,
+    },
+  ] = useWpTransmissionCountByVendorLazyQuery();
+
+  const [callTransmissionsBySponsor,
+    {
+      data: transmissionSponsorData,
+      loading: isLoadingTransmissionSponsor,
+      error: errorTransmissionsBySponsor,
+    },
+  ] = useWpTransmissionCountBySponsorLazyQuery();
+
+  const [callTransmissionsTableData,
+    {
+      data: transmissionTableData,
+      loading: isLoadingTransmissionTable,
+      error: errorTransmissionsTableData,
+    },
   ] = useWpTransmissionsLazyQuery();
 
-  const currentdate = new Date();
-  const start = new Date(currentdate.getFullYear(), currentMonth);
-  const end = new Date(currentdate.getFullYear(), currentMonth + 1);
+  useEffect(() => {
+    handleError(errorTransmissionsTableData);
+  }, [errorTransmissionsTableData]);
+
+  useEffect(() => {
+    handleError(errorTransmissionByVendor);
+  }, [errorTransmissionByVendor]);
+
+  useEffect(() => {
+    handleError(errorTransmissionsBySponsor);
+  }, [errorTransmissionsBySponsor]);
+
+  const start = new Date(currentYear, currentMonth);
+  const end = endOfMonth(start);
 
   const COLORS = ['#8884d8', '#82ca9d', '#FFBB28', '#FF8042', '#AF19FF'];
 
@@ -146,33 +201,39 @@ const VisualizationPanel = ({
   const { columns } = useSortableColumns(tableFilters, columnOptions);
   const fetchData = () => {
     if (typeTransmissions === 'sponsor') {
-      transmissionVendor({
+      callTransmissionsByVendor({
         variables: {
           orgSid,
-          dateRange: {
-            rangeStart: start,
-            rangeEnd: end,
+          filter: {
+            dateRange: {
+              rangeStart: start,
+              rangeEnd: end,
+            },
+            planSponsorId: orgId,
+            vendorId,
           },
         },
       });
       return;
     }
 
-    transmissionSponsor({
+    callTransmissionsBySponsor({
       variables: {
         orgSid,
-        dateRange: {
-          rangeStart: start,
-          rangeEnd: end,
+        filter: {
+          dateRange: {
+            rangeStart: start,
+            rangeEnd: end,
+          },
+          planSponsorId: orgId,
+          vendorId,
         },
       },
     });
   };
 
   const fetchDataTable = () => {
-    const planSponsorId = typeTransmissions === 'sponsor' ? orgId : null;
-    const vendorId = typeTransmissions === 'vendor' ? orgId : null;
-    transmissionTable({
+    callTransmissionsTableData({
       variables: {
         orgSid,
         filter: {
@@ -181,7 +242,7 @@ const VisualizationPanel = ({
             rangeStart: start,
             rangeEnd: end,
           },
-          planSponsorId,
+          planSponsorId: orgId,
           vendorId,
           inboundFilename: null,
           outboundFilename: null,
@@ -201,7 +262,7 @@ const VisualizationPanel = ({
     }
   }, [isPanelOpen, tableFilters.searchText.delayedValue, tableFilters.pagingParams]);
 
-  const getTransmissionVendorData = (data) => {
+  const loadTransmissionVendorData = (data) => {
     for (let organization = 0; organization < data.length; organization++) {
       const orgVendorData: TotalTransmissionProps = {};
       orgVendorData.monthCounts = data[organization].monthCounts;
@@ -217,14 +278,14 @@ const VisualizationPanel = ({
   useEffect(() => {
     if (!isLoadingTransmissionVendor && transmissionVendorData) {
       const { wpTransmissionCountByVendor } = transmissionVendorData;
-      getTransmissionVendorData(wpTransmissionCountByVendor);
+      loadTransmissionVendorData(wpTransmissionCountByVendor);
     }
   }, [transmissionVendorData, isLoadingTransmissionVendor]);
 
   useEffect(() => {
     if (!isLoadingTransmissionSponsor && transmissionSponsorData) {
       const { wpTransmissionCountBySponsor } = transmissionSponsorData;
-      getTransmissionVendorData(wpTransmissionCountBySponsor);
+      loadTransmissionVendorData(wpTransmissionCountBySponsor);
     }
   }, [transmissionSponsorData, isLoadingTransmissionSponsor])
 
@@ -234,13 +295,14 @@ const VisualizationPanel = ({
       if (wpTransmissions?.nodes && wpTransmissions.nodes.length > 0) {
         setNodes(wpTransmissions?.nodes);
       }
+      setTotalTransmissions(wpTransmissions?.paginationInfo?.totalElements ?? 0);
     }
   }, [transmissionTableData, isLoadingTransmissionTable]);
 
   const updateDateFormat = (date: Date) => {
-    const currentDate = new Date(date);
-    let hour = currentDate.getHours();
-    let minutes: string = currentDate.getMinutes().toString();
+    const now = new Date(date);
+    let hour = now.getHours();
+    let minutes: string = now.getMinutes().toString();
     const format = hour >= 12 ? 'PM' : 'AM';
     hour %= 12;
     hour = hour || 12;
@@ -254,8 +316,8 @@ const VisualizationPanel = ({
     if (column?.key === 'deliveredOn') {
       const delivered = node.deliveredOn;
       const currentTime = updateDateFormat(delivered);
-      const currentDate = new Date(delivered).toLocaleDateString();
-      columnVal = `${currentDate} ${currentTime}`;
+      const now = new Date(delivered).toLocaleDateString();
+      columnVal = `${now} ${currentTime}`;
     } else if (column?.key === 'vendorId') {
       columnVal = node.vendorId ?? '';
     } else if (column?.key === 'specId') {
@@ -274,6 +336,42 @@ const VisualizationPanel = ({
     )
   }
 
+  const renderLegendText = (value: string, entry: any, index: number) => (
+    <ButtonLink
+      onMouseOver={() => onMouseOver(entry, index)}
+      onMouseLeave={() => onMouseLeave()}
+      onClick={() => {
+
+      }}
+    >
+      <Text style={{
+        fontSize: ThemeStore.userTheme.fontSizes.small,
+        fontWeight: index === activeIndex ? 'bold' : 'normal',
+        color: index === activeIndex ? chroma(entry.color).darken().saturate(2).hex() : entry.color,
+      }}
+      >
+        {value} ({entry.payload.value})
+      </Text>
+    </ButtonLink>
+  );
+
+  const renderActiveShape = (props) => {
+    const {
+      cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill,
+    } = props;
+    return (
+      <Sector
+        cx={cx}
+        cy={cy}
+        innerRadius={innerRadius}
+        outerRadius={outerRadius}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        fill={chroma(fill).darken().saturate(2).hex()}
+      />
+    );
+  };
+
   const renderBody = () => {
     if (isLoadingTransmissionVendor || isLoadingTransmissionSponsor) {
       return (
@@ -283,9 +381,15 @@ const VisualizationPanel = ({
       );
     }
 
+    let additionalFilter: string;
+    if (typeTransmissions === 'vendor') {
+      additionalFilter = `&vendorId=${vendorId}`;
+    } else {
+      additionalFilter = `&planSponsorId=${orgId}`;
+    }
     return (
       <>
-        <PieChart width={500} height={250}>
+        <PieChart width={500} height={200}>
           <Pie
             data={transmissionsVendor}
             color="#000000"
@@ -295,6 +399,10 @@ const VisualizationPanel = ({
             cy="40%"
             outerRadius={80}
             fill="#8884d8"
+            activeIndex={activeIndex}
+            activeShape={renderActiveShape}
+            onMouseOver={onMouseOver}
+            onMouseLeave={onMouseLeave}
           >
             {transmissionsVendor?.map((entry, index) => (
               <Cell
@@ -309,15 +417,27 @@ const VisualizationPanel = ({
             verticalAlign="center"
             align="center"
             wrapperStyle={{
-              marginTop: '45px',
+              marginTop: '35px',
               fontSize: '12px',
               maxWidth: '150px',
               marginLeft: '25px',
               paddingBottom: '8px',
               width: '100%',
+              overflow: 'visible',
+              whiteSpace: 'nowrap',
             }}
+            formatter={renderLegendText}
           />
         </PieChart>
+        <Row>
+          <Column lg="12" right>
+            <ButtonLink
+              to={`/transmissions?orgSid=${parentOrgSid}&startDate=${yyyyMMdd(start)}&endDate=${yyyyMMdd(end)}${additionalFilter}`}
+            >
+              Full List
+            </ButtonLink>
+          </Column>
+        </Row>
         <DetailsList
           items={nodes ?? []}
           columns={columns}
@@ -334,7 +454,7 @@ const VisualizationPanel = ({
     <PanelHeader id="__Visualization_PanelHeader">
       <Stack horizontal styles={{ root: { height: 44 } }}>
         <PanelTitle id="__Visualization_Panel_Title" variant="bold" size="large">
-          {`${shortMonths[currentMonth]} ${new Date().getFullYear()} ${typeTransmissions === 'sponsor' ? 'Transmissions for' : 'sent to'} ${orgName}`}
+          {`${shortMonths[currentMonth]} ${currentYear} ${typeTransmissions === 'sponsor' ? 'Transmissions for' : 'sent to'} ${orgName}`} ({totalTransmissions})
         </PanelTitle>
       </Stack>
     </PanelHeader>

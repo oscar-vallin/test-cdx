@@ -14877,14 +14877,14 @@
                 "deprecationReason": null
               },
               {
-                "name": "dateRange",
+                "name": "filter",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "DateTimeRangeInput",
+                    "name": "WPTransmissionFilter",
                     "ofType": null
                   }
                 },
@@ -14930,14 +14930,14 @@
                 "deprecationReason": null
               },
               {
-                "name": "dateRange",
+                "name": "filter",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "DateTimeRangeInput",
+                    "name": "WPTransmissionFilter",
                     "ofType": null
                   }
                 },

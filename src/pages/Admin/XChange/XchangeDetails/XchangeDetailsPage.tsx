@@ -202,7 +202,7 @@ const XchangeDetailsPage = () => {
     if (qualifier) {
       let width: number | string = qualifier.length * 9;
       width = `${width}px`;
-      let color = 'blue';
+      let color = ThemeStore.userTheme.colors.themePrimary;
       if (qualifier === 'TEST' || qualifier === 'TEST-OE') {
         color = 'orange';
         width = '50px';

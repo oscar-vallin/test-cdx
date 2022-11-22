@@ -78,7 +78,11 @@ export const tableFiltersToQueryParams = (filters: TableFiltersType): string => 
 };
 
 //
-export const useTableFilters = (searchTextPlaceholder: string, defaultSort?: SortOrderInput[]): TableFiltersType => {
+export const useTableFilters = (
+  searchTextPlaceholder: string,
+  defaultSort?: SortOrderInput[],
+  preFilters?: any,
+): TableFiltersType => {
   const QueryParams = useQueryParams();
   const history = useHistory();
   const location = useLocation();
@@ -121,7 +125,7 @@ export const useTableFilters = (searchTextPlaceholder: string, defaultSort?: Sor
   const eventType = useDelayedDropdownValue('Event', '', urlParams.get('eventType') || '', '');
   const userSid = useDelayedInputValue('', '', urlParams.get('userSid') || '', '');
   const changedByUserSid = useDelayedInputValue('', '', urlParams.get('changedByUserSid') || '', '');
-  const [additionalFilters, setAdditionalFilters] = useState({});
+  const [additionalFilters, setAdditionalFilters] = useState(preFilters ?? {});
 
   const cloneFilters = (filters) => {
     const clone = {};

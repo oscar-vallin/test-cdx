@@ -13,6 +13,7 @@ import { Container, Row } from 'src/components/layouts';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useNotification } from 'src/hooks/useNotification';
 import { ButtonLink } from 'src/components/buttons';
+import { ThemeStore } from 'src/store/ThemeStore';
 import Node from './Node';
 import { StyledQualifier, StyledSFTP } from '../../XchangeDetailsPage.styles';
 import { XchangeTransmissionPanel } from '../../XchangeTransmissionPanel/XchangeTransmissionPanel';
@@ -59,7 +60,7 @@ const DataNodeTransmissions = ({ data, id }) => {
   );
 
   let width = `${qualifier && qualifier.length * 9}px`;
-  let color = 'blue';
+  let color = ThemeStore.userTheme.colors.themePrimary;
 
   if (qualifier === 'TEST' || qualifier === 'TEST-OE') {
     color = 'orange';
