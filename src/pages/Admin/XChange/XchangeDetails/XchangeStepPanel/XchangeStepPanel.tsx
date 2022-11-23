@@ -210,6 +210,13 @@ const XchangeStepPanel = ({
     setUnsavedChanges(false);
   };
 
+  const readOnly = () => {
+    if (updateCmd || createCmd) {
+      return false
+    }
+    return true;
+  };
+
   const renderBody = () => {
     if (loadingAddStep || loadingCopyStep) {
       return (
@@ -282,7 +289,7 @@ const XchangeStepPanel = ({
                 height="400px"
                 style={{ border: '1px solid gray', fontWeight: 'bold', fontSize: '14px' }}
                 theme={myTheme}
-                readOnly={!updateCmd}
+                readOnly={readOnly()}
                 basicSetup={setupOption}
                 extensions={[javascript({ jsx: true })]}
                 value={editXmlData ?? ''}
