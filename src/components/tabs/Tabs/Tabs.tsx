@@ -30,7 +30,7 @@ const renderHeader = (
   link?: IPivotItemProps,
   defaultRenderer?: (props?: IPivotItemProps) => JSX.Element | null,
 ) => (
-  <StyledSpan onClick={() => onClickTab(hash)}>
+  <StyledSpan id={link?.id} onClick={() => onClickTab(hash)}>
     {defaultRenderer && defaultRenderer(link)}
     {badge && <Badge variant={badge.variant} label={badge.label?.toString()} />}
   </StyledSpan>
@@ -55,10 +55,13 @@ const CDXTabs = ({ items, selectedKey, onClickTab }: CDXTabsType): ReactElement 
       title, content, badge, hash, disabled,
     }: CDXTabsItemType, index) => (
       <PivotItem
+        id={`__${title.replace(/ /g, '_')}`}
         headerText={title}
         key={index}
         itemKey={hash}
-        onRenderItemLink={(link, defaultRenderer) => renderHeader(hash, onClickTab, badge, link, defaultRenderer)}
+        onRenderItemLink={
+          (link, defaultRenderer) => renderHeader(hash, onClickTab, badge, link, defaultRenderer)
+        }
         headerButtonProps={{
           disabled,
         }}

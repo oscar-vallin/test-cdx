@@ -1,5 +1,10 @@
 import styled from 'styled-components';
-import { ActionButton, DetailsRow, Stack } from '@fluentui/react';
+import {
+  ActionButton,
+  DetailsRow,
+  IconButton,
+  Stack,
+} from '@fluentui/react';
 import { device } from 'src/styles/GlobalStyles';
 
 export const ShadowBox = styled.div`
@@ -173,5 +178,17 @@ export const TabBody = styled.div`
   
   @media ${device.tablet} {
     padding 15px;
+  }
+`
+
+export const HelpButton = styled(IconButton)`
+  top: -10px;
+  height: 25px;
+  width: 25px;
+  border-radius: 20px;
+  background-color: ${({ theme }) => theme.colors.neutralLight};
+  & i.ms-Icon {
+    font-size: ${({ theme }) => theme.fontSizes.small};
+    font-weight: bold;
   }
 `

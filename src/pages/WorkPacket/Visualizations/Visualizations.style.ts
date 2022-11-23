@@ -34,8 +34,8 @@ export const StyledTotal = styled(Stack)<StyledTotalProps>`
   width: 97%;
   text-align: center;
   padding: ${(({ background }) => (background ? '7px 0' : null))};
-  padding-left: ${(({ lineChart }) => (lineChart ? '18px' : '18px'))};
-  padding-right: ${(({ lineChart }) => (lineChart ? '70px' : '70px'))};
+  padding-left: 18px;
+  padding-right: 70px;
   margin-left: ${(({ lineChart }) => (lineChart ? '36px' : '33px'))};
   background-color: ${(({ background, theme }) => (background ? theme.colors.neutralLighter : null))};
 

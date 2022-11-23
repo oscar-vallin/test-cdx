@@ -11,6 +11,7 @@ import {
   Stack,
 } from '@fluentui/react';
 import { useHistory } from 'react-router-dom';
+import { format } from 'date-fns';
 
 import { PanelBody, PanelHeader, ThemedPanel } from 'src/layouts/Panels/Panels.styles';
 
@@ -26,8 +27,6 @@ import {
 
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { InfoIcon } from 'src/components/badges/InfoIcon';
-import { format } from 'date-fns';
-import { ShowForMobile } from 'src/styles/GlobalStyles';
 import { Required } from 'src/components/labels/FormLabel/FormLabel.styles';
 import { LabelValue } from 'src/components/labels/LabelValue';
 import { ArchivesTab } from 'src/pages/FileStatusDetails/ArchivesTab/ArchivesTab';
@@ -37,6 +36,7 @@ import { ButtonLink } from 'src/components/buttons';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { Column } from 'src/components/layouts';
 import { CDXTabsItemType, Tabs } from 'src/components/tabs/Tabs';
+import { WalkThrough, fileStatusDetailsTour } from 'src/components/help';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
 import { useNotification } from 'src/hooks/useNotification';
 import { EmptyState } from 'src/containers/states';
@@ -47,7 +47,7 @@ import EnrollmentStatsTab from './EnrollmentStatsTab/EnrollmentStatsTab';
 import VendorCountStatsTab from './VendorCountStatsTab/VendorCountStatsTab';
 import { WorkPacketCommandButton } from './WorkPacketCommandButton';
 import {
-  FileMetaDetails, FileTitle, HeaderStack, PanelFooter, ShadowBox,
+  FileMetaDetails, FileTitle, HeaderStack, HelpButton, PanelFooter, ShadowBox,
 } from './FileStatusDetails.styles';
 import { UseFileStatusDetailsPanel } from './useFileStatusDetailsPanel';
 import { useFileStatusDetailsPoll } from './useFileStatusDetailsPoll';
@@ -60,8 +60,9 @@ type FileStatusDetailsPanelProps = {
 const FileStatusDetailsPanel = (
   { useFileStatusDetailsPanel, tableFilters }: FileStatusDetailsPanelProps,
 ) => {
-  const { fsOrgSid } = useFileStatusDetailsPanel;
-  const { hash, setHash } = useFileStatusDetailsPanel;
+  const { fsOrgSid, hash, setHash } = useFileStatusDetailsPanel;
+  const [isShowHelp, setIsShowHelp] = useState(false);
+
   const id = useFileStatusDetailsPanel.workOrderId;
 
   const history = useHistory();
@@ -331,7 +332,7 @@ const FileStatusDetailsPanel = (
     if (fileInfo) {
       return (
         <>
-          <Stack.Item grow={1}>
+          <Stack.Item id="__DeliveredFileInfo" grow={1}>
             <Text size="small" variant="muted">
               Delivered Vendor File Details
             </Text>
@@ -346,7 +347,7 @@ const FileStatusDetailsPanel = (
             />
           </Stack.Item>
           {fileInfo?.ftp?.host && (
-            <Stack.Item grow={1}>
+            <Stack.Item id="__FTP_Info" grow={1}>
               <Text size="small" variant="muted">
                 FTP details
               </Text>
@@ -391,13 +392,19 @@ const FileStatusDetailsPanel = (
           </Stack.Item>
           <Stack.Item align="center" className="hide-for-mobile">
             <Badge
+              id="__Badge_Status"
               variant={getBadgeVariant(packet?.packetStatus)}
               label={packet?.packetStatus}
               pill
             />
           </Stack.Item>
           <Stack.Item align="center" className="hide-for-mobile">
-            <Badge variant="info" label={`Billing Units: ${packet?.populationCount ?? 'none'}`} pill />
+            <Badge
+              id="__Badge_BillingUnits"
+              variant="info"
+              label={`Billing Units: ${packet?.populationCount ?? 'none'}`}
+              pill
+            />
             {packet?.suppressBilling && (
               <>
                 <Required>*</Required>
@@ -407,6 +414,15 @@ const FileStatusDetailsPanel = (
           </Stack.Item>
           <Stack.Item align="center" grow className="hide-for-mobile">
             <Text variant="muted">{renderReceivedDate()}</Text>
+          </Stack.Item>
+          <Stack.Item align="end" className="hide-for-mobile">
+            <HelpButton
+              id="__FileStatusDetails_Help"
+              iconProps={{ iconName: 'Help' }}
+              title="Help"
+              aria-label="Help"
+              onClick={() => setIsShowHelp(!isShowHelp)}
+            />
           </Stack.Item>
         </HeaderStack>
       </Column>
@@ -429,14 +445,14 @@ const FileStatusDetailsPanel = (
             {packet?.suppressBilling && (
               <>
                 <Required>*</Required>
-                <InfoIcon id="billingUnitInfo" tooltip="This exchange was not billed" />
+                <InfoIcon id="billingUnitInfo" tooltip="This Xchange was not billed" />
               </>
             )}
           </Stack.Item>
           <Stack.Item className="show-for-mobile">
             <Text variant="muted">{renderReceivedDate()}</Text>
           </Stack.Item>
-          <Stack.Item grow={1}>
+          <Stack.Item id="__CoreMetaData" grow={1}>
             <LabelValue label="Vendor" value={packet?.vendorId} />
             <LabelValue label="Plan Sponsor" value={packet?.orgId} />
             <LabelValue label="Work Order Id" value={packet?.workOrderId} />
@@ -565,6 +581,12 @@ const FileStatusDetailsPanel = (
       isFooterAtBottom={true}
     >
       <PanelBody>{renderBody()}</PanelBody>
+      <WalkThrough
+        id="__FileStatusDetails_Tour"
+        show={isShowHelp}
+        tour={fileStatusDetailsTour}
+        onDismiss={() => setIsShowHelp(false)}
+      />
     </ThemedPanel>
   );
 };
