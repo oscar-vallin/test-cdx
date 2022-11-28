@@ -15,6 +15,7 @@ export const ROUTES_ID = {
   ACCESS_MANAGEMENT_SPECIALIZATION: 'access-management-specialization',
   ACTIVE_ORGS: 'active-orgs',
   ORG_ACTIVITY: 'current-activity',
+  DELETED_ORGS: 'deleted-orgs',
   EXTERNAL_ORGS: 'external-orgs',
   COLOR_PALETTES: 'color-palettes',
   DEFAULT_THEME: 'default-theme',
@@ -56,6 +57,7 @@ export const URL_ROUTES = {
   ACTIVE_ORGS: `/${ROUTES_ID.ADMIN}/organizations/active-orgs`,
   EXTERNAL_ORGS: `/${ROUTES_ID.ADMIN}/organizations/external-orgs`,
   ORG_ACTIVITY: `/${ROUTES_ID.ADMIN}/organizations/current-activity`,
+  DELETED_ORGS: `/${ROUTES_ID.ADMIN}/organizations/deleted-orgs`,
   COLOR_PALETTES: `/${ROUTES_ID.ADMIN}/dashboard-site/color-palettes`,
   DEFAULT_THEME: `/${ROUTES_ID.ADMIN}/dashboard-site/default-theme`,
   ACTIVE_USERS: `/${ROUTES_ID.ACTIVE_USERS}`,
@@ -211,6 +213,14 @@ export const ROUTE_EXTERNAL_ORGS: RouteType = {
   URL: URL_ROUTES.EXTERNAL_ORGS,
   MAIN_MENU: false,
   API_ID: 'EXTERNAL_ORGS',
+};
+
+export const ROUTE_DELETED_ORGS: RouteType = {
+  ID: ROUTES_ID.DELETED_ORGS,
+  TITLE: 'Inactive Orgs',
+  URL: URL_ROUTES.DELETED_ORGS,
+  MAIN_MENU: false,
+  API_ID: 'DELETED_ORGS',
 };
 
 export const ROUTE_ACTIVITY_CURRENT: RouteType = {
@@ -399,6 +409,7 @@ export const ROUTES = {
   ROUTE_ACCESS_MANAGEMENT_SPECIALIZATION,
   ROUTE_ACTIVE_ORGS,
   ROUTE_EXTERNAL_ORGS,
+  ROUTE_DELETED_ORGS,
   ROUTE_ACTIVITY_CURRENT,
   ROUTE_COLOR_PALETTES,
   ROUTE_DEFAULT_THEME,
@@ -439,6 +450,7 @@ export const ROUTES_ARRAY: RouteType[] = [
   ROUTE_ACCESS_MANAGEMENT_SPECIALIZATION,
   ROUTE_ACTIVE_ORGS,
   ROUTE_EXTERNAL_ORGS,
+  ROUTE_DELETED_ORGS,
   ROUTE_ACTIVITY_CURRENT,
   ROUTE_COLOR_PALETTES,
   ROUTE_DEFAULT_THEME,

@@ -15,7 +15,7 @@ import {
   VisualizationsPage,
 } from './WorkPacket';
 import { AccessDenied, PageNotFound } from './ErrorHandling';
-import { ActiveOrgsPage } from './Admin/Organizations';
+import { ActiveOrgsPage, InactiveOrgsPage } from './Admin/Organizations';
 import { ExternalOrgsPage } from './Admin/ExternalOrganization';
 import { CurrentActivityPage } from './Admin/Activity';
 import { ColorPalettesPage, DefaultThemePage } from './Admin/DashboardSite';
@@ -96,6 +96,9 @@ export const Routes = () => (
     </AuthRoute>
     <AuthRoute path={ROUTES.ROUTE_EXTERNAL_ORGS.URL}>
       <ExternalOrgsPage />
+    </AuthRoute>
+    <AuthRoute path={ROUTES.ROUTE_DELETED_ORGS.URL}>
+      <InactiveOrgsPage />
     </AuthRoute>
     <AuthRoute path={ROUTES.ROUTE_ACTIVITY_CURRENT.URL}>
       <CurrentActivityPage />
