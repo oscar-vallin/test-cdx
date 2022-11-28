@@ -136,6 +136,7 @@ export const StyledOverFlow = styled.div`
   max-width: 150px;
   width: 100%;
   overflow: hidden;
+  text-overflow: ellipsis;
   @media all and ${device.mobileL} {
     max-width: 180px;
 
