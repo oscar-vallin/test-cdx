@@ -4,13 +4,17 @@ import { SectionAccessManagementProps } from 'src/pages/Admin/Users/WizardTypes'
 import AddExternalUsersAccessFooter from './AddExternalUsersAccessFooter';
 
 const SectionAccessManagement = ({
-  form, onPrev, onNext, saveOptions,
+  form, onPrev, onNext, saveOptions, accessManSelected,
 }: SectionAccessManagementProps) => (
   <>
     <WizardBody>
       <AccessManagementWizardBody form={form} saveOptions={saveOptions} />
     </WizardBody>
-    <AddExternalUsersAccessFooter onPrev={onPrev} onNext={onNext} />
+    <AddExternalUsersAccessFooter
+      onPrev={onPrev}
+      onNext={onNext}
+      userSelected={accessManSelected}
+    />
   </>
 );
 

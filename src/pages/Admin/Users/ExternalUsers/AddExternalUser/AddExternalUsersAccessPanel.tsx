@@ -47,6 +47,7 @@ const AddExternalUsersAccessPanel = ({
   const [errorMsg, setErrorMsg] = useState<string | undefined>();
   const [createExternalUser, setCreateExternalUser] = useState(false);
   const [userSelected, setUserSelected] = useState(false);
+  const [accessManSelected, setAccessManSelected] = useState(false);
   const client = useApolloClient();
   const handleError = ErrorHandler();
 
@@ -214,10 +215,19 @@ const AddExternalUsersAccessPanel = ({
                 content: (
                   <SectionAccessManagement
                     form={externalUsersAccessService.userAccountForm}
+                    accessManSelected={accessManSelected}
                     onPrev={handlePrev}
                     onNext={handleNext}
                     saveOptions={(sids) => {
                       externalUsersAccessService.updateAccessPolicyGroups(sids);
+                      const value = externalUsersAccessService?.userAccountForm
+                        .accessPolicyGroups?.value;
+                      setAccessManSelected(false);
+                      setUserSelected(false);
+                      if (value && value.length > 0) {
+                        setAccessManSelected(true);
+                        setUserSelected(true);
+                      }
                       setUnsavedChanges(true);
                     }}
                   />
@@ -241,7 +251,9 @@ const AddExternalUsersAccessPanel = ({
             ]}
             selectedKey={selectedTab}
             onClickTab={(hash: string) => {
-              if (userSelected) {
+              if (userSelected && hash !== '#summary') {
+                handleTabChange(hash);
+              } else if (userSelected && accessManSelected) {
                 handleTabChange(hash);
               }
             }}
