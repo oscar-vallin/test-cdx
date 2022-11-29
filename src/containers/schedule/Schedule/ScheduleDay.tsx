@@ -103,12 +103,12 @@ export const ScheduleDay = ({
     const day = new Date(currentSelectedDate);
     day.setHours(hour);
     const dayRows = allItems.filter((_item) => isSameHour(_item.runTime, day));
-
     return dayRows?.map((_item, index) => (
       <OccurrenceDetail
         id={`__Occurrence_${_item.workOrderId}`}
         key={`cell_${hour}_${index}`}
         onClick={() => openDetails(_item)}
+        status={_item.status}
       >
         <Stack horizontal tokens={{ childrenGap: 15 }} verticalAlign="center" wrap>
           <StackItem>

@@ -47,9 +47,9 @@ export const ScheduleWeek = ({
   // ─── CREATE ROWS ─────────────────────────────────────────────────────────────────
   const renderItems = (_day: Date, allItems: ScheduleOccurrence[]) => {
     const dayRows = allItems.filter((_item) => isSameHour(parseISO(_item.timeScheduled), _day));
-
+    console.log(dayRows[0])
     return dayRows?.map((_item, index) => (
-      <DesktopCellItem key={`cell_${_day}_${index}`} title={_item.resource}>
+      <DesktopCellItem key={`cell_${_day}_${index}`} title={_item.resource} status={_item.schedOccurStatus}>
         {_item.resource}
       </DesktopCellItem>
     ));

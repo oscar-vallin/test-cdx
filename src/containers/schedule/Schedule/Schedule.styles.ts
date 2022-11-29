@@ -20,6 +20,36 @@ const FONT_NORMAL = ({ theme }) => theme.fontSizes.normal;
 const FONT_LARGE = ({ theme }) => theme.fontSizes.large;
 const FONT_XLARGE = ({ theme }) => theme.fontSizes.xlarge;
 
+const background = (status: string, theme: any) => {
+  switch (status) {
+    case 'RAN_NOT_SCHEDULED':
+    case 'RAN_IN_WINDOW':
+      return COLOR_MAIN;
+    case 'RAN_LATE':
+      return theme.colors.custom.error;
+    case 'SCHEDULED':
+      return theme.colors.themeTertiary;
+    case 'ERRORED':
+    case 'ERRORED_LATE':
+    case 'ERRORED_EARLY':
+      return theme.colors.custom.error;
+    case 'MISSED':
+      return theme.colors.custom.warning;
+    default:
+      return null;
+  }
+};
+
+const color = (status: string, theme: any) => {
+  let c: any;
+  if (status !== 'RAN_LATE') {
+    c = COLOR_NEUTRAL;
+  } else {
+    c = theme.colors.black;
+  }
+  return c;
+};
+
 export const Container = styled(LayoutBox)`
   width: 100vw;
   background-color: ${COLOR_BACKGROUND};
@@ -141,14 +171,14 @@ export const CellItem = styled.div`
   margin-bottom: 5px;
 `;
 
-export const DesktopCellItem = styled.div`
+export const DesktopCellItem = styled.div<DesktopCellItemProps>`
   font-size: ${FONT_SMALL};
   width: calc(100% - 10px);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  background: ${COLOR_DARK};
-  color: ${COLOR_NEUTRAL_LIGHTER};
+  background: ${({ status, theme }) => background(status ?? '', theme)};
+  color: ${({ status, theme }) => color(status ?? '', theme)};
   border-radius: 3px;
   margin-left: 5px;
   margin-right: 5px;
@@ -160,6 +190,10 @@ export const DesktopCellItem = styled.div`
     display: block;
   }
 `;
+
+type DesktopCellItemProps = {
+  status?: string;
+}
 
 export const MobileCellItem = styled.div`
   font-size: ${FONT_SMALL};
@@ -287,11 +321,11 @@ export const DayHourWrapper = styled.div`
   padding-bottom: 5px;
 `;
 
-export const OccurrenceDetail = styled.div`
+export const OccurrenceDetail = styled.div<OccurrenceDetailProps>`
   font-size: ${FONT_NORMAL};
   width: calc(100% - 5px);
-  background: ${COLOR_DARK};
-  color: ${COLOR_NEUTRAL_LIGHTER};
+  background: ${({ status, theme }) => background(status ?? '', theme)};
+  color: ${({ status, theme }) => color(status ?? '', theme)};
   border-radius: 3px;
   margin: 5px 5px 0 5px;
   padding: 5px;
@@ -301,6 +335,10 @@ export const OccurrenceDetail = styled.div`
     background: ${COLOR_MAIN};
   }
 `;
+
+type OccurrenceDetailProps = {
+  status?: string;
+};
 
 export const OccurrenceItem = styled.span`
   font-size: ${FONT_NORMAL};
