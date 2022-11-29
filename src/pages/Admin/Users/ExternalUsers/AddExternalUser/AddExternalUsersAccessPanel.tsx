@@ -251,7 +251,9 @@ const AddExternalUsersAccessPanel = ({
             ]}
             selectedKey={selectedTab}
             onClickTab={(hash: string) => {
-              if (userSelected && hash !== '#summary') {
+              const userExist = externalUsersAccessService.userAccountForm.sid;
+              if ((userSelected || userExist) && hash !== '#summary') {
+                setUserSelected(true);
                 handleTabChange(hash);
               } else if (userSelected && accessManSelected) {
                 handleTabChange(hash);
