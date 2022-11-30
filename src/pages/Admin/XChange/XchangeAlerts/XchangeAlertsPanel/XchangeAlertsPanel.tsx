@@ -5,6 +5,8 @@ import {
   Spinner,
   SpinnerSize,
   Stack,
+  MessageBar,
+  MessageBarType,
 } from '@fluentui/react';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import {
@@ -84,6 +86,8 @@ const XchangeAlertsPanel = ({
   const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
   const [showDialog, setShowDialog] = useState(false);
+  const [message, setMessage] = useState<string | null>();
+  const [messageType, setMessageType] = useState<MessageBarType>(MessageBarType.info);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
 
@@ -219,7 +223,7 @@ const XchangeAlertsPanel = ({
       closePanel(false);
       setTotalSubscribers([]);
       setUnsavedChanges(false);
-      setAlertTypesValue([]);
+      setAlertTypesValue(undefined);
       setXchangeConfigAlert(null);
       setXchangeProfileAlert(null);
       setFilenameQualifier('');
@@ -236,9 +240,10 @@ const XchangeAlertsPanel = ({
       showUnsavedChangesDialog();
     } else {
       setTotalSubscribers([]);
-      setAlertTypesValue([]);
       setXchangeConfigAlert(null);
+      setAlertTypesValue(undefined);
       setXchangeProfileAlert(null);
+      setUnsavedChanges(false);
       setFilenameQualifier('');
       closePanel(false);
     }
@@ -290,6 +295,8 @@ const XchangeAlertsPanel = ({
       if (xchangeConfigAlertForm?.alertTypes.value
         && xchangeConfigAlertForm?.alertTypes.value.length > 0) {
         setAlertTypesValue(xchangeConfigAlertForm?.alertTypes.value.map((alert) => alert.value));
+      } else {
+        setAlertTypesValue([]);
       }
       if (xchangeConfigAlertForm.subscribers.value
         && xchangeConfigAlertForm.subscribers.value.length > 0) {
@@ -313,6 +320,8 @@ const XchangeAlertsPanel = ({
         if (!customQualifierValue && filenameQualifierValue) {
           setCustomQualifier(true);
         }
+      } else {
+        setFilenameQualifier('')
       }
 
       if (xchangeConfigAlertForm?.commands) {
@@ -386,6 +395,18 @@ const XchangeAlertsPanel = ({
 
     return (
       <PanelBody>
+        {message && (
+          <Spacing margin={{ bottom: 'normal' }}>
+            <MessageBar
+              id="__TransmissionPanel_Msg"
+              messageBarType={messageType}
+              isMultiline
+              onDismiss={() => setMessage(undefined)}
+            >
+              {message}
+            </MessageBar>
+          </Spacing>
+        )}
         <Container>
           {xchangeConfigAlert?.filenameQualifier.visible && (
             <Row>
@@ -396,7 +417,10 @@ const XchangeAlertsPanel = ({
                     value={filenameQualifier}
                     uiField={xchangeConfigAlert.filenameQualifier}
                     options={optionAlerts}
-                    onChange={(newValue) => setFilenameQualifier(newValue ?? '')}
+                    onChange={(newValue) => {
+                      setUnsavedChanges(true);
+                      setFilenameQualifier(newValue ?? '');
+                    }}
                   />
                 ) : (
                   <InputText
@@ -404,7 +428,10 @@ const XchangeAlertsPanel = ({
                     value={filenameQualifier}
                     label="Enviroment"
                     required={xchangeConfigAlert.filenameQualifier.required}
-                    onChange={(_event, newValue) => setFilenameQualifier(newValue ?? '')}
+                    onChange={(_event, newValue) => {
+                      setUnsavedChanges(true);
+                      setFilenameQualifier(newValue ?? '');
+                    }}
                   />
                 )}
                 <ButtonLink onClick={() => setCustomQualifier((prevState) => !prevState)}>
@@ -444,6 +471,11 @@ const XchangeAlertsPanel = ({
               id="__Update__Alert"
               iconProps={{ iconName: 'Save' }}
               onClick={() => {
+                if (!alertTypesValue?.length || !filenameQualifier) {
+                  setMessageType(MessageBarType.error);
+                  setMessage('Complete the required fields');
+                  return;
+                }
                 if (xchangeProfileAlert) {
                   saveProfileAlert();
                 }
