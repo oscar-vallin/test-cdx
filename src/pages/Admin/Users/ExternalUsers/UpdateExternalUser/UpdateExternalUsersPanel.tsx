@@ -42,6 +42,7 @@ const UpdateExternalUsersPanel = ({
   const [showRevokeAccessDialog, setShowRevokeAccessDialog] = useState(false);
   const [showUnsavedChangesDialog, setShowUnsavedChangesDialog] = useState(false);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
+  const [accessManagementSelected, setAccessManagementSelected] = useState(true);
   const [isProcessing, setProcessing] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string | undefined>();
 
@@ -195,8 +196,14 @@ const UpdateExternalUsersPanel = ({
                   <SectionAccessManagement
                     form={externalUsersAccessService.userAccountForm}
                     onSubmit={handleGrantAccess}
+                    accessManagementSelected={accessManagementSelected}
                     saveOptions={(sids) => {
                       externalUsersAccessService.updateAccessPolicyGroups(sids);
+                      setAccessManagementSelected(false);
+                      const values = externalUsersAccessService.userAccountForm.accessPolicyGroups;
+                      if (values?.value && values.value.length > 0) {
+                        setAccessManagementSelected(true);
+                      }
                       setUnsavedChanges(true);
                     }}
                   />

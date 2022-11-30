@@ -5,14 +5,19 @@ import { WebCommand } from 'src/data/services/graphql';
 
 type UpdateExternalUserFooterProps = {
   saveCmd?: WebCommand;
+  accessManagementSelected?: boolean;
   onSave: () => void;
 };
 
-const UpdateExternalUserFooter = ({ saveCmd, onSave }: UpdateExternalUserFooterProps): ReactElement => (
+const UpdateExternalUserFooter = ({
+  saveCmd,
+  onSave,
+  accessManagementSelected,
+}: UpdateExternalUserFooterProps): ReactElement => (
   <WizardButtonRow>
     {saveCmd && (
     <span>
-      <Button id="__User_Save_Button" onClick={onSave} variant="primary">
+      <Button id="__User_Save_Button" onClick={onSave} variant="primary" disabled={!accessManagementSelected}>
         Save
       </Button>
     </span>
