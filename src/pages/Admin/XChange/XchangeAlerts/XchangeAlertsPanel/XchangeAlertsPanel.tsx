@@ -21,6 +21,7 @@ import {
   WebCommand,
   CdxWebCommandType,
   UiSelectManyField,
+  UiSelectOneField,
 } from 'src/data/services/graphql';
 import {
   PanelBody,
@@ -76,6 +77,7 @@ const XchangeAlertsPanel = ({
   const [xchangeProfileAlert, setXchangeProfileAlert] = useState<XchangeProfileAlertForm | null>();
   const [xchangeConfigAlert, setXchangeConfigAlert] = useState<XchangeConfigAlertForm | null>();
   const [filenameQualifier, setFilenameQualifier] = useState('');
+  const [filenameQualifieruiField, setFilenameQualifieruiField] = useState<UiSelectOneField>()
   const [customQualifier, setCustomQualifier] = useState<boolean>();
   const [optionAlerts, setOptionAlerts] = useState([]);
   const [alertTypes, setAlertTypes] = useState<UiSelectManyField>();
@@ -310,13 +312,17 @@ const XchangeAlertsPanel = ({
       if (xchangeConfigAlertForm?.alertTypes) {
         setAlertTypes(xchangeConfigAlertForm?.alertTypes);
       }
-
+      const filename = { ...xchangeConfigAlertForm?.filenameQualifier }
+      filename.label = 'Enviroment';
+      filename.info = null;
+      setFilenameQualifieruiField(filename);
       if (xchangeConfigAlertForm?.filenameQualifier.value
         && xchangeConfigAlertForm?.filenameQualifier.value.value) {
         setFilenameQualifier(xchangeConfigAlertForm?.filenameQualifier.value.value ?? '');
+        xchangeConfigAlertForm.filenameQualifier.label = 'Enviroment';
         const filenameQualifierValue = xchangeConfigAlertForm?.filenameQualifier.value.value;
         const customQualifierValue = xchangeConfigAlertForm.options
-          .find((opt) => opt.key === 'filenameQualifier').values.find((val) => val.value === filenameQualifierValue)
+          .find((opt) => opt.key === 'filenameQualifier').values.find((val) => val.value === filenameQualifierValue);
         if (!customQualifierValue && filenameQualifierValue) {
           setCustomQualifier(true);
         }
@@ -415,7 +421,7 @@ const XchangeAlertsPanel = ({
                   <UIInputSelectOne
                     id="filenameQualifier"
                     value={filenameQualifier}
-                    uiField={xchangeConfigAlert.filenameQualifier}
+                    uiField={filenameQualifieruiField}
                     options={optionAlerts}
                     onChange={(newValue) => {
                       setUnsavedChanges(true);
@@ -426,7 +432,8 @@ const XchangeAlertsPanel = ({
                   <InputText
                     id="__filenameQualifier"
                     value={filenameQualifier}
-                    label="Enviroment"
+                    label="Filename Qualifier"
+                    info={xchangeConfigAlert.filenameQualifier.info ?? ''}
                     required={xchangeConfigAlert.filenameQualifier.required}
                     onChange={(_event, newValue) => {
                       setUnsavedChanges(true);
@@ -435,7 +442,7 @@ const XchangeAlertsPanel = ({
                   />
                 )}
                 <ButtonLink onClick={() => setCustomQualifier((prevState) => !prevState)}>
-                  use a custom qualifier
+                  {!customQualifier ? 'use a custom qualifier' : 'use a standar enviroment-based qualifier'}
                 </ButtonLink>
               </Column>
             </Row>
