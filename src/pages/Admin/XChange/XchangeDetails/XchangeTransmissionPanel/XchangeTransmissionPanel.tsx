@@ -852,7 +852,8 @@ const XchangeTransmissionPanel = ({
                 }}
               />
               {(updateCmd || copyCmd) && enableUpdate('filenamePattern', xchangeFileTransmission.filenamePattern)}
-              {(updateCmd || copyCmd) && !xchangeFileTransmission.filenamePattern.readOnly && (
+              {(updateCmd || copyCmd || createCmd)
+                && !xchangeFileTransmission.filenamePattern.readOnly && (
                 <Spacing margin={{ top: 'normal' }}>
                   <span style={{ color: '#605e5c', fontSize: '14px', fontWeight: 'bold' }}>
                     Ex:{' '}
