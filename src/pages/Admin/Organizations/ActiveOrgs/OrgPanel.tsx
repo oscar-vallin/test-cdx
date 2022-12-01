@@ -1,15 +1,17 @@
 import {
+  DirectionalHint,
   MessageBar,
   MessageBarType,
   PanelType,
   Spinner,
   SpinnerSize,
   Stack,
+  TooltipHost,
 } from '@fluentui/react';
 import { Column } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { LightSeparator } from 'src/components/separators/Separator';
-import { DialogYesNo } from 'src/containers/modals/DialogYesNo';
+import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import React, { useEffect, useState } from 'react';
 import {
   PanelBody,
@@ -27,6 +29,9 @@ import {
   useFindOrganizationLazyQuery,
   useOrganizationFormLazyQuery,
   useUpdateOrgMutation,
+  useDeactivateOrgMutation,
+  useActivateOrgMutation,
+  WebCommand,
 } from 'src/data/services/graphql';
 import { Button } from 'src/components/buttons';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
@@ -37,6 +42,8 @@ import { UIInputSelectOne } from 'src/components/inputs/InputDropdown';
 import { getEnumByValue } from 'src/utils/CDXUtils';
 import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 import { useNotification } from 'src/hooks/useNotification';
+import { ActiveIcon, InactiveIcon } from '../../Users/UpdateUsers/UpdateUserPanel.styles';
+import { StyledThemedCommandButton } from '../Orgs.styles';
 
 type OrgPanelType = {
   isOpen: boolean;
@@ -61,14 +68,29 @@ const INITIAL_STATE: OrgStateType = {
   orgType: undefined,
 };
 
+const defaultDialogProps: DialogYesNoProps = {
+  id: '__OrgPanel_Dlg',
+  open: false,
+  title: '',
+  message: '',
+  labelYes: 'Yes',
+  labelNo: 'No',
+  highlightNo: true,
+  highlightYes: false,
+};
+
 export const OrgPanel = ({
   isOpen, selectedOrgSid, onDismiss, onSave,
 }: OrgPanelType) => {
   const { orgSid: orgOwnerSid } = useOrgSid();
   const [orgState, setOrgState] = useState<OrgStateType>(INITIAL_STATE);
   const [orgForm, setOrgForm] = useState<OrganizationForm | null>();
+  const [deactivateCmd, setDeactivateCmd] = useState<WebCommand | null>();
+  const [activateCmd, setActivateCmd] = useState<WebCommand | null>();
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
+  const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
+  const [refreshDataXchange, setRefreshDataXchange] = useState(false);
   const [messageType, setMessageType] = useState<MessageBarType>(MessageBarType.info);
   const [message, setMessage] = useState<string | undefined>();
 
@@ -92,6 +114,16 @@ export const OrgPanel = ({
     loading: loadingUpdate,
     error: errorUpdate,
   }] = useUpdateOrgMutation();
+  const [deactivateOrg, {
+    data: dataDeactivateOrg,
+    loading: loadingDeactivate,
+    error: errorDeactivate,
+  }] = useDeactivateOrgMutation();
+  const [activateOrg, {
+    data: dataActivateOrg,
+    loading: loadingActivate,
+    error: errorActivate,
+  }] = useActivateOrgMutation();
   const Toast = useNotification();
   const handleError = ErrorHandler();
 
@@ -105,14 +137,6 @@ export const OrgPanel = ({
     onDismiss();
   };
 
-  const onPanelClose = () => {
-    if (unsavedChanges) {
-      setShowDialog(true);
-    } else {
-      doClosePanel();
-    }
-  };
-
   useEffect(() => {
     handleError(errorForm);
     handleError(errorOrg);
@@ -121,6 +145,7 @@ export const OrgPanel = ({
   }, [errorForm, errorOrg, errorCreate, errorUpdate]);
 
   useEffect(() => {
+    setRefreshDataXchange(false);
     if (selectedOrgSid) {
       fetchOrg({
         variables: {
@@ -134,7 +159,7 @@ export const OrgPanel = ({
         },
       });
     }
-  }, [selectedOrgSid]);
+  }, [selectedOrgSid, refreshDataXchange]);
 
   useEffect(() => {
     if (dataForm && !loadingForm) {
@@ -145,6 +170,16 @@ export const OrgPanel = ({
   useEffect(() => {
     if (dataOrg && !loadingOrg) {
       setOrgForm(dataOrg.findOrganization);
+
+      if (dataOrg.findOrganization?.commands) {
+        const pageCommands = dataOrg.findOrganization.commands;
+        const _deactivateCmd = pageCommands
+          ?.find((cmd) => cmd.commandType === CdxWebCommandType.Deactivate);
+        setDeactivateCmd(_deactivateCmd);
+        const _activateCmd = pageCommands
+          ?.find((cmd) => cmd.commandType === CdxWebCommandType.Activate);
+        setActivateCmd(_activateCmd);
+      }
     }
   }, [dataOrg, loadingOrg]);
 
@@ -199,6 +234,30 @@ export const OrgPanel = ({
     }
   }, [orgForm]);
 
+  useEffect(() => {
+    if (!loadingDeactivate && dataDeactivateOrg) {
+      const { orgId } = orgState;
+      setRefreshDataXchange(true);
+      Toast.success({ text: `Organization ${orgId} has been deactivated` });
+    }
+
+    if (!loadingDeactivate && errorDeactivate) {
+      Toast.error({ text: 'An error occurred deactivating this Organization' });
+    }
+  }, [dataDeactivateOrg, loadingDeactivate, errorDeactivate]);
+
+  useEffect(() => {
+    if (!loadingActivate && dataActivateOrg) {
+      const { orgId } = orgState;
+      setRefreshDataXchange(true);
+      Toast.success({ text: `Organization ${orgId} has been activated` });
+    }
+
+    if (!loadingDeactivate && errorActivate) {
+      Toast.error({ text: 'An error occurred activating this Organization' });
+    }
+  }, [dataActivateOrg, loadingActivate, errorActivate]);
+
   const renderOrgId = () => {
     if (selectedOrgSid) {
       return <UIInputTextReadOnly id="__OrgID" uiField={orgForm?.orgId} />;
@@ -214,6 +273,67 @@ export const OrgPanel = ({
         }}
       />
     );
+  };
+
+  const hideDialog = () => {
+    setShowDialog(false);
+  };
+
+  const unsavedChangesDialog = () => {
+    const updatedDialog = { ...defaultDialogProps };
+    updatedDialog.title = 'You have unsaved changes';
+    updatedDialog.message = 'You are about lose all changes made to this Organization. Are you sure you want to continue?';
+
+    updatedDialog.onYes = () => {
+      hideDialog();
+      doClosePanel();
+    };
+    updatedDialog.onNo = () => {
+      hideDialog();
+    };
+
+    setDialogProps(updatedDialog);
+    setShowDialog(true);
+  };
+
+  const deactivateDialog = () => {
+    const updatedDialog = { ...defaultDialogProps };
+    const status = deactivateCmd ? 'deactivate' : 'activate';
+    updatedDialog.title = deactivateCmd ? 'Deactivate' : 'Activate';
+    updatedDialog.message = `Are you sure you want to ${status} this Organization?'`
+
+    updatedDialog.onYes = () => {
+      hideDialog();
+      const { sid } = orgState;
+      if (deactivateCmd) {
+        deactivateOrg({
+          variables: {
+            orgSid: sid ?? '',
+          },
+        })
+      }
+      if (activateCmd) {
+        activateOrg({
+          variables: {
+            orgSid: sid ?? '',
+          },
+        })
+      }
+    };
+    updatedDialog.onNo = () => {
+      hideDialog();
+    };
+
+    setDialogProps(updatedDialog);
+    setShowDialog(true);
+  };
+
+  const onPanelClose = () => {
+    if (unsavedChanges) {
+      unsavedChangesDialog();
+    } else {
+      doClosePanel();
+    }
   };
 
   const renderBody = () => (
@@ -276,12 +396,39 @@ export const OrgPanel = ({
 
   const renderPanelHeader = () => (
     <PanelHeader id="__Org_PanelHeader">
-      <Column lg="12">
+      <Column lg="6">
         <Stack horizontal styles={{ root: { height: 44 } }}>
           <PanelTitle id="__Org_Panel_Title" variant="bold" size="large">
             {!selectedOrgSid ? 'New Organization' : orgState.orgId}
+            {orgForm?.active?.value ? (
+              <TooltipHost content="This organization is active" directionalHint={DirectionalHint.rightCenter}>
+                <ActiveIcon iconName="CompletedSolid" style={{ fontSize: '15px' }} />
+              </TooltipHost>
+            ) : (
+              <TooltipHost content="This organization is inactive" directionalHint={DirectionalHint.rightCenter}>
+                <InactiveIcon iconName="StatusErrorFull" />
+              </TooltipHost>
+            )}
           </PanelTitle>
         </Stack>
+      </Column>
+      <Column lg="6" right>
+        {deactivateCmd && (
+          <StyledThemedCommandButton
+            id="__DeactivateOrg_Button"
+            iconProps={{ iconName: 'StatusCircleErrorX' }}
+            text="Deactivate"
+            onClick={() => deactivateDialog()}
+          />
+        )}
+        {activateCmd && (
+          <StyledThemedCommandButton
+            id="__ActivateOrg_Button"
+            iconProps={{ iconName: 'HomeVerify' }}
+            text="Activate"
+            onClick={() => deactivateDialog()}
+          />
+        )}
       </Column>
     </PanelHeader>
   );
@@ -393,20 +540,7 @@ export const OrgPanel = ({
           )}
         </PanelBody>
       </ThemedPanel>
-      <DialogYesNo
-        id="__OrgUnsavedChanges_Dlg"
-        open={showDialog}
-        highlightNo
-        title="You have unsaved changes"
-        message="You are about lose all changes made to this Organization. Are you sure you want to continue?"
-        onYes={() => {
-          setShowDialog(false);
-          doClosePanel();
-        }}
-        onClose={() => {
-          setShowDialog(false);
-        }}
-      />
+      <DialogYesNo {...dialogProps} open={showDialog} />
     </>
   );
 };
