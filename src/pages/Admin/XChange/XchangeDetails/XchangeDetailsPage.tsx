@@ -83,11 +83,13 @@ const XchangeDetailsPage = () => {
   const [fileProcesses, setFileProcesses] = useState<XchangeFileProcessForm[]>();
   const [fileProcess, setFileProcess] = useState<XchangeFileProcessForm>();
   const [dataDiagram, setDataDiagram] = useState<XchangeDiagram>();
-  const [allowedCommands, setAllowedCommands] = useState(false);
   const [refreshXchangeDetails, setRefreshXchangeDetails] = useState(false);
   const [comments, setComments] = useState('');
   const [commands, setCommands] = useState<WebCommand[] | null>([]);
   const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
+  const [createAlertCmd, setCreateAlertCmd] = useState<WebCommand | null>();
+  const [updateScheduleCmd, setUpdateScheduleCmd] = useState<WebCommand | null>();
+  const [createFileCmd, setCreateFileCmd] = useState<WebCommand | null>();
   const [openUpdateComments, setOpenUpdateComments] = useState(false);
   const [closeTooltipHost, setCloseTooltipHost] = useState(true);
   const [sid, setSid] = useState('');
@@ -308,7 +310,7 @@ const XchangeDetailsPage = () => {
                 </Column>
               </Row>
             )}
-            {allowedCommands && (
+            {createAlertCmd && (
             <ButtonAction
               id="__Add_Alert"
               iconName="add"
@@ -330,13 +332,15 @@ const XchangeDetailsPage = () => {
                       <FontIcon iconName="CalendarAgenda" style={{ fontSize: '10px', fontWeight: 500, paddingRight: '8px' }} />
                       Schedule
                     </Text>
-                    <IconButton
-                      iconProps={{ iconName: 'EditSolid12' }}
-                      style={{ fontSize: '0.675rem' }}
-                      onClick={() => {
-                        setOpenSchedulePanel(true);
-                      }}
-                    />
+                    {updateScheduleCmd && (
+                      <IconButton
+                        iconProps={{ iconName: 'EditSolid12' }}
+                        style={{ fontSize: '0.675rem' }}
+                        onClick={() => {
+                          setOpenSchedulePanel(true);
+                        }}
+                      />
+                    )}
                   </Stack>
                 </Row>
                 {schedule?.scheduleType === 'NOT_SCHEDULED' ? (
@@ -348,6 +352,7 @@ const XchangeDetailsPage = () => {
                 ) : (
                   <>
                     <Row>
+                      {!updateScheduleCmd && <Spacing margin={{ top: 'normal' }} />}
                       <Stack horizontal={true} horizontalAlign="space-between">
                         <FontIcon
                           iconName="ReminderTime"
@@ -462,8 +467,18 @@ const XchangeDetailsPage = () => {
       }
 
       if (xchangeConfig.commands) {
-        setAllowedCommands(true);
         setCommands(xchangeConfig.commands);
+
+        const pageCommands = xchangeConfig?.commands;
+        const _createAlertCmd = pageCommands
+          ?.find((cmd) => cmd.commandType === CdxWebCommandType.Add);
+        setCreateAlertCmd(_createAlertCmd);
+        const _updateScheduleCmd = pageCommands
+          ?.find((cmd) => cmd.commandType === CdxWebCommandType.Update && cmd.endPoint === 'updateXchangeSchedule');
+        setUpdateScheduleCmd(_updateScheduleCmd);
+        const _createFileCmd = pageCommands
+          ?.find((cmd) => cmd.endPoint === 'createXchangeFileTransmission');
+        setCreateFileCmd(_createFileCmd);
       }
 
       if (xchangeConfig.schedule) {
@@ -544,7 +559,6 @@ const XchangeDetailsPage = () => {
           data={dataDiagram}
           refreshDetailsPage={setRefreshXchangeDetails}
           xchangeFileProcessSid={xchangeFileProcessSid ?? ''}
-          allowedCommands={allowedCommands}
           commands={commands}
         />
       );
@@ -671,7 +685,14 @@ const XchangeDetailsPage = () => {
                   <StyledProcessValueText variant="large">
                     {process.vendor.value?.name}-{process.specId.value}
                   </StyledProcessValueText>
-                  <StyledButtonAction fontSize={24} id="__Add_FileProcess" iconName="add" title="Add File Process" />
+                  <StyledButtonAction
+                    fontSize={100}
+                    id="__Add_FileProcess"
+                    iconName="add"
+                    title={createFileCmd?.label ?? ''}
+                    disableIcon={!!createFileCmd}
+                    disabled={!createFileCmd}
+                  />
                 </StyledColumTabs>
               ))}
           </Row>

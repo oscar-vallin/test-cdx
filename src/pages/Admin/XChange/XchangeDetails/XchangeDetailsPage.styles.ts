@@ -103,10 +103,14 @@ type StyledQualifierProps = {
 
 export const StyledButtonAction = styled(ButtonAction)<StyledButtonActionProps>`
   font-size: ${({ fontSize }) => fontSize};
+  .ms-Icon {
+    color: ${({ theme, disableIcon }) => (!disableIcon && theme.colors.white)}
+  }
 `;
 
 type StyledButtonActionProps = {
   fontSize: number;
+  disableIcon?: boolean;
 };
 
 export const StyledProcessValueText = styled(Text)`

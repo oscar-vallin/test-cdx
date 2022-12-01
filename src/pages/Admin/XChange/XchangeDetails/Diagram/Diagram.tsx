@@ -3,7 +3,7 @@ import ReactFlow, {
   useNodesState, useEdgesState, addEdge, Connection, Edge,
 } from 'react-flow-renderer';
 import { Column, Container, Row } from 'src/components/layouts';
-import { WebCommand, XchangeDiagram } from 'src/data/services/graphql';
+import { CdxWebCommandType, WebCommand, XchangeDiagram } from 'src/data/services/graphql';
 import {
   StyledContainer, StyledHorizontalButtons, StyledText, StyledButtonAction,
 } from '../XchangeDetailsPage.styles';
@@ -25,11 +25,10 @@ type DiagramProps = {
   refreshDetailsPage: (data: boolean) => void;
   xchangeFileProcessSid?: string;
   commands: WebCommand[] | null;
-  allowedCommands: boolean;
 };
 
 const Diagram = ({
-  data, refreshDetailsPage, xchangeFileProcessSid, allowedCommands, commands,
+  data, refreshDetailsPage, xchangeFileProcessSid, commands,
 }: DiagramProps) => {
   const { initialNodes, largestCoordinate } = InitialNodes(data);
   const { nodeWithParents } = NodeParent(initialNodes, data.stepGroups);
@@ -42,6 +41,8 @@ const Diagram = ({
   const [stepCommands, setStepCommands] = useState<WebCommand[] | undefined>([]);
   const [totalHeight, setTotalHeight] = useState(0);
   const [transmissionCommands, setTransmissionCommands] = useState<WebCommand[] | undefined>([]);
+  const [createStepCmd, setCreateStepCmd] = useState<WebCommand | null>();
+  const [createTransmissionCmd, setCreateTransmissionCmd] = useState<WebCommand | null>();
   const [optionXchangeStep, setOptionXchangeStep] = useState<string>();
   const [optionXchangeFileTransmission, setOptionXchangeFileTransmission] = useState<string>();
   const [showIcons, setShowIcons] = useState(false);
@@ -134,13 +135,21 @@ const Diagram = ({
       const step = cmd.endPoint?.slice(-4);
       const transmission = cmd.endPoint?.slice(-12);
 
+      if (cmd.commandType === CdxWebCommandType.Add && cmd.endPoint === 'createXchangeStep') {
+        setCreateStepCmd(cmd);
+      }
+
+      if (cmd.commandType === CdxWebCommandType.Add && cmd.endPoint === 'createXchangeFileTransmission') {
+        setCreateTransmissionCmd(cmd);
+      }
+
       if (step === 'Step') {
         setStepCommands((prevState) => prevState?.concat(cmd));
       }
       if (transmission === 'Transmission') {
         setTransmissionCommands((prevState) => prevState?.concat(cmd))
       }
-    })
+    });
   };
 
   useEffect(() => {
@@ -165,7 +174,7 @@ const Diagram = ({
             <StyledButtonAction
               fontSize={24}
               id="__Add_XchangeSteps"
-              disabled={!allowedCommands}
+              disabled={!createStepCmd}
               title="Add Step"
               onClick={() => {
                 setOpenStepPanel(true);
@@ -173,13 +182,13 @@ const Diagram = ({
               }}
             >
               <StyledText>
-                Xchange Steps {allowedCommands && <span style={{ color: '#0078D4', fontSize: '22px' }}>+</span>}
+                Xchange Steps {createStepCmd && <span style={{ color: '#0078D4', fontSize: '22px' }}>+</span>}
               </StyledText>
             </StyledButtonAction>
             <StyledButtonAction
               fontSize={24}
               id="__Add_FileTransmission"
-              disabled={!allowedCommands}
+              disabled={!createTransmissionCmd}
               title="Add File Transmission"
               onClick={() => {
                 setOpenFilePanel(true);
@@ -187,7 +196,7 @@ const Diagram = ({
               }}
             >
               <StyledText>
-                File Transmissions {allowedCommands && <span style={{ color: '#0078D4', fontSize: '22px' }}>+</span>}
+                File Transmissions {createTransmissionCmd && <span style={{ color: '#0078D4', fontSize: '22px' }}>+</span>}
               </StyledText>
             </StyledButtonAction>
           </StyledHorizontalButtons>
