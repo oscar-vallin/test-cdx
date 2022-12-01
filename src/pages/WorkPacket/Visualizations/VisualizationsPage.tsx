@@ -65,14 +65,13 @@ const styles = {
 };
 
 const VisualizationsPage = () => {
+  const monthInCurrent = 0;
   const ThemeStore = useThemeStore();
   const { orgSid } = useOrgSid();
   const [series, setSeries] = useState<WpTransmissionSummary[]>([]);
   const [barChartSeries, setBarChartSeries] = useState<any[]>([]);
   const [typeOfTransmissions, setTypeOfTransmissions] = useState<string | undefined>('sponsor');
   const [graphicType, setGraphicType] = useState<string | undefined>('linechart');
-  const [months, setMonths] = useState<string[]>([]);
-  const [monthInCurrent, setMonthInCurrent] = useState(0);
   const [countMonth, setCountMonth] = useState(new Array(...INITIAL_COUNT_TOTAL));
   const [countTotal, setCountTotal] = useState(new Array(...INITIAL_COUNT_TOTAL));
   const [orgsSelected, setOrgsSelected]: any = useState({});
@@ -157,17 +156,17 @@ const VisualizationsPage = () => {
     const m: string[] = [];
     let i = CURRENT_MONTH + 1;
     while (m.length < 11) {
-      m.push(shortMonths[i]);
-      if (i === 11) {
+      if (i > 11) {
         i = 0;
-        m.push(shortMonths[i]);
       }
+      m.push(shortMonths[i]);
       i++;
     }
     m.push(shortMonths[CURRENT_MONTH]);
-    setMonths(m);
     return m;
   };
+
+  const months = monthList();
 
   const setLineChartData = (data: WpTransmissionSummary[]) => {
     setSeries([]);
@@ -184,13 +183,13 @@ const VisualizationsPage = () => {
   };
 
   const setBarChartData = (data: WpTransmissionSummary[]) => {
-    const orderedMonth = monthList();
+    const orderedMonths = months;
     setBarChartSeries([]);
     const chartData: any[] = [];
     let _data = {};
-    for (let month = 0; month < orderedMonth.length; month++) {
+    for (let month = 0; month < orderedMonths.length; month++) {
       _data = {};
-      _data['month'] = orderedMonth[month];
+      _data['month'] = orderedMonths[month];
       chartData.push(_data);
     }
 
@@ -297,7 +296,6 @@ const VisualizationsPage = () => {
           sumTotalTransmissions(organization?.monthCounts);
         });
       }
-      monthList();
     }
   }, [transmissionSponsorData, isLoadingTransmissionSponsor]);
 
@@ -311,7 +309,6 @@ const VisualizationsPage = () => {
           sumTotalTransmissions(organization?.monthCounts);
         });
       }
-      monthList();
     }
   }, [transmissionVendorData, isLoadingTransmissionVendor]);
 
