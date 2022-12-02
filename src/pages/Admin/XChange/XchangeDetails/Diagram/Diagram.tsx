@@ -51,7 +51,7 @@ const Diagram = ({
 
   const updateStep = (event, node) => {
     setNodes((nds) => nds.map((n) => {
-      if (node.type === 'dataNodeTransmissions' && n.data.sid && n.data.sid === node.data.sid) {
+      if (n.data.sid && n.data.transIndex === node.data.transIndex && node.type === 'dataNodeTransmissions') {
         n.data = {
           ...node.data,
           hoverOverShowIcons: false,
@@ -61,7 +61,7 @@ const Diagram = ({
           stepCommands,
         };
       }
-      if (n.data.sid && n.data.index === node.data.index && node.type === 'dataNodeSteps') {
+      if (n.data.sid && n.data.stepIndex === node.data.stepIndex && node.type === 'dataNodeSteps') {
         n.data = {
           ...node.data,
           qualifier: node.data.qualifier,
@@ -78,7 +78,7 @@ const Diagram = ({
 
   const hideIcons = (event, node) => {
     setNodes((nds) => nds.map((n) => {
-      if (node.type === 'dataNodeTransmissions' && n.data.sid && n.data.sid === node.data.sid) {
+      if (n.data.sid && n.data.transIndex === node.data.transIndex && node.type === 'dataNodeTransmissions') {
         n.data = {
           ...node.data,
           hoverOverShowIcons: false,
@@ -88,7 +88,7 @@ const Diagram = ({
           transmissionCommands,
         };
       }
-      if (n.data.sid && n.data.index === node.data.index && node.type === 'dataNodeSteps') {
+      if (n.data.sid && n.data.stepIndex === node.data.stepIndex && node.type === 'dataNodeSteps') {
         n.data = {
           ...node.data,
           qualifier: node.data.qualifier,
@@ -105,7 +105,7 @@ const Diagram = ({
 
   const handleIcons = (event, node) => {
     setNodes((nds) => nds.map((n) => {
-      if (node.type === 'dataNodeTransmissions' && n.data.sid && n.data.sid === node.data.sid) {
+      if (n.data.sid && n.data.transIndex === node.data.transIndex && node.type === 'dataNodeTransmissions') {
         n.data = {
           ...node.data,
           hoverOverShowIcons: true,
@@ -115,7 +115,7 @@ const Diagram = ({
           transmissionCommands,
         };
       }
-      if (n.data.sid && n.data.index === node.data.index && node.type === 'dataNodeSteps') {
+      if (n.data.sid && n.data.stepIndex === node.data.stepIndex && node.type === 'dataNodeSteps') {
         n.data = {
           ...node.data,
           qualifier: node.data.qualifier,
@@ -216,7 +216,7 @@ const Diagram = ({
               zoomOnDoubleClick={false}
               nodesDraggable={false}
               nodesConnectable={false}
-              panOnDrag={true}
+              panOnDrag={false}
               onNodesChange={onNodesChange}
               onEdgesChange={onEdgesChange}
               onConnect={onConnect}

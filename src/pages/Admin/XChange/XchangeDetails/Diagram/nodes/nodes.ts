@@ -3,9 +3,9 @@ import { XchangeDiagram, XchangeDiagramFileTransmission, XchangeDiagramStep } fr
 export function InitialNodes(data: XchangeDiagram) {
   const xchangeSteps = data.steps ? data.steps : [];
   const xhcnageTransmissions = data.transmissions ? data.transmissions : [];
-  const initialSteps = xchangeSteps.map((step: XchangeDiagramStep, index: number) => {
+  const initialSteps = xchangeSteps.map((step: XchangeDiagramStep, stepIndex: number) => {
     const values = {};
-    const lastNode = index === xchangeSteps.length - 1;
+    const lastNode = stepIndex === xchangeSteps.length - 1;
     let positionX = step.position.x * 300;
     if (step.position.x === 0) {
       positionX = 10;
@@ -18,7 +18,7 @@ export function InitialNodes(data: XchangeDiagram) {
     values['id'] = step.key;
     values['type'] = 'dataNodeSteps';
     values['data'] = {
-      index,
+      stepIndex,
       lastNode,
       sid: step.sid,
       label: step.title,
@@ -40,7 +40,7 @@ export function InitialNodes(data: XchangeDiagram) {
   });
   let largestCoordinate = 0;
   const initialTransmissions = xhcnageTransmissions
-    .map((transmission:XchangeDiagramFileTransmission, index: number) => {
+    .map((transmission:XchangeDiagramFileTransmission, transIndex: number) => {
       const values = {};
       if (transmission.position.y > largestCoordinate) largestCoordinate = transmission.position.y;
       let positionX = transmission.position.x * 265;
@@ -48,10 +48,11 @@ export function InitialNodes(data: XchangeDiagram) {
         positionX = 10;
       }
       const positionY = (transmission.position.y + 0.2) * 120;
-      const lastTrans = xhcnageTransmissions.length - 1 === index;
+      const lastTrans = xhcnageTransmissions.length - 1 === transIndex;
       values['id'] = transmission.key;
       values['type'] = 'dataNodeTransmissions';
       values['data'] = {
+        transIndex,
         lastTrans,
         sid: transmission.sid,
         hoverOverShowIcons: false,

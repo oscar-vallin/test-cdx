@@ -42,7 +42,7 @@ const defaultDialogProps: DialogYesNoProps = {
 };
 
 type DataProps = {
-  index: number;
+  stepIndex: number;
   lastNode: boolean;
   sid?: string;
   label?: string;
@@ -67,7 +67,7 @@ type DataNodeProps = {
 
 const DataNodeSteps = ({ data, id }: DataNodeProps) => {
   const {
-    index,
+    stepIndex,
     lastNode,
     sid,
     label,
@@ -139,7 +139,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
   const hanldeSourcePosition = () => {
     if (
       trans
-      || index === 0
+      || stepIndex === 0
       || data.position.x === 1
       || ((sourceBottom === '1' || sourceBottom === '0') && data.label === 'Semantic Map')
     ) {
@@ -162,7 +162,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
         />
       );
     }
-    if (index > 0) {
+    if (stepIndex > 0) {
       return (
         <Handle
           type="source"
@@ -253,15 +253,15 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
           </div>
           <div style={{ position: 'absolute', left: 251, bottom: 30 }}>
             {updateMoveUpCmd && (
-              <TooltipHost content={index > 0 ? 'Move up' : ''}>
+              <TooltipHost content={stepIndex > 0 ? 'Move up' : ''}>
                 <StyledChevronUpIcon
-                  aria-disabled={index === 0}
+                  aria-disabled={stepIndex === 0}
                   iconName="ChevronUp"
-                  firstIndex={index === 0}
+                  firstIndex={stepIndex === 0}
                   onClick={() => {
                     setOpenPanel(false);
                     setHiddeIcon(true);
-                    if (index > 0) {
+                    if (stepIndex > 0) {
                       moveUpXchangeStep({
                         variables: {
                           xchangeFileProcessSid,
