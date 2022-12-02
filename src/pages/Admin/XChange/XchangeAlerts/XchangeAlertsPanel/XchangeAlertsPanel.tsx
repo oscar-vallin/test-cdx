@@ -260,6 +260,7 @@ const XchangeAlertsPanel = ({
   useEffect(() => {
     if (!alertProfileFormLoading && alertProfileFormData) {
       const { xchangeProfileAlertForm } = alertProfileFormData;
+      setUnsavedChanges(false);
       setXchangeProfileAlert(xchangeProfileAlertForm);
       if (xchangeProfileAlertForm?.alertTypes.value
         && xchangeProfileAlertForm?.alertTypes.value.length > 0) {
@@ -293,6 +294,7 @@ const XchangeAlertsPanel = ({
   useEffect(() => {
     if (!alertConfigFormLoading && alertConfigFormData) {
       const { xchangeConfigAlertForm } = alertConfigFormData;
+      setUnsavedChanges(false);
       setXchangeConfigAlert(xchangeConfigAlertForm);
       if (xchangeConfigAlertForm?.alertTypes.value
         && xchangeConfigAlertForm?.alertTypes.value.length > 0) {
@@ -345,6 +347,7 @@ const XchangeAlertsPanel = ({
   useEffect(() => {
     if (!updateProfileLoading && updateProfiledata) {
       refreshPage(true);
+      setTotalSubscribers([]);
       Toast.success({ text: 'Alert updated' });
       closePanel(false);
     }
@@ -357,6 +360,7 @@ const XchangeAlertsPanel = ({
   useEffect(() => {
     if (!createProfileLoading && createProfileData) {
       refreshPage(true);
+      setTotalSubscribers([]);
       Toast.success({ text: 'Alert Added' });
       closePanel(false);
     }
@@ -369,6 +373,7 @@ const XchangeAlertsPanel = ({
   useEffect(() => {
     if (!createConfigloading && createConfigData) {
       refreshPage(true);
+      setTotalSubscribers([]);
       Toast.success({ text: 'Alert Added' });
       closePanel(false);
     }
@@ -381,6 +386,7 @@ const XchangeAlertsPanel = ({
   useEffect(() => {
     if (!updateConfigLoading && updateConfigData) {
       refreshPage(true);
+      setTotalSubscribers([]);
       Toast.success({ text: 'Alert updated' });
       closePanel(false);
     }
