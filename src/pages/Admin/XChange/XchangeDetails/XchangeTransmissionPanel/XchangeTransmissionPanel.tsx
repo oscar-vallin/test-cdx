@@ -26,6 +26,7 @@ import {
   CdxWebCommandType,
   WebCommand,
   UiField,
+  UiSelectManyField,
   GqOperationResponse,
 } from 'src/data/services/graphql';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
@@ -112,6 +113,7 @@ const XchangeTransmissionPanel = ({
   const [createFileTransmission, setCreateFileTransmission] = useState(false);
   const [authKeyPassphrase, setAuthKeyPassphrase] = useState('');
   const [filenameQualifiers, setFilenameQualifiers] = useState<string[]>();
+  const [filenameQualifieruiField, setFilenameQualifieruiField] = useState<UiSelectManyField>()
   const [customFileQualifier, setCustomFileQualifier] = useState('');
   const [customQualifier, setCustomQualifier] = useState<boolean>();
   const [protocol, setProtocol] = useState('');
@@ -781,7 +783,7 @@ const XchangeTransmissionPanel = ({
                 <UIInputMultiSelect
                   id="__filenameQualifier"
                   value={filenameQualifiers ?? []}
-                  uiField={xchangeFileTransmission?.filenameQualifiers}
+                  uiField={filenameQualifieruiField}
                   options={xchangeFileTransmission?.options ?? []}
                   onChange={(newValue) => {
                     setFilenameQualifiers(newValue ?? []);
@@ -967,19 +969,24 @@ const XchangeTransmissionPanel = ({
 
   useEffect(() => {
     if (!loadingCopyTransmission && dataCopyTransmission) {
+      const { copyXchangeFileTransmission } = dataCopyTransmission
       setOptionXchangeTransmission('copy');
-      setXchangeFileTransmission(dataCopyTransmission?.copyXchangeFileTransmission);
+      setXchangeFileTransmission(copyXchangeFileTransmission);
+      const filename = { ...copyXchangeFileTransmission?.filenameQualifiers };
+      filename.label = 'Enviroment';
+      filename.info = null;
+      setFilenameQualifieruiField(filename);
       if (
-        dataCopyTransmission.copyXchangeFileTransmission?.filenameQualifiers.value
-        && dataCopyTransmission.copyXchangeFileTransmission?.filenameQualifiers.value.length > 0
+        copyXchangeFileTransmission?.filenameQualifiers.value
+        && copyXchangeFileTransmission?.filenameQualifiers.value.length > 0
       ) {
         setFilenameQualifiers(
-          dataCopyTransmission.copyXchangeFileTransmission.filenameQualifiers.value
+          copyXchangeFileTransmission.filenameQualifiers.value
             .map((file) => file.value) ?? [],
         );
       }
-      if (dataCopyTransmission.copyXchangeFileTransmission?.commands) {
-        const pageCommands = dataCopyTransmission.copyXchangeFileTransmission?.commands;
+      if (copyXchangeFileTransmission?.commands) {
+        const pageCommands = copyXchangeFileTransmission?.commands;
         const _copyCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
         setCopyCmd(_copyCmd);
         setUpdateCmd(null);
@@ -998,6 +1005,13 @@ const XchangeTransmissionPanel = ({
   useEffect(() => {
     if (!loadingFileTransmissionForm && dataFileTransmissionForm) {
       setXchangeFileTransmission(dataFileTransmissionForm.xchangeFileTransmissionForm);
+
+      const filename = {
+        ...dataFileTransmissionForm.xchangeFileTransmissionForm?.filenameQualifiers,
+      };
+      filename.label = 'Enviroment';
+      filename.info = null;
+      setFilenameQualifieruiField(filename);
       if (
         dataFileTransmissionForm.xchangeFileTransmissionForm?.filenameQualifiers.value
         && dataFileTransmissionForm.xchangeFileTransmissionForm?.filenameQualifiers.value.length > 0
