@@ -426,6 +426,15 @@ export type CreateDefaultDashThemeInput = {
   themeColorSid?: Maybe<Scalars['ID']>;
 };
 
+export type CreateIdentityProviderInput = {
+  orgSid: Scalars['ID'];
+  idpId?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  type?: Maybe<IdpType>;
+  samlMetaData?: Maybe<Scalars['String']>;
+  isDefault?: Maybe<Scalars['Boolean']>;
+};
+
 export type CreateOrgInput = {
   orgId: Scalars['String'];
   name: Scalars['String'];
@@ -774,6 +783,45 @@ export type GrantExternalUserInput = {
   accessPolicyGroupSids?: Maybe<Array<Scalars['ID']>>;
 };
 
+export type IdentityProvider = {
+  __typename?: 'IdentityProvider';
+  sid: Scalars['ID'];
+  idpId: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  type?: Maybe<IdpType>;
+  members?: Maybe<Scalars['Int']>;
+  commands?: Maybe<Array<WebCommand>>;
+};
+
+export type IdentityProviderConnection = {
+  __typename?: 'IdentityProviderConnection';
+  paginationInfo: PaginationInfo;
+  nodes?: Maybe<Array<IdentityProvider>>;
+  listPageInfo?: Maybe<ListPageInfo>;
+};
+
+export type IdentityProviderForm = {
+  __typename?: 'IdentityProviderForm';
+  sid?: Maybe<Scalars['ID']>;
+  idpId: UiStringField;
+  name: UiStringField;
+  type: UiSelectOneField;
+  samlMetaData: UiStringField;
+  priorMetaData?: Maybe<Array<IdentityProviderMetaDataLink>>;
+  isDefault: UiBooleanField;
+};
+
+export type IdentityProviderMetaDataLink = {
+  __typename?: 'IdentityProviderMetaDataLink';
+  sid: Scalars['ID'];
+  creationDateTime: Scalars['DateTime'];
+};
+
+export enum IdpType {
+  Saml2 = 'SAML2',
+  Oidc = 'OIDC'
+}
+
 export type ImplementationDeployResponse = {
   __typename?: 'ImplementationDeployResponse';
   response: GqOperationResponse;
@@ -901,6 +949,11 @@ export type Mutation = {
   deactivateOrg?: Maybe<GqOperationResponse>;
   activateOrg?: Maybe<GqOperationResponse>;
   updateOrgSecurity?: Maybe<OrgSecurityForm>;
+  disablePasswordLogin: GenericResponse;
+  enablePasswordLogin: GenericResponse;
+  createIdentityProvider: IdentityProviderForm;
+  updateIdentityProvider: IdentityProviderForm;
+  deleteIdentityProvider: GenericResponse;
   createAccessPolicy?: Maybe<AccessPolicyForm>;
   updateAccessPolicy?: Maybe<AccessPolicyForm>;
   deleteAccessPolicies?: Maybe<GqOperationResponse>;
@@ -1035,6 +1088,31 @@ export type MutationActivateOrgArgs = {
 
 export type MutationUpdateOrgSecurityArgs = {
   orgSecurityInfo: UpdateOrgSecurityInput;
+};
+
+
+export type MutationDisablePasswordLoginArgs = {
+  orgSid: Scalars['ID'];
+};
+
+
+export type MutationEnablePasswordLoginArgs = {
+  orgSid: Scalars['ID'];
+};
+
+
+export type MutationCreateIdentityProviderArgs = {
+  idpInput: CreateIdentityProviderInput;
+};
+
+
+export type MutationUpdateIdentityProviderArgs = {
+  idpInput: UpdateIdentityProviderInput;
+};
+
+
+export type MutationDeleteIdentityProviderArgs = {
+  sid: Scalars['ID'];
 };
 
 
@@ -1931,6 +2009,8 @@ export type Query = {
   orgSecurityForm?: Maybe<OrgSecurityForm>;
   /** Get a listing of external organizations the current user has been granted access to */
   externalOrgs?: Maybe<OrganizationConnection>;
+  identityProvidersForOrg: IdentityProviderConnection;
+  identityProviderForm: IdentityProviderForm;
   dashThemeColorForOrg?: Maybe<DashThemeColorConnection>;
   dashSiteForOrg?: Maybe<DashSite>;
   dashThemeColor?: Maybe<DashThemeColor>;
@@ -2287,6 +2367,17 @@ export type QueryOrgSecurityFormArgs = {
 
 export type QueryExternalOrgsArgs = {
   pageableInput?: Maybe<PageableInput>;
+};
+
+
+export type QueryIdentityProvidersForOrgArgs = {
+  orgSid: Scalars['ID'];
+};
+
+
+export type QueryIdentityProviderFormArgs = {
+  orgSid: Scalars['ID'];
+  sid?: Maybe<Scalars['ID']>;
 };
 
 
@@ -3032,6 +3123,17 @@ export type UpdateDefaultDashThemeInput = {
   themeFontSize?: Maybe<ThemeFontSize>;
   themeColorMode?: Maybe<ThemeColorMode>;
   themeColorSid?: Maybe<Scalars['ID']>;
+};
+
+export type UpdateIdentityProviderInput = {
+  sid: Scalars['ID'];
+  idpId?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  type?: Maybe<IdpType>;
+  samlMetaData?: Maybe<Scalars['String']>;
+  isDefault?: Maybe<Scalars['Boolean']>;
+  /** Array of prior meta data sids to remove */
+  removePriorMetaDataSids?: Maybe<Array<Scalars['ID']>>;
 };
 
 export type UpdateMyProfileInput = {
@@ -6099,6 +6201,65 @@ export type ExternalOrgsQuery = (
   )> }
 );
 
+export type IdentityProvidersForOrgQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+}>;
+
+
+export type IdentityProvidersForOrgQuery = (
+  { __typename?: 'Query' }
+  & { identityProvidersForOrg: (
+    { __typename?: 'IdentityProviderConnection' }
+    & { paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), nodes?: Maybe<Array<(
+      { __typename?: 'IdentityProvider' }
+      & Pick<IdentityProvider, 'sid' | 'idpId' | 'name' | 'type' | 'members'>
+      & { commands?: Maybe<Array<(
+        { __typename?: 'WebCommand' }
+        & FragmentWebCommandFragment
+      )>> }
+    )>>, listPageInfo?: Maybe<(
+      { __typename?: 'ListPageInfo' }
+      & FragmentListPageInfoFragment
+    )> }
+  ) }
+);
+
+export type IdentityProviderFormQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+  sid?: Maybe<Scalars['ID']>;
+}>;
+
+
+export type IdentityProviderFormQuery = (
+  { __typename?: 'Query' }
+  & { identityProviderForm: (
+    { __typename?: 'IdentityProviderForm' }
+    & Pick<IdentityProviderForm, 'sid'>
+    & { idpId: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), name: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), type: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), samlMetaData: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), priorMetaData?: Maybe<Array<(
+      { __typename?: 'IdentityProviderMetaDataLink' }
+      & Pick<IdentityProviderMetaDataLink, 'sid' | 'creationDateTime'>
+    )>>, isDefault: (
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    ) }
+  ) }
+);
+
 export type DashThemeColorForOrgQueryVariables = Exact<{
   ownedInput?: Maybe<OwnedInput>;
   pageableInput?: Maybe<PageableInput>;
@@ -7620,6 +7781,142 @@ export type UpdateOrgSecurityMutation = (
       & FragmentWebCommandFragment
     )>> }
   )> }
+);
+
+export type DisablePasswordLoginMutationVariables = Exact<{
+  orgSid: Scalars['ID'];
+}>;
+
+
+export type DisablePasswordLoginMutation = (
+  { __typename?: 'Mutation' }
+  & { disablePasswordLogin: (
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
+  ) }
+);
+
+export type EnablePasswordLoginMutationVariables = Exact<{
+  orgSid: Scalars['ID'];
+}>;
+
+
+export type EnablePasswordLoginMutation = (
+  { __typename?: 'Mutation' }
+  & { enablePasswordLogin: (
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
+  ) }
+);
+
+export type CreateIdentityProviderMutationVariables = Exact<{
+  idpInput: CreateIdentityProviderInput;
+}>;
+
+
+export type CreateIdentityProviderMutation = (
+  { __typename?: 'Mutation' }
+  & { createIdentityProvider: (
+    { __typename?: 'IdentityProviderForm' }
+    & Pick<IdentityProviderForm, 'sid'>
+    & { idpId: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), name: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), type: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), samlMetaData: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), priorMetaData?: Maybe<Array<(
+      { __typename?: 'IdentityProviderMetaDataLink' }
+      & Pick<IdentityProviderMetaDataLink, 'sid' | 'creationDateTime'>
+    )>>, isDefault: (
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    ) }
+  ) }
+);
+
+export type UpdateIdentityProviderMutationVariables = Exact<{
+  idpInput: UpdateIdentityProviderInput;
+}>;
+
+
+export type UpdateIdentityProviderMutation = (
+  { __typename?: 'Mutation' }
+  & { updateIdentityProvider: (
+    { __typename?: 'IdentityProviderForm' }
+    & Pick<IdentityProviderForm, 'sid'>
+    & { idpId: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), name: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), type: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), samlMetaData: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), priorMetaData?: Maybe<Array<(
+      { __typename?: 'IdentityProviderMetaDataLink' }
+      & Pick<IdentityProviderMetaDataLink, 'sid' | 'creationDateTime'>
+    )>>, isDefault: (
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    ) }
+  ) }
+);
+
+export type DeleteIdentityProviderMutationVariables = Exact<{
+  sid: Scalars['ID'];
+}>;
+
+
+export type DeleteIdentityProviderMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteIdentityProvider: (
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
+  ) }
 );
 
 export type CreateAccessPolicyMutationVariables = Exact<{
@@ -13913,6 +14210,111 @@ export function useExternalOrgsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type ExternalOrgsQueryHookResult = ReturnType<typeof useExternalOrgsQuery>;
 export type ExternalOrgsLazyQueryHookResult = ReturnType<typeof useExternalOrgsLazyQuery>;
 export type ExternalOrgsQueryResult = Apollo.QueryResult<ExternalOrgsQuery, ExternalOrgsQueryVariables>;
+export const IdentityProvidersForOrgDocument = gql`
+    query IdentityProvidersForOrg($orgSid: ID!) {
+  identityProvidersForOrg(orgSid: $orgSid) {
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    nodes {
+      sid
+      idpId
+      name
+      type
+      members
+      commands {
+        ...fragmentWebCommand
+      }
+    }
+    listPageInfo {
+      ...fragmentListPageInfo
+    }
+  }
+}
+    ${FragmentPaginationInfoFragmentDoc}
+${FragmentWebCommandFragmentDoc}
+${FragmentListPageInfoFragmentDoc}`;
+
+/**
+ * __useIdentityProvidersForOrgQuery__
+ *
+ * To run a query within a React component, call `useIdentityProvidersForOrgQuery` and pass it any options that fit your needs.
+ * When your component renders, `useIdentityProvidersForOrgQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useIdentityProvidersForOrgQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *   },
+ * });
+ */
+export function useIdentityProvidersForOrgQuery(baseOptions: Apollo.QueryHookOptions<IdentityProvidersForOrgQuery, IdentityProvidersForOrgQueryVariables>) {
+        return Apollo.useQuery<IdentityProvidersForOrgQuery, IdentityProvidersForOrgQueryVariables>(IdentityProvidersForOrgDocument, baseOptions);
+      }
+export function useIdentityProvidersForOrgLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IdentityProvidersForOrgQuery, IdentityProvidersForOrgQueryVariables>) {
+          return Apollo.useLazyQuery<IdentityProvidersForOrgQuery, IdentityProvidersForOrgQueryVariables>(IdentityProvidersForOrgDocument, baseOptions);
+        }
+export type IdentityProvidersForOrgQueryHookResult = ReturnType<typeof useIdentityProvidersForOrgQuery>;
+export type IdentityProvidersForOrgLazyQueryHookResult = ReturnType<typeof useIdentityProvidersForOrgLazyQuery>;
+export type IdentityProvidersForOrgQueryResult = Apollo.QueryResult<IdentityProvidersForOrgQuery, IdentityProvidersForOrgQueryVariables>;
+export const IdentityProviderFormDocument = gql`
+    query IdentityProviderForm($orgSid: ID!, $sid: ID) {
+  identityProviderForm(orgSid: $orgSid, sid: $sid) {
+    sid
+    idpId {
+      ...fragmentUIStringField
+    }
+    name {
+      ...fragmentUIStringField
+    }
+    type {
+      ...fragmentUISelectOneField
+    }
+    samlMetaData {
+      ...fragmentUIStringField
+    }
+    priorMetaData {
+      sid
+      creationDateTime
+    }
+    isDefault {
+      ...fragmentUIBooleanField
+    }
+  }
+}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}`;
+
+/**
+ * __useIdentityProviderFormQuery__
+ *
+ * To run a query within a React component, call `useIdentityProviderFormQuery` and pass it any options that fit your needs.
+ * When your component renders, `useIdentityProviderFormQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useIdentityProviderFormQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      sid: // value for 'sid'
+ *   },
+ * });
+ */
+export function useIdentityProviderFormQuery(baseOptions: Apollo.QueryHookOptions<IdentityProviderFormQuery, IdentityProviderFormQueryVariables>) {
+        return Apollo.useQuery<IdentityProviderFormQuery, IdentityProviderFormQueryVariables>(IdentityProviderFormDocument, baseOptions);
+      }
+export function useIdentityProviderFormLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IdentityProviderFormQuery, IdentityProviderFormQueryVariables>) {
+          return Apollo.useLazyQuery<IdentityProviderFormQuery, IdentityProviderFormQueryVariables>(IdentityProviderFormDocument, baseOptions);
+        }
+export type IdentityProviderFormQueryHookResult = ReturnType<typeof useIdentityProviderFormQuery>;
+export type IdentityProviderFormLazyQueryHookResult = ReturnType<typeof useIdentityProviderFormLazyQuery>;
+export type IdentityProviderFormQueryResult = Apollo.QueryResult<IdentityProviderFormQuery, IdentityProviderFormQueryVariables>;
 export const DashThemeColorForOrgDocument = gql`
     query DashThemeColorForOrg($ownedInput: OwnedInput, $pageableInput: PageableInput) {
   dashThemeColorForOrg(ownedInput: $ownedInput, pageableInput: $pageableInput) {
@@ -16797,6 +17199,244 @@ export function useUpdateOrgSecurityMutation(baseOptions?: Apollo.MutationHookOp
 export type UpdateOrgSecurityMutationHookResult = ReturnType<typeof useUpdateOrgSecurityMutation>;
 export type UpdateOrgSecurityMutationResult = Apollo.MutationResult<UpdateOrgSecurityMutation>;
 export type UpdateOrgSecurityMutationOptions = Apollo.BaseMutationOptions<UpdateOrgSecurityMutation, UpdateOrgSecurityMutationVariables>;
+export const DisablePasswordLoginDocument = gql`
+    mutation DisablePasswordLogin($orgSid: ID!) {
+  disablePasswordLogin(orgSid: $orgSid) {
+    response
+    errCode
+    errMsg
+    errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export type DisablePasswordLoginMutationFn = Apollo.MutationFunction<DisablePasswordLoginMutation, DisablePasswordLoginMutationVariables>;
+
+/**
+ * __useDisablePasswordLoginMutation__
+ *
+ * To run a mutation, you first call `useDisablePasswordLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDisablePasswordLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [disablePasswordLoginMutation, { data, loading, error }] = useDisablePasswordLoginMutation({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *   },
+ * });
+ */
+export function useDisablePasswordLoginMutation(baseOptions?: Apollo.MutationHookOptions<DisablePasswordLoginMutation, DisablePasswordLoginMutationVariables>) {
+        return Apollo.useMutation<DisablePasswordLoginMutation, DisablePasswordLoginMutationVariables>(DisablePasswordLoginDocument, baseOptions);
+      }
+export type DisablePasswordLoginMutationHookResult = ReturnType<typeof useDisablePasswordLoginMutation>;
+export type DisablePasswordLoginMutationResult = Apollo.MutationResult<DisablePasswordLoginMutation>;
+export type DisablePasswordLoginMutationOptions = Apollo.BaseMutationOptions<DisablePasswordLoginMutation, DisablePasswordLoginMutationVariables>;
+export const EnablePasswordLoginDocument = gql`
+    mutation EnablePasswordLogin($orgSid: ID!) {
+  enablePasswordLogin(orgSid: $orgSid) {
+    response
+    errCode
+    errMsg
+    errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export type EnablePasswordLoginMutationFn = Apollo.MutationFunction<EnablePasswordLoginMutation, EnablePasswordLoginMutationVariables>;
+
+/**
+ * __useEnablePasswordLoginMutation__
+ *
+ * To run a mutation, you first call `useEnablePasswordLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEnablePasswordLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [enablePasswordLoginMutation, { data, loading, error }] = useEnablePasswordLoginMutation({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *   },
+ * });
+ */
+export function useEnablePasswordLoginMutation(baseOptions?: Apollo.MutationHookOptions<EnablePasswordLoginMutation, EnablePasswordLoginMutationVariables>) {
+        return Apollo.useMutation<EnablePasswordLoginMutation, EnablePasswordLoginMutationVariables>(EnablePasswordLoginDocument, baseOptions);
+      }
+export type EnablePasswordLoginMutationHookResult = ReturnType<typeof useEnablePasswordLoginMutation>;
+export type EnablePasswordLoginMutationResult = Apollo.MutationResult<EnablePasswordLoginMutation>;
+export type EnablePasswordLoginMutationOptions = Apollo.BaseMutationOptions<EnablePasswordLoginMutation, EnablePasswordLoginMutationVariables>;
+export const CreateIdentityProviderDocument = gql`
+    mutation CreateIdentityProvider($idpInput: CreateIdentityProviderInput!) {
+  createIdentityProvider(idpInput: $idpInput) {
+    sid
+    idpId {
+      ...fragmentUIStringField
+    }
+    name {
+      ...fragmentUIStringField
+    }
+    type {
+      ...fragmentUISelectOneField
+    }
+    samlMetaData {
+      ...fragmentUIStringField
+    }
+    priorMetaData {
+      sid
+      creationDateTime
+    }
+    isDefault {
+      ...fragmentUIBooleanField
+    }
+  }
+}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}`;
+export type CreateIdentityProviderMutationFn = Apollo.MutationFunction<CreateIdentityProviderMutation, CreateIdentityProviderMutationVariables>;
+
+/**
+ * __useCreateIdentityProviderMutation__
+ *
+ * To run a mutation, you first call `useCreateIdentityProviderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateIdentityProviderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createIdentityProviderMutation, { data, loading, error }] = useCreateIdentityProviderMutation({
+ *   variables: {
+ *      idpInput: // value for 'idpInput'
+ *   },
+ * });
+ */
+export function useCreateIdentityProviderMutation(baseOptions?: Apollo.MutationHookOptions<CreateIdentityProviderMutation, CreateIdentityProviderMutationVariables>) {
+        return Apollo.useMutation<CreateIdentityProviderMutation, CreateIdentityProviderMutationVariables>(CreateIdentityProviderDocument, baseOptions);
+      }
+export type CreateIdentityProviderMutationHookResult = ReturnType<typeof useCreateIdentityProviderMutation>;
+export type CreateIdentityProviderMutationResult = Apollo.MutationResult<CreateIdentityProviderMutation>;
+export type CreateIdentityProviderMutationOptions = Apollo.BaseMutationOptions<CreateIdentityProviderMutation, CreateIdentityProviderMutationVariables>;
+export const UpdateIdentityProviderDocument = gql`
+    mutation UpdateIdentityProvider($idpInput: UpdateIdentityProviderInput!) {
+  updateIdentityProvider(idpInput: $idpInput) {
+    sid
+    idpId {
+      ...fragmentUIStringField
+    }
+    name {
+      ...fragmentUIStringField
+    }
+    type {
+      ...fragmentUISelectOneField
+    }
+    samlMetaData {
+      ...fragmentUIStringField
+    }
+    priorMetaData {
+      sid
+      creationDateTime
+    }
+    isDefault {
+      ...fragmentUIBooleanField
+    }
+  }
+}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}`;
+export type UpdateIdentityProviderMutationFn = Apollo.MutationFunction<UpdateIdentityProviderMutation, UpdateIdentityProviderMutationVariables>;
+
+/**
+ * __useUpdateIdentityProviderMutation__
+ *
+ * To run a mutation, you first call `useUpdateIdentityProviderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateIdentityProviderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateIdentityProviderMutation, { data, loading, error }] = useUpdateIdentityProviderMutation({
+ *   variables: {
+ *      idpInput: // value for 'idpInput'
+ *   },
+ * });
+ */
+export function useUpdateIdentityProviderMutation(baseOptions?: Apollo.MutationHookOptions<UpdateIdentityProviderMutation, UpdateIdentityProviderMutationVariables>) {
+        return Apollo.useMutation<UpdateIdentityProviderMutation, UpdateIdentityProviderMutationVariables>(UpdateIdentityProviderDocument, baseOptions);
+      }
+export type UpdateIdentityProviderMutationHookResult = ReturnType<typeof useUpdateIdentityProviderMutation>;
+export type UpdateIdentityProviderMutationResult = Apollo.MutationResult<UpdateIdentityProviderMutation>;
+export type UpdateIdentityProviderMutationOptions = Apollo.BaseMutationOptions<UpdateIdentityProviderMutation, UpdateIdentityProviderMutationVariables>;
+export const DeleteIdentityProviderDocument = gql`
+    mutation DeleteIdentityProvider($sid: ID!) {
+  deleteIdentityProvider(sid: $sid) {
+    response
+    errCode
+    errMsg
+    errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export type DeleteIdentityProviderMutationFn = Apollo.MutationFunction<DeleteIdentityProviderMutation, DeleteIdentityProviderMutationVariables>;
+
+/**
+ * __useDeleteIdentityProviderMutation__
+ *
+ * To run a mutation, you first call `useDeleteIdentityProviderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteIdentityProviderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteIdentityProviderMutation, { data, loading, error }] = useDeleteIdentityProviderMutation({
+ *   variables: {
+ *      sid: // value for 'sid'
+ *   },
+ * });
+ */
+export function useDeleteIdentityProviderMutation(baseOptions?: Apollo.MutationHookOptions<DeleteIdentityProviderMutation, DeleteIdentityProviderMutationVariables>) {
+        return Apollo.useMutation<DeleteIdentityProviderMutation, DeleteIdentityProviderMutationVariables>(DeleteIdentityProviderDocument, baseOptions);
+      }
+export type DeleteIdentityProviderMutationHookResult = ReturnType<typeof useDeleteIdentityProviderMutation>;
+export type DeleteIdentityProviderMutationResult = Apollo.MutationResult<DeleteIdentityProviderMutation>;
+export type DeleteIdentityProviderMutationOptions = Apollo.BaseMutationOptions<DeleteIdentityProviderMutation, DeleteIdentityProviderMutationVariables>;
 export const CreateAccessPolicyDocument = gql`
     mutation CreateAccessPolicy($createAccessPolicyInput: CreateAccessPolicyInput!) {
   createAccessPolicy(createAccessPolicyInput: $createAccessPolicyInput) {
