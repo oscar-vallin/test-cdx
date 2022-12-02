@@ -1,6 +1,8 @@
 import {
   DefaultButton,
   DialogFooter,
+  MessageBar,
+  MessageBarType,
   PrimaryButton,
   SearchBox,
   Stack,
@@ -11,7 +13,7 @@ import { ButtonLink } from 'src/components/buttons';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { useUserQuickSearchLazyQuery, useCreateUserMutation } from 'src/data/services/graphql';
 import { InputText } from 'src/components/inputs/InputText';
-import { MessageBar } from 'src/components/notifications/MessageBar';
+import { MessageBar as MessageBarComponent } from 'src/components/notifications/MessageBar';
 import { SubscriberOptionProps } from 'src/pages/Admin/XChange/XchangeAlerts/XchangeAlertsPanel/XchangeAlertsPanel';
 import { StyledDialog, StyledSubsOptions } from './AddSubscriberModal.styles';
 
@@ -34,28 +36,43 @@ const AddSubscriberModal = ({
   const [userQuickSearch,
     { data: quickSearchData, loading: quickSearchLoading }] = useUserQuickSearchLazyQuery();
   const [createUser,
-    { data: createUserData, loading: createUserLoading }] = useCreateUserMutation();
+    { data: createUserData, loading: createUserLoading, error }] = useCreateUserMutation();
   const [currentSubscriber, setCurrentSubscriber] = useState('');
   const [subscriberFound, setSubsciberFound] = useState<SubscriberOptionProps | null>();
   const [addNewAccount, setAddNewAccount] = useState(false);
   const [firstNm, setFirstNm] = useState('');
   const [lastNm, setLastNm] = useState('');
   const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('')
+  const [message, setMessage] = useState<string | null>();
+  const [messageType, setMessageType] = useState<MessageBarType>(MessageBarType.info);
 
   useEffect(() => {
-    if (!createUserLoading && createUserData) {
+    const response = createUserData?.createUser;
+    if (createUserData) {
+      const responseCode = response?.response;
       const { createUser: newUser } = createUserData;
-      addSubscribers([
-        ...currentSubscribers,
-        {
-          name: newUser?.person?.firstNm.value ?? '',
-          email: newUser?.email?.value ?? '',
-          sid: newUser?.sid ?? '',
-        },
-      ]);
-      isOpen(false);
+      if (responseCode === 'FAIL') {
+        const errorMsg = newUser?.errMsg
+          ?? 'Error occurred, please verify the information and try again.';
+        setMessageType(MessageBarType.error);
+        setEmailError(newUser?.email?.errMsg ?? '');
+        setMessage(errorMsg);
+      }
+
+      if (responseCode === 'SUCCESS') {
+        addSubscribers([
+          ...currentSubscribers,
+          {
+            name: newUser?.person?.firstNm.value ?? '',
+            email: newUser?.email?.value ?? '',
+            sid: newUser?.sid ?? '',
+          },
+        ]);
+        isOpen(false);
+      }
     }
-  }, [createUserData, createUserLoading]);
+  }, [createUserData, createUserLoading, error]);
 
   const doSearch = () => {
     if (quickSearchData?.userQuickSearch?.length && quickSearchData.userQuickSearch.length > 0) {
@@ -94,6 +111,18 @@ const AddSubscriberModal = ({
 
   const renderBody = () => (
     <>
+      {message && (
+      <Spacing margin={{ bottom: 'normal' }}>
+        <MessageBar
+          id="__AddSubscriberDialog_Msg"
+          messageBarType={messageType}
+          isMultiline
+          onDismiss={() => setMessage(undefined)}
+        >
+          {message}
+        </MessageBar>
+      </Spacing>
+      )}
       <SearchBox
         id="Subscriber_Input-Search"
         disabled={false}
@@ -135,12 +164,13 @@ const AddSubscriberModal = ({
             id="emailSubscriber"
             type="email"
             value={email}
+            errorMessage={emailError}
             label="Username and Email Address"
             required={true}
             onChange={(event, newValue) => setEmail(newValue ?? '')}
           />
           <Spacing margin={{ top: 'normal' }}>
-            <MessageBar
+            <MessageBarComponent
               type="warning"
               content="This user does not seem to be within your organization (based on their email address) This user will be added as a 3rd party user."
               multiline

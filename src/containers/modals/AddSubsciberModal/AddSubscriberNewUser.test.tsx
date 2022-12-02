@@ -22,7 +22,9 @@ jest.mock('src/data/services/graphql', () => ({
     jest.fn(async () => {}),
     {
       data: {
-        createUser: {},
+        createUser: {
+          response: 'SUCCESS',
+        },
       },
     },
   ],
