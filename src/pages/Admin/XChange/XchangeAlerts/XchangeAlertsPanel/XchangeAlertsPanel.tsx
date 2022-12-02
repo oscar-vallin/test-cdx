@@ -505,17 +505,21 @@ const XchangeAlertsPanel = ({
     );
   };
 
-  const renderPanelHeader = () => (
-    <PanelHeader id="__XchangeAlert_PanelHeader">
-      <Container>
-        <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
-          <PanelTitle id="__AccessPolicyMembers_Panel_Title" variant="bold" size="large">
-            {updateCmd ? `Update Alert ${coreFilename}` : 'Create Alert'}
-          </PanelTitle>
-        </Stack>
-      </Container>
-    </PanelHeader>
-  );
+  const renderPanelHeader = () => {
+    const titleUpdate = coreFilename ? 'Update Alert' : 'Update Global Aler';
+    const titleCreate = coreFilename ? 'Create Alert' : 'Global Alert';
+    return (
+      <PanelHeader id="__XchangeAlert_PanelHeader">
+        <Container>
+          <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
+            <PanelTitle id="__AccessPolicyMembers_Panel_Title" variant="bold" size="large">
+              {updateCmd ? `${titleUpdate} ${coreFilename}` : titleCreate}
+            </PanelTitle>
+          </Stack>
+        </Container>
+      </PanelHeader>
+    );
+  };
 
   return (
     <ThemedPanel
