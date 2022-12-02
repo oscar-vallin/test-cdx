@@ -292,6 +292,7 @@ const XchangeAlertsPage = () => {
                 </StyledButtonAction>
               </Stack>
               <LightSeparator />
+              <Spacing margin={{ bottom: 'normal' }} />
               {xchangeAlerts?.globalXchangeAlerts && xchangeAlerts?.globalXchangeAlerts.length <= 0
                 && (
                 <Text>There are no global alerts configured</Text>
@@ -300,10 +301,12 @@ const XchangeAlertsPage = () => {
                 (globalAlerts, globalAlertsIndex: number) => (
                   <Spacing key={globalAlertsIndex}>
                     <Row>
-                      <Column lg="2">
-                        <StyledEnvironment>All environments</StyledEnvironment>
+                      <Column lg="12">
+                        <Stack horizontal horizontalAlign='space-between'>
+                          <StyledEnvironment>All environments</StyledEnvironment>
+                          {userPermissionsIcons(globalAlerts?.commands ?? [], globalAlerts?.sid ?? '', 'profile')}
+                        </Stack>
                       </Column>
-                      {userPermissionsIcons(globalAlerts?.commands ?? [], globalAlerts?.sid ?? '', 'profile')}
                     </Row>
                     {typesAlertsRender(globalAlerts?.alertTypes ?? [])}
                     <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
@@ -339,7 +342,7 @@ const XchangeAlertsPage = () => {
             </Column>
             <Column lg="6">
               <Text variant="bold">Alerts on individual Xchanges</Text>
-              <Spacing margin={{ top: 'normal' }}>
+              <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                 <LightSeparator />
               </Spacing>
               {xchangeAlerts?.individualXchangeAlerts
