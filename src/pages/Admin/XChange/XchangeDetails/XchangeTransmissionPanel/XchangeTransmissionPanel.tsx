@@ -340,6 +340,13 @@ const XchangeTransmissionPanel = ({
 
   const overrideEnables = (uiFieldData, fieldName): UiField => {
     const uiField = { ...uiFieldData };
+    // HAX: Force required for host and user name
+    if (fieldName === 'host') {
+      uiField.required = true;
+    }
+    if (fieldName === 'userName') {
+      uiField.required = true;
+    }
     if (uiField.inheritedFrom) {
       if (overrides[fieldName] || detach) {
         uiField.inheritedFrom = null;
