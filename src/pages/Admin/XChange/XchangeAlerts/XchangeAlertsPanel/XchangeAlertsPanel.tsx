@@ -506,7 +506,7 @@ const XchangeAlertsPanel = ({
   };
 
   const renderPanelHeader = () => {
-    const titleUpdate = coreFilename ? 'Update Alert' : 'Update Global Aler';
+    const titleUpdate = coreFilename ? 'Update Alert' : 'Update Global Alert';
     const titleCreate = coreFilename ? 'Create Alert' : 'Global Alert';
     return (
       <PanelHeader id="__XchangeAlert_PanelHeader">
