@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import {
   CdxWebCommandType,
+  CreatePersonInput,
+  CreateUserInput,
   Maybe,
   useCreateExternalUserMutation,
   useExternalUserForOrgLazyQuery,
@@ -8,7 +10,7 @@ import {
   UserAccount,
   UserAccountForm,
   useRevokeExternalUserAccessMutation,
-  useUserAccountFormLazyQuery,
+  useUserAccountFormLazyQuery, useValidateNewUserMutation,
   WebCommand,
 } from 'src/data/services/graphql';
 import { ApolloClient, gql } from '@apollo/client';
@@ -17,9 +19,13 @@ import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { defaultForm, updateForm } from '../UserAccountFormUtil';
 
 export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: string) => {
-  const [callGrantExternalUserAccess, { error: grantExternalUserAccessError }] = useGrantExternalUserAccessMutation();
+  const [callGrantExternalUserAccess, {
+    error: grantExternalUserAccessError,
+  }] = useGrantExternalUserAccessMutation();
 
-  const [callCreateExternalUser, { error: createExternalUserError }] = useCreateExternalUserMutation();
+  const [callCreateExternalUser, {
+    error: createExternalUserError,
+  }] = useCreateExternalUserMutation();
 
   const [userAccountForm, setUserAccountForm] = useState<UserAccountForm>(defaultForm);
   const [revokeAccessCmd, setRevokeAccessCmd] = useState<WebCommand>();
@@ -35,10 +41,20 @@ export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: s
 
   const [
     callExternalUserForOrg,
-    { data: dataExternalUserForOrg, loading: externalUsersForOrgLoading, error: externalUserForOrgError },
+    {
+      data: dataExternalUserForOrg,
+      loading: externalUsersForOrgLoading,
+      error: externalUserForOrgError,
+    },
   ] = useExternalUserForOrgLazyQuery();
 
-  const [callRevokeExternalUserAccess, { error: revokeExternalUserAccess }] = useRevokeExternalUserAccessMutation();
+  const [callRevokeExternalUserAccess, {
+    error: revokeExternalUserAccess,
+  }] = useRevokeExternalUserAccessMutation();
+
+  const [callValidateForm, {
+    error: errorValidateForm,
+  }] = useValidateNewUserMutation();
 
   const handleError = ErrorHandler();
   useEffect(() => {
@@ -56,6 +72,9 @@ export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: s
   useEffect(() => {
     handleError(revokeExternalUserAccess);
   }, [revokeExternalUserAccess, handleError]);
+  useEffect(() => {
+    handleError(errorValidateForm);
+  }, [errorValidateForm]);
 
   useEffect(() => {
     if (orgSid) {
@@ -90,7 +109,11 @@ export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: s
 
   useEffect(() => {
     if (userAccountForm) {
-      setRevokeAccessCmd(userAccountForm.commands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Deactivate));
+      setRevokeAccessCmd(
+        userAccountForm.commands?.find(
+          (cmd) => cmd?.commandType === CdxWebCommandType.Deactivate,
+        ),
+      );
     }
   }, [userAccountForm]);
 
@@ -143,23 +166,28 @@ export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: s
     return data;
   };
 
-  const handleCreateExternalUser = async () => {
+  const getUserInfo = (): CreateUserInput => {
     const accessPolicyGroupSids: string[] = userAccountForm.accessPolicyGroups?.value
       ?.filter((opt) => opt != null && opt?.value != null)
       ?.map((opt) => opt?.value ?? '') ?? [];
+    return ({
+      email: userAccountForm.email?.value ?? '',
+      sendActivationEmail: userAccountForm.sendActivationEmail?.value ?? true,
+      orgSid,
+      accessPolicyGroupSids,
+    });
+  };
 
+  const getPersonInfo = (): CreatePersonInput => ({
+    firstNm: userAccountForm.person?.firstNm.value ?? '',
+    lastNm: userAccountForm.person?.lastNm.value ?? '',
+  });
+
+  const handleCreateExternalUser = async () => {
     const { data } = await callCreateExternalUser({
       variables: {
-        userInfo: {
-          email: userAccountForm.email?.value ?? '',
-          sendActivationEmail: userAccountForm.sendActivationEmail?.value ?? true,
-          orgSid,
-          accessPolicyGroupSids,
-        },
-        personInfo: {
-          firstNm: userAccountForm.person?.firstNm.value ?? '',
-          lastNm: userAccountForm.person?.lastNm.value ?? '',
-        },
+        userInfo: getUserInfo(),
+        personInfo: getPersonInfo(),
       },
       errorPolicy: 'all',
     });
@@ -170,6 +198,22 @@ export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: s
 
     return data;
   };
+
+  const handleValidateForm = async () => {
+    const { data } = await callValidateForm({
+      variables: {
+        userInfo: getUserInfo(),
+        personInfo: getPersonInfo(),
+      },
+      errorPolicy: 'all',
+    });
+
+    if (data?.validateNewUser) {
+      setUserAccountForm(data?.validateNewUser);
+    }
+
+    return data;
+  }
 
   const handleRevokeExternalUserAccess = async () => {
     if (userAccountSid) {
@@ -234,6 +278,7 @@ export const useExternalUsersAccessService = (orgSid: string, userAccountSid?: s
   // * Return the state of the form.
   return {
     callCreateExternalUser: handleCreateExternalUser,
+    callValidateForm: handleValidateForm,
     setSendAccountActivation,
     callGrantUserAccess: handleGrantUserAccess,
     callRevokeExternalUserAccess: handleRevokeExternalUserAccess,
