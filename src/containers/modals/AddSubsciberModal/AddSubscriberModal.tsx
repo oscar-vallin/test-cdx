@@ -169,13 +169,6 @@ const AddSubscriberModal = ({
             required={true}
             onChange={(event, newValue) => setEmail(newValue ?? '')}
           />
-          <Spacing margin={{ top: 'normal' }}>
-            <MessageBarComponent
-              type="warning"
-              content="This user does not seem to be within your organization (based on their email address) This user will be added as a 3rd party user."
-              multiline
-            />
-          </Spacing>
         </>
       )}
     </>
@@ -186,20 +179,18 @@ const AddSubscriberModal = ({
       addSubscribers([...currentSubscribers, subscriberFound]);
       isOpen(false);
     }
-    if (firstNm.trim() !== '' && lastNm.trim() !== '' && email.trim() !== '') {
-      createUser({
-        variables: {
-          userInfo: {
-            orgSid,
-            email,
-          },
-          personInfo: {
-            firstNm,
-            lastNm,
-          },
+    createUser({
+      variables: {
+        userInfo: {
+          orgSid,
+          email,
         },
-      });
-    }
+        personInfo: {
+          firstNm,
+          lastNm,
+        },
+      },
+    });
   };
 
   const renderButtons = () => (

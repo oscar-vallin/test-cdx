@@ -115,7 +115,7 @@ const DataNodeTransmissions = ({ data, id }) => {
           }}
           >
             {addCmd && (
-              <TooltipHost content="Copy Step">
+              <TooltipHost content="Copy Transmission">
                 <StyledCopyIcon
                   iconName="Copy"
                   onClick={() => {

@@ -113,7 +113,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
   const sourceBottom = id && id[id.length - 1];
   const findFromKey = connectors && connectors.find((connector) => connector.fromKey === id);
   const trans = findFromKey && findFromKey.toKey.includes('trans');
-  const styles = { lineHeight: subTitle.trim() === '' ? '36px' : '18px' };
+  const styles = { lineHeight: subTitle.trim() === '' ? '' : '18px' };
   if (iconName === 'Column Arrow Right') {
     iconName = 'PaddingRight';
   }
