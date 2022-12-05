@@ -80,7 +80,7 @@ const XchangeAlertsPanel = ({
   const [xchangeProfileAlert, setXchangeProfileAlert] = useState<XchangeProfileAlertForm | null>();
   const [xchangeConfigAlert, setXchangeConfigAlert] = useState<XchangeConfigAlertForm | null>();
   const [filenameQualifier, setFilenameQualifier] = useState('');
-  const [filenameQualifierUIField, setFilenameQualifierUIField] = useState<UiSelectOneField>()
+  const [filenameQualifierUIField, setFilenameQualifierUIField] = useState<UiSelectOneField>();
   const [customQualifier, setCustomQualifier] = useState<boolean>();
   const [optionAlerts, setOptionAlerts] = useState<UiOptions[]>([]);
   const [alertTypes, setAlertTypes] = useState<UiSelectManyField>();
@@ -160,9 +160,8 @@ const XchangeAlertsPanel = ({
     }
   };
 
-  const alertTypesEnums = (): AlertType[] | undefined => {
-    return alertTypesValue?.map(value => (getEnumByValue(AlertType, value) as AlertType));
-  };
+  const alertTypesEnums = (): AlertType[] | undefined => alertTypesValue
+    ?.map((value) => (getEnumByValue(AlertType, value) as AlertType));
 
   const saveProfileAlert = () => {
     const subscriberSids = totalSubscribers.map((subSids) => subSids.sid);
@@ -281,96 +280,108 @@ const XchangeAlertsPanel = ({
     }
   }, [isPanelOpen]);
 
+  const updateFormFromProfileAlert = (form: XchangeProfileAlertForm) => {
+    setUnsavedChanges(false);
+    setXchangeProfileAlert(form);
+    if (form?.alertTypes.value
+      && form?.alertTypes.value.length > 0) {
+      setAlertTypesValue(form?.alertTypes.value.map((alert) => alert.value));
+    }
+    if (form?.subscribers.value
+      && form.subscribers.value.length > 0) {
+      subscribersList(form.subscribers.value);
+    }
+
+    if (form?.options) {
+      setOptionAlerts(form?.options ?? []);
+    }
+
+    if (form?.alertTypes) {
+      setAlertTypes(form?.alertTypes);
+    }
+
+    if (form?.commands) {
+      const pageCommands = form?.commands;
+      const _updateCmd = pageCommands
+        ?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
+      setUpdateCmd(_updateCmd);
+      const _createCmd = pageCommands
+        ?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
+      setCreateCmd(_createCmd);
+    }
+  };
+
   useEffect(() => {
     if (!alertProfileFormLoading && alertProfileFormData) {
       const { xchangeProfileAlertForm } = alertProfileFormData;
-      setUnsavedChanges(false);
-      setXchangeProfileAlert(xchangeProfileAlertForm);
-      if (xchangeProfileAlertForm?.alertTypes.value
-        && xchangeProfileAlertForm?.alertTypes.value.length > 0) {
-        setAlertTypesValue(xchangeProfileAlertForm?.alertTypes.value.map((alert) => alert.value));
-      }
-      if (xchangeProfileAlertForm?.subscribers.value
-        && xchangeProfileAlertForm.subscribers.value.length > 0) {
-        subscribersList(xchangeProfileAlertForm.subscribers.value);
-      }
-
-      if (xchangeProfileAlertForm?.options) {
-        setOptionAlerts(xchangeProfileAlertForm?.options ?? []);
-      }
-
-      if (xchangeProfileAlertForm?.alertTypes) {
-        setAlertTypes(xchangeProfileAlertForm?.alertTypes);
-      }
-
-      if (xchangeProfileAlertForm?.commands) {
-        const pageCommands = xchangeProfileAlertForm?.commands;
-        const _updateCmd = pageCommands
-          ?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
-        setUpdateCmd(_updateCmd);
-        const _createCmd = pageCommands
-          ?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
-        setCreateCmd(_createCmd);
+      if (xchangeProfileAlertForm) {
+        updateFormFromProfileAlert(xchangeProfileAlertForm);
       }
     }
   }, [alertProfileFormData, alertProfileFormLoading]);
 
+  const updateFormFromXchangeConfigAlert = (form: XchangeConfigAlertForm) => {
+    setUnsavedChanges(false);
+    setXchangeConfigAlert(form);
+    if (form.alertTypes.value
+      && form.alertTypes.value.length > 0) {
+      setAlertTypesValue(form?.alertTypes.value.map((alert) => alert.value));
+    } else {
+      setAlertTypesValue([]);
+    }
+    if (form.subscribers.value
+      && form.subscribers.value.length > 0) {
+      subscribersList(form.subscribers.value);
+    }
+
+    if (form?.options) {
+      setOptionAlerts(form?.options);
+    }
+
+    if (form.alertTypes) {
+      setAlertTypes(form.alertTypes);
+    }
+    const qualifierField: UiSelectOneField = {
+      ...form.filenameQualifier,
+      label: form.filenameQualifier.label ?? '',
+      required: form.filenameQualifier.required ?? true,
+      visible: form.filenameQualifier?.visible ?? true,
+    }
+    qualifierField.label = 'Environment';
+    qualifierField.info = null;
+    setFilenameQualifierUIField(qualifierField);
+    if (form.filenameQualifier.value
+      && form.filenameQualifier.value.value) {
+      setFilenameQualifier(form.filenameQualifier.value.value ?? '');
+      form.filenameQualifier.label = 'Environment';
+      const filenameQualifierValue = form.filenameQualifier.value.value;
+      const customQualifierValue = form.options
+        ?.find((opt) => opt.key === 'filenameQualifier')
+        ?.values
+        ?.find((val) => val.value === filenameQualifierValue);
+      if (!customQualifierValue && filenameQualifierValue) {
+        setCustomQualifier(true);
+      }
+    } else {
+      setFilenameQualifier('')
+    }
+
+    if (form.commands) {
+      const pageCommands = form.commands;
+      const _updateCmd = pageCommands
+        ?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
+      setUpdateCmd(_updateCmd);
+      const _createCmd = pageCommands
+        ?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
+      setCreateCmd(_createCmd);
+    }
+  };
+
   useEffect(() => {
     if (!alertConfigFormLoading && alertConfigFormData) {
       const { xchangeConfigAlertForm } = alertConfigFormData;
-      setUnsavedChanges(false);
-      setXchangeConfigAlert(xchangeConfigAlertForm);
-      if (xchangeConfigAlertForm?.alertTypes.value
-        && xchangeConfigAlertForm?.alertTypes.value.length > 0) {
-        setAlertTypesValue(xchangeConfigAlertForm?.alertTypes.value.map((alert) => alert.value));
-      } else {
-        setAlertTypesValue([]);
-      }
-      if (xchangeConfigAlertForm?.subscribers.value
-        && xchangeConfigAlertForm.subscribers.value.length > 0) {
-        subscribersList(xchangeConfigAlertForm.subscribers.value);
-      }
-
-      if (xchangeConfigAlertForm?.options) {
-        setOptionAlerts(xchangeConfigAlertForm?.options);
-      }
-
-      if (xchangeConfigAlertForm?.alertTypes) {
-        setAlertTypes(xchangeConfigAlertForm?.alertTypes);
-      }
-      const qualifierField: UiSelectOneField = {
-        ...xchangeConfigAlertForm?.filenameQualifier,
-        label: xchangeConfigAlertForm?.filenameQualifier.label ?? '',
-        required: xchangeConfigAlertForm?.filenameQualifier.required ?? true,
-        visible: xchangeConfigAlertForm?.filenameQualifier?.visible ?? true
-      }
-      qualifierField.label = 'Environment';
-      qualifierField.info = null;
-      setFilenameQualifierUIField(qualifierField);
-      if (xchangeConfigAlertForm?.filenameQualifier.value
-        && xchangeConfigAlertForm?.filenameQualifier.value.value) {
-        setFilenameQualifier(xchangeConfigAlertForm?.filenameQualifier.value.value ?? '');
-        xchangeConfigAlertForm.filenameQualifier.label = 'Environment';
-        const filenameQualifierValue = xchangeConfigAlertForm?.filenameQualifier.value.value;
-        const customQualifierValue = xchangeConfigAlertForm?.options
-          ?.find((opt) => opt.key === 'filenameQualifier')
-          ?.values
-          ?.find((val) => val.value === filenameQualifierValue);
-        if (!customQualifierValue && filenameQualifierValue) {
-          setCustomQualifier(true);
-        }
-      } else {
-        setFilenameQualifier('')
-      }
-
-      if (xchangeConfigAlertForm?.commands) {
-        const pageCommands = xchangeConfigAlertForm?.commands;
-        const _updateCmd = pageCommands
-          ?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
-        setUpdateCmd(_updateCmd);
-        const _createCmd = pageCommands
-          ?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
-        setCreateCmd(_createCmd);
+      if (xchangeConfigAlertForm) {
+        updateFormFromXchangeConfigAlert(xchangeConfigAlertForm);
       }
     }
   }, [alertConfigFormData, alertConfigFormLoading]);
@@ -383,7 +394,10 @@ const XchangeAlertsPanel = ({
         Toast.success({ text: 'Alert updated' });
         closePanel(false);
       } else {
-        setMessage(updateProfileData.updateXchangeProfileAlert?.errMsg);
+        if (updateProfileData.updateXchangeProfileAlert) {
+          updateFormFromProfileAlert(updateProfileData.updateXchangeProfileAlert);
+          setMessage(updateProfileData.updateXchangeProfileAlert.errMsg);
+        }
         setMessageType(MessageBarType.error);
       }
     }
@@ -397,7 +411,10 @@ const XchangeAlertsPanel = ({
         Toast.success({ text: 'Alert Added' });
         closePanel(false);
       } else {
-        setMessage(createProfileData.createXchangeProfileAlert?.errMsg);
+        if (createProfileData.createXchangeProfileAlert) {
+          updateFormFromProfileAlert(createProfileData.createXchangeProfileAlert);
+          setMessage(createProfileData.createXchangeProfileAlert.errMsg);
+        }
         setMessageType(MessageBarType.error);
       }
     }
@@ -411,7 +428,10 @@ const XchangeAlertsPanel = ({
         Toast.success({ text: 'Alert Added' });
         closePanel(false);
       } else {
-        setMessage(createConfigData.createXchangeConfigAlert?.errMsg);
+        if (createConfigData.createXchangeConfigAlert) {
+          updateFormFromXchangeConfigAlert(createConfigData.createXchangeConfigAlert);
+          setMessage(createConfigData.createXchangeConfigAlert.errMsg);
+        }
         setMessageType(MessageBarType.error);
       }
     }
@@ -425,7 +445,10 @@ const XchangeAlertsPanel = ({
         Toast.success({ text: 'Alert updated' });
         closePanel(false);
       } else {
-        setMessage(updateConfigData.updateXchangeConfigAlert?.errMsg);
+        if (updateConfigData.updateXchangeConfigAlert) {
+          updateFormFromXchangeConfigAlert(updateConfigData.updateXchangeConfigAlert);
+          setMessage(updateConfigData.updateXchangeConfigAlert.errMsg);
+        }
         setMessageType(MessageBarType.error);
       }
     }
