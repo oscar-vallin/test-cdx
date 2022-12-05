@@ -103,7 +103,9 @@ type StyledQualifierProps = {
 
 export const StyledButtonAction = styled(ButtonAction)<StyledButtonActionProps>`
   font-size: ${({ fontSize }) => fontSize};
+
   .ms-Icon {
+    margin-bottom: 10px;
     color: ${({ theme, disableIcon }) => (!disableIcon && theme.colors.white)}
   }
 `;
@@ -113,13 +115,19 @@ type StyledButtonActionProps = {
   disableIcon?: boolean;
 };
 
-export const StyledProcessValueText = styled(Text)`
+export const StyledProcessValueText = styled(Text)<StyledProcessValueText>`
   font-weight: bold;
-  text-decoration: underline #0078d4 2px;
+  text-decoration:${({ underlined }) => (underlined && 'underline')}  #0078d4 2px;
+  cursor: pointer;
   text-underline-offset: 7px;
   text-decoration-thickness: 2px;
   margin-right: 10px;
+  margin-left: 10px;
 `;
+
+type StyledProcessValueText = {
+  underlined?: boolean;
+}
 
 export const StyledSubTitleText = styled.div`
   margin-top: -5px;

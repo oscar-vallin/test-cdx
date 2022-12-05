@@ -681,8 +681,15 @@ const XchangeDetailsPage = () => {
           <Row>
             {fileProcesses
               && fileProcesses?.map((process, index) => (
-                <StyledColumTabs lg="9" key={index}>
-                  <StyledProcessValueText variant="large">
+                <Stack horizontal={true} horizontalAlign="space-between" key={index}>
+                  <StyledProcessValueText
+                    variant="large"
+                    underlined={process?.specId?.value === fileProcess?.specId.value}
+                    onClick={() => {
+                      setFileProcess(process);
+                      setDataDiagram(process.diagram);
+                    }}
+                  >
                     {process.vendor.value?.name}-{process.specId.value}
                   </StyledProcessValueText>
                   <StyledButtonAction
@@ -693,7 +700,7 @@ const XchangeDetailsPage = () => {
                     disableIcon={!!createFileCmd}
                     disabled={!createFileCmd}
                   />
-                </StyledColumTabs>
+                </Stack>
               ))}
           </Row>
           <Row>
