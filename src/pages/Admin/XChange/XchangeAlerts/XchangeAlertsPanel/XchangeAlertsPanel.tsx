@@ -238,6 +238,17 @@ const XchangeAlertsPanel = ({
     setShowDialog(false);
   };
 
+  const hidePanel = () => {
+    setTotalSubscribers([]);
+    setXchangeConfigAlert(null);
+    setAlertTypesValue(undefined);
+    setXchangeProfileAlert(null);
+    setUnsavedChanges(false);
+    setFilenameQualifier('');
+    setMessage(null);
+    closePanel(false);
+  };
+
   const showUnsavedChangesDialog = () => {
     const updatedDialog = { ...defaultDialogProps };
     updatedDialog.title = 'You have unsaved changes';
@@ -245,13 +256,7 @@ const XchangeAlertsPanel = ({
 
     updatedDialog.onYes = () => {
       hideDialog();
-      closePanel(false);
-      setTotalSubscribers([]);
-      setUnsavedChanges(false);
-      setAlertTypesValue(undefined);
-      setXchangeConfigAlert(null);
-      setXchangeProfileAlert(null);
-      setFilenameQualifier('');
+      hidePanel();
     };
     updatedDialog.onClose = () => {
       hideDialog();
@@ -264,13 +269,7 @@ const XchangeAlertsPanel = ({
     if (unsavedChanges || firstSubscribers < totalSubscribers.length) {
       showUnsavedChangesDialog();
     } else {
-      setTotalSubscribers([]);
-      setXchangeConfigAlert(null);
-      setAlertTypesValue(undefined);
-      setXchangeProfileAlert(null);
-      setUnsavedChanges(false);
-      setFilenameQualifier('');
-      closePanel(false);
+      hidePanel();
     }
   };
 
@@ -281,7 +280,6 @@ const XchangeAlertsPanel = ({
   }, [isPanelOpen]);
 
   const updateFormFromProfileAlert = (form: XchangeProfileAlertForm) => {
-    setUnsavedChanges(false);
     setXchangeProfileAlert(form);
     if (form?.alertTypes.value
       && form?.alertTypes.value.length > 0) {
@@ -321,7 +319,6 @@ const XchangeAlertsPanel = ({
   }, [alertProfileFormData, alertProfileFormLoading]);
 
   const updateFormFromXchangeConfigAlert = (form: XchangeConfigAlertForm) => {
-    setUnsavedChanges(false);
     setXchangeConfigAlert(form);
     if (form.alertTypes.value
       && form.alertTypes.value.length > 0) {
@@ -389,6 +386,7 @@ const XchangeAlertsPanel = ({
   useEffect(() => {
     if (!updateProfileLoading && updateProfileData) {
       if (updateProfileData.updateXchangeProfileAlert?.response === 'SUCCESS') {
+        setUnsavedChanges(false);
         refreshPage(true);
         setTotalSubscribers([]);
         Toast.success({ text: 'Alert updated' });
@@ -406,6 +404,7 @@ const XchangeAlertsPanel = ({
   useEffect(() => {
     if (!createProfileLoading && createProfileData) {
       if (createProfileData.createXchangeProfileAlert?.response === 'SUCCESS') {
+        setUnsavedChanges(false);
         refreshPage(true);
         setTotalSubscribers([]);
         Toast.success({ text: 'Alert Added' });
@@ -423,6 +422,7 @@ const XchangeAlertsPanel = ({
   useEffect(() => {
     if (!createConfigLoading && createConfigData) {
       if (createConfigData.createXchangeConfigAlert?.response === 'SUCCESS') {
+        setUnsavedChanges(false);
         refreshPage(true);
         setTotalSubscribers([]);
         Toast.success({ text: 'Alert Added' });
@@ -440,6 +440,7 @@ const XchangeAlertsPanel = ({
   useEffect(() => {
     if (!updateConfigLoading && updateConfigData) {
       if (updateConfigData.updateXchangeConfigAlert?.response === 'SUCCESS') {
+        setUnsavedChanges(false);
         refreshPage(true);
         setTotalSubscribers([]);
         Toast.success({ text: 'Alert updated' });
