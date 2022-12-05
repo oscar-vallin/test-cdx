@@ -154,7 +154,6 @@ const XchangeAlertsPage = () => {
       return null;
     }
     if (qualifier) {
-
       let width: number | string = qualifier.length * 8;
       width = `${width}px`;
       let color = 'blue';
@@ -306,7 +305,7 @@ const XchangeAlertsPage = () => {
                   <Spacing key={globalAlertsIndex}>
                     <Row>
                       <Column lg="12">
-                        <Stack horizontal horizontalAlign='space-between'>
+                        <Stack horizontal horizontalAlign="space-between">
                           <StyledEnvironment>All environments</StyledEnvironment>
                           {userPermissionsIcons(globalAlerts?.commands ?? [], globalAlerts?.sid ?? '', 'profile')}
                         </Stack>
