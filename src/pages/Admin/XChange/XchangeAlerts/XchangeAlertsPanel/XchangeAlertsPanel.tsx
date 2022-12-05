@@ -222,6 +222,7 @@ const XchangeAlertsPanel = ({
 
     updatedDialog.onYes = () => {
       hideDialog();
+      setMessage(null);
       closePanel(false);
       setTotalSubscribers([]);
       setUnsavedChanges(false);
@@ -247,6 +248,7 @@ const XchangeAlertsPanel = ({
       setXchangeProfileAlert(null);
       setUnsavedChanges(false);
       setFilenameQualifier('');
+      setMessage(null);
       closePanel(false);
     }
   };
@@ -347,6 +349,7 @@ const XchangeAlertsPanel = ({
   useEffect(() => {
     if (!updateProfileLoading && updateProfiledata) {
       refreshPage(true);
+      setMessage(null);
       setTotalSubscribers([]);
       Toast.success({ text: 'Alert updated' });
       closePanel(false);
@@ -360,6 +363,7 @@ const XchangeAlertsPanel = ({
   useEffect(() => {
     if (!createProfileLoading && createProfileData) {
       refreshPage(true);
+      setMessage(null);
       setTotalSubscribers([]);
       Toast.success({ text: 'Alert Added' });
       closePanel(false);
@@ -373,6 +377,7 @@ const XchangeAlertsPanel = ({
   useEffect(() => {
     if (!createConfigloading && createConfigData) {
       refreshPage(true);
+      setMessage(null);
       setTotalSubscribers([]);
       Toast.success({ text: 'Alert Added' });
       closePanel(false);
@@ -386,6 +391,7 @@ const XchangeAlertsPanel = ({
   useEffect(() => {
     if (!updateConfigLoading && updateConfigData) {
       refreshPage(true);
+      setMessage(null);
       setTotalSubscribers([]);
       Toast.success({ text: 'Alert updated' });
       closePanel(false);
