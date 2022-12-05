@@ -58,6 +58,7 @@ import { UIInputText } from 'src/components/inputs/InputText';
 import { EmptyMessage } from 'src/containers/tables/TableCurrentActivity/TableActivity.styles';
 import { EmptyState } from 'src/containers/states';
 import { useThemeStore } from 'src/store/ThemeStore';
+import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { SubscriberOptionProps } from '../XchangeAlerts/XchangeAlertsPanel/XchangeAlertsPanel';
 import { StyledText, StyledXchanges } from './SchedulePanel.styles';
 
@@ -122,6 +123,17 @@ const DefaulMonthsProps: MonthsProps = {
   Dec: false,
 };
 
+const defaultDialogProps: DialogYesNoProps = {
+  id: '__SchedulePanel_Dlg',
+  open: false,
+  title: '',
+  message: '',
+  labelYes: 'Yes',
+  labelNo: 'No',
+  highlightNo: true,
+  highlightYes: false,
+};
+
 const SchedulePanel = ({
   isPanelOpen,
   closePanel,
@@ -164,6 +176,9 @@ const SchedulePanel = ({
   const [endRelativeDay, setEndRelativeDay] = useState<string | null>('');
   const [message, setMessage] = useState<string | null>();
   const [messageType, setMessageType] = useState<MessageBarType>(MessageBarType.info);
+  const [showDialog, setShowDialog] = useState(false);
+  const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
+  const [unsavedChanges, setUnsavedChanges] = useState(false);
 
   const [
     scheduleForm, { data: formData, loading: isLoadingForm },
@@ -233,6 +248,7 @@ const SchedulePanel = ({
 
   const handleMonths = (selectedMonth: boolean, month: string) => {
     let currentMonth = month.toLocaleLowerCase();
+    setUnsavedChanges(true);
     currentMonth = currentMonth.charAt(0).toUpperCase() + currentMonth.slice(1);
     if (selectedMonth) {
       setMonths((prevState) => prevState.concat(Month[currentMonth]));
@@ -243,6 +259,7 @@ const SchedulePanel = ({
 
   const handleDays = (selectedDay: boolean, day: string) => {
     let currentDay = day.toLocaleLowerCase();
+    setUnsavedChanges(true);
     currentDay = currentDay.charAt(0).toUpperCase() + currentDay.slice(1);
     if (selectedDay) {
       setDays((prevState) => prevState.concat(DayOfWeek[currentDay]));
@@ -280,6 +297,7 @@ const SchedulePanel = ({
         currentDaySelected[name] = true;
         handleDays(true, day.value);
       });
+      setUnsavedChanges(false);
       if (xchangeScheduleForm?.subscribers.value
         && xchangeScheduleForm.subscribers.value.length > 0) {
         subscribersList(xchangeScheduleForm.subscribers.value)
@@ -520,6 +538,48 @@ const SchedulePanel = ({
     </Spacing>
   );
 
+  const hideDialog = () => {
+    setShowDialog(false);
+  };
+
+  const showUnsavedChangesDialog = () => {
+    const updatedDialog = { ...defaultDialogProps };
+    updatedDialog.title = 'You have unsaved changes';
+    updatedDialog.message = 'Changes made to this Schedule will be discarded?  Are you sure you wish to continue and lose your changes?';
+
+    updatedDialog.onYes = () => {
+      hideDialog();
+      closePanel(false);
+      setCurrentMonthSelected({ ...DefaulMonthsProps });
+      setCurrentDaySelected({ ...DefaulDaysProps });
+      setMonths([]);
+      setDays([]);
+      setMessage(null);
+      setTotalSubscribers([]);
+      setUnsavedChanges(false);
+    };
+    updatedDialog.onClose = () => {
+      hideDialog();
+    };
+    setDialogProps(updatedDialog);
+    setShowDialog(true);
+  };
+
+  const onPanelClose = () => {
+    if (unsavedChanges) {
+      showUnsavedChangesDialog();
+    } else {
+      setCurrentMonthSelected({ ...DefaulMonthsProps });
+      setCurrentDaySelected({ ...DefaulDaysProps });
+      setUnsavedChanges(false);
+      setMonths([]);
+      setDays([]);
+      setTotalSubscribers([]);
+      setMessage(null);
+      closePanel(false);
+    }
+  };
+
   const saveSchedule = () => {
     const subscriberSids = totalSubscribers.map((subSids) => subSids.sid);
     let endHour: number | undefined;
@@ -628,7 +688,10 @@ const SchedulePanel = ({
             uiFieldHour={xchangeSchedule?.endHour}
             uiFieldMinute={xchangeSchedule?.endMinute}
             value={scheduleTime ?? ''}
-            onChange={(_newValue) => setScheduleTime(_newValue ?? '')}
+            onChange={(_newValue) => {
+              setUnsavedChanges(true);
+              setScheduleTime(_newValue ?? '')
+            }}
           />
         </Column>
         <Column lg="6">
@@ -638,7 +701,10 @@ const SchedulePanel = ({
               uiField={renderUiField('timezone')}
               value={scheduleTimezone ?? ''}
               options={options}
-              onChange={(_newValue) => setScheduleTimeZone(_newValue ?? '')}
+              onChange={(_newValue) => {
+                setUnsavedChanges(true);
+                setScheduleTimeZone(_newValue ?? '')
+              }}
             />
           </Spacing>
         </Column>
@@ -664,7 +730,10 @@ const SchedulePanel = ({
                 id="jobGroupName"
                 value={jobGroupName}
                 uiField={xchangeJobGroup?.name}
-                onChange={(event, _newValue) => setJobGroupName(_newValue ?? '')}
+                onChange={(event, _newValue) => {
+                  setUnsavedChanges(true);
+                  setJobGroupName(_newValue ?? '')
+                }}
               />
             </Column>
           </Spacing>
@@ -677,7 +746,10 @@ const SchedulePanel = ({
               uiField={renderUiField('scheduleType')}
               options={options}
               value={scheduleType}
-              onChange={(_newValue) => setScheduleType(_newValue ?? '')}
+              onChange={(_newValue) => {
+                setUnsavedChanges(true);
+                setScheduleType(_newValue ?? '')
+              }}
             />
           </Column>
           {scheduleType && scheduleType !== 'NOT_SCHEDULED' && (
@@ -687,7 +759,10 @@ const SchedulePanel = ({
               uiField={renderUiField('frequency')}
               options={options}
               value={scheduleFrequency}
-              onChange={(_newValue) => setScheduleFrequency(_newValue ?? '')}
+              onChange={(_newValue) => {
+                setUnsavedChanges(true);
+                setScheduleFrequency(_newValue ?? '');
+              }}
             />
           </Column>
           )}
@@ -814,6 +889,7 @@ const SchedulePanel = ({
                                 disabled={!props?.checked}
                                 onChange={(_newValue) => {
                                   setEndDayOfMonth(_newValue ?? '');
+                                  setUnsavedChanges(true);
                                   setEndDayOrdinal(null);
                                   setEndRelativeDay(null);
                                 }}
@@ -838,6 +914,7 @@ const SchedulePanel = ({
                                 disabled={!props?.checked}
                                 onChange={(_newValue) =>{
                                   setEndDayOrdinal(_newValue ?? '');
+                                  setUnsavedChanges(true);
                                   setEndDayOfMonth(null);
                                 }}
                               />
@@ -847,7 +924,10 @@ const SchedulePanel = ({
                                 value={endRelativeDay ?? ''}
                                 options={options}
                                 disabled={!props?.checked}
-                                onChange={(_newValue) => setEndRelativeDay(_newValue ?? '')}
+                                onChange={(_newValue) => {
+                                  setUnsavedChanges(true);
+                                  setEndRelativeDay(_newValue ?? '');
+                                }}
                               />
                             </Stack>
                           </Spacing>
@@ -892,6 +972,9 @@ const SchedulePanel = ({
               label={hasSilencePeriodLabel}
               checked={hasSilencePeriod}
               onChange={() => {
+                if (hasSilencePeriod) {
+                  setUnsavedChanges(true);
+                }
                 setHasSilencePeriod((prevState) => !prevState);
               }}
             />
@@ -1030,13 +1113,7 @@ const SchedulePanel = ({
       isOpen={isPanelOpen}
       onRenderFooterContent={renderPanelFooter}
       onDismiss={() => {
-        setCurrentMonthSelected({ ...DefaulMonthsProps });
-        setCurrentDaySelected({ ...DefaulDaysProps });
-        setMonths([]);
-        setDays([]);
-        setTotalSubscribers([]);
-        setMessage(null);
-        closePanel(false);
+        onPanelClose();
       }}
     >
       <PanelBody>
@@ -1086,6 +1163,7 @@ const SchedulePanel = ({
           addSubscribers={setTotalSubscribers}
         />
       )}
+      <DialogYesNo {...dialogProps} open={showDialog} />
     </ThemedPanel>
   );
 };
