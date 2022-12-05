@@ -157,7 +157,7 @@ const Diagram = ({
     setTotalHeight(0);
     let height = largestCoordinate;
     height = height === 1 ? 2 : height;
-    height *= 150;
+    height *= 165;
     setTotalHeight(height);
   }, [data]);
 
