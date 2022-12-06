@@ -976,6 +976,8 @@ export type Mutation = {
   grantExternalUserAccess?: Maybe<UserAccountForm>;
   createExternalUser?: Maybe<UserAccountForm>;
   revokeExternalUserAccess?: Maybe<GenericResponse>;
+  /** Validate data for a new user without saving it */
+  validateNewUser?: Maybe<UserAccountForm>;
   createDashThemeColor?: Maybe<DashThemeColor>;
   updateDashThemeColor?: Maybe<DashThemeColor>;
   createDefaultDashTheme?: Maybe<DashTheme>;
@@ -1226,6 +1228,12 @@ export type MutationCreateExternalUserArgs = {
 export type MutationRevokeExternalUserAccessArgs = {
   orgSid: Scalars['ID'];
   userAccountSid: Scalars['ID'];
+};
+
+
+export type MutationValidateNewUserArgs = {
+  userInfo: CreateUserInput;
+  personInfo: CreatePersonInput;
 };
 
 
@@ -2011,6 +2019,7 @@ export type Query = {
   externalOrgs?: Maybe<OrganizationConnection>;
   identityProvidersForOrg: IdentityProviderConnection;
   identityProviderForm: IdentityProviderForm;
+  identityProviderConnectionInformation: Scalars['String'];
   dashThemeColorForOrg?: Maybe<DashThemeColorConnection>;
   dashSiteForOrg?: Maybe<DashSite>;
   dashThemeColor?: Maybe<DashThemeColor>;
@@ -2378,6 +2387,11 @@ export type QueryIdentityProvidersForOrgArgs = {
 export type QueryIdentityProviderFormArgs = {
   orgSid: Scalars['ID'];
   sid?: Maybe<Scalars['ID']>;
+};
+
+
+export type QueryIdentityProviderConnectionInformationArgs = {
+  idpSid: Scalars['ID'];
 };
 
 
@@ -6260,6 +6274,16 @@ export type IdentityProviderFormQuery = (
   ) }
 );
 
+export type IdentityProviderConnectionInformationQueryVariables = Exact<{
+  idpSid: Scalars['ID'];
+}>;
+
+
+export type IdentityProviderConnectionInformationQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'identityProviderConnectionInformation'>
+);
+
 export type DashThemeColorForOrgQueryVariables = Exact<{
   ownedInput?: Maybe<OwnedInput>;
   pageableInput?: Maybe<PageableInput>;
@@ -8582,6 +8606,55 @@ export type RevokeExternalUserAccessMutation = (
         { __typename?: 'NVPId' }
         & UnionNvp_NvpId_Fragment
       )>> }
+    )>> }
+  )> }
+);
+
+export type ValidateNewUserMutationVariables = Exact<{
+  userInfo: CreateUserInput;
+  personInfo: CreatePersonInput;
+}>;
+
+
+export type ValidateNewUserMutation = (
+  { __typename?: 'Mutation' }
+  & { validateNewUser?: Maybe<(
+    { __typename?: 'UserAccountForm' }
+    & Pick<UserAccountForm, 'sid' | 'accessGrantOrgNames' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { email?: Maybe<(
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    )>, active?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    )>, person?: Maybe<(
+      { __typename?: 'PersonForm' }
+      & Pick<PersonForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { firstNm: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ), lastNm: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ) }
+    )>, organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
+    ), accessPolicyGroups?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    )>, sendActivationEmail?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    )>, lastLogin?: Maybe<(
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
+    )>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>, options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
     )>> }
   )> }
 );
@@ -14315,6 +14388,37 @@ export function useIdentityProviderFormLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type IdentityProviderFormQueryHookResult = ReturnType<typeof useIdentityProviderFormQuery>;
 export type IdentityProviderFormLazyQueryHookResult = ReturnType<typeof useIdentityProviderFormLazyQuery>;
 export type IdentityProviderFormQueryResult = Apollo.QueryResult<IdentityProviderFormQuery, IdentityProviderFormQueryVariables>;
+export const IdentityProviderConnectionInformationDocument = gql`
+    query IdentityProviderConnectionInformation($idpSid: ID!) {
+  identityProviderConnectionInformation(idpSid: $idpSid)
+}
+    `;
+
+/**
+ * __useIdentityProviderConnectionInformationQuery__
+ *
+ * To run a query within a React component, call `useIdentityProviderConnectionInformationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useIdentityProviderConnectionInformationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useIdentityProviderConnectionInformationQuery({
+ *   variables: {
+ *      idpSid: // value for 'idpSid'
+ *   },
+ * });
+ */
+export function useIdentityProviderConnectionInformationQuery(baseOptions: Apollo.QueryHookOptions<IdentityProviderConnectionInformationQuery, IdentityProviderConnectionInformationQueryVariables>) {
+        return Apollo.useQuery<IdentityProviderConnectionInformationQuery, IdentityProviderConnectionInformationQueryVariables>(IdentityProviderConnectionInformationDocument, baseOptions);
+      }
+export function useIdentityProviderConnectionInformationLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IdentityProviderConnectionInformationQuery, IdentityProviderConnectionInformationQueryVariables>) {
+          return Apollo.useLazyQuery<IdentityProviderConnectionInformationQuery, IdentityProviderConnectionInformationQueryVariables>(IdentityProviderConnectionInformationDocument, baseOptions);
+        }
+export type IdentityProviderConnectionInformationQueryHookResult = ReturnType<typeof useIdentityProviderConnectionInformationQuery>;
+export type IdentityProviderConnectionInformationLazyQueryHookResult = ReturnType<typeof useIdentityProviderConnectionInformationLazyQuery>;
+export type IdentityProviderConnectionInformationQueryResult = Apollo.QueryResult<IdentityProviderConnectionInformationQuery, IdentityProviderConnectionInformationQueryVariables>;
 export const DashThemeColorForOrgDocument = gql`
     query DashThemeColorForOrg($ownedInput: OwnedInput, $pageableInput: PageableInput) {
   dashThemeColorForOrg(ownedInput: $ownedInput, pageableInput: $pageableInput) {
@@ -18660,6 +18764,85 @@ export function useRevokeExternalUserAccessMutation(baseOptions?: Apollo.Mutatio
 export type RevokeExternalUserAccessMutationHookResult = ReturnType<typeof useRevokeExternalUserAccessMutation>;
 export type RevokeExternalUserAccessMutationResult = Apollo.MutationResult<RevokeExternalUserAccessMutation>;
 export type RevokeExternalUserAccessMutationOptions = Apollo.BaseMutationOptions<RevokeExternalUserAccessMutation, RevokeExternalUserAccessMutationVariables>;
+export const ValidateNewUserDocument = gql`
+    mutation ValidateNewUser($userInfo: CreateUserInput!, $personInfo: CreatePersonInput!) {
+  validateNewUser(userInfo: $userInfo, personInfo: $personInfo) {
+    sid
+    email {
+      ...fragmentUIStringField
+    }
+    active {
+      ...fragmentUIBooleanField
+    }
+    person {
+      sid
+      firstNm {
+        ...fragmentUIStringField
+      }
+      lastNm {
+        ...fragmentUIStringField
+      }
+      errCode
+      errMsg
+      errSeverity
+    }
+    organization {
+      ...fragmentUIReadOnlyField
+    }
+    accessPolicyGroups {
+      ...fragmentUISelectManyField
+    }
+    accessGrantOrgNames
+    sendActivationEmail {
+      ...fragmentUIBooleanField
+    }
+    lastLogin {
+      ...fragmentUIReadOnlyField
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    options {
+      ...fragmentUIOptions
+    }
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentWebCommandFragmentDoc}
+${FragmentUiOptionsFragmentDoc}`;
+export type ValidateNewUserMutationFn = Apollo.MutationFunction<ValidateNewUserMutation, ValidateNewUserMutationVariables>;
+
+/**
+ * __useValidateNewUserMutation__
+ *
+ * To run a mutation, you first call `useValidateNewUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useValidateNewUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [validateNewUserMutation, { data, loading, error }] = useValidateNewUserMutation({
+ *   variables: {
+ *      userInfo: // value for 'userInfo'
+ *      personInfo: // value for 'personInfo'
+ *   },
+ * });
+ */
+export function useValidateNewUserMutation(baseOptions?: Apollo.MutationHookOptions<ValidateNewUserMutation, ValidateNewUserMutationVariables>) {
+        return Apollo.useMutation<ValidateNewUserMutation, ValidateNewUserMutationVariables>(ValidateNewUserDocument, baseOptions);
+      }
+export type ValidateNewUserMutationHookResult = ReturnType<typeof useValidateNewUserMutation>;
+export type ValidateNewUserMutationResult = Apollo.MutationResult<ValidateNewUserMutation>;
+export type ValidateNewUserMutationOptions = Apollo.BaseMutationOptions<ValidateNewUserMutation, ValidateNewUserMutationVariables>;
 export const CreateDashThemeColorDocument = gql`
     mutation CreateDashThemeColor($createDashThemeColorInput: CreateDashThemeColorInput!) {
   createDashThemeColor(createDashThemeColorInput: $createDashThemeColorInput) {

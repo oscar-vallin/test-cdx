@@ -79,7 +79,9 @@ const AddExternalUsersAccessPanel = ({
     }
   };
 
-  const findExternalUsers = async (text: string): Promise<ITag[]> => externalUsersAccessService.callFindExternalUsers(client, handleError, text);
+  const findExternalUsers = async (text: string): Promise<ITag[]> => (
+    externalUsersAccessService.callFindExternalUsers(client, handleError, text)
+  );
 
   const handleFindExternalUsers = (text: string) => findExternalUsers(text);
 
@@ -106,7 +108,8 @@ const AddExternalUsersAccessPanel = ({
         Toast.warning({ text: _errorMsg });
       }
 
-      if (responseCode === GqOperationResponse.Success || responseCode === GqOperationResponse.PartialSuccess) {
+      if (responseCode === GqOperationResponse.Success
+        || responseCode === GqOperationResponse.PartialSuccess) {
         if (onGrantAccessToExternalUser) {
           onGrantAccessToExternalUser(response.grantExternalUserAccess);
         }
@@ -138,13 +141,26 @@ const AddExternalUsersAccessPanel = ({
         Toast.warning({ text: _errorMsg });
       }
 
-      if (responseCode === GqOperationResponse.Success || responseCode === GqOperationResponse.PartialSuccess) {
+      if (responseCode === GqOperationResponse.Success
+        || responseCode === GqOperationResponse.PartialSuccess) {
         if (onGrantAccessToExternalUser) {
           onGrantAccessToExternalUser(response.createExternalUser);
         }
         doClosePanel();
       }
     }
+  };
+
+  const validateBeforeNext = () => {
+    externalUsersAccessService.callValidateForm().then((data) => {
+      if (data?.validateNewUser?.response === GqOperationResponse.Success) {
+        handleNext();
+        setErrorMsg(undefined);
+      } else {
+        const _errorMsg = data?.validateNewUser?.errMsg ?? data?.validateNewUser?.response ?? 'Validation error';
+        setErrorMsg(_errorMsg);
+      }
+    });
   };
 
   const renderPanelHeader = () => (
@@ -189,7 +205,7 @@ const AddExternalUsersAccessPanel = ({
                   <SectionAccount
                     searchExternalUsers={handleFindExternalUsers}
                     form={externalUsersAccessService.userAccountForm}
-                    onNext={handleNext}
+                    onNext={validateBeforeNext}
                     userSelected={userSelected}
                     setUserSelected={setUserSelected}
                     createExternalUser={createExternalUser}
@@ -217,7 +233,7 @@ const AddExternalUsersAccessPanel = ({
                     form={externalUsersAccessService.userAccountForm}
                     accessManSelected={accessManSelected}
                     onPrev={handlePrev}
-                    onNext={handleNext}
+                    onNext={validateBeforeNext}
                     saveOptions={(sids) => {
                       externalUsersAccessService.updateAccessPolicyGroups(sids);
                       const value = externalUsersAccessService?.userAccountForm

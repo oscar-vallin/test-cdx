@@ -1,13 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { ReactElement, useEffect, useState } from 'react';
 import {
-  MessageBar, MessageBarType, PanelType, Stack,
+  MessageBar,
+  MessageBarType,
+  PanelType,
+  Stack,
 } from '@fluentui/react';
 
 import { Tabs } from 'src/components/tabs/Tabs';
 import { Text } from 'src/components/typography';
 import {
-  PanelBody, PanelHeader, PanelTitle, ThemedPanel,
+  PanelBody,
+  PanelHeader,
+  PanelTitle,
+  ThemedPanel,
 } from 'src/layouts/Panels/Panels.styles';
 
 import { useNotification } from 'src/hooks/useNotification';
@@ -93,7 +99,8 @@ const CreateUsersPanel = ({
         Toast.warning({ text: _errorMsg });
       }
 
-      if (responseCode === GqOperationResponse.Success || responseCode === GqOperationResponse.PartialSuccess) {
+      if (responseCode === GqOperationResponse.Success
+        || responseCode === GqOperationResponse.PartialSuccess) {
         onCreateUser(responseCreate.createUser);
         doClosePanel();
       }
@@ -105,6 +112,18 @@ const CreateUsersPanel = ({
       onDismiss();
     }
   }, [createUserService.isUserCreated]);
+
+  const validateBeforeNext = () => {
+    createUserService.callValidateForm().then((data) => {
+      if (data?.validateNewUser?.response === GqOperationResponse.Success) {
+        handleNext();
+        setErrorMsg(undefined);
+      } else {
+        const _errorMsg = data?.validateNewUser?.errMsg ?? data?.validateNewUser?.response ?? 'Validation error';
+        setErrorMsg(_errorMsg);
+      }
+    });
+  };
 
   const renderPanelHeader = () => (
     <PanelHeader>
@@ -149,7 +168,7 @@ const CreateUsersPanel = ({
                   content: (
                     <SectionAccount
                       form={createUserService.userAccountForm}
-                      onNext={handleNext}
+                      onNext={validateBeforeNext}
                       saveOptions={(userAccount) => {
                         createUserService.updateAccountInfo(userAccount);
                         setUnsavedChanges(true);
@@ -164,7 +183,7 @@ const CreateUsersPanel = ({
                     <SectionAccessManagement
                       form={createUserService.userAccountForm}
                       onPrev={handlePrev}
-                      onNext={handleNext}
+                      onNext={validateBeforeNext}
                       saveOptions={(sids) => {
                         createUserService.updateAccessPolicyGroups(sids);
                         setUnsavedChanges(true);
@@ -179,7 +198,7 @@ const CreateUsersPanel = ({
                     <SectionAuthentication
                       form={createUserService.userAccountForm}
                       onPrev={handlePrev}
-                      onNext={handleNext}
+                      onNext={validateBeforeNext}
                       saveOptions={(send) => {
                         createUserService.setSendAccountActivation(send);
                         setUnsavedChanges(true);
