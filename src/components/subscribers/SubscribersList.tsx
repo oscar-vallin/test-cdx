@@ -21,7 +21,7 @@ const SubscribersList = ({ totalSubscribers, currentSubscribers, title }: UserLi
 
   const columns: IColumn[] = [
     {
-      name: title ? 'Notify' : '',
+      name: '',
       key: 'name',
       fieldName: 'name',
       data: 'string',
@@ -73,7 +73,7 @@ const SubscribersList = ({ totalSubscribers, currentSubscribers, title }: UserLi
       selectionMode={SelectionMode.none}
       onRenderItemColumn={onRenderItemColum}
       layoutMode={DetailsListLayoutMode.justified}
-      isHeaderVisible
+      isHeaderVisible={false}
       title={title}
     />
   )
