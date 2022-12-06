@@ -6,12 +6,12 @@ import { ButtonAction } from 'src/components/buttons';
 export const CardStyled = styled(DocumentCard)`
   background: ${({ theme }) => theme.colors.neutralLighter};
   border: none;
-  padding-right: 35px;
+  padding-right: 5px;
   z-index: 10;
   border-radius: ${({ theme }) => theme.radius.normal};
   font: ${({ theme }) => theme.fontStyles.normal};
-  min-width: 320px;
-  max-width: 400px;
+  min-width: 310px;
+  max-width: 350px;
   min-height: 100px;
   width: 100%;
   bottom: 100px;
@@ -22,6 +22,27 @@ export const CardStyled = styled(DocumentCard)`
         border: none;
       }
     }
+  }
+  [data-icon-name*='Chevron'] {
+    font-size: 0.75em;
+    cursor: pointer;
+    font-weight:${({ theme }) => theme.fontWeights.bold};
+  }
+
+  [data-icon-name*='Ringer'] {
+    padding-right: 10px;
+  }
+
+  [data-icon-name*='add'] {
+    font-size: 0.75em;
+    padding-right: 15px;
+    cursor: pointer;
+    color: ${({ theme }) => theme.colors.themePrimary};
+    font-weight:${({ theme }) => theme.fontWeights.bold};
+  }
+
+  [data-icon-name*='Trash'] {
+    padding-right: 5px;
   }
 `;
 
@@ -134,3 +155,10 @@ export const StyledSubTitleText = styled.div`
   height: 22px;
   text-decoration: none !important;
 `;
+
+export const EllipsisedStyled = styled(Column)`
+max-width: 140px;
+width: 100%;
+overflow: hidden;
+text-overflow: ellipsis;
+`

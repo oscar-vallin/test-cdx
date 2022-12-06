@@ -55,7 +55,9 @@ import {
   StyledButtonAction,
   StyledProcessValueText,
   StyledQualifier,
+  EllipsisedStyled,
 } from './XchangeDetailsPage.styles';
+import { Collapse } from 'src/components/collapses/Collapse';
 
 const defaultDialogProps: DialogYesNoProps = {
   id: '__XchangeDetails_Dlg',
@@ -97,6 +99,7 @@ const XchangeDetailsPage = () => {
   const [openAlertsPanel, setOpenAlertsPanel] = useState(false);
   const [openJobGroup, setOpenJobGroup] = useState(false);
   const [openSchedulePanel, setOpenSchedulePanel] = useState(false);
+  const [isExpandedAlertBox, setIsExpandedAlertBox] = useState(false)
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
 
@@ -184,16 +187,20 @@ const XchangeDetailsPage = () => {
 
     if (typesAlert) {
       return (
-        <Row>
-          <Column lg="3">
-            <Text>Alert on: </Text>
-          </Column>
-          {typesAlert.map((type, index) => (
-            <StyledAlertTypes width={adaptWidth(type)} key={index} paddingTop={true}>
-              {type}
-            </StyledAlertTypes>
-          ))}
-        </Row>
+        <Spacing margin={{ left: 'double' }}>
+          <Stack horizontal>
+            <Text> Alert on: &nbsp;</Text>
+            {typesAlert.length > 1 ? (
+              <StyledAlertTypes width="55px">
+                ({typesAlert.length}) types
+              </StyledAlertTypes>
+            ) : (
+              <StyledAlertTypes width={adaptWidth(typesAlert[0])}>
+                {typesAlert[0]}
+              </StyledAlertTypes>
+            )}
+          </Stack>
+        </Spacing>
       );
     }
     return null;
@@ -228,34 +235,25 @@ const XchangeDetailsPage = () => {
     const _deleteCmd = cmds?.find((cmd) => cmd?.commandType === CdxWebCommandType.Delete);
 
     return (
-      <>
+      <Stack horizontal>
         {_updateCmd && (
-          <Column lg="1">
-            <IconButton
-              iconProps={{ iconName: 'EditSolid12' }}
-              style={{
-                paddingBottom: '10px',
-                position: 'relative',
-                right: '5px',
-                top: '1px',
-              }}
-              onClick={() => {
-                setSid(currentSid);
-                setOpenAlertsPanel(true);
-              }}
-            />
-          </Column>
+          <IconButton
+            iconProps={{ iconName: 'EditSolid12' }}
+            style={{ paddingBottom: '10px' }}
+            onClick={() => {
+              setSid(currentSid);
+              setOpenAlertsPanel(true);
+            }}
+          />
         )}
         {_deleteCmd && (
-          <Column lg="1">
-            <IconButton
-              iconProps={{ iconName: 'Trash' }}
-              style={{ paddingBottom: '10px' }}
-              onClick={() => showUnsavedChangesDialog(currentSid)}
-            />
-          </Column>
+          <IconButton
+            iconProps={{ iconName: 'Trash' }}
+            style={{ paddingBottom: '10px' }}
+            onClick={() => showUnsavedChangesDialog(currentSid)}
+          />
         )}
-      </>
+      </Stack>
     );
   };
 
@@ -264,63 +262,113 @@ const XchangeDetailsPage = () => {
       return (
         <>
           <CardStyled>
-            <Text style={{ fontWeight: 'bold' }}>
-              <IconButton iconProps={{ iconName: 'Ringer' }} style={{ color: 'black', fontWeight: 'bold' }} />
-              Alerts
-            </Text>
-            {xchangesAlerts?.map((alert, index) => (
-              <Spacing margin="normal" key={index}>
-                <Row>
-                  {filenameQualifier(alert.filenameQualifier ?? '', alert?.coreFilename ?? '')}
-                  {userPermissionsIcons(alert?.commands ?? [], alert?.sid ?? '')}
-                </Row>
-                {typesAlertsRender(alert?.alertTypes ?? [])}
-                <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+            <Row>
+              <Column lg="6">
+                <Stack horizontal>
+                  <Spacing margin={{ top: 'normal', left: 'normal' }}>
+                    <FontIcon iconName="Ringer" />
+                    <Text style={{ fontWeight: 'bold' }}>
+                      Alerts
+                    </Text>
+                  </Spacing>
+                </Stack>
+              </Column>
+              <Column lg="6" right>
+                <Stack horizontal>
+                  <Spacing margin={{ top: 'normal' }}>
+                    {createAlertCmd && (
+                    <TooltipHost content="Add Alert" directionalHint={DirectionalHint.topCenter}>
+                      <FontIcon
+                        id="__Add_Alert"
+                        iconName="add"
+                        onClick={() => {
+                          setSid('');
+                          setOpenAlertsPanel(true)
+                        }}
+                      />
+                    </TooltipHost>
+                    )}
+                    <FontIcon
+                      iconName={isExpandedAlertBox ? 'ChevronUp' : 'ChevronDown'}
+                      onClick={() => setIsExpandedAlertBox((prevState) => !prevState)}
+                    />
+                  </Spacing>
+                </Stack>
+              </Column>
+            </Row>
+            {!isExpandedAlertBox && (
+              <>
+                {xchangesAlerts?.map((alert, index) => (
+                  <Spacing margin="normal" key={index}>
+                    <Row>
+                      <Column lg="3">
+                        {filenameQualifier(alert.filenameQualifier ?? '', alert?.coreFilename ?? '')}
+                      </Column>
+                      <Column lg="7">
+                        {typesAlertsRender(alert?.alertTypes ?? [])}
+                      </Column>
+                      <Column lg="2" right>
+                        {userPermissionsIcons(alert?.commands ?? [], alert?.sid ?? '')}
+                      </Column>
+                    </Row>
+                    {alert?.subscribers
+                      && alert?.subscribers.map((subs, subsIndex: number) => (
+                        <Spacing key={subsIndex}>
+                          <Row>
+                            {subsIndex < 2 && (
+                              <>
+                                <EllipsisedStyled lg="6">
+                                  <ButtonLink
+                                    underline
+                                    title={subs.firstNm ?? ''}
+                                    style={{
+                                      fontSize: '12px',
+                                      maxWidth: '130px',
+                                      wordWrap: 'break-word',
+                                    }}
+                                  >
+                                    {subs.firstNm}
+                                  </ButtonLink>
+                                </EllipsisedStyled>
+                                <EllipsisedStyled lg="6">
+                                  <ButtonLink
+                                    underline
+                                    title={subs.email ?? ''}
+                                    style={{
+                                      fontSize: '12px',
+                                      maxWidth: '130px',
+                                      wordWrap: 'break-word',
+                                    }}
+                                  >
+                                    {subs.email}
+                                  </ButtonLink>
+                                </EllipsisedStyled>
+                              </>
+                            )}
+                          </Row>
+                        </Spacing>
+                      ))}
+                    <Row>
+                      {alert.subscribers && alert?.subscribers?.length > 2 && (
+                      <Column lg="6">
+                        <ButtonLink underline style={{ fontSize: '12px', maxWidth: '130px', wordWrap: 'break-word' }}>
+                          ({alert.subscribers.length - 2}) more . . .
+                        </ButtonLink>
+                      </Column>
+                      )}
+                    </Row>
+                  </Spacing>
+                ))}
+                {xchangesAlerts?.length === 0 && (
                   <Row>
-                    <Column lg="2">
-                      <Text style={{ fontWeight: 'bold' }}>Notify:</Text>
+                    <Column>
+                      <EmptyMessage size="normal">
+                        {'<none>'}
+                      </EmptyMessage>
                     </Column>
                   </Row>
-                </Spacing>
-                {alert?.subscribers
-                  && alert?.subscribers.map((subs, subsIndex: number) => (
-                    <Spacing margin={{ bottom: 'normal' }} key={subsIndex}>
-                      <Row>
-                        <Column lg="6">
-                          <ButtonLink style={{ fontSize: '12px', maxWidth: '130px', wordWrap: 'break-word' }}>
-                            {subs.firstNm}
-                          </ButtonLink>
-                        </Column>
-                        <Column lg="6">
-                          <ButtonLink style={{ fontSize: '12px', maxWidth: '150px', wordWrap: 'break-word' }}>
-                            {subs.email}
-                          </ButtonLink>
-                        </Column>
-                      </Row>
-                    </Spacing>
-                  ))}
-              </Spacing>
-            ))}
-            {xchangesAlerts?.length === 0 && (
-              <Row>
-                <Column>
-                  <EmptyMessage size="normal">
-                    {'<none>'}
-                  </EmptyMessage>
-                </Column>
-              </Row>
-            )}
-            {createAlertCmd && (
-            <ButtonAction
-              id="__Add_Alert"
-              iconName="add"
-              onClick={() => {
-                setSid('');
-                setOpenAlertsPanel(true)
-              }}
-            >
-              Add alert
-            </ButtonAction>
+                )}
+              </>
             )}
           </CardStyled>
           <Spacing margin={{ top: 'normal' }}>
