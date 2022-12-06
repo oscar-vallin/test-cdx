@@ -189,7 +189,7 @@ const XchangeDetailsPage = () => {
       return (
         <Spacing margin={{ left: 'double' }}>
           <Stack horizontal>
-            <Text> Alert on: &nbsp;</Text>
+            <Text style={{fontWeight: 'bold'}}> Alert on: &nbsp;</Text>
             {typesAlert.length > 1 ? (
               <StyledAlertTypes width="55px">
                 ({typesAlert.length}) types
