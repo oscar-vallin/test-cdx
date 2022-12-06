@@ -21,6 +21,7 @@ import {
   XchangeJobGroupConnection,
   WebCommand,
   CdxWebCommandType,
+  XchangeJobGroup,
 } from 'src/data/services/graphql';
 import {
   PanelBody,
@@ -150,6 +151,7 @@ const SchedulePanel = ({
   const [xchangeSchedule, setXchangeSchedule] = useState<XchangeScheduleForm | null>();
   const [xchangeJobGroup, setXchangeJobGroup] = useState<XchangeJobGroupForm | null>();
   const [xchangeJobGroups, setXchangeJobGroups] = useState<XchangeJobGroupConnection | null>();
+  const [jobGroup, setJobGroup] = useState<XchangeJobGroup>();
   const [options, setOptions] = useState<UiOptions[]>([]);
   const [currentDaySelected, setCurrentDaySelected] = useState<DaysProps>({ ...DefaulDaysProps });
   const [currentMonthSelected, setCurrentMonthSelected] = useState<MonthsProps>({ ...DefaulMonthsProps });
@@ -581,7 +583,7 @@ const SchedulePanel = ({
   };
 
   const saveSchedule = () => {
-    const subscriberSids = totalSubscribers.map((subSids) => subSids.sid);
+    let subscriberSids;
     let endHour: number | undefined;
     let endMinute: number | undefined;
     if (scheduleTime) {
@@ -597,28 +599,55 @@ const SchedulePanel = ({
     const endOday = handleLastValue(endDayOrdinal ?? '');
     const silenceSMonth = handleLastValue(silenceStartMonth ?? '');
     const silenceEMonth = handleLastValue(silenceEndMonth ?? '');
-
-    const scheduleValues = {
-      frequency: ScheduleFrequency[frecuency],
-      scheduleType: scheduleType === ScheduleType.ExpectedToRun
-        ? ScheduleType.ExpectedToRun : ScheduleType.NotScheduled,
-      months: scheduleFrequency === ScheduleFrequency.Weekly ? null : months,
-      days: scheduleFrequency === ScheduleFrequency.Monthly ? null : days,
-      xchangeJobGroupSid,
-      endDayOfMonth: !endDayOfMonth || scheduleFrequency === ScheduleFrequency.Weekly
-        ? null : +endDayOfMonth,
-      endDayOrdinal: scheduleFrequency === ScheduleFrequency.Weekly ? null : DayOrdinal[endOday],
-      endRelativeDay: scheduleFrequency === ScheduleFrequency.Weekly ? null : RelativeDay[endRDay],
-      endHour: scheduleFrequency === ScheduleFrequency.Monthly ? null : endHour,
-      endMinute: scheduleFrequency === ScheduleFrequency.Monthly ? null : endMinute,
-      timezone: scheduleFrequency === ScheduleFrequency.Monthly ? undefined : scheduleTimezone,
-      subscriberSids,
-      hasSilencePeriod,
-      silenceStartMonth: Month[silenceSMonth],
-      silenceStartDay: !silenceStartDay ? undefined : +silenceStartDay,
-      silenceEndMonth: Month[silenceEMonth],
-      silenceEndDay: !silenceEndDay ? undefined : +silenceEndDay,
-    };
+    let scheduleValues;
+    if (ScheduleFrequency.InGroup === scheduleFrequency) {
+      const scheduleJobGroup = jobGroup?.schedule
+      subscriberSids = scheduleJobGroup?.subscribers
+        ? scheduleJobGroup?.subscribers.map((subSids) => subSids.sid) : null;
+      scheduleValues = {
+        frequency: scheduleJobGroup?.frequency,
+        scheduleType: scheduleJobGroup?.scheduleType,
+        months: scheduleJobGroup?.months,
+        days: scheduleJobGroup?.days,
+        xchangeJobGroupSid: scheduleJobGroup?.xchangeJobGroupSid,
+        endDayOfMonth: scheduleJobGroup?.endDayOfMonth,
+        endDayOrdinal: scheduleJobGroup?.endDayOrdinal,
+        endRelativeDay: scheduleJobGroup?.endRelativeDay,
+        endHour: scheduleJobGroup?.endHour,
+        endMinute: scheduleJobGroup?.endMinute,
+        timezone: scheduleJobGroup?.timezone,
+        subscriberSids,
+        hasSilencePeriod,
+        silenceStartMonth: scheduleJobGroup?.silenceStartMonth,
+        silenceStartDay: scheduleJobGroup?.silenceStartDay,
+        silenceEndMonth: scheduleJobGroup?.silenceEndMonth,
+        silenceEndDay: scheduleJobGroup?.silenceEndDay,
+      }
+    } else {
+      subscriberSids = totalSubscribers.map((subSids) => subSids.sid);
+      scheduleValues = {
+        frequency: ScheduleFrequency[frecuency],
+        scheduleType: scheduleType === ScheduleType.ExpectedToRun
+          ? ScheduleType.ExpectedToRun : ScheduleType.NotScheduled,
+        months: scheduleFrequency === ScheduleFrequency.Weekly ? null : months,
+        days: scheduleFrequency === ScheduleFrequency.Monthly ? null : days,
+        xchangeJobGroupSid,
+        endDayOfMonth: !endDayOfMonth || scheduleFrequency === ScheduleFrequency.Weekly
+          ? null : +endDayOfMonth,
+        endDayOrdinal: scheduleFrequency === ScheduleFrequency.Weekly ? null : DayOrdinal[endOday],
+        endRelativeDay: scheduleFrequency === ScheduleFrequency.Weekly
+          ? null : RelativeDay[endRDay],
+        endHour: scheduleFrequency === ScheduleFrequency.Monthly ? null : endHour,
+        endMinute: scheduleFrequency === ScheduleFrequency.Monthly ? null : endMinute,
+        timezone: scheduleFrequency === ScheduleFrequency.Monthly ? undefined : scheduleTimezone,
+        subscriberSids,
+        hasSilencePeriod,
+        silenceStartMonth: Month[silenceSMonth],
+        silenceStartDay: !silenceStartDay ? undefined : +silenceStartDay,
+        silenceEndMonth: Month[silenceEMonth],
+        silenceEndDay: !silenceEndDay ? undefined : +silenceEndDay,
+      };
+    }
 
     if (schedule) {
       scheduleUpdate({
@@ -837,6 +866,7 @@ const SchedulePanel = ({
                     </StyledXchanges>
                   </>
                 ),
+                onClick: () => setJobGroup(jobGroup),
               }))
             }
           />
