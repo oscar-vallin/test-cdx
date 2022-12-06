@@ -363,7 +363,7 @@ const XchangeDetailsPage = () => {
                   <Row>
                     <Column>
                       <EmptyMessage size="normal">
-                        {'<none>'}
+                        {'No Xchange specific alerts configured'}
                       </EmptyMessage>
                     </Column>
                   </Row>
