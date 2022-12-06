@@ -256,14 +256,7 @@ const XchangeAlertsPanel = ({
 
     updatedDialog.onYes = () => {
       hideDialog();
-      setMessage(null);
-      closePanel(false);
-      setTotalSubscribers([]);
-      setUnsavedChanges(false);
-      setAlertTypesValue(undefined);
-      setXchangeConfigAlert(null);
-      setXchangeProfileAlert(null);
-      setFilenameQualifier('');
+      hidePanel();
     };
     updatedDialog.onClose = () => {
       hideDialog();
@@ -276,14 +269,7 @@ const XchangeAlertsPanel = ({
     if (unsavedChanges || firstSubscribers < totalSubscribers.length) {
       showUnsavedChangesDialog();
     } else {
-      setTotalSubscribers([]);
-      setXchangeConfigAlert(null);
-      setAlertTypesValue(undefined);
-      setXchangeProfileAlert(null);
-      setUnsavedChanges(false);
-      setFilenameQualifier('');
-      setMessage(null);
-      closePanel(false);
+      hidePanel();
     }
   };
 
@@ -399,57 +385,73 @@ const XchangeAlertsPanel = ({
 
   useEffect(() => {
     if (!updateProfileLoading && updateProfileData) {
-      refreshPage(true);
-      setMessage(null);
-      setTotalSubscribers([]);
-      Toast.success({ text: 'Alert updated' });
-      closePanel(false);
-    }
-
-    if (!updateProfileLoading && updateProfileError) {
-      Toast.error({ text: 'There was an error to updated alert' });
+      if (updateProfileData.updateXchangeProfileAlert?.response === 'SUCCESS') {
+        setUnsavedChanges(false);
+        refreshPage(true);
+        setTotalSubscribers([]);
+        Toast.success({ text: 'Alert updated' });
+        closePanel(false);
+      } else {
+        if (updateProfileData.updateXchangeProfileAlert) {
+          updateFormFromProfileAlert(updateProfileData.updateXchangeProfileAlert);
+          setMessage(updateProfileData.updateXchangeProfileAlert.errMsg);
+        }
+        setMessageType(MessageBarType.error);
+      }
     }
   }, [updateProfileData, updateProfileLoading]);
 
   useEffect(() => {
     if (!createProfileLoading && createProfileData) {
-      refreshPage(true);
-      setMessage(null);
-      setTotalSubscribers([]);
-      Toast.success({ text: 'Alert Added' });
-      closePanel(false);
-    }
-
-    if (!createProfileLoading && createProfileError) {
-      Toast.error({ text: 'There was an error to add alert' });
+      if (createProfileData.createXchangeProfileAlert?.response === 'SUCCESS') {
+        setUnsavedChanges(false);
+        refreshPage(true);
+        setTotalSubscribers([]);
+        Toast.success({ text: 'Alert Added' });
+        closePanel(false);
+      } else {
+        if (createProfileData.createXchangeProfileAlert) {
+          updateFormFromProfileAlert(createProfileData.createXchangeProfileAlert);
+          setMessage(createProfileData.createXchangeProfileAlert.errMsg);
+        }
+        setMessageType(MessageBarType.error);
+      }
     }
   }, [createProfileData, createProfileLoading]);
 
   useEffect(() => {
     if (!createConfigLoading && createConfigData) {
-      refreshPage(true);
-      setMessage(null);
-      setTotalSubscribers([]);
-      Toast.success({ text: 'Alert Added' });
-      closePanel(false);
-    }
-
-    if (!createConfigLoading && createConfigError) {
-      Toast.error({ text: 'There was an error to add alert' });
+      if (createConfigData.createXchangeConfigAlert?.response === 'SUCCESS') {
+        setUnsavedChanges(false);
+        refreshPage(true);
+        setTotalSubscribers([]);
+        Toast.success({ text: 'Alert Added' });
+        closePanel(false);
+      } else {
+        if (createConfigData.createXchangeConfigAlert) {
+          updateFormFromXchangeConfigAlert(createConfigData.createXchangeConfigAlert);
+          setMessage(createConfigData.createXchangeConfigAlert.errMsg);
+        }
+        setMessageType(MessageBarType.error);
+      }
     }
   }, [createConfigData, createConfigLoading]);
 
   useEffect(() => {
     if (!updateConfigLoading && updateConfigData) {
-      refreshPage(true);
-      setMessage(null);
-      setTotalSubscribers([]);
-      Toast.success({ text: 'Alert updated' });
-      closePanel(false);
-    }
-
-    if (!updateConfigLoading && updateConfigError) {
-      Toast.error({ text: 'There was an error to updated alert' });
+      if (updateConfigData.updateXchangeConfigAlert?.response === 'SUCCESS') {
+        setUnsavedChanges(false);
+        refreshPage(true);
+        setTotalSubscribers([]);
+        Toast.success({ text: 'Alert updated' });
+        closePanel(false);
+      } else {
+        if (updateConfigData.updateXchangeConfigAlert) {
+          updateFormFromXchangeConfigAlert(updateConfigData.updateXchangeConfigAlert);
+          setMessage(updateConfigData.updateXchangeConfigAlert.errMsg);
+        }
+        setMessageType(MessageBarType.error);
+      }
     }
   }, [updateConfigData, updateConfigLoading]);
 
