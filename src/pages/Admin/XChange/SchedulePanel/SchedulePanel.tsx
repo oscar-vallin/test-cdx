@@ -331,7 +331,8 @@ const SchedulePanel = ({
         const { name } = month;
         currentMonthSelected[name] = true;
         handleMonths(true, month.value);
-      })
+      });
+      setUnsavedChanges(false);
       xchangeJobGroupForm?.days.value?.forEach((day) => {
         const { name } = day;
         currentDaySelected[name] = true;
