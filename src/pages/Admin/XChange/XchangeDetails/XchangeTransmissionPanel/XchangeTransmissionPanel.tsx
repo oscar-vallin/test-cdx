@@ -808,7 +808,7 @@ const XchangeTransmissionPanel = ({
               )}
               {createCmd || updateCmd ? (
                 <ButtonLink onClick={() => setCustomQualifier((prevState) => !prevState)}>
-                  use a custom qualifier
+                  {!customQualifier ? 'use a custom qualifier' : 'use a standard environment-based qualifier'}
                 </ButtonLink>
               ) : null}
             </Column>
@@ -980,7 +980,7 @@ const XchangeTransmissionPanel = ({
       setOptionXchangeTransmission('copy');
       setXchangeFileTransmission(copyXchangeFileTransmission);
       const filename = { ...copyXchangeFileTransmission?.filenameQualifiers };
-      filename.label = 'Enviroment';
+      filename.label = 'Environment';
       filename.info = null;
       setFilenameQualifieruiField(filename);
       if (
