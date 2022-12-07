@@ -30,7 +30,7 @@ type DiagramProps = {
 const Diagram = ({
   data, refreshDetailsPage, xchangeFileProcessSid, commands,
 }: DiagramProps) => {
-  const { initialNodes, largestCoordinate } = InitialNodes(data);
+  const { initialNodes, largestCoordinate, largestCoordinateX } = InitialNodes(data);
   const { nodeWithParents } = NodeParent(initialNodes, data.stepGroups);
   const { initialEdges } = InitialEdges(data);
   const [nodes, setNodes, onNodesChange] = useNodesState(nodeWithParents);
@@ -40,6 +40,7 @@ const Diagram = ({
   const [openFilePanel, setOpenFilePanel] = useState(false);
   const [stepCommands, setStepCommands] = useState<WebCommand[] | undefined>([]);
   const [totalHeight, setTotalHeight] = useState(0);
+  const [totalWidth, setTotalWidth] = useState(0);
   const [transmissionCommands, setTransmissionCommands] = useState<WebCommand[] | undefined>([]);
   const [createStepCmd, setCreateStepCmd] = useState<WebCommand | null>();
   const [createTransmissionCmd, setCreateTransmissionCmd] = useState<WebCommand | null>();
@@ -156,9 +157,12 @@ const Diagram = ({
     getCommands();
     setTotalHeight(0);
     let height = largestCoordinate;
+    let width = largestCoordinateX + 1;
     height = height === 1 ? 2 : height;
     height *= 165;
+    width *= 280;
     setTotalHeight(height);
+    setTotalWidth(width);
   }, [data]);
 
   useEffect(() => {
@@ -202,7 +206,7 @@ const Diagram = ({
           </StyledHorizontalButtons>
         </Column>
         <Column lg="10">
-          <StyledContainer height={totalHeight}>
+          <StyledContainer height={totalHeight} width={totalWidth}>
             <ReactFlow
               nodes={nodes}
               edges={edges}

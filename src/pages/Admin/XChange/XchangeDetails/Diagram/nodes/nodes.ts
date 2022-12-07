@@ -39,10 +39,14 @@ export function InitialNodes(data: XchangeDiagram) {
     return values;
   });
   let largestCoordinate = 0;
+  let largestCoordinateX = 0;
   const initialTransmissions = xhcnageTransmissions
     .map((transmission:XchangeDiagramFileTransmission, transIndex: number) => {
       const values = {};
       if (transmission.position.y > largestCoordinate) largestCoordinate = transmission.position.y;
+      if (transmission.position.x > largestCoordinateX) {
+        largestCoordinateX = transmission.position.x;
+      }
       let positionX = transmission.position.x * 265;
       if (transmission.position.x === 0) {
         positionX = 10;
@@ -71,5 +75,9 @@ export function InitialNodes(data: XchangeDiagram) {
       return values;
     });
 
-  return { initialNodes: [...initialSteps, ...initialTransmissions], largestCoordinate };
+  return {
+    initialNodes: [...initialSteps, ...initialTransmissions],
+    largestCoordinate,
+    largestCoordinateX,
+  };
 }
