@@ -194,6 +194,7 @@ const XchangeAlertsPanel = ({
   };
 
   const saveConfigAlert = () => {
+    setTotalSubscribers([]);
     const subscriberSids = totalSubscribers.map((subSids) => subSids.sid);
     if (createCmd && coreFilename) {
       createXchangeConfigAlert({
@@ -398,6 +399,7 @@ const XchangeAlertsPanel = ({
       if (updateProfileData.updateXchangeProfileAlert?.response === 'SUCCESS') {
         setUnsavedChanges(false);
         refreshPage(true);
+        setMessage(null);
         setTotalSubscribers([]);
         Toast.success({ text: 'Alert updated' });
         closePanel(false);
@@ -416,6 +418,7 @@ const XchangeAlertsPanel = ({
       if (createProfileData.createXchangeProfileAlert?.response === 'SUCCESS') {
         setUnsavedChanges(false);
         refreshPage(true);
+        setMessage(null);
         setTotalSubscribers([]);
         Toast.success({ text: 'Alert Added' });
         closePanel(false);
@@ -434,6 +437,7 @@ const XchangeAlertsPanel = ({
       if (createConfigData.createXchangeConfigAlert?.response === 'SUCCESS') {
         setUnsavedChanges(false);
         refreshPage(true);
+        setMessage(null);
         setTotalSubscribers([]);
         Toast.success({ text: 'Alert Added' });
         closePanel(false);
@@ -452,6 +456,7 @@ const XchangeAlertsPanel = ({
       if (updateConfigData.updateXchangeConfigAlert?.response === 'SUCCESS') {
         setUnsavedChanges(false);
         refreshPage(true);
+        setMessage(null);
         setTotalSubscribers([]);
         Toast.success({ text: 'Alert updated' });
         closePanel(false);
