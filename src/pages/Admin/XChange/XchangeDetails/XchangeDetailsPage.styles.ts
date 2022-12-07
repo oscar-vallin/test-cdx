@@ -10,9 +10,9 @@ export const CardStyled = styled(DocumentCard)`
   z-index: 10;
   border-radius: ${({ theme }) => theme.radius.normal};
   font: ${({ theme }) => theme.fontStyles.normal};
-  min-width: 310px;
+  min-width: 320px;
   max-width: 350px;
-  min-height: 100px;
+  min-height: 50px;
   width: 100%;
   bottom: 100px;
 

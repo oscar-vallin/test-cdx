@@ -301,10 +301,10 @@ const XchangeDetailsPage = () => {
                 {xchangesAlerts?.map((alert, index) => (
                   <Spacing margin="normal" key={index}>
                     <Row>
-                      <Column lg="3">
+                      <Column lg="1">
                         {filenameQualifier(alert.filenameQualifier ?? '', alert?.coreFilename ?? '')}
                       </Column>
-                      <Column lg="7">
+                      <Column lg="9">
                         {typesAlertsRender(alert?.alertTypes ?? [])}
                       </Column>
                       <Column lg="2" right>
