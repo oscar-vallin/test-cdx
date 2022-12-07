@@ -32,7 +32,7 @@ import {
   ThemedPanel,
 } from 'src/layouts/Panels/Panels.styles';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { Column, Container, Row } from 'src/components/layouts';
+import { Column, Container } from 'src/components/layouts';
 import { UIInputMultiSelect, UIInputSelectOne } from 'src/components/inputs/InputDropdown';
 import { ButtonAction, ButtonLink } from 'src/components/buttons';
 import { SubscribersList } from 'src/components/subscribers/SubscribersList';
@@ -42,6 +42,8 @@ import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo
 import { InputText } from 'src/components/inputs/InputText';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { getEnumByValue } from 'src/utils/CDXUtils';
+import { UIFormLabel } from 'src/components/labels/FormLabel';
+import { FormRow } from 'src/components/layouts/Row/Row.styles';
 
 type XchangeAlertsPanelProps = {
   isPanelOpen: boolean;
@@ -86,6 +88,7 @@ const XchangeAlertsPanel = ({
   const [alertTypes, setAlertTypes] = useState<UiSelectManyField>();
   const [alertTypesValue, setAlertTypesValue] = useState<string[]>();
   const [addSubscriberModal, setAddSubscriberModal] = useState(false);
+  const [subscribersField, setSubscribersField] = useState<UiSelectManyField>();
   const [firstSubscribers, setFirstSubscribers] = useState(0);
   const [totalSubscribers, setTotalSubscribers] = useState<SubscriberOptionProps[]>([]);
   const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
@@ -242,6 +245,7 @@ const XchangeAlertsPanel = ({
     setTotalSubscribers([]);
     setXchangeConfigAlert(null);
     setAlertTypesValue(undefined);
+    setSubscribersField(undefined);
     setXchangeProfileAlert(null);
     setUnsavedChanges(false);
     setFilenameQualifier('');
@@ -256,14 +260,7 @@ const XchangeAlertsPanel = ({
 
     updatedDialog.onYes = () => {
       hideDialog();
-      setMessage(null);
-      closePanel(false);
-      setTotalSubscribers([]);
-      setUnsavedChanges(false);
-      setAlertTypesValue(undefined);
-      setXchangeConfigAlert(null);
-      setXchangeProfileAlert(null);
-      setFilenameQualifier('');
+      hidePanel();
     };
     updatedDialog.onClose = () => {
       hideDialog();
@@ -276,14 +273,7 @@ const XchangeAlertsPanel = ({
     if (unsavedChanges || firstSubscribers < totalSubscribers.length) {
       showUnsavedChangesDialog();
     } else {
-      setTotalSubscribers([]);
-      setXchangeConfigAlert(null);
-      setAlertTypesValue(undefined);
-      setXchangeProfileAlert(null);
-      setUnsavedChanges(false);
-      setFilenameQualifier('');
-      setMessage(null);
-      closePanel(false);
+      hidePanel();
     }
   };
 
@@ -299,6 +289,9 @@ const XchangeAlertsPanel = ({
       && form?.alertTypes.value.length > 0) {
       setAlertTypesValue(form?.alertTypes.value.map((alert) => alert.value));
     }
+
+    setSubscribersField(form?.subscribers);
+
     if (form?.subscribers.value
       && form.subscribers.value.length > 0) {
       subscribersList(form.subscribers.value);
@@ -340,6 +333,9 @@ const XchangeAlertsPanel = ({
     } else {
       setAlertTypesValue([]);
     }
+
+    setSubscribersField(form.subscribers);
+
     if (form.subscribers.value
       && form.subscribers.value.length > 0) {
       subscribersList(form.subscribers.value);
@@ -399,57 +395,73 @@ const XchangeAlertsPanel = ({
 
   useEffect(() => {
     if (!updateProfileLoading && updateProfileData) {
-      refreshPage(true);
-      setMessage(null);
-      setTotalSubscribers([]);
-      Toast.success({ text: 'Alert updated' });
-      closePanel(false);
-    }
-
-    if (!updateProfileLoading && updateProfileError) {
-      Toast.error({ text: 'There was an error to updated alert' });
+      if (updateProfileData.updateXchangeProfileAlert?.response === 'SUCCESS') {
+        setUnsavedChanges(false);
+        refreshPage(true);
+        setTotalSubscribers([]);
+        Toast.success({ text: 'Alert updated' });
+        closePanel(false);
+      } else {
+        if (updateProfileData.updateXchangeProfileAlert) {
+          updateFormFromProfileAlert(updateProfileData.updateXchangeProfileAlert);
+          setMessage(updateProfileData.updateXchangeProfileAlert.errMsg);
+        }
+        setMessageType(MessageBarType.error);
+      }
     }
   }, [updateProfileData, updateProfileLoading]);
 
   useEffect(() => {
     if (!createProfileLoading && createProfileData) {
-      refreshPage(true);
-      setMessage(null);
-      setTotalSubscribers([]);
-      Toast.success({ text: 'Alert Added' });
-      closePanel(false);
-    }
-
-    if (!createProfileLoading && createProfileError) {
-      Toast.error({ text: 'There was an error to add alert' });
+      if (createProfileData.createXchangeProfileAlert?.response === 'SUCCESS') {
+        setUnsavedChanges(false);
+        refreshPage(true);
+        setTotalSubscribers([]);
+        Toast.success({ text: 'Alert Added' });
+        closePanel(false);
+      } else {
+        if (createProfileData.createXchangeProfileAlert) {
+          updateFormFromProfileAlert(createProfileData.createXchangeProfileAlert);
+          setMessage(createProfileData.createXchangeProfileAlert.errMsg);
+        }
+        setMessageType(MessageBarType.error);
+      }
     }
   }, [createProfileData, createProfileLoading]);
 
   useEffect(() => {
     if (!createConfigLoading && createConfigData) {
-      refreshPage(true);
-      setMessage(null);
-      setTotalSubscribers([]);
-      Toast.success({ text: 'Alert Added' });
-      closePanel(false);
-    }
-
-    if (!createConfigLoading && createConfigError) {
-      Toast.error({ text: 'There was an error to add alert' });
+      if (createConfigData.createXchangeConfigAlert?.response === 'SUCCESS') {
+        setUnsavedChanges(false);
+        refreshPage(true);
+        setTotalSubscribers([]);
+        Toast.success({ text: 'Alert Added' });
+        closePanel(false);
+      } else {
+        if (createConfigData.createXchangeConfigAlert) {
+          updateFormFromXchangeConfigAlert(createConfigData.createXchangeConfigAlert);
+          setMessage(createConfigData.createXchangeConfigAlert.errMsg);
+        }
+        setMessageType(MessageBarType.error);
+      }
     }
   }, [createConfigData, createConfigLoading]);
 
   useEffect(() => {
     if (!updateConfigLoading && updateConfigData) {
-      refreshPage(true);
-      setMessage(null);
-      setTotalSubscribers([]);
-      Toast.success({ text: 'Alert updated' });
-      closePanel(false);
-    }
-
-    if (!updateConfigLoading && updateConfigError) {
-      Toast.error({ text: 'There was an error to updated alert' });
+      if (updateConfigData.updateXchangeConfigAlert?.response === 'SUCCESS') {
+        setUnsavedChanges(false);
+        refreshPage(true);
+        setTotalSubscribers([]);
+        Toast.success({ text: 'Alert updated' });
+        closePanel(false);
+      } else {
+        if (updateConfigData.updateXchangeConfigAlert) {
+          updateFormFromXchangeConfigAlert(updateConfigData.updateXchangeConfigAlert);
+          setMessage(updateConfigData.updateXchangeConfigAlert.errMsg);
+        }
+        setMessageType(MessageBarType.error);
+      }
     }
   }, [updateConfigData, updateConfigLoading]);
 
@@ -476,83 +488,82 @@ const XchangeAlertsPanel = ({
             </MessageBar>
           </Spacing>
         )}
-        <Container>
-          {xchangeConfigAlert?.filenameQualifier.visible && (
-            <Row>
-              <Column lg="12">
-                {!customQualifier ? (
-                  <UIInputSelectOne
-                    id="filenameQualifier"
-                    value={filenameQualifier}
-                    uiField={filenameQualifierUIField}
-                    options={optionAlerts}
-                    onChange={(newValue) => {
-                      setUnsavedChanges(true);
-                      setFilenameQualifier(newValue ?? '');
-                    }}
-                  />
-                ) : (
-                  <InputText
-                    id="__filenameQualifier"
-                    value={filenameQualifier}
-                    label="Filename Qualifier"
-                    info={xchangeConfigAlert.filenameQualifier.info ?? ''}
-                    required={xchangeConfigAlert.filenameQualifier.required}
-                    onChange={(_event, newValue) => {
-                      setUnsavedChanges(true);
-                      setFilenameQualifier(newValue ?? '');
-                    }}
-                  />
-                )}
-                <ButtonLink onClick={() => setCustomQualifier((prevState) => !prevState)}>
-                  {!customQualifier ? 'use a custom qualifier' : 'use a standard environment-based qualifier'}
-                </ButtonLink>
-              </Column>
-            </Row>
-          )}
-          <Row>
+        {xchangeConfigAlert?.filenameQualifier.visible && (
+          <FormRow>
             <Column lg="12">
-              <UIInputMultiSelect
-                id="__AlertTypes"
-                value={alertTypesValue}
-                uiField={alertTypes}
-                options={optionAlerts}
-                onChange={(types) => {
-                  setUnsavedChanges(true);
-                  setAlertTypesValue(types ?? []);
-                }}
-              />
+              {!customQualifier ? (
+                <UIInputSelectOne
+                  id="filenameQualifier"
+                  value={filenameQualifier}
+                  uiField={filenameQualifierUIField}
+                  options={optionAlerts}
+                  onChange={(newValue) => {
+                    setUnsavedChanges(true);
+                    setFilenameQualifier(newValue ?? '');
+                  }}
+                />
+              ) : (
+                <InputText
+                  id="__filenameQualifier"
+                  value={filenameQualifier}
+                  label="Filename Qualifier"
+                  info={xchangeConfigAlert.filenameQualifier.info ?? ''}
+                  required={xchangeConfigAlert.filenameQualifier.required}
+                  onChange={(_event, newValue) => {
+                    setUnsavedChanges(true);
+                    setFilenameQualifier(newValue ?? '');
+                  }}
+                />
+              )}
+              <ButtonLink onClick={() => setCustomQualifier((prevState) => !prevState)}>
+                {!customQualifier ? 'use a custom qualifier' : 'use a standard environment-based qualifier'}
+              </ButtonLink>
             </Column>
-          </Row>
-          <Row>
-            <Column lg="12">
-              <SubscribersList
-                currentSubscribers={totalSubscribers}
-                totalSubscribers={setTotalSubscribers}
-                title={true}
-              />
-            </Column>
-          </Row>
-          <ButtonAction onClick={() => setAddSubscriberModal(true)} iconName="add">
-            Add person to be notified
-          </ButtonAction>
-          <Spacing margin={{ top: 'normal' }}>
-            <PrimaryButton
-              id="__Update__Alert"
-              iconProps={{ iconName: 'Save' }}
-              onClick={() => {
-                if (xchangeProfileAlert) {
-                  saveProfileAlert();
-                }
-                if (xchangeConfigAlert) {
-                  saveConfigAlert();
-                }
+          </FormRow>
+        )}
+        <FormRow>
+          <Column lg="12">
+            <UIInputMultiSelect
+              id="__AlertTypes"
+              value={alertTypesValue}
+              uiField={alertTypes}
+              options={optionAlerts}
+              onChange={(types) => {
+                setUnsavedChanges(true);
+                setAlertTypesValue(types ?? []);
               }}
-            >
-              Save
-            </PrimaryButton>
-          </Spacing>
-        </Container>
+            />
+          </Column>
+        </FormRow>
+        <FormRow>
+          <Column lg="12">
+            <UIFormLabel id="__Alert_Subscribers_lbl" uiField={subscribersField} />
+            <SubscribersList
+              currentSubscribers={totalSubscribers}
+              totalSubscribers={setTotalSubscribers}
+              title={true}
+            />
+          </Column>
+        </FormRow>
+        <ButtonAction onClick={() => setAddSubscriberModal(true)} iconName="add">
+          Add person to be notified
+        </ButtonAction>
+        <Spacing margin={{ top: 'normal' }}>
+          <PrimaryButton
+            id="__Update__Alert"
+            iconProps={{ iconName: 'Save' }}
+            onClick={() => {
+              if (xchangeProfileAlert) {
+                saveProfileAlert();
+              }
+              if (xchangeConfigAlert) {
+                saveConfigAlert();
+              }
+            }}
+          >
+            Save
+          </PrimaryButton>
+        </Spacing>
       </PanelBody>
     );
   };
