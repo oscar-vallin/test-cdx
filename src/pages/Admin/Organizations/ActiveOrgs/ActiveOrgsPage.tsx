@@ -89,31 +89,33 @@ const ActiveOrgsPage = () => {
   useEffect(() => {
     if (!loadingSearch && dataSearch) {
       setOrgs(dataSearch.searchOrganizations.nodes);
-      const example = { ...dataSearch.searchOrganizations.nodes[0] };
-      const uatActivity = { ...dataSearch.searchOrganizations.nodes[0].uatActivity };
-      const prodActivity = { ...uatActivity };
-      const testActivity = { ...uatActivity };
-      uatActivity.filesProcessed = 0;
-      prodActivity.filesProcessed = 0;
-      testActivity.filesProcessed = 0;
-      const vendors: string[] = []
-      dataSearch.searchOrganizations.nodes.forEach((node: OrganizationActivity) => {
-        if (node.vendorNames.length > 0) {
-          vendors.push(...node.vendorNames);
-        }
-        uatActivity.filesProcessed += node.uatActivity.filesProcessed;
-        prodActivity.filesProcessed += node.prodActivity.filesProcessed;
-        testActivity.filesProcessed += node.testActivity.filesProcessed;
-      });
-      example.vendorNames = vendors;
-      example.uatActivity = uatActivity;
-      example.prodActivity = prodActivity;
-      example.testActivity = testActivity;
-      example.name = '';
-      example.sid = '';
-      example.orgId = '';
-      example.orgTypeLabel = '';
-      setOrgs((prevState) => prevState.concat(example));
+      if (dataSearch.searchOrganizations.nodes[0]) {
+        const example = { ...dataSearch.searchOrganizations.nodes[0] };
+        const uatActivity = { ...dataSearch.searchOrganizations.nodes[0].uatActivity };
+        const prodActivity = { ...uatActivity };
+        const testActivity = { ...uatActivity };
+        uatActivity.filesProcessed = 0;
+        prodActivity.filesProcessed = 0;
+        testActivity.filesProcessed = 0;
+        const vendors: string[] = []
+        dataSearch.searchOrganizations.nodes.forEach((node: OrganizationActivity) => {
+          if (node.vendorNames.length > 0) {
+            vendors.push(...node.vendorNames);
+          }
+          uatActivity.filesProcessed += node.uatActivity.filesProcessed;
+          prodActivity.filesProcessed += node.prodActivity.filesProcessed;
+          testActivity.filesProcessed += node.testActivity.filesProcessed;
+        });
+        example.vendorNames = vendors;
+        example.uatActivity = uatActivity;
+        example.prodActivity = prodActivity;
+        example.testActivity = testActivity;
+        example.name = '';
+        example.sid = '';
+        example.orgId = '';
+        example.orgTypeLabel = '';
+        setOrgs((prevState) => prevState.concat(example));
+      }
 
       // update the paging info
       const newPagingInfo = dataSearch?.searchOrganizations?.paginationInfo;
