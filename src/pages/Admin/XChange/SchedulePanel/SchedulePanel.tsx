@@ -22,6 +22,7 @@ import {
   WebCommand,
   CdxWebCommandType,
   XchangeJobGroup,
+  useDeleteXchangeJobGroupMutation,
 } from 'src/data/services/graphql';
 import {
   PanelBody,
@@ -206,6 +207,11 @@ const SchedulePanel = ({
   ] = useUpdateXchangeJobGroupMutation();
 
   const [
+    deleteJobGroup,
+    { data: jobGroupDeleted, loading: isLoadingDeletedJobGroup, error: jobGroupDeletedError },
+  ] = useDeleteXchangeJobGroupMutation();
+
+  const [
     scheduleUpdate,
     { data: updateData, loading: isLoadingUpdate, error: updateError },
   ] = useUpdateXchangeScheduleMutation();
@@ -332,7 +338,6 @@ const SchedulePanel = ({
         currentMonthSelected[name] = true;
         handleMonths(true, month.value);
       });
-      setUnsavedChanges(false);
       xchangeJobGroupForm?.days.value?.forEach((day) => {
         const { name } = day;
         currentDaySelected[name] = true;
@@ -360,6 +365,7 @@ const SchedulePanel = ({
         const _updateCmd = pageCommands.find((cmd) => cmd.commandType === CdxWebCommandType.Update);
         setUpdateCmd(_updateCmd);
       }
+      setUnsavedChanges(false);
     }
   }, [jobGroupData, isLoadingJobGroup]);
 
@@ -467,6 +473,23 @@ const SchedulePanel = ({
   }, [jobGroupUpdated, isLoadingUpdateJobGroup, jobGroupUpdatedError]);
 
   useEffect(() => {
+    if (!isLoadingDeletedJobGroup && jobGroupDeleted) {
+      setTotalSubscribers([]);
+      setCurrentDaySelected({ ...DefaulDaysProps });
+      setCurrentMonthSelected({ ...DefaulMonthsProps });
+      setMonths([]);
+      setDays([]);
+      setMessage(null);
+      closePanel(false);
+      refreshPage(true);
+      Toast.success({ text: 'Job Group Deleted' });
+    }
+    if (!isLoadingDeletedJobGroup && jobGroupDeletedError) {
+      Toast.error({ text: 'Error deleting job group' });
+    }
+  }, [jobGroupDeleted, isLoadingDeletedJobGroup, jobGroupDeletedError]);
+
+  useEffect(() => {
     if (!isLoadingListJobGroup && jobGroupListData) {
       const { xchangeJobGroups: xchangeJobGroupList } = jobGroupListData;
       setXchangeJobGroups(xchangeJobGroupList);
@@ -562,6 +585,27 @@ const SchedulePanel = ({
       setUnsavedChanges(false);
     };
     updatedDialog.onClose = () => {
+      hideDialog();
+    };
+    setDialogProps(updatedDialog);
+    setShowDialog(true);
+  };
+
+  const deleteJonGroupDialog = () => {
+    const updatedDialog = { ...defaultDialogProps };
+    updatedDialog.title = 'Delete Job group';
+    updatedDialog.message = 'Are you sure you want to delete this Job Group?';
+
+    const sid = xchangeJobGroup?.sid ?? '';
+
+    updatedDialog.onYes = () => {
+      deleteJobGroup({
+        variables: {
+          sid,
+        },
+      }).then()
+    };
+    updatedDialog.onNo = () => {
       hideDialog();
     };
     setDialogProps(updatedDialog);
@@ -1121,18 +1165,47 @@ const SchedulePanel = ({
         Save
       </PrimaryButton>
     );
+  };
+
+  const renderDeleteJobGroup = () => {
+    if (xchangeJobGroup && xchangeJobGroup.sid) {
+      const xchangesProcessed = !xchangeJobGroup.includedExchanges.length;
+      return (
+        <>
+          <DefaultButton
+            style={{ marginLeft: '20px' }}
+            id="deleteSchedule"
+            text="Delete"
+            disabled={!xchangesProcessed}
+            onClick={() => {
+              setShowDialog(true);
+              deleteJonGroupDialog();
+            }}
+          />
+          {!xchangeProcessed && (
+            <TooltipHost
+              content="A job group can only be deleted if there are no Xchanges processed within the group."
+            >
+              <FontIcon
+                iconName="info"
+                style={{
+                  marginLeft: '10px',
+                  cursor: 'pointer',
+                }}
+              />
+            </TooltipHost>
+          )}
+        </>
+      );
+    }
+
+    return null;
   }
 
   const renderPanelFooter = () => (
     <>
       {renderSaveButton()}
-      {!schedule && xchangeConfigSid && (
-        <DefaultButton
-          style={{ marginLeft: '20px' }}
-          id="deleteSchedule"
-          text="Delete"
-        />
-      )}
+      {renderDeleteJobGroup()}
     </>
   );
 
