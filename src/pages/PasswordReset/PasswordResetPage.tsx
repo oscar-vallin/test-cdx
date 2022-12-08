@@ -109,7 +109,7 @@ export const PasswordResetPage = () => {
       } else {
         setValidationMessage(
           dataUpdatePassword?.updatePassword?.errMsg
-            ?? 'An internal error occurred updating your password. Please contact your administrator.',
+            ?? 'An unexpected error occurred updating your password. Please contact your administrator.',
         );
       }
     }
