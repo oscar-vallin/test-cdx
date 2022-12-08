@@ -354,6 +354,7 @@ const XchangeDetailsPage = () => {
                         </ButtonLink>
                       </Column>
                       )}
+                      <Spacing margin={{ bottom: 'normal' }} />
                     </Row>
                   </Spacing>
                 ))}

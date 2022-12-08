@@ -23,7 +23,7 @@ export const StyledAlertTypes = styled.div<StyledAlertTypesProps>`
   border-radius: 5px;
   border: solid 1px ${({ theme }) => theme.colors.black};
   text-align: center;
-  padding-top: ${({ paddingTop }) => (paddingTop ? '3px' : '2px')};
+  padding-top: ${({ paddingTop }) => (paddingTop ? '3px' : '3px')};
   color: ${({ theme }) => theme.colors.black};
   font-size: 12px;
   font-weight: 600;
