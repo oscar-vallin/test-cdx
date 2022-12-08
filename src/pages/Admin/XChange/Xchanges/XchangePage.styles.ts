@@ -55,19 +55,20 @@ export const StyledIconsComments = styled.div`
 
 export const CircleStyled = styled.div<CircleStyledProps>`
   border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  padding: 2.5px 1px 7px 1px;
+  width: ${({ total }) => (total ? '25px' : '20px')};
+  height: ${({ total }) => (total ? '25px' : '20px')};;
+  padding: ${({ total }) => (total ? '5px 1px 7px 1px' : '2.5px 1px 7px 1px')};
   background: ${({ theme }) => theme.colors.white};
-  border: 1.5px solid ${({ color }) => color};
+  border: ${({ total, color }) => (total ? `2px solid ${color}` : `1.5px solid ${color}`)};
   color: ${({ color }) => color};
   text-align: center;
   font: 11px Arial, sans-serif;
-  cursor: ${({ color }) => color === 'gray' ? 'default' : 'pointer'};
+  cursor: ${({ color }) => (color === 'gray' ? 'default' : 'pointer')};
 `;
 
 type CircleStyledProps = {
   color: string;
+  total?: boolean;
 };
 
 export const StyledButtonAction = styled(ButtonAction)`

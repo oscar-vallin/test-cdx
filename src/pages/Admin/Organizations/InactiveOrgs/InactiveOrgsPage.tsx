@@ -8,6 +8,7 @@ import {
   Organization,
   PaginationInfo,
   UiBooleanField,
+  OrganizationActivity,
 } from 'src/data/services/graphql';
 import { Column, Container, Row } from 'src/components/layouts';
 import { PageTitle } from 'src/components/typography';
@@ -27,7 +28,7 @@ import { OrgsTable } from '../OrgsTable';
 const InactiveOrgsPage = () => {
   const { orgSid: orgOwnerSid } = useOrgSid();
   const ActiveDomainStore = useActiveDomainStore();
-  const [orgs, setOrgs] = useState<Organization[]>([]);
+  const [orgs, setOrgs] = useState<OrganizationActivity[]>([]);
   const [searchAllOrgsFilter, setSearchAllOrgsFilter] = useState<boolean>(false);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [selectedOrgSid, setSelectedOrgSid] = useState<string>();

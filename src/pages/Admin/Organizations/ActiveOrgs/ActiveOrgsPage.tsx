@@ -10,7 +10,7 @@ import { PageTitle } from 'src/components/typography';
 
 import {
   CdxWebCommandType,
-  Organization,
+  OrganizationActivity,
   PaginationInfo,
   SortDirection,
   UiBooleanField,
@@ -36,7 +36,7 @@ import { OrgsTable } from '../OrgsTable';
 const ActiveOrgsPage = () => {
   const { orgSid: orgOwnerSid } = useOrgSid();
   const ActiveDomainStore = useActiveDomainStore();
-  const [orgs, setOrgs] = useState<Organization[]>([]);
+  const [orgs, setOrgs] = useState<OrganizationActivity[]>([]);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [selectedOrgSid, setSelectedOrgSid] = useState<string>();
   const [searchAllOrgsFilter, setSearchAllOrgsFilter] = useState<boolean>(false);
@@ -89,6 +89,31 @@ const ActiveOrgsPage = () => {
   useEffect(() => {
     if (!loadingSearch && dataSearch) {
       setOrgs(dataSearch.searchOrganizations.nodes);
+      const example = { ...dataSearch.searchOrganizations.nodes[0] };
+      const uatActivity = { ...dataSearch.searchOrganizations.nodes[0].uatActivity };
+      const prodActivity = { ...uatActivity };
+      const testActivity = { ...uatActivity };
+      uatActivity.filesProcessed = 0;
+      prodActivity.filesProcessed = 0;
+      testActivity.filesProcessed = 0;
+      const vendors: string[] = []
+      dataSearch.searchOrganizations.nodes.forEach((node: OrganizationActivity) => {
+        if (node.vendorNames.length > 0) {
+          vendors.push(...node.vendorNames);
+        }
+        uatActivity.filesProcessed += node.uatActivity.filesProcessed;
+        prodActivity.filesProcessed += node.prodActivity.filesProcessed;
+        testActivity.filesProcessed += node.testActivity.filesProcessed;
+      });
+      example.vendorNames = vendors;
+      example.uatActivity = uatActivity;
+      example.prodActivity = prodActivity;
+      example.testActivity = testActivity;
+      example.name = '';
+      example.sid = '';
+      example.orgId = '';
+      example.orgTypeLabel = '';
+      setOrgs((prevState) => prevState.concat(example));
 
       // update the paging info
       const newPagingInfo = dataSearch?.searchOrganizations?.paginationInfo;
@@ -158,7 +183,6 @@ const ActiveOrgsPage = () => {
         : 'There are no active Organizations in this Organization.';
       return <EmptyState title="No active orgs found" description={emptyText} actions={createOrgButton()} />;
     }
-
     return (
       <>
         <OrgsTable
