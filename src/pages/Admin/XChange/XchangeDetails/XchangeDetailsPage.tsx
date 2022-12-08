@@ -40,7 +40,7 @@ import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { ROUTE_XCHANGE_DETAILS } from 'src/data/constants/RouteConstants';
 import { Comment20Filled } from '@fluentui/react-icons';
 import { UIInputTextArea } from 'src/components/inputs/InputTextArea';
-import { ButtonAction, ButtonLink } from 'src/components/buttons';
+import { ButtonLink } from 'src/components/buttons';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { EmptyMessage } from 'src/containers/tables/TableCurrentActivity/TableActivity.styles';
 import { ThemeStore } from 'src/store/ThemeStore';
@@ -51,13 +51,11 @@ import { SchedulePanel } from '../SchedulePanel';
 import { StyledAlertTypes } from '../XchangeAlerts/XchangeAlertsPage.style';
 import {
   CardStyled,
-  StyledColumTabs,
   StyledButtonAction,
   StyledProcessValueText,
   StyledQualifier,
   EllipsisedStyled,
 } from './XchangeDetailsPage.styles';
-import { Collapse } from 'src/components/collapses/Collapse';
 
 const defaultDialogProps: DialogYesNoProps = {
   id: '__XchangeDetails_Dlg',
@@ -189,7 +187,7 @@ const XchangeDetailsPage = () => {
       return (
         <Spacing margin={{ left: 'double' }}>
           <Stack horizontal>
-            <Text style={{fontWeight: 'bold'}}> Alert on: &nbsp;</Text>
+            <Text style={{ fontWeight: 'bold' }}> Alert on: &nbsp;</Text>
             {typesAlert.length > 1 ? (
               <StyledAlertTypes width="55px">
                 ({typesAlert.length}) types
@@ -263,17 +261,17 @@ const XchangeDetailsPage = () => {
         <>
           <CardStyled>
             <Row>
-              <Column lg="6">
+              <Column lg="10">
                 <Stack horizontal>
                   <Spacing margin={{ top: 'normal', left: 'normal' }}>
                     <FontIcon iconName="Ringer" />
                     <Text style={{ fontWeight: 'bold' }}>
-                      Alerts
+                      Alerts (for this Xchange)
                     </Text>
                   </Spacing>
                 </Stack>
               </Column>
-              <Column lg="6" right>
+              <Column lg="2" right>
                 <Stack horizontal>
                   <Spacing margin={{ top: 'normal' }}>
                     {createAlertCmd && (
@@ -363,7 +361,7 @@ const XchangeDetailsPage = () => {
                   <Row>
                     <Column>
                       <EmptyMessage size="normal">
-                        {'No Xchange specific alerts configured'}
+                        {'<none>'}
                       </EmptyMessage>
                     </Column>
                   </Row>
