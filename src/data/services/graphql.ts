@@ -1032,6 +1032,7 @@ export type Mutation = {
   updateXchangeSchedule?: Maybe<XchangeScheduleForm>;
   createXchangeJobGroup?: Maybe<XchangeJobGroupForm>;
   updateXchangeJobGroup?: Maybe<XchangeJobGroupForm>;
+  deleteXchangeJobGroup?: Maybe<GenericResponse>;
   subscribeToAlert?: Maybe<GenericResponse>;
   deleteMyAlert?: Maybe<GenericResponse>;
 };
@@ -1469,6 +1470,11 @@ export type MutationCreateXchangeJobGroupArgs = {
 
 export type MutationUpdateXchangeJobGroupArgs = {
   jobGroupInput: UpdateXchangeJobGroupInput;
+};
+
+
+export type MutationDeleteXchangeJobGroupArgs = {
+  sid: Scalars['ID'];
 };
 
 
@@ -10238,6 +10244,30 @@ export type UpdateXchangeJobGroupMutation = (
     )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type DeleteXchangeJobGroupMutationVariables = Exact<{
+  sid: Scalars['ID'];
+}>;
+
+
+export type DeleteXchangeJobGroupMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteXchangeJobGroup?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
     )>> }
   )> }
 );
@@ -21634,6 +21664,50 @@ export function useUpdateXchangeJobGroupMutation(baseOptions?: Apollo.MutationHo
 export type UpdateXchangeJobGroupMutationHookResult = ReturnType<typeof useUpdateXchangeJobGroupMutation>;
 export type UpdateXchangeJobGroupMutationResult = Apollo.MutationResult<UpdateXchangeJobGroupMutation>;
 export type UpdateXchangeJobGroupMutationOptions = Apollo.BaseMutationOptions<UpdateXchangeJobGroupMutation, UpdateXchangeJobGroupMutationVariables>;
+export const DeleteXchangeJobGroupDocument = gql`
+    mutation DeleteXchangeJobGroup($sid: ID!) {
+  deleteXchangeJobGroup(sid: $sid) {
+    response
+    errCode
+    errMsg
+    errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export type DeleteXchangeJobGroupMutationFn = Apollo.MutationFunction<DeleteXchangeJobGroupMutation, DeleteXchangeJobGroupMutationVariables>;
+
+/**
+ * __useDeleteXchangeJobGroupMutation__
+ *
+ * To run a mutation, you first call `useDeleteXchangeJobGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteXchangeJobGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteXchangeJobGroupMutation, { data, loading, error }] = useDeleteXchangeJobGroupMutation({
+ *   variables: {
+ *      sid: // value for 'sid'
+ *   },
+ * });
+ */
+export function useDeleteXchangeJobGroupMutation(baseOptions?: Apollo.MutationHookOptions<DeleteXchangeJobGroupMutation, DeleteXchangeJobGroupMutationVariables>) {
+        return Apollo.useMutation<DeleteXchangeJobGroupMutation, DeleteXchangeJobGroupMutationVariables>(DeleteXchangeJobGroupDocument, baseOptions);
+      }
+export type DeleteXchangeJobGroupMutationHookResult = ReturnType<typeof useDeleteXchangeJobGroupMutation>;
+export type DeleteXchangeJobGroupMutationResult = Apollo.MutationResult<DeleteXchangeJobGroupMutation>;
+export type DeleteXchangeJobGroupMutationOptions = Apollo.BaseMutationOptions<DeleteXchangeJobGroupMutation, DeleteXchangeJobGroupMutationVariables>;
 export const SubscribeToAlertDocument = gql`
     mutation SubscribeToAlert($alertInput: AlertSelectionInput) {
   subscribeToAlert(alertInput: $alertInput) {
