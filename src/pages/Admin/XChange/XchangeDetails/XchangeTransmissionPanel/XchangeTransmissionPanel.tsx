@@ -1016,7 +1016,7 @@ const XchangeTransmissionPanel = ({
       const filename = {
         ...dataFileTransmissionForm.xchangeFileTransmissionForm?.filenameQualifiers,
       };
-      filename.label = 'Enviroment';
+      filename.label = 'Environment';
       filename.info = null;
       setFilenameQualifieruiField(filename);
       if (
