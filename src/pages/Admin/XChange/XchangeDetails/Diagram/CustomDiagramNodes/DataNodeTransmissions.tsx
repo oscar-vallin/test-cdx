@@ -1,5 +1,8 @@
 import React, { memo, useEffect, useState } from 'react';
 import {
+  DefaultButton,
+  Dialog,
+  DialogFooter,
   DirectionalHint, FontIcon, Stack, Text, TooltipHost,
 } from '@fluentui/react';
 import {
@@ -14,6 +17,7 @@ import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useNotification } from 'src/hooks/useNotification';
 import { ButtonLink } from 'src/components/buttons';
 import { ThemeStore } from 'src/store/ThemeStore';
+import { Spacing } from 'src/components/spacings/Spacing';
 import Node from './Node';
 import { StyledQualifier, StyledSFTP } from '../../XchangeDetailsPage.styles';
 import { XchangeTransmissionPanel } from '../../XchangeTransmissionPanel/XchangeTransmissionPanel';
@@ -51,6 +55,7 @@ const DataNodeTransmissions = ({ data, id }) => {
   const [addCmd, setAddCmd] = useState<WebCommand | null>();
   const [deleteCmd, setDeleteCmd] = useState<WebCommand | null>();
   const [showDialog, setShowDialog] = useState(false);
+  const [showMessageDialog, setShowMessageDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
 
   const [deleteXchangeFileTransmission,
@@ -242,6 +247,10 @@ const DataNodeTransmissions = ({ data, id }) => {
 
   useEffect(() => {
     if (updateTransmissionPanel && !showDialog) {
+      if (!sid) {
+        setShowMessageDialog(true);
+        return;
+      }
       setOptionXchangeTransmission('update');
       setOpenPanel(true);
       setUpdateTransmissionPanel(false);
@@ -282,6 +291,21 @@ const DataNodeTransmissions = ({ data, id }) => {
     <>
       <Node content={renderNode()} />
       <DialogYesNo {...dialogProps} open={showDialog} />
+      <Dialog hidden={!showMessageDialog} minWidth="300px">
+        <Spacing>
+          <span>
+            The Xchange Profile requires conversion.
+            Convert this Xchange Profile to see its details
+          </span>
+        </Spacing>
+        <DialogFooter>
+          <DefaultButton
+            id="__Transmission_Message"
+            text="Close"
+            onClick={() => setShowMessageDialog(false)}
+          />
+        </DialogFooter>
+      </Dialog>
     </>
   );
 };

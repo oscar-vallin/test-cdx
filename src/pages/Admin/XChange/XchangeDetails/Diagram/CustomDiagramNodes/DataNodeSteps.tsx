@@ -1,6 +1,12 @@
 import { useState, memo, useEffect } from 'react';
 import {
-  DirectionalHint, FontIcon, Stack, TooltipHost,
+  DirectionalHint,
+  FontIcon,
+  Stack,
+  TooltipHost,
+  Dialog,
+  DialogFooter,
+  DefaultButton,
 } from '@fluentui/react';
 import { Handle, Position } from 'react-flow-renderer';
 import { BrainCircuit24Regular } from '@fluentui/react-icons';
@@ -20,6 +26,7 @@ import { useNotification } from 'src/hooks/useNotification';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { ButtonLink } from 'src/components/buttons';
 import { theme } from 'src/styles/themes/theme';
+import { Spacing } from 'src/components/spacings/Spacing';
 import Node from './Node';
 import { StyledQualifier, StyledSubTitleText } from '../../XchangeDetailsPage.styles';
 import { XchangeStepPanel } from '../../XchangeStepPanel/XchangeStepPanel';
@@ -94,6 +101,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
   const [updateMoveUpCmd, setUpdateMoveUpCmd] = useState<WebCommand | null>();
   const [updateMoveDownCmd, setUpdateMoveDownCmd] = useState<WebCommand | null>();
   const [showDialog, setShowDialog] = useState(false);
+  const [showMessageDialog, setShowMessageDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
 
   const [deleteXchangeStep,
@@ -180,7 +188,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
     setShowDialog(false);
   };
 
-  const showUnsavedChangesDialog = (title: string) => {
+  const showDeleteStepDialog = (title: string) => {
     const updatedDialog = { ...defaultDialogProps };
     updatedDialog.title = 'Delete Step';
     updatedDialog.message = `Are you sure you want to delete this Xchange step ${title}?`;
@@ -245,7 +253,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
                 onClick={() => {
                   setOpenPanel(false);
                   setShowDialog(true);
-                  showUnsavedChangesDialog(label ?? '');
+                  showDeleteStepDialog(label ?? '');
                 }}
               />
             </TooltipHost>
@@ -396,6 +404,10 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
 
   useEffect(() => {
     if (updateStepPanel && !showDialog && !hoverIcon) {
+      if (!sid) {
+        setShowMessageDialog(true);
+        return;
+      }
       setOptionXchangeStep('update');
       setOpenPanel(true);
       setHiddeIcon(false);
@@ -454,6 +466,21 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
     <>
       <Node content={renderNode()} />
       <DialogYesNo {...dialogProps} open={showDialog} />
+      <Dialog hidden={!showMessageDialog} minWidth="300px">
+        <Spacing>
+          <span>
+            The Xchange Profile requires conversion.
+            Convert this Xchange Profile to see its details
+          </span>
+        </Spacing>
+        <DialogFooter>
+          <DefaultButton
+            id="__StepMessage_confirm_ok"
+            text="Close"
+            onClick={() => setShowMessageDialog(false)}
+          />
+        </DialogFooter>
+      </Dialog>
     </>
   );
 };
