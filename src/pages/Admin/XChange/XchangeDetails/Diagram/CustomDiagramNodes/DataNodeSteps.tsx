@@ -102,6 +102,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
   const [updateMoveDownCmd, setUpdateMoveDownCmd] = useState<WebCommand | null>();
   const [showDialog, setShowDialog] = useState(false);
   const [showMessageDialog, setShowMessageDialog] = useState(false);
+  const [handleDialog, setHandleDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
 
   const [deleteXchangeStep,
@@ -403,11 +404,12 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
   }, [stepCommands]);
 
   useEffect(() => {
+    if (handleDialog && !sid) {
+      setShowMessageDialog(true);
+      setHandleDialog(false);
+      return;
+    }
     if (updateStepPanel && !showDialog && !hoverIcon) {
-      if (!sid) {
-        setShowMessageDialog(true);
-        return;
-      }
       setOptionXchangeStep('update');
       setOpenPanel(true);
       setHiddeIcon(false);
@@ -416,7 +418,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
     }
 
     setHiddeIcon(true);
-  }, [updateStepPanel]);
+  }, [updateStepPanel, handleDialog]);
 
   useEffect(() => {
     let isMounted = true;
@@ -433,7 +435,11 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
     }
 
     if (updateStep) {
-      setUpdateStepPanel(true);
+      if (!sid) {
+        setHandleDialog(true);
+      } else {
+        setUpdateStepPanel(true);
+      }
     }
 
     return () => {

@@ -56,6 +56,7 @@ const DataNodeTransmissions = ({ data, id }) => {
   const [deleteCmd, setDeleteCmd] = useState<WebCommand | null>();
   const [showDialog, setShowDialog] = useState(false);
   const [showMessageDialog, setShowMessageDialog] = useState(false);
+  const [handleDialog, setHandleDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
 
   const [deleteXchangeFileTransmission,
@@ -246,16 +247,17 @@ const DataNodeTransmissions = ({ data, id }) => {
   }, [transmissionCommands]);
 
   useEffect(() => {
+    if (handleDialog && !sid) {
+      setShowMessageDialog(true);
+      setHandleDialog(false);
+      return;
+    }
     if (updateTransmissionPanel && !showDialog) {
-      if (!sid) {
-        setShowMessageDialog(true);
-        return;
-      }
       setOptionXchangeTransmission('update');
       setOpenPanel(true);
       setUpdateTransmissionPanel(false);
     }
-  }, [updateTransmissionPanel]);
+  }, [updateTransmissionPanel, handleDialog]);
 
   useEffect(() => {
     let isMounted = true;
@@ -272,7 +274,11 @@ const DataNodeTransmissions = ({ data, id }) => {
     }
 
     if (updateTransmission) {
-      setUpdateTransmissionPanel(true);
+      if (!sid) {
+        setHandleDialog(true);
+      } else {
+        setUpdateTransmissionPanel(true);
+      }
     }
 
     return () => {
