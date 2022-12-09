@@ -322,7 +322,7 @@ const XchangeDetailsPage = () => {
                                     style={{
                                       fontSize: '12px',
                                       maxWidth: '130px',
-                                      wordWrap: 'break-word',
+                                      overflow: 'hidden',
                                     }}
                                   >
                                     {subs.firstNm}
@@ -335,7 +335,7 @@ const XchangeDetailsPage = () => {
                                     style={{
                                       fontSize: '12px',
                                       maxWidth: '130px',
-                                      wordWrap: 'break-word',
+                                      overflow: 'hidden',
                                     }}
                                   >
                                     {subs.email}
