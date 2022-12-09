@@ -479,6 +479,7 @@ const SchedulePanel = ({
       setCurrentMonthSelected({ ...DefaulMonthsProps });
       setMonths([]);
       setDays([]);
+      setShowDialog(false);
       setMessage(null);
       closePanel(false);
       refreshPage(true);
