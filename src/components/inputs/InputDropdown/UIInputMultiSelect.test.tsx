@@ -11,11 +11,11 @@ import {
 const fullField: UiSelectManyField = {
   value: [
     {
-      name: 'One',
+      label: 'One',
       value: '1',
     },
     {
-      name: 'Four',
+      label: 'Four',
       value: '4',
     },
   ],

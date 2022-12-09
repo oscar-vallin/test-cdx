@@ -22,7 +22,7 @@ export const UIInputSelectOne = ({
 
   const renderReadOnlyValues = () => {
     if (uiField?.value) {
-      return uiField?.value.name ?? uiField?.value.value;
+      return uiField?.value.label ?? uiField?.value.value;
     }
     return <EmptyValue>&lt;empty&gt;</EmptyValue>;
   };

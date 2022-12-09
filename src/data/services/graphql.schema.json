@@ -22560,7 +22560,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "OBJECT",
-                  "name": "NVPStr",
+                  "name": "UIOption",
                   "ofType": null
                 }
               }
@@ -22751,7 +22751,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "NVPStr",
+              "name": "UIOption",
               "ofType": null
             },
             "isDeprecated": false,

@@ -8,7 +8,7 @@ import {
 
 const fullField: UiSelectOneField = {
     value: {
-      name: 'Four',
+      label: 'Four',
       value: '4',
     },
     label: 'Select One Field',

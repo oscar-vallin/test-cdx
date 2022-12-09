@@ -3022,7 +3022,7 @@ export type UiReadOnlyField = UiField & {
 
 export type UiSelectManyField = UiField & {
   __typename?: 'UISelectManyField';
-  value?: Maybe<Array<NvpStr>>;
+  value?: Maybe<Array<UiOption>>;
   label: Scalars['String'];
   readOnly?: Maybe<Scalars['Boolean']>;
   info?: Maybe<Scalars['String']>;
@@ -3041,7 +3041,7 @@ export type UiSelectManyField = UiField & {
 
 export type UiSelectOneField = UiField & {
   __typename?: 'UISelectOneField';
-  value?: Maybe<NvpStr>;
+  value?: Maybe<UiOption>;
   label: Scalars['String'];
   readOnly?: Maybe<Scalars['Boolean']>;
   info?: Maybe<Scalars['String']>;
@@ -4350,8 +4350,8 @@ export type FragmentUiSelectOneFieldFragment = (
   { __typename?: 'UISelectOneField' }
   & Pick<UiSelectOneField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'inheritedFrom' | 'inheritedBy' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
   & { value?: Maybe<(
-    { __typename?: 'NVPStr' }
-    & Pick<NvpStr, 'name' | 'value'>
+    { __typename?: 'UIOption' }
+    & FragmentUiOptionFragment
   )> }
 );
 
@@ -4359,8 +4359,8 @@ export type FragmentUiSelectManyFieldFragment = (
   { __typename?: 'UISelectManyField' }
   & Pick<UiSelectManyField, 'label' | 'readOnly' | 'info' | 'required' | 'visible' | 'inheritedFrom' | 'inheritedBy' | 'options' | 'query' | 'errCode' | 'errMsg' | 'errSeverity'>
   & { value?: Maybe<Array<(
-    { __typename?: 'NVPStr' }
-    & Pick<NvpStr, 'name' | 'value'>
+    { __typename?: 'UIOption' }
+    & FragmentUiOptionFragment
   )>> }
 );
 
@@ -10650,11 +10650,18 @@ export const FragmentXchangeActivityFragmentDoc = gql`
   lastActivity
 }
     `;
+export const FragmentUiOptionFragmentDoc = gql`
+    fragment fragmentUIOption on UIOption {
+  label
+  value
+  info
+  category
+}
+    `;
 export const FragmentUiSelectOneFieldFragmentDoc = gql`
     fragment fragmentUISelectOneField on UISelectOneField {
   value {
-    name
-    value
+    ...fragmentUIOption
   }
   label
   readOnly
@@ -10669,7 +10676,7 @@ export const FragmentUiSelectOneFieldFragmentDoc = gql`
   errMsg
   errSeverity
 }
-    `;
+    ${FragmentUiOptionFragmentDoc}`;
 export const FragmentUiStringFieldFragmentDoc = gql`
     fragment fragmentUIStringField on UIStringField {
   value
@@ -10690,8 +10697,7 @@ export const FragmentUiStringFieldFragmentDoc = gql`
 export const FragmentUiSelectManyFieldFragmentDoc = gql`
     fragment fragmentUISelectManyField on UISelectManyField {
   value {
-    name
-    value
+    ...fragmentUIOption
   }
   label
   readOnly
@@ -10706,15 +10712,7 @@ export const FragmentUiSelectManyFieldFragmentDoc = gql`
   errMsg
   errSeverity
 }
-    `;
-export const FragmentUiOptionFragmentDoc = gql`
-    fragment fragmentUIOption on UIOption {
-  label
-  value
-  info
-  category
-}
-    `;
+    ${FragmentUiOptionFragmentDoc}`;
 export const FragmentUiOptionsFragmentDoc = gql`
     fragment fragmentUIOptions on UIOptions {
   key
