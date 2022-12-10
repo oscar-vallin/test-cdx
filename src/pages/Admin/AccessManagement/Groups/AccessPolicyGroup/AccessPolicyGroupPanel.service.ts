@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import {
   AccessPolicyGroupForm,
   Maybe,
-  NvpStr,
   UiOption,
   useAccessPolicyGroupFormLazyQuery,
   useCreateAccessPolicyGroupMutation,
@@ -78,14 +77,14 @@ export const useCreateGroupPanel = (isOpen, orgSid, selectedGroupId, templateId)
     return cleaned;
   };
 
-  const nvpStrToITag = (nvps?: Maybe<NvpStr>[] | null): ITag[] => {
+  const uiOptionToITag = (nvps?: Maybe<UiOption>[] | null): ITag[] => {
     const tags: ITag[] = [];
     if (nvps) {
       nvps.forEach((nvp) => {
         if (nvp) {
           tags.push({
             key: nvp.value,
-            name: nvp.name,
+            name: nvp.label,
           });
         }
       });
@@ -108,8 +107,8 @@ export const useCreateGroupPanel = (isOpen, orgSid, selectedGroupId, templateId)
         includeAllSubOrgs: form.includeAllSubOrgs?.value ?? false,
         policySids: form.policies?.value?.map((itm) => itm?.value ?? '') ?? [],
         specializationSids: form.specializations?.value?.map((itm) => itm?.value ?? '') ?? [],
-        includeOrgSids: nvpStrToITag(form.includeOrgSids?.value),
-        excludeOrgSids: nvpStrToITag(form.excludeOrgSids?.value),
+        includeOrgSids: uiOptionToITag(form.includeOrgSids?.value),
+        excludeOrgSids: uiOptionToITag(form.excludeOrgSids?.value),
       };
       setAccessPolicyData(data);
       // console.log('Setting PolicySids')

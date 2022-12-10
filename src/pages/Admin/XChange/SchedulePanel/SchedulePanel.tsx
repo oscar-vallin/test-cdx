@@ -241,12 +241,12 @@ const SchedulePanel = ({
     });
   };
 
-  const subscribersList = (subscribers) => {
+  const subscribersList = (subscribers: UiOption[]) => {
     const showSubs: any[] = [];
     let sub = {};
     for (let subscriber = 0; subscriber < subscribers.length; subscriber++) {
-      sub['name'] = subscribers[subscriber].name;
-      sub['email'] = subscribers[subscriber].email;
+      sub['name'] = subscribers[subscriber].info;
+      sub['email'] = subscribers[subscriber].label;
       sub['sid'] = subscribers[subscriber].value;
       showSubs.push(sub);
       sub = {};
@@ -296,13 +296,13 @@ const SchedulePanel = ({
       setXchangeSchedule(xchangeScheduleForm);
       setOptions(xchangeScheduleForm?.options ?? []);
       xchangeScheduleForm?.months.value?.forEach((month) => {
-        const { name } = month;
-        currentMonthSelected[name] = true;
+        const { label } = month;
+        currentMonthSelected[label] = true;
         handleMonths(true, month.value);
       });
       xchangeScheduleForm?.days.value?.forEach((day) => {
-        const { name } = day;
-        currentDaySelected[name] = true;
+        const { label } = day;
+        currentDaySelected[label] = true;
         handleDays(true, day.value);
       });
       setUnsavedChanges(false);
@@ -334,16 +334,20 @@ const SchedulePanel = ({
       setXchangeJobGroup(xchangeJobGroupForm);
       setOptions(xchangeJobGroupForm?.options ?? []);
       xchangeJobGroupForm?.months.value?.forEach((month) => {
-        const { name } = month;
-        currentMonthSelected[name] = true;
+        const { label } = month;
+        currentMonthSelected[label] = true;
         handleMonths(true, month.value);
       });
       xchangeJobGroupForm?.days.value?.forEach((day) => {
-        const { name } = day;
-        currentDaySelected[name] = true;
+        const { label } = day;
+        currentDaySelected[label] = true;
         handleDays(true, day.value);
       });
       setJobGroupName(xchangeJobGroupForm?.name.value ?? '');
+      if (xchangeJobGroupForm?.subscribers.value
+        && xchangeJobGroupForm.subscribers.value.length > 0) {
+        subscribersList(xchangeJobGroupForm.subscribers.value)
+      }
       setScheduleFrequency(xchangeJobGroupForm?.frequency.value?.value ?? '');
       setScheduleType(xchangeJobGroupForm?.scheduleType.value?.value ?? '');
       setScheduleTimeZone(xchangeJobGroupForm?.timezone.value?.value ?? '');

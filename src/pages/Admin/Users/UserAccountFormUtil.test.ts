@@ -50,8 +50,8 @@ const fullForm: UserAccountForm = {
   accessPolicyGroups: {
     label: 'Groups',
     value: [
-      { value: '92', name: '' },
-      { value: '95', name: '' },
+      { value: '92', label: '' },
+      { value: '95', label: '' },
     ],
     required: false,
     visible: true,
@@ -87,8 +87,8 @@ describe('User Account Form Utils testing', () => {
     expect(updated?.email?.value).toEqual('shem.phillips@garphill.com');
     expect(updated?.person?.firstNm?.value).toEqual('Shem');
     expect(updated?.person?.lastNm?.value).toEqual('Phillips');
-    expect(updated?.accessPolicyGroups?.value).toContainEqual({ name: '', value: '10' });
-    expect(updated?.accessPolicyGroups?.value).toContainEqual({ name: '', value: '12' });
+    expect(updated?.accessPolicyGroups?.value).toContainEqual({ label: '', value: '10' });
+    expect(updated?.accessPolicyGroups?.value).toContainEqual({ label: '', value: '12' });
   });
 
   it('Test Update Form Retains Labels', () => {

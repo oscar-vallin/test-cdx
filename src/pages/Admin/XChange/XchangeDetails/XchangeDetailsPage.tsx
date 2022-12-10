@@ -737,7 +737,7 @@ const XchangeDetailsPage = () => {
                       setDataDiagram(process.diagram);
                     }}
                   >
-                    {process.vendor.value?.name}-{process.specId.value}
+                    {process.vendor.value?.label}-{process.specId.value}
                   </StyledProcessValueText>
                   <StyledButtonAction
                     fontSize={100}

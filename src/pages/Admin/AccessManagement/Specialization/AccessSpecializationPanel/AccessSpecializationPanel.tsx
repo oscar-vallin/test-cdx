@@ -210,7 +210,7 @@ const AccessSpecializationPanel = ({
         (obj, item) => ({
           ...obj,
           [item.permission]:
-            item.orgSids.value?.map(({ name: itemName, value }) => ({ name: itemName, key: value })) || [],
+            item.orgSids.value?.map(({ label: itemName, value }) => ({ name: itemName, key: value })) || [],
         }),
         {},
       );

@@ -77,7 +77,7 @@ export const MigrateUserDialog = ({
       const { userAccountForm } = dataUserAccountForm;
       // Prepopulate the values of the access groups with the access groups the user currently has
       if (userAccountForm?.accessPolicyGroups) {
-        userAccountForm.accessPolicyGroups.value = selectedGroupSids.map((id) => ({ name: id, value: id }));
+        userAccountForm.accessPolicyGroups.value = selectedGroupSids.map((id) => ({ label: id, value: id }));
         userAccountForm.accessPolicyGroups.label = 'New Access Groups';
       }
       setOtherOrgForm(userAccountForm);
@@ -91,7 +91,7 @@ export const MigrateUserDialog = ({
         <OptionRow key={`existing-group-${index}`}>
           <Text>
             <PaddedIcon iconName="Completed" />
-            {itm.name}
+            {itm.label}
           </Text>
         </OptionRow>
       ));

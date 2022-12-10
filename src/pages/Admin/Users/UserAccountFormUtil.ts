@@ -75,7 +75,7 @@ export const updateForm = (
     userAccountForm.accessPolicyGroups = {
       ...(userAccountForm.accessPolicyGroups ?? defaultForm.accessPolicyGroups),
       value: accessPolicyGroupSids.map((sid) => ({
-        name: '',
+        label: '',
         value: sid,
       })),
     };

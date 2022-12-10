@@ -11,7 +11,7 @@ import {
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import {
   AlertType,
-  CdxWebCommandType,
+  CdxWebCommandType, UiOption,
   UiOptions,
   UiSelectManyField,
   UiSelectOneField,
@@ -224,12 +224,12 @@ const XchangeAlertsPanel = ({
     }
   };
 
-  const subscribersList = (subscribers) => {
+  const subscribersList = (subscribers: UiOption[]) => {
     const showSubs: any[] = [];
     let sub = {};
     for (let subscriber = 0; subscriber < subscribers.length; subscriber++) {
-      sub['name'] = subscribers[subscriber].name;
-      sub['email'] = subscribers[subscriber].email;
+      sub['name'] = subscribers[subscriber].info;
+      sub['email'] = subscribers[subscriber].label;
       sub['sid'] = subscribers[subscriber].value;
       showSubs.push(sub);
       sub = {};
