@@ -5,7 +5,6 @@ import { PageHeader } from 'src/containers/headers/PageHeader';
 import {
   useSearchOrganizationsLazyQuery,
   SortDirection,
-  Organization,
   PaginationInfo,
   UiBooleanField,
   OrganizationActivity,
@@ -13,6 +12,7 @@ import {
 import { Column, Container, Row } from 'src/components/layouts';
 import { PageTitle } from 'src/components/typography';
 import { PageBody } from 'src/components/layouts/Column';
+import { OrgPanel } from 'src/pages/Admin/Organizations/ActiveOrgs/OrgPanel';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
@@ -174,6 +174,15 @@ const InactiveOrgsPage = () => {
           <Row>{renderBody()}</Row>
         </Container>
       </PageBody>
+
+      {isPanelOpen && (
+        <OrgPanel
+          isOpen={isPanelOpen}
+          selectedOrgSid={selectedOrgSid}
+          onDismiss={() => setIsPanelOpen(false)}
+          onSave={fetchData}
+        />
+      )}
     </LayoutDashboard>
   )
 };

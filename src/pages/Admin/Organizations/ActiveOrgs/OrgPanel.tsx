@@ -238,6 +238,8 @@ export const OrgPanel = ({
     if (!loadingDeactivate && dataDeactivateOrg) {
       const { orgId } = orgState;
       setRefreshDataXchange(true);
+      doClosePanel();
+      onSave();
       Toast.success({ text: `Organization ${orgId} has been deactivated` });
     }
 
