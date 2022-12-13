@@ -252,6 +252,8 @@ export const OrgPanel = ({
     if (!loadingActivate && dataActivateOrg) {
       const { orgId } = orgState;
       setRefreshDataXchange(true);
+      doClosePanel();
+      onSave();
       Toast.success({ text: `Organization ${orgId} has been activated` });
     }
 
