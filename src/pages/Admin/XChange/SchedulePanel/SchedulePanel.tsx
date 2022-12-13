@@ -651,27 +651,24 @@ const SchedulePanel = ({
     const silenceEMonth = handleLastValue(silenceEndMonth ?? '');
     let scheduleValues;
     if (ScheduleFrequency.InGroup === scheduleFrequency) {
-      const scheduleJobGroup = jobGroup?.schedule
-      subscriberSids = scheduleJobGroup?.subscribers
-        ? scheduleJobGroup?.subscribers.map((subSids) => subSids.sid) : null;
       scheduleValues = {
-        frequency: scheduleJobGroup?.frequency,
-        scheduleType: scheduleJobGroup?.scheduleType,
-        months: scheduleJobGroup?.months,
-        days: scheduleJobGroup?.days,
-        xchangeJobGroupSid: scheduleJobGroup?.xchangeJobGroupSid,
-        endDayOfMonth: scheduleJobGroup?.endDayOfMonth,
-        endDayOrdinal: scheduleJobGroup?.endDayOrdinal,
-        endRelativeDay: scheduleJobGroup?.endRelativeDay,
-        endHour: scheduleJobGroup?.endHour,
-        endMinute: scheduleJobGroup?.endMinute,
-        timezone: scheduleJobGroup?.timezone,
+        frequency: ScheduleFrequency[frecuency],
+        scheduleType: ScheduleType.ExpectedToRun,
+        months: null,
+        days: null,
+        endDayOfMonth: null,
+        endDayOrdinal: null,
+        endRelativeDay: null,
+        endHour: null,
+        endMinute: null,
+        timezone: null,
         subscriberSids,
         hasSilencePeriod,
-        silenceStartMonth: scheduleJobGroup?.silenceStartMonth,
-        silenceStartDay: scheduleJobGroup?.silenceStartDay,
-        silenceEndMonth: scheduleJobGroup?.silenceEndMonth,
-        silenceEndDay: scheduleJobGroup?.silenceEndDay,
+        silenceStartMonth: null,
+        silenceStartDay: null,
+        silenceEndMonth: null,
+        silenceEndDay: null,
+        xchangeJobGroupSid: jobGroup?.sid,
       }
     } else {
       subscriberSids = totalSubscribers.map((subSids) => subSids.sid);
