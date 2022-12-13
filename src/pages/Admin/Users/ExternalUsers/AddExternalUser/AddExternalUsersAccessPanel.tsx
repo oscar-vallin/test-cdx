@@ -152,15 +152,19 @@ const AddExternalUsersAccessPanel = ({
   };
 
   const validateBeforeNext = () => {
-    externalUsersAccessService.callValidateForm().then((data) => {
-      if (data?.validateNewUser?.response === GqOperationResponse.Success) {
-        handleNext();
-        setErrorMsg(undefined);
-      } else {
-        const _errorMsg = data?.validateNewUser?.errMsg ?? data?.validateNewUser?.response ?? 'Validation error';
-        setErrorMsg(_errorMsg);
-      }
-    });
+    if (createExternalUser) {
+      externalUsersAccessService.callValidateForm().then((data) => {
+        if (data?.validateNewUser?.response === GqOperationResponse.Success) {
+          handleNext();
+          setErrorMsg(undefined);
+        } else {
+          const _errorMsg = data?.validateNewUser?.errMsg ?? data?.validateNewUser?.response ?? 'Validation error';
+          setErrorMsg(_errorMsg);
+        }
+      });
+    } else {
+      handleNext();
+    }
   };
 
   const renderPanelHeader = () => (
