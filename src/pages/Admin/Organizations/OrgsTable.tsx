@@ -19,6 +19,7 @@ import { TableFiltersType } from 'src/hooks/useTableFilters';
 import { useActiveDomainUseCase } from 'src/use-cases/ActiveDomain';
 import { yyyyMMdd } from 'src/utils/CDXUtils';
 import { useThemeStore } from 'src/store/ThemeStore';
+import { useHistory } from 'react-router-dom';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { IDetailsColumnProps } from '@fluentui/react/lib/components/DetailsList/DetailsColumn.types';
 import { CircleStyled } from '../XChange/Xchanges/XchangePage.styles';
@@ -43,6 +44,7 @@ export const OrgsTable = ({
 }: OrgsTableType) => {
   const ActiveDomain = useActiveDomainUseCase();
   const ThemeStore = useThemeStore();
+  const history = useHistory();
   const updateDateFormat = (date: Date) => {
     const currentDate = new Date(date);
     const formattedDate = currentDate.toDateString();
@@ -73,30 +75,25 @@ export const OrgsTable = ({
     }
 
     const currentDate = updateDateFormat(lastActivity);
-    const startFormatted = yyyyMMdd(fromDate);
-
+    const endDate = yyyyMMdd(fromDate);
+    const endFormatted = new Date(endDate);
+    endFormatted.setMonth(endFormatted.getMonth() - 1);
+    endFormatted.setDate(endFormatted.getDate() + 1);
+    const startDate = yyyyMMdd(endFormatted);
     return (
       // eslint-disable-next-line react/jsx-no-useless-fragment
       <>
-        {error ? (
+        {error && (
           <>
             <span style={{ color: currentColor, fontWeight: 'bold' }}> {filesProcessed} </span>
-            {type} files have been processed in the last 30 days <br />
-            <span style={{ marginLeft: '40px' }}>Last Run: {currentDate}</span> <br /> <br />
+            {activityType} files processed in the last 30 days <br />
+            <span style={{ marginLeft: '20px' }}>Last Run: {currentDate}</span> <br /> <br />
             <ButtonLink
-              style={{ marginLeft: '97px' }}
-              to={`/file-status?filter=&orgSid=${sid}&startDate=${startFormatted}`}
-            >
-              {' '}
-              Click for details
-            </ButtonLink>
-          </>
-        ) : (
-          <>
-            <span>A file processed on {currentDate} result in an error</span> <br /> <br />
-            <ButtonLink
-              to={`/transmissions?filter=&orgSid=${sid}&startDate=${startFormatted}`}
-              style={{ marginLeft: '120px' }}
+              style={{ marginLeft: '70px' }}
+              onClick={() => {
+                ActiveDomain.setCurrentOrg(sid);
+                history.push(`/file-status?endDate=${endDate}&orgSid=6&startDate=${startDate}`);
+              }}
             >
               {' '}
               Click for details
@@ -108,6 +105,13 @@ export const OrgsTable = ({
   };
 
   const tooltipHostVendors = (title?: boolean, vendors?: string[]) => {
+    if (vendors?.length === 0) {
+      return (
+        <Text size="small">
+          No vendors are currently associated with this organization
+        </Text>
+      )
+    }
     if (!vendors?.length) {
       if (title) {
         return (
@@ -119,7 +123,7 @@ export const OrgsTable = ({
       }
       return (
         <Text size="small">
-          This is the number if <Text variant="bold">distinct</Text> vendors  <br />
+          This is the number of <Text variant="bold">distinct</Text> vendors  <br />
           &nbsp;across organizations shown here
         </Text>
       );
