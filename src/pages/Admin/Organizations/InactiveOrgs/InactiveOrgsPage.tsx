@@ -6,7 +6,6 @@ import {
   useSearchOrganizationsLazyQuery,
   SortDirection,
   PaginationInfo,
-  UiBooleanField,
   OrganizationActivity,
 } from 'src/data/services/graphql';
 import { Column, Container, Row } from 'src/components/layouts';
@@ -18,16 +17,10 @@ import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { EmptyState } from 'src/containers/states';
 import { Paginator } from 'src/components/tables/Paginator';
-import { Spinner, SpinnerSize, Stack } from '@fluentui/react';
-import { ThemedSearchBox } from 'src/components/inputs/SearchBox/ThemedSearchBox.styles';
-import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
-import { UIInputCheck } from 'src/components/inputs/InputCheck';
-import { Spacing } from 'src/components/spacings/Spacing';
 import { OrgsTable } from '../OrgsTable';
 
 const InactiveOrgsPage = () => {
   const { orgSid: orgOwnerSid } = useOrgSid();
-  const ActiveDomainStore = useActiveDomainStore();
   const [orgs, setOrgs] = useState<OrganizationActivity[]>([]);
   const [searchAllOrgsFilter, setSearchAllOrgsFilter] = useState<boolean>(false);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
@@ -88,40 +81,10 @@ const InactiveOrgsPage = () => {
     }
   }, [dataSearch, loadingSearch]);
 
-  const searchAllField: UiBooleanField = {
-    label: 'Search all organizations',
-    value: searchAllOrgsFilter,
-    visible: true,
-    required: false,
-  };
-
-  const showCheckbox = () => {
-    if (ActiveDomainStore.domainOrg.current.orgId === 'CDX') {
-      return (
-        <UIInputCheck
-          id="__SearchAllOrgs__Orgs-Checkbox"
-          uiField={searchAllField}
-          onChange={(_event, _searchAllOrgsFilter: any) => {
-            setSearchAllOrgsFilter(_searchAllOrgsFilter);
-          }}
-        />
-      );
-    }
-    return null;
-  };
-
   const renderBody = () => {
-    if (loadingSearch) {
-      return (
-        <Spacing margin={{ top: 'double' }}>
-          <Spinner size={SpinnerSize.large} label="Loading inactive orgs" />
-        </Spacing>
-      );
-    }
-
+    let emptyText;
     if (!orgs.length) {
-      const emptyText = 'No inactive organizations shows';
-      return <EmptyState title="No inactive orgs found" description={emptyText} />;
+      emptyText = 'No inactive organizations shows';
     }
 
     return (
@@ -135,7 +98,15 @@ const InactiveOrgsPage = () => {
           setSelectedOrgSid={setSelectedOrgSid}
           setIsPanelOpen={setIsPanelOpen}
         />
-        <Paginator id="__Paginator" pagingInfo={pagingInfo} onPageChange={onPageChange} />
+        {!orgs.length && !loadingSearch ? (
+          <Container>
+            <EmptyState
+              title="No inactive orgs found"
+              description={emptyText}
+            />
+          </Container>
+        ) : null};
+        {!loadingSearch && <Paginator id="__Paginator" pagingInfo={pagingInfo} onPageChange={onPageChange} />}
       </>
     )
   };
@@ -153,26 +124,7 @@ const InactiveOrgsPage = () => {
       </PageHeader>
 
       <PageBody id="__InactiveOrgsBody">
-        <Container>
-          <Row>
-            <Stack horizontal={true} wrap={true} style={{ width: '100%' }} verticalAlign="end">
-              <Column lg="6">
-                <ThemedSearchBox
-                  id="Orgs_Input-Search"
-                  disabled={false}
-                  value={tableFilters.searchText.value}
-                  styles={{ root: { width: '100%' } }}
-                  onChange={tableFilters.searchText.onChange}
-                  placeholder="Search"
-                />
-              </Column>
-              <Column lg="6">
-                {showCheckbox()}
-              </Column>
-            </Stack>
-          </Row>
-          <Row>{renderBody()}</Row>
-        </Container>
+        {renderBody()}
       </PageBody>
 
       {isPanelOpen && (

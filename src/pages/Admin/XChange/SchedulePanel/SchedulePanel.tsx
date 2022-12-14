@@ -434,6 +434,13 @@ const SchedulePanel = ({
         setMonths([]);
         setDays([]);
         setMessage(null);
+        if (typeSchedule) {
+          setSchedule(true);
+          setScheduleFrequency('');
+          fethData();
+          Toast.success({ text: `Job Group ${jobGroupName} created` });
+          return;
+        }
         closePanel(false);
         refreshPage(true);
         Toast.success({ text: `Job Group ${jobGroupName} created` });
@@ -1151,7 +1158,7 @@ const SchedulePanel = ({
   );
 
   const renderSaveButton = () => {
-    if (xchangeJobGroup) {
+    if (xchangeJobGroup && !schedule) {
       if (xchangeJobGroup.sid && !updateCmd) {
         return null;
       }
@@ -1170,7 +1177,7 @@ const SchedulePanel = ({
   };
 
   const renderDeleteJobGroup = () => {
-    if (xchangeJobGroup && xchangeJobGroup.sid) {
+    if (xchangeJobGroup && xchangeJobGroup.sid && !schedule) {
       const xchangesProcessed = !xchangeJobGroup.includedExchanges.length;
       return (
         <>
