@@ -107,7 +107,8 @@ export const useLoginUseCase = () => {
           window.location.reload();
         }
       } else {
-        const errMsg = userIdVerificationError.graphQLErrors[0].message ?? 'Please provide a valid email address to proceed';
+        const errMsg = userIdVerificationError?.graphQLErrors[0]?.message
+          ?? 'Please provide a valid email address to proceed';
 
         setState({
           ...state,
