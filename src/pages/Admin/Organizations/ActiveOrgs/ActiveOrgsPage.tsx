@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 
 import {
-  PrimaryButton, Spinner, SpinnerSize, Stack,
+  PrimaryButton,
 } from '@fluentui/react';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Row, Column, Container } from 'src/components/layouts';
@@ -13,7 +13,6 @@ import {
   OrganizationActivity,
   PaginationInfo,
   SortDirection,
-  UiBooleanField,
   useSearchOrganizationsLazyQuery,
   WebCommand,
 } from 'src/data/services/graphql';
@@ -26,16 +25,11 @@ import { Paginator } from 'src/components/tables/Paginator';
 import { PageBody } from 'src/components/layouts/Column';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 import { HideForMobile } from 'src/styles/GlobalStyles';
-import { ThemedSearchBox } from 'src/components/inputs/SearchBox/ThemedSearchBox.styles';
-import { UIInputCheck } from 'src/components/inputs/InputCheck';
-import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { EmptyState } from 'src/containers/states';
-import { Spacing } from 'src/components/spacings/Spacing';
 import { OrgsTable } from '../OrgsTable';
 
 const ActiveOrgsPage = () => {
   const { orgSid: orgOwnerSid } = useOrgSid();
-  const ActiveDomainStore = useActiveDomainStore();
   const [orgs, setOrgs] = useState<OrganizationActivity[]>([]);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [selectedOrgSid, setSelectedOrgSid] = useState<string>();
@@ -149,42 +143,14 @@ const ActiveOrgsPage = () => {
     return null;
   };
 
-  const searchAllField: UiBooleanField = {
-    label: 'Search all organizations',
-    value: searchAllOrgsFilter,
-    visible: true,
-    required: false,
-  };
-
-  const showCheckbox = () => {
-    if (ActiveDomainStore.domainOrg.current.orgId === 'CDX') {
-      return (
-        <UIInputCheck
-          id="__SearchAllOrgs__Orgs-Checkbox"
-          uiField={searchAllField}
-          onChange={(_event, _searchAllOrgsFilter: any) => {
-            setSearchAllOrgsFilter(_searchAllOrgsFilter);
-          }}
-        />
-      );
-    }
-    return null;
-  };
-
   const renderBody = () => {
-    if (loadingSearch) {
-      return (
-        <Spacing margin={{ top: 'double' }}>
-          <Spinner size={SpinnerSize.large} label="Loading active orgs" />
-        </Spacing>
-      );
-    }
+    let emptyText;
     if (!orgs.length) {
-      const emptyText = createCmd
+      emptyText = createCmd
         ? 'There are no active Organizations in this Organization. Click the button below to create a new Organization.'
         : 'There are no active Organizations in this Organization.';
-      return <EmptyState title="No active orgs found" description={emptyText} actions={createOrgButton()} />;
     }
+
     return (
       <>
         <OrgsTable
@@ -197,7 +163,16 @@ const ActiveOrgsPage = () => {
           setSelectedOrgSid={setSelectedOrgSid}
           setIsPanelOpen={setIsPanelOpen}
         />
-        <Paginator id="__Paginator" pagingInfo={pagingInfo} onPageChange={onPageChange} />
+        {!orgs.length && !loadingSearch ? (
+          <Container>
+            <EmptyState
+              title="No active orgs found"
+              description={emptyText}
+              actions={createOrgButton()}
+            />
+          </Container>
+        ) : null};
+        {!loadingSearch && <Paginator id="__Paginator" pagingInfo={pagingInfo} onPageChange={onPageChange} />}
       </>
     )
   };
@@ -218,26 +193,7 @@ const ActiveOrgsPage = () => {
       </PageHeader>
 
       <PageBody id="__ActiveOrgsBody">
-        <Container>
-          <Row>
-            <Stack horizontal={true} wrap={true} style={{ width: '100%' }} verticalAlign="end">
-              <Column lg="6">
-                <ThemedSearchBox
-                  id="Orgs_Input-Search"
-                  disabled={false}
-                  value={tableFilters.searchText.value}
-                  styles={{ root: { width: '100%' } }}
-                  onChange={tableFilters.searchText.onChange}
-                  placeholder="Search"
-                />
-              </Column>
-              <Column lg="6">
-                {showCheckbox()}
-              </Column>
-            </Stack>
-          </Row>
-          <Row>{renderBody()}</Row>
-        </Container>
+        {renderBody()}
       </PageBody>
 
       {isPanelOpen && (

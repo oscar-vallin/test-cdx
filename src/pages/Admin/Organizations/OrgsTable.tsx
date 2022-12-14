@@ -9,19 +9,24 @@ import {
   Stack,
   DirectionalHint,
   FontIcon,
+  Spinner,
+  SpinnerSize,
 } from '@fluentui/react';
 import { Text } from 'src/components/typography';
 import { ButtonLink } from 'src/components/buttons';
-import { Row } from 'src/components/layouts';
+import { Column, Container, Row } from 'src/components/layouts';
 import { DataColumn, useSortableColumns } from 'src/containers/tables';
-import { Organization, OrganizationActivity } from 'src/data/services/graphql';
+import { Organization, OrganizationActivity, UiBooleanField } from 'src/data/services/graphql';
 import { TableFiltersType } from 'src/hooks/useTableFilters';
 import { useActiveDomainUseCase } from 'src/use-cases/ActiveDomain';
+import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { yyyyMMdd } from 'src/utils/CDXUtils';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { useHistory } from 'react-router-dom';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { IDetailsColumnProps } from '@fluentui/react/lib/components/DetailsList/DetailsColumn.types';
+import { ThemedSearchBox } from 'src/components/inputs/SearchBox/ThemedSearchBox.styles';
+import { UIInputCheck } from 'src/components/inputs/InputCheck';
 import { CircleStyled } from '../XChange/Xchanges/XchangePage.styles';
 
 type OrgsTableType = {
@@ -38,11 +43,15 @@ type OrgsTableType = {
 export const OrgsTable = ({
   orgs,
   tableFilters,
+  loading,
   type,
+  searchAllOrgsFilter,
   setSelectedOrgSid,
+  setSearchAllOrgsFilter,
   setIsPanelOpen,
 }: OrgsTableType) => {
   const ActiveDomain = useActiveDomainUseCase();
+  const ActiveDomainStore = useActiveDomainStore();
   const ThemeStore = useThemeStore();
   const history = useHistory();
   const updateDateFormat = (date: Date) => {
@@ -387,17 +396,72 @@ export const OrgsTable = ({
   ];
   const { columns } = useSortableColumns(tableFilters, initColumns);
 
-  const renderBody = () => (
-    <DetailsList
-      items={orgs ?? []}
-      selectionMode={SelectionMode.none}
-      columns={columns}
-      layoutMode={DetailsListLayoutMode.justified}
-      isHeaderVisible
-    />
-  );
+  const searchAllField: UiBooleanField = {
+    label: 'Search all organizations',
+    value: searchAllOrgsFilter,
+    visible: true,
+    required: false,
+  };
+
+  const showCheckbox = () => {
+    if (ActiveDomainStore.domainOrg.current.orgId === 'CDX') {
+      return (
+        <UIInputCheck
+          id="__SearchAllOrgs__Orgs-Checkbox"
+          uiField={searchAllField}
+          onChange={(_event, _searchAllOrgsFilter: any) => {
+            setSearchAllOrgsFilter(_searchAllOrgsFilter);
+          }}
+        />
+      );
+    }
+    return null;
+  };
+
+  const renderBody = () => {
+    const typeOrgs = type ? 'active' : 'inactive';
+    if (loading) {
+      return (
+        <Spacing margin={{ top: 'double' }}>
+          <Spinner size={SpinnerSize.large} label={`Loading ${typeOrgs} orgs`} />
+        </Spacing>
+      );
+    }
+
+    if (orgs?.length) {
+      return (
+        <DetailsList
+          items={orgs ?? []}
+          selectionMode={SelectionMode.none}
+          columns={columns}
+          layoutMode={DetailsListLayoutMode.justified}
+          isHeaderVisible
+        />
+      )
+    }
+    return null;
+  };
 
   return (
-    <Row>{renderBody()}</Row>
+    <Container>
+      <Row>
+        <Stack horizontal={true} wrap={true} style={{ width: '100%' }} verticalAlign="end">
+          <Column lg="6">
+            <ThemedSearchBox
+              id="Orgs_Input-Search"
+              disabled={false}
+              value={tableFilters.searchText.value}
+              styles={{ root: { width: '100%' } }}
+              onChange={tableFilters.searchText.onChange}
+              placeholder="Search"
+            />
+          </Column>
+          <Column lg="6">
+            {showCheckbox()}
+          </Column>
+        </Stack>
+      </Row>
+      <Row>{renderBody()}</Row>
+    </Container>
   )
 };
