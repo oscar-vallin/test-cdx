@@ -1028,9 +1028,9 @@ const XchangeTransmissionPanel = ({
         const customQualifierValue = dataFileTransmissionForm.xchangeFileTransmissionForm.options
           .find((opt) => opt.key === 'filenameQualifier').values.find((val) => val.value === fileTransmissionValue);
         if (customQualifierValue) {
-          setFilenameQualifiers(
-            [fileTransmissionValue] ?? [],
-          );
+          const fileTransmissionValues = dataFileTransmissionForm.xchangeFileTransmissionForm
+            .filenameQualifiers.value;
+          setFilenameQualifiers(fileTransmissionValues.map((ft) => ft.value))
         } else {
           setCustomQualifier(true);
           setCustomFileQualifier(fileTransmissionValue);
