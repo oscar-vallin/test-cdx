@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -54,6 +55,7 @@ export const OrgsTable = ({
   const ActiveDomainStore = useActiveDomainStore();
   const ThemeStore = useThemeStore();
   const history = useHistory();
+  const [increaseDelay, setIncreasedelay] = useState(1500);
   const updateDateFormat = (date: Date) => {
     const currentDate = new Date(date);
     const formattedDate = currentDate.toDateString();
@@ -212,6 +214,9 @@ export const OrgsTable = ({
                 uatFilesProcessed,
               ) : undefined}
               directionalHint={DirectionalHint.topRightEdge}
+              closeDelay={increaseDelay}
+              onMouseOver={() => setIncreasedelay(2000)}
+              onMouseLeave={() => setIncreasedelay(0)}
             >
               <CircleStyled total={!item.sid} color="purple">{uatFilesProcessed}</CircleStyled>
             </TooltipHost>
@@ -227,6 +232,9 @@ export const OrgsTable = ({
                 testFilesProcessed,
               ) : undefined}
               directionalHint={DirectionalHint.topRightEdge}
+              closeDelay={increaseDelay}
+              onMouseOver={() => setIncreasedelay(2000)}
+              onMouseLeave={() => setIncreasedelay(0)}
             >
               <CircleStyled total={!item.sid} color="orange">{testFilesProcessed}</CircleStyled>
             </TooltipHost>
@@ -242,6 +250,9 @@ export const OrgsTable = ({
                 prodFilesProcessed,
               ) : undefined}
               directionalHint={DirectionalHint.topRightEdge}
+              closeDelay={increaseDelay}
+              onMouseOver={() => setIncreasedelay(2000)}
+              onMouseLeave={() => setIncreasedelay(0)}
             >
               <CircleStyled total={!item.sid} color="blue">{prodFilesProcessed}</CircleStyled>
             </TooltipHost>
