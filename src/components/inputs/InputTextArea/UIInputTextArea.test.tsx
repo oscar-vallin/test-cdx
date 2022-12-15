@@ -35,8 +35,9 @@ describe('UI Input Text Area', () => {
       <UIInputTextArea id="__Comments" uiField={defaultField} showRichTextEditor={true} value="Turkey Pastrami" />
     );
     expect(wrapper.find('FormLabel[id="__Comments_lbl"]')).toHaveLength(1);
-    expect(wrapper.find('Quill[id="__Comments"]')).toHaveLength(1);
-    expect(wrapper.find('Quill[id="__Comments"]').text().trim()).toEqual('Turkey Pastrami');
+    expect(wrapper.find('div[id="__Comments"]')).toHaveLength(1);
+    expect(wrapper.find('div[id="__Comments"]').props().className).toContain('quill');
+    expect(wrapper.find('div[id="__Comments"]').text().trim()).toEqual('Turkey Pastrami');
   });
 
   it('Read Only Text Area', () => {
