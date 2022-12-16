@@ -171,7 +171,7 @@ const ActiveOrgsPage = () => {
               actions={createOrgButton()}
             />
           </Container>
-        ) : null};
+        ) : null}
         {!loadingSearch && <Paginator id="__Paginator" pagingInfo={pagingInfo} onPageChange={onPageChange} />}
       </>
     )

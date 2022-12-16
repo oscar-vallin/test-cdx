@@ -105,7 +105,7 @@ const InactiveOrgsPage = () => {
               description={emptyText}
             />
           </Container>
-        ) : null};
+        ) : null}
         {!loadingSearch && <Paginator id="__Paginator" pagingInfo={pagingInfo} onPageChange={onPageChange} />}
       </>
     )
