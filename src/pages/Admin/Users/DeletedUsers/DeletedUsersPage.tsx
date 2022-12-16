@@ -17,6 +17,7 @@ import { ROUTE_DELETED_USERS } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 import { PageBody } from 'src/components/layouts/Column';
+import { Paginator } from 'src/components/tables/Paginator';
 
 const DeletedUsersPage = () => {
   const [isConfirmationHidden, setIsConfirmationHidden] = useState(true);
@@ -61,7 +62,16 @@ const DeletedUsersPage = () => {
         <EmptyState title="No inactive users" description="There aren't any inactive users in this organization" />
       );
     }
-    return <UsersTable tableFilters={tableFilters} users={userService.users} onClickUser={updateUserPanel.showPanel} />;
+    return (
+      <>
+        <UsersTable
+          tableFilters={tableFilters}
+          users={userService.users}
+          onClickUser={updateUserPanel.showPanel}
+        />
+        <Paginator id="__Paginator" pagingInfo={userService.pagingInfo} onPageChange={userService.onPageChange} />
+      </>
+    );
   };
 
   return (
