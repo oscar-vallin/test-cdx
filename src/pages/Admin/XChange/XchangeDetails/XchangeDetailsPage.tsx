@@ -93,6 +93,7 @@ const XchangeDetailsPage = () => {
   const [openUpdateComments, setOpenUpdateComments] = useState(false);
   const [closeTooltipHost, setCloseTooltipHost] = useState(true);
   const [sid, setSid] = useState('');
+  const [typeSchedule, setTypeSchedule] = useState<boolean>();
   const [schedule, setSchedule] = useState<XchangeSchedule>();
   const [openAlertsPanel, setOpenAlertsPanel] = useState(false);
   const [openJobGroup, setOpenJobGroup] = useState(false);
@@ -384,6 +385,7 @@ const XchangeDetailsPage = () => {
                         iconProps={{ iconName: 'EditSolid12' }}
                         style={{ fontSize: '0.675rem' }}
                         onClick={() => {
+                          setTypeSchedule(true);
                           setOpenSchedulePanel(true);
                         }}
                       />
@@ -421,7 +423,10 @@ const XchangeDetailsPage = () => {
                     <Row>
                       <Column>
                         <ButtonLink
-                          onClick={() => setOpenJobGroup(true)}
+                          onClick={() => {
+                            setTypeSchedule(false);
+                            setOpenSchedulePanel(true);
+                          }}
                         >
                           {schedule?.xchangeJobGroupName}
                         </ButtonLink>
@@ -773,8 +778,9 @@ const XchangeDetailsPage = () => {
         isPanelOpen={openSchedulePanel}
         closePanel={setOpenSchedulePanel}
         xchangeConfigSid={xchangeDataDetails?.sid ?? ''}
+        xchangeJobGroupSid={schedule?.xchangeJobGroupSid ?? ''}
         refreshPage={setRefreshXchangeDetails}
-        typeSchedule={true}
+        typeSchedule={typeSchedule}
       />
       <DialogYesNo {...dialogProps} open={showDialog} />
     </LayoutDashboard>

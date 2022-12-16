@@ -71,7 +71,7 @@ type ScheduleProps = {
     xchangeConfigSid?: string,
     xchangeJobGroupSid?: string;
     refreshPage: (data: boolean) => void;
-    typeSchedule: boolean;
+    typeSchedule?: boolean;
     xchangeProcessed?: string[];
 };
 
@@ -887,16 +887,17 @@ const SchedulePanel = ({
       return (
         <Spacing margin={{ top: 'double' }}>
           <ChoiceGroup
+          defaultSelectedKey={formData?.xchangeScheduleForm?.xchangeJobGroup.value?.label}
             options={
-              xchangeJobGroups.nodes.map((jobGroup, indexJobGroup) => ({
-                key: `${jobGroup.name}-${indexJobGroup}`,
-                text: jobGroup.name ?? '',
+              xchangeJobGroups.nodes.map((jobG, indexJobGroup) => ({
+                key: `${jobG.name}`,
+                text: jobG.name ?? '',
                 onRenderLabel: () => (
-                  <Spacing margin={{ left: 'double' }} key={`${jobGroup.name}-label-${indexJobGroup}`}>
-                    <Text style={{ marginRight: '10px' }}>{jobGroup.name}</Text>
+                  <Spacing margin={{ left: 'double' }} key={`${jobG.name}-label-${indexJobGroup}`}>
+                    <Text style={{ marginRight: '10px' }}>{jobG.name}</Text>
                     <TooltipHost
                         directionalHint={DirectionalHint.rightCenter}
-                        content={scheduleTooltiphost(jobGroup.schedule)}
+                        content={scheduleTooltiphost(jobG.schedule)}
                     >
                       <FontIcon
                         iconName="Info"
@@ -914,13 +915,13 @@ const SchedulePanel = ({
                   <>
                     {render!(props)}
                     <StyledXchanges>
-                      {jobGroup.includedExchanges.map((xchange, indexXchange) => (
+                      {jobG.includedExchanges.map((xchange, indexXchange) => (
                         <li key={`${xchange}-${indexXchange}`}>{xchange}</li>
                       ))}
                     </StyledXchanges>
                   </>
                 ),
-                onClick: () => setJobGroup(jobGroup),
+                onClick: () => setJobGroup(jobG),
               }))
             }
           />
