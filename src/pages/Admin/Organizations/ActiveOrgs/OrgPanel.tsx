@@ -324,7 +324,7 @@ export const OrgPanel = ({
         })
       }
     };
-    updatedDialog.onNo = () => {
+    updatedDialog.onClose = () => {
       hideDialog();
     };
 
