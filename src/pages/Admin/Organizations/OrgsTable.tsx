@@ -446,6 +446,11 @@ export const OrgsTable = ({
           columns={columns}
           layoutMode={DetailsListLayoutMode.justified}
           isHeaderVisible
+          styles={{
+            root: {
+              overflow: 'unset',
+            },
+          }}
         />
       )
     }
