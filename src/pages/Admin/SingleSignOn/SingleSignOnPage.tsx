@@ -1,5 +1,10 @@
 import React, { CSSProperties, useEffect, useState } from 'react';
-import { useIdentityProvidersForOrgLazyQuery, IdentityProvider } from 'src/data/services/graphql';
+import {
+  useIdentityProvidersForOrgLazyQuery,
+  IdentityProvider,
+  CdxWebCommandType,
+  WebCommand,
+} from 'src/data/services/graphql';
 import { Column, Container, Row } from 'src/components/layouts';
 import { PageTitle, Text } from 'src/components/typography';
 import { PageHeader } from 'src/containers/headers/PageHeader';
@@ -12,7 +17,7 @@ import { Spacing } from 'src/components/spacings/Spacing';
 import {
   DetailsList,
   DetailsListLayoutMode,
-  IColumn, SelectionMode,
+  IColumn, PrimaryButton, SelectionMode,
   Spinner,
   SpinnerSize,
   TooltipHost,
@@ -20,10 +25,14 @@ import {
 import { People20Filled } from '@fluentui/react-icons';
 import { EmptyState } from 'src/containers/states';
 import { ButtonLink } from 'src/components/buttons';
+import { SingleSignOnPanel } from './SingleSignOnPanel';
 
 export const SingleSignOnPage = () => {
   const { orgSid } = useOrgSid();
   const [nodes, setNodes] = useState<IdentityProvider[] | null>();
+  const [createCmd, setCreateCmd] = useState<WebCommand | null>();
+  const [refreshXchangeDetails, setRefreshXchangeDetails] = useState(false);
+  const [isOpenPanel, setIsOpenPanel] = useState(false);
   const [
     identityProvidersForOrg,
     {
@@ -42,14 +51,38 @@ export const SingleSignOnPage = () => {
   };
 
   useEffect(() => {
+    setRefreshXchangeDetails(false);
     fetchData();
-  }, [orgSid]);
+  }, [refreshXchangeDetails]);
 
   useEffect(() => {
     if (!isLoadingIdentityProviders && identityProvidersdata) {
       setNodes(identityProvidersdata?.identityProvidersForOrg?.nodes);
+
+      const pageCommands = identityProvidersdata.identityProvidersForOrg.listPageInfo?.pageCommands;
+      const _createCmd = pageCommands?.find((cmd) => cmd.commandType === CdxWebCommandType.Create);
+      setCreateCmd(_createCmd);
     }
   }, [identityProvidersdata, isLoadingIdentityProviders, identityProvidersdataError]);
+
+  const createIdenProviderButton = () => {
+    if (createCmd) {
+      return (
+        <PrimaryButton
+          id="__CreateIdentityProvidersButton"
+          iconProps={{ iconName: 'Add' }}
+          ariaLabel={createCmd.label ?? undefined}
+          title={createCmd.label ?? undefined}
+          onClick={() => {
+            setIsOpenPanel(true);
+          }}
+        >
+          {createCmd.label}
+        </PrimaryButton>
+      );
+    }
+    return null;
+  };
 
   const columns: IColumn[] = [
     {
@@ -142,7 +175,7 @@ export const SingleSignOnPage = () => {
     if (isLoadingIdentityProviders) {
       return (
         <Spacing margin={{ top: 'double' }}>
-          <Spinner size={SpinnerSize.large} label="Loading Convention List" />
+          <Spinner size={SpinnerSize.large} label="Loading Single Sign on Page" />
         </Spacing>
       );
     }
@@ -175,6 +208,9 @@ export const SingleSignOnPage = () => {
             <Column lg="6" direction="row">
               <PageTitle id="__Page_Title_Single_Config" title="Single Sign On" />
             </Column>
+            <Column sm="6" right>
+              {createIdenProviderButton()}
+            </Column>
           </Row>
         </Container>
       </PageHeader>
@@ -185,6 +221,11 @@ export const SingleSignOnPage = () => {
           </Row>
         </Container>
       </PageBody>
+      <SingleSignOnPanel
+        isPanelOpen={isOpenPanel}
+        closePanel={setIsOpenPanel}
+        refreshDetailsPage={setRefreshXchangeDetails}
+      />
     </LayoutDashboard>
   );
 };
