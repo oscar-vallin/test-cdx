@@ -432,6 +432,7 @@ export type CreateIdentityProviderInput = {
   name?: Maybe<Scalars['String']>;
   type?: Maybe<IdpType>;
   samlMetaData?: Maybe<Scalars['String']>;
+  oidcSettings?: Maybe<OidcSettingsInput>;
   isDefault?: Maybe<Scalars['Boolean']>;
 };
 
@@ -809,6 +810,13 @@ export type IdentityProviderForm = {
   samlMetaData: UiStringField;
   priorMetaData?: Maybe<Array<IdentityProviderMetaDataLink>>;
   isDefault: UiBooleanField;
+  oidcSettings: OidcSettingsForm;
+  options?: Maybe<Array<UiOptions>>;
+  commands?: Maybe<Array<WebCommand>>;
+  response: GqOperationResponse;
+  errCode?: Maybe<Scalars['String']>;
+  errMsg?: Maybe<Scalars['String']>;
+  errSeverity?: Maybe<ErrorSeverity>;
 };
 
 export type IdentityProviderMetaDataLink = {
@@ -1521,6 +1529,39 @@ export enum NullHandling {
   NullsFirst = 'NULLS_FIRST',
   NullsLast = 'NULLS_LAST'
 }
+
+export enum OidcAuthenticationMethod {
+  ClientSecretPost = 'CLIENT_SECRET_POST',
+  ClientSecretBasic = 'CLIENT_SECRET_BASIC',
+  ClientSecretJwt = 'CLIENT_SECRET_JWT',
+  SignedJwt = 'SIGNED_JWT'
+}
+
+export type OidcSettingsForm = {
+  __typename?: 'OIDCSettingsForm';
+  sid?: Maybe<Scalars['ID']>;
+  issuer: UiStringField;
+  clientId: UiStringField;
+  clientSecret: UiStringField;
+  authenticationMethod: UiSelectOneField;
+  autoDiscovery: UiBooleanField;
+  authorizationURL: UiStringField;
+  tokenURL: UiStringField;
+  logoutURL: UiStringField;
+  userInfoURL: UiStringField;
+};
+
+export type OidcSettingsInput = {
+  issuer?: Maybe<Scalars['String']>;
+  clientId?: Maybe<Scalars['String']>;
+  clientSecret?: Maybe<Scalars['String']>;
+  authenticationMethod?: Maybe<OidcAuthenticationMethod>;
+  autoDiscovery?: Maybe<Scalars['Boolean']>;
+  authorizationURL?: Maybe<Scalars['String']>;
+  tokenURL?: Maybe<Scalars['String']>;
+  logoutURL?: Maybe<Scalars['String']>;
+  userInfoURL?: Maybe<Scalars['String']>;
+};
 
 export type OntologyClass = {
   __typename?: 'OntologyClass';
@@ -3151,6 +3192,7 @@ export type UpdateIdentityProviderInput = {
   name?: Maybe<Scalars['String']>;
   type?: Maybe<IdpType>;
   samlMetaData?: Maybe<Scalars['String']>;
+  oidcSettings?: Maybe<OidcSettingsInput>;
   isDefault?: Maybe<Scalars['Boolean']>;
   /** Array of prior meta data sids to remove */
   removePriorMetaDataSids?: Maybe<Array<Scalars['ID']>>;
@@ -6257,7 +6299,7 @@ export type IdentityProviderFormQuery = (
   { __typename?: 'Query' }
   & { identityProviderForm: (
     { __typename?: 'IdentityProviderForm' }
-    & Pick<IdentityProviderForm, 'sid'>
+    & Pick<IdentityProviderForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { idpId: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
@@ -6276,7 +6318,44 @@ export type IdentityProviderFormQuery = (
     )>>, isDefault: (
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
-    ) }
+    ), oidcSettings: (
+      { __typename?: 'OIDCSettingsForm' }
+      & Pick<OidcSettingsForm, 'sid'>
+      & { issuer: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ), clientId: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ), clientSecret: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ), authenticationMethod: (
+        { __typename?: 'UISelectOneField' }
+        & FragmentUiSelectOneFieldFragment
+      ), autoDiscovery: (
+        { __typename?: 'UIBooleanField' }
+        & FragmentUiBooleanFieldFragment
+      ), authorizationURL: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ), tokenURL: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ), logoutURL: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ), userInfoURL: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ) }
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
   ) }
 );
 
@@ -7870,7 +7949,7 @@ export type CreateIdentityProviderMutation = (
   { __typename?: 'Mutation' }
   & { createIdentityProvider: (
     { __typename?: 'IdentityProviderForm' }
-    & Pick<IdentityProviderForm, 'sid'>
+    & Pick<IdentityProviderForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { idpId: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
@@ -7889,7 +7968,44 @@ export type CreateIdentityProviderMutation = (
     )>>, isDefault: (
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
-    ) }
+    ), oidcSettings: (
+      { __typename?: 'OIDCSettingsForm' }
+      & Pick<OidcSettingsForm, 'sid'>
+      & { issuer: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ), clientId: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ), clientSecret: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ), authenticationMethod: (
+        { __typename?: 'UISelectOneField' }
+        & FragmentUiSelectOneFieldFragment
+      ), autoDiscovery: (
+        { __typename?: 'UIBooleanField' }
+        & FragmentUiBooleanFieldFragment
+      ), authorizationURL: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ), tokenURL: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ), logoutURL: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ), userInfoURL: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ) }
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
   ) }
 );
 
@@ -7902,7 +8018,7 @@ export type UpdateIdentityProviderMutation = (
   { __typename?: 'Mutation' }
   & { updateIdentityProvider: (
     { __typename?: 'IdentityProviderForm' }
-    & Pick<IdentityProviderForm, 'sid'>
+    & Pick<IdentityProviderForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { idpId: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
@@ -7921,7 +8037,44 @@ export type UpdateIdentityProviderMutation = (
     )>>, isDefault: (
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
-    ) }
+    ), oidcSettings: (
+      { __typename?: 'OIDCSettingsForm' }
+      & Pick<OidcSettingsForm, 'sid'>
+      & { issuer: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ), clientId: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ), clientSecret: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ), authenticationMethod: (
+        { __typename?: 'UISelectOneField' }
+        & FragmentUiSelectOneFieldFragment
+      ), autoDiscovery: (
+        { __typename?: 'UIBooleanField' }
+        & FragmentUiBooleanFieldFragment
+      ), authorizationURL: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ), tokenURL: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ), logoutURL: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ), userInfoURL: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ) }
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
   ) }
 );
 
@@ -14384,11 +14537,53 @@ export const IdentityProviderFormDocument = gql`
     isDefault {
       ...fragmentUIBooleanField
     }
+    oidcSettings {
+      sid
+      issuer {
+        ...fragmentUIStringField
+      }
+      clientId {
+        ...fragmentUIStringField
+      }
+      clientSecret {
+        ...fragmentUIStringField
+      }
+      authenticationMethod {
+        ...fragmentUISelectOneField
+      }
+      autoDiscovery {
+        ...fragmentUIBooleanField
+      }
+      authorizationURL {
+        ...fragmentUIStringField
+      }
+      tokenURL {
+        ...fragmentUIStringField
+      }
+      logoutURL {
+        ...fragmentUIStringField
+      }
+      userInfoURL {
+        ...fragmentUIStringField
+      }
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
   }
 }
     ${FragmentUiStringFieldFragmentDoc}
 ${FragmentUiSelectOneFieldFragmentDoc}
-${FragmentUiBooleanFieldFragmentDoc}`;
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 
 /**
  * __useIdentityProviderFormQuery__
@@ -17442,11 +17637,53 @@ export const CreateIdentityProviderDocument = gql`
     isDefault {
       ...fragmentUIBooleanField
     }
+    oidcSettings {
+      sid
+      issuer {
+        ...fragmentUIStringField
+      }
+      clientId {
+        ...fragmentUIStringField
+      }
+      clientSecret {
+        ...fragmentUIStringField
+      }
+      authenticationMethod {
+        ...fragmentUISelectOneField
+      }
+      autoDiscovery {
+        ...fragmentUIBooleanField
+      }
+      authorizationURL {
+        ...fragmentUIStringField
+      }
+      tokenURL {
+        ...fragmentUIStringField
+      }
+      logoutURL {
+        ...fragmentUIStringField
+      }
+      userInfoURL {
+        ...fragmentUIStringField
+      }
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
   }
 }
     ${FragmentUiStringFieldFragmentDoc}
 ${FragmentUiSelectOneFieldFragmentDoc}
-${FragmentUiBooleanFieldFragmentDoc}`;
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 export type CreateIdentityProviderMutationFn = Apollo.MutationFunction<CreateIdentityProviderMutation, CreateIdentityProviderMutationVariables>;
 
 /**
@@ -17495,11 +17732,53 @@ export const UpdateIdentityProviderDocument = gql`
     isDefault {
       ...fragmentUIBooleanField
     }
+    oidcSettings {
+      sid
+      issuer {
+        ...fragmentUIStringField
+      }
+      clientId {
+        ...fragmentUIStringField
+      }
+      clientSecret {
+        ...fragmentUIStringField
+      }
+      authenticationMethod {
+        ...fragmentUISelectOneField
+      }
+      autoDiscovery {
+        ...fragmentUIBooleanField
+      }
+      authorizationURL {
+        ...fragmentUIStringField
+      }
+      tokenURL {
+        ...fragmentUIStringField
+      }
+      logoutURL {
+        ...fragmentUIStringField
+      }
+      userInfoURL {
+        ...fragmentUIStringField
+      }
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
   }
 }
     ${FragmentUiStringFieldFragmentDoc}
 ${FragmentUiSelectOneFieldFragmentDoc}
-${FragmentUiBooleanFieldFragmentDoc}`;
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
 export type UpdateIdentityProviderMutationFn = Apollo.MutationFunction<UpdateIdentityProviderMutation, UpdateIdentityProviderMutationVariables>;
 
 /**
