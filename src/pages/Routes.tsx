@@ -42,6 +42,7 @@ import UnauthRoute from './UnauthRoute';
 import { ImplementationDeployPage } from './Admin/ImplDeploy';
 import { PasswordRulesPage } from './Admin/PasswordRules';
 import { OrganizationSecuritySettingsPage } from './Admin/OrganizationSecuritySettings';
+import { SingleSignOnPage } from './Admin/SingleSignOn';
 
 export const Routes = () => (
   <Switch>
@@ -150,6 +151,9 @@ export const Routes = () => (
     </AuthRoute>
     <AuthRoute path={ROUTES.ROUTE_PASSWORD_RULES.URL}>
       <PasswordRulesPage />
+    </AuthRoute>
+    <AuthRoute path={ROUTES.ROUTE_SSO_CONFIG.URL}>
+      <SingleSignOnPage />
     </AuthRoute>
     <AuthRoute path={ROUTES.ROUTE_PAGE_NOT_FOUND.URL}>
       <PageNotFound />
