@@ -30,6 +30,7 @@ import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
 import { useNotification } from 'src/hooks/useNotification';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
+import { ErrorIcon } from 'src/components/badges/ErrorIcon';
 import { CodeMirrorRequired } from './SingleSignOn.styles';
 
 type SingleSignOnPanelProps = {
@@ -59,7 +60,7 @@ const setupOption: BasicSetupOptions = {
 };
 
 const defaultDialogProps: DialogYesNoProps = {
-  id: '__XchangeStep_Dlg',
+  id: '__SingleSignOn_Panel_Dlg',
   open: false,
   title: '',
   message: '',
@@ -82,6 +83,7 @@ const SingleSignOnPanel = ({
   const [idpId, setIdpId] = useState('');
   const [name, setName] = useState('');
   const [samlMetaData, setSamlMetaData] = useState('');
+  const [errMsgSamlMetaData, setErrMsgSamlMetaData] = useState('');
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
@@ -139,12 +141,14 @@ const SingleSignOnPanel = ({
   }, [identityProviderFormData, isLoadingForm]);
 
   useEffect(() => {
-    const response = identityProviderCreated?.identityProviderForm;
+    const response = identityProviderCreated?.createIdentityProvider;
     if (identityProviderCreated) {
       const responseCode = response?.response;
-      setIdentityProviderForm(identityProviderCreated?.identityProviderForm);
+      setIdentityProviderForm(identityProviderCreated?.createIdentityProvider);
+      const { errMsg } = identityProviderCreated.createIdentityProvider.samlMetaData;
+      setErrMsgSamlMetaData(errMsg);
       if (responseCode === GqOperationResponse.Fail) {
-        const errorMsg = identityProviderCreated?.identityProviderForm?.errMsg
+        const errorMsg = identityProviderCreated?.createIdentityProvider?.errMsg
           ?? 'Error occurred, please verify the information and try again.';
         setMessageType(MessageBarType.error);
         setMessage(errorMsg);
@@ -154,6 +158,7 @@ const SingleSignOnPanel = ({
         refreshDetailsPage(true);
         setMessage(null);
         closePanel(false);
+        setErrMsgSamlMetaData('');
         setName('');
         setIdpId('');
         setSamlMetaData('');
@@ -203,6 +208,7 @@ const SingleSignOnPanel = ({
     updatedDialog.onYes = () => {
       hideDialog();
       closePanel(false);
+      setErrMsgSamlMetaData('');
       setMessage(null);
       setUnsavedChanges(false);
       setIdpId('');
@@ -221,6 +227,7 @@ const SingleSignOnPanel = ({
       showUnsavedChangesDialog();
     } else {
       closePanel(false);
+      setErrMsgSamlMetaData('');
       setUnsavedChanges(false);
       setMessage(null);
       setIdpId('');
@@ -284,7 +291,9 @@ const SingleSignOnPanel = ({
                 style={{ color: ThemeStore.userTheme.colors.black }}
               />
               <CodeMirrorRequired>*</CodeMirrorRequired>
+              {errMsgSamlMetaData && <ErrorIcon id="samlMetaData-error" errorMessage={errMsgSamlMetaData} />}
               <CodeMirror
+                id="samlMetaData"
                 height="255px"
                 style={{ border: '1px solid gray', fontWeight: 'bold', fontSize: '14px' }}
                 basicSetup={setupOption}
@@ -293,7 +302,7 @@ const SingleSignOnPanel = ({
                 theme={myTheme}
                 onChange={(value) => {
                   setUnsavedChanges(true);
-                  setSamlMetaData(value)
+                  setSamlMetaData(value);
                 }}
               />
             </>
