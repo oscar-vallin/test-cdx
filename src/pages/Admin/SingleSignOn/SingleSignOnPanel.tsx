@@ -3,6 +3,7 @@ import {
   useIdentityProviderFormLazyQuery,
   IdentityProviderForm,
   useCreateIdentityProviderMutation,
+  useUpdateIdentityProviderMutation,
   IdpType,
   GqOperationResponse,
 } from 'src/data/services/graphql';
@@ -34,6 +35,7 @@ import { CodeMirrorRequired } from './SingleSignOn.styles';
 type SingleSignOnPanelProps = {
     isPanelOpen: boolean;
     closePanel: (data: boolean) => void;
+    sid?: string | null;
     refreshDetailsPage: (data: boolean) => void;
 };
 
@@ -70,6 +72,7 @@ const defaultDialogProps: DialogYesNoProps = {
 const SingleSignOnPanel = ({
   isPanelOpen,
   closePanel,
+  sid,
   refreshDetailsPage,
 }: SingleSignOnPanelProps) => {
   const { orgSid } = useOrgSid();
@@ -90,24 +93,30 @@ const SingleSignOnPanel = ({
     {
       data: identityProviderFormData,
       loading: isLoadingForm,
-      error: IdentityProviderFormError,
     },
-  ] = useIdentityProviderFormLazyQuery();
+  ] = useQueryHandler(useIdentityProviderFormLazyQuery);
 
   const [
     createIdentityProvider,
     {
       data: identityProviderCreated,
       loading: isLoadingCreated,
-      error: identityProviderCreatedError,
-    }
+    },
   ] = useQueryHandler(useCreateIdentityProviderMutation);
+  const [
+    updateIdentityProvider,
+    {
+      data: identityProviderUpdated,
+      loading: isLoadingUpdated,
+      error: identityProviderUpdatedError,
+    },
+  ] = useQueryHandler(useUpdateIdentityProviderMutation);
 
   const fetchData = () => {
     identityProvider({
       variables: {
         orgSid,
-        sid: null,
+        sid,
       },
     })
   };
@@ -120,7 +129,12 @@ const SingleSignOnPanel = ({
 
   useEffect(() => {
     if (!isLoadingForm && identityProviderFormData) {
+      setUnsavedChanges(false);
       setIdentityProviderForm(identityProviderFormData?.identityProviderForm);
+      const idenProviderdata = identityProviderFormData?.identityProviderForm;
+      setSamlMetaData(idenProviderdata.samlMetaData.value ?? '');
+      setName(idenProviderdata.name.value ?? '');
+      setIdpId(idenProviderdata.idpId.value ?? '');
     }
   }, [identityProviderFormData, isLoadingForm]);
 
@@ -150,6 +164,19 @@ const SingleSignOnPanel = ({
   }, [identityProviderCreated, isLoadingCreated]);
 
   const saveIdentityProvider = () => {
+    if (sid) {
+      updateIdentityProvider({
+        variables: {
+          sid,
+          name,
+          samlMetaData,
+          idpId,
+          isDefault,
+          type: IdpType.Saml2,
+        },
+      });
+      return;
+    }
     createIdentityProvider({
       variables: {
         idpInput: {
@@ -194,6 +221,7 @@ const SingleSignOnPanel = ({
       showUnsavedChangesDialog();
     } else {
       closePanel(false);
+      setUnsavedChanges(false);
       setMessage(null);
       setIdpId('');
       setName('');
@@ -260,6 +288,7 @@ const SingleSignOnPanel = ({
                 height="255px"
                 style={{ border: '1px solid gray', fontWeight: 'bold', fontSize: '14px' }}
                 basicSetup={setupOption}
+                value={samlMetaData}
                 extensions={[javascript({ jsx: true })]}
                 theme={myTheme}
                 onChange={(value) => {
@@ -275,6 +304,7 @@ const SingleSignOnPanel = ({
                 id="__Default_Identy_Provider"
                 uiField={identityProviderForm.isDefault}
                 value={isDefault}
+                onChange={() => setIsDefault((prevState) => !prevState)}
               />
             </Spacing>
           )}
@@ -293,7 +323,7 @@ const SingleSignOnPanel = ({
       <ThemedPanel
         closeButtonAriaLabel="Close"
         type={PanelType.medium}
-        headerText="Setup Identity Provider"
+        headerText={identityProviderForm?.idpId.value ? `Idp - ${identityProviderForm?.idpId.value}` : 'Setup Identity Provider'}
         isOpen={isPanelOpen}
         onDismiss={() => {
           onPanelClose();
