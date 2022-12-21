@@ -50,7 +50,7 @@ export const SingleSignOnPage = () => {
   const [deleteCmd, setDeleteCmd] = useState<WebCommand | null>();
   const [refreshXchangeDetails, setRefreshXchangeDetails] = useState(false);
   const [identityProviderSid, setIdentityProviderSid] = useState<string | null>('');
-  const [identityProviderName, setIdentityProviderName] = useState<string | null>('');
+  const [identityProviderName, setIdentityProviderName] = useState('');
   const [isOpenPanel, setIsOpenPanel] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
   const [showDialog, setShowDialog] = useState(false);
@@ -98,7 +98,6 @@ export const SingleSignOnPage = () => {
   useEffect(() => {
     if (!isLoadingDeleted && deletedIdentityProvider) {
       setRefreshXchangeDetails(true);
-      setIdentityProviderName('');
       Toast.success({ text: `Identity Provider ${identityProviderName} has been deleted` });
     }
   }, [deletedIdentityProvider, isLoadingDeleted]);
@@ -107,13 +106,14 @@ export const SingleSignOnPage = () => {
     setShowDialog(false);
   };
 
-  const showDeleteIdentityProviderDialog = (sid: string) => {
+  const showDeleteIdentityProviderDialog = (sid: string, name: string) => {
     const updatedDialog = { ...defaultDialogProps };
     updatedDialog.title = 'Delete Identity Provider?';
     updatedDialog.message = 'Are you sure you want to delete this Identity Provider';
 
     updatedDialog.onYes = () => {
       hideDialog();
+      setIdentityProviderName(name);
       deleteIdentityProvider({
         variables: {
           sid,
@@ -121,7 +121,6 @@ export const SingleSignOnPage = () => {
       });
     };
     updatedDialog.onClose = () => {
-      setIdentityProviderName('');
       hideDialog();
     };
 
@@ -160,8 +159,7 @@ export const SingleSignOnPage = () => {
           iconProps={{ iconName: 'Trash' }}
           disabled={disabled > 0}
           onClick={() => {
-            setIdentityProviderName(item?.name ?? '');
-            showDeleteIdentityProviderDialog(item?.sid);
+            showDeleteIdentityProviderDialog(item?.sid, item.name ?? '');
           }}
         />
       );
