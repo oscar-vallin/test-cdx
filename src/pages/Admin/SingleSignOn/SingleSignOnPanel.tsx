@@ -87,7 +87,7 @@ const SingleSignOnPanel = ({
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
-  const [isDefault, setIsDefault] = useState(false);
+  const [isDefault, setIsDefault] = useState<boolean>();
   const [message, setMessage] = useState<string | null>();
   const [messageType, setMessageType] = useState<MessageBarType>(MessageBarType.info);
   const [
@@ -103,6 +103,7 @@ const SingleSignOnPanel = ({
     {
       data: identityProviderCreated,
       loading: isLoadingCreated,
+      error: identityProviderError,
     },
   ] = useQueryHandler(useCreateIdentityProviderMutation);
   const [
@@ -137,6 +138,7 @@ const SingleSignOnPanel = ({
       setSamlMetaData(idenProviderdata.samlMetaData.value ?? '');
       setName(idenProviderdata.name.value ?? '');
       setIdpId(idenProviderdata.idpId.value ?? '');
+      setIsDefault(idenProviderdata.isDefault.value ?? false);
     }
   }, [identityProviderFormData, isLoadingForm]);
 
@@ -166,18 +168,54 @@ const SingleSignOnPanel = ({
         Toast.success({ text: 'Identity Provider Saved' });
       }
     }
-  }, [identityProviderCreated, isLoadingCreated]);
+    if (!isLoadingCreated && identityProviderError) {
+      Toast.error({ text: 'There was an error creating Indentity Provider' });
+    }
+  }, [identityProviderCreated, isLoadingCreated, identityProviderError]);
+
+  useEffect(() => {
+    const response = identityProviderUpdated?.updateIdentityProvider;
+    if (identityProviderUpdated) {
+      const responseCode = response?.response;
+      setIdentityProviderForm(identityProviderUpdated?.updateIdentityProvider);
+      const { errMsg } = identityProviderUpdated.updateIdentityProvider.samlMetaData;
+      setErrMsgSamlMetaData(errMsg);
+      if (responseCode === GqOperationResponse.Fail) {
+        const errorMsg = identityProviderUpdated?.updateIdentityProvider?.errMsg
+          ?? 'Error occurred, please verify the information and try again.';
+        setMessageType(MessageBarType.error);
+        setMessage(errorMsg);
+      }
+
+      if (responseCode === GqOperationResponse.Success) {
+        refreshDetailsPage(true);
+        setMessage(null);
+        closePanel(false);
+        setErrMsgSamlMetaData('');
+        setName('');
+        setIdpId('');
+        setSamlMetaData('');
+        setIsDefault(false);
+        Toast.success({ text: 'Identity Provider Saved' });
+      }
+    }
+    if (!isLoadingUpdated && identityProviderUpdatedError) {
+      Toast.error({ text: 'There was an error updating Indentity Provider' });
+    }
+  }, [identityProviderUpdated, isLoadingUpdated, identityProviderUpdatedError]);
 
   const saveIdentityProvider = () => {
     if (sid) {
       updateIdentityProvider({
         variables: {
-          sid,
-          name,
-          samlMetaData,
-          idpId,
-          isDefault,
-          type: IdpType.Saml2,
+          idpInput: {
+            sid,
+            name,
+            samlMetaData,
+            idpId,
+            isDefault,
+            type: IdpType.Saml2,
+          },
         },
       });
       return;
