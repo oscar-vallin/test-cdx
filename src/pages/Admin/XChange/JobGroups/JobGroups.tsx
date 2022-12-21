@@ -191,7 +191,6 @@ const JobGroups = () => {
         xchangeJobGroupSid={currentSid}
         refreshPage={setRefreshJobGroup}
         typeSchedule={false}
-        xchangeProcessed={[]}
       />
     </LayoutDashboard>
   );

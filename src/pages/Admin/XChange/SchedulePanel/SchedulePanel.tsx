@@ -72,7 +72,6 @@ type ScheduleProps = {
     xchangeJobGroupSid?: string;
     refreshPage: (data: boolean) => void;
     typeSchedule?: boolean;
-    xchangeProcessed?: string[];
 };
 
 type DaysProps = {
@@ -142,7 +141,6 @@ const SchedulePanel = ({
   xchangeConfigSid,
   refreshPage,
   typeSchedule,
-  xchangeProcessed,
   xchangeJobGroupSid,
 }: ScheduleProps) => {
   const { orgSid } = useOrgSid();
@@ -1123,11 +1121,15 @@ const SchedulePanel = ({
           {!schedule && (
           <Spacing margin={{ top: 'normal' }}>
             <Stack>
-              <Text style={{ fontWeight: 'bolder' }}>Xchange processed in this groups</Text>
-              {xchangeProcessed && xchangeProcessed.length > 0 ? (
-                xchangeProcessed?.map((xchange, indexXchange) => (
-                  <Text key={indexXchange}>{xchange}</Text>
-                ))
+              <Text style={{ fontWeight: 'bolder' }}>Xchanges processed in this group</Text>
+              {xchangeJobGroup && xchangeJobGroup?.includedExchanges?.length > 0 ? (
+                <StyledXchanges>
+                  {
+                    xchangeJobGroup?.includedExchanges?.map((xchange, indexXchange) => (
+                      <li><Text key={indexXchange}>{xchange}</Text></li>
+                    ))
+                  }
+                </StyledXchanges>
               ) : (
                 <EmptyMessage>
                   {'<none>'}
@@ -1179,20 +1181,20 @@ const SchedulePanel = ({
 
   const renderDeleteJobGroup = () => {
     if (xchangeJobGroup && xchangeJobGroup.sid && !schedule) {
-      const xchangesProcessed = !xchangeJobGroup.includedExchanges.length;
+      const xchangesProcessed = xchangeJobGroup.includedExchanges.length > 0;
       return (
         <>
           <DefaultButton
             style={{ marginLeft: '20px' }}
             id="deleteSchedule"
             text="Delete"
-            disabled={!xchangesProcessed}
+            disabled={xchangesProcessed}
             onClick={() => {
               setShowDialog(true);
               deleteJonGroupDialog();
             }}
           />
-          {!xchangeProcessed && (
+          {xchangesProcessed && (
             <TooltipHost
               content="A job group can only be deleted if there are no Xchanges processed within the group."
             >
