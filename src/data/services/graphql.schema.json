@@ -4281,6 +4281,18 @@
             "deprecationReason": null
           },
           {
+            "name": "identityProviderSid",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "accessPolicyGroupSids",
             "description": null,
             "type": {
@@ -9261,6 +9273,35 @@
             "deprecationReason": null
           },
           {
+            "name": "updateUserAuthentication",
+            "description": null,
+            "args": [
+              {
+                "name": "userInfo",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "UpdateUserAuthenticationInput",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "UserAccountForm",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "deactivateUser",
             "description": null,
             "args": [
@@ -11575,22 +11616,6 @@
             "deprecationReason": null
           },
           {
-            "name": "logoutURL",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "UIStringField",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "userInfoURL",
             "description": null,
             "args": [],
@@ -11692,18 +11717,6 @@
           },
           {
             "name": "tokenURL",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "logoutURL",
             "description": null,
             "type": {
               "kind": "SCALAR",
@@ -24964,6 +24977,57 @@
       },
       {
         "kind": "INPUT_OBJECT",
+        "name": "UpdateUserAuthenticationInput",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "sid",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "usePasswordLogin",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "identityProviderSid",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
         "name": "UpdateUserDashThemeInput",
         "description": null,
         "fields": null,
@@ -26158,6 +26222,18 @@
             "type": {
               "kind": "OBJECT",
               "name": "UIBooleanField",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "identityProvider",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "UISelectOneField",
               "ofType": null
             },
             "isDeprecated": false,
