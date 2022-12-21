@@ -217,7 +217,7 @@ export const SingleSignOnPage = () => {
     if (column?.key === 'name') {
       columnVal = item?.name ?? '';
     } else if (column?.key === 'idpId') {
-      columnVal = item?.name ?? '';
+      columnVal = item?.idpId ?? '';
     }
 
     if (column?.key === 'members') {
