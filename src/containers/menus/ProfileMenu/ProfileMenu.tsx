@@ -5,6 +5,7 @@ import { ButtonContextual } from 'src/components/buttons/ButtonContextual';
 import { useLogoutUseCase } from 'src/use-cases/Authentication';
 import { useSessionStore } from 'src/store/SessionStore';
 import { useApplicationStore } from 'src/store/ApplicationStore';
+import { UserProfilePanel } from 'src/pages/UserSettings/UserProfile';
 import { StyledBox } from './ProfileMenu.styles';
 
 const defaultProps = {
@@ -20,6 +21,7 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
   const SessionStore = useSessionStore();
   const { performUserLogout } = useLogoutUseCase();
   const ApplicationStore = useApplicationStore();
+  const [isOpenPanel, setIsOpenPanel] = useState(false);
 
   const handleLogout = () => {
     performUserLogout();
@@ -31,7 +33,15 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
     }
   };
 
+  const openPanel = () => setIsOpenPanel(true);
+
   const buildMenuItems = (version: string): IContextualMenuItem[] => [
+    {
+      id: '__ProfileUser',
+      key: 'ProfileMenu_Profile',
+      text: 'My Profile',
+      onClick: openPanel,
+    },
     {
       id: '__ProfileMenu_UserSettingsId',
       key: 'ProfileMenu_UserSettings',
@@ -76,6 +86,7 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
           <UserToken id="__UserToken" name={SessionStore.user.firstName} />
         </ButtonContextual>
       )}
+      {isOpenPanel && <UserProfilePanel isOpen={isOpenPanel} closePanel={setIsOpenPanel} />}
     </StyledBox>
   );
 };
