@@ -469,6 +469,7 @@ export type CreateUserInput = {
   orgSid: Scalars['ID'];
   /** Indicates that an email should be sent to the user with an activation link. */
   sendActivationEmail?: Maybe<Scalars['Boolean']>;
+  identityProviderSid?: Maybe<Scalars['ID']>;
   accessPolicyGroupSids?: Maybe<Array<Scalars['ID']>>;
 };
 
@@ -976,6 +977,7 @@ export type Mutation = {
   createUser?: Maybe<UserAccountForm>;
   updateUser?: Maybe<UserAccountForm>;
   updateUserAccessPolicyGroups?: Maybe<UserAccountForm>;
+  updateUserAuthentication?: Maybe<UserAccountForm>;
   deactivateUser?: Maybe<GqOperationResponse>;
   deactivateUsers?: Maybe<GqOperationResponse>;
   activateUser?: Maybe<GqOperationResponse>;
@@ -1195,6 +1197,11 @@ export type MutationUpdateUserArgs = {
 
 export type MutationUpdateUserAccessPolicyGroupsArgs = {
   userAccessPolicyGroupUpdate?: Maybe<UpdateUserAccessPolicyGroupsInput>;
+};
+
+
+export type MutationUpdateUserAuthenticationArgs = {
+  userInfo: UpdateUserAuthenticationInput;
 };
 
 
@@ -1547,7 +1554,6 @@ export type OidcSettingsForm = {
   autoDiscovery: UiBooleanField;
   authorizationURL: UiStringField;
   tokenURL: UiStringField;
-  logoutURL: UiStringField;
   userInfoURL: UiStringField;
 };
 
@@ -1559,7 +1565,6 @@ export type OidcSettingsInput = {
   autoDiscovery?: Maybe<Scalars['Boolean']>;
   authorizationURL?: Maybe<Scalars['String']>;
   tokenURL?: Maybe<Scalars['String']>;
-  logoutURL?: Maybe<Scalars['String']>;
   userInfoURL?: Maybe<Scalars['String']>;
 };
 
@@ -3243,6 +3248,12 @@ export type UpdateUserAccessPolicyGroupsInput = {
   accessPolicyGroupSids?: Maybe<Array<Scalars['ID']>>;
 };
 
+export type UpdateUserAuthenticationInput = {
+  sid: Scalars['ID'];
+  usePasswordLogin?: Maybe<Scalars['Boolean']>;
+  identityProviderSid?: Maybe<Scalars['ID']>;
+};
+
 export type UpdateUserDashThemeInput = {
   orgSid: Scalars['ID'];
   ownerId: Scalars['ID'];
@@ -3364,6 +3375,7 @@ export type UserAccountForm = {
   accessGrantOrgNames: Array<Scalars['String']>;
   /** Indicates that an email should be sent to the user with an activation link. */
   sendActivationEmail?: Maybe<UiBooleanField>;
+  identityProvider?: Maybe<UiSelectOneField>;
   lastLogin?: Maybe<UiReadOnlyField>;
   commands?: Maybe<Array<WebCommand>>;
   response: GqOperationResponse;
@@ -5188,6 +5200,9 @@ export type MyProfileQuery = (
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
+    )>, identityProvider?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & FragmentUiReadOnlyFieldFragment
@@ -5236,6 +5251,9 @@ export type UserAccountFormQuery = (
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
+    )>, identityProvider?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & FragmentUiReadOnlyFieldFragment
@@ -5284,6 +5302,9 @@ export type FindUserAccountQuery = (
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
+    )>, identityProvider?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & FragmentUiReadOnlyFieldFragment
@@ -5488,6 +5509,9 @@ export type ExternalUserForOrgQuery = (
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
+    )>, identityProvider?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & FragmentUiReadOnlyFieldFragment
@@ -6340,9 +6364,6 @@ export type IdentityProviderFormQuery = (
         { __typename?: 'UIStringField' }
         & FragmentUiStringFieldFragment
       ), tokenURL: (
-        { __typename?: 'UIStringField' }
-        & FragmentUiStringFieldFragment
-      ), logoutURL: (
         { __typename?: 'UIStringField' }
         & FragmentUiStringFieldFragment
       ), userInfoURL: (
@@ -7992,9 +8013,6 @@ export type CreateIdentityProviderMutation = (
       ), tokenURL: (
         { __typename?: 'UIStringField' }
         & FragmentUiStringFieldFragment
-      ), logoutURL: (
-        { __typename?: 'UIStringField' }
-        & FragmentUiStringFieldFragment
       ), userInfoURL: (
         { __typename?: 'UIStringField' }
         & FragmentUiStringFieldFragment
@@ -8059,9 +8077,6 @@ export type UpdateIdentityProviderMutation = (
         { __typename?: 'UIStringField' }
         & FragmentUiStringFieldFragment
       ), tokenURL: (
-        { __typename?: 'UIStringField' }
-        & FragmentUiStringFieldFragment
-      ), logoutURL: (
         { __typename?: 'UIStringField' }
         & FragmentUiStringFieldFragment
       ), userInfoURL: (
@@ -8425,6 +8440,9 @@ export type UpdateMyProfileMutation = (
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
+    )>, identityProvider?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & FragmentUiReadOnlyFieldFragment
@@ -8474,6 +8492,9 @@ export type CreateUserMutation = (
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
+    )>, identityProvider?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & FragmentUiReadOnlyFieldFragment
@@ -8522,6 +8543,9 @@ export type UpdateUserMutation = (
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
+    )>, identityProvider?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & FragmentUiReadOnlyFieldFragment
@@ -8570,6 +8594,60 @@ export type UpdateUserAccessPolicyGroupsMutation = (
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
+    )>, identityProvider?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, lastLogin?: Maybe<(
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
+    )>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>>, options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>> }
+  )> }
+);
+
+export type UpdateUserAuthenticationMutationVariables = Exact<{
+  userInfo: UpdateUserAuthenticationInput;
+}>;
+
+
+export type UpdateUserAuthenticationMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUserAuthentication?: Maybe<(
+    { __typename?: 'UserAccountForm' }
+    & Pick<UserAccountForm, 'sid' | 'accessGrantOrgNames' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { email?: Maybe<(
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    )>, active?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    )>, person?: Maybe<(
+      { __typename?: 'PersonForm' }
+      & Pick<PersonForm, 'sid' | 'errCode' | 'errMsg' | 'errSeverity'>
+      & { firstNm: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ), lastNm: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ) }
+    )>, organization: (
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
+    ), accessPolicyGroups?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    )>, sendActivationEmail?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    )>, identityProvider?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & FragmentUiReadOnlyFieldFragment
@@ -8682,6 +8760,9 @@ export type GrantExternalUserAccessMutation = (
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
+    )>, identityProvider?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & FragmentUiReadOnlyFieldFragment
@@ -8731,6 +8812,9 @@ export type CreateExternalUserMutation = (
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
+    )>, identityProvider?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & FragmentUiReadOnlyFieldFragment
@@ -8805,6 +8889,9 @@ export type ValidateNewUserMutation = (
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
+    )>, identityProvider?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & FragmentUiReadOnlyFieldFragment
@@ -12417,6 +12504,9 @@ export const MyProfileDocument = gql`
     sendActivationEmail {
       ...fragmentUIBooleanField
     }
+    identityProvider {
+      ...fragmentUISelectOneField
+    }
     lastLogin {
       ...fragmentUIReadOnlyField
     }
@@ -12436,6 +12526,7 @@ export const MyProfileDocument = gql`
 ${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentUiReadOnlyFieldFragmentDoc}
 ${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentWebCommandFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}`;
 
@@ -12495,6 +12586,9 @@ export const UserAccountFormDocument = gql`
     sendActivationEmail {
       ...fragmentUIBooleanField
     }
+    identityProvider {
+      ...fragmentUISelectOneField
+    }
     lastLogin {
       ...fragmentUIReadOnlyField
     }
@@ -12514,6 +12608,7 @@ export const UserAccountFormDocument = gql`
 ${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentUiReadOnlyFieldFragmentDoc}
 ${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentWebCommandFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}`;
 
@@ -12574,6 +12669,9 @@ export const FindUserAccountDocument = gql`
     sendActivationEmail {
       ...fragmentUIBooleanField
     }
+    identityProvider {
+      ...fragmentUISelectOneField
+    }
     lastLogin {
       ...fragmentUIReadOnlyField
     }
@@ -12593,6 +12691,7 @@ export const FindUserAccountDocument = gql`
 ${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentUiReadOnlyFieldFragmentDoc}
 ${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentWebCommandFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}`;
 
@@ -12939,6 +13038,9 @@ export const ExternalUserForOrgDocument = gql`
     sendActivationEmail {
       ...fragmentUIBooleanField
     }
+    identityProvider {
+      ...fragmentUISelectOneField
+    }
     lastLogin {
       ...fragmentUIReadOnlyField
     }
@@ -12958,6 +13060,7 @@ export const ExternalUserForOrgDocument = gql`
 ${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentUiReadOnlyFieldFragmentDoc}
 ${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentWebCommandFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}`;
 
@@ -14558,9 +14661,6 @@ export const IdentityProviderFormDocument = gql`
         ...fragmentUIStringField
       }
       tokenURL {
-        ...fragmentUIStringField
-      }
-      logoutURL {
         ...fragmentUIStringField
       }
       userInfoURL {
@@ -17660,9 +17760,6 @@ export const CreateIdentityProviderDocument = gql`
       tokenURL {
         ...fragmentUIStringField
       }
-      logoutURL {
-        ...fragmentUIStringField
-      }
       userInfoURL {
         ...fragmentUIStringField
       }
@@ -17753,9 +17850,6 @@ export const UpdateIdentityProviderDocument = gql`
         ...fragmentUIStringField
       }
       tokenURL {
-        ...fragmentUIStringField
-      }
-      logoutURL {
         ...fragmentUIStringField
       }
       userInfoURL {
@@ -18422,6 +18516,9 @@ export const UpdateMyProfileDocument = gql`
     sendActivationEmail {
       ...fragmentUIBooleanField
     }
+    identityProvider {
+      ...fragmentUISelectOneField
+    }
     lastLogin {
       ...fragmentUIReadOnlyField
     }
@@ -18441,6 +18538,7 @@ export const UpdateMyProfileDocument = gql`
 ${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentUiReadOnlyFieldFragmentDoc}
 ${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentWebCommandFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}`;
 export type UpdateMyProfileMutationFn = Apollo.MutationFunction<UpdateMyProfileMutation, UpdateMyProfileMutationVariables>;
@@ -18500,6 +18598,9 @@ export const CreateUserDocument = gql`
     sendActivationEmail {
       ...fragmentUIBooleanField
     }
+    identityProvider {
+      ...fragmentUISelectOneField
+    }
     lastLogin {
       ...fragmentUIReadOnlyField
     }
@@ -18519,6 +18620,7 @@ export const CreateUserDocument = gql`
 ${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentUiReadOnlyFieldFragmentDoc}
 ${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentWebCommandFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}`;
 export type CreateUserMutationFn = Apollo.MutationFunction<CreateUserMutation, CreateUserMutationVariables>;
@@ -18579,6 +18681,9 @@ export const UpdateUserDocument = gql`
     sendActivationEmail {
       ...fragmentUIBooleanField
     }
+    identityProvider {
+      ...fragmentUISelectOneField
+    }
     lastLogin {
       ...fragmentUIReadOnlyField
     }
@@ -18598,6 +18703,7 @@ export const UpdateUserDocument = gql`
 ${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentUiReadOnlyFieldFragmentDoc}
 ${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentWebCommandFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}`;
 export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
@@ -18659,6 +18765,9 @@ export const UpdateUserAccessPolicyGroupsDocument = gql`
     sendActivationEmail {
       ...fragmentUIBooleanField
     }
+    identityProvider {
+      ...fragmentUISelectOneField
+    }
     lastLogin {
       ...fragmentUIReadOnlyField
     }
@@ -18678,6 +18787,7 @@ export const UpdateUserAccessPolicyGroupsDocument = gql`
 ${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentUiReadOnlyFieldFragmentDoc}
 ${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentWebCommandFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}`;
 export type UpdateUserAccessPolicyGroupsMutationFn = Apollo.MutationFunction<UpdateUserAccessPolicyGroupsMutation, UpdateUserAccessPolicyGroupsMutationVariables>;
@@ -18705,6 +18815,88 @@ export function useUpdateUserAccessPolicyGroupsMutation(baseOptions?: Apollo.Mut
 export type UpdateUserAccessPolicyGroupsMutationHookResult = ReturnType<typeof useUpdateUserAccessPolicyGroupsMutation>;
 export type UpdateUserAccessPolicyGroupsMutationResult = Apollo.MutationResult<UpdateUserAccessPolicyGroupsMutation>;
 export type UpdateUserAccessPolicyGroupsMutationOptions = Apollo.BaseMutationOptions<UpdateUserAccessPolicyGroupsMutation, UpdateUserAccessPolicyGroupsMutationVariables>;
+export const UpdateUserAuthenticationDocument = gql`
+    mutation UpdateUserAuthentication($userInfo: UpdateUserAuthenticationInput!) {
+  updateUserAuthentication(userInfo: $userInfo) {
+    sid
+    email {
+      ...fragmentUIStringField
+    }
+    active {
+      ...fragmentUIBooleanField
+    }
+    person {
+      sid
+      firstNm {
+        ...fragmentUIStringField
+      }
+      lastNm {
+        ...fragmentUIStringField
+      }
+      errCode
+      errMsg
+      errSeverity
+    }
+    organization {
+      ...fragmentUIReadOnlyField
+    }
+    accessPolicyGroups {
+      ...fragmentUISelectManyField
+    }
+    accessGrantOrgNames
+    sendActivationEmail {
+      ...fragmentUIBooleanField
+    }
+    identityProvider {
+      ...fragmentUISelectOneField
+    }
+    lastLogin {
+      ...fragmentUIReadOnlyField
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    options {
+      ...fragmentUIOptions
+    }
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentWebCommandFragmentDoc}
+${FragmentUiOptionsFragmentDoc}`;
+export type UpdateUserAuthenticationMutationFn = Apollo.MutationFunction<UpdateUserAuthenticationMutation, UpdateUserAuthenticationMutationVariables>;
+
+/**
+ * __useUpdateUserAuthenticationMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserAuthenticationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserAuthenticationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserAuthenticationMutation, { data, loading, error }] = useUpdateUserAuthenticationMutation({
+ *   variables: {
+ *      userInfo: // value for 'userInfo'
+ *   },
+ * });
+ */
+export function useUpdateUserAuthenticationMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserAuthenticationMutation, UpdateUserAuthenticationMutationVariables>) {
+        return Apollo.useMutation<UpdateUserAuthenticationMutation, UpdateUserAuthenticationMutationVariables>(UpdateUserAuthenticationDocument, baseOptions);
+      }
+export type UpdateUserAuthenticationMutationHookResult = ReturnType<typeof useUpdateUserAuthenticationMutation>;
+export type UpdateUserAuthenticationMutationResult = Apollo.MutationResult<UpdateUserAuthenticationMutation>;
+export type UpdateUserAuthenticationMutationOptions = Apollo.BaseMutationOptions<UpdateUserAuthenticationMutation, UpdateUserAuthenticationMutationVariables>;
 export const DeactivateUserDocument = gql`
     mutation DeactivateUser($sidInput: SidInput!) {
   deactivateUser(sidInput: $sidInput)
@@ -18901,6 +19093,9 @@ export const GrantExternalUserAccessDocument = gql`
     sendActivationEmail {
       ...fragmentUIBooleanField
     }
+    identityProvider {
+      ...fragmentUISelectOneField
+    }
     lastLogin {
       ...fragmentUIReadOnlyField
     }
@@ -18920,6 +19115,7 @@ export const GrantExternalUserAccessDocument = gql`
 ${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentUiReadOnlyFieldFragmentDoc}
 ${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentWebCommandFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}`;
 export type GrantExternalUserAccessMutationFn = Apollo.MutationFunction<GrantExternalUserAccessMutation, GrantExternalUserAccessMutationVariables>;
@@ -18979,6 +19175,9 @@ export const CreateExternalUserDocument = gql`
     sendActivationEmail {
       ...fragmentUIBooleanField
     }
+    identityProvider {
+      ...fragmentUISelectOneField
+    }
     lastLogin {
       ...fragmentUIReadOnlyField
     }
@@ -18998,6 +19197,7 @@ export const CreateExternalUserDocument = gql`
 ${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentUiReadOnlyFieldFragmentDoc}
 ${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentWebCommandFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}`;
 export type CreateExternalUserMutationFn = Apollo.MutationFunction<CreateExternalUserMutation, CreateExternalUserMutationVariables>;
@@ -19103,6 +19303,9 @@ export const ValidateNewUserDocument = gql`
     sendActivationEmail {
       ...fragmentUIBooleanField
     }
+    identityProvider {
+      ...fragmentUISelectOneField
+    }
     lastLogin {
       ...fragmentUIReadOnlyField
     }
@@ -19122,6 +19325,7 @@ export const ValidateNewUserDocument = gql`
 ${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentUiReadOnlyFieldFragmentDoc}
 ${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentWebCommandFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}`;
 export type ValidateNewUserMutationFn = Apollo.MutationFunction<ValidateNewUserMutation, ValidateNewUserMutationVariables>;
