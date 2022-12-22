@@ -175,7 +175,7 @@ export const SingleSignOnPage = () => {
       data: 'string',
       isPadded: true,
       minWidth: 150,
-      maxWidth: 400,
+      maxWidth: 250,
       flexGrow: 1,
     },
     {
@@ -185,7 +185,17 @@ export const SingleSignOnPage = () => {
       data: 'string',
       isPadded: true,
       minWidth: 150,
-      maxWidth: 400,
+      maxWidth: 250,
+      flexGrow: 1,
+    },
+    {
+      name: 'Type',
+      key: 'type',
+      fieldName: 'type',
+      data: 'string',
+      isPadded: true,
+      minWidth: 150,
+      maxWidth: 250,
       flexGrow: 1,
     },
     {
@@ -195,7 +205,7 @@ export const SingleSignOnPage = () => {
       data: 'string',
       isPadded: true,
       minWidth: 150,
-      maxWidth: 400,
+      maxWidth: 250,
       flexGrow: 1,
     },
     {
@@ -218,6 +228,8 @@ export const SingleSignOnPage = () => {
       columnVal = item?.name ?? '';
     } else if (column?.key === 'idpId') {
       columnVal = item?.idpId ?? '';
+    } else if (column?.key === 'type') {
+      columnVal = item?.type ?? '';
     }
 
     if (column?.key === 'members') {
@@ -249,7 +261,7 @@ export const SingleSignOnPage = () => {
 
     return (
       <>
-        {column?.key === 'name' && (
+        {column?.key === 'name' ? (
         <>
         &nbsp;
           <ButtonLink
@@ -262,9 +274,8 @@ export const SingleSignOnPage = () => {
             {columnVal}
           </ButtonLink>
         </>
-        )}
-        {column?.key === 'idpId' && (
-        <Text>{columnVal}</Text>
+        ) : (
+          <Text>{columnVal}</Text>
         )}
       </>
     );
