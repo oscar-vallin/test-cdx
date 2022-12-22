@@ -7,7 +7,6 @@ import { useSessionStore } from 'src/store/SessionStore';
 import { useApplicationStore } from 'src/store/ApplicationStore';
 import { UserProfilePanel } from 'src/pages/UserSettings/UserProfile';
 import { PasswordChangePanel } from 'src/pages/UserSettings/PasswordChange';
-import { useThemeStore } from 'src/store/ThemeStore';
 import { StyledBox } from './ProfileMenu.styles';
 
 const defaultProps = {
@@ -21,7 +20,6 @@ type ProfileMenuProps = {
 
 const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement => {
   const SessionStore = useSessionStore();
-  const ThemeStore = useThemeStore();
   const { performUserLogout } = useLogoutUseCase();
   const ApplicationStore = useApplicationStore();
   const [isOpenPanel, setIsOpenPanel] = useState(false);
@@ -48,9 +46,6 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
       onClick: openPanel,
       iconProps: {
         iconName: 'AddFriend',
-        style: {
-          color: ThemeStore.userTheme.colors.black,
-        },
       },
     },
     {
