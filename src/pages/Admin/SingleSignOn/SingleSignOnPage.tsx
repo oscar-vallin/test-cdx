@@ -259,11 +259,10 @@ export const SingleSignOnPage = () => {
       )
     }
 
-    return (
-      <>
-        {column?.key === 'name' ? (
+    if (column?.key === 'name') {
+      return (
         <>
-        &nbsp;
+          &nbsp;
           <ButtonLink
             id={`__identityProviderName${columnVal}`}
             onClick={() => {
@@ -274,11 +273,10 @@ export const SingleSignOnPage = () => {
             {columnVal}
           </ButtonLink>
         </>
-        ) : (
-          <Text>{columnVal}</Text>
-        )}
-      </>
-    );
+      );
+    }
+
+    return <Text>{columnVal}</Text>;
   };
 
   const renderBody = () => {
