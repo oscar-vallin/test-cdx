@@ -1,3 +1,4 @@
 import PasswordChange from './PasswordChange';
+import PasswordChangePanel from './PasswordChangePanel';
 
-export { PasswordChange };
+export { PasswordChange, PasswordChangePanel };

@@ -6,6 +6,7 @@ import { useLogoutUseCase } from 'src/use-cases/Authentication';
 import { useSessionStore } from 'src/store/SessionStore';
 import { useApplicationStore } from 'src/store/ApplicationStore';
 import { UserProfilePanel } from 'src/pages/UserSettings/UserProfile';
+import { PasswordChangePanel } from 'src/pages/UserSettings/PasswordChange';
 import { StyledBox } from './ProfileMenu.styles';
 
 const defaultProps = {
@@ -22,6 +23,7 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
   const { performUserLogout } = useLogoutUseCase();
   const ApplicationStore = useApplicationStore();
   const [isOpenPanel, setIsOpenPanel] = useState(false);
+  const [isOpenPasswordChangePanel, setIsOpenPasswordChangePanel] = useState(false);
 
   const handleLogout = () => {
     performUserLogout();
@@ -34,6 +36,7 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
   };
 
   const openPanel = () => setIsOpenPanel(true);
+  const openPasswordChange = () => setIsOpenPasswordChangePanel(true);
 
   const buildMenuItems = (version: string): IContextualMenuItem[] => [
     {
@@ -41,6 +44,15 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
       key: 'ProfileMenu_Profile',
       text: 'My Profile',
       onClick: openPanel,
+      iconProps: {
+        iconName: 'AddFriend',
+      },
+    },
+    {
+      id: '__PasswordChange',
+      key: 'ProfileMenu_ChangePassword',
+      text: 'Change Password',
+      onClick: openPasswordChange,
     },
     {
       id: '__ProfileMenu_UserSettingsId',
@@ -87,6 +99,12 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
         </ButtonContextual>
       )}
       {isOpenPanel && <UserProfilePanel isOpen={isOpenPanel} closePanel={setIsOpenPanel} />}
+      {isOpenPasswordChangePanel && (
+        <PasswordChangePanel
+          isOpen={isOpenPasswordChangePanel}
+          closePanel={setIsOpenPasswordChangePanel}
+        />
+      )}
     </StyledBox>
   );
 };
