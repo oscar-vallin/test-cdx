@@ -6,6 +6,8 @@ import { useLogoutUseCase } from 'src/use-cases/Authentication';
 import { useSessionStore } from 'src/store/SessionStore';
 import { useApplicationStore } from 'src/store/ApplicationStore';
 import { UserProfilePanel } from 'src/pages/UserSettings/UserProfile';
+import { PasswordChangePanel } from 'src/pages/UserSettings/PasswordChange';
+import { useThemeStore } from 'src/store/ThemeStore';
 import { StyledBox } from './ProfileMenu.styles';
 
 const defaultProps = {
@@ -19,9 +21,11 @@ type ProfileMenuProps = {
 
 const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement => {
   const SessionStore = useSessionStore();
+  const ThemeStore = useThemeStore();
   const { performUserLogout } = useLogoutUseCase();
   const ApplicationStore = useApplicationStore();
   const [isOpenPanel, setIsOpenPanel] = useState(false);
+  const [isOpenPasswordChangePanel, setIsOpenPasswordChangePanel] = useState(false);
 
   const handleLogout = () => {
     performUserLogout();
@@ -34,6 +38,7 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
   };
 
   const openPanel = () => setIsOpenPanel(true);
+  const openPasswordChange = () => setIsOpenPasswordChangePanel(true);
 
   const buildMenuItems = (version: string): IContextualMenuItem[] => [
     {
@@ -41,6 +46,18 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
       key: 'ProfileMenu_Profile',
       text: 'My Profile',
       onClick: openPanel,
+      iconProps: {
+        iconName: 'AddFriend',
+        style: {
+          color: ThemeStore.userTheme.colors.black,
+        },
+      },
+    },
+    {
+      id: '__PasswordChange',
+      key: 'ProfileMenu_ChangePassword',
+      text: 'Change Password',
+      onClick: openPasswordChange,
     },
     {
       id: '__ProfileMenu_UserSettingsId',
@@ -87,6 +104,12 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
         </ButtonContextual>
       )}
       {isOpenPanel && <UserProfilePanel isOpen={isOpenPanel} closePanel={setIsOpenPanel} />}
+      {isOpenPasswordChangePanel && (
+        <PasswordChangePanel
+          isOpen={isOpenPasswordChangePanel}
+          closePanel={setIsOpenPasswordChangePanel}
+        />
+      )}
     </StyledBox>
   );
 };
