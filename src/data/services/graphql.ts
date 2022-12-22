@@ -469,7 +469,7 @@ export type CreateUserInput = {
   orgSid: Scalars['ID'];
   /** Indicates that an email should be sent to the user with an activation link. */
   sendActivationEmail?: Maybe<Scalars['Boolean']>;
-  identityProviderSid?: Maybe<Scalars['ID']>;
+  authenticationMethod?: Maybe<Scalars['ID']>;
   accessPolicyGroupSids?: Maybe<Array<Scalars['ID']>>;
 };
 
@@ -800,6 +800,12 @@ export type IdentityProviderConnection = {
   paginationInfo: PaginationInfo;
   nodes?: Maybe<Array<IdentityProvider>>;
   listPageInfo?: Maybe<ListPageInfo>;
+};
+
+export type IdentityProviderConnectionInfo = {
+  __typename?: 'IdentityProviderConnectionInfo';
+  saml2ConnectionInfo?: Maybe<Saml2ConnectionInfo>;
+  oidcConnectionInfo?: Maybe<OidcConnectionInfo>;
 };
 
 export type IdentityProviderForm = {
@@ -1544,6 +1550,13 @@ export enum OidcAuthenticationMethod {
   SignedJwt = 'SIGNED_JWT'
 }
 
+export type OidcConnectionInfo = {
+  __typename?: 'OIDCConnectionInfo';
+  clientId?: Maybe<Scalars['String']>;
+  clientSecret?: Maybe<Scalars['String']>;
+  logoURL?: Maybe<Scalars['String']>;
+};
+
 export type OidcSettingsForm = {
   __typename?: 'OIDCSettingsForm';
   sid?: Maybe<Scalars['ID']>;
@@ -2071,7 +2084,7 @@ export type Query = {
   externalOrgs?: Maybe<OrganizationConnection>;
   identityProvidersForOrg: IdentityProviderConnection;
   identityProviderForm: IdentityProviderForm;
-  identityProviderConnectionInformation: Scalars['String'];
+  identityProviderConnectionInformation: IdentityProviderConnectionInfo;
   dashThemeColorForOrg?: Maybe<DashThemeColorConnection>;
   dashSiteForOrg?: Maybe<DashSite>;
   dashThemeColor?: Maybe<DashThemeColor>;
@@ -2742,6 +2755,16 @@ export enum RestartReason {
   External = 'EXTERNAL'
 }
 
+export type Saml2ConnectionInfo = {
+  __typename?: 'SAML2ConnectionInfo';
+  entityId?: Maybe<Scalars['String']>;
+  metaDataURL?: Maybe<Scalars['String']>;
+  assertionConsumerURL?: Maybe<Scalars['String']>;
+  certificateDownloadURL?: Maybe<Scalars['String']>;
+  logoURL?: Maybe<Scalars['String']>;
+  singleLogoutURL?: Maybe<Scalars['String']>;
+};
+
 export type SftpConfigSubscriptionResponse = {
   __typename?: 'SFTPConfigSubscriptionResponse';
   status: WorkStatus;
@@ -3250,8 +3273,7 @@ export type UpdateUserAccessPolicyGroupsInput = {
 
 export type UpdateUserAuthenticationInput = {
   sid: Scalars['ID'];
-  usePasswordLogin?: Maybe<Scalars['Boolean']>;
-  identityProviderSid?: Maybe<Scalars['ID']>;
+  authenticationMethod?: Maybe<Scalars['ID']>;
 };
 
 export type UpdateUserDashThemeInput = {
@@ -3373,9 +3395,9 @@ export type UserAccountForm = {
   organization: UiReadOnlyField;
   accessPolicyGroups?: Maybe<UiSelectManyField>;
   accessGrantOrgNames: Array<Scalars['String']>;
+  authenticationMethod?: Maybe<UiSelectOneField>;
   /** Indicates that an email should be sent to the user with an activation link. */
   sendActivationEmail?: Maybe<UiBooleanField>;
-  identityProvider?: Maybe<UiSelectOneField>;
   lastLogin?: Maybe<UiReadOnlyField>;
   commands?: Maybe<Array<WebCommand>>;
   response: GqOperationResponse;
@@ -5197,12 +5219,12 @@ export type MyProfileQuery = (
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & FragmentUiSelectManyFieldFragment
+    )>, authenticationMethod?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
-    )>, identityProvider?: Maybe<(
-      { __typename?: 'UISelectOneField' }
-      & FragmentUiSelectOneFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & FragmentUiReadOnlyFieldFragment
@@ -5248,12 +5270,12 @@ export type UserAccountFormQuery = (
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & FragmentUiSelectManyFieldFragment
+    )>, authenticationMethod?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
-    )>, identityProvider?: Maybe<(
-      { __typename?: 'UISelectOneField' }
-      & FragmentUiSelectOneFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & FragmentUiReadOnlyFieldFragment
@@ -5299,12 +5321,12 @@ export type FindUserAccountQuery = (
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & FragmentUiSelectManyFieldFragment
+    )>, authenticationMethod?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
-    )>, identityProvider?: Maybe<(
-      { __typename?: 'UISelectOneField' }
-      & FragmentUiSelectOneFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & FragmentUiReadOnlyFieldFragment
@@ -5506,12 +5528,12 @@ export type ExternalUserForOrgQuery = (
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & FragmentUiSelectManyFieldFragment
+    )>, authenticationMethod?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
-    )>, identityProvider?: Maybe<(
-      { __typename?: 'UISelectOneField' }
-      & FragmentUiSelectOneFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & FragmentUiReadOnlyFieldFragment
@@ -6387,7 +6409,16 @@ export type IdentityProviderConnectionInformationQueryVariables = Exact<{
 
 export type IdentityProviderConnectionInformationQuery = (
   { __typename?: 'Query' }
-  & Pick<Query, 'identityProviderConnectionInformation'>
+  & { identityProviderConnectionInformation: (
+    { __typename?: 'IdentityProviderConnectionInfo' }
+    & { saml2ConnectionInfo?: Maybe<(
+      { __typename?: 'SAML2ConnectionInfo' }
+      & Pick<Saml2ConnectionInfo, 'entityId' | 'metaDataURL' | 'assertionConsumerURL' | 'certificateDownloadURL' | 'logoURL' | 'singleLogoutURL'>
+    )>, oidcConnectionInfo?: Maybe<(
+      { __typename?: 'OIDCConnectionInfo' }
+      & Pick<OidcConnectionInfo, 'clientId' | 'clientSecret' | 'logoURL'>
+    )> }
+  ) }
 );
 
 export type DashThemeColorForOrgQueryVariables = Exact<{
@@ -8437,12 +8468,12 @@ export type UpdateMyProfileMutation = (
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & FragmentUiSelectManyFieldFragment
+    )>, authenticationMethod?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
-    )>, identityProvider?: Maybe<(
-      { __typename?: 'UISelectOneField' }
-      & FragmentUiSelectOneFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & FragmentUiReadOnlyFieldFragment
@@ -8489,12 +8520,12 @@ export type CreateUserMutation = (
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & FragmentUiSelectManyFieldFragment
+    )>, authenticationMethod?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
-    )>, identityProvider?: Maybe<(
-      { __typename?: 'UISelectOneField' }
-      & FragmentUiSelectOneFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & FragmentUiReadOnlyFieldFragment
@@ -8540,12 +8571,12 @@ export type UpdateUserMutation = (
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & FragmentUiSelectManyFieldFragment
+    )>, authenticationMethod?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
-    )>, identityProvider?: Maybe<(
-      { __typename?: 'UISelectOneField' }
-      & FragmentUiSelectOneFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & FragmentUiReadOnlyFieldFragment
@@ -8591,12 +8622,12 @@ export type UpdateUserAccessPolicyGroupsMutation = (
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & FragmentUiSelectManyFieldFragment
+    )>, authenticationMethod?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
-    )>, identityProvider?: Maybe<(
-      { __typename?: 'UISelectOneField' }
-      & FragmentUiSelectOneFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & FragmentUiReadOnlyFieldFragment
@@ -8642,12 +8673,12 @@ export type UpdateUserAuthenticationMutation = (
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & FragmentUiSelectManyFieldFragment
+    )>, authenticationMethod?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
-    )>, identityProvider?: Maybe<(
-      { __typename?: 'UISelectOneField' }
-      & FragmentUiSelectOneFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & FragmentUiReadOnlyFieldFragment
@@ -8757,12 +8788,12 @@ export type GrantExternalUserAccessMutation = (
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & FragmentUiSelectManyFieldFragment
+    )>, authenticationMethod?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
-    )>, identityProvider?: Maybe<(
-      { __typename?: 'UISelectOneField' }
-      & FragmentUiSelectOneFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & FragmentUiReadOnlyFieldFragment
@@ -8809,12 +8840,12 @@ export type CreateExternalUserMutation = (
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & FragmentUiSelectManyFieldFragment
+    )>, authenticationMethod?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
-    )>, identityProvider?: Maybe<(
-      { __typename?: 'UISelectOneField' }
-      & FragmentUiSelectOneFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & FragmentUiReadOnlyFieldFragment
@@ -8886,12 +8917,12 @@ export type ValidateNewUserMutation = (
     ), accessPolicyGroups?: Maybe<(
       { __typename?: 'UISelectManyField' }
       & FragmentUiSelectManyFieldFragment
+    )>, authenticationMethod?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
     )>, sendActivationEmail?: Maybe<(
       { __typename?: 'UIBooleanField' }
       & FragmentUiBooleanFieldFragment
-    )>, identityProvider?: Maybe<(
-      { __typename?: 'UISelectOneField' }
-      & FragmentUiSelectOneFieldFragment
     )>, lastLogin?: Maybe<(
       { __typename?: 'UIReadOnlyField' }
       & FragmentUiReadOnlyFieldFragment
@@ -12501,11 +12532,11 @@ export const MyProfileDocument = gql`
       ...fragmentUISelectManyField
     }
     accessGrantOrgNames
+    authenticationMethod {
+      ...fragmentUISelectOneField
+    }
     sendActivationEmail {
       ...fragmentUIBooleanField
-    }
-    identityProvider {
-      ...fragmentUISelectOneField
     }
     lastLogin {
       ...fragmentUIReadOnlyField
@@ -12583,11 +12614,11 @@ export const UserAccountFormDocument = gql`
       ...fragmentUISelectManyField
     }
     accessGrantOrgNames
+    authenticationMethod {
+      ...fragmentUISelectOneField
+    }
     sendActivationEmail {
       ...fragmentUIBooleanField
-    }
-    identityProvider {
-      ...fragmentUISelectOneField
     }
     lastLogin {
       ...fragmentUIReadOnlyField
@@ -12666,11 +12697,11 @@ export const FindUserAccountDocument = gql`
       ...fragmentUISelectManyField
     }
     accessGrantOrgNames
+    authenticationMethod {
+      ...fragmentUISelectOneField
+    }
     sendActivationEmail {
       ...fragmentUIBooleanField
-    }
-    identityProvider {
-      ...fragmentUISelectOneField
     }
     lastLogin {
       ...fragmentUIReadOnlyField
@@ -13035,11 +13066,11 @@ export const ExternalUserForOrgDocument = gql`
       ...fragmentUISelectManyField
     }
     accessGrantOrgNames
+    authenticationMethod {
+      ...fragmentUISelectOneField
+    }
     sendActivationEmail {
       ...fragmentUIBooleanField
-    }
-    identityProvider {
-      ...fragmentUISelectOneField
     }
     lastLogin {
       ...fragmentUIReadOnlyField
@@ -14713,7 +14744,21 @@ export type IdentityProviderFormLazyQueryHookResult = ReturnType<typeof useIdent
 export type IdentityProviderFormQueryResult = Apollo.QueryResult<IdentityProviderFormQuery, IdentityProviderFormQueryVariables>;
 export const IdentityProviderConnectionInformationDocument = gql`
     query IdentityProviderConnectionInformation($idpSid: ID!) {
-  identityProviderConnectionInformation(idpSid: $idpSid)
+  identityProviderConnectionInformation(idpSid: $idpSid) {
+    saml2ConnectionInfo {
+      entityId
+      metaDataURL
+      assertionConsumerURL
+      certificateDownloadURL
+      logoURL
+      singleLogoutURL
+    }
+    oidcConnectionInfo {
+      clientId
+      clientSecret
+      logoURL
+    }
+  }
 }
     `;
 
@@ -18513,11 +18558,11 @@ export const UpdateMyProfileDocument = gql`
       ...fragmentUISelectManyField
     }
     accessGrantOrgNames
+    authenticationMethod {
+      ...fragmentUISelectOneField
+    }
     sendActivationEmail {
       ...fragmentUIBooleanField
-    }
-    identityProvider {
-      ...fragmentUISelectOneField
     }
     lastLogin {
       ...fragmentUIReadOnlyField
@@ -18595,11 +18640,11 @@ export const CreateUserDocument = gql`
       ...fragmentUISelectManyField
     }
     accessGrantOrgNames
+    authenticationMethod {
+      ...fragmentUISelectOneField
+    }
     sendActivationEmail {
       ...fragmentUIBooleanField
-    }
-    identityProvider {
-      ...fragmentUISelectOneField
     }
     lastLogin {
       ...fragmentUIReadOnlyField
@@ -18678,11 +18723,11 @@ export const UpdateUserDocument = gql`
       ...fragmentUISelectManyField
     }
     accessGrantOrgNames
+    authenticationMethod {
+      ...fragmentUISelectOneField
+    }
     sendActivationEmail {
       ...fragmentUIBooleanField
-    }
-    identityProvider {
-      ...fragmentUISelectOneField
     }
     lastLogin {
       ...fragmentUIReadOnlyField
@@ -18762,11 +18807,11 @@ export const UpdateUserAccessPolicyGroupsDocument = gql`
       ...fragmentUISelectManyField
     }
     accessGrantOrgNames
+    authenticationMethod {
+      ...fragmentUISelectOneField
+    }
     sendActivationEmail {
       ...fragmentUIBooleanField
-    }
-    identityProvider {
-      ...fragmentUISelectOneField
     }
     lastLogin {
       ...fragmentUIReadOnlyField
@@ -18844,11 +18889,11 @@ export const UpdateUserAuthenticationDocument = gql`
       ...fragmentUISelectManyField
     }
     accessGrantOrgNames
+    authenticationMethod {
+      ...fragmentUISelectOneField
+    }
     sendActivationEmail {
       ...fragmentUIBooleanField
-    }
-    identityProvider {
-      ...fragmentUISelectOneField
     }
     lastLogin {
       ...fragmentUIReadOnlyField
@@ -19090,11 +19135,11 @@ export const GrantExternalUserAccessDocument = gql`
       ...fragmentUISelectManyField
     }
     accessGrantOrgNames
+    authenticationMethod {
+      ...fragmentUISelectOneField
+    }
     sendActivationEmail {
       ...fragmentUIBooleanField
-    }
-    identityProvider {
-      ...fragmentUISelectOneField
     }
     lastLogin {
       ...fragmentUIReadOnlyField
@@ -19172,11 +19217,11 @@ export const CreateExternalUserDocument = gql`
       ...fragmentUISelectManyField
     }
     accessGrantOrgNames
+    authenticationMethod {
+      ...fragmentUISelectOneField
+    }
     sendActivationEmail {
       ...fragmentUIBooleanField
-    }
-    identityProvider {
-      ...fragmentUISelectOneField
     }
     lastLogin {
       ...fragmentUIReadOnlyField
@@ -19300,11 +19345,11 @@ export const ValidateNewUserDocument = gql`
       ...fragmentUISelectManyField
     }
     accessGrantOrgNames
+    authenticationMethod {
+      ...fragmentUISelectOneField
+    }
     sendActivationEmail {
       ...fragmentUIBooleanField
-    }
-    identityProvider {
-      ...fragmentUISelectOneField
     }
     lastLogin {
       ...fragmentUIReadOnlyField
