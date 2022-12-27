@@ -122,6 +122,8 @@ const PasswordChangePanel = ({ closePanel, isOpen }: PasswordChangePanelProps) =
           onChange={(event, newValue) => setPasswords({ ...passwords, confirmation: newValue ?? '' })}
         />
 
+        <Spacing margin={{ top: 'normal' }} />
+
         <PasswordRules
           user={user}
           password={delayedPassword}
