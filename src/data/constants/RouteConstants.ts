@@ -1,6 +1,7 @@
 export const ROUTES_ID = {
   HOME: 'home',
   LOGIN: 'login',
+  SSO_LOGIN: 'sso-login',
   USER_SETTINGS: 'user-settings',
   DASHBOARD: 'dashboard',
   FILE_STATUS: 'file-status',
@@ -42,6 +43,7 @@ export const ROUTES_ID = {
 export const URL_ROUTES = {
   HOME: '/',
   LOGIN: `/${ROUTES_ID.LOGIN}`,
+  SSO_LOGIN: `/${ROUTES_ID.SSO_LOGIN}`,
   USER_SETTINGS: `/${ROUTES_ID.USER_SETTINGS}`,
   DASHBOARD: `/${ROUTES_ID.DASHBOARD}`,
   DASHBOARD_TO_FILE_STATUS: `/${ROUTES_ID.FILE_STATUS}/filter/:id`,
@@ -101,6 +103,14 @@ export const ROUTE_LOGIN: RouteType = {
   ID: ROUTES_ID.LOGIN,
   TITLE: 'Login',
   URL: URL_ROUTES.LOGIN,
+  MAIN_MENU: false,
+  API_ID: 'LOGIN',
+};
+
+export const ROUTE_SSO_LOGIN: RouteType = {
+  ID: ROUTES_ID.SSO_LOGIN,
+  TITLE: 'Login',
+  URL: URL_ROUTES.SSO_LOGIN,
   MAIN_MENU: false,
   API_ID: 'LOGIN',
 };
@@ -404,6 +414,7 @@ export const ROUTE_UNAUTHORIZED: RouteType = {
 export const ROUTES = {
   ROUTE_HOME,
   ROUTE_LOGIN,
+  ROUTE_SSO_LOGIN,
   ROUTE_USER_SETTINGS,
   ROUTE_DASHBOARD,
   ROUTE_DASHBOARD_TO_FILE_STATUS,
@@ -446,6 +457,7 @@ export const ROUTES = {
 export const ROUTES_ARRAY: RouteType[] = [
   ROUTE_HOME,
   ROUTE_LOGIN,
+  ROUTE_SSO_LOGIN,
   ROUTE_USER_SETTINGS,
   ROUTE_DASHBOARD,
   ROUTE_DASHBOARD_TO_FILE_STATUS,

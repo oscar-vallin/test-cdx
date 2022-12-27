@@ -3,8 +3,10 @@ import { useEffect, useState } from 'react';
 import { useSessionStore } from 'src/store/SessionStore';
 import {
   LoginStepType,
+  TokenUser,
   useBeginLoginMutation,
-  usePasswordLoginMutation,
+  useCurrentUserLazyQuery,
+  usePasswordLoginMutation, WebAppDomain,
 } from 'src/data/services/graphql';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { useCSRFToken } from 'src/hooks/useCSRFToken';
@@ -55,6 +57,11 @@ export const useLoginUseCase = () => {
     verifyUserCredentials,
     { data: userSession, loading: isVerifyingCredentials, error: credentialsVerificationError },
   ] = usePasswordLoginMutation();
+
+  const [
+    callCurrentUser,
+    { data: dataCurrentUser, loading: loadingCurrentUser, error: errorCurrentUser },
+  ] = useCurrentUserLazyQuery();
 
   const performUserIdVerification = ({ userId: _userId }) => {
     setUserId(_userId);
@@ -130,10 +137,23 @@ export const useLoginUseCase = () => {
   }, [credentialsVerificationError]);
 
   useEffect(() => {
-    if (verifiedUserId && verifiedUserId.beginLogin?.step === LoginStepType.Password) {
+    if (errorCurrentUser) {
       setState({
-        step: 'PASSWORD', data: verifiedUserId.beginLogin, loading: false, error: null, reset: false,
+        step: 'USER_ID', data: null, loading: false, error: 'An unexpected error occurred', reset: true,
       });
+    }
+  }, [errorCurrentUser]);
+
+  useEffect(() => {
+    if (verifiedUserId) {
+      if (verifiedUserId.beginLogin?.step === LoginStepType.Password) {
+        setState({
+          step: 'PASSWORD', data: verifiedUserId.beginLogin, loading: false, error: null, reset: false,
+        });
+      } else if (verifiedUserId.beginLogin?.step === LoginStepType.SsoRedirect
+        && verifiedUserId.beginLogin.redirectPath) {
+        window.location.href = verifiedUserId.beginLogin.redirectPath;
+      }
     }
   }, [verifiedUserId]);
 
@@ -156,33 +176,69 @@ export const useLoginUseCase = () => {
   }, [userSession]);
 
   useEffect(() => {
-    // Wait for the login to happen and for the navigation and theme queries to be done
-    if (userSession && fetchedTheme && fetchedNav) {
-      const { passwordLogin } = userSession;
+    if (dataCurrentUser?.currentUser?.domain && dataCurrentUser?.currentUser?.tokenUser) {
       const organization = {
-        type: passwordLogin?.loginCompleteDomain?.type,
-        orgSid: passwordLogin?.tokenUser?.session?.orgSid,
-        destination: passwordLogin?.loginCompleteDomain?.selectedPage,
-        label: passwordLogin?.tokenUser?.session?.orgName,
-        orgId: passwordLogin?.tokenUser?.session?.orgId,
+        type: dataCurrentUser.currentUser.domain.type,
+        orgSid: dataCurrentUser.currentUser.tokenUser.session?.orgSid,
+        destination: dataCurrentUser.currentUser.domain.selectedPage,
+        label: dataCurrentUser.currentUser.tokenUser.session?.orgName,
+        orgId: dataCurrentUser.currentUser.tokenUser.session?.orgId,
         subNavItems: [],
       };
 
-      SessionStore.setCurrentSession({
-        token: passwordLogin?.tokenUser?.token,
-        id: passwordLogin?.tokenUser?.session?.id,
-        orgSid: passwordLogin?.tokenUser?.session?.orgSid,
-        userId: passwordLogin?.tokenUser?.session?.userId,
-        firstName: passwordLogin?.tokenUser?.session?.firstNm,
-        defaultAuthorities: passwordLogin?.tokenUser?.session?.defaultAuthorities,
-      });
+      const { orgSid } = organization;
 
-      ActiveDomainStore.setOriginOrg(organization);
-      ActiveDomainStore.setCurrentOrg(organization);
+      fetchTheme();
+      performNavUpdate({ orgSid });
     }
-  }, [fetchedTheme, fetchedNav, userSession]);
+  }, [dataCurrentUser, loadingCurrentUser]);
+
+  const storeCurrentUser = (tokenUser?: TokenUser | null, domain?: WebAppDomain | null) => {
+    const organization = {
+      type: domain?.type,
+      orgSid: tokenUser?.session?.orgSid,
+      destination: domain?.selectedPage,
+      label: tokenUser?.session?.orgName,
+      orgId: tokenUser?.session?.orgId,
+      subNavItems: [],
+    };
+
+    SessionStore.setCurrentSession({
+      token: tokenUser?.token,
+      id: tokenUser?.session?.id,
+      orgSid: tokenUser?.session?.orgSid,
+      userId: tokenUser?.session?.userId,
+      firstName: tokenUser?.session?.firstNm,
+      defaultAuthorities: tokenUser?.session?.defaultAuthorities,
+    });
+
+    ActiveDomainStore.setOriginOrg(organization);
+    ActiveDomainStore.setCurrentOrg(organization);
+  };
+
+  useEffect(() => {
+    // Wait for the login to happen and for the navigation and theme queries to be done
+    if (fetchedTheme && fetchedNav) {
+      if (userSession) {
+        storeCurrentUser(
+          userSession.passwordLogin?.tokenUser,
+          userSession.passwordLogin?.loginCompleteDomain,
+        );
+      }
+      if (dataCurrentUser) {
+        storeCurrentUser(
+          dataCurrentUser.currentUser?.tokenUser,
+          dataCurrentUser.currentUser?.domain,
+        );
+      }
+    }
+  }, [fetchedTheme, fetchedNav, userSession, dataCurrentUser]);
 
   return {
-    performUserIdVerification, performUserAuthentication, returnToInitialStep, state,
+    performUserIdVerification,
+    performUserAuthentication,
+    returnToInitialStep,
+    callCurrentUser,
+    state,
   };
 };

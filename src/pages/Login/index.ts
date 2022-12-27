@@ -1,3 +1,4 @@
 import { LoginPage } from './LoginPage';
+import { SSOLoginPage } from './SSOLoginPage';
 
-export { LoginPage };
+export { LoginPage, SSOLoginPage };

@@ -40,12 +40,18 @@ export const SessionContextProvider = ({ children }: SessionContextProviderProps
     if (params.get('redirectUrl')) {
       SessionStore.setRedirectUrl(currentUrl);
     }
-    if (isRehydrated && !SessionStore.user.token && location.pathname.indexOf('ua/password-reset') < 0) {
+    if (isRehydrated
+      && !SessionStore.user.token && location.pathname.indexOf('ua/password-reset') < 0
+      && location.pathname.indexOf('sso-login') < 0) {
       history.push('/login');
     }
   }, [SessionStore.user.token, isRehydrated]);
 
-  return <SessionContext.Provider value={null}>{!isRehydrated ? <LoadingPage /> : children}</SessionContext.Provider>;
+  return (
+    <SessionContext.Provider value={null}>
+      {!isRehydrated ? <LoadingPage /> : children}
+    </SessionContext.Provider>
+  );
 };
 
 SessionContextProvider.defaultProps = defaultProps;
