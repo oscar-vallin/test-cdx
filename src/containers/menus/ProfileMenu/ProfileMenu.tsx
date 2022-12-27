@@ -7,6 +7,7 @@ import { useSessionStore } from 'src/store/SessionStore';
 import { useApplicationStore } from 'src/store/ApplicationStore';
 import { UserProfilePanel } from 'src/pages/UserSettings/UserProfile';
 import { PasswordChangePanel } from 'src/pages/UserSettings/PasswordChange';
+import { AlertsPanel } from 'src/pages/UserSettings/Alerts';
 import { StyledBox } from './ProfileMenu.styles';
 
 const defaultProps = {
@@ -24,6 +25,7 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
   const ApplicationStore = useApplicationStore();
   const [isOpenPanel, setIsOpenPanel] = useState(false);
   const [isOpenPasswordChangePanel, setIsOpenPasswordChangePanel] = useState(false);
+  const [isOpenAlertsPanel, setIsAlertsPanel] = useState(false);
 
   const handleLogout = () => {
     performUserLogout();
@@ -37,6 +39,7 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
 
   const openPanel = () => setIsOpenPanel(true);
   const openPasswordChange = () => setIsOpenPasswordChangePanel(true);
+  const openAlerts = () => setIsAlertsPanel(true);
 
   const buildMenuItems = (version: string): IContextualMenuItem[] => [
     {
@@ -46,6 +49,15 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
       onClick: openPanel,
       iconProps: {
         iconName: 'AddFriend',
+      },
+    },
+    {
+      id: '__MyAlerts',
+      key: 'ProfileMenu_Alerts',
+      text: 'My Alerts',
+      onClick: openAlerts,
+      iconProps: {
+        iconName: 'Ringer',
       },
     },
     {
@@ -104,6 +116,9 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
           isOpen={isOpenPasswordChangePanel}
           closePanel={setIsOpenPasswordChangePanel}
         />
+      )}
+      {isOpenAlertsPanel && (
+        <AlertsPanel isOpen={isOpenAlertsPanel} closePanel={setIsAlertsPanel} />
       )}
     </StyledBox>
   );

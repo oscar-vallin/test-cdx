@@ -122,6 +122,8 @@ const PasswordChangePanel = ({ closePanel, isOpen }: PasswordChangePanelProps) =
           onChange={(event, newValue) => setPasswords({ ...passwords, confirmation: newValue ?? '' })}
         />
 
+        <Spacing margin={{ top: 'normal' }} />
+
         <PasswordRules
           user={user}
           password={delayedPassword}
@@ -133,6 +135,7 @@ const PasswordChangePanel = ({ closePanel, isOpen }: PasswordChangePanelProps) =
             id="__PasswordChangeId"
             variant="primary"
             text="Save"
+            disabled={isFormInvalid(passwords) || !validationPassed || isUpdatingPassword}
             onClick={() => {
               updateOwnPasswordMutation({
                 variables: {
