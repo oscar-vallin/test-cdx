@@ -916,7 +916,8 @@ export type LoginStep = {
 export enum LoginStepType {
   Username = 'USERNAME',
   Password = 'PASSWORD',
-  Complete = 'COMPLETE'
+  Complete = 'COMPLETE',
+  SsoRedirect = 'SSO_REDIRECT'
 }
 
 export type MigrateUserInput = {
