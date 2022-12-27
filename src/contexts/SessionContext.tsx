@@ -41,7 +41,8 @@ export const SessionContextProvider = ({ children }: SessionContextProviderProps
       SessionStore.setRedirectUrl(currentUrl);
     }
     if (isRehydrated
-      && !SessionStore.user.token && location.pathname.indexOf('ua/password-reset') < 0
+      && !SessionStore.user.token
+      && location.pathname.indexOf('ua/password-reset') < 0
       && location.pathname.indexOf('sso-login') < 0) {
       history.push('/login');
     }
