@@ -133,6 +133,7 @@ const PasswordChangePanel = ({ closePanel, isOpen }: PasswordChangePanelProps) =
             id="__PasswordChangeId"
             variant="primary"
             text="Save"
+            disabled={isFormInvalid(passwords) || !validationPassed || isUpdatingPassword}
             onClick={() => {
               updateOwnPasswordMutation({
                 variables: {
