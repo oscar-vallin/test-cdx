@@ -463,6 +463,7 @@ export const OrgsTable = ({
         <Stack horizontal={true} wrap={true} style={{ width: '100%' }} verticalAlign="end">
           <Column lg="6">
             <ThemedSearchBox
+              autoComplete="off"
               id="Orgs_Input-Search"
               disabled={false}
               value={tableFilters.searchText.value}
