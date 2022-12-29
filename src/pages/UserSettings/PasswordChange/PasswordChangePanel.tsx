@@ -93,6 +93,7 @@ const PasswordChangePanel = ({ closePanel, isOpen }: PasswordChangePanelProps) =
 
         <InputText
           id="currentPassword"
+          autocomplete="new-password"
           errorMessage={errMsg}
           required
           type="password"
