@@ -9,6 +9,7 @@ import { UserProfilePanel } from 'src/pages/UserSettings/UserProfile';
 import { PasswordChangePanel } from 'src/pages/UserSettings/PasswordChange';
 import { AlertsPanel } from 'src/pages/UserSettings/Alerts';
 import { StyledBox } from './ProfileMenu.styles';
+import { ChangeThemePanel } from 'src/pages/UserSettings/ChangeTheme';
 
 const defaultProps = {
   id: '',
@@ -26,6 +27,7 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
   const [isOpenPanel, setIsOpenPanel] = useState(false);
   const [isOpenPasswordChangePanel, setIsOpenPasswordChangePanel] = useState(false);
   const [isOpenAlertsPanel, setIsAlertsPanel] = useState(false);
+  const [changeTheme, setChangeThemePanel] = useState(false);
 
   const handleLogout = () => {
     performUserLogout();
@@ -40,6 +42,7 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
   const openPanel = () => setIsOpenPanel(true);
   const openPasswordChange = () => setIsOpenPasswordChangePanel(true);
   const openAlerts = () => setIsAlertsPanel(true);
+  const openChangeTheme = () => setChangeThemePanel(true);
 
   const buildMenuItems = (version: string): IContextualMenuItem[] => [
     {
@@ -65,6 +68,12 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
       key: 'ProfileMenu_ChangePassword',
       text: 'Change Password',
       onClick: openPasswordChange,
+    },
+    {
+      id: '__ChangeTheme',
+      key: 'ProfileMenu_ChangeTheme',
+      text: 'Change theme',
+      onClick: openChangeTheme,
     },
     {
       id: '__ProfileMenu_UserSettingsId',
@@ -119,6 +128,9 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
       )}
       {isOpenAlertsPanel && (
         <AlertsPanel isOpen={isOpenAlertsPanel} closePanel={setIsAlertsPanel} />
+      )}
+      {changeTheme && (
+        <ChangeThemePanel isOpen={changeTheme} closePanel={setChangeThemePanel}/>
       )}
     </StyledBox>
   );

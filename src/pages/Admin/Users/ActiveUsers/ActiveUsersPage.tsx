@@ -161,6 +161,7 @@ const ActiveUsersPage = () => {
         <Column lg="6">
           <SearchBoxStyled
             id="Active_Users_Input-Search"
+            autoComplete="off"
             autoFocus
             styles={{ root: { width: '100%' } }}
             onChange={tableFilters.searchText.onChange}
