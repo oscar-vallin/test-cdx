@@ -107,7 +107,7 @@ const PasswordChangePanel = ({ closePanel, isOpen }: PasswordChangePanelProps) =
           id="newPassword"
           required
           type="password"
-          label="Password"
+          label="New Password"
           value={passwords.new}
           disabled={isUpdatingPassword}
           onChange={(event, newValue) => setPasswords({ ...passwords, new: newValue ?? '' })}
