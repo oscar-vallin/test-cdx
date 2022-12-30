@@ -1964,7 +1964,11 @@ export enum Permission {
   ThemeUpdate = 'THEME_UPDATE',
   ThemeDelete = 'THEME_DELETE',
   FtpTest = 'FTP_TEST',
-  ImplementationDeploy = 'IMPLEMENTATION_DEPLOY'
+  ImplementationDeploy = 'IMPLEMENTATION_DEPLOY',
+  SupportedPlatformRead = 'SUPPORTED_PLATFORM_READ',
+  SupportedPlatformCreate = 'SUPPORTED_PLATFORM_CREATE',
+  SupportedPlatformUpdate = 'SUPPORTED_PLATFORM_UPDATE',
+  SupportedPlatformDelete = 'SUPPORTED_PLATFORM_DELETE'
 }
 
 export type Person = {

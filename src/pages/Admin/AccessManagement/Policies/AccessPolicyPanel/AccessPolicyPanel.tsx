@@ -82,12 +82,20 @@ const AccessPolicyPanel = ({
   const [permissions, setPermissions] = useState<PermissionGroups>();
   const [applicableOrgTypes, setApplicableOrgTypes]: any = useState([]);
 
-  const [fetchPolicyForm, { data: form, loading: isLoadingForm }] = useQueryHandler(useAccessPolicyFormLazyQuery);
-  const [createPolicy, { data: createdPolicy, loading: isCreatingPolicy }] = useQueryHandler(useCreateAccessPolicyMutation);
+  const [fetchPolicyForm, {
+    data: form, loading: isLoadingForm,
+  }] = useQueryHandler(useAccessPolicyFormLazyQuery);
+  const [createPolicy, {
+    data: createdPolicy, loading: isCreatingPolicy,
+  }] = useQueryHandler(useCreateAccessPolicyMutation);
 
-  const [updatePolicy, { data: updatedPolicy, loading: isUpdatingPolicy }] = useQueryHandler(useUpdateAccessPolicyMutation);
+  const [updatePolicy, {
+    data: updatedPolicy, loading: isUpdatingPolicy,
+  }] = useQueryHandler(useUpdateAccessPolicyMutation);
 
-  const [fetchPolicy, { data: policy, loading: isLoadingPolicy }] = useQueryHandler(useFindAccessPolicyLazyQuery);
+  const [fetchPolicy, {
+    data: policy, loading: isLoadingPolicy,
+  }] = useQueryHandler(useFindAccessPolicyLazyQuery);
 
   const doClosePanel = () => {
     setState({ ...INITIAL_STATE });
@@ -181,7 +189,9 @@ const AccessPolicyPanel = ({
           permissions: _accessPolicyForm?.permissions.value?.map(({ value }) => value) || [],
         });
 
-        setApplicableOrgTypes(_accessPolicyForm?.applicableOrgTypes.value?.map(({ value }) => value) || []);
+        setApplicableOrgTypes(
+          _accessPolicyForm?.applicableOrgTypes.value?.map(({ value }) => value) || [],
+        );
       }
     }
   }, [form, isOpen]);
@@ -192,7 +202,9 @@ const AccessPolicyPanel = ({
 
       setPolicyForm(_accessPolicyForm);
       setPermissions(groupPermissions(_accessPolicyForm?.options));
-      setApplicableOrgTypes(_accessPolicyForm?.applicableOrgTypes?.value?.map(({ value }) => value));
+      setApplicableOrgTypes(
+        _accessPolicyForm?.applicableOrgTypes?.value?.map(({ value }) => value),
+      );
 
       setState({
         sid: _accessPolicyForm?.sid,
@@ -226,7 +238,8 @@ const AccessPolicyPanel = ({
 
   const renderSaveButton = () => {
     const saveCmd = policyForm?.commands?.find(
-      (cmd) => cmd?.commandType === CdxWebCommandType.Create || cmd?.commandType === CdxWebCommandType.Update,
+      (cmd) => cmd?.commandType === CdxWebCommandType.Create
+        || cmd?.commandType === CdxWebCommandType.Update,
     );
     if (saveCmd) {
       return (
@@ -290,7 +303,8 @@ const AccessPolicyPanel = ({
    * given list of options
    * @param option option to find
    * @param options array of options to search
-   * @return UiOption which refers to a LIST permission OR undefined if a LIST permission option was not found
+   * @return UiOption which refers to a LIST permission
+   *         OR undefined if a LIST permission option was not found
    */
   const findListOption = (option?: UiOption, options?: UiOption[]): UiOption | null => {
     if (!option || !options) {
@@ -304,7 +318,8 @@ const AccessPolicyPanel = ({
    * given list of options
    * @param option option to find
    * @param options array of options to search
-   * @return UiOption which refers to a READ permission OR undefined if a READ permission option was not found
+   * @return UiOption which refers to a READ permission
+   *         OR undefined if a READ permission option was not found
    */
   const findReadOption = (option?: UiOption, options?: UiOption[]): UiOption | null => {
     if (!option || !options) {
@@ -316,7 +331,8 @@ const AccessPolicyPanel = ({
   };
 
   /**
-   * Should the given option within a list of options be disabled based on if the corresponding READ permission is checked?
+   * Should the given option within a list of options be disabled
+   * based on if the corresponding READ permission is checked?
    * @param option option to find
    * @param options array of options to search
    * @return true if the corresponding READ permission for the given option is unchecked,
@@ -351,10 +367,12 @@ const AccessPolicyPanel = ({
       const permissionOptions = options?.map((opt) => opt.value);
 
       if (isListOption(option)) {
-        // If this is a LIST permission and we unchecked, we need to uncheck all other permissions in this group
+        // If this is a LIST permission and we unchecked,
+        // we need to uncheck all other permissions in this group
         _permissions = _permissions.filter((value) => !permissionOptions?.includes(value));
       } else if (isReadOption(option)) {
-        // If this is a READ permission and we unchecked, we need to uncheck all other _CREATE, _UPDATE, etc. permissions
+        // If this is a READ permission and we unchecked,
+        // we need to uncheck all other _CREATE, _UPDATE, etc. permissions
         const permPrefix = option.value.substring(0, option.value.lastIndexOf('_READ'));
         const readControlledOptions = permissionOptions?.filter(
           (perm) => perm.startsWith(permPrefix) && !perm.endsWith('_LIST'),
@@ -371,7 +389,8 @@ const AccessPolicyPanel = ({
 
   const renderPermissionList = (options?: UiOption[], readOnly = true) => {
     if (readOnly) {
-      const selectedOptions = options?.filter((option) => state.permissions.includes(option.value)) ?? [];
+      const selectedOptions = options
+        ?.filter((option) => state.permissions.includes(option.value)) ?? [];
       if (selectedOptions.length > 0) {
         return selectedOptions.map((option, optIndex) => (
           <Spacing margin={{ top: 'small' }} key={`perm-${optIndex}`}>
@@ -517,6 +536,7 @@ const AccessPolicyPanel = ({
                 {renderPermissionGroup(permissions?.exchange, permissionsReadOnly)}
                 {renderPermissionGroup(permissions?.accessManagement, permissionsReadOnly)}
                 {renderPermissionGroup(permissions?.orgAdmin, permissionsReadOnly)}
+                {renderPermissionGroup(permissions?.xchange, permissionsReadOnly)}
                 {renderPermissionGroup(permissions?.tools, permissionsReadOnly)}
                 {renderPermissionGroup(permissions?.other, permissionsReadOnly)}
               </Column>
