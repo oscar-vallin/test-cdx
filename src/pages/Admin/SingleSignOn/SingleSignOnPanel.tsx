@@ -2,19 +2,21 @@ import React, { useEffect, useState } from 'react';
 import {
   useIdentityProviderFormLazyQuery,
   IdentityProviderForm,
+  OidcSettingsForm,
   useCreateIdentityProviderMutation,
   useUpdateIdentityProviderMutation,
   IdpType,
+  OidcAuthenticationMethod,
   GqOperationResponse,
 } from 'src/data/services/graphql';
 import {
-  IconButton,
   PanelType,
   PrimaryButton,
   Spinner,
   SpinnerSize,
   MessageBar,
   MessageBarType,
+  IconButton,
 } from '@fluentui/react';
 import CodeMirror, { BasicSetupOptions } from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
@@ -25,12 +27,14 @@ import { PanelBody, ThemedPanel, WizardButtonRow } from 'src/layouts/Panels/Pane
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { UIInputText } from 'src/components/inputs/InputText';
+import { InputText, UIInputText } from 'src/components/inputs/InputText';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
 import { useNotification } from 'src/hooks/useNotification';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { ErrorIcon } from 'src/components/badges/ErrorIcon';
+import { UIInputSelectOne } from 'src/components/inputs/InputDropdown';
+import { UIInputToggle } from 'src/components/inputs/InputToggle';
 import { CodeMirrorRequired } from './SingleSignOn.styles';
 
 type SingleSignOnPanelProps = {
@@ -80,8 +84,18 @@ const SingleSignOnPanel = ({
   const ThemeStore = useThemeStore();
   const Toast = useNotification();
   const [identityProviderForm, setIdentityProviderForm] = useState<IdentityProviderForm>();
+  const [oidcSettings, setOidcSettings] = useState<OidcSettingsForm>()
   const [idpId, setIdpId] = useState('');
   const [name, setName] = useState('');
+  const [type, setType] = useState('');
+  const [issuer, setIssuer] = useState('');
+  const [clientId, setClientId] = useState('');
+  const [clientSecret, setClientSecret] = useState('');
+  const [authenticationMethod, setAuthenticationMethod] = useState('');
+  const [autoDiscovery, setAutoDiscovery] = useState<boolean>();
+  const [authorizationURL, setAuthorizationURL] = useState('');
+  const [tokenURL, setTokenURL] = useState('');
+  const [userInfoURL, setUserInfoURL] = useState('');
   const [samlMetaData, setSamlMetaData] = useState('');
   const [errMsgSamlMetaData, setErrMsgSamlMetaData] = useState('');
   const [unsavedChanges, setUnsavedChanges] = useState(false);
@@ -135,9 +149,18 @@ const SingleSignOnPanel = ({
       setUnsavedChanges(false);
       setIdentityProviderForm(identityProviderFormData?.identityProviderForm);
       const idenProviderdata = identityProviderFormData?.identityProviderForm;
-      setSamlMetaData(idenProviderdata.samlMetaData.value ?? '');
-      setName(idenProviderdata.name.value ?? '');
+      setOidcSettings(idenProviderdata.oidcSettings);
       setIdpId(idenProviderdata.idpId.value ?? '');
+      setName(idenProviderdata.name.value ?? '');
+      setType(idenProviderdata.type.value ?? '');
+      setIssuer(idenProviderdata.oidcSettings.issuer.value ?? '');
+      setClientId(idenProviderdata.oidcSettings.clientId.value ?? '');
+      setClientSecret(idenProviderdata.oidcSettings.clientSecret.value ?? '');
+      setAuthenticationMethod(idenProviderdata.oidcSettings.authenticationMethod.value ?? '');
+      setAutoDiscovery(idenProviderdata.oidcSettings.autoDiscovery.value ?? false);
+      setAuthorizationURL(idenProviderdata.oidcSettings.authorizationURL.value ?? '');
+      setTokenURL(idenProviderdata.oidcSettings.tokenURL.value ?? '');
+      setUserInfoURL(idenProviderdata.oidcSettings.userInfoURL.value ?? '');
       setIsDefault(idenProviderdata.isDefault.value ?? false);
     }
   }, [identityProviderFormData, isLoadingForm]);
@@ -147,6 +170,7 @@ const SingleSignOnPanel = ({
     if (identityProviderCreated) {
       const responseCode = response?.response;
       setIdentityProviderForm(identityProviderCreated?.createIdentityProvider);
+      setOidcSettings(identityProviderCreated?.createIdentityProvider.oidcSettings);
       const { errMsg } = identityProviderCreated.createIdentityProvider.samlMetaData;
       setErrMsgSamlMetaData(errMsg);
       if (responseCode === GqOperationResponse.Fail) {
@@ -163,7 +187,6 @@ const SingleSignOnPanel = ({
         setErrMsgSamlMetaData('');
         setName('');
         setIdpId('');
-        setSamlMetaData('');
         setIsDefault(false);
         Toast.success({ text: 'Identity Provider Saved' });
       }
@@ -194,7 +217,6 @@ const SingleSignOnPanel = ({
         setErrMsgSamlMetaData('');
         setName('');
         setIdpId('');
-        setSamlMetaData('');
         setIsDefault(false);
         Toast.success({ text: 'Identity Provider Saved' });
       }
@@ -205,6 +227,22 @@ const SingleSignOnPanel = ({
   }, [identityProviderUpdated, isLoadingUpdated, identityProviderUpdatedError]);
 
   const saveIdentityProvider = () => {
+    let authMeth = '';
+    if (authenticationMethod === 'CLIENT_SECRET_POST') {
+      authMeth = 'ClientSecretPost';
+    } else if (authenticationMethod === 'CLIENT_SECRET_BASIC') {
+      authMeth = 'ClientSecretBasic';
+    } else if (authenticationMethod === 'CLIENT_SECRET_JWT') {
+      authMeth = 'ClientSecretJwt';
+    } else if (authenticationMethod === 'SIGNED_JWT') {
+      authMeth = 'SignedJwt';
+    }
+    let idpType = '';
+    if (type === 'SAML2') {
+      idpType = 'Saml2';
+    } else if (type === 'Oidc') {
+      idpType = 'Oidc';
+    }
     if (sid) {
       updateIdentityProvider({
         variables: {
@@ -214,7 +252,7 @@ const SingleSignOnPanel = ({
             samlMetaData,
             idpId,
             isDefault,
-            type: IdpType.Saml2,
+            type: IdpType[idpType],
           },
         },
       });
@@ -229,6 +267,16 @@ const SingleSignOnPanel = ({
           samlMetaData,
           isDefault,
           type: IdpType.Saml2,
+          oidcSettings: {
+            issuer,
+            clientId,
+            clientSecret,
+            authenticationMethod: OidcAuthenticationMethod[authMeth],
+            autoDiscovery,
+            authorizationURL,
+            tokenURL,
+            userInfoURL,
+          }
         },
       },
     });
@@ -251,7 +299,6 @@ const SingleSignOnPanel = ({
       setUnsavedChanges(false);
       setIdpId('');
       setName('');
-      setSamlMetaData('');
     };
     updatedDialog.onClose = () => {
       hideDialog();
@@ -270,7 +317,6 @@ const SingleSignOnPanel = ({
       setMessage(null);
       setIdpId('');
       setName('');
-      setSamlMetaData('');
     }
   };
 
@@ -319,32 +365,130 @@ const SingleSignOnPanel = ({
           }}
         />
         )}
-        <Spacing margin={{ top: 'double' }}>
-          {identityProviderForm?.samlMetaData.visible && (
-            <>
-              <Text variant="semiBold">{identityProviderForm.samlMetaData.label}</Text>
-              <IconButton
-                title={identityProviderForm.samlMetaData.info ?? ''}
-                iconProps={{ iconName: 'Info' }}
-                style={{ color: ThemeStore.userTheme.colors.black }}
-              />
-              <CodeMirrorRequired>*</CodeMirrorRequired>
-              {errMsgSamlMetaData && <ErrorIcon id="samlMetaData-error" errorMessage={errMsgSamlMetaData} />}
-              <CodeMirror
-                id="samlMetaData"
-                height="255px"
-                style={{ border: '1px solid gray', fontWeight: 'bold', fontSize: '14px' }}
-                basicSetup={setupOption}
-                value={samlMetaData}
-                extensions={[javascript({ jsx: true })]}
-                theme={myTheme}
-                onChange={(value) => {
+        {identityProviderForm?.type.visible && (
+          <UIInputSelectOne
+            id="indentityType"
+            uiField={identityProviderForm.type}
+            options={identityProviderForm.options}
+            value={type}
+            onChange={(newValue) => {
+              setUnsavedChanges(true);
+              setType(newValue ?? '')
+            }}
+          />
+        )}
+        {IdpType.Saml2 === type && (
+          <>
+            <Text variant="semiBold">{identityProviderForm?.samlMetaData.label}</Text>
+            <IconButton
+              title={identityProviderForm?.samlMetaData.info ?? ''}
+              iconProps={{ iconName: 'Info' }}
+              style={{ color: ThemeStore.userTheme.colors.black }}
+            />
+            <CodeMirrorRequired>*</CodeMirrorRequired>
+            {errMsgSamlMetaData && <ErrorIcon id="samlMetaData-error" errorMessage={errMsgSamlMetaData} />}
+            <CodeMirror
+              id="samlMetaData"
+              height="255px"
+              style={{ border: '1px solid gray', fontWeight: 'bold', fontSize: '14px' }}
+              basicSetup={setupOption}
+              value={samlMetaData}
+              extensions={[javascript({ jsx: true })]}
+              theme={myTheme}
+              onChange={(value) => {
+                setUnsavedChanges(true);
+                setSamlMetaData(value);
+              }}
+            />
+          </>
+        )}
+        {IdpType.Oidc === type && (
+          <>
+            {oidcSettings?.issuer.visible && (
+              <UIInputText
+                id="identityIssuer"
+                uiField={oidcSettings.issuer}
+                value={issuer}
+                onChange={(event, newValue) => {
                   setUnsavedChanges(true);
-                  setSamlMetaData(value);
+                  setIssuer(newValue ?? '')
                 }}
               />
-            </>
-          )}
+            )}
+            {oidcSettings?.clientId.visible && (
+              <UIInputText
+                id="identityClientId"
+                uiField={oidcSettings.clientId}
+                value={clientId}
+                onChange={(event, newValue) => {
+                  setUnsavedChanges(true);
+                  setClientId(newValue ?? '')
+                }}
+              />
+            )}
+            {oidcSettings?.clientSecret.visible && (
+              <InputText
+                disabled={oidcSettings?.clientSecret?.readOnly ?? false}
+                autofocus={false}
+                label={oidcSettings?.clientSecret?.label}
+                errorMessage={oidcSettings?.clientSecret?.errMsg ?? undefined}
+                info={oidcSettings?.clientSecret?.info ?? undefined}
+                required={oidcSettings?.clientSecret?.required ?? false}
+                minLength={oidcSettings?.clientSecret?.min}
+                maxLength={oidcSettings?.clientSecret?.max}
+                canRevealPassword
+                type="password"
+                autocomplete="new-password"
+                id="password"
+                value={clientSecret}
+                onChange={(event, newValue) => setClientSecret(newValue ?? '')}
+              />
+            )}
+            {oidcSettings?.authenticationMethod.visible && (
+              <UIInputSelectOne
+                id="indentityAuthenticationMethod"
+                uiField={oidcSettings.authenticationMethod}
+                options={identityProviderForm?.options}
+                value={authenticationMethod}
+                onChange={(newValue) => {
+                  setUnsavedChanges(true);
+                  setAuthenticationMethod(newValue ?? '')
+                }}
+              />
+            )}
+            {oidcSettings?.autoDiscovery.visible && (
+              <UIInputToggle
+                id="identityAutoDiscoveryToggle"
+                uiField={oidcSettings?.autoDiscovery}
+                onText="On"
+                offText="Off"
+                role="checkbox"
+                onChange={(event, checked) => {
+                  setUnsavedChanges(true);
+                  setAutoDiscovery(checked);
+                }}
+              />
+            )}
+            {oidcSettings?.authorizationURL.visible && (
+              <UIInputText
+                id="identityAuthorizationURL"
+                uiField={oidcSettings.authorizationURL}
+              />
+            )}
+            {oidcSettings?.tokenURL.visible && (
+              <UIInputText
+                id="identityTokenURL"
+                uiField={oidcSettings.tokenURL}
+                value={tokenURL}
+                onChange={(event, newValue) => {
+                  setUnsavedChanges(true);
+                  setTokenURL(newValue ?? '')
+                }}
+              />
+            )}
+          </>
+        )}
+        <Spacing margin={{ top: 'double' }}>
           {identityProviderForm?.isDefault.visible && (
             <Spacing margin={{ top: 'double', bottom: 'double' }}>
               <UIInputCheck
