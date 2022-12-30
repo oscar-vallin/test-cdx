@@ -462,6 +462,26 @@
           "label": "Implementation Deploy",
           "value": "IMPLEMENTATION_DEPLOY",
           "info": "Allows access to deploy compiled implementations for Exchange Processing"
+        },
+        {
+          "label": "Supported Source Platform - Read",
+          "value": "SUPPORTED_PLATFORM_READ",
+          "info": "Grants access to see the list of Supported Source Platforms and Incoming Data Formats across all of CDX"
+        },
+        {
+          "label": "Supported Source Platform - Create",
+          "value": "SUPPORTED_PLATFORM_CREATE",
+          "info": "Grants access to create new Supported Source Platforms and Incoming Data Formats"
+        },
+        {
+          "label": "Supported Source Platform - Update",
+          "value": "SUPPORTED_PLATFORM_UPDATE",
+          "info": "Grants access to update existing Supported Source Platforms and Incoming Data Formats"
+        },
+        {
+          "label": "Supported Source Platform - Delete",
+          "value": "SUPPORTED_PLATFORM_DELETE",
+          "info": "Grants access to delete Supported Source Platforms and Incoming Data Formats. Supported Source Platforms and Incoming Data formats which are in use can only be Deactivated to prevent future use"
         }
       ]
     }
@@ -796,32 +816,10 @@
         }
       ]
     },
-    "tools": {
-      "id": "Tools",
-      "label": "Tools",
+    "xchange": {
+      "id": "XchangeConfig",
+      "label": "Xchange Configuration",
       "subGroup": [
-        {
-          "id": "Permissions_FTP",
-          "label": "",
-          "options": [
-            {
-              "label": "FTP Testing",
-              "value": "FTP_TEST",
-              "info": "Allows access to the FTP Testing utility to test connectivity between CDX and a remote FTP server"
-            }
-          ]
-        },
-        {
-          "id": "Permissions_Implementation",
-          "label": "",
-          "options": [
-            {
-              "label": "Implementation Deploy",
-              "value": "IMPLEMENTATION_DEPLOY",
-              "info": "Allows access to deploy compiled implementations for Exchange Processing"
-            }
-          ]
-        },
         {
           "id": "Permissions_XchangeProfile",
           "label": "",
@@ -876,6 +874,60 @@
               "label": "Xchange Alerts - Delete",
               "value": "XCHANGE_ALERT_DELETE",
               "info": "Grants access to delete Alerts on Xchanges and delete configured Job Groups."
+            }
+          ]
+        },
+        {
+          "id": "Permissions_SuppPlatform",
+          "label": "",
+          "options": [
+            {
+              "label": "Supported Source Platform - Read",
+              "value": "SUPPORTED_PLATFORM_READ",
+              "info": "Grants access to see the list of Supported Source Platforms and Incoming Data Formats across all of CDX"
+            },
+            {
+              "label": "Supported Source Platform - Create",
+              "value": "SUPPORTED_PLATFORM_CREATE",
+              "info": "Grants access to create new Supported Source Platforms and Incoming Data Formats"
+            },
+            {
+              "label": "Supported Source Platform - Update",
+              "value": "SUPPORTED_PLATFORM_UPDATE",
+              "info": "Grants access to update existing Supported Source Platforms and Incoming Data Formats"
+            },
+            {
+              "label": "Supported Source Platform - Delete",
+              "value": "SUPPORTED_PLATFORM_DELETE",
+              "info": "Grants access to delete Supported Source Platforms and Incoming Data Formats. Supported Source Platforms and Incoming Data formats which are in use can only be Deactivated to prevent future use"
+            }
+          ]
+        }
+      ]
+    },
+    "tools": {
+      "id": "Tools",
+      "label": "Tools",
+      "subGroup": [
+        {
+          "id": "Permissions_FTP",
+          "label": "",
+          "options": [
+            {
+              "label": "FTP Testing",
+              "value": "FTP_TEST",
+              "info": "Allows access to the FTP Testing utility to test connectivity between CDX and a remote FTP server"
+            }
+          ]
+        },
+        {
+          "id": "Permissions_Implementation",
+          "label": "",
+          "options": [
+            {
+              "label": "Implementation Deploy",
+              "value": "IMPLEMENTATION_DEPLOY",
+              "info": "Allows access to deploy compiled implementations for Exchange Processing"
             }
           ]
         }

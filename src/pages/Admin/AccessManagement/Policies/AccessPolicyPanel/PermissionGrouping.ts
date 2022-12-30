@@ -16,6 +16,7 @@ export type PermissionGroups = {
   exchange: PermissionGroup;
   accessManagement: PermissionGroup;
   orgAdmin: PermissionGroup;
+  xchange: PermissionGroup;
   tools: PermissionGroup;
   other: PermissionGroup;
 };
@@ -87,6 +88,23 @@ const permissionGroupingDef = {
       regex: '(PASSWORD_.+)|(SSOIDP_.+)',
     },
   },
+  xchange: {
+    xprofile: {
+      id: 'XchangeProfile',
+      label: '',
+      regex: '(XCHANGE_PROFILE_.+)|(XCHANGE_FILE_UPLOAD)',
+    },
+    xalert: {
+      id: 'XchangeAlert',
+      label: '',
+      regex: 'XCHANGE_ALERT_.+',
+    },
+    platforms: {
+      id: 'SuppPlatform',
+      label: '',
+      regex: 'SUPPORTED_PLATFORM_.+',
+    },
+  },
   tools: {
     ftp: {
       id: 'FTP',
@@ -98,16 +116,6 @@ const permissionGroupingDef = {
       label: '',
       regex: 'IMPLEMENTATION_.+',
     },
-    xprofile: {
-      id: 'XchangeProfile',
-      label: '',
-      regex: '(XCHANGE_PROFILE_.+)|(XCHANGE_FILE_UPLOAD)',
-    },
-    xalert: {
-      id: 'XchangeAlert',
-      label: '',
-      regex: 'XCHANGE_ALERT_.+'
-    }
   },
 };
 
@@ -126,6 +134,11 @@ export const groupPermissions = (opts?: UiOptions[] | null): PermissionGroups =>
     orgAdmin: {
       id: 'OrgAdmin',
       label: 'Organization Admin',
+      subGroup: [],
+    },
+    xchange: {
+      id: 'XchangeConfig',
+      label: 'Xchange Configuration',
       subGroup: [],
     },
     tools: {
@@ -157,7 +170,8 @@ export const groupPermissions = (opts?: UiOptions[] | null): PermissionGroups =>
       permissionGroups[groupName].subGroup.push(subGroup);
       const expr = new RegExp(permissionGroupingDef[groupName][subGroupName].regex);
       // find any matching permissions
-      const matchingOptions: UiOption[] = permissionOptions.filter((permissionOption) => expr.test(permissionOption?.value));
+      const matchingOptions: UiOption[] = permissionOptions
+        .filter((permissionOption) => expr.test(permissionOption?.value));
       subGroup.options = matchingOptions;
 
       // Remove these permissions from the remaining options
