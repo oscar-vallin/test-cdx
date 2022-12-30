@@ -123,6 +123,12 @@ const PasswordChangePanel = ({ closePanel, isOpen }: PasswordChangePanelProps) =
           onChange={(event, newValue) => setPasswords({ ...passwords, confirmation: newValue ?? '' })}
         />
 
+        {!validationPassed && passwords.new.trim() !== '' && (
+          <Spacing margin={{ top: 'normal' }}>
+            <MessageBar type="warning" content="Please fulfill all the security requirements" />
+          </Spacing>
+        )}
+
         <Spacing margin={{ top: 'normal' }} />
 
         <PasswordRules
