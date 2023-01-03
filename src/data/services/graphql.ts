@@ -260,7 +260,8 @@ export enum CdxWebPage {
   AddOrg = 'ADD_ORG',
   AddUser = 'ADD_USER',
   ColorPalettes = 'COLOR_PALETTES',
-  Theme = 'THEME'
+  Theme = 'THEME',
+  SupportedPlatforms = 'SUPPORTED_PLATFORMS'
 }
 
 export enum CdxWebPivot {
@@ -436,6 +437,11 @@ export type CreateIdentityProviderInput = {
   isDefault?: Maybe<Scalars['Boolean']>;
 };
 
+export type CreateIncomingFormatInput = {
+  name?: Maybe<Scalars['String']>;
+  notes?: Maybe<Scalars['String']>;
+};
+
 export type CreateOrgInput = {
   orgId: Scalars['String'];
   name: Scalars['String'];
@@ -453,6 +459,12 @@ export type CreatePersonInput = {
 export type CreateSpecializationFilterInput = {
   permission: Permission;
   orgSids?: Maybe<Array<Scalars['ID']>>;
+};
+
+export type CreateSupportedPlatformInput = {
+  name?: Maybe<Scalars['String']>;
+  notes?: Maybe<Scalars['String']>;
+  supportedIncomingFormats?: Maybe<Array<Maybe<Scalars['ID']>>>;
 };
 
 export type CreateUserDashThemeInput = {
@@ -853,6 +865,30 @@ export enum ImplementationDeployStatus {
   Error = 'ERROR'
 }
 
+export type IncomingFormat = {
+  __typename?: 'IncomingFormat';
+  name: Scalars['String'];
+  notes?: Maybe<Scalars['String']>;
+};
+
+export type IncomingFormatConnection = {
+  __typename?: 'IncomingFormatConnection';
+  listPageInfo?: Maybe<ListPageInfo>;
+  nodes?: Maybe<Array<IncomingFormat>>;
+};
+
+export type IncomingFormatForm = {
+  __typename?: 'IncomingFormatForm';
+  sid?: Maybe<Scalars['ID']>;
+  name: UiStringField;
+  notes: UiStringField;
+  commands?: Maybe<Array<WebCommand>>;
+  response: GqOperationResponse;
+  errCode?: Maybe<Scalars['String']>;
+  errMsg?: Maybe<Scalars['String']>;
+  errSeverity?: Maybe<ErrorSeverity>;
+};
+
 export type InsuredStat = {
   __typename?: 'InsuredStat';
   subscribers?: Maybe<InsuredStatCount>;
@@ -1050,6 +1086,13 @@ export type Mutation = {
   createXchangeJobGroup?: Maybe<XchangeJobGroupForm>;
   updateXchangeJobGroup?: Maybe<XchangeJobGroupForm>;
   deleteXchangeJobGroup?: Maybe<GenericResponse>;
+  createSupportedPlatform?: Maybe<SupportedPlatformForm>;
+  updateSupportedPlatform?: Maybe<SupportedPlatformForm>;
+  deleteSupportedPlatform?: Maybe<GenericResponse>;
+  createIncomingFormat?: Maybe<IncomingFormatForm>;
+  updateIncomingFormat?: Maybe<IncomingFormatForm>;
+  deleteIncomingFormat?: Maybe<GenericResponse>;
+  activateIncomingFormat?: Maybe<GenericResponse>;
   subscribeToAlert?: Maybe<GenericResponse>;
   deleteMyAlert?: Maybe<GenericResponse>;
 };
@@ -1496,6 +1539,41 @@ export type MutationUpdateXchangeJobGroupArgs = {
 
 
 export type MutationDeleteXchangeJobGroupArgs = {
+  sid: Scalars['ID'];
+};
+
+
+export type MutationCreateSupportedPlatformArgs = {
+  supportedPlatformInput: CreateSupportedPlatformInput;
+};
+
+
+export type MutationUpdateSupportedPlatformArgs = {
+  supportedPlatformInput: UpdateSupportedPlatformInput;
+};
+
+
+export type MutationDeleteSupportedPlatformArgs = {
+  sid: Scalars['ID'];
+};
+
+
+export type MutationCreateIncomingFormatArgs = {
+  incomingFormatInput: CreateIncomingFormatInput;
+};
+
+
+export type MutationUpdateIncomingFormatArgs = {
+  incomingFormatInput: UpdateIncomingFormatInput;
+};
+
+
+export type MutationDeleteIncomingFormatArgs = {
+  sid: Scalars['ID'];
+};
+
+
+export type MutationActivateIncomingFormatArgs = {
   sid: Scalars['ID'];
 };
 
@@ -2126,6 +2204,10 @@ export type Query = {
   xchangeScheduleForm?: Maybe<XchangeScheduleForm>;
   xchangeJobGroups?: Maybe<XchangeJobGroupConnection>;
   xchangeJobGroupForm?: Maybe<XchangeJobGroupForm>;
+  supportedPlatforms?: Maybe<SupportedPlatformConnection>;
+  supportedPlatformForm?: Maybe<SupportedPlatformForm>;
+  incomingFormats?: Maybe<IncomingFormatConnection>;
+  incomingFormatForm?: Maybe<IncomingFormatForm>;
   myAlerts?: Maybe<MyAlerts>;
   findAvailableAlerts?: Maybe<AvailableAlerts>;
   topLevelOntologyClasses: Array<OntologyClass>;
@@ -2623,6 +2705,16 @@ export type QueryXchangeJobGroupFormArgs = {
 };
 
 
+export type QuerySupportedPlatformFormArgs = {
+  sid?: Maybe<Scalars['ID']>;
+};
+
+
+export type QueryIncomingFormatFormArgs = {
+  sid?: Maybe<Scalars['ID']>;
+};
+
+
 export type QueryFindOntologyClassArgs = {
   id: Scalars['String'];
 };
@@ -2958,6 +3050,34 @@ export enum SubscriptionType {
   JobGroupSchedule = 'JOB_GROUP_SCHEDULE'
 }
 
+export type SupportedPlatform = {
+  __typename?: 'SupportedPlatform';
+  sid: Scalars['ID'];
+  name: Scalars['String'];
+  notes?: Maybe<Scalars['String']>;
+  supportedIncomingFormats?: Maybe<Array<Scalars['String']>>;
+};
+
+export type SupportedPlatformConnection = {
+  __typename?: 'SupportedPlatformConnection';
+  listPageInfo?: Maybe<ListPageInfo>;
+  nodes?: Maybe<Array<SupportedPlatform>>;
+};
+
+export type SupportedPlatformForm = {
+  __typename?: 'SupportedPlatformForm';
+  sid?: Maybe<Scalars['ID']>;
+  name: UiStringField;
+  notes: UiStringField;
+  supportedIncomingFormats: UiSelectManyField;
+  options?: Maybe<Array<UiOptions>>;
+  commands?: Maybe<Array<WebCommand>>;
+  response: GqOperationResponse;
+  errCode?: Maybe<Scalars['String']>;
+  errMsg?: Maybe<Scalars['String']>;
+  errSeverity?: Maybe<ErrorSeverity>;
+};
+
 export enum TestFileStrategy {
   Upload = 'UPLOAD',
   Generate = 'GENERATE'
@@ -3231,6 +3351,12 @@ export type UpdateIdentityProviderInput = {
   removePriorMetaDataSids?: Maybe<Array<Scalars['ID']>>;
 };
 
+export type UpdateIncomingFormatInput = {
+  sid: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  notes?: Maybe<Scalars['String']>;
+};
+
 export type UpdateMyProfileInput = {
   email: Scalars['String'];
   firstNm: Scalars['String'];
@@ -3269,6 +3395,13 @@ export type UpdateSpecializationFilterInput = {
   sid?: Maybe<Scalars['ID']>;
   permission: Permission;
   orgSids?: Maybe<Array<Scalars['ID']>>;
+};
+
+export type UpdateSupportedPlatformInput = {
+  sid: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  notes?: Maybe<Scalars['String']>;
+  supportedIncomingFormats?: Maybe<Array<Maybe<Scalars['ID']>>>;
 };
 
 export type UpdateUserAccessPolicyGroupsInput = {
@@ -7546,6 +7679,92 @@ export type XchangeJobGroupFormQuery = (
   )> }
 );
 
+export type SupportedPlatformsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SupportedPlatformsQuery = (
+  { __typename?: 'Query' }
+  & { supportedPlatforms?: Maybe<(
+    { __typename?: 'SupportedPlatformConnection' }
+    & { listPageInfo?: Maybe<(
+      { __typename?: 'ListPageInfo' }
+      & FragmentListPageInfoFragment
+    )>, nodes?: Maybe<Array<(
+      { __typename?: 'SupportedPlatform' }
+      & Pick<SupportedPlatform, 'sid' | 'name' | 'notes' | 'supportedIncomingFormats'>
+    )>> }
+  )> }
+);
+
+export type SupportedPlatformFormQueryVariables = Exact<{
+  sid?: Maybe<Scalars['ID']>;
+}>;
+
+
+export type SupportedPlatformFormQuery = (
+  { __typename?: 'Query' }
+  & { supportedPlatformForm?: Maybe<(
+    { __typename?: 'SupportedPlatformForm' }
+    & Pick<SupportedPlatformForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), notes: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), supportedIncomingFormats: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type IncomingFormatsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type IncomingFormatsQuery = (
+  { __typename?: 'Query' }
+  & { incomingFormats?: Maybe<(
+    { __typename?: 'IncomingFormatConnection' }
+    & { listPageInfo?: Maybe<(
+      { __typename?: 'ListPageInfo' }
+      & FragmentListPageInfoFragment
+    )>, nodes?: Maybe<Array<(
+      { __typename?: 'IncomingFormat' }
+      & Pick<IncomingFormat, 'name' | 'notes'>
+    )>> }
+  )> }
+);
+
+export type IncomingFormatFormQueryVariables = Exact<{
+  sid?: Maybe<Scalars['ID']>;
+}>;
+
+
+export type IncomingFormatFormQuery = (
+  { __typename?: 'Query' }
+  & { incomingFormatForm?: Maybe<(
+    { __typename?: 'IncomingFormatForm' }
+    & Pick<IncomingFormatForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), notes: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
 export type MyAlertsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -10532,6 +10751,182 @@ export type DeleteXchangeJobGroupMutationVariables = Exact<{
 export type DeleteXchangeJobGroupMutation = (
   { __typename?: 'Mutation' }
   & { deleteXchangeJobGroup?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
+  )> }
+);
+
+export type CreateSupportedPlatformMutationVariables = Exact<{
+  supportedPlatformInput: CreateSupportedPlatformInput;
+}>;
+
+
+export type CreateSupportedPlatformMutation = (
+  { __typename?: 'Mutation' }
+  & { createSupportedPlatform?: Maybe<(
+    { __typename?: 'SupportedPlatformForm' }
+    & Pick<SupportedPlatformForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), notes: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), supportedIncomingFormats: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type UpdateSupportedPlatformMutationVariables = Exact<{
+  supportedPlatformInput: UpdateSupportedPlatformInput;
+}>;
+
+
+export type UpdateSupportedPlatformMutation = (
+  { __typename?: 'Mutation' }
+  & { updateSupportedPlatform?: Maybe<(
+    { __typename?: 'SupportedPlatformForm' }
+    & Pick<SupportedPlatformForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), notes: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), supportedIncomingFormats: (
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type DeleteSupportedPlatformMutationVariables = Exact<{
+  sid: Scalars['ID'];
+}>;
+
+
+export type DeleteSupportedPlatformMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteSupportedPlatform?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
+  )> }
+);
+
+export type CreateIncomingFormatMutationVariables = Exact<{
+  incomingFormatInput: CreateIncomingFormatInput;
+}>;
+
+
+export type CreateIncomingFormatMutation = (
+  { __typename?: 'Mutation' }
+  & { createIncomingFormat?: Maybe<(
+    { __typename?: 'IncomingFormatForm' }
+    & Pick<IncomingFormatForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), notes: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type UpdateIncomingFormatMutationVariables = Exact<{
+  incomingFormatInput: UpdateIncomingFormatInput;
+}>;
+
+
+export type UpdateIncomingFormatMutation = (
+  { __typename?: 'Mutation' }
+  & { updateIncomingFormat?: Maybe<(
+    { __typename?: 'IncomingFormatForm' }
+    & Pick<IncomingFormatForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), notes: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type DeleteIncomingFormatMutationVariables = Exact<{
+  sid: Scalars['ID'];
+}>;
+
+
+export type DeleteIncomingFormatMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteIncomingFormat?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
+  )> }
+);
+
+export type ActivateIncomingFormatMutationVariables = Exact<{
+  sid: Scalars['ID'];
+}>;
+
+
+export type ActivateIncomingFormatMutation = (
+  { __typename?: 'Mutation' }
+  & { activateIncomingFormat?: Maybe<(
     { __typename?: 'GenericResponse' }
     & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { allMessages?: Maybe<Array<(
@@ -16850,6 +17245,186 @@ export function useXchangeJobGroupFormLazyQuery(baseOptions?: Apollo.LazyQueryHo
 export type XchangeJobGroupFormQueryHookResult = ReturnType<typeof useXchangeJobGroupFormQuery>;
 export type XchangeJobGroupFormLazyQueryHookResult = ReturnType<typeof useXchangeJobGroupFormLazyQuery>;
 export type XchangeJobGroupFormQueryResult = Apollo.QueryResult<XchangeJobGroupFormQuery, XchangeJobGroupFormQueryVariables>;
+export const SupportedPlatformsDocument = gql`
+    query SupportedPlatforms {
+  supportedPlatforms {
+    listPageInfo {
+      ...fragmentListPageInfo
+    }
+    nodes {
+      sid
+      name
+      notes
+      supportedIncomingFormats
+    }
+  }
+}
+    ${FragmentListPageInfoFragmentDoc}`;
+
+/**
+ * __useSupportedPlatformsQuery__
+ *
+ * To run a query within a React component, call `useSupportedPlatformsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSupportedPlatformsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSupportedPlatformsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSupportedPlatformsQuery(baseOptions?: Apollo.QueryHookOptions<SupportedPlatformsQuery, SupportedPlatformsQueryVariables>) {
+        return Apollo.useQuery<SupportedPlatformsQuery, SupportedPlatformsQueryVariables>(SupportedPlatformsDocument, baseOptions);
+      }
+export function useSupportedPlatformsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SupportedPlatformsQuery, SupportedPlatformsQueryVariables>) {
+          return Apollo.useLazyQuery<SupportedPlatformsQuery, SupportedPlatformsQueryVariables>(SupportedPlatformsDocument, baseOptions);
+        }
+export type SupportedPlatformsQueryHookResult = ReturnType<typeof useSupportedPlatformsQuery>;
+export type SupportedPlatformsLazyQueryHookResult = ReturnType<typeof useSupportedPlatformsLazyQuery>;
+export type SupportedPlatformsQueryResult = Apollo.QueryResult<SupportedPlatformsQuery, SupportedPlatformsQueryVariables>;
+export const SupportedPlatformFormDocument = gql`
+    query SupportedPlatformForm($sid: ID) {
+  supportedPlatformForm(sid: $sid) {
+    sid
+    name {
+      ...fragmentUIStringField
+    }
+    notes {
+      ...fragmentUIStringField
+    }
+    supportedIncomingFormats {
+      ...fragmentUISelectManyField
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+
+/**
+ * __useSupportedPlatformFormQuery__
+ *
+ * To run a query within a React component, call `useSupportedPlatformFormQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSupportedPlatformFormQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSupportedPlatformFormQuery({
+ *   variables: {
+ *      sid: // value for 'sid'
+ *   },
+ * });
+ */
+export function useSupportedPlatformFormQuery(baseOptions?: Apollo.QueryHookOptions<SupportedPlatformFormQuery, SupportedPlatformFormQueryVariables>) {
+        return Apollo.useQuery<SupportedPlatformFormQuery, SupportedPlatformFormQueryVariables>(SupportedPlatformFormDocument, baseOptions);
+      }
+export function useSupportedPlatformFormLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SupportedPlatformFormQuery, SupportedPlatformFormQueryVariables>) {
+          return Apollo.useLazyQuery<SupportedPlatformFormQuery, SupportedPlatformFormQueryVariables>(SupportedPlatformFormDocument, baseOptions);
+        }
+export type SupportedPlatformFormQueryHookResult = ReturnType<typeof useSupportedPlatformFormQuery>;
+export type SupportedPlatformFormLazyQueryHookResult = ReturnType<typeof useSupportedPlatformFormLazyQuery>;
+export type SupportedPlatformFormQueryResult = Apollo.QueryResult<SupportedPlatformFormQuery, SupportedPlatformFormQueryVariables>;
+export const IncomingFormatsDocument = gql`
+    query IncomingFormats {
+  incomingFormats {
+    listPageInfo {
+      ...fragmentListPageInfo
+    }
+    nodes {
+      name
+      notes
+    }
+  }
+}
+    ${FragmentListPageInfoFragmentDoc}`;
+
+/**
+ * __useIncomingFormatsQuery__
+ *
+ * To run a query within a React component, call `useIncomingFormatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useIncomingFormatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useIncomingFormatsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useIncomingFormatsQuery(baseOptions?: Apollo.QueryHookOptions<IncomingFormatsQuery, IncomingFormatsQueryVariables>) {
+        return Apollo.useQuery<IncomingFormatsQuery, IncomingFormatsQueryVariables>(IncomingFormatsDocument, baseOptions);
+      }
+export function useIncomingFormatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IncomingFormatsQuery, IncomingFormatsQueryVariables>) {
+          return Apollo.useLazyQuery<IncomingFormatsQuery, IncomingFormatsQueryVariables>(IncomingFormatsDocument, baseOptions);
+        }
+export type IncomingFormatsQueryHookResult = ReturnType<typeof useIncomingFormatsQuery>;
+export type IncomingFormatsLazyQueryHookResult = ReturnType<typeof useIncomingFormatsLazyQuery>;
+export type IncomingFormatsQueryResult = Apollo.QueryResult<IncomingFormatsQuery, IncomingFormatsQueryVariables>;
+export const IncomingFormatFormDocument = gql`
+    query IncomingFormatForm($sid: ID) {
+  incomingFormatForm(sid: $sid) {
+    sid
+    name {
+      ...fragmentUIStringField
+    }
+    notes {
+      ...fragmentUIStringField
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+
+/**
+ * __useIncomingFormatFormQuery__
+ *
+ * To run a query within a React component, call `useIncomingFormatFormQuery` and pass it any options that fit your needs.
+ * When your component renders, `useIncomingFormatFormQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useIncomingFormatFormQuery({
+ *   variables: {
+ *      sid: // value for 'sid'
+ *   },
+ * });
+ */
+export function useIncomingFormatFormQuery(baseOptions?: Apollo.QueryHookOptions<IncomingFormatFormQuery, IncomingFormatFormQueryVariables>) {
+        return Apollo.useQuery<IncomingFormatFormQuery, IncomingFormatFormQueryVariables>(IncomingFormatFormDocument, baseOptions);
+      }
+export function useIncomingFormatFormLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IncomingFormatFormQuery, IncomingFormatFormQueryVariables>) {
+          return Apollo.useLazyQuery<IncomingFormatFormQuery, IncomingFormatFormQueryVariables>(IncomingFormatFormDocument, baseOptions);
+        }
+export type IncomingFormatFormQueryHookResult = ReturnType<typeof useIncomingFormatFormQuery>;
+export type IncomingFormatFormLazyQueryHookResult = ReturnType<typeof useIncomingFormatFormLazyQuery>;
+export type IncomingFormatFormQueryResult = Apollo.QueryResult<IncomingFormatFormQuery, IncomingFormatFormQueryVariables>;
 export const MyAlertsDocument = gql`
     query MyAlerts {
   myAlerts {
@@ -22239,6 +22814,338 @@ export function useDeleteXchangeJobGroupMutation(baseOptions?: Apollo.MutationHo
 export type DeleteXchangeJobGroupMutationHookResult = ReturnType<typeof useDeleteXchangeJobGroupMutation>;
 export type DeleteXchangeJobGroupMutationResult = Apollo.MutationResult<DeleteXchangeJobGroupMutation>;
 export type DeleteXchangeJobGroupMutationOptions = Apollo.BaseMutationOptions<DeleteXchangeJobGroupMutation, DeleteXchangeJobGroupMutationVariables>;
+export const CreateSupportedPlatformDocument = gql`
+    mutation CreateSupportedPlatform($supportedPlatformInput: CreateSupportedPlatformInput!) {
+  createSupportedPlatform(supportedPlatformInput: $supportedPlatformInput) {
+    sid
+    name {
+      ...fragmentUIStringField
+    }
+    notes {
+      ...fragmentUIStringField
+    }
+    supportedIncomingFormats {
+      ...fragmentUISelectManyField
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+export type CreateSupportedPlatformMutationFn = Apollo.MutationFunction<CreateSupportedPlatformMutation, CreateSupportedPlatformMutationVariables>;
+
+/**
+ * __useCreateSupportedPlatformMutation__
+ *
+ * To run a mutation, you first call `useCreateSupportedPlatformMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateSupportedPlatformMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createSupportedPlatformMutation, { data, loading, error }] = useCreateSupportedPlatformMutation({
+ *   variables: {
+ *      supportedPlatformInput: // value for 'supportedPlatformInput'
+ *   },
+ * });
+ */
+export function useCreateSupportedPlatformMutation(baseOptions?: Apollo.MutationHookOptions<CreateSupportedPlatformMutation, CreateSupportedPlatformMutationVariables>) {
+        return Apollo.useMutation<CreateSupportedPlatformMutation, CreateSupportedPlatformMutationVariables>(CreateSupportedPlatformDocument, baseOptions);
+      }
+export type CreateSupportedPlatformMutationHookResult = ReturnType<typeof useCreateSupportedPlatformMutation>;
+export type CreateSupportedPlatformMutationResult = Apollo.MutationResult<CreateSupportedPlatformMutation>;
+export type CreateSupportedPlatformMutationOptions = Apollo.BaseMutationOptions<CreateSupportedPlatformMutation, CreateSupportedPlatformMutationVariables>;
+export const UpdateSupportedPlatformDocument = gql`
+    mutation UpdateSupportedPlatform($supportedPlatformInput: UpdateSupportedPlatformInput!) {
+  updateSupportedPlatform(supportedPlatformInput: $supportedPlatformInput) {
+    sid
+    name {
+      ...fragmentUIStringField
+    }
+    notes {
+      ...fragmentUIStringField
+    }
+    supportedIncomingFormats {
+      ...fragmentUISelectManyField
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+export type UpdateSupportedPlatformMutationFn = Apollo.MutationFunction<UpdateSupportedPlatformMutation, UpdateSupportedPlatformMutationVariables>;
+
+/**
+ * __useUpdateSupportedPlatformMutation__
+ *
+ * To run a mutation, you first call `useUpdateSupportedPlatformMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateSupportedPlatformMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateSupportedPlatformMutation, { data, loading, error }] = useUpdateSupportedPlatformMutation({
+ *   variables: {
+ *      supportedPlatformInput: // value for 'supportedPlatformInput'
+ *   },
+ * });
+ */
+export function useUpdateSupportedPlatformMutation(baseOptions?: Apollo.MutationHookOptions<UpdateSupportedPlatformMutation, UpdateSupportedPlatformMutationVariables>) {
+        return Apollo.useMutation<UpdateSupportedPlatformMutation, UpdateSupportedPlatformMutationVariables>(UpdateSupportedPlatformDocument, baseOptions);
+      }
+export type UpdateSupportedPlatformMutationHookResult = ReturnType<typeof useUpdateSupportedPlatformMutation>;
+export type UpdateSupportedPlatformMutationResult = Apollo.MutationResult<UpdateSupportedPlatformMutation>;
+export type UpdateSupportedPlatformMutationOptions = Apollo.BaseMutationOptions<UpdateSupportedPlatformMutation, UpdateSupportedPlatformMutationVariables>;
+export const DeleteSupportedPlatformDocument = gql`
+    mutation DeleteSupportedPlatform($sid: ID!) {
+  deleteSupportedPlatform(sid: $sid) {
+    response
+    errCode
+    errMsg
+    errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export type DeleteSupportedPlatformMutationFn = Apollo.MutationFunction<DeleteSupportedPlatformMutation, DeleteSupportedPlatformMutationVariables>;
+
+/**
+ * __useDeleteSupportedPlatformMutation__
+ *
+ * To run a mutation, you first call `useDeleteSupportedPlatformMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteSupportedPlatformMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteSupportedPlatformMutation, { data, loading, error }] = useDeleteSupportedPlatformMutation({
+ *   variables: {
+ *      sid: // value for 'sid'
+ *   },
+ * });
+ */
+export function useDeleteSupportedPlatformMutation(baseOptions?: Apollo.MutationHookOptions<DeleteSupportedPlatformMutation, DeleteSupportedPlatformMutationVariables>) {
+        return Apollo.useMutation<DeleteSupportedPlatformMutation, DeleteSupportedPlatformMutationVariables>(DeleteSupportedPlatformDocument, baseOptions);
+      }
+export type DeleteSupportedPlatformMutationHookResult = ReturnType<typeof useDeleteSupportedPlatformMutation>;
+export type DeleteSupportedPlatformMutationResult = Apollo.MutationResult<DeleteSupportedPlatformMutation>;
+export type DeleteSupportedPlatformMutationOptions = Apollo.BaseMutationOptions<DeleteSupportedPlatformMutation, DeleteSupportedPlatformMutationVariables>;
+export const CreateIncomingFormatDocument = gql`
+    mutation CreateIncomingFormat($incomingFormatInput: CreateIncomingFormatInput!) {
+  createIncomingFormat(incomingFormatInput: $incomingFormatInput) {
+    sid
+    name {
+      ...fragmentUIStringField
+    }
+    notes {
+      ...fragmentUIStringField
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+export type CreateIncomingFormatMutationFn = Apollo.MutationFunction<CreateIncomingFormatMutation, CreateIncomingFormatMutationVariables>;
+
+/**
+ * __useCreateIncomingFormatMutation__
+ *
+ * To run a mutation, you first call `useCreateIncomingFormatMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateIncomingFormatMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createIncomingFormatMutation, { data, loading, error }] = useCreateIncomingFormatMutation({
+ *   variables: {
+ *      incomingFormatInput: // value for 'incomingFormatInput'
+ *   },
+ * });
+ */
+export function useCreateIncomingFormatMutation(baseOptions?: Apollo.MutationHookOptions<CreateIncomingFormatMutation, CreateIncomingFormatMutationVariables>) {
+        return Apollo.useMutation<CreateIncomingFormatMutation, CreateIncomingFormatMutationVariables>(CreateIncomingFormatDocument, baseOptions);
+      }
+export type CreateIncomingFormatMutationHookResult = ReturnType<typeof useCreateIncomingFormatMutation>;
+export type CreateIncomingFormatMutationResult = Apollo.MutationResult<CreateIncomingFormatMutation>;
+export type CreateIncomingFormatMutationOptions = Apollo.BaseMutationOptions<CreateIncomingFormatMutation, CreateIncomingFormatMutationVariables>;
+export const UpdateIncomingFormatDocument = gql`
+    mutation UpdateIncomingFormat($incomingFormatInput: UpdateIncomingFormatInput!) {
+  updateIncomingFormat(incomingFormatInput: $incomingFormatInput) {
+    sid
+    name {
+      ...fragmentUIStringField
+    }
+    notes {
+      ...fragmentUIStringField
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+export type UpdateIncomingFormatMutationFn = Apollo.MutationFunction<UpdateIncomingFormatMutation, UpdateIncomingFormatMutationVariables>;
+
+/**
+ * __useUpdateIncomingFormatMutation__
+ *
+ * To run a mutation, you first call `useUpdateIncomingFormatMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateIncomingFormatMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateIncomingFormatMutation, { data, loading, error }] = useUpdateIncomingFormatMutation({
+ *   variables: {
+ *      incomingFormatInput: // value for 'incomingFormatInput'
+ *   },
+ * });
+ */
+export function useUpdateIncomingFormatMutation(baseOptions?: Apollo.MutationHookOptions<UpdateIncomingFormatMutation, UpdateIncomingFormatMutationVariables>) {
+        return Apollo.useMutation<UpdateIncomingFormatMutation, UpdateIncomingFormatMutationVariables>(UpdateIncomingFormatDocument, baseOptions);
+      }
+export type UpdateIncomingFormatMutationHookResult = ReturnType<typeof useUpdateIncomingFormatMutation>;
+export type UpdateIncomingFormatMutationResult = Apollo.MutationResult<UpdateIncomingFormatMutation>;
+export type UpdateIncomingFormatMutationOptions = Apollo.BaseMutationOptions<UpdateIncomingFormatMutation, UpdateIncomingFormatMutationVariables>;
+export const DeleteIncomingFormatDocument = gql`
+    mutation DeleteIncomingFormat($sid: ID!) {
+  deleteIncomingFormat(sid: $sid) {
+    response
+    errCode
+    errMsg
+    errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export type DeleteIncomingFormatMutationFn = Apollo.MutationFunction<DeleteIncomingFormatMutation, DeleteIncomingFormatMutationVariables>;
+
+/**
+ * __useDeleteIncomingFormatMutation__
+ *
+ * To run a mutation, you first call `useDeleteIncomingFormatMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteIncomingFormatMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteIncomingFormatMutation, { data, loading, error }] = useDeleteIncomingFormatMutation({
+ *   variables: {
+ *      sid: // value for 'sid'
+ *   },
+ * });
+ */
+export function useDeleteIncomingFormatMutation(baseOptions?: Apollo.MutationHookOptions<DeleteIncomingFormatMutation, DeleteIncomingFormatMutationVariables>) {
+        return Apollo.useMutation<DeleteIncomingFormatMutation, DeleteIncomingFormatMutationVariables>(DeleteIncomingFormatDocument, baseOptions);
+      }
+export type DeleteIncomingFormatMutationHookResult = ReturnType<typeof useDeleteIncomingFormatMutation>;
+export type DeleteIncomingFormatMutationResult = Apollo.MutationResult<DeleteIncomingFormatMutation>;
+export type DeleteIncomingFormatMutationOptions = Apollo.BaseMutationOptions<DeleteIncomingFormatMutation, DeleteIncomingFormatMutationVariables>;
+export const ActivateIncomingFormatDocument = gql`
+    mutation ActivateIncomingFormat($sid: ID!) {
+  activateIncomingFormat(sid: $sid) {
+    response
+    errCode
+    errMsg
+    errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export type ActivateIncomingFormatMutationFn = Apollo.MutationFunction<ActivateIncomingFormatMutation, ActivateIncomingFormatMutationVariables>;
+
+/**
+ * __useActivateIncomingFormatMutation__
+ *
+ * To run a mutation, you first call `useActivateIncomingFormatMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useActivateIncomingFormatMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [activateIncomingFormatMutation, { data, loading, error }] = useActivateIncomingFormatMutation({
+ *   variables: {
+ *      sid: // value for 'sid'
+ *   },
+ * });
+ */
+export function useActivateIncomingFormatMutation(baseOptions?: Apollo.MutationHookOptions<ActivateIncomingFormatMutation, ActivateIncomingFormatMutationVariables>) {
+        return Apollo.useMutation<ActivateIncomingFormatMutation, ActivateIncomingFormatMutationVariables>(ActivateIncomingFormatDocument, baseOptions);
+      }
+export type ActivateIncomingFormatMutationHookResult = ReturnType<typeof useActivateIncomingFormatMutation>;
+export type ActivateIncomingFormatMutationResult = Apollo.MutationResult<ActivateIncomingFormatMutation>;
+export type ActivateIncomingFormatMutationOptions = Apollo.BaseMutationOptions<ActivateIncomingFormatMutation, ActivateIncomingFormatMutationVariables>;
 export const SubscribeToAlertDocument = gql`
     mutation SubscribeToAlert($alertInput: AlertSelectionInput) {
   subscribeToAlert(alertInput: $alertInput) {
