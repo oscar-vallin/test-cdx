@@ -21,6 +21,7 @@ import {
   IColumn, IconButton, PrimaryButton, SelectionMode,
   Spinner,
   SpinnerSize,
+  Stack,
   TooltipHost,
 } from '@fluentui/react';
 import { People20Filled } from '@fluentui/react-icons';
@@ -47,7 +48,6 @@ export const SingleSignOnPage = () => {
   const Toast = useNotification();
   const [nodes, setNodes] = useState<IdentityProvider[] | null>();
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
-  const [deleteCmd, setDeleteCmd] = useState<WebCommand | null>();
   const [refreshXchangeDetails, setRefreshXchangeDetails] = useState(false);
   const [identityProviderSid, setIdentityProviderSid] = useState<string | null>('');
   const [identityProviderName, setIdentityProviderName] = useState('');
@@ -90,8 +90,6 @@ export const SingleSignOnPage = () => {
       const pageCommands = identityProvidersdata.identityProvidersForOrg.listPageInfo?.pageCommands;
       const _createCmd = pageCommands?.find((cmd) => cmd.commandType === CdxWebCommandType.Create);
       setCreateCmd(_createCmd);
-      const _deleteCmd = pageCommands?.find((cmd) => cmd.commandType === CdxWebCommandType.Delete);
-      setDeleteCmd(_deleteCmd);
     }
   }, [identityProvidersdata, isLoadingIdentityProviders, identityProvidersdataError]);
 
@@ -149,6 +147,8 @@ export const SingleSignOnPage = () => {
   };
 
   const onRenderAction = (item:IdentityProvider) => {
+    const pageCommands = item.commands;
+    const deleteCmd = pageCommands?.find((cmd) => cmd.commandType === CdxWebCommandType.Delete)
     if (item?.sid && deleteCmd) {
       let disabled;
       if (typeof item.members === 'number') {
@@ -325,7 +325,19 @@ export const SingleSignOnPage = () => {
       <PageBody>
         <Container>
           <Row>
-            {renderBody()}
+            <Spacing margin={{ bottom: 'double' }}>{renderBody()}</Spacing>
+          </Row>
+        </Container>
+        <Container>
+          <Row>
+            <Spacing margin={{ top: 'double' }}>
+              <Stack>
+                <Text variant="semiBold">Password based login enabled</Text>
+                <Spacing padding={{ top: 'normal' }}>
+                  <ButtonLink underline>Disable Password based login</ButtonLink>
+                </Spacing>
+              </Stack>
+            </Spacing>
           </Row>
         </Container>
       </PageBody>
