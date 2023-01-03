@@ -37,6 +37,7 @@ export const AddAlertsModal = ({ isOpen, refreshPage }: ALertsModalProps) => {
   const [schedule, setSchedule] = useState<AvailableAlert[]| null>();
   const [processingAlerts, setProcessingAlerts] = useState<AvailableAlert[] | null>();
   const [sid, setSid] = useState('');
+  const [name, setName] = useState('');
   const [subscriptionType, setSubscriptionType] = useState('');
   const [findAlerts,
     {
@@ -106,9 +107,11 @@ export const AddAlertsModal = ({ isOpen, refreshPage }: ALertsModalProps) => {
             key={indexAlert}
             label={alert.name}
             onRenderLabel={() => renderLabel(alert)}
+            checked={alert.sid === sid && alert.name === name}
             onChange={() => {
               setSid(alert.sid ?? '');
               setSubscriptionType(alert.subscriptionType ?? '');
+              setName(alert.name);
             }}
           />
         ))}
@@ -119,10 +122,12 @@ export const AddAlertsModal = ({ isOpen, refreshPage }: ALertsModalProps) => {
           <Checkbox
             key={indexAlert}
             label={alert.name}
+            checked={alert.sid === sid && alert.name === name}
             onRenderLabel={() => renderLabel(alert)}
             onChange={() => {
               setSid(alert.sid ?? '');
               setSubscriptionType(alert.subscriptionType ?? '');
+              setName(alert.name);
             }}
           />
         ))}
