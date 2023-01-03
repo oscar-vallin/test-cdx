@@ -152,7 +152,7 @@ const SingleSignOnPanel = ({
       setOidcSettings(idenProviderdata.oidcSettings);
       setIdpId(idenProviderdata.idpId.value ?? '');
       setName(idenProviderdata.name.value ?? '');
-      setType(idenProviderdata.type.value ?? '');
+      setType(idenProviderdata.type.value?.value ?? '');
       setIssuer(idenProviderdata.oidcSettings.issuer.value ?? '');
       setClientId(idenProviderdata.oidcSettings.clientId.value ?? '');
       setClientSecret(idenProviderdata.oidcSettings.clientSecret.value ?? '');
@@ -240,9 +240,10 @@ const SingleSignOnPanel = ({
     let idpType = '';
     if (type === 'SAML2') {
       idpType = 'Saml2';
-    } else if (type === 'Oidc') {
+    } else if (type === 'OIDC') {
       idpType = 'Oidc';
     }
+
     if (sid) {
       updateIdentityProvider({
         variables: {
@@ -266,7 +267,7 @@ const SingleSignOnPanel = ({
           name,
           samlMetaData,
           isDefault,
-          type: IdpType.Saml2,
+          type: IdpType[idpType],
           oidcSettings: {
             issuer,
             clientId,
@@ -276,7 +277,7 @@ const SingleSignOnPanel = ({
             authorizationURL,
             tokenURL,
             userInfoURL,
-          }
+          },
         },
       },
     });
@@ -472,7 +473,12 @@ const SingleSignOnPanel = ({
             {oidcSettings?.authorizationURL.visible && (
               <UIInputText
                 id="identityAuthorizationURL"
+                value={authorizationURL}
                 uiField={oidcSettings.authorizationURL}
+                onChange={(event, newValue) => {
+                  setUnsavedChanges(true);
+                  setAuthorizationURL(newValue ?? '')
+                }}
               />
             )}
             {oidcSettings?.tokenURL.visible && (
