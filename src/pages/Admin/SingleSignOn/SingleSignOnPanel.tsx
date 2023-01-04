@@ -152,6 +152,7 @@ const SingleSignOnPanel = ({
       setOidcSettings(idenProviderdata.oidcSettings);
       setIdpId(idenProviderdata.idpId.value ?? '');
       setName(idenProviderdata.name.value ?? '');
+      setSamlMetaData(idenProviderdata.samlMetaData.value ?? '');
       setType(idenProviderdata.type.value?.value ?? '');
       setIssuer(idenProviderdata.oidcSettings.issuer.value ?? '');
       setClientId(idenProviderdata.oidcSettings.clientId.value ?? '');
