@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
+  UiOption,
   useCreateUserMutation,
   UserAccount,
   UserAccountForm,
@@ -52,6 +53,13 @@ export const useCreateUsersPanel = (orgSid: string) => {
     };
   };
 
+  const setAuthenticationMethod = (singleSignOn?: UiOption) => {
+    userAccountForm.authenticationMethod = {
+      ...(userAccountForm.authenticationMethod ?? defaultForm.authenticationMethod),
+      value: singleSignOn,
+    };
+  };
+
   //
   // * When the organizationId changes, we need to re-fetch the user account form.
   useEffect(() => {
@@ -93,6 +101,7 @@ export const useCreateUsersPanel = (orgSid: string) => {
           email: userAccountForm.email?.value ?? '',
           orgSid,
           sendActivationEmail: userAccountForm.sendActivationEmail?.value ?? true,
+          authenticationMethod: userAccountForm.authenticationMethod?.value?.value ?? '',
           accessPolicyGroupSids,
         },
         personInfo: {
@@ -171,5 +180,6 @@ export const useCreateUsersPanel = (orgSid: string) => {
     updateAccountInfo,
     updateAccessPolicyGroups,
     setSendAccountActivation,
+    setAuthenticationMethod,
   };
 };

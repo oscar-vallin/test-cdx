@@ -199,8 +199,9 @@ const CreateUsersPanel = ({
                       form={createUserService.userAccountForm}
                       onPrev={handlePrev}
                       onNext={validateBeforeNext}
-                      saveOptions={(send) => {
+                      saveOptions={(send, authMethod) => {
                         createUserService.setSendAccountActivation(send);
+                        createUserService.setAuthenticationMethod(authMethod);
                         setUnsavedChanges(true);
                       }}
                     />

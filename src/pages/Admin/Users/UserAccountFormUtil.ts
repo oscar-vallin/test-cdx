@@ -44,6 +44,12 @@ export const defaultForm = {
     required: false,
     visible: true,
   },
+  authenticationMethod: {
+    category: 'Single Sign On',
+    label: '',
+    required: false,
+    visible: true,
+  },
   response: GqOperationResponse.Success,
 };
 
@@ -51,6 +57,7 @@ export const updateForm = (
   userAccountForm: UserAccountForm,
   userAccount?: UserAccount,
   accessPolicyGroupSids?: string[],
+  authenticationMethod?: string,
 ): UserAccountForm => {
   if (userAccount) {
     userAccountForm.sid = userAccount.sid;
@@ -79,6 +86,17 @@ export const updateForm = (
         value: sid,
       })),
     };
+  }
+
+  if (authenticationMethod) {
+    userAccountForm.authenticationMethod = {
+      ...(userAccountForm.authenticationMethod ?? defaultForm.authenticationMethod),
+      value: {
+        category: '',
+        label: '',
+        value: authenticationMethod,
+      },
+    }
   }
 
   return userAccountForm;
