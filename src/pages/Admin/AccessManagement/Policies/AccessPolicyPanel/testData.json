@@ -274,6 +274,26 @@
           "info": "Grants access to delete Alerts on Xchanges and delete configured Job Groups."
         },
         {
+          "label": "Vendor Spec - Read",
+          "value": "VENDOR_SPEC_READ",
+          "info": null
+        },
+        {
+          "label": "Vendor Spec - Create",
+          "value": "VENDOR_SPEC_CREATE",
+          "info": null
+        },
+        {
+          "label": "Vendor Spec - Update",
+          "value": "VENDOR_SPEC_UPDATE",
+          "info": null
+        },
+        {
+          "label": "Vendor Spec - Delete",
+          "value": "VENDOR_SPEC_DELETE",
+          "info": "Grants access to delete vendor specs which are not in use or deactivate vendor specs which are in use."
+        },
+        {
           "label": "Users - Read",
           "value": "USER_READ",
           "info": null
@@ -900,6 +920,32 @@
               "label": "Supported Source Platform - Delete",
               "value": "SUPPORTED_PLATFORM_DELETE",
               "info": "Grants access to delete Supported Source Platforms and Incoming Data Formats. Supported Source Platforms and Incoming Data formats which are in use can only be Deactivated to prevent future use"
+            }
+          ]
+        },
+        {
+          "id": "Permissions_VendorSpec",
+          "label": "",
+          "options": [
+            {
+              "label": "Vendor Spec - Read",
+              "value": "VENDOR_SPEC_READ",
+              "info": null
+            },
+            {
+              "label": "Vendor Spec - Create",
+              "value": "VENDOR_SPEC_CREATE",
+              "info": null
+            },
+            {
+              "label": "Vendor Spec - Update",
+              "value": "VENDOR_SPEC_UPDATE",
+              "info": null
+            },
+            {
+              "label": "Vendor Spec - Delete",
+              "value": "VENDOR_SPEC_DELETE",
+              "info": "Grants access to delete vendor specs which are not in use or deactivate vendor specs which are in use."
             }
           ]
         }

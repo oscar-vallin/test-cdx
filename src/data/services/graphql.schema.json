@@ -7893,6 +7893,22 @@
             "deprecationReason": null
           },
           {
+            "name": "active",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "UIReadOnlyField",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "commands",
             "description": null,
             "args": [],
@@ -15296,6 +15312,30 @@
           },
           {
             "name": "XCHANGE_FILE_UPLOAD",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "VENDOR_SPEC_READ",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "VENDOR_SPEC_CREATE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "VENDOR_SPEC_UPDATE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "VENDOR_SPEC_DELETE",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -27144,6 +27184,12 @@
           },
           {
             "name": "WORK_PACKET_ACTION",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ORG_SECURITY_UPDATE",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null

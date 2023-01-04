@@ -104,6 +104,11 @@ const permissionGroupingDef = {
       label: '',
       regex: 'SUPPORTED_PLATFORM_.+',
     },
+    specs: {
+      id: 'VendorSpec',
+      label: '',
+      regex: 'VENDOR_SPEC_.+',
+    },
   },
   tools: {
     ftp: {
