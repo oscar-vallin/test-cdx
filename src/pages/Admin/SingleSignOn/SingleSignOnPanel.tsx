@@ -255,6 +255,16 @@ const SingleSignOnPanel = ({
             idpId,
             isDefault,
             type: IdpType[idpType],
+            oidcSettings: {
+              issuer,
+              clientId,
+              clientSecret,
+              authenticationMethod: OidcAuthenticationMethod[authMeth],
+              autoDiscovery,
+              authorizationURL,
+              tokenURL,
+              userInfoURL,
+            },
           },
         },
       });
@@ -498,7 +508,7 @@ const SingleSignOnPanel = ({
               )}
               {oidcSettings?.userInfoURL.visible && (
                 <UIInputText
-                  id="identityTokenURL"
+                  id="identityUserInfoURL"
                   uiField={oidcSettings.userInfoURL}
                   value={userInfoURL}
                   onChange={(event, newValue) => {
