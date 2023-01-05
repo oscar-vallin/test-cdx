@@ -2,9 +2,12 @@ import React, { CSSProperties, useEffect, useState } from 'react';
 import {
   useIdentityProvidersForOrgLazyQuery,
   useDeleteIdentityProviderMutation,
+  useDisablePasswordLoginMutation,
+  useEnablePasswordLoginMutation,
   IdentityProvider,
   CdxWebCommandType,
   WebCommand,
+  GqOperationResponse,
 } from 'src/data/services/graphql';
 import { Column, Container, Row } from 'src/components/layouts';
 import { PageTitle, Text } from 'src/components/typography';
@@ -16,8 +19,11 @@ import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { PageBody } from 'src/components/layouts/Column';
 import { Spacing } from 'src/components/spacings/Spacing';
 import {
+  DefaultButton,
   DetailsList,
   DetailsListLayoutMode,
+  Dialog,
+  DialogFooter,
   IColumn, IconButton, PrimaryButton, SelectionMode,
   Spinner,
   SpinnerSize,
@@ -27,8 +33,10 @@ import {
 import { People20Filled } from '@fluentui/react-icons';
 import { EmptyState } from 'src/containers/states';
 import { ButtonLink } from 'src/components/buttons';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { useNotification } from 'src/hooks/useNotification';
+import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { SingleSignOnPanel } from './SingleSignOnPanel';
 
 const defaultDialogProps: DialogYesNoProps = {
@@ -45,15 +53,20 @@ const defaultDialogProps: DialogYesNoProps = {
 export const SingleSignOnPage = () => {
   const { orgSid } = useOrgSid();
   const ThemeStore = useThemeStore();
+  const ActiveDomainStore = useActiveDomainStore();
   const Toast = useNotification();
   const [nodes, setNodes] = useState<IdentityProvider[] | null>();
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
-  const [refreshXchangeDetails, setRefreshXchangeDetails] = useState(false);
+  const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
+  const [refreshSinglePage, setRefreshSinglePage] = useState(false);
   const [identityProviderSid, setIdentityProviderSid] = useState<string | null>('');
   const [identityProviderName, setIdentityProviderName] = useState('');
   const [isOpenPanel, setIsOpenPanel] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
   const [showDialog, setShowDialog] = useState(false);
+  const [showDisableDialog, setShowDisableDialog] = useState(false);
+  const [disable, setDisable] = useState(true);
+  const handleError = ErrorHandler();
   const [
     identityProvidersForOrg,
     {
@@ -69,6 +82,27 @@ export const SingleSignOnPage = () => {
       loading: isLoadingDeleted,
     },
   ] = useDeleteIdentityProviderMutation();
+  const [
+    disablePasswordLogin,
+    {
+      data: disablePasswordLoginData,
+      error: disablePasswordLoginError,
+    },
+  ] = useDisablePasswordLoginMutation();
+  const [
+    enablePasswordLogin,
+    {
+      data: enablePasswordLoginData,
+      error: enablePasswordLoginError,
+    },
+  ] = useEnablePasswordLoginMutation();
+
+  useEffect(() => {
+    handleError(disablePasswordLoginError);
+  }, [disablePasswordLoginError]);
+  useEffect(() => {
+    handleError(enablePasswordLoginError);
+  }, [enablePasswordLoginError]);
 
   const fetchData = () => {
     identityProvidersForOrg({
@@ -79,9 +113,9 @@ export const SingleSignOnPage = () => {
   };
 
   useEffect(() => {
-    setRefreshXchangeDetails(false);
+    setRefreshSinglePage(false);
     fetchData();
-  }, [refreshXchangeDetails]);
+  }, [refreshSinglePage]);
 
   useEffect(() => {
     if (!isLoadingIdentityProviders && identityProvidersdata) {
@@ -90,15 +124,45 @@ export const SingleSignOnPage = () => {
       const pageCommands = identityProvidersdata.identityProvidersForOrg.listPageInfo?.pageCommands;
       const _createCmd = pageCommands?.find((cmd) => cmd.commandType === CdxWebCommandType.Create);
       setCreateCmd(_createCmd);
+      const _updateCmd = pageCommands?.find((cmd) => cmd.commandType === CdxWebCommandType.Update);
+      setUpdateCmd(_updateCmd);
+      setDisable(true);
+      if (_updateCmd?.endPoint === 'enablePasswordLogin') {
+        setDisable(false);
+      }
     }
   }, [identityProvidersdata, isLoadingIdentityProviders, identityProvidersdataError]);
 
   useEffect(() => {
     if (!isLoadingDeleted && deletedIdentityProvider) {
-      setRefreshXchangeDetails(true);
+      setRefreshSinglePage(true);
       Toast.success({ text: `Identity Provider ${identityProviderName} has been deleted` });
     }
   }, [deletedIdentityProvider, isLoadingDeleted]);
+
+  useEffect(() => {
+    const response = disablePasswordLoginData?.disablePasswordLogin;
+
+    if (disablePasswordLoginData) {
+      const responseCode = response?.response;
+      if (responseCode === GqOperationResponse.Success) {
+        setRefreshSinglePage(true);
+        Toast.success({ text: `"Password based login has been disabled for ${ActiveDomainStore.domainOrg.current.orgId}` });
+      }
+    }
+  }, [disablePasswordLoginData]);
+
+  useEffect(() => {
+    const response = enablePasswordLoginData?.enablePasswordLogin;
+
+    if (enablePasswordLoginData) {
+      const responseCode = response?.response;
+      if (responseCode === GqOperationResponse.Success) {
+        setRefreshSinglePage(true);
+        Toast.success({ text: `"Password based login has been enabled for ${ActiveDomainStore.domainOrg.current.orgId}` });
+      }
+    }
+  }, [enablePasswordLoginData]);
 
   const hideDialog = () => {
     setShowDialog(false);
@@ -124,6 +188,22 @@ export const SingleSignOnPage = () => {
 
     setDialogProps(updatedDialog);
     setShowDialog(true);
+  };
+
+  const renderDialogBody = () => {
+    const org = ActiveDomainStore.domainOrg.current.orgId;
+    let message = ` This will require all users of ${org} to login through Single Sign On.`;
+    if (updateCmd?.endPoint === 'enablePasswordLogin') {
+      message = 'This will allow users to be created or updated with the ability to login with a CDX managed password.';
+    }
+
+    return (
+      <Spacing>
+        <Text>Are you sure want to {disable ? 'disable' : 'enable'} Password based login for {org}?</Text>
+        <Spacing margin={{ top: 'normal' }} />
+        <Text>{message}</Text>
+      </Spacing>
+    )
   };
 
   const createIdenProviderButton = () => {
@@ -331,12 +411,19 @@ export const SingleSignOnPage = () => {
         <Container>
           <Row>
             <Spacing margin={{ top: 'double' }}>
-              <Stack>
-                <Text variant="semiBold">Password based login enabled</Text>
-                <Spacing padding={{ top: 'normal' }}>
-                  <ButtonLink underline>Disable Password based login</ButtonLink>
-                </Spacing>
-              </Stack>
+              {updateCmd && (
+                <Stack>
+                  <Text variant="semiBold">Password based login enabled</Text>
+                  <Spacing padding={{ top: 'normal' }}>
+                    <ButtonLink
+                      underline
+                      onClick={() => setShowDisableDialog(true)}
+                    >
+                      {updateCmd.label}
+                    </ButtonLink>
+                  </Spacing>
+                </Stack>
+              )}
             </Spacing>
           </Row>
         </Container>
@@ -345,9 +432,40 @@ export const SingleSignOnPage = () => {
         isPanelOpen={isOpenPanel}
         closePanel={setIsOpenPanel}
         sid={identityProviderSid}
-        refreshDetailsPage={setRefreshXchangeDetails}
+        refreshDetailsPage={setRefreshSinglePage}
       />
       <DialogYesNo {...dialogProps} open={showDialog} />
+      <Dialog hidden={!showDisableDialog} dialogContentProps={{ title: `${disable ? 'Disable' : 'Enable'} Password based login` }} minWidth="500px">
+        <>
+          {renderDialogBody()}
+          <DialogFooter>
+            <PrimaryButton
+              id="__ForgotPassword_confirm_ok"
+              text="Yes"
+              onClick={() => {
+                setShowDisableDialog(false)
+                if (disable) {
+                  disablePasswordLogin({
+                    variables: {
+                      orgSid,
+                    },
+                  });
+                  return;
+                }
+                enablePasswordLogin({
+                  variables: {
+                    orgSid,
+                  },
+                });
+              }}
+            />
+            <DefaultButton
+              text="No"
+              onClick={() => setShowDisableDialog(false)}
+            />
+          </DialogFooter>
+        </>
+      </Dialog>
     </LayoutDashboard>
   );
 };
