@@ -8,6 +8,7 @@ import {
   ResetPasswordMutation,
   UpdateUserAccessPolicyGroupsMutation,
   UpdateUserMutation,
+  UpdateUserAuthenticationMutation,
   useActivateUserMutation,
   useDeactivateUserMutation,
   useFindUserAccountLazyQuery,
@@ -17,6 +18,7 @@ import {
   useResetPasswordMutation,
   useUpdateUserAccessPolicyGroupsMutation,
   useUpdateUserMutation,
+  useUpdateUserAuthenticationMutation,
   WebCommand,
 } from 'src/data/services/graphql';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
@@ -34,6 +36,7 @@ export type UseUpdateUserPanel = {
   auditActivityCmd: WebCommand | null | undefined;
   migrateUserCmd: WebCommand | null | undefined;
   callUpdateUser: (updates: UserAccount) => Promise<UpdateUserMutation | null | undefined>;
+  callUpdateUserAuth: (sid: string, identityProvider: string) => Promise<UpdateUserAuthenticationMutation | null | undefined>;
   callAssignGroups: (sids: string[]) => Promise<UpdateUserAccessPolicyGroupsMutation | null | undefined>;
   callResetPassword: () => Promise<ResetPasswordMutation | null | undefined>;
   callDeactivateUser: () => Promise<DeactivateUserMutation | null | undefined>;
@@ -58,6 +61,8 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
   const [callFindUserAccount, { data: dataFindUserAccount, error: findUserAccountError }] = useFindUserAccountLazyQuery();
 
   const [callUpdateUser, { error: updateUserError }] = useUpdateUserMutation();
+
+  const [callUpdateUserAuth, { error: updateUserAuthError }] = useUpdateUserAuthenticationMutation();
 
   const [callAssignGroups, { error: assignGroupsError }] = useUpdateUserAccessPolicyGroupsMutation();
 
@@ -85,6 +90,10 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
   useEffect(() => {
     handleError(updateUserError);
   }, [updateUserError]);
+
+  useEffect(() => {
+    handleError(updateUserAuthError);
+  }, [updateUserAuthError]);
 
   useEffect(() => {
     handleError(findUserAccountError);
@@ -169,6 +178,28 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
 
     return data;
   };
+
+  const handleUpdateUserAuth = async (sid: string, identityProvider: string) => {
+    updateForm(userAccountForm, undefined, undefined, identityProvider);
+    const { data, errors } = await callUpdateUserAuth({
+      variables: {
+        userInfo: {
+          sid,
+          authenticationMethod: identityProvider,
+        },
+      },
+    });
+
+    if (data?.updateUserAuthentication) {
+      setUserAccountForm(data?.updateUserAuthentication);
+    }
+    if (data && errors && errors.length > 0) {
+      // Set errors into the object itself
+      data.updateUserAuthentication = internalServerError;
+    }
+
+    return data;
+  }
 
   const handleResetPassword = async () => {
     const { data } = await callResetPassword({
@@ -288,6 +319,7 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
     auditActivityCmd,
     migrateUserCmd,
     callUpdateUser: handleUpdateUser,
+    callUpdateUserAuth: handleUpdateUserAuth,
     callAssignGroups: handleUpdateUserGroups,
     callResetPassword: handleResetPassword,
     callDeactivateUser: handleDeactivateUser,

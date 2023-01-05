@@ -24,6 +24,7 @@ import { useOrgSid } from 'src/hooks/useOrgSid';
 import { MigrateUserDialog } from 'src/pages/Admin/Users/UpdateUsers/MigrateUserDialog';
 import { useWizardTabs } from 'src/pages/Admin/Users/useWizardTabs';
 import SectionAccessManagement from './SectionAccessManagement';
+import SectionAuthentication from './SectionAuthentication';
 import { SectionAccount } from './SectionAccount';
 import { ActiveIcon, EllipsisTitle, InactiveIcon } from './UpdateUserPanel.styles';
 
@@ -33,7 +34,7 @@ type UpdateUserPanelProps = {
   onUpdateUser?: () => void;
 };
 
-const tabs = ['#account', '#access'];
+const tabs = ['#account', '#access', '#auth'];
 
 const defaultDialogProps: DialogYesNoProps = {
   id: '__UpdateUser_Dialog',
@@ -158,6 +159,30 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
       }
     }
   };
+
+  const handleupdateUserAuth = async (identityProvider: string) => {
+    const { sid } = form;
+    const responseAuth = await useUpdateUserPanel.callUpdateUserAuth(sid ?? '', identityProvider);
+    if (responseAuth?.updateUserAuthentication) {
+      const responseCode = responseAuth.updateUserAuthentication?.response;
+      if (responseCode === GqOperationResponse.Fail || responseCode === GqOperationResponse.PartialSuccess) {
+        const errorMsg = responseAuth?.updateUserAuthentication?.errMsg
+          ?? responseAuth?.updateUserAuthentication?.response
+          ?? 'Error Updating Authenticate User';
+        setMessageType(MessageBarType.error);
+        setMessage(errorMsg);
+      }
+
+      if (responseCode === GqOperationResponse.Success || responseCode === GqOperationResponse.PartialSuccess) {
+        if (onUpdateUser) {
+          onUpdateUser();
+        }
+        setMessageType(MessageBarType.success);
+        setMessage('User Profile Saved');
+        setUnsavedChanges(false);
+      }
+    }
+  }
 
   const onFormChange = () => {
     setUnsavedChanges(true);
@@ -421,6 +446,16 @@ const UpdateUserPanel = ({ useUpdateUserPanel, onDismiss, onUpdateUser }: Update
                   />
                 ),
                 hash: '#access',
+              },
+              {
+                title: 'Authentication',
+                content: (
+                  <SectionAuthentication
+                    form={useUpdateUserPanel.userAccountForm}
+                    onSave={handleupdateUserAuth}
+                  />
+                ),
+                hash: '#auth',
               },
             ]}
             selectedKey={selectedTab}
