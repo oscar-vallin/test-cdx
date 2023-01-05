@@ -882,6 +882,7 @@ export type IncomingFormatForm = {
   sid?: Maybe<Scalars['ID']>;
   name: UiStringField;
   notes: UiStringField;
+  active: UiReadOnlyField;
   commands?: Maybe<Array<WebCommand>>;
   response: GqOperationResponse;
   errCode?: Maybe<Scalars['String']>;
@@ -2004,6 +2005,10 @@ export enum Permission {
   XchangeAlertUpdate = 'XCHANGE_ALERT_UPDATE',
   XchangeAlertDelete = 'XCHANGE_ALERT_DELETE',
   XchangeFileUpload = 'XCHANGE_FILE_UPLOAD',
+  VendorSpecRead = 'VENDOR_SPEC_READ',
+  VendorSpecCreate = 'VENDOR_SPEC_CREATE',
+  VendorSpecUpdate = 'VENDOR_SPEC_UPDATE',
+  VendorSpecDelete = 'VENDOR_SPEC_DELETE',
   UserCreate = 'USER_CREATE',
   UserRead = 'USER_READ',
   UserUpdate = 'USER_UPDATE',
@@ -3509,7 +3514,8 @@ export enum UserAccountAuditEvent {
   LockedLoginAttempt = 'LOCKED_LOGIN_ATTEMPT',
   Logout = 'LOGOUT',
   ArchiveAccess = 'ARCHIVE_ACCESS',
-  WorkPacketAction = 'WORK_PACKET_ACTION'
+  WorkPacketAction = 'WORK_PACKET_ACTION',
+  OrgSecurityUpdate = 'ORG_SECURITY_UPDATE'
 }
 
 export type UserAccountAuditLog = {
@@ -7758,6 +7764,9 @@ export type IncomingFormatFormQuery = (
     ), notes: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
+    ), active: (
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
     ), commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
@@ -10865,6 +10874,9 @@ export type CreateIncomingFormatMutation = (
     ), notes: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
+    ), active: (
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
     ), commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
@@ -10888,6 +10900,9 @@ export type UpdateIncomingFormatMutation = (
     ), notes: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
+    ), active: (
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
     ), commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
@@ -17388,6 +17403,9 @@ export const IncomingFormatFormDocument = gql`
     notes {
       ...fragmentUIStringField
     }
+    active {
+      ...fragmentUIReadOnlyField
+    }
     commands {
       ...fragmentWebCommand
     }
@@ -17398,6 +17416,7 @@ export const IncomingFormatFormDocument = gql`
   }
 }
     ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
 
 /**
@@ -22976,6 +22995,9 @@ export const CreateIncomingFormatDocument = gql`
     notes {
       ...fragmentUIStringField
     }
+    active {
+      ...fragmentUIReadOnlyField
+    }
     commands {
       ...fragmentWebCommand
     }
@@ -22986,6 +23008,7 @@ export const CreateIncomingFormatDocument = gql`
   }
 }
     ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
 export type CreateIncomingFormatMutationFn = Apollo.MutationFunction<CreateIncomingFormatMutation, CreateIncomingFormatMutationVariables>;
 
@@ -23022,6 +23045,9 @@ export const UpdateIncomingFormatDocument = gql`
     notes {
       ...fragmentUIStringField
     }
+    active {
+      ...fragmentUIReadOnlyField
+    }
     commands {
       ...fragmentWebCommand
     }
@@ -23032,6 +23058,7 @@ export const UpdateIncomingFormatDocument = gql`
   }
 }
     ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
 export type UpdateIncomingFormatMutationFn = Apollo.MutationFunction<UpdateIncomingFormatMutation, UpdateIncomingFormatMutationVariables>;
 
