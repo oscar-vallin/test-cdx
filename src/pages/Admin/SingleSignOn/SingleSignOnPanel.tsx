@@ -472,27 +472,42 @@ const SingleSignOnPanel = ({
                 }}
               />
             )}
-            {oidcSettings?.authorizationURL.visible && (
-              <UIInputText
-                id="identityAuthorizationURL"
-                value={authorizationURL}
-                uiField={oidcSettings.authorizationURL}
-                onChange={(event, newValue) => {
-                  setUnsavedChanges(true);
-                  setAuthorizationURL(newValue ?? '')
-                }}
-              />
-            )}
-            {oidcSettings?.tokenURL.visible && (
-              <UIInputText
-                id="identityTokenURL"
-                uiField={oidcSettings.tokenURL}
-                value={tokenURL}
-                onChange={(event, newValue) => {
-                  setUnsavedChanges(true);
-                  setTokenURL(newValue ?? '')
-                }}
-              />
+            {!autoDiscovery && (
+            <>
+              {oidcSettings?.authorizationURL.visible && (
+                <UIInputText
+                  id="identityAuthorizationURL"
+                  value={authorizationURL}
+                  uiField={oidcSettings.authorizationURL}
+                  onChange={(event, newValue) => {
+                    setUnsavedChanges(true);
+                    setAuthorizationURL(newValue ?? '')
+                  }}
+                />
+              )}
+              {oidcSettings?.tokenURL.visible && (
+                <UIInputText
+                  id="identityTokenURL"
+                  uiField={oidcSettings.tokenURL}
+                  value={tokenURL}
+                  onChange={(event, newValue) => {
+                    setUnsavedChanges(true);
+                    setTokenURL(newValue ?? '')
+                  }}
+                />
+              )}
+              {oidcSettings?.userInfoURL.visible && (
+                <UIInputText
+                  id="identityTokenURL"
+                  uiField={oidcSettings.userInfoURL}
+                  value={userInfoURL}
+                  onChange={(event, newValue) => {
+                    setUnsavedChanges(true);
+                    setUserInfoURL(newValue ?? '')
+                  }}
+                />
+              )}
+            </>
             )}
           </>
         )}
