@@ -158,7 +158,7 @@ const SingleSignOnPanel = ({
       setClientId(idenProviderdata.oidcSettings.clientId.value ?? '');
       setClientSecret(idenProviderdata.oidcSettings.clientSecret.value ?? '');
       setAuthenticationMethod(idenProviderdata.oidcSettings.authenticationMethod.value ?? '');
-      setAutoDiscovery(idenProviderdata.oidcSettings.autoDiscovery.value ?? false);
+      setAutoDiscovery(idenProviderdata.oidcSettings.autoDiscovery.value ?? true);
       setAuthorizationURL(idenProviderdata.oidcSettings.authorizationURL.value ?? '');
       setTokenURL(idenProviderdata.oidcSettings.tokenURL.value ?? '');
       setUserInfoURL(idenProviderdata.oidcSettings.userInfoURL.value ?? '');
@@ -464,6 +464,7 @@ const SingleSignOnPanel = ({
                 uiField={oidcSettings?.autoDiscovery}
                 onText="On"
                 offText="Off"
+                value={autoDiscovery}
                 role="checkbox"
                 onChange={(event, checked) => {
                   setUnsavedChanges(true);
