@@ -38,6 +38,7 @@ import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo
 import { useNotification } from 'src/hooks/useNotification';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { SingleSignOnPanel } from './SingleSignOnPanel';
+import { ConnectionInformationPanel } from './ConnectionInformationPanel';
 
 const defaultDialogProps: DialogYesNoProps = {
   id: '__DiagramStep_Dlg',
@@ -66,6 +67,7 @@ export const SingleSignOnPage = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [showDisableDialog, setShowDisableDialog] = useState(false);
   const [disable, setDisable] = useState(true);
+  const [isOpenConnectionInfoPanel, setIsOpenConnectionInfo] = useState(false);
   const handleError = ErrorHandler();
   const [
     identityProvidersForOrg,
@@ -290,6 +292,16 @@ export const SingleSignOnPage = () => {
     },
     {
       name: '',
+      key: 'connection',
+      fieldName: 'connection',
+      data: 'string',
+      isPadded: true,
+      minWidth: 250,
+      maxWidth: 250,
+      flexGrow: 1,
+    },
+    {
+      name: '',
       key: 'actions',
       fieldName: 'actions',
       data: 'string',
@@ -310,6 +322,23 @@ export const SingleSignOnPage = () => {
       columnVal = item?.idpId ?? '';
     } else if (column?.key === 'type') {
       columnVal = item?.type ?? '';
+    } else if (column?.key === 'connection') {
+      columnVal = 'Connection Information'
+    }
+
+    if (column?.key === 'connection') {
+      return (
+        <ButtonLink
+          underline
+          id={`__identityProviderConnectionInfo${columnVal}`}
+          onClick={() => {
+            setIdentityProviderSid(item?.sid ?? '');
+            setIsOpenConnectionInfo(true);
+          }}
+        >
+          {columnVal}
+        </ButtonLink>
+      );
     }
 
     if (column?.key === 'members') {
@@ -433,6 +462,11 @@ export const SingleSignOnPage = () => {
         closePanel={setIsOpenPanel}
         sid={identityProviderSid}
         refreshDetailsPage={setRefreshSinglePage}
+      />
+      <ConnectionInformationPanel
+        isOpen={isOpenConnectionInfoPanel}
+        closePanel={setIsOpenConnectionInfo}
+        indetityProviderSid={identityProviderSid ?? ''}
       />
       <DialogYesNo {...dialogProps} open={showDialog} />
       <Dialog hidden={!showDisableDialog} dialogContentProps={{ title: `${disable ? 'Disable' : 'Enable'} Password based login` }} minWidth="500px">

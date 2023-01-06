@@ -35,7 +35,9 @@ import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo
 import { ErrorIcon } from 'src/components/badges/ErrorIcon';
 import { UIInputSelectOne } from 'src/components/inputs/InputDropdown';
 import { UIInputToggle } from 'src/components/inputs/InputToggle';
+import { ButtonLink } from 'src/components/buttons';
 import { CodeMirrorRequired } from './SingleSignOn.styles';
+import { ConnectionInformationPanel } from './ConnectionInformationPanel';
 
 type SingleSignOnPanelProps = {
     isPanelOpen: boolean;
@@ -104,6 +106,7 @@ const SingleSignOnPanel = ({
   const [isDefault, setIsDefault] = useState<boolean>();
   const [message, setMessage] = useState<string | null>();
   const [messageType, setMessageType] = useState<MessageBarType>(MessageBarType.info);
+  const [isOpenConnectionInfoPanel, setIsOpenConnectionInfo] = useState(false);
   const [
     identityProvider,
     {
@@ -537,6 +540,17 @@ const SingleSignOnPanel = ({
           <PrimaryButton id="__AddIdentityProvider_Button" iconProps={{ iconName: 'Save' }} onClick={saveIdentityProvider}>
             Save
           </PrimaryButton>
+          {sid && (
+            <ButtonLink
+              underline
+              id="__identityProviderConnectionInfoPanel"
+              onClick={() => {
+                setIsOpenConnectionInfo(true);
+              }}
+            >
+              Connection Information
+            </ButtonLink>
+          )}
         </WizardButtonRow>
       </PanelBody>
     )
@@ -555,6 +569,11 @@ const SingleSignOnPanel = ({
       >
         {renderBody()}
       </ThemedPanel>
+      <ConnectionInformationPanel
+        isOpen={isOpenConnectionInfoPanel}
+        closePanel={setIsOpenConnectionInfo}
+        indetityProviderSid={sid ?? ''}
+      />
       <DialogYesNo {...dialogProps} open={showDialog} />
     </>
   )
