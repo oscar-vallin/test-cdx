@@ -129,7 +129,7 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
       {isOpenAlertsPanel && (
         <AlertsPanel isOpen={isOpenAlertsPanel} closePanel={setIsAlertsPanel} />
       )}
-      <ChangeThemePanel isOpen={changeTheme} closePanel={setChangeThemePanel} />
+      {changeTheme && <ChangeThemePanel isOpen={changeTheme} closePanel={setChangeThemePanel} />}
     </StyledBox>
   );
 };
