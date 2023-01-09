@@ -88,7 +88,7 @@ export const OrgsTable = ({
     const currentDate = updateDateFormat(lastActivity);
     const endDate = yyyyMMdd(fromDate);
     const endFormatted = new Date(endDate);
-    endFormatted.setDate(endFormatted.getDate() - 30);
+    endFormatted.setDate(endFormatted.getDate() - 29);
     const startDate = yyyyMMdd(endFormatted);
     return (
       // eslint-disable-next-line react/jsx-no-useless-fragment
