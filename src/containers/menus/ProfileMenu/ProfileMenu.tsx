@@ -8,8 +8,8 @@ import { useApplicationStore } from 'src/store/ApplicationStore';
 import { UserProfilePanel } from 'src/pages/UserSettings/UserProfile';
 import { PasswordChangePanel } from 'src/pages/UserSettings/PasswordChange';
 import { AlertsPanel } from 'src/pages/UserSettings/Alerts';
-import { StyledBox } from './ProfileMenu.styles';
 import { ChangeThemePanel } from 'src/pages/UserSettings/ChangeTheme';
+import { StyledBox } from './ProfileMenu.styles';
 
 const defaultProps = {
   id: '',
@@ -129,9 +129,7 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
       {isOpenAlertsPanel && (
         <AlertsPanel isOpen={isOpenAlertsPanel} closePanel={setIsAlertsPanel} />
       )}
-      {changeTheme && (
-        <ChangeThemePanel isOpen={changeTheme} closePanel={setChangeThemePanel}/>
-      )}
+      <ChangeThemePanel isOpen={changeTheme} closePanel={setChangeThemePanel} />
     </StyledBox>
   );
 };

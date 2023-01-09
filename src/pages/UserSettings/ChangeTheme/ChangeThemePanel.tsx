@@ -89,6 +89,13 @@ const ChangeThemePanel = ({ closePanel, isOpen }: ChangeThemePanelProps) => {
     }
   }, [themeResponse]);
 
+  useEffect(() => {
+    if (selectedPaletteId && palettes) {
+      const finalPalette = palettes.find(({ id }): any => id === selectedPaletteId) || defaultTheme;
+      changeThemeColors(finalPalette)
+    }
+  }, [selectedPaletteId, palettes]);
+
   const selectTheme = (paletteId: string) => {
     setSelectedPaletteId(paletteId);
     const finalPalette = palettes.find(({ id }): any => id === paletteId) || defaultTheme;
