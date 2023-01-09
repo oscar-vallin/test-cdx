@@ -485,6 +485,17 @@ export type CreateUserInput = {
   accessPolicyGroupSids?: Maybe<Array<Scalars['ID']>>;
 };
 
+export type CreateVendorSpecInput = {
+  vendorSid: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  legacyName?: Maybe<Scalars['String']>;
+  version?: Maybe<Scalars['String']>;
+  fileContents?: Maybe<XchangeFileContents>;
+  supportsFullFile?: Maybe<Scalars['Boolean']>;
+  supportsChangesOnly?: Maybe<Scalars['Boolean']>;
+  comments?: Maybe<Scalars['String']>;
+};
+
 export type CreateXchangeConfigAlertInput = {
   orgSid: Scalars['ID'];
   coreFilename: Scalars['String'];
@@ -1060,6 +1071,11 @@ export type Mutation = {
   workPacketResend?: Maybe<GenericResponse>;
   /** Upload a file to be processed */
   xchangeFileUpload?: Maybe<GenericResponse>;
+  createVendorSpec?: Maybe<VendorSpecForm>;
+  updateVendorSpec?: Maybe<VendorSpecForm>;
+  deleteVendorSpec?: Maybe<GenericResponse>;
+  activateVendorSpec?: Maybe<GenericResponse>;
+  updateGeneralVendorSpecComments?: Maybe<GenericResponse>;
   /** Convert an Xchange profile from the 1.0 XML File version to being managed in the CDX Dashboard */
   convertXchangeProfile?: Maybe<XchangeProfile>;
   updateXchangeProfileComment?: Maybe<GenericResponse>;
@@ -1404,6 +1420,32 @@ export type MutationXchangeFileUploadArgs = {
   xchangeConfigSid: Scalars['ID'];
   qualifier: Scalars['String'];
   file?: Maybe<Scalars['Upload']>;
+};
+
+
+export type MutationCreateVendorSpecArgs = {
+  specInput?: Maybe<CreateVendorSpecInput>;
+};
+
+
+export type MutationUpdateVendorSpecArgs = {
+  specInput?: Maybe<UpdateVendorSpecInput>;
+};
+
+
+export type MutationDeleteVendorSpecArgs = {
+  sid: Scalars['ID'];
+};
+
+
+export type MutationActivateVendorSpecArgs = {
+  sid: Scalars['ID'];
+};
+
+
+export type MutationUpdateGeneralVendorSpecCommentsArgs = {
+  orgSid: Scalars['ID'];
+  comments?: Maybe<Scalars['String']>;
 };
 
 
@@ -2193,6 +2235,9 @@ export type Query = {
   implementationLog?: Maybe<ImplementationDeployResponse>;
   implementationPoll?: Maybe<Scalars['Int']>;
   reprocessDialog?: Maybe<ReprocessDialog>;
+  vendorSpecs?: Maybe<VendorSpecSummaryConnection>;
+  vendorSpecForm?: Maybe<VendorSpecForm>;
+  fullVendorSpecLibrary?: Maybe<VendorLinkConnection>;
   xchangeProfile?: Maybe<XchangeProfile>;
   xchangeConfig?: Maybe<XchangeConfigForm>;
   xchangeFileProcessForm?: Maybe<XchangeFileProcessForm>;
@@ -2617,6 +2662,23 @@ export type QueryImplementationPollArgs = {
 
 export type QueryReprocessDialogArgs = {
   workOrderId: Scalars['String'];
+};
+
+
+export type QueryVendorSpecsArgs = {
+  orgSid: Scalars['ID'];
+};
+
+
+export type QueryVendorSpecFormArgs = {
+  orgSid: Scalars['ID'];
+  sid?: Maybe<Scalars['ID']>;
+};
+
+
+export type QueryFullVendorSpecLibraryArgs = {
+  searchText: Scalars['String'];
+  pageableInput?: Maybe<PageableInput>;
 };
 
 
@@ -3435,6 +3497,17 @@ export type UpdateUserInput = {
   lastNm?: Maybe<Scalars['String']>;
 };
 
+export type UpdateVendorSpecInput = {
+  sid: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  legacyName?: Maybe<Scalars['String']>;
+  version?: Maybe<Scalars['String']>;
+  fileContents?: Maybe<XchangeFileContents>;
+  supportsFullFile?: Maybe<Scalars['Boolean']>;
+  supportsChangesOnly?: Maybe<Scalars['Boolean']>;
+  comments?: Maybe<Scalars['String']>;
+};
+
 export type UpdateXchangeConfigAlertInput = {
   sid: Scalars['ID'];
   filenameQualifier?: Maybe<Scalars['String']>;
@@ -3627,6 +3700,63 @@ export type UserSession = {
   firstNm: Scalars['String'];
   pollInterval?: Maybe<Scalars['Int']>;
   defaultAuthorities?: Maybe<Array<Scalars['String']>>;
+};
+
+export type VendorLink = {
+  __typename?: 'VendorLink';
+  orgSid?: Maybe<Scalars['ID']>;
+  name?: Maybe<Scalars['String']>;
+  active?: Maybe<Scalars['Boolean']>;
+  specs?: Maybe<Array<VendorSpecSummary>>;
+};
+
+export type VendorLinkConnection = {
+  __typename?: 'VendorLinkConnection';
+  nodes?: Maybe<Array<VendorLink>>;
+  paginationInfo: PaginationInfo;
+};
+
+export type VendorSpecForm = {
+  __typename?: 'VendorSpecForm';
+  sid?: Maybe<Scalars['ID']>;
+  name: UiStringField;
+  legacyName: UiStringField;
+  version: UiStringField;
+  fileContents: UiSelectOneField;
+  supportsFullFile: UiSelectOneField;
+  supportsChangesOnly: UiSelectOneField;
+  comments: UiStringField;
+  active: UiReadOnlyField;
+  options?: Maybe<Array<UiOptions>>;
+  commands?: Maybe<Array<WebCommand>>;
+  response: GqOperationResponse;
+  errCode?: Maybe<Scalars['String']>;
+  errMsg?: Maybe<Scalars['String']>;
+  errSeverity?: Maybe<ErrorSeverity>;
+};
+
+export type VendorSpecSummary = {
+  __typename?: 'VendorSpecSummary';
+  sid?: Maybe<Scalars['ID']>;
+  name?: Maybe<Scalars['String']>;
+  active?: Maybe<Scalars['Boolean']>;
+  /** Vendor Names this organization integrates with */
+  integratedClients: Array<Scalars['String']>;
+  /** UAT file activity in the last 30 days */
+  uatActivity: XchangeActivity;
+  /** Test file activity in the last 30 days */
+  testActivity: XchangeActivity;
+  /** Prod file activity in the last 30 days */
+  prodActivity: XchangeActivity;
+  /** Errored file activity in the last 30 days */
+  errorActivity?: Maybe<XchangeActivity>;
+};
+
+export type VendorSpecSummaryConnection = {
+  __typename?: 'VendorSpecSummaryConnection';
+  listPageInfo?: Maybe<ListPageInfo>;
+  nodes?: Maybe<Array<VendorSpecSummary>>;
+  comments?: Maybe<Scalars['String']>;
 };
 
 export type WpProcessError = {
@@ -4064,6 +4194,13 @@ export type XchangeDiagramStepGroup = {
   start: DiagramCoordinates;
   end: DiagramCoordinates;
 };
+
+export enum XchangeFileContents {
+  Enrollment = 'ENROLLMENT',
+  Census = 'CENSUS',
+  CensusEnrollment = 'CENSUS_ENROLLMENT',
+  PayrollDeductions = 'PAYROLL_DEDUCTIONS'
+}
 
 export type XchangeFileProcessForm = {
   __typename?: 'XchangeFileProcessForm';
@@ -7024,6 +7161,121 @@ export type ReprocessDialogQuery = (
   )> }
 );
 
+export type VendorSpecsQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+}>;
+
+
+export type VendorSpecsQuery = (
+  { __typename?: 'Query' }
+  & { vendorSpecs?: Maybe<(
+    { __typename?: 'VendorSpecSummaryConnection' }
+    & Pick<VendorSpecSummaryConnection, 'comments'>
+    & { listPageInfo?: Maybe<(
+      { __typename?: 'ListPageInfo' }
+      & FragmentListPageInfoFragment
+    )>, nodes?: Maybe<Array<(
+      { __typename?: 'VendorSpecSummary' }
+      & Pick<VendorSpecSummary, 'sid' | 'name' | 'active' | 'integratedClients'>
+      & { uatActivity: (
+        { __typename?: 'XchangeActivity' }
+        & FragmentXchangeActivityFragment
+      ), testActivity: (
+        { __typename?: 'XchangeActivity' }
+        & FragmentXchangeActivityFragment
+      ), prodActivity: (
+        { __typename?: 'XchangeActivity' }
+        & FragmentXchangeActivityFragment
+      ), errorActivity?: Maybe<(
+        { __typename?: 'XchangeActivity' }
+        & FragmentXchangeActivityFragment
+      )> }
+    )>> }
+  )> }
+);
+
+export type VendorSpecFormQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+  sid?: Maybe<Scalars['ID']>;
+}>;
+
+
+export type VendorSpecFormQuery = (
+  { __typename?: 'Query' }
+  & { vendorSpecForm?: Maybe<(
+    { __typename?: 'VendorSpecForm' }
+    & Pick<VendorSpecForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), legacyName: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), version: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), fileContents: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), supportsFullFile: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), supportsChangesOnly: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), comments: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), active: (
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type FullVendorSpecLibraryQueryVariables = Exact<{
+  searchText: Scalars['String'];
+  pageableInput?: Maybe<PageableInput>;
+}>;
+
+
+export type FullVendorSpecLibraryQuery = (
+  { __typename?: 'Query' }
+  & { fullVendorSpecLibrary?: Maybe<(
+    { __typename?: 'VendorLinkConnection' }
+    & { nodes?: Maybe<Array<(
+      { __typename?: 'VendorLink' }
+      & Pick<VendorLink, 'orgSid' | 'name' | 'active'>
+      & { specs?: Maybe<Array<(
+        { __typename?: 'VendorSpecSummary' }
+        & Pick<VendorSpecSummary, 'sid' | 'name' | 'active' | 'integratedClients'>
+        & { uatActivity: (
+          { __typename?: 'XchangeActivity' }
+          & FragmentXchangeActivityFragment
+        ), testActivity: (
+          { __typename?: 'XchangeActivity' }
+          & FragmentXchangeActivityFragment
+        ), prodActivity: (
+          { __typename?: 'XchangeActivity' }
+          & FragmentXchangeActivityFragment
+        ), errorActivity?: Maybe<(
+          { __typename?: 'XchangeActivity' }
+          & FragmentXchangeActivityFragment
+        )> }
+      )>> }
+    )>>, paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ) }
+  )> }
+);
+
 export type XchangeProfileQueryVariables = Exact<{
   orgSid: Scalars['ID'];
 }>;
@@ -9716,6 +9968,167 @@ export type XchangeFileUploadMutationVariables = Exact<{
 export type XchangeFileUploadMutation = (
   { __typename?: 'Mutation' }
   & { xchangeFileUpload?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
+  )> }
+);
+
+export type CreateVendorSpecMutationVariables = Exact<{
+  specInput?: Maybe<CreateVendorSpecInput>;
+}>;
+
+
+export type CreateVendorSpecMutation = (
+  { __typename?: 'Mutation' }
+  & { createVendorSpec?: Maybe<(
+    { __typename?: 'VendorSpecForm' }
+    & Pick<VendorSpecForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), legacyName: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), version: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), fileContents: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), supportsFullFile: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), supportsChangesOnly: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), comments: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), active: (
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type UpdateVendorSpecMutationVariables = Exact<{
+  specInput?: Maybe<UpdateVendorSpecInput>;
+}>;
+
+
+export type UpdateVendorSpecMutation = (
+  { __typename?: 'Mutation' }
+  & { updateVendorSpec?: Maybe<(
+    { __typename?: 'VendorSpecForm' }
+    & Pick<VendorSpecForm, 'sid' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { name: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), legacyName: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), version: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), fileContents: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), supportsFullFile: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), supportsChangesOnly: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), comments: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), active: (
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
+      { __typename?: 'WebCommand' }
+      & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type DeleteVendorSpecMutationVariables = Exact<{
+  sid: Scalars['ID'];
+}>;
+
+
+export type DeleteVendorSpecMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteVendorSpec?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
+  )> }
+);
+
+export type ActivateVendorSpecMutationVariables = Exact<{
+  sid: Scalars['ID'];
+}>;
+
+
+export type ActivateVendorSpecMutation = (
+  { __typename?: 'Mutation' }
+  & { activateVendorSpec?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
+  )> }
+);
+
+export type UpdateGeneralVendorSpecCommentsMutationVariables = Exact<{
+  orgSid: Scalars['ID'];
+  comments?: Maybe<Scalars['String']>;
+}>;
+
+
+export type UpdateGeneralVendorSpecCommentsMutation = (
+  { __typename?: 'Mutation' }
+  & { updateGeneralVendorSpecComments?: Maybe<(
     { __typename?: 'GenericResponse' }
     & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { allMessages?: Maybe<Array<(
@@ -16056,6 +16469,193 @@ export function useReprocessDialogLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type ReprocessDialogQueryHookResult = ReturnType<typeof useReprocessDialogQuery>;
 export type ReprocessDialogLazyQueryHookResult = ReturnType<typeof useReprocessDialogLazyQuery>;
 export type ReprocessDialogQueryResult = Apollo.QueryResult<ReprocessDialogQuery, ReprocessDialogQueryVariables>;
+export const VendorSpecsDocument = gql`
+    query VendorSpecs($orgSid: ID!) {
+  vendorSpecs(orgSid: $orgSid) {
+    listPageInfo {
+      ...fragmentListPageInfo
+    }
+    nodes {
+      sid
+      name
+      active
+      integratedClients
+      uatActivity {
+        ...fragmentXchangeActivity
+      }
+      testActivity {
+        ...fragmentXchangeActivity
+      }
+      prodActivity {
+        ...fragmentXchangeActivity
+      }
+      errorActivity {
+        ...fragmentXchangeActivity
+      }
+    }
+    comments
+  }
+}
+    ${FragmentListPageInfoFragmentDoc}
+${FragmentXchangeActivityFragmentDoc}`;
+
+/**
+ * __useVendorSpecsQuery__
+ *
+ * To run a query within a React component, call `useVendorSpecsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useVendorSpecsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useVendorSpecsQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *   },
+ * });
+ */
+export function useVendorSpecsQuery(baseOptions: Apollo.QueryHookOptions<VendorSpecsQuery, VendorSpecsQueryVariables>) {
+        return Apollo.useQuery<VendorSpecsQuery, VendorSpecsQueryVariables>(VendorSpecsDocument, baseOptions);
+      }
+export function useVendorSpecsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<VendorSpecsQuery, VendorSpecsQueryVariables>) {
+          return Apollo.useLazyQuery<VendorSpecsQuery, VendorSpecsQueryVariables>(VendorSpecsDocument, baseOptions);
+        }
+export type VendorSpecsQueryHookResult = ReturnType<typeof useVendorSpecsQuery>;
+export type VendorSpecsLazyQueryHookResult = ReturnType<typeof useVendorSpecsLazyQuery>;
+export type VendorSpecsQueryResult = Apollo.QueryResult<VendorSpecsQuery, VendorSpecsQueryVariables>;
+export const VendorSpecFormDocument = gql`
+    query VendorSpecForm($orgSid: ID!, $sid: ID) {
+  vendorSpecForm(orgSid: $orgSid, sid: $sid) {
+    sid
+    name {
+      ...fragmentUIStringField
+    }
+    legacyName {
+      ...fragmentUIStringField
+    }
+    version {
+      ...fragmentUIStringField
+    }
+    fileContents {
+      ...fragmentUISelectOneField
+    }
+    supportsFullFile {
+      ...fragmentUISelectOneField
+    }
+    supportsChangesOnly {
+      ...fragmentUISelectOneField
+    }
+    comments {
+      ...fragmentUIStringField
+    }
+    active {
+      ...fragmentUIReadOnlyField
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+
+/**
+ * __useVendorSpecFormQuery__
+ *
+ * To run a query within a React component, call `useVendorSpecFormQuery` and pass it any options that fit your needs.
+ * When your component renders, `useVendorSpecFormQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useVendorSpecFormQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      sid: // value for 'sid'
+ *   },
+ * });
+ */
+export function useVendorSpecFormQuery(baseOptions: Apollo.QueryHookOptions<VendorSpecFormQuery, VendorSpecFormQueryVariables>) {
+        return Apollo.useQuery<VendorSpecFormQuery, VendorSpecFormQueryVariables>(VendorSpecFormDocument, baseOptions);
+      }
+export function useVendorSpecFormLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<VendorSpecFormQuery, VendorSpecFormQueryVariables>) {
+          return Apollo.useLazyQuery<VendorSpecFormQuery, VendorSpecFormQueryVariables>(VendorSpecFormDocument, baseOptions);
+        }
+export type VendorSpecFormQueryHookResult = ReturnType<typeof useVendorSpecFormQuery>;
+export type VendorSpecFormLazyQueryHookResult = ReturnType<typeof useVendorSpecFormLazyQuery>;
+export type VendorSpecFormQueryResult = Apollo.QueryResult<VendorSpecFormQuery, VendorSpecFormQueryVariables>;
+export const FullVendorSpecLibraryDocument = gql`
+    query FullVendorSpecLibrary($searchText: String!, $pageableInput: PageableInput) {
+  fullVendorSpecLibrary(searchText: $searchText, pageableInput: $pageableInput) {
+    nodes {
+      orgSid
+      name
+      active
+      specs {
+        sid
+        name
+        active
+        integratedClients
+        uatActivity {
+          ...fragmentXchangeActivity
+        }
+        testActivity {
+          ...fragmentXchangeActivity
+        }
+        prodActivity {
+          ...fragmentXchangeActivity
+        }
+        errorActivity {
+          ...fragmentXchangeActivity
+        }
+      }
+    }
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+  }
+}
+    ${FragmentXchangeActivityFragmentDoc}
+${FragmentPaginationInfoFragmentDoc}`;
+
+/**
+ * __useFullVendorSpecLibraryQuery__
+ *
+ * To run a query within a React component, call `useFullVendorSpecLibraryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFullVendorSpecLibraryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFullVendorSpecLibraryQuery({
+ *   variables: {
+ *      searchText: // value for 'searchText'
+ *      pageableInput: // value for 'pageableInput'
+ *   },
+ * });
+ */
+export function useFullVendorSpecLibraryQuery(baseOptions: Apollo.QueryHookOptions<FullVendorSpecLibraryQuery, FullVendorSpecLibraryQueryVariables>) {
+        return Apollo.useQuery<FullVendorSpecLibraryQuery, FullVendorSpecLibraryQueryVariables>(FullVendorSpecLibraryDocument, baseOptions);
+      }
+export function useFullVendorSpecLibraryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FullVendorSpecLibraryQuery, FullVendorSpecLibraryQueryVariables>) {
+          return Apollo.useLazyQuery<FullVendorSpecLibraryQuery, FullVendorSpecLibraryQueryVariables>(FullVendorSpecLibraryDocument, baseOptions);
+        }
+export type FullVendorSpecLibraryQueryHookResult = ReturnType<typeof useFullVendorSpecLibraryQuery>;
+export type FullVendorSpecLibraryLazyQueryHookResult = ReturnType<typeof useFullVendorSpecLibraryLazyQuery>;
+export type FullVendorSpecLibraryQueryResult = Apollo.QueryResult<FullVendorSpecLibraryQuery, FullVendorSpecLibraryQueryVariables>;
 export const XchangeProfileDocument = gql`
     query XchangeProfile($orgSid: ID!) {
   xchangeProfile(orgSid: $orgSid) {
@@ -21073,6 +21673,279 @@ export function useXchangeFileUploadMutation(baseOptions?: Apollo.MutationHookOp
 export type XchangeFileUploadMutationHookResult = ReturnType<typeof useXchangeFileUploadMutation>;
 export type XchangeFileUploadMutationResult = Apollo.MutationResult<XchangeFileUploadMutation>;
 export type XchangeFileUploadMutationOptions = Apollo.BaseMutationOptions<XchangeFileUploadMutation, XchangeFileUploadMutationVariables>;
+export const CreateVendorSpecDocument = gql`
+    mutation CreateVendorSpec($specInput: CreateVendorSpecInput) {
+  createVendorSpec(specInput: $specInput) {
+    sid
+    name {
+      ...fragmentUIStringField
+    }
+    legacyName {
+      ...fragmentUIStringField
+    }
+    version {
+      ...fragmentUIStringField
+    }
+    fileContents {
+      ...fragmentUISelectOneField
+    }
+    supportsFullFile {
+      ...fragmentUISelectOneField
+    }
+    supportsChangesOnly {
+      ...fragmentUISelectOneField
+    }
+    comments {
+      ...fragmentUIStringField
+    }
+    active {
+      ...fragmentUIReadOnlyField
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+export type CreateVendorSpecMutationFn = Apollo.MutationFunction<CreateVendorSpecMutation, CreateVendorSpecMutationVariables>;
+
+/**
+ * __useCreateVendorSpecMutation__
+ *
+ * To run a mutation, you first call `useCreateVendorSpecMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateVendorSpecMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createVendorSpecMutation, { data, loading, error }] = useCreateVendorSpecMutation({
+ *   variables: {
+ *      specInput: // value for 'specInput'
+ *   },
+ * });
+ */
+export function useCreateVendorSpecMutation(baseOptions?: Apollo.MutationHookOptions<CreateVendorSpecMutation, CreateVendorSpecMutationVariables>) {
+        return Apollo.useMutation<CreateVendorSpecMutation, CreateVendorSpecMutationVariables>(CreateVendorSpecDocument, baseOptions);
+      }
+export type CreateVendorSpecMutationHookResult = ReturnType<typeof useCreateVendorSpecMutation>;
+export type CreateVendorSpecMutationResult = Apollo.MutationResult<CreateVendorSpecMutation>;
+export type CreateVendorSpecMutationOptions = Apollo.BaseMutationOptions<CreateVendorSpecMutation, CreateVendorSpecMutationVariables>;
+export const UpdateVendorSpecDocument = gql`
+    mutation UpdateVendorSpec($specInput: UpdateVendorSpecInput) {
+  updateVendorSpec(specInput: $specInput) {
+    sid
+    name {
+      ...fragmentUIStringField
+    }
+    legacyName {
+      ...fragmentUIStringField
+    }
+    version {
+      ...fragmentUIStringField
+    }
+    fileContents {
+      ...fragmentUISelectOneField
+    }
+    supportsFullFile {
+      ...fragmentUISelectOneField
+    }
+    supportsChangesOnly {
+      ...fragmentUISelectOneField
+    }
+    comments {
+      ...fragmentUIStringField
+    }
+    active {
+      ...fragmentUIReadOnlyField
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    commands {
+      ...fragmentWebCommand
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
+${FragmentWebCommandFragmentDoc}`;
+export type UpdateVendorSpecMutationFn = Apollo.MutationFunction<UpdateVendorSpecMutation, UpdateVendorSpecMutationVariables>;
+
+/**
+ * __useUpdateVendorSpecMutation__
+ *
+ * To run a mutation, you first call `useUpdateVendorSpecMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateVendorSpecMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateVendorSpecMutation, { data, loading, error }] = useUpdateVendorSpecMutation({
+ *   variables: {
+ *      specInput: // value for 'specInput'
+ *   },
+ * });
+ */
+export function useUpdateVendorSpecMutation(baseOptions?: Apollo.MutationHookOptions<UpdateVendorSpecMutation, UpdateVendorSpecMutationVariables>) {
+        return Apollo.useMutation<UpdateVendorSpecMutation, UpdateVendorSpecMutationVariables>(UpdateVendorSpecDocument, baseOptions);
+      }
+export type UpdateVendorSpecMutationHookResult = ReturnType<typeof useUpdateVendorSpecMutation>;
+export type UpdateVendorSpecMutationResult = Apollo.MutationResult<UpdateVendorSpecMutation>;
+export type UpdateVendorSpecMutationOptions = Apollo.BaseMutationOptions<UpdateVendorSpecMutation, UpdateVendorSpecMutationVariables>;
+export const DeleteVendorSpecDocument = gql`
+    mutation DeleteVendorSpec($sid: ID!) {
+  deleteVendorSpec(sid: $sid) {
+    response
+    errCode
+    errMsg
+    errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export type DeleteVendorSpecMutationFn = Apollo.MutationFunction<DeleteVendorSpecMutation, DeleteVendorSpecMutationVariables>;
+
+/**
+ * __useDeleteVendorSpecMutation__
+ *
+ * To run a mutation, you first call `useDeleteVendorSpecMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteVendorSpecMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteVendorSpecMutation, { data, loading, error }] = useDeleteVendorSpecMutation({
+ *   variables: {
+ *      sid: // value for 'sid'
+ *   },
+ * });
+ */
+export function useDeleteVendorSpecMutation(baseOptions?: Apollo.MutationHookOptions<DeleteVendorSpecMutation, DeleteVendorSpecMutationVariables>) {
+        return Apollo.useMutation<DeleteVendorSpecMutation, DeleteVendorSpecMutationVariables>(DeleteVendorSpecDocument, baseOptions);
+      }
+export type DeleteVendorSpecMutationHookResult = ReturnType<typeof useDeleteVendorSpecMutation>;
+export type DeleteVendorSpecMutationResult = Apollo.MutationResult<DeleteVendorSpecMutation>;
+export type DeleteVendorSpecMutationOptions = Apollo.BaseMutationOptions<DeleteVendorSpecMutation, DeleteVendorSpecMutationVariables>;
+export const ActivateVendorSpecDocument = gql`
+    mutation ActivateVendorSpec($sid: ID!) {
+  activateVendorSpec(sid: $sid) {
+    response
+    errCode
+    errMsg
+    errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export type ActivateVendorSpecMutationFn = Apollo.MutationFunction<ActivateVendorSpecMutation, ActivateVendorSpecMutationVariables>;
+
+/**
+ * __useActivateVendorSpecMutation__
+ *
+ * To run a mutation, you first call `useActivateVendorSpecMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useActivateVendorSpecMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [activateVendorSpecMutation, { data, loading, error }] = useActivateVendorSpecMutation({
+ *   variables: {
+ *      sid: // value for 'sid'
+ *   },
+ * });
+ */
+export function useActivateVendorSpecMutation(baseOptions?: Apollo.MutationHookOptions<ActivateVendorSpecMutation, ActivateVendorSpecMutationVariables>) {
+        return Apollo.useMutation<ActivateVendorSpecMutation, ActivateVendorSpecMutationVariables>(ActivateVendorSpecDocument, baseOptions);
+      }
+export type ActivateVendorSpecMutationHookResult = ReturnType<typeof useActivateVendorSpecMutation>;
+export type ActivateVendorSpecMutationResult = Apollo.MutationResult<ActivateVendorSpecMutation>;
+export type ActivateVendorSpecMutationOptions = Apollo.BaseMutationOptions<ActivateVendorSpecMutation, ActivateVendorSpecMutationVariables>;
+export const UpdateGeneralVendorSpecCommentsDocument = gql`
+    mutation UpdateGeneralVendorSpecComments($orgSid: ID!, $comments: String) {
+  updateGeneralVendorSpecComments(orgSid: $orgSid, comments: $comments) {
+    response
+    errCode
+    errMsg
+    errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export type UpdateGeneralVendorSpecCommentsMutationFn = Apollo.MutationFunction<UpdateGeneralVendorSpecCommentsMutation, UpdateGeneralVendorSpecCommentsMutationVariables>;
+
+/**
+ * __useUpdateGeneralVendorSpecCommentsMutation__
+ *
+ * To run a mutation, you first call `useUpdateGeneralVendorSpecCommentsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateGeneralVendorSpecCommentsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateGeneralVendorSpecCommentsMutation, { data, loading, error }] = useUpdateGeneralVendorSpecCommentsMutation({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      comments: // value for 'comments'
+ *   },
+ * });
+ */
+export function useUpdateGeneralVendorSpecCommentsMutation(baseOptions?: Apollo.MutationHookOptions<UpdateGeneralVendorSpecCommentsMutation, UpdateGeneralVendorSpecCommentsMutationVariables>) {
+        return Apollo.useMutation<UpdateGeneralVendorSpecCommentsMutation, UpdateGeneralVendorSpecCommentsMutationVariables>(UpdateGeneralVendorSpecCommentsDocument, baseOptions);
+      }
+export type UpdateGeneralVendorSpecCommentsMutationHookResult = ReturnType<typeof useUpdateGeneralVendorSpecCommentsMutation>;
+export type UpdateGeneralVendorSpecCommentsMutationResult = Apollo.MutationResult<UpdateGeneralVendorSpecCommentsMutation>;
+export type UpdateGeneralVendorSpecCommentsMutationOptions = Apollo.BaseMutationOptions<UpdateGeneralVendorSpecCommentsMutation, UpdateGeneralVendorSpecCommentsMutationVariables>;
 export const ConvertXchangeProfileDocument = gql`
     mutation ConvertXchangeProfile($orgSid: ID!) {
   convertXchangeProfile(orgSid: $orgSid) {
