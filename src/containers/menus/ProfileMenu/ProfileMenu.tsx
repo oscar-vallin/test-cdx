@@ -68,12 +68,18 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
       key: 'ProfileMenu_ChangePassword',
       text: 'Change Password',
       onClick: openPasswordChange,
+      iconProps: {
+        iconName: 'PasswordField',
+      },
     },
     {
       id: '__ChangeTheme',
       key: 'ProfileMenu_ChangeTheme',
       text: 'Change theme',
       onClick: openChangeTheme,
+      iconProps: {
+        iconName: 'Color',
+      },
     },
     {
       id: '__ProfileMenu_UserSettingsId',
@@ -82,7 +88,13 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
       onClick: handleSettings,
     },
     {
-      id: '__Logout_button', key: 'ProfileMenu_Logout', text: 'Logout', onClick: handleLogout,
+      id: '__Logout_button',
+      key: 'ProfileMenu_Logout',
+      text: 'Logout',
+      onClick: handleLogout,
+      iconProps: {
+        iconName: 'SignOut',
+      },
     },
     {
       id: '__separator',
