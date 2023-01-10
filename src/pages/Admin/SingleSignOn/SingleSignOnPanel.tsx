@@ -18,10 +18,6 @@ import {
   MessageBarType,
   IconButton,
 } from '@fluentui/react';
-import CodeMirror, { BasicSetupOptions } from '@uiw/react-codemirror';
-import { javascript } from '@codemirror/lang-javascript';
-import { createTheme } from '@uiw/codemirror-themes';
-import { tags as t } from '@lezer/highlight';
 import { Text } from 'src/components/typography';
 import { PanelBody, ThemedPanel, WizardButtonRow } from 'src/layouts/Panels/Panels.styles';
 import { useOrgSid } from 'src/hooks/useOrgSid';
@@ -36,7 +32,7 @@ import { ErrorIcon } from 'src/components/badges/ErrorIcon';
 import { UIInputSelectOne } from 'src/components/inputs/InputDropdown';
 import { UIInputToggle } from 'src/components/inputs/InputToggle';
 import { ButtonLink } from 'src/components/buttons';
-import { CodeMirrorRequired } from './SingleSignOn.styles';
+import { CodeMirrorRequired, EditorField } from './SingleSignOn.styles';
 import { ConnectionInformationPanel } from './ConnectionInformationPanel';
 
 type SingleSignOnPanelProps = {
@@ -44,25 +40,6 @@ type SingleSignOnPanelProps = {
     closePanel: (data: boolean) => void;
     sid?: string | null;
     refreshDetailsPage: (data: boolean) => void;
-};
-
-const myTheme = createTheme({
-  theme: 'light',
-  settings: {
-    background: '#ffffff',
-    foreground: 'black',
-    lineHighlight: '#fff',
-    gutterBackground: '#fff',
-    gutterBorder: '#fff',
-  },
-  styles: [
-    { tag: t.typeName, color: '#0078D4' },
-    { tag: t.angleBracket, color: '#0078D4' },
-  ],
-});
-
-const setupOption: BasicSetupOptions = {
-  lineNumbers: false,
 };
 
 const defaultDialogProps: DialogYesNoProps = {
@@ -107,6 +84,7 @@ const SingleSignOnPanel = ({
   const [message, setMessage] = useState<string | null>();
   const [messageType, setMessageType] = useState<MessageBarType>(MessageBarType.info);
   const [isOpenConnectionInfoPanel, setIsOpenConnectionInfo] = useState(false);
+
   const [
     identityProvider,
     {
@@ -402,17 +380,23 @@ const SingleSignOnPanel = ({
             />
             <CodeMirrorRequired>*</CodeMirrorRequired>
             {errMsgSamlMetaData && <ErrorIcon id="samlMetaData-error" errorMessage={errMsgSamlMetaData} />}
-            <CodeMirror
-              id="samlMetaData"
-              height="255px"
-              style={{ border: '1px solid gray', fontWeight: 'bold', fontSize: '14px' }}
-              basicSetup={setupOption}
-              value={samlMetaData}
-              extensions={[javascript({ jsx: true })]}
-              theme={myTheme}
+            <EditorField
+              height="50vh"
+              defaultLanguage="xml"
               onChange={(value) => {
                 setUnsavedChanges(true);
-                setSamlMetaData(value);
+                setSamlMetaData(value ?? '');
+              }}
+              value={samlMetaData}
+              options={{
+                lineNumbers: 'off',
+                renderValidationDecorations: 'off',
+                codeLens: false,
+                overviewRulerBorder: false,
+                lineDecorationsWidth: 0,
+                minimap: {
+                  enabled: false,
+                },
               }}
             />
           </>

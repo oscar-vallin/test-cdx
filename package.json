@@ -9,6 +9,7 @@
     "@codemirror/lang-javascript": "^6.0.1",
     "@fluentui/react": "8.52.1",
     "@fluentui/react-icons": "1.1.145",
+    "@monaco-editor/react": "^4.4.6",
     "@types/jest": "^26.0.15",
     "@types/node": "^14.14.25",
     "@types/react": "^17.0.0",
