@@ -9,6 +9,8 @@ import {
   OidcAuthenticationMethod,
   IdentityProviderMetaDataLink,
   GqOperationResponse,
+  WebCommand,
+  CdxWebCommandType,
 } from 'src/data/services/graphql';
 import {
   PanelType,
@@ -66,7 +68,9 @@ const SingleSignOnPanel = ({
   const Toast = useNotification();
   const [identityProviderForm, setIdentityProviderForm] = useState<IdentityProviderForm>();
   const [priorMetaData, setPriorMetaData] = useState<IdentityProviderMetaDataLink[] | null>();
-  const [oidcSettings, setOidcSettings] = useState<OidcSettingsForm>()
+  const [oidcSettings, setOidcSettings] = useState<OidcSettingsForm>();
+  const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
+  const [createCmd, setCreateCmd] = useState<WebCommand | null>();
   const [idpId, setIdpId] = useState('');
   const [name, setName] = useState('');
   const [type, setType] = useState('');
@@ -148,6 +152,14 @@ const SingleSignOnPanel = ({
       setTokenURL(idenProviderdata.oidcSettings.tokenURL.value ?? '');
       setUserInfoURL(idenProviderdata.oidcSettings.userInfoURL.value ?? '');
       setIsDefault(idenProviderdata.isDefault.value ?? false);
+
+      if (idenProviderdata.commands) {
+        const pageCommands = idenProviderdata.commands;
+        const _createCmd = pageCommands.find((cmd) => cmd.commandType === CdxWebCommandType.Create);
+        setCreateCmd(_createCmd);
+        const _updateCmd = pageCommands.find((cmd) => cmd.commandType === CdxWebCommandType.Update);
+        setUpdateCmd(_updateCmd);
+      }
     }
   }, [identityProviderFormData, isLoadingForm]);
 
@@ -414,6 +426,7 @@ const SingleSignOnPanel = ({
               value={samlMetaData}
               options={{
                 lineNumbers: 'off',
+                readOnly: identityProviderForm?.samlMetaData.readOnly,
                 renderValidationDecorations: 'off',
                 codeLens: false,
                 overviewRulerBorder: false,
@@ -546,9 +559,11 @@ const SingleSignOnPanel = ({
           )}
         </Spacing>
         <WizardButtonRow>
-          <PrimaryButton id="__AddIdentityProvider_Button" iconProps={{ iconName: 'Save' }} onClick={saveIdentityProvider}>
-            Save
-          </PrimaryButton>
+          {updateCmd || createCmd ? (
+            <PrimaryButton id="__AddIdentityProvider_Button" iconProps={{ iconName: 'Save' }} onClick={saveIdentityProvider}>
+              Save
+            </PrimaryButton>
+          ) : null}
           {sid && (
             <ButtonLink
               underline
