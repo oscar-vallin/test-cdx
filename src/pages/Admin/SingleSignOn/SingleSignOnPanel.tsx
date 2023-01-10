@@ -7,6 +7,7 @@ import {
   useUpdateIdentityProviderMutation,
   IdpType,
   OidcAuthenticationMethod,
+  IdentityProviderMetaDataLink,
   GqOperationResponse,
 } from 'src/data/services/graphql';
 import {
@@ -17,6 +18,7 @@ import {
   MessageBar,
   MessageBarType,
   IconButton,
+  Stack,
 } from '@fluentui/react';
 import { Text } from 'src/components/typography';
 import { PanelBody, ThemedPanel, WizardButtonRow } from 'src/layouts/Panels/Panels.styles';
@@ -63,6 +65,7 @@ const SingleSignOnPanel = ({
   const ThemeStore = useThemeStore();
   const Toast = useNotification();
   const [identityProviderForm, setIdentityProviderForm] = useState<IdentityProviderForm>();
+  const [priorMetaData, setPriorMetaData] = useState<IdentityProviderMetaDataLink[] | null>();
   const [oidcSettings, setOidcSettings] = useState<OidcSettingsForm>()
   const [idpId, setIdpId] = useState('');
   const [name, setName] = useState('');
@@ -133,6 +136,7 @@ const SingleSignOnPanel = ({
       setOidcSettings(idenProviderdata.oidcSettings);
       setIdpId(idenProviderdata.idpId.value ?? '');
       setName(idenProviderdata.name.value ?? '');
+      setPriorMetaData(idenProviderdata.priorMetaData);
       setSamlMetaData(idenProviderdata.samlMetaData.value ?? '');
       setType(idenProviderdata.type.value?.value ?? '');
       setIssuer(idenProviderdata.oidcSettings.issuer.value ?? '');
@@ -313,6 +317,26 @@ const SingleSignOnPanel = ({
     }
   };
 
+  const renderMetaData = () => {
+    if (!priorMetaData?.length) return null;
+
+    const updateDate = (date: string) => {
+      const currentDate = new Date(date);
+      let formattedDate = currentDate.toDateString();
+      formattedDate = formattedDate.split(' ').slice(1, 4).toLocaleString().replace(',', ' ')
+      return formattedDate;
+    }
+    return (
+      <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+        <Stack>
+          {priorMetaData.map((metaData, metaDataIndex: number) => (
+            <Text key={metaDataIndex}>Created on {updateDate(metaData.creationDateTime)}</Text>
+          ))}
+        </Stack>
+      </Spacing>
+    )
+  }
+
   const renderBody = () => {
     if (isLoadingForm) {
       return (
@@ -399,6 +423,7 @@ const SingleSignOnPanel = ({
                 },
               }}
             />
+            {renderMetaData()}
           </>
         )}
         {IdpType.Oidc === type && (
