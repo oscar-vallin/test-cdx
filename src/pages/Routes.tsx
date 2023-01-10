@@ -30,6 +30,7 @@ import {
   NamingPage,
   JobGroups,
 } from './Admin/XChange';
+import { SupportedPlatformsPage } from './Admin/SupportedSourcePlatforms';
 import { FtpTestPage } from './Admin/FtpTest';
 import { UserAuditLogsPage } from './Admin/Users/UserAuditLogs';
 import {
@@ -143,6 +144,9 @@ export const Routes = () => (
     </AuthRoute>
     <AuthRoute path={ROUTES.ROUTE_XCHANGE_DETAILS.URL}>
       <XchangeDetailsPage />
+    </AuthRoute>
+    <AuthRoute path={ROUTES.ROUTE_SUPPORTED_PLATFORMS.URL}>
+      <SupportedPlatformsPage />
     </AuthRoute>
     <AuthRoute path={ROUTES.ROUTE_FTP_TEST.URL}>
       <FtpTestPage />
