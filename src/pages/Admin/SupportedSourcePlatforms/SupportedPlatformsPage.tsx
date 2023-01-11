@@ -18,7 +18,9 @@ import {
   useSupportedPlatformsLazyQuery,
   useIncomingFormatsLazyQuery,
   SupportedPlatform,
+  WebCommand,
   IncomingFormat,
+  CdxWebCommandType,
 } from 'src/data/services/graphql';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { PageBody } from 'src/components/layouts/Column';
@@ -26,10 +28,15 @@ import { Spacing } from 'src/components/spacings/Spacing';
 import { DataColumn, useSortableColumns } from 'src/containers/tables';
 import { ButtonLink } from 'src/components/buttons';
 import { CardSupportedStyled } from './SupportedPlatforms.styes';
+import { SupportedPlataformsPanel } from './SupportedPlatformsPanel';
 
 const SupportedPlatformsPage = () => {
   const [supportedPlatforms, setSupportedPlatforms] = useState<SupportedPlatform[] | null>();
   const [incomingFormats, setIncomingFormats] = useState<IncomingFormat[] | null>();
+  const [createCmd, setCreateCmd] = useState<WebCommand | null>();
+  const [isOpenPanel, setIsOpenPanel] = useState(false);
+  const [sid, setSid] = useState('');
+  const [refreshPage, setRefreshPage] = useState(false);
   const [supportedPlatform,
     { data: supportedPlatformsData, loading: isLoadingSupportedPlataforms },
   ] = useSupportedPlatformsLazyQuery();
@@ -52,6 +59,12 @@ const SupportedPlatformsPage = () => {
   useEffect(() => {
     if (!isLoadingSupportedPlataforms && supportedPlatformsData) {
       setSupportedPlatforms(supportedPlatformsData.supportedPlatforms?.nodes);
+
+      if (supportedPlatformsData.supportedPlatforms?.listPageInfo?.pageCommands) {
+        const pageCommands = supportedPlatformsData.supportedPlatforms?.listPageInfo?.pageCommands;
+        const _createCmd = pageCommands.find((cmd) => cmd.commandType === CdxWebCommandType.Create);
+        setCreateCmd(_createCmd);
+      }
     }
   }, [supportedPlatformsData, isLoadingSupportedPlataforms]);
 
@@ -90,8 +103,9 @@ const SupportedPlatformsPage = () => {
   const { columns } = useSortableColumns(tableFilters, columnOptions);
 
   useEffect(() => {
+    setRefreshPage(false);
     fetchData();
-  }, [tableFilters.pagingParams]);
+  }, [tableFilters.pagingParams, refreshPage]);
 
   useEffect(() => {
     fetchIncomingData();
@@ -102,7 +116,7 @@ const SupportedPlatformsPage = () => {
       return (
         <Stack>
           {item.supportedIncomingFormats?.map((incoming, incomingIndex: number) => (
-            <ButtonLink key={incomingIndex}>
+            <ButtonLink underline key={incomingIndex}>
               {incoming}
             </ButtonLink>
           ))}
@@ -112,7 +126,13 @@ const SupportedPlatformsPage = () => {
 
     if (column?.key === 'name') {
       return (
-        <ButtonLink>
+        <ButtonLink
+          underline
+          onClick={() => {
+            setSid(item.sid ?? '');
+            setIsOpenPanel(true);
+          }}
+        >
           {item.name}
         </ButtonLink>
       )
@@ -169,14 +189,20 @@ const SupportedPlatformsPage = () => {
             <Column lg="6" direction="row">
               <PageTitle id="__Page__Title_Supported_Platforms" title="Supported Source Plarfotms" />
             </Column>
+            {createCmd && (
             <Column sm="6" right>
               <PrimaryButton
                 id="__CreateSupportedSourcePlarform"
                 iconProps={{ iconName: 'Add' }}
+                onClick={() => {
+                  setSid('');
+                  setIsOpenPanel(true);
+                }}
               >
                 Create Supported Source Platform
               </PrimaryButton>
             </Column>
+            )}
           </Row>
         </Container>
       </PageHeader>
@@ -192,6 +218,12 @@ const SupportedPlatformsPage = () => {
           </Row>
         </Container>
       </PageBody>
+      <SupportedPlataformsPanel
+        isOpen={isOpenPanel}
+        closePanel={setIsOpenPanel}
+        refreshPage={setRefreshPage}
+        sid={sid}
+      />
     </LayoutDashboard>
   )
 };
