@@ -178,7 +178,7 @@ export const AddAlertsModal = ({ isOpen, refreshPage }: ALertsModalProps) => {
   return (
     <Dialog
       hidden={false}
-      dialogContentProps={{ title: 'Add person to be notified' }}
+      dialogContentProps={{ title: 'Add Alert' }}
       minWidth="500px"
     >
       {renderBody()}
