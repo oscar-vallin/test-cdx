@@ -144,7 +144,7 @@ const ConnectionInformationPanel = (
               Download here
             </ButtonLink>
           </Stack>
-          <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+          <Spacing margin={{ top: 'normal', bottom: 'double' }}>
             <Stack>
               <Text variant="semiBold">Name id Format</Text>
               <Text>email</Text>
@@ -152,6 +152,10 @@ const ConnectionInformationPanel = (
               <Text>urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddr</Text>
             </Stack>
           </Spacing>
+          <Text>
+            The Following configuration properties are
+            <span style={{ fontWeight: 'bold' }}> optionally </span>configured in your idP
+          </Text>
           <Spacing margin={{ top: 'double', bottom: 'normal' }}>
             <Text variant="semiBold">Logo URL</Text>
             <Stack horizontal>
