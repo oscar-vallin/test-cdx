@@ -451,6 +451,7 @@ export type CreateOrgInput = {
   orgOwnerSid?: Maybe<Scalars['ID']>;
   mv1Id?: Maybe<Scalars['Int']>;
   mv1Folder?: Maybe<Scalars['String']>;
+  supportedPlatforms?: Maybe<Array<Maybe<Scalars['ID']>>>;
 };
 
 export type CreatePersonInput = {
@@ -880,6 +881,7 @@ export enum ImplementationDeployStatus {
 
 export type IncomingFormat = {
   __typename?: 'IncomingFormat';
+  sid: Scalars['ID'];
   name: Scalars['String'];
   notes?: Maybe<Scalars['String']>;
 };
@@ -1837,6 +1839,7 @@ export type OrganizationForm = {
   active: UiBooleanField;
   mv1Id: UiLongField;
   mv1Folder: UiStringField;
+  supportedPlatforms?: Maybe<UiSelectManyField>;
   options?: Maybe<Array<UiOptions>>;
   commands?: Maybe<Array<WebCommand>>;
   response: GqOperationResponse;
@@ -3438,6 +3441,7 @@ export type UpdateOrgInput = {
   orgType: OrgType;
   mv1Id?: Maybe<Scalars['Int']>;
   mv1Folder?: Maybe<Scalars['String']>;
+  supportedPlatforms?: Maybe<Array<Maybe<Scalars['ID']>>>;
 };
 
 export type UpdateOrgSecurityInput = {
@@ -6407,7 +6411,10 @@ export type OrganizationFormQuery = (
     ), mv1Folder: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
-    ), options?: Maybe<Array<(
+    ), supportedPlatforms?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    )>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
@@ -6445,7 +6452,10 @@ export type FindOrganizationQuery = (
     ), mv1Folder: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
-    ), options?: Maybe<Array<(
+    ), supportedPlatforms?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    )>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
@@ -7997,7 +8007,7 @@ export type IncomingFormatsQuery = (
       & FragmentListPageInfoFragment
     )>, nodes?: Maybe<Array<(
       { __typename?: 'IncomingFormat' }
-      & Pick<IncomingFormat, 'name' | 'notes'>
+      & Pick<IncomingFormat, 'sid' | 'name' | 'notes'>
     )>> }
   )> }
 );
@@ -8327,7 +8337,10 @@ export type CreateOrgMutation = (
     ), mv1Folder: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
-    ), options?: Maybe<Array<(
+    ), supportedPlatforms?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    )>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
@@ -8365,7 +8378,10 @@ export type UpdateOrgMutation = (
     ), mv1Folder: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
-    ), options?: Maybe<Array<(
+    ), supportedPlatforms?: Maybe<(
+      { __typename?: 'UISelectManyField' }
+      & FragmentUiSelectManyFieldFragment
+    )>, options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & FragmentUiOptionsFragment
     )>>, commands?: Maybe<Array<(
@@ -15028,6 +15044,9 @@ export const OrganizationFormDocument = gql`
     mv1Folder {
       ...fragmentUIStringField
     }
+    supportedPlatforms {
+      ...fragmentUISelectManyField
+    }
     options {
       ...fragmentUIOptions
     }
@@ -15044,6 +15063,7 @@ export const OrganizationFormDocument = gql`
 ${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentUiLongFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
 
@@ -15094,6 +15114,9 @@ export const FindOrganizationDocument = gql`
     mv1Folder {
       ...fragmentUIStringField
     }
+    supportedPlatforms {
+      ...fragmentUISelectManyField
+    }
     options {
       ...fragmentUIOptions
     }
@@ -15110,6 +15133,7 @@ export const FindOrganizationDocument = gql`
 ${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentUiLongFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
 
@@ -17964,6 +17988,7 @@ export const IncomingFormatsDocument = gql`
       ...fragmentListPageInfo
     }
     nodes {
+      sid
       name
       notes
     }
@@ -18642,6 +18667,9 @@ export const CreateOrgDocument = gql`
     mv1Folder {
       ...fragmentUIStringField
     }
+    supportedPlatforms {
+      ...fragmentUISelectManyField
+    }
     options {
       ...fragmentUIOptions
     }
@@ -18658,6 +18686,7 @@ export const CreateOrgDocument = gql`
 ${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentUiLongFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
 export type CreateOrgMutationFn = Apollo.MutationFunction<CreateOrgMutation, CreateOrgMutationVariables>;
@@ -18707,6 +18736,9 @@ export const UpdateOrgDocument = gql`
     mv1Folder {
       ...fragmentUIStringField
     }
+    supportedPlatforms {
+      ...fragmentUISelectManyField
+    }
     options {
       ...fragmentUIOptions
     }
@@ -18723,6 +18755,7 @@ export const UpdateOrgDocument = gql`
 ${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentUiLongFieldFragmentDoc}
+${FragmentUiSelectManyFieldFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
 export type UpdateOrgMutationFn = Apollo.MutationFunction<UpdateOrgMutation, UpdateOrgMutationVariables>;
