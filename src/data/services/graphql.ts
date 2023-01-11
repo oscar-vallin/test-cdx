@@ -261,7 +261,9 @@ export enum CdxWebPage {
   AddUser = 'ADD_USER',
   ColorPalettes = 'COLOR_PALETTES',
   Theme = 'THEME',
-  SupportedPlatforms = 'SUPPORTED_PLATFORMS'
+  SupportedPlatforms = 'SUPPORTED_PLATFORMS',
+  VendorSpecLibrary = 'VENDOR_SPEC_LIBRARY',
+  FullSpecLibrary = 'FULL_SPEC_LIBRARY'
 }
 
 export enum CdxWebPivot {
