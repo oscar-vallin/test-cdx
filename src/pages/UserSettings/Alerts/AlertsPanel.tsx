@@ -167,6 +167,7 @@ const AlertsPanel = ({ isOpen, closePanel }: AlertsPanelProps) => {
         <TooltipHost content={deleteAlertCmd?.label ?? ''}>
           <FontIcon
             iconName="Trash"
+            style={{ cursor: 'pointer' }}
             onClick={() => showDeleteStepDialog(item)}
           />
         </TooltipHost>

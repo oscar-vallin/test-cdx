@@ -21,6 +21,7 @@ import { formatInfoTooltip } from 'src/components/inputs/CheckboxList';
 import { InlineLabel } from 'src/components/inputs/InputCheck/UIInputCheck.styles';
 import { InfoIcon } from 'src/components/badges/InfoIcon';
 import { useNotification } from 'src/hooks/useNotification';
+import { ChevronIcon } from './AddAlerts.style';
 
 const defaultProps = {
   isOpen: (data: boolean) => {},
@@ -39,6 +40,8 @@ export const AddAlertsModal = ({ isOpen, refreshPage }: ALertsModalProps) => {
   const [sid, setSid] = useState('');
   const [name, setName] = useState('');
   const [subscriptionType, setSubscriptionType] = useState('');
+  const [isExpandedProcessing, setIsExpandedProcessing] = useState(false);
+  const [isExpandedSchedule, setIsExpandedSchedule] = useState(false);
   const [findAlerts,
     {
       data: findAlertsdata,
@@ -101,24 +104,34 @@ export const AddAlertsModal = ({ isOpen, refreshPage }: ALertsModalProps) => {
       <Stack style={{ height: '300px', overflowY: 'scroll' }}>
         <Spacing margin={{ bottom: 'normal' }}>
           <Text variant="bold">Xchange Processing Alerts</Text>
-        </Spacing>
-        {processingAlerts?.map((alert, indexAlert) => (
-          <Checkbox
-            key={indexAlert}
-            label={alert.name}
-            onRenderLabel={() => renderLabel(alert)}
-            checked={alert.sid === sid && alert.name === name}
-            onChange={() => {
-              setSid(alert.sid ?? '');
-              setSubscriptionType(alert.subscriptionType ?? '');
-              setName(alert.name);
-            }}
+          <ChevronIcon
+            iconName={isExpandedProcessing ? 'ChevronUp' : 'ChevronDown'}
+            onClick={() => setIsExpandedProcessing((prevState) => !prevState)}
           />
-        ))}
+        </Spacing>
+        <Spacing margin={{ bottom: 'normal' }}>
+          {!isExpandedProcessing && processingAlerts?.map((alert, indexAlert) => (
+            <Checkbox
+              key={indexAlert}
+              label={alert.name}
+              onRenderLabel={() => renderLabel(alert)}
+              checked={alert.sid === sid && alert.name === name}
+              onChange={() => {
+                setSid(alert.sid ?? '');
+                setSubscriptionType(alert.subscriptionType ?? '');
+                setName(alert.name);
+              }}
+            />
+          ))}
+        </Spacing>
         <Spacing margin={{ bottom: 'normal', top: 'normal' }}>
           <Text variant="bold">Missed Schedule Alerts</Text>
+          <ChevronIcon
+            iconName={isExpandedSchedule ? 'ChevronUp' : 'ChevronDown'}
+            onClick={() => setIsExpandedSchedule((prevState) => !prevState)}
+          />
         </Spacing>
-        {schedule?.map((alert, indexAlert) => (
+        {!isExpandedSchedule && schedule?.map((alert, indexAlert) => (
           <Checkbox
             key={indexAlert}
             label={alert.name}
@@ -178,7 +191,7 @@ export const AddAlertsModal = ({ isOpen, refreshPage }: ALertsModalProps) => {
   return (
     <Dialog
       hidden={false}
-      dialogContentProps={{ title: 'Add person to be notified' }}
+      dialogContentProps={{ title: 'Add Alert' }}
       minWidth="500px"
     >
       {renderBody()}

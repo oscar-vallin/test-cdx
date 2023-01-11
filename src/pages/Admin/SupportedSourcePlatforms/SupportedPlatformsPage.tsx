@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   DetailsList,
   DetailsListLayoutMode,
+  FontIcon,
   IColumn,
   PrimaryButton,
   SelectionMode,
@@ -27,14 +28,19 @@ import { PageBody } from 'src/components/layouts/Column';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { DataColumn, useSortableColumns } from 'src/containers/tables';
 import { ButtonLink } from 'src/components/buttons';
+import { useThemeStore } from 'src/store/ThemeStore';
 import { CardSupportedStyled } from './SupportedPlatforms.styes';
 import { SupportedPlataformsPanel } from './SupportedPlatformsPanel';
+import { IncomingFormatPanel } from './IncomingFormatPanel';
 
 const SupportedPlatformsPage = () => {
+  const ThemeStore = useThemeStore();
   const [supportedPlatforms, setSupportedPlatforms] = useState<SupportedPlatform[] | null>();
   const [incomingFormats, setIncomingFormats] = useState<IncomingFormat[] | null>();
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
+  const [createIncomingCmd, setCreateIncomingCmd] = useState<WebCommand | null>();
   const [isOpenPanel, setIsOpenPanel] = useState(false);
+  const [isOpenIncomingPanel, setIsOpenIncomingPanel] = useState(false);
   const [sid, setSid] = useState('');
   const [refreshPage, setRefreshPage] = useState(false);
   const [supportedPlatform,
@@ -71,6 +77,12 @@ const SupportedPlatformsPage = () => {
   useEffect(() => {
     if (!isLoadingSupportedPlataforms && incomingFormatData) {
       setIncomingFormats(incomingFormatData.incomingFormats?.nodes);
+
+      if (incomingFormatData.incomingFormats?.listPageInfo?.pageCommands) {
+        const { pageCommands } = incomingFormatData.incomingFormats.listPageInfo;
+        const _createCmd = pageCommands.find((cmd) => cmd.commandType === CdxWebCommandType.Create);
+        setCreateIncomingCmd(_createCmd);
+      }
     }
   }, [incomingFormatData, isLoadingSupportedPlataforms]);
 
@@ -167,7 +179,27 @@ const SupportedPlatformsPage = () => {
     return (
       <CardSupportedStyled>
         <Spacing margin="normal">
-          <Text variant="bold">Incoming Formats</Text>
+          <Row>
+            <Column lg="9">
+              <Text variant="bold">Incoming Formats</Text>
+            </Column>
+            <Column lg="2" right>
+              {createIncomingCmd && (
+                <FontIcon
+                  id="__Add_IncomingFormat"
+                  style={{
+                    color: ThemeStore.userTheme.colors.themePrimary,
+                    cursor: 'pointer',
+                  }}
+                  iconName="add"
+                  onClick={() => {
+                    setSid('');
+                    setIsOpenIncomingPanel(true);
+                  }}
+                />
+              )}
+            </Column>
+          </Row>
           <Spacing margin={{ top: 'normal' }}>
             {incomingFormats?.map((incoming, index) => (
               <Spacing margin={{ top: 'normal', bottom: 'normal' }} key={index}>
@@ -221,6 +253,12 @@ const SupportedPlatformsPage = () => {
       <SupportedPlataformsPanel
         isOpen={isOpenPanel}
         closePanel={setIsOpenPanel}
+        refreshPage={setRefreshPage}
+        sid={sid}
+      />
+      <IncomingFormatPanel
+        isOpen={isOpenIncomingPanel}
+        closePanel={setIsOpenIncomingPanel}
         refreshPage={setRefreshPage}
         sid={sid}
       />
