@@ -841,6 +841,7 @@ export type IdentityProviderForm = {
   name: UiStringField;
   type: UiSelectOneField;
   samlMetaData: UiStringField;
+  historicalMetaData: UiReadOnlyField;
   priorMetaData?: Maybe<Array<IdentityProviderMetaDataLink>>;
   isDefault: UiBooleanField;
   oidcSettings: OidcSettingsForm;
@@ -6653,6 +6654,9 @@ export type IdentityProviderFormQuery = (
     ), samlMetaData: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
+    ), historicalMetaData: (
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
     ), priorMetaData?: Maybe<Array<(
       { __typename?: 'IdentityProviderMetaDataLink' }
       & Pick<IdentityProviderMetaDataLink, 'sid' | 'creationDateTime'>
@@ -8519,6 +8523,9 @@ export type CreateIdentityProviderMutation = (
     ), samlMetaData: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
+    ), historicalMetaData: (
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
     ), priorMetaData?: Maybe<Array<(
       { __typename?: 'IdentityProviderMetaDataLink' }
       & Pick<IdentityProviderMetaDataLink, 'sid' | 'creationDateTime'>
@@ -8585,6 +8592,9 @@ export type UpdateIdentityProviderMutation = (
     ), samlMetaData: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
+    ), historicalMetaData: (
+      { __typename?: 'UIReadOnlyField' }
+      & FragmentUiReadOnlyFieldFragment
     ), priorMetaData?: Maybe<Array<(
       { __typename?: 'IdentityProviderMetaDataLink' }
       & Pick<IdentityProviderMetaDataLink, 'sid' | 'creationDateTime'>
@@ -15520,6 +15530,9 @@ export const IdentityProviderFormDocument = gql`
     samlMetaData {
       ...fragmentUIStringField
     }
+    historicalMetaData {
+      ...fragmentUIReadOnlyField
+    }
     priorMetaData {
       sid
       creationDateTime
@@ -15568,6 +15581,7 @@ export const IdentityProviderFormDocument = gql`
 }
     ${FragmentUiStringFieldFragmentDoc}
 ${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
 ${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
@@ -19013,6 +19027,9 @@ export const CreateIdentityProviderDocument = gql`
     samlMetaData {
       ...fragmentUIStringField
     }
+    historicalMetaData {
+      ...fragmentUIReadOnlyField
+    }
     priorMetaData {
       sid
       creationDateTime
@@ -19061,6 +19078,7 @@ export const CreateIdentityProviderDocument = gql`
 }
     ${FragmentUiStringFieldFragmentDoc}
 ${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
 ${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
@@ -19105,6 +19123,9 @@ export const UpdateIdentityProviderDocument = gql`
     samlMetaData {
       ...fragmentUIStringField
     }
+    historicalMetaData {
+      ...fragmentUIReadOnlyField
+    }
     priorMetaData {
       sid
       creationDateTime
@@ -19153,6 +19174,7 @@ export const UpdateIdentityProviderDocument = gql`
 }
     ${FragmentUiStringFieldFragmentDoc}
 ${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiReadOnlyFieldFragmentDoc}
 ${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
