@@ -103,10 +103,10 @@ const SupportedPlatformsPage = () => {
       fieldName: 'supportedIncomingFormats',
       minWidth: 500,
       isPadded: true,
-      isSorted: true,
+      isSorted: false,
       isSortedDescending: false,
       dataType: 'string',
-      sortable: true,
+      sortable: false,
       filterable: false,
     },
   ];
@@ -226,7 +226,7 @@ const SupportedPlatformsPage = () => {
         <Container>
           <Row>
             <Column lg="6" direction="row">
-              <PageTitle id="__Page__Title_Supported_Platforms" title="Supported Source Plarfotms" />
+              <PageTitle id="__Page__Title_Supported_Platforms" title="Supported Source Platforms" />
             </Column>
             {createCmd && (
             <Column sm="6" right>
