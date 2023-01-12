@@ -120,8 +120,9 @@ const SupportedPlatformsPage = () => {
   }, [tableFilters.pagingParams, refreshPage]);
 
   useEffect(() => {
+    setRefreshPage(false);
     fetchIncomingData();
-  }, []);
+  }, [refreshPage]);
 
   const onRenderItemColumn = (item: SupportedPlatform, index?: number, column?: IColumn) => {
     if (column?.key === 'supportedIncomingFormats') {
@@ -203,7 +204,13 @@ const SupportedPlatformsPage = () => {
           <Spacing margin={{ top: 'normal' }}>
             {incomingFormats?.map((incoming, index) => (
               <Spacing margin={{ top: 'normal', bottom: 'normal' }} key={index}>
-                <ButtonLink underline>
+                <ButtonLink
+                  underline
+                  onClick={() => {
+                    setSid(incoming.sid ?? '');
+                    setIsOpenIncomingPanel(true);
+                  }}
+                >
                   {incoming.name}
                 </ButtonLink>
               </Spacing>

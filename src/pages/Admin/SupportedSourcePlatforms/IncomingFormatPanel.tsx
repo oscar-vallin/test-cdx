@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  DefaultButton,
   MessageBar,
   MessageBarType,
   PanelType,
@@ -10,6 +11,8 @@ import {
 import {
   useIncomingFormatFormLazyQuery,
   useCreateIncomingFormatMutation,
+  useUpdateIncomingFormatMutation,
+  useDeleteIncomingFormatMutation,
   IncomingFormatForm,
   WebCommand,
   CdxWebCommandType,
@@ -50,6 +53,8 @@ const IncomingFormatPanel = ({
   const handleError = ErrorHandler();
   const [incomingFormat, setIncomingFormat] = useState<IncomingFormatForm | null>();
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
+  const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
+  const [deleteCmd, setDeleteCmd] = useState<WebCommand | null>();
   const [incomingName, setIncomingName] = useState('');
   const [incomingNotes, setIncomingNotes] = useState('');
   const [message, setMessage] = useState<string | null>();
@@ -73,6 +78,22 @@ const IncomingFormatPanel = ({
       error: createIncomingFormatError,
     },
   ] = useCreateIncomingFormatMutation();
+  const [
+    updateIncoming,
+    {
+      data: updateIncomingFormatData,
+      loading: isLoadIngUpdateIncomingFormat,
+      error: updateIncomingFormatError,
+    },
+  ] = useUpdateIncomingFormatMutation();
+  const [
+    deleteIncoming,
+    {
+      data: deleteIncomingFormatData,
+      loading: isLoadIngDeleteIncomingFormat,
+      error: deleteIncomingFormatError,
+    },
+  ] = useDeleteIncomingFormatMutation();
 
   useEffect(() => {
     handleError(incomingFormatsError);
@@ -80,11 +101,17 @@ const IncomingFormatPanel = ({
   useEffect(() => {
     handleError(createIncomingFormatError);
   }, [createIncomingFormatError]);
+  useEffect(() => {
+    handleError(updateIncomingFormatError);
+  }, [updateIncomingFormatError]);
+  useEffect(() => {
+    handleError(deleteIncomingFormatError);
+  }, [deleteIncomingFormatError]);
 
   const fetchData = () => {
     incomingFormats({
       variables: {
-        sid: null,
+        sid,
       },
     });
   };
@@ -98,10 +125,17 @@ const IncomingFormatPanel = ({
   useEffect(() => {
     if (!isLoadingIncomingFormats && incomingFormatsData) {
       setIncomingFormat(incomingFormatsData.incomingFormatForm);
+      const incomingData = incomingFormatsData.incomingFormatForm;
+      setIncomingName(incomingData?.name.value ?? '');
+      setIncomingNotes(incomingData?.notes.value ?? '');
       if (incomingFormatsData.incomingFormatForm?.commands) {
         const pageCommands = incomingFormatsData.incomingFormatForm.commands;
         const _createCmd = pageCommands.find((cmd) => cmd.commandType === CdxWebCommandType.Create);
         setCreateCmd(_createCmd);
+        const _updateCmd = pageCommands.find((cmd) => cmd.commandType === CdxWebCommandType.Update);
+        setUpdateCmd(_updateCmd);
+        const _deleteCmd = pageCommands.find((cmd) => cmd.commandType === CdxWebCommandType.Delete);
+        setDeleteCmd(_deleteCmd);
       }
     }
   }, [incomingFormatsData, isLoadingIncomingFormats]);
@@ -128,6 +162,36 @@ const IncomingFormatPanel = ({
     }
   }, [createIncomingFormatData, isLoadIngcreateIncomingFormat]);
 
+  useEffect(() => {
+    const response = updateIncomingFormatData?.updateIncomingFormat;
+
+    if (updateIncomingFormatData) {
+      const responseCode = response?.response;
+      const { updateIncomingFormat } = updateIncomingFormatData;
+      setIncomingFormat(updateIncomingFormat);
+      if (responseCode === GqOperationResponse.Fail) {
+        const errorMsg = updateIncomingFormat?.errMsg
+        ?? 'Error occurred, please verify the information and try again.';
+        setMessageType(MessageBarType.error);
+        setMessage(errorMsg);
+      }
+
+      if (responseCode === GqOperationResponse.Success) {
+        closePanel(false);
+        refreshPage(true);
+        Toast.success({ text: 'Incoming Format Saved' });
+      }
+    }
+  }, [updateIncomingFormatData, isLoadIngUpdateIncomingFormat]);
+
+  useEffect(() => {
+    if (!isLoadIngDeleteIncomingFormat && deleteIncomingFormatData) {
+      closePanel(false);
+      refreshPage(true);
+      Toast.error({ text: `${incomingName} has been deleted` });
+    }
+  }, [deleteIncomingFormatData, isLoadIngDeleteIncomingFormat]);
+
   const hideDialog = () => {
     setShowDialog(false);
   };
@@ -152,6 +216,26 @@ const IncomingFormatPanel = ({
     setShowDialog(true);
   };
 
+  const showDeleteIncomingFormatDialog = () => {
+    const updatedDialog = { ...defaultDialogProps };
+    updatedDialog.title = 'Delete Icoming Format';
+    updatedDialog.message = 'Are you sure want to delete this Incoming Format? New Xchanges will not be able to use this format once deleted';
+
+    updatedDialog.onYes = () => {
+      hideDialog();
+      deleteIncoming({
+        variables: {
+          sid: sid ?? '',
+        },
+      });
+    };
+    updatedDialog.onClose = () => {
+      hideDialog();
+    };
+    setDialogProps(updatedDialog);
+    setShowDialog(true);
+  };
+
   const onPanelClose = () => {
     if (unsavedChanges) {
       showUnsavedChangesDialog();
@@ -165,6 +249,18 @@ const IncomingFormatPanel = ({
   };
 
   const saveIncomingFormat = () => {
+    if (sid) {
+      updateIncoming({
+        variables: {
+          incomingFormatInput: {
+            sid,
+            name: incomingName,
+            notes: incomingNotes,
+          },
+        },
+      });
+      return;
+    }
     createIncoming({
       variables: {
         incomingFormatInput: {
@@ -233,7 +329,8 @@ const IncomingFormatPanel = ({
         </FormRow>
         <WizardButtonRow>
           <Spacing margin={{ top: 'double' }}>
-            {createCmd && (
+            <>
+              {(createCmd || updateCmd) && (
               <PrimaryButton
                 iconProps={{ iconName: 'save' }}
                 id="__saveIncomingFormat"
@@ -241,7 +338,17 @@ const IncomingFormatPanel = ({
               >
                 Save
               </PrimaryButton>
-            )}
+              )}
+              {deleteCmd && (
+                <DefaultButton
+                  iconProps={{ iconName: 'trash' }}
+                  style={{ marginLeft: '20px' }}
+                  id="deleteIncomingFormat"
+                  text="Delete"
+                  onClick={() => showDeleteIncomingFormatDialog()}
+                />
+              )}
+            </>
           </Spacing>
         </WizardButtonRow>
       </PanelBody>
@@ -251,7 +358,7 @@ const IncomingFormatPanel = ({
   return (
     <ThemedPanel
       closeButtonAriaLabel="Close"
-      headerText="Create Incoming Format"
+      headerText={updateCmd ? `${incomingFormatsData?.incomingFormatForm?.name.value}` : 'Create Incoming Format'}
       type={PanelType.medium}
       isLightDismiss={false}
       isOpen={isOpen}
