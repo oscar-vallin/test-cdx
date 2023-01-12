@@ -884,6 +884,7 @@ export type IncomingFormat = {
   sid: Scalars['ID'];
   name: Scalars['String'];
   notes?: Maybe<Scalars['String']>;
+  active?: Maybe<Scalars['Boolean']>;
 };
 
 export type IncomingFormatConnection = {
@@ -3128,6 +3129,7 @@ export type SupportedPlatform = {
   name: Scalars['String'];
   notes?: Maybe<Scalars['String']>;
   supportedIncomingFormats?: Maybe<Array<Scalars['String']>>;
+  active?: Maybe<Scalars['Boolean']>;
 };
 
 export type SupportedPlatformConnection = {
@@ -7961,7 +7963,7 @@ export type SupportedPlatformsQuery = (
       & FragmentListPageInfoFragment
     )>, nodes?: Maybe<Array<(
       { __typename?: 'SupportedPlatform' }
-      & Pick<SupportedPlatform, 'sid' | 'name' | 'notes' | 'supportedIncomingFormats'>
+      & Pick<SupportedPlatform, 'sid' | 'name' | 'notes' | 'supportedIncomingFormats' | 'active'>
     )>> }
   )> }
 );
@@ -8007,7 +8009,7 @@ export type IncomingFormatsQuery = (
       & FragmentListPageInfoFragment
     )>, nodes?: Maybe<Array<(
       { __typename?: 'IncomingFormat' }
-      & Pick<IncomingFormat, 'sid' | 'name' | 'notes'>
+      & Pick<IncomingFormat, 'sid' | 'name' | 'notes' | 'active'>
     )>> }
   )> }
 );
@@ -17897,6 +17899,7 @@ export const SupportedPlatformsDocument = gql`
       name
       notes
       supportedIncomingFormats
+      active
     }
   }
 }
@@ -17991,6 +17994,7 @@ export const IncomingFormatsDocument = gql`
       sid
       name
       notes
+      active
     }
   }
 }
