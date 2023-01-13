@@ -281,7 +281,7 @@ export const OrgsTable = ({
         </Link>
       )
     }
-    return null;
+    return <span>{item?.name}</span>;
   };
 
   const renderColumnHeader = (props?: IDetailsColumnProps) => {
