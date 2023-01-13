@@ -206,6 +206,9 @@ const SupportedPlatformsPage = () => {
               <Spacing margin={{ top: 'normal', bottom: 'normal' }} key={index}>
                 <ButtonLink
                   underline
+                  style={(!incoming.active)
+                    ? { color: ThemeStore.userTheme.colors.neutralSecondary }
+                    : { color: ThemeStore.userTheme.colors.themePrimary }}
                   onClick={() => {
                     setSid(incoming.sid ?? '');
                     setIsOpenIncomingPanel(true);

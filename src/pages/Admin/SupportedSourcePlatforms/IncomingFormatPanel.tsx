@@ -13,6 +13,7 @@ import {
   useCreateIncomingFormatMutation,
   useUpdateIncomingFormatMutation,
   useDeleteIncomingFormatMutation,
+  useActivateIncomingFormatMutation,
   IncomingFormatForm,
   WebCommand,
   CdxWebCommandType,
@@ -55,6 +56,7 @@ const IncomingFormatPanel = ({
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
   const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
   const [deleteCmd, setDeleteCmd] = useState<WebCommand | null>();
+  const [activateCmd, setActivateCmd] = useState<WebCommand | null>();
   const [incomingName, setIncomingName] = useState('');
   const [incomingNotes, setIncomingNotes] = useState('');
   const [message, setMessage] = useState<string | null>();
@@ -94,6 +96,14 @@ const IncomingFormatPanel = ({
       error: deleteIncomingFormatError,
     },
   ] = useDeleteIncomingFormatMutation();
+  const [
+    activateIncoming,
+    {
+      data: activateIncomingFormatData,
+      loading: isLoadIngActivateIncomingFormat,
+      error: activateIncomingFormatError,
+    },
+  ] = useActivateIncomingFormatMutation();
 
   useEffect(() => {
     handleError(incomingFormatsError);
@@ -107,6 +117,9 @@ const IncomingFormatPanel = ({
   useEffect(() => {
     handleError(deleteIncomingFormatError);
   }, [deleteIncomingFormatError]);
+  useEffect(() => {
+    handleError(activateIncomingFormatError);
+  }, [activateIncomingFormatError]);
 
   const fetchData = () => {
     incomingFormats({
@@ -136,6 +149,9 @@ const IncomingFormatPanel = ({
         setUpdateCmd(_updateCmd);
         const _deleteCmd = pageCommands.find((cmd) => cmd.commandType === CdxWebCommandType.Delete);
         setDeleteCmd(_deleteCmd);
+        const _activateCmd = pageCommands
+          .find((cmd) => cmd.commandType === CdxWebCommandType.Activate);
+        setActivateCmd(_activateCmd);
       }
     }
   }, [incomingFormatsData, isLoadingIncomingFormats]);
@@ -192,6 +208,14 @@ const IncomingFormatPanel = ({
     }
   }, [deleteIncomingFormatData, isLoadIngDeleteIncomingFormat]);
 
+  useEffect(() => {
+    if (!isLoadIngActivateIncomingFormat && activateIncomingFormatData) {
+      closePanel(false);
+      refreshPage(true);
+      Toast.success({ text: `${incomingName} has been activated` });
+    }
+  }, [activateIncomingFormatData, isLoadIngActivateIncomingFormat]);
+
   const hideDialog = () => {
     setShowDialog(false);
   };
@@ -224,6 +248,26 @@ const IncomingFormatPanel = ({
     updatedDialog.onYes = () => {
       hideDialog();
       deleteIncoming({
+        variables: {
+          sid: sid ?? '',
+        },
+      });
+    };
+    updatedDialog.onClose = () => {
+      hideDialog();
+    };
+    setDialogProps(updatedDialog);
+    setShowDialog(true);
+  };
+
+  const showActivateIncomingFormatDialog = () => {
+    const updatedDialog = { ...defaultDialogProps };
+    updatedDialog.title = 'Activate Icoming Format';
+    updatedDialog.message = 'Are you sure want to activate this Incoming Format? This option will be made available when creating new xchanges once activate';
+
+    updatedDialog.onYes = () => {
+      hideDialog();
+      activateIncoming({
         variables: {
           sid: sid ?? '',
         },
@@ -346,6 +390,15 @@ const IncomingFormatPanel = ({
                   id="deleteIncomingFormat"
                   text="Delete"
                   onClick={() => showDeleteIncomingFormatDialog()}
+                />
+              )}
+              {activateCmd && (
+                <DefaultButton
+                  iconProps={{ iconName: 'CompletedSolid' }}
+                  style={{ marginLeft: '20px' }}
+                  id="deleteSupportedPlatform"
+                  text="Activate"
+                  onClick={() => showActivateIncomingFormatDialog()}
                 />
               )}
             </>
