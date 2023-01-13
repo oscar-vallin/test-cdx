@@ -36,9 +36,10 @@ import { ErrorIcon } from 'src/components/badges/ErrorIcon';
 import { UIInputSelectOne } from 'src/components/inputs/InputDropdown';
 import { UIInputToggle } from 'src/components/inputs/InputToggle';
 import { ButtonLink } from 'src/components/buttons';
+import { CodeMirrorRequired, StyledAceEditor } from './SingleSignOn.styles';
+import 'ace-builds/src-noconflict/ace';
 import 'ace-builds/src-noconflict/mode-java'
 import 'ace-builds/src-noconflict/theme-monokai'
-import { CodeMirrorRequired, StyledAceEditor } from './SingleSignOn.styles';
 import { ConnectionInformationPanel } from './ConnectionInformationPanel';
 
 type SingleSignOnPanelProps = {
