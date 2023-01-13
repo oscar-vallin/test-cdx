@@ -36,7 +36,9 @@ import { ErrorIcon } from 'src/components/badges/ErrorIcon';
 import { UIInputSelectOne } from 'src/components/inputs/InputDropdown';
 import { UIInputToggle } from 'src/components/inputs/InputToggle';
 import { ButtonLink } from 'src/components/buttons';
-import { CodeMirrorRequired, EditorField } from './SingleSignOn.styles';
+import 'ace-builds/src-noconflict/mode-java'
+import 'ace-builds/src-noconflict/theme-monokai'
+import { CodeMirrorRequired, StyledAceEditor } from './SingleSignOn.styles';
 import { ConnectionInformationPanel } from './ConnectionInformationPanel';
 
 type SingleSignOnPanelProps = {
@@ -416,25 +418,22 @@ const SingleSignOnPanel = ({
             />
             <CodeMirrorRequired>*</CodeMirrorRequired>
             {errMsgSamlMetaData && <ErrorIcon id="samlMetaData-error" errorMessage={errMsgSamlMetaData} />}
-            <EditorField
-              height="50vh"
-              defaultLanguage="xml"
+            <StyledAceEditor
+              mode="java"
+              width="600"
+              value={samlMetaData}
               onChange={(value) => {
                 setUnsavedChanges(true);
                 setSamlMetaData(value ?? '');
               }}
-              value={samlMetaData}
-              options={{
-                lineNumbers: 'off',
-                readOnly: identityProviderForm?.samlMetaData.readOnly,
-                renderValidationDecorations: 'off',
-                codeLens: false,
-                overviewRulerBorder: false,
-                lineDecorationsWidth: 0,
-                minimap: {
-                  enabled: false,
-                },
+              setOptions={{
+                fontSize: 14,
+                showLineNumbers: false,
+                showGutter: false,
+                readOnly: identityProviderForm?.samlMetaData.readOnly ?? false,
               }}
+              name="UNIQUE_ID_OF_DIV"
+              editorProps={{ $blockScrolling: true }}
             />
             {renderMetaData()}
           </>

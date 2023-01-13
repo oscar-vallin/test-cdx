@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Editor from '@monaco-editor/react';
+import AceEditor from 'react-ace';
 
 export const CodeMirrorRequired = styled.samp`
     color: #a4262c;
@@ -8,10 +8,6 @@ export const CodeMirrorRequired = styled.samp`
     font-weight: 600;
 `;
 
-export const EditorField = styled(Editor)`
+export const StyledAceEditor = styled(AceEditor)`
   border: 1px solid black;
-
-  .editor-scrollable {
-    position: fixed;
-  }
 `;
