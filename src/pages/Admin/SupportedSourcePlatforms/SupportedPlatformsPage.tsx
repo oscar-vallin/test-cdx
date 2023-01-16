@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -36,6 +36,8 @@ import { IncomingFormatPanel } from './IncomingFormatPanel';
 const SupportedPlatformsPage = () => {
   const ThemeStore = useThemeStore();
   const [supportedPlatforms, setSupportedPlatforms] = useState<SupportedPlatform[] | null>();
+  const refItems = useRef(supportedPlatforms);
+  const [isSorted, setIsSorted] = useState(0);
   const [incomingFormats, setIncomingFormats] = useState<IncomingFormat[] | null>();
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
   const [createIncomingCmd, setCreateIncomingCmd] = useState<WebCommand | null>();
@@ -62,9 +64,14 @@ const SupportedPlatformsPage = () => {
     });
   }
 
+  const updateItems = (newItems) => {
+    refItems.current = newItems;
+    setSupportedPlatforms(newItems);
+  }
   useEffect(() => {
     if (!isLoadingSupportedPlataforms && supportedPlatformsData) {
       setSupportedPlatforms(supportedPlatformsData.supportedPlatforms?.nodes);
+      updateItems(supportedPlatformsData.supportedPlatforms?.nodes)
 
       if (supportedPlatformsData.supportedPlatforms?.listPageInfo?.pageCommands) {
         const pageCommands = supportedPlatformsData.supportedPlatforms?.listPageInfo?.pageCommands;
@@ -86,16 +93,40 @@ const SupportedPlatformsPage = () => {
     }
   }, [incomingFormatData, isLoadingSupportedPlataforms]);
 
+  function copyAndSort <T>(items:T[], columnKey?: string, isSortedDescending?: boolean): T[] {
+    const key = columnKey as keyof T;
+    const itemsSorted = items.slice(0)
+      .sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
+    return itemsSorted;
+  }
+
+  const columnClick = (event, column: IColumn) => {
+    let { isSortedDescending } = column;
+    if (column.isSorted) {
+      isSortedDescending = !isSortedDescending;
+    }
+    const suppPlatforms: SupportedPlatform[] = copyAndSort(refItems.current ?? [], column.fieldName ?? '', isSortedDescending);
+    setSupportedPlatforms(suppPlatforms);
+    setIsSorted((prevState) => prevState + 1);
+  };
+
+  useEffect(() => {
+    if (isSorted === 2) {
+      setSupportedPlatforms(refItems.current);
+      setIsSorted(0);
+    }
+  }, [isSorted]);
+
   const columnOptions: DataColumn[] = [
     {
       name: 'Platform Name',
       key: 'name',
       fieldName: 'name',
       minWidth: 100,
-      isPadded: true,
       dataType: 'string',
-      sortable: true,
-      filterable: false,
+      isSorted: true,
+      onColumnClick: columnClick,
+      isSortedDescending: false,
     },
     {
       name: 'Supported Incoming Formats',
@@ -117,7 +148,7 @@ const SupportedPlatformsPage = () => {
   useEffect(() => {
     setRefreshPage(false);
     fetchData();
-  }, [tableFilters.pagingParams, refreshPage]);
+  }, [refreshPage]);
 
   useEffect(() => {
     setRefreshPage(false);
