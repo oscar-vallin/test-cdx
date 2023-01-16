@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import AceEditor from 'react-ace';
+import Editor from '@monaco-editor/react';
 
 export const CodeMirrorRequired = styled.samp`
     color: #a4262c;
@@ -8,6 +8,6 @@ export const CodeMirrorRequired = styled.samp`
     font-weight: 600;
 `;
 
-export const StyledAceEditor = styled(AceEditor)`
+export const StyledMonacoEditor = styled(Editor)`
   border: 1px solid black;
 `;

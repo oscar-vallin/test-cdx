@@ -37,7 +37,7 @@ import { UIInputSelectOne } from 'src/components/inputs/InputDropdown';
 import { UIInputToggle } from 'src/components/inputs/InputToggle';
 import { ButtonLink } from 'src/components/buttons';
 import { UIFormLabel } from 'src/components/labels/FormLabel';
-import { CodeMirrorRequired, StyledAceEditor } from './SingleSignOn.styles';
+import { CodeMirrorRequired, StyledMonacoEditor } from './SingleSignOn.styles';
 import 'ace-builds/src-noconflict/ace';
 import 'ace-builds/src-noconflict/mode-java'
 import 'ace-builds/src-noconflict/theme-monokai'
@@ -427,22 +427,20 @@ const SingleSignOnPanel = ({
             />
             <CodeMirrorRequired>*</CodeMirrorRequired>
             {errMsgSamlMetaData && <ErrorIcon id="samlMetaData-error" errorMessage={errMsgSamlMetaData} />}
-            <StyledAceEditor
-              mode="java"
+            <StyledMonacoEditor
+              language="xml"
+              height="50vh"
               width="600"
               value={samlMetaData}
               onChange={(value) => {
                 setUnsavedChanges(true);
                 setSamlMetaData(value ?? '');
               }}
-              setOptions={{
-                fontSize: 14,
-                showLineNumbers: false,
-                showGutter: false,
-                readOnly: identityProviderForm?.samlMetaData.readOnly ?? false,
+              options={{
+                minimap: { enabled: false },
+                readOnly: identityProviderForm?.samlMetaData.readOnly,
+                lineNumbers: { lineNumbersType: 'off' },
               }}
-              name="UNIQUE_ID_OF_DIV"
-              editorProps={{ $blockScrolling: true }}
             />
             {identityProviderForm?.historicalMetaData.visible && (
             <UIFormLabel
