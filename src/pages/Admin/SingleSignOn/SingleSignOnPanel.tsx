@@ -36,6 +36,7 @@ import { ErrorIcon } from 'src/components/badges/ErrorIcon';
 import { UIInputSelectOne } from 'src/components/inputs/InputDropdown';
 import { UIInputToggle } from 'src/components/inputs/InputToggle';
 import { ButtonLink } from 'src/components/buttons';
+import { UIFormLabel } from 'src/components/labels/FormLabel';
 import { CodeMirrorRequired, StyledAceEditor } from './SingleSignOn.styles';
 import 'ace-builds/src-noconflict/ace';
 import 'ace-builds/src-noconflict/mode-java'
@@ -345,7 +346,14 @@ const SingleSignOnPanel = ({
       <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
         <Stack>
           {priorMetaData.map((metaData, metaDataIndex: number) => (
-            <Text key={metaDataIndex}>Created on {updateDate(metaData.creationDateTime)}</Text>
+            <Stack horizontal>
+              <Stack.Item align="center">
+                <Text key={metaDataIndex}>Created on {updateDate(metaData.creationDateTime)}</Text>
+                <IconButton
+                  iconProps={{ iconName: 'Trash' }}
+                />
+              </Stack.Item>
+            </Stack>
           ))}
         </Stack>
       </Spacing>
@@ -436,6 +444,12 @@ const SingleSignOnPanel = ({
               name="UNIQUE_ID_OF_DIV"
               editorProps={{ $blockScrolling: true }}
             />
+            {identityProviderForm?.historicalMetaData.visible && (
+            <UIFormLabel
+              id="historialMetaData"
+              uiField={identityProviderForm.historicalMetaData}
+            />
+            )}
             {renderMetaData()}
           </>
         )}
