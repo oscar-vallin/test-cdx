@@ -38,7 +38,7 @@ import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { UIInputText } from 'src/components/inputs/InputText';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { useOrgSid } from 'src/hooks/useOrgSid';
-import { UIInputSelectOne } from 'src/components/inputs/InputDropdown';
+import { UIInputMultiSelect, UIInputSelectOne } from 'src/components/inputs/InputDropdown';
 import { getEnumByValue } from 'src/utils/CDXUtils';
 import { UIInputTextReadOnly } from 'src/components/inputs/InputText/InputText';
 import { useNotification } from 'src/hooks/useNotification';
@@ -59,6 +59,7 @@ type OrgStateType = {
   orgType?: OrgType;
   mv1Id?: string;
   mv1Folder?: string | null;
+  supportedPlatforms?: string[],
 };
 
 const INITIAL_STATE: OrgStateType = {
@@ -66,6 +67,7 @@ const INITIAL_STATE: OrgStateType = {
   name: '',
   orgId: '',
   orgType: undefined,
+  supportedPlatforms: [],
 };
 
 const defaultDialogProps: DialogYesNoProps = {
@@ -395,6 +397,21 @@ export const OrgPanel = ({
           />
         </Column>
       </FormRow>
+      <FormRow>
+        {orgForm?.orgType?.value?.value === OrgType.IntegrationSponsor && (
+        <Column lg="12">
+          <UIInputMultiSelect
+            id="__OrgName"
+            uiField={orgForm?.supportedPlatforms}
+            value={orgState.supportedPlatforms ?? []}
+            onChange={(platformss) => {
+              setUnsavedChanges(true);
+              setOrgState({ ...orgState, supportedPlatforms: platformss });
+            }}
+          />
+        </Column>
+        )}
+      </FormRow>
     </>
   );
 
@@ -472,6 +489,7 @@ export const OrgPanel = ({
               orgType,
               mv1Id: orgState.mv1Id ? +orgState.mv1Id : undefined,
               mv1Folder: orgState.mv1Folder,
+              supportedPlatforms: orgState.supportedPlatforms,
             },
           },
         }).then();
