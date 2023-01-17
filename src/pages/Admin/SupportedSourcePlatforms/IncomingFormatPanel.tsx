@@ -263,7 +263,7 @@ const IncomingFormatPanel = ({
   const showActivateIncomingFormatDialog = () => {
     const updatedDialog = { ...defaultDialogProps };
     updatedDialog.title = 'Activate Icoming Format';
-    updatedDialog.message = 'Are you sure want to activate this Incoming Format? This option will be made available when creating new xchanges once activate';
+    updatedDialog.message = 'Are you sure want to activate this Incoming Format? This option will be made available when creating new xchanges once active';
 
     updatedDialog.onYes = () => {
       hideDialog();
