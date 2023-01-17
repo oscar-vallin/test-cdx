@@ -16,6 +16,7 @@ import { ThemedPanel } from 'src/layouts/Panels/Panels.styles';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { ButtonLink } from 'src/components/buttons';
 import { useNotification } from 'src/hooks/useNotification';
+import { EmptyMessage } from 'src/containers/tables/TableCurrentActivity/TableActivity.styles';
 
 type AlertsPanelProps = {
     isOpen: boolean;
@@ -230,12 +231,19 @@ const ConnectionInformationPanel = (
           <Stack.Item align="center">
             <IconButton
               id="__oidcClientSecret"
+              disabled={!oidcConnectionInfo?.clientSecret}
               iconProps={{ iconName: 'Copy' }}
               onClick={() => {
                 copyToClipboard(oidcConnectionInfo?.clientSecret ?? '');
               }}
             />
-            <Text>{oidcConnectionInfo?.clientSecret}</Text>
+            {oidcConnectionInfo?.clientSecret ? (
+              <ButtonLink>Click to copy to clipboard</ButtonLink>
+            ) : (
+              <EmptyMessage size="normal">
+                {'<none>'}
+              </EmptyMessage>
+            )}
           </Stack.Item>
         </Stack>
         <Spacing margin={{ top: 'normal', bottom: 'double' }}>
