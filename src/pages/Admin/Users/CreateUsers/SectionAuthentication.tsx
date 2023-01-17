@@ -4,7 +4,8 @@ import { Column } from 'src/components/layouts';
 import { UiOption, UserAccountForm } from 'src/data/services/graphql';
 import { WizardBody } from 'src/layouts/Panels/Panels.styles';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
-import { ChoiceGroup } from '@fluentui/react';
+import { Checkbox, ChoiceGroup, Stack } from '@fluentui/react';
+import { Text } from 'src/components/typography';
 import { Spacing } from 'src/components/spacings/Spacing';
 import CreateUsersFooter from './CreateUsersFooter';
 
@@ -19,7 +20,7 @@ const SectionAuthentication = ({
   form, onPrev, onNext, saveOptions,
 }: SectionAuthProps) => {
   const [sendEmail, setSendEmail] = useState<boolean>(form.sendActivationEmail?.value ?? true);
-  const [authenticationMethods, setAuthenticationMethods] = useState<UiOption[] | null>();
+  const [passwordBasedLoginData, setPasswordBasedLoginData] = useState<UiOption[] | null>();
   const [authenticationMethod, setAuthenticationMethod] = useState<UiOption>();
 
   useEffect(() => {
@@ -29,7 +30,7 @@ const SectionAuthentication = ({
 
   useEffect(() => {
     const authMethod = form.options?.find((opt) => opt.key === 'AuthenticationMethod');
-    setAuthenticationMethods(authMethod?.values);
+    setPasswordBasedLoginData(authMethod?.values);
   }, []);
 
   const handleSaveChanges = () => {
@@ -62,35 +63,54 @@ const SectionAuthentication = ({
         <ChoiceGroup
           defaultSelectedKey="-1"
           options={
-            authenticationMethods?.map((method, indexMethod) => ({
+            passwordBasedLoginData?.map((method, indexMethod) => ({
               key: `${method.value}`,
               text: `${method.label}`,
               onRenderField: (props, render) => (
-                <>
+                <Stack>
                   {render!(props)}
                   {method.label === 'Password based login' && (
-                     <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                      <Column lg="12">
-                        <UIInputCheck
-                          id="__userSendActivation"
-                          uiField={form?.sendActivationEmail}
-                          value={sendEmail}
-                        />
-                      </Column>
-                   </Spacing>
+                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+                      {sendEmail ? (
+                        <Column lg="12">
+                          <Spacing margin={{top: 'normal'}}>
+                            <UIInputCheck
+                              id="__userSendActivation"
+                              uiField={form?.sendActivationEmail}
+                              value={sendEmail}
+                            />
+                         </Spacing>
+                       </Column>
+                      ) : (
+                       <Column lg="12">
+                        <Spacing margin={{top: 'normal'}}>
+                           <Checkbox
+                             id="__userSendActivation"
+                             disabled
+                             checked={sendEmail}
+                             label={form?.sendActivationEmail?.label}
+                           />
+                        </Spacing>
+                       </Column>
+                      )}
+                    </Spacing>
                   )}
-                </>
-              )
+                  {passwordBasedLoginData && passwordBasedLoginData?.length > 1
+                     && indexMethod === 0 && (
+                       <Text variant="semiBold">Single Sing On</Text>
+                  )}
+                </Stack>
+              ),
             }))
           }
           onChange={(e, newValue) => {
-            const value = authenticationMethods?.find((method) => method.value === newValue?.key);
+            const value = passwordBasedLoginData?.find((method) => method.value === newValue?.key);
             if (value?.category) {
               setAuthenticationMethod(value);
               setSendEmail(false);
               saveOptions(false, value);
             } else {
-              onCheck()
+              onCheck();
             }
           }}
         />
