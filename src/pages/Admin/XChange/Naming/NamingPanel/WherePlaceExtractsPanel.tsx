@@ -12,9 +12,12 @@ type WherePlaceExtractsProps = {
 const WherePlaceExtractsPanel = ({ isOpen, closePanel }: WherePlaceExtractsProps) => {
   const [content, { data, loading }] = useContentLazyQuery();
 
+  const nonce = document.getElementById('__nonce')?.getAttribute('content');
+
   const fetchContentData = () => {
     content({
       variables: {
+        nonce,
         contentType: ContentType.WhereToPlaceExtracts,
       },
     });

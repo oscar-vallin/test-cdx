@@ -12,9 +12,12 @@ type NamingConventionsProps = {
 const NamingConventionsPanel = ({ isOpen, closePanel }: NamingConventionsProps) => {
   const [content, { data, loading }] = useContentLazyQuery();
 
+  const nonce = document.getElementById('__nonce')?.getAttribute('content');
+
   const fetchContentData = () => {
     content({
       variables: {
+        nonce,
         contentType: ContentType.NamingConventionsExplained,
       },
     });

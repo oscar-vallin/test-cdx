@@ -2665,6 +2665,7 @@ export type QueryNavigateToNewDomainArgs = {
 
 
 export type QueryContentArgs = {
+  nonce?: Maybe<Scalars['String']>;
   contentType?: Maybe<ContentType>;
 };
 
@@ -6940,6 +6941,7 @@ export type SimulateSessionExpirQuery = (
 );
 
 export type ContentQueryVariables = Exact<{
+  nonce?: Maybe<Scalars['String']>;
   contentType?: Maybe<ContentType>;
 }>;
 
@@ -16359,8 +16361,8 @@ export type SimulateSessionExpirQueryHookResult = ReturnType<typeof useSimulateS
 export type SimulateSessionExpirLazyQueryHookResult = ReturnType<typeof useSimulateSessionExpirLazyQuery>;
 export type SimulateSessionExpirQueryResult = Apollo.QueryResult<SimulateSessionExpirQuery, SimulateSessionExpirQueryVariables>;
 export const ContentDocument = gql`
-    query Content($contentType: ContentType) {
-  content(contentType: $contentType)
+    query Content($nonce: String, $contentType: ContentType) {
+  content(nonce: $nonce, contentType: $contentType)
 }
     `;
 
@@ -16376,6 +16378,7 @@ export const ContentDocument = gql`
  * @example
  * const { data, loading, error } = useContentQuery({
  *   variables: {
+ *      nonce: // value for 'nonce'
  *      contentType: // value for 'contentType'
  *   },
  * });
