@@ -346,9 +346,9 @@ const SingleSignOnPanel = ({
       <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
         <Stack>
           {priorMetaData.map((metaData, metaDataIndex: number) => (
-            <Stack horizontal>
+            <Stack horizontal key={metaDataIndex}>
               <Stack.Item align="center">
-                <Text key={metaDataIndex}>Created on {updateDate(metaData.creationDateTime)}</Text>
+                <Text>Created on {updateDate(metaData.creationDateTime)}</Text>
                 <IconButton
                   iconProps={{ iconName: 'Trash' }}
                 />
