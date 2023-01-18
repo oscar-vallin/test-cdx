@@ -25,22 +25,18 @@ import {
 import { Text } from 'src/components/typography';
 import { PanelBody, ThemedPanel, WizardButtonRow } from 'src/layouts/Panels/Panels.styles';
 import { useOrgSid } from 'src/hooks/useOrgSid';
-import { useThemeStore } from 'src/store/ThemeStore';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { InputText, UIInputText } from 'src/components/inputs/InputText';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
 import { useNotification } from 'src/hooks/useNotification';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
-import { ErrorIcon } from 'src/components/badges/ErrorIcon';
 import { UIInputSelectOne } from 'src/components/inputs/InputDropdown';
 import { UIInputToggle } from 'src/components/inputs/InputToggle';
 import { ButtonLink } from 'src/components/buttons';
 import { UIFormLabel } from 'src/components/labels/FormLabel';
-import { CodeMirrorRequired, StyledAceEditor } from './SingleSignOn.styles';
-import 'ace-builds/src-noconflict/ace';
-import 'ace-builds/src-noconflict/mode-java'
-import 'ace-builds/src-noconflict/theme-monokai'
+import { UIInputCode } from 'src/components/inputs/InputCode';
+import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { ConnectionInformationPanel } from './ConnectionInformationPanel';
 
 type SingleSignOnPanelProps = {
@@ -68,7 +64,6 @@ const SingleSignOnPanel = ({
   refreshDetailsPage,
 }: SingleSignOnPanelProps) => {
   const { orgSid } = useOrgSid();
-  const ThemeStore = useThemeStore();
   const Toast = useNotification();
   const [identityProviderForm, setIdentityProviderForm] = useState<IdentityProviderForm>();
   const [priorMetaData, setPriorMetaData] = useState<IdentityProviderMetaDataLink[] | null>();
@@ -86,8 +81,7 @@ const SingleSignOnPanel = ({
   const [authorizationURL, setAuthorizationURL] = useState('');
   const [tokenURL, setTokenURL] = useState('');
   const [userInfoURL, setUserInfoURL] = useState('');
-  const [samlMetaData, setSamlMetaData] = useState('');
-  const [errMsgSamlMetaData, setErrMsgSamlMetaData] = useState('');
+  const [samlMetaData, setSamlMetaData] = useState<string>();
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
@@ -173,8 +167,6 @@ const SingleSignOnPanel = ({
       const responseCode = response?.response;
       setIdentityProviderForm(identityProviderCreated?.createIdentityProvider);
       setOidcSettings(identityProviderCreated?.createIdentityProvider.oidcSettings);
-      const { errMsg } = identityProviderCreated.createIdentityProvider.samlMetaData;
-      setErrMsgSamlMetaData(errMsg);
       if (responseCode === GqOperationResponse.Fail) {
         const errorMsg = identityProviderCreated?.createIdentityProvider?.errMsg
           ?? 'Error occurred, please verify the information and try again.';
@@ -186,7 +178,6 @@ const SingleSignOnPanel = ({
         refreshDetailsPage(true);
         setMessage(null);
         closePanel(false);
-        setErrMsgSamlMetaData('');
         setName('');
         setIdpId('');
         setIsDefault(false);
@@ -203,8 +194,6 @@ const SingleSignOnPanel = ({
     if (identityProviderUpdated) {
       const responseCode = response?.response;
       setIdentityProviderForm(identityProviderUpdated?.updateIdentityProvider);
-      const { errMsg } = identityProviderUpdated.updateIdentityProvider.samlMetaData;
-      setErrMsgSamlMetaData(errMsg);
       if (responseCode === GqOperationResponse.Fail) {
         const errorMsg = identityProviderUpdated?.updateIdentityProvider?.errMsg
           ?? 'Error occurred, please verify the information and try again.';
@@ -216,7 +205,6 @@ const SingleSignOnPanel = ({
         refreshDetailsPage(true);
         setMessage(null);
         closePanel(false);
-        setErrMsgSamlMetaData('');
         setName('');
         setIdpId('');
         setIsDefault(false);
@@ -307,7 +295,6 @@ const SingleSignOnPanel = ({
     updatedDialog.onYes = () => {
       hideDialog();
       closePanel(false);
-      setErrMsgSamlMetaData('');
       setMessage(null);
       setUnsavedChanges(false);
       setIdpId('');
@@ -325,7 +312,6 @@ const SingleSignOnPanel = ({
       showUnsavedChangesDialog();
     } else {
       closePanel(false);
-      setErrMsgSamlMetaData('');
       setUnsavedChanges(false);
       setMessage(null);
       setIdpId('');
@@ -334,6 +320,9 @@ const SingleSignOnPanel = ({
   };
 
   const renderMetaData = () => {
+    if (!identityProviderForm?.historicalMetaData.visible) {
+      return null;
+    }
     if (!priorMetaData?.length) return null;
 
     const updateDate = (date: string) => {
@@ -343,10 +332,14 @@ const SingleSignOnPanel = ({
       return formattedDate;
     }
     return (
-      <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+      <FormRow>
+        <UIFormLabel
+          id="historicalMetaData"
+          uiField={identityProviderForm?.historicalMetaData}
+        />
         <Stack>
           {priorMetaData.map((metaData, metaDataIndex: number) => (
-            <Stack horizontal>
+            <Stack horizontal key={metaDataIndex}>
               <Stack.Item align="center">
                 <Text key={metaDataIndex}>Created on {updateDate(metaData.creationDateTime)}</Text>
                 <IconButton
@@ -356,7 +349,7 @@ const SingleSignOnPanel = ({
             </Stack>
           ))}
         </Stack>
-      </Spacing>
+      </FormRow>
     )
   }
 
@@ -383,122 +376,108 @@ const SingleSignOnPanel = ({
             </MessageBar>
           </Spacing>
         )}
-        {identityProviderForm?.idpId.visible && (
-        <UIInputText
-          id="identityProviderId"
-          uiField={identityProviderForm.idpId}
-          value={idpId}
-          onChange={(event, newValue) => {
-            setUnsavedChanges(true);
-            setIdpId(newValue ?? '');
-          }}
-        />
-        )}
-        {identityProviderForm?.name.visible && (
-        <UIInputText
-          id="identityProviderName"
-          uiField={identityProviderForm.name}
-          value={name}
-          onChange={(event, newValue) => {
-            setUnsavedChanges(true);
-            setName(newValue ?? '');
-          }}
-        />
-        )}
-        {identityProviderForm?.type.visible && (
+        <FormRow>
+          <UIInputText
+            id="identityProviderId"
+            uiField={identityProviderForm?.idpId}
+            value={idpId}
+            onChange={(event, newValue) => {
+              setUnsavedChanges(true);
+              setIdpId(newValue ?? '');
+            }}
+          />
+        </FormRow>
+        <FormRow>
+          <UIInputText
+            id="identityProviderName"
+            uiField={identityProviderForm?.name}
+            value={name}
+            onChange={(event, newValue) => {
+              setUnsavedChanges(true);
+              setName(newValue ?? '');
+            }}
+          />
+        </FormRow>
+        <FormRow>
           <UIInputSelectOne
-            id="indentityType"
-            uiField={identityProviderForm.type}
-            options={identityProviderForm.options}
+            id="identityType"
+            uiField={identityProviderForm?.type}
+            options={identityProviderForm?.options}
             value={type}
             onChange={(newValue) => {
               setUnsavedChanges(true);
               setType(newValue ?? '')
             }}
           />
-        )}
+        </FormRow>
         {IdpType.Saml2 === type && (
           <>
-            <Text variant="semiBold">{identityProviderForm?.samlMetaData.label}</Text>
-            <IconButton
-              title={identityProviderForm?.samlMetaData.info ?? ''}
-              iconProps={{ iconName: 'Info' }}
-              style={{ color: ThemeStore.userTheme.colors.black }}
-            />
-            <CodeMirrorRequired>*</CodeMirrorRequired>
-            {errMsgSamlMetaData && <ErrorIcon id="samlMetaData-error" errorMessage={errMsgSamlMetaData} />}
-            <StyledAceEditor
-              mode="java"
-              width="600"
-              value={samlMetaData}
-              onChange={(value) => {
-                setUnsavedChanges(true);
-                setSamlMetaData(value ?? '');
-              }}
-              setOptions={{
-                fontSize: 14,
-                showLineNumbers: false,
-                showGutter: false,
-                readOnly: identityProviderForm?.samlMetaData.readOnly ?? false,
-              }}
-              name="UNIQUE_ID_OF_DIV"
-              editorProps={{ $blockScrolling: true }}
-            />
-            {identityProviderForm?.historicalMetaData.visible && (
-            <UIFormLabel
-              id="historialMetaData"
-              uiField={identityProviderForm.historicalMetaData}
-            />
-            )}
+            <FormRow>
+              <UIInputCode
+                id="samlMetaData"
+                mode="xml"
+                uiField={identityProviderForm?.samlMetaData}
+                value={samlMetaData}
+                onChange={(_, value) => {
+                  setSamlMetaData(value);
+                  setUnsavedChanges(true);
+                }}
+              />
+            </FormRow>
             {renderMetaData()}
           </>
         )}
         {IdpType.Oidc === type && (
           <>
-            {oidcSettings?.issuer.visible && (
+            <FormRow>
               <UIInputText
                 id="identityIssuer"
-                uiField={oidcSettings.issuer}
+                uiField={oidcSettings?.issuer}
                 value={issuer}
                 onChange={(event, newValue) => {
                   setUnsavedChanges(true);
                   setIssuer(newValue ?? '')
                 }}
               />
-            )}
-            {oidcSettings?.clientId.visible && (
+            </FormRow>
+            <FormRow>
               <UIInputText
                 id="identityClientId"
-                uiField={oidcSettings.clientId}
+                uiField={oidcSettings?.clientId}
                 value={clientId}
                 onChange={(event, newValue) => {
                   setUnsavedChanges(true);
                   setClientId(newValue ?? '')
                 }}
               />
-            )}
+            </FormRow>
             {oidcSettings?.clientSecret.visible && (
-              <InputText
-                disabled={oidcSettings?.clientSecret?.readOnly ?? false}
-                autofocus={false}
-                label={oidcSettings?.clientSecret?.label}
-                errorMessage={oidcSettings?.clientSecret?.errMsg ?? undefined}
-                info={oidcSettings?.clientSecret?.info ?? undefined}
-                required={oidcSettings?.clientSecret?.required ?? false}
-                minLength={oidcSettings?.clientSecret?.min}
-                maxLength={oidcSettings?.clientSecret?.max}
-                canRevealPassword
-                type="password"
-                autocomplete="new-password"
-                id="password"
-                value={clientSecret}
-                onChange={(event, newValue) => setClientSecret(newValue ?? '')}
-              />
+              <FormRow>
+                <InputText
+                  disabled={oidcSettings?.clientSecret?.readOnly ?? false}
+                  autofocus={false}
+                  label={oidcSettings?.clientSecret?.label}
+                  errorMessage={oidcSettings?.clientSecret?.errMsg ?? undefined}
+                  info={oidcSettings?.clientSecret?.info ?? undefined}
+                  required={oidcSettings?.clientSecret?.required ?? false}
+                  minLength={oidcSettings?.clientSecret?.min}
+                  maxLength={oidcSettings?.clientSecret?.max}
+                  canRevealPassword
+                  type="password"
+                  autocomplete="new-password"
+                  id="password"
+                  value={clientSecret}
+                  onChange={(event, newValue) => {
+                    setUnsavedChanges(true);
+                    setClientSecret(newValue ?? '')
+                  }}
+                />
+              </FormRow>
             )}
-            {oidcSettings?.authenticationMethod.visible && (
+            <FormRow>
               <UIInputSelectOne
-                id="indentityAuthenticationMethod"
-                uiField={oidcSettings.authenticationMethod}
+                id="identityAuthenticationMethod"
+                uiField={oidcSettings?.authenticationMethod}
                 options={identityProviderForm?.options}
                 value={authenticationMethod}
                 onChange={(newValue) => {
@@ -506,8 +485,8 @@ const SingleSignOnPanel = ({
                   setAuthenticationMethod(newValue ?? '')
                 }}
               />
-            )}
-            {oidcSettings?.autoDiscovery.visible && (
+            </FormRow>
+            <FormRow>
               <UIInputToggle
                 id="identityAutoDiscoveryToggle"
                 uiField={oidcSettings?.autoDiscovery}
@@ -520,43 +499,43 @@ const SingleSignOnPanel = ({
                   setAutoDiscovery(checked);
                 }}
               />
-            )}
+            </FormRow>
             {!autoDiscovery && (
-            <>
-              {oidcSettings?.authorizationURL.visible && (
-                <UIInputText
-                  id="identityAuthorizationURL"
-                  value={authorizationURL}
-                  uiField={oidcSettings.authorizationURL}
-                  onChange={(event, newValue) => {
-                    setUnsavedChanges(true);
-                    setAuthorizationURL(newValue ?? '')
-                  }}
-                />
-              )}
-              {oidcSettings?.tokenURL.visible && (
-                <UIInputText
-                  id="identityTokenURL"
-                  uiField={oidcSettings.tokenURL}
-                  value={tokenURL}
-                  onChange={(event, newValue) => {
-                    setUnsavedChanges(true);
-                    setTokenURL(newValue ?? '')
-                  }}
-                />
-              )}
-              {oidcSettings?.userInfoURL.visible && (
-                <UIInputText
-                  id="identityUserInfoURL"
-                  uiField={oidcSettings.userInfoURL}
-                  value={userInfoURL}
-                  onChange={(event, newValue) => {
-                    setUnsavedChanges(true);
-                    setUserInfoURL(newValue ?? '')
-                  }}
-                />
-              )}
-            </>
+              <>
+                <FormRow>
+                  <UIInputText
+                    id="identityAuthorizationURL"
+                    value={authorizationURL}
+                    uiField={oidcSettings?.authorizationURL}
+                    onChange={(event, newValue) => {
+                      setUnsavedChanges(true);
+                      setAuthorizationURL(newValue ?? '')
+                    }}
+                  />
+                </FormRow>
+                <FormRow>
+                  <UIInputText
+                    id="identityTokenURL"
+                    uiField={oidcSettings?.tokenURL}
+                    value={tokenURL}
+                    onChange={(event, newValue) => {
+                      setUnsavedChanges(true);
+                      setTokenURL(newValue ?? '')
+                    }}
+                  />
+                </FormRow>
+                <FormRow>
+                  <UIInputText
+                    id="identityUserInfoURL"
+                    uiField={oidcSettings?.userInfoURL}
+                    value={userInfoURL}
+                    onChange={(event, newValue) => {
+                      setUnsavedChanges(true);
+                      setUserInfoURL(newValue ?? '');
+                    }}
+                  />
+                </FormRow>
+              </>
             )}
           </>
         )}
@@ -564,7 +543,7 @@ const SingleSignOnPanel = ({
           {identityProviderForm?.isDefault.visible && (
             <Spacing margin={{ top: 'double', bottom: 'double' }}>
               <UIInputCheck
-                id="__Default_Identy_Provider"
+                id="isDefault"
                 uiField={identityProviderForm.isDefault}
                 value={isDefault}
                 onChange={() => setIsDefault((prevState) => !prevState)}

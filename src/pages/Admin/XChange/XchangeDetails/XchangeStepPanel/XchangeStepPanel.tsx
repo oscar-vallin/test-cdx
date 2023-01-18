@@ -1,39 +1,40 @@
 import { useEffect, useState } from 'react';
 import {
   FontIcon,
-  IconButton,
-  MessageBarType,
   MessageBar,
+  MessageBarType,
   PanelType,
   PrimaryButton,
   Spinner,
   SpinnerSize,
   Stack,
-  Text,
   TooltipHost,
 } from '@fluentui/react';
-import CodeMirror, { BasicSetupOptions } from '@uiw/react-codemirror';
-import { createTheme } from '@uiw/codemirror-themes';
-import { javascript } from '@codemirror/lang-javascript';
-import { tags as t } from '@lezer/highlight';
 import format from 'xml-formatter';
 import {
-  useXchangeStepFormLazyQuery,
-  useCreateXchangeStepMutation,
-  useCopyXchangeStepLazyQuery,
-  useUpdateXchangeStepMutation,
   CdxWebCommandType,
-  WebCommand,
   GqOperationResponse,
+  UiStringField,
+  useCopyXchangeStepLazyQuery,
+  useCreateXchangeStepMutation,
+  useUpdateXchangeStepMutation,
+  useXchangeStepFormLazyQuery,
+  WebCommand,
 } from 'src/data/services/graphql';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { useNotification } from 'src/hooks/useNotification';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import {
-  ThemedPanel, PanelBody, WizardButtonRow, WizardBody, PanelHeader, PanelTitle,
+  PanelBody,
+  PanelHeader,
+  PanelTitle,
+  ThemedPanel,
+  WizardBody,
+  WizardButtonRow,
 } from 'src/layouts/Panels/Panels.styles';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { theme } from 'src/styles/themes/theme';
+import { UIInputCode } from 'src/components/inputs/InputCode';
 
 type XchangeStepPanelProps = {
   isPanelOpen: boolean;
@@ -58,25 +59,6 @@ const defaultDialogProps: DialogYesNoProps = {
   highlightYes: false,
 };
 
-const myTheme = createTheme({
-  theme: 'light',
-  settings: {
-    background: '#ffffff',
-    foreground: 'black',
-    lineHighlight: '#fff',
-    gutterBackground: '#fff',
-    gutterBorder: '#fff',
-  },
-  styles: [
-    { tag: t.typeName, color: '#0078D4' },
-    { tag: t.angleBracket, color: '#0078D4' },
-  ],
-});
-
-const setupOption: BasicSetupOptions = {
-  lineNumbers: false,
-};
-
 const XchangeStepPanel = ({
   isPanelOpen,
   closePanel,
@@ -99,6 +81,7 @@ const XchangeStepPanel = ({
   const [message, setMessage] = useState<string | null>();
   const [messageType, setMessageType] = useState<MessageBarType>(MessageBarType.info);
   const [infoMessage, setInfoMessage] = useState('');
+  const [xmlField, setXmlField] = useState<UiStringField>();
 
   const [xchangeStepForm,
     { data: dataAddStep, loading: loadingAddStep }] = useQueryHandler(useXchangeStepFormLazyQuery);
@@ -115,7 +98,7 @@ const XchangeStepPanel = ({
     { data: dataCreateStep, loading: loadingCreateStep, error: errorCreateStep },
   ] = useQueryHandler(useCreateXchangeStepMutation);
 
-  const getxmlData = () => {
+  const getXmlData = () => {
     if (isPanelOpen) {
       if (optionXchangeStep === 'add' || optionXchangeStep === 'update') {
         xchangeStepForm({
@@ -194,12 +177,11 @@ const XchangeStepPanel = ({
   };
 
   const addFormatToXml = (xmlValue: string) => {
-    const formattedXml = format(xmlValue, {
+    return format(xmlValue, {
       indentation: '  ',
       collapseContent: true,
       lineSeparator: '\n',
     });
-    return formattedXml;
   };
 
   const comparePreviousXml = (editXml: string, preXml: string) => {
@@ -208,13 +190,6 @@ const XchangeStepPanel = ({
       return;
     }
     setUnsavedChanges(false);
-  };
-
-  const readOnly = () => {
-    if (updateCmd || createCmd) {
-      return false
-    }
-    return true;
   };
 
   const renderBody = () => {
@@ -242,14 +217,14 @@ const XchangeStepPanel = ({
           </Spacing>
           )}
           <WizardBody>
-            <CodeMirror
-              height="400px"
-              style={{ border: '1px solid gray', fontWeight: 'bold', fontSize: '14px' }}
-              theme={myTheme}
-              basicSetup={setupOption}
-              extensions={[javascript({ jsx: true })]}
-              value={editXmlData ?? ''}
-              onChange={(value) => setEditXmlData(value)}
+            <UIInputCode
+              id="__xchangeStepXML"
+              uiField={xmlField}
+              value={editXmlData}
+              mode="xml"
+              onChange={(_, value) => {
+                setEditXmlData(value);
+              }}
             />
           </WizardBody>
           <WizardButtonRow>
@@ -265,37 +240,15 @@ const XchangeStepPanel = ({
       return (
         <PanelBody>
           <WizardBody>
-            <>
-              {dataAddStep ? (
-                <>
-                  <Text>{dataAddStep.xchangeStepForm.xml.label}</Text>
-                  <IconButton
-                    title={dataAddStep.xchangeStepForm.xml.info}
-                    iconProps={{ iconName: 'Info' }}
-                    style={{ color: theme.colors.black }}
-                  />
-                </>
-              ) : (
-                <>
-                  <Text>{dataCopyStep.copyXchangeStep.xml.label}</Text>
-                  <IconButton
-                    title={dataCopyStep.copyXchangeStep.xml.info}
-                    iconProps={{ iconName: 'Info' }}
-                    style={{ color: theme.colors.black }}
-                  />
-                </>
-              )}
-              <CodeMirror
-                height="400px"
-                style={{ border: '1px solid gray', fontWeight: 'bold', fontSize: '14px' }}
-                theme={myTheme}
-                readOnly={readOnly()}
-                basicSetup={setupOption}
-                extensions={[javascript({ jsx: true })]}
-                value={editXmlData ?? ''}
-                onChange={(value) => setEditXmlData(value)}
-              />
-            </>
+            <UIInputCode
+              id="__xchangeStepXML"
+              uiField={xmlField}
+              value={editXmlData}
+              mode="xml"
+              onChange={(_, value) => {
+                setEditXmlData(value);
+              }}
+            />
           </WizardBody>
           {(updateCmd || createCmd) && (
             <WizardButtonRow>
@@ -342,7 +295,7 @@ const XchangeStepPanel = ({
   };
 
   useEffect(() => {
-    getxmlData();
+    getXmlData();
   }, [isPanelOpen]);
 
   useEffect(() => {
@@ -355,6 +308,7 @@ const XchangeStepPanel = ({
     }
 
     if (dataAddStep?.xchangeStepForm) {
+      setXmlField(dataAddStep.xchangeStepForm.xml)
       const pageCommands = dataAddStep?.xchangeStepForm?.commands;
       const _updateCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
       setUpdateCmd(_updateCmd);
@@ -372,6 +326,7 @@ const XchangeStepPanel = ({
     }
 
     if (dataCopyStep?.copyXchangeStep) {
+      setXmlField(dataCopyStep.copyXchangeStep.xml)
       const pageCommands = dataCopyStep?.copyXchangeStep?.commands;
       const _createCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
       setCreateCmd(_createCmd);
@@ -397,6 +352,8 @@ const XchangeStepPanel = ({
     if (dataCreateStep) {
       const responseCode = response?.response;
       if (responseCode === GqOperationResponse.Fail) {
+        setXmlField(dataCreateStep?.createXchangeStep.xml)
+
         const errorMsg = dataCreateStep?.createXchangeStep?.errMsg
           ?? 'Error occurred, please verify the information and try again.';
         setMessageType(MessageBarType.error);
@@ -424,6 +381,7 @@ const XchangeStepPanel = ({
     }
 
     if (!loadingUpdateXchange && errorUpdateXchange) {
+      setXmlField(dataUpdateStep.updateXchangeStep.xml)
       Toast.error({ text: 'There was an error to update step' });
     }
   }, [dataUpdateStep, loadingUpdateXchange, errorUpdateXchange]);
