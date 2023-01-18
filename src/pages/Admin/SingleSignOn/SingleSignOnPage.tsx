@@ -72,9 +72,9 @@ export const SingleSignOnPage = () => {
   const [
     identityProvidersForOrg,
     {
-      data: identityProvidersdata,
+      data: identityProvidersData,
       loading: isLoadingIdentityProviders,
-      error: identityProvidersdataError,
+      error: identityProvidersDataError,
     },
   ] = useIdentityProvidersForOrgLazyQuery();
   const [
@@ -120,10 +120,10 @@ export const SingleSignOnPage = () => {
   }, [refreshSinglePage]);
 
   useEffect(() => {
-    if (!isLoadingIdentityProviders && identityProvidersdata) {
-      setNodes(identityProvidersdata?.identityProvidersForOrg?.nodes);
+    if (!isLoadingIdentityProviders && identityProvidersData) {
+      setNodes(identityProvidersData?.identityProvidersForOrg?.nodes);
 
-      const pageCommands = identityProvidersdata.identityProvidersForOrg.listPageInfo?.pageCommands;
+      const pageCommands = identityProvidersData.identityProvidersForOrg.listPageInfo?.pageCommands;
       const _createCmd = pageCommands?.find((cmd) => cmd.commandType === CdxWebCommandType.Create);
       setCreateCmd(_createCmd);
       const _updateCmd = pageCommands?.find((cmd) => cmd.commandType === CdxWebCommandType.Update);
@@ -133,7 +133,7 @@ export const SingleSignOnPage = () => {
         setDisable(false);
       }
     }
-  }, [identityProvidersdata, isLoadingIdentityProviders, identityProvidersdataError]);
+  }, [identityProvidersData, isLoadingIdentityProviders, identityProvidersDataError]);
 
   useEffect(() => {
     if (!isLoadingDeleted && deletedIdentityProvider) {
@@ -330,7 +330,7 @@ export const SingleSignOnPage = () => {
       return (
         <ButtonLink
           underline
-          id={`__identityProviderConnectionInfo${columnVal}`}
+          id={`__identityProviderConnectionInfo${item?.idpId}`}
           onClick={() => {
             setIdentityProviderSid(item?.sid ?? '');
             setIsOpenConnectionInfo(true);
