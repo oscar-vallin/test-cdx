@@ -27,7 +27,9 @@ jest.mock('src/data/services/graphql', () => ({
   useSubscribeToAlertMutation: () => [
     jest.fn(async () => {}),
     {
-      data: {}
+      data: {
+        response: "SUCCESS",
+      }
     }
   ]
 }));
@@ -50,5 +52,6 @@ describe('Add person to be notified dialog', () => {
     wrapper.find('button[id="__AddAlerts_add_button"]').simulate('click');
     // Close the dialog
     wrapper.find('button[id="__AddAlerts_cancel_button"]').simulate('click');
+    expect(wrapper.find('Dialog').at(0).props().hidden);
   }) 
 })

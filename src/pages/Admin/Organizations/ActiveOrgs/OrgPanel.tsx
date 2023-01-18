@@ -403,6 +403,7 @@ export const OrgPanel = ({
           <UIInputMultiSelect
             id="__OrgName"
             uiField={orgForm?.supportedPlatforms}
+            options={orgForm.options}
             value={orgState.supportedPlatforms ?? []}
             onChange={(platformss) => {
               setUnsavedChanges(true);

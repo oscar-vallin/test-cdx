@@ -13,7 +13,6 @@ import {
 import { Column, Container, Row } from 'src/components/layouts';
 import { PageTitle, Text } from 'src/components/typography';
 import { PageHeader } from 'src/containers/headers/PageHeader';
-import { useTableFilters } from 'src/hooks/useTableFilters';
 import { ROUTE_SUPPORTED_PLATFORMS } from 'src/data/constants/RouteConstants';
 import {
   useSupportedPlatformsLazyQuery,
@@ -26,7 +25,7 @@ import {
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { PageBody } from 'src/components/layouts/Column';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { DataColumn, useSortableColumns } from 'src/containers/tables';
+import { DataColumn } from 'src/containers/tables';
 import { ButtonLink } from 'src/components/buttons';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { CardSupportedStyled } from './SupportedPlatforms.styes';
@@ -45,6 +44,7 @@ const SupportedPlatformsPage = () => {
   const [isOpenIncomingPanel, setIsOpenIncomingPanel] = useState(false);
   const [sid, setSid] = useState('');
   const [refreshPage, setRefreshPage] = useState(false);
+  const [sortedDescending, setSortedDescending] = useState(false);
   const [supportedPlatform,
     { data: supportedPlatformsData, loading: isLoadingSupportedPlataforms },
   ] = useSupportedPlatformsLazyQuery();
@@ -108,16 +108,18 @@ const SupportedPlatformsPage = () => {
     const suppPlatforms: SupportedPlatform[] = copyAndSort(refItems.current ?? [], column.fieldName ?? '', isSortedDescending);
     setSupportedPlatforms(suppPlatforms);
     setIsSorted((prevState) => prevState + 1);
+    setSortedDescending(true);
   };
 
   useEffect(() => {
     if (isSorted === 2) {
       setSupportedPlatforms(refItems.current);
       setIsSorted(0);
+      setSortedDescending(false);
     }
   }, [isSorted]);
 
-  const columnOptions: DataColumn[] = [
+  const columnOption: DataColumn[] = [
     {
       name: 'Platform Name',
       key: 'name',
@@ -126,7 +128,7 @@ const SupportedPlatformsPage = () => {
       dataType: 'string',
       isSorted: true,
       onColumnClick: columnClick,
-      isSortedDescending: false,
+      isSortedDescending: sortedDescending,
     },
     {
       name: 'Supported Incoming Formats',
@@ -135,15 +137,11 @@ const SupportedPlatformsPage = () => {
       minWidth: 500,
       isPadded: true,
       isSorted: false,
-      isSortedDescending: false,
       dataType: 'string',
       sortable: false,
       filterable: false,
     },
   ];
-
-  const tableFilters = useTableFilters('Platform Name, Supported Incoming Formats');
-  const { columns } = useSortableColumns(tableFilters, columnOptions);
 
   useEffect(() => {
     setRefreshPage(false);
@@ -197,7 +195,7 @@ const SupportedPlatformsPage = () => {
     return (
       <DetailsList
         items={supportedPlatforms ?? []}
-        columns={columns}
+        columns={columnOption}
         selectionMode={SelectionMode.none}
         onRenderItemColumn={onRenderItemColumn}
         layoutMode={DetailsListLayoutMode.justified}

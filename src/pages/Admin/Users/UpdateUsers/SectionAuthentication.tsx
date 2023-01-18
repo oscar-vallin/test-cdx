@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { CdxWebCommandType, UiOption, UserAccountForm } from 'src/data/services/graphql';
 import { WizardBody } from 'src/layouts/Panels/Panels.styles';
-import { ChoiceGroup } from '@fluentui/react';
+import { ChoiceGroup, Stack } from '@fluentui/react';
+import { Text } from 'src/components/typography';
 import UpdateUserFooter from './UpdateUserFooter';
+import { Spacing } from 'src/components/spacings/Spacing';
 
 type SectionAuthProps = {
     form?: UserAccountForm;
@@ -30,9 +32,21 @@ const SectionAuthentication = ({ form, onSave }: SectionAuthProps) => {
         <ChoiceGroup
           defaultSelectedKey={form?.authenticationMethod?.value?.value}
           options={
-            authenticationMethods?.map((method) => ({
+            authenticationMethods?.map((method, indexMethod) => ({
               key: `${method?.value}`,
               text: `${method?.label}`,
+              onRenderField: (props, render) => (
+                <Stack>
+                  {render!(props)}
+                  {indexMethod === 0 && (
+                    <Spacing margin={{  bottom: 'normal' }} />
+                  )}
+                  {authenticationMethods && authenticationMethods.length > 1
+                    && indexMethod === 0 && (
+                      <Text variant="semiBold">Single Sing On</Text>
+                      )}
+                </Stack>
+              ),
             }))
           }
           onChange={(e, newValue) => setAuthenticationMethod(newValue?.key ?? '')}
