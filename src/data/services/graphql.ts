@@ -493,7 +493,7 @@ export type CreateVendorSpecInput = {
   name?: Maybe<Scalars['String']>;
   legacyName?: Maybe<Scalars['String']>;
   version?: Maybe<Scalars['String']>;
-  fileContents?: Maybe<XchangeFileContents>;
+  fileContents?: Maybe<ExtractType>;
   supportsFullFile?: Maybe<Scalars['Boolean']>;
   supportsChangesOnly?: Maybe<Scalars['Boolean']>;
   comments?: Maybe<Scalars['String']>;
@@ -1086,6 +1086,10 @@ export type Mutation = {
   convertXchangeProfile?: Maybe<XchangeProfile>;
   updateXchangeProfileComment?: Maybe<GenericResponse>;
   publishXchangeProfile?: Maybe<GenericResponse>;
+  setupNewXchange?: Maybe<XchangeSetupForm>;
+  createNewXchange?: Maybe<XchangeSetupForm>;
+  resumeXchangeSetup?: Maybe<XchangeSetupForm>;
+  updateXchangeSetup?: Maybe<XchangeSetupForm>;
   updateXchangeConfigMeta?: Maybe<GenericResponse>;
   updateXchangeConfigComment?: Maybe<GenericResponse>;
   updateXchangeConfigInstruction?: Maybe<GenericResponse>;
@@ -1468,6 +1472,26 @@ export type MutationUpdateXchangeProfileCommentArgs = {
 
 export type MutationPublishXchangeProfileArgs = {
   orgSid: Scalars['ID'];
+};
+
+
+export type MutationSetupNewXchangeArgs = {
+  setup: XchangeSetupInput;
+};
+
+
+export type MutationCreateNewXchangeArgs = {
+  setup: XchangeSetupInput;
+};
+
+
+export type MutationResumeXchangeSetupArgs = {
+  xchangeConfigSid: Scalars['ID'];
+};
+
+
+export type MutationUpdateXchangeSetupArgs = {
+  setup: XchangeSetupInput;
 };
 
 
@@ -3511,7 +3535,7 @@ export type UpdateVendorSpecInput = {
   name?: Maybe<Scalars['String']>;
   legacyName?: Maybe<Scalars['String']>;
   version?: Maybe<Scalars['String']>;
-  fileContents?: Maybe<XchangeFileContents>;
+  fileContents?: Maybe<ExtractType>;
   supportsFullFile?: Maybe<Scalars['Boolean']>;
   supportsChangesOnly?: Maybe<Scalars['Boolean']>;
   comments?: Maybe<Scalars['String']>;
@@ -4120,6 +4144,7 @@ export type XchangeConfigForm = {
   sid?: Maybe<Scalars['ID']>;
   requiresConversion: Scalars['Boolean'];
   hasUnpublishedChanges: Scalars['Boolean'];
+  incompleteSetup: Scalars['Boolean'];
   schedule: XchangeSchedule;
   coreFilename: UiStringField;
   coreFilenamePattern: UiStringField;
@@ -4203,13 +4228,6 @@ export type XchangeDiagramStepGroup = {
   start: DiagramCoordinates;
   end: DiagramCoordinates;
 };
-
-export enum XchangeFileContents {
-  Enrollment = 'ENROLLMENT',
-  Census = 'CENSUS',
-  CensusEnrollment = 'CENSUS_ENROLLMENT',
-  PayrollDeductions = 'PAYROLL_DEDUCTIONS'
-}
 
 export type XchangeFileProcessForm = {
   __typename?: 'XchangeFileProcessForm';
@@ -4438,6 +4456,52 @@ export type XchangeScheduleForm = {
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
   errSeverity?: Maybe<ErrorSeverity>;
+};
+
+export type XchangeSetupForm = {
+  __typename?: 'XchangeSetupForm';
+  xchangeConfigSid?: Maybe<Scalars['ID']>;
+  coreFilename?: Maybe<Scalars['String']>;
+  vendor?: Maybe<UiSelectOneField>;
+  vendorSpec?: Maybe<UiSelectOneField>;
+  sourcePlatform?: Maybe<UiSelectOneField>;
+  incomingFormat?: Maybe<UiSelectOneField>;
+  fileContents?: Maybe<UiSelectOneField>;
+  supportsFullFile?: Maybe<UiBooleanField>;
+  supportsChangesOnly?: Maybe<UiBooleanField>;
+  deliveryProtocol: UiSelectOneField;
+  host: UiStringField;
+  port: UiIntField;
+  userName: UiStringField;
+  password: UiStringField;
+  authKeyName: UiSelectOneField;
+  authKeyPassphrase: UiStringField;
+  folder: UiStringField;
+  options?: Maybe<Array<UiOptions>>;
+  response: GqOperationResponse;
+  errCode?: Maybe<Scalars['String']>;
+  errMsg?: Maybe<Scalars['String']>;
+  errSeverity?: Maybe<ErrorSeverity>;
+};
+
+export type XchangeSetupInput = {
+  xchangeConfigSid?: Maybe<Scalars['ID']>;
+  orgSid: Scalars['ID'];
+  vendorSid?: Maybe<Scalars['ID']>;
+  vendorSpec?: Maybe<Scalars['ID']>;
+  sourcePlatform?: Maybe<Scalars['ID']>;
+  incomingFormat?: Maybe<Scalars['ID']>;
+  fileContents?: Maybe<ExtractType>;
+  supportsFullFile?: Maybe<Scalars['Boolean']>;
+  supportsChangesOnly?: Maybe<Scalars['Boolean']>;
+  deliveryProtocol?: Maybe<TransmissionProtocol>;
+  host?: Maybe<Scalars['String']>;
+  port?: Maybe<Scalars['Int']>;
+  userName?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+  authKeyName?: Maybe<Scalars['String']>;
+  authKeyPassphrase?: Maybe<Scalars['String']>;
+  folder?: Maybe<Scalars['String']>;
 };
 
 export type XchangeStepForm = {
@@ -7346,7 +7410,7 @@ export type XchangeConfigQuery = (
   { __typename?: 'Query' }
   & { xchangeConfig?: Maybe<(
     { __typename?: 'XchangeConfigForm' }
-    & Pick<XchangeConfigForm, 'sid' | 'requiresConversion' | 'hasUnpublishedChanges' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<XchangeConfigForm, 'sid' | 'requiresConversion' | 'hasUnpublishedChanges' | 'incompleteSetup' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { schedule: (
       { __typename?: 'XchangeSchedule' }
       & Pick<XchangeSchedule, 'scheduleType' | 'frequency' | 'xchangeJobGroupSid' | 'xchangeJobGroupName' | 'months' | 'days' | 'endDayOfMonth' | 'endDayOrdinal' | 'endRelativeDay' | 'endHour' | 'endMinute' | 'timezone' | 'hasSilencePeriod' | 'silenceStartMonth' | 'silenceStartDay' | 'silenceEndMonth' | 'silenceEndDay' | 'expectedRunSchedule' | 'expectedCompletionTime'>
@@ -10262,6 +10326,254 @@ export type PublishXchangeProfileMutation = (
         { __typename?: 'NVPId' }
         & UnionNvp_NvpId_Fragment
       )>> }
+    )>> }
+  )> }
+);
+
+export type SetupNewXchangeMutationVariables = Exact<{
+  setup: XchangeSetupInput;
+}>;
+
+
+export type SetupNewXchangeMutation = (
+  { __typename?: 'Mutation' }
+  & { setupNewXchange?: Maybe<(
+    { __typename?: 'XchangeSetupForm' }
+    & Pick<XchangeSetupForm, 'xchangeConfigSid' | 'coreFilename' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { vendor?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, vendorSpec?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, sourcePlatform?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, incomingFormat?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, fileContents?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, supportsFullFile?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    )>, supportsChangesOnly?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    )>, deliveryProtocol: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), host: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), port: (
+      { __typename?: 'UIIntField' }
+      & FragmentUiIntFieldFragment
+    ), userName: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), password: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), authKeyName: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), authKeyPassphrase: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), folder: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>> }
+  )> }
+);
+
+export type CreateNewXchangeMutationVariables = Exact<{
+  setup: XchangeSetupInput;
+}>;
+
+
+export type CreateNewXchangeMutation = (
+  { __typename?: 'Mutation' }
+  & { createNewXchange?: Maybe<(
+    { __typename?: 'XchangeSetupForm' }
+    & Pick<XchangeSetupForm, 'xchangeConfigSid' | 'coreFilename' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { vendor?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, vendorSpec?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, sourcePlatform?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, incomingFormat?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, fileContents?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, supportsFullFile?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    )>, supportsChangesOnly?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    )>, deliveryProtocol: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), host: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), port: (
+      { __typename?: 'UIIntField' }
+      & FragmentUiIntFieldFragment
+    ), userName: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), password: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), authKeyName: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), authKeyPassphrase: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), folder: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>> }
+  )> }
+);
+
+export type ResumeXchangeSetupMutationVariables = Exact<{
+  xchangeConfigSid: Scalars['ID'];
+}>;
+
+
+export type ResumeXchangeSetupMutation = (
+  { __typename?: 'Mutation' }
+  & { resumeXchangeSetup?: Maybe<(
+    { __typename?: 'XchangeSetupForm' }
+    & Pick<XchangeSetupForm, 'xchangeConfigSid' | 'coreFilename' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { vendor?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, vendorSpec?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, sourcePlatform?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, incomingFormat?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, fileContents?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, supportsFullFile?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    )>, supportsChangesOnly?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    )>, deliveryProtocol: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), host: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), port: (
+      { __typename?: 'UIIntField' }
+      & FragmentUiIntFieldFragment
+    ), userName: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), password: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), authKeyName: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), authKeyPassphrase: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), folder: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>> }
+  )> }
+);
+
+export type UpdateXchangeSetupMutationVariables = Exact<{
+  setup: XchangeSetupInput;
+}>;
+
+
+export type UpdateXchangeSetupMutation = (
+  { __typename?: 'Mutation' }
+  & { updateXchangeSetup?: Maybe<(
+    { __typename?: 'XchangeSetupForm' }
+    & Pick<XchangeSetupForm, 'xchangeConfigSid' | 'coreFilename' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { vendor?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, vendorSpec?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, sourcePlatform?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, incomingFormat?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, fileContents?: Maybe<(
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    )>, supportsFullFile?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    )>, supportsChangesOnly?: Maybe<(
+      { __typename?: 'UIBooleanField' }
+      & FragmentUiBooleanFieldFragment
+    )>, deliveryProtocol: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), host: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), port: (
+      { __typename?: 'UIIntField' }
+      & FragmentUiIntFieldFragment
+    ), userName: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), password: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), authKeyName: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), authKeyPassphrase: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), folder: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
     )>> }
   )> }
 );
@@ -16786,6 +17098,7 @@ export const XchangeConfigDocument = gql`
     sid
     requiresConversion
     hasUnpublishedChanges
+    incompleteSetup
     schedule {
       scheduleType
       frequency
@@ -22177,6 +22490,362 @@ export function usePublishXchangeProfileMutation(baseOptions?: Apollo.MutationHo
 export type PublishXchangeProfileMutationHookResult = ReturnType<typeof usePublishXchangeProfileMutation>;
 export type PublishXchangeProfileMutationResult = Apollo.MutationResult<PublishXchangeProfileMutation>;
 export type PublishXchangeProfileMutationOptions = Apollo.BaseMutationOptions<PublishXchangeProfileMutation, PublishXchangeProfileMutationVariables>;
+export const SetupNewXchangeDocument = gql`
+    mutation SetupNewXchange($setup: XchangeSetupInput!) {
+  setupNewXchange(setup: $setup) {
+    xchangeConfigSid
+    coreFilename
+    vendor {
+      ...fragmentUISelectOneField
+    }
+    vendorSpec {
+      ...fragmentUISelectOneField
+    }
+    sourcePlatform {
+      ...fragmentUISelectOneField
+    }
+    incomingFormat {
+      ...fragmentUISelectOneField
+    }
+    fileContents {
+      ...fragmentUISelectOneField
+    }
+    supportsFullFile {
+      ...fragmentUIBooleanField
+    }
+    supportsChangesOnly {
+      ...fragmentUIBooleanField
+    }
+    deliveryProtocol {
+      ...fragmentUISelectOneField
+    }
+    host {
+      ...fragmentUIStringField
+    }
+    port {
+      ...fragmentUIIntField
+    }
+    userName {
+      ...fragmentUIStringField
+    }
+    password {
+      ...fragmentUIStringField
+    }
+    authKeyName {
+      ...fragmentUISelectOneField
+    }
+    authKeyPassphrase {
+      ...fragmentUIStringField
+    }
+    folder {
+      ...fragmentUIStringField
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiStringFieldFragmentDoc}
+${FragmentUiIntFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}`;
+export type SetupNewXchangeMutationFn = Apollo.MutationFunction<SetupNewXchangeMutation, SetupNewXchangeMutationVariables>;
+
+/**
+ * __useSetupNewXchangeMutation__
+ *
+ * To run a mutation, you first call `useSetupNewXchangeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetupNewXchangeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setupNewXchangeMutation, { data, loading, error }] = useSetupNewXchangeMutation({
+ *   variables: {
+ *      setup: // value for 'setup'
+ *   },
+ * });
+ */
+export function useSetupNewXchangeMutation(baseOptions?: Apollo.MutationHookOptions<SetupNewXchangeMutation, SetupNewXchangeMutationVariables>) {
+        return Apollo.useMutation<SetupNewXchangeMutation, SetupNewXchangeMutationVariables>(SetupNewXchangeDocument, baseOptions);
+      }
+export type SetupNewXchangeMutationHookResult = ReturnType<typeof useSetupNewXchangeMutation>;
+export type SetupNewXchangeMutationResult = Apollo.MutationResult<SetupNewXchangeMutation>;
+export type SetupNewXchangeMutationOptions = Apollo.BaseMutationOptions<SetupNewXchangeMutation, SetupNewXchangeMutationVariables>;
+export const CreateNewXchangeDocument = gql`
+    mutation CreateNewXchange($setup: XchangeSetupInput!) {
+  createNewXchange(setup: $setup) {
+    xchangeConfigSid
+    coreFilename
+    vendor {
+      ...fragmentUISelectOneField
+    }
+    vendorSpec {
+      ...fragmentUISelectOneField
+    }
+    sourcePlatform {
+      ...fragmentUISelectOneField
+    }
+    incomingFormat {
+      ...fragmentUISelectOneField
+    }
+    fileContents {
+      ...fragmentUISelectOneField
+    }
+    supportsFullFile {
+      ...fragmentUIBooleanField
+    }
+    supportsChangesOnly {
+      ...fragmentUIBooleanField
+    }
+    deliveryProtocol {
+      ...fragmentUISelectOneField
+    }
+    host {
+      ...fragmentUIStringField
+    }
+    port {
+      ...fragmentUIIntField
+    }
+    userName {
+      ...fragmentUIStringField
+    }
+    password {
+      ...fragmentUIStringField
+    }
+    authKeyName {
+      ...fragmentUISelectOneField
+    }
+    authKeyPassphrase {
+      ...fragmentUIStringField
+    }
+    folder {
+      ...fragmentUIStringField
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiStringFieldFragmentDoc}
+${FragmentUiIntFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}`;
+export type CreateNewXchangeMutationFn = Apollo.MutationFunction<CreateNewXchangeMutation, CreateNewXchangeMutationVariables>;
+
+/**
+ * __useCreateNewXchangeMutation__
+ *
+ * To run a mutation, you first call `useCreateNewXchangeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateNewXchangeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createNewXchangeMutation, { data, loading, error }] = useCreateNewXchangeMutation({
+ *   variables: {
+ *      setup: // value for 'setup'
+ *   },
+ * });
+ */
+export function useCreateNewXchangeMutation(baseOptions?: Apollo.MutationHookOptions<CreateNewXchangeMutation, CreateNewXchangeMutationVariables>) {
+        return Apollo.useMutation<CreateNewXchangeMutation, CreateNewXchangeMutationVariables>(CreateNewXchangeDocument, baseOptions);
+      }
+export type CreateNewXchangeMutationHookResult = ReturnType<typeof useCreateNewXchangeMutation>;
+export type CreateNewXchangeMutationResult = Apollo.MutationResult<CreateNewXchangeMutation>;
+export type CreateNewXchangeMutationOptions = Apollo.BaseMutationOptions<CreateNewXchangeMutation, CreateNewXchangeMutationVariables>;
+export const ResumeXchangeSetupDocument = gql`
+    mutation ResumeXchangeSetup($xchangeConfigSid: ID!) {
+  resumeXchangeSetup(xchangeConfigSid: $xchangeConfigSid) {
+    xchangeConfigSid
+    coreFilename
+    vendor {
+      ...fragmentUISelectOneField
+    }
+    vendorSpec {
+      ...fragmentUISelectOneField
+    }
+    sourcePlatform {
+      ...fragmentUISelectOneField
+    }
+    incomingFormat {
+      ...fragmentUISelectOneField
+    }
+    fileContents {
+      ...fragmentUISelectOneField
+    }
+    supportsFullFile {
+      ...fragmentUIBooleanField
+    }
+    supportsChangesOnly {
+      ...fragmentUIBooleanField
+    }
+    deliveryProtocol {
+      ...fragmentUISelectOneField
+    }
+    host {
+      ...fragmentUIStringField
+    }
+    port {
+      ...fragmentUIIntField
+    }
+    userName {
+      ...fragmentUIStringField
+    }
+    password {
+      ...fragmentUIStringField
+    }
+    authKeyName {
+      ...fragmentUISelectOneField
+    }
+    authKeyPassphrase {
+      ...fragmentUIStringField
+    }
+    folder {
+      ...fragmentUIStringField
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiStringFieldFragmentDoc}
+${FragmentUiIntFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}`;
+export type ResumeXchangeSetupMutationFn = Apollo.MutationFunction<ResumeXchangeSetupMutation, ResumeXchangeSetupMutationVariables>;
+
+/**
+ * __useResumeXchangeSetupMutation__
+ *
+ * To run a mutation, you first call `useResumeXchangeSetupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResumeXchangeSetupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resumeXchangeSetupMutation, { data, loading, error }] = useResumeXchangeSetupMutation({
+ *   variables: {
+ *      xchangeConfigSid: // value for 'xchangeConfigSid'
+ *   },
+ * });
+ */
+export function useResumeXchangeSetupMutation(baseOptions?: Apollo.MutationHookOptions<ResumeXchangeSetupMutation, ResumeXchangeSetupMutationVariables>) {
+        return Apollo.useMutation<ResumeXchangeSetupMutation, ResumeXchangeSetupMutationVariables>(ResumeXchangeSetupDocument, baseOptions);
+      }
+export type ResumeXchangeSetupMutationHookResult = ReturnType<typeof useResumeXchangeSetupMutation>;
+export type ResumeXchangeSetupMutationResult = Apollo.MutationResult<ResumeXchangeSetupMutation>;
+export type ResumeXchangeSetupMutationOptions = Apollo.BaseMutationOptions<ResumeXchangeSetupMutation, ResumeXchangeSetupMutationVariables>;
+export const UpdateXchangeSetupDocument = gql`
+    mutation UpdateXchangeSetup($setup: XchangeSetupInput!) {
+  updateXchangeSetup(setup: $setup) {
+    xchangeConfigSid
+    coreFilename
+    vendor {
+      ...fragmentUISelectOneField
+    }
+    vendorSpec {
+      ...fragmentUISelectOneField
+    }
+    sourcePlatform {
+      ...fragmentUISelectOneField
+    }
+    incomingFormat {
+      ...fragmentUISelectOneField
+    }
+    fileContents {
+      ...fragmentUISelectOneField
+    }
+    supportsFullFile {
+      ...fragmentUIBooleanField
+    }
+    supportsChangesOnly {
+      ...fragmentUIBooleanField
+    }
+    deliveryProtocol {
+      ...fragmentUISelectOneField
+    }
+    host {
+      ...fragmentUIStringField
+    }
+    port {
+      ...fragmentUIIntField
+    }
+    userName {
+      ...fragmentUIStringField
+    }
+    password {
+      ...fragmentUIStringField
+    }
+    authKeyName {
+      ...fragmentUISelectOneField
+    }
+    authKeyPassphrase {
+      ...fragmentUIStringField
+    }
+    folder {
+      ...fragmentUIStringField
+    }
+    options {
+      ...fragmentUIOptions
+    }
+    response
+    errCode
+    errMsg
+    errSeverity
+  }
+}
+    ${FragmentUiSelectOneFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
+${FragmentUiStringFieldFragmentDoc}
+${FragmentUiIntFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}`;
+export type UpdateXchangeSetupMutationFn = Apollo.MutationFunction<UpdateXchangeSetupMutation, UpdateXchangeSetupMutationVariables>;
+
+/**
+ * __useUpdateXchangeSetupMutation__
+ *
+ * To run a mutation, you first call `useUpdateXchangeSetupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateXchangeSetupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateXchangeSetupMutation, { data, loading, error }] = useUpdateXchangeSetupMutation({
+ *   variables: {
+ *      setup: // value for 'setup'
+ *   },
+ * });
+ */
+export function useUpdateXchangeSetupMutation(baseOptions?: Apollo.MutationHookOptions<UpdateXchangeSetupMutation, UpdateXchangeSetupMutationVariables>) {
+        return Apollo.useMutation<UpdateXchangeSetupMutation, UpdateXchangeSetupMutationVariables>(UpdateXchangeSetupDocument, baseOptions);
+      }
+export type UpdateXchangeSetupMutationHookResult = ReturnType<typeof useUpdateXchangeSetupMutation>;
+export type UpdateXchangeSetupMutationResult = Apollo.MutationResult<UpdateXchangeSetupMutation>;
+export type UpdateXchangeSetupMutationOptions = Apollo.BaseMutationOptions<UpdateXchangeSetupMutation, UpdateXchangeSetupMutationVariables>;
 export const UpdateXchangeConfigMetaDocument = gql`
     mutation UpdateXchangeConfigMeta($xchangeInput: UpdateXchangeConfigMetaInput!) {
   updateXchangeConfigMeta(xchangeInput: $xchangeInput) {
