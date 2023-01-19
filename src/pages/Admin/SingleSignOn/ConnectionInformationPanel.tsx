@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   IconButton,
+  Link,
   PanelType,
   Spinner,
   SpinnerSize,
@@ -92,9 +93,9 @@ const ConnectionInformationPanel = (
           <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
             <Text>Download the service provider metadata here: </Text>
           </Spacing>
-          <ButtonLink underline>
+          <Link href={saml2ConnectionInfo.metaDataURL ?? "#"} target="_new">
             {saml2ConnectionInfo.metaDataURL}
-          </ButtonLink>
+          </Link>
           <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
             <Text variant="bold">
               Configuring your Identity Provider (Idp) to connect to the CDX Dashboard
