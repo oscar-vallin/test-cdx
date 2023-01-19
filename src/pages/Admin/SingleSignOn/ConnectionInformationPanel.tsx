@@ -238,7 +238,13 @@ const ConnectionInformationPanel = (
               }}
             />
             {oidcConnectionInfo?.clientSecret ? (
-              <ButtonLink>Click to copy to clipboard</ButtonLink>
+              <ButtonLink
+                onClick={() => {
+                  copyToClipboard(oidcConnectionInfo?.clientSecret ?? '');
+                }}
+              >
+                Click to copy to clipboard
+              </ButtonLink>
             ) : (
               <EmptyMessage size="normal">
                 {'<none>'}
