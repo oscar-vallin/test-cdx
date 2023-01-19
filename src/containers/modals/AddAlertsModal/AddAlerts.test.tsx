@@ -45,6 +45,13 @@ describe('Add person to be notified dialog', () => {
     expect(wrapper.find('input[type="checkbox"]')).toHaveLength(2);
     expect(wrapper.find('input[type="checkbox"]').at(0).props().checked).toBeFalsy();
     expect(wrapper.find('input[type="checkbox"]').at(1).props().checked).toBeFalsy();
+
+    expect(wrapper.find("i[data-icon-name='ChevronDown']")).toHaveLength(2);
+    wrapper.find("i[data-icon-name='ChevronDown']").at(0).simulate('click');
+    expect(wrapper.find('input[type="checkbox"]')).toHaveLength(1);
+    wrapper.find("i[data-icon-name='ChevronDown']").simulate('click');
+    expect(wrapper.find('input[type="checkbox"]')).toHaveLength(0);
+
      // Render buttons
      expect(wrapper.find('button[id="__AddAlerts_add_button"]')).toHaveLength(1);
      expect(wrapper.find('button[id="__AddAlerts_cancel_button"]')).toHaveLength(1);
