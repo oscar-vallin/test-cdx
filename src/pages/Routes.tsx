@@ -23,6 +23,7 @@ import { ColorPalettesPage, DefaultThemePage } from './Admin/DashboardSite';
 import { ActiveUsersPage } from './Admin/Users/ActiveUsers';
 import { DeletedUsersPage } from './Admin/Users/DeletedUsers';
 import {
+  FullSpecLibraryPage,
   OntologyPage,
   XChangePage,
   XchangeAlertsPage,
@@ -129,6 +130,9 @@ export const Routes = () => (
     </AuthRoute>
     <AuthRoute path={ROUTES.ROUTE_XCHANGE_LIST.URL}>
       <XChangePage />
+    </AuthRoute>
+    <AuthRoute path={ROUTES.ROUTE_FULL_SPEC_LIBRARY.URL}>
+      <FullSpecLibraryPage />
     </AuthRoute>
     <AuthRoute path={ROUTES.ROUTE_ONTOLOGY_BROWSER.URL}>
       <OntologyPage />
