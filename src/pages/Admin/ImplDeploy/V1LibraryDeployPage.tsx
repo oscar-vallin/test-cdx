@@ -4,13 +4,13 @@ import { Column, Container } from 'src/components/layouts';
 import { PageTitle } from 'src/components/typography';
 import {
   ImplementationDeployStatus,
-  ImplementationLogQuery,
-  ImplementationPollQuery,
-  useImplementationDeployMutation,
-  useImplementationLogLazyQuery,
-  useImplementationPollQuery,
+  useV1LibraryDeployMutation,
+  useV1LibraryLogLazyQuery,
+  useV1LibraryPollQuery,
+  V1LibraryLogQuery,
+  V1LibraryPollQuery,
 } from 'src/data/services/graphql';
-import { ROUTE_IMPL_DEPLOY } from 'src/data/constants/RouteConstants';
+import { ROUTE_V1LIB_DEPLOY } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { PageBody } from 'src/components/layouts/Column';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
@@ -19,7 +19,7 @@ import { GitChangeLog } from './GitChangeLog';
 
 const POLL_INTERVAL = 10000;
 
-const _ImplementationDeployPage = () => {
+const _V1LibraryDeployPage = () => {
   const [lastPolled, setLastPolled] = useState(new Date());
 
   const handleError = ErrorHandler();
@@ -28,48 +28,48 @@ const _ImplementationDeployPage = () => {
   const [requestDateTime, setRequestDateTime] = useState<Date>();
   const [changes, setChanges] = useState<string[]>([]);
 
-  const onLogUpdate = (data: ImplementationLogQuery) => {
-    if (data.implementationLog?.changes) {
-      setChanges(data.implementationLog.changes);
+  const onLogUpdate = (data: V1LibraryLogQuery) => {
+    if (data.v1LibraryLog?.changes) {
+      setChanges(data.v1LibraryLog.changes);
     } else {
       setChanges([]);
     }
-    if (data.implementationLog?.status) {
-      setStatus(data.implementationLog.status);
+    if (data.v1LibraryLog?.status) {
+      setStatus(data.v1LibraryLog.status);
     } else {
       setStatus(ImplementationDeployStatus.Error);
     }
-    if (data.implementationLog?.timestamp) {
-      setRequestDateTime(data.implementationLog.timestamp);
+    if (data.v1LibraryLog?.timestamp) {
+      setRequestDateTime(data.v1LibraryLog.timestamp);
     } else {
       setRequestDateTime(undefined);
     }
   };
 
-  const [callImplLog] = useImplementationLogLazyQuery({
+  const [callLibraryLog] = useV1LibraryLogLazyQuery({
     errorPolicy: 'all',
     onError: handleError,
     onCompleted: onLogUpdate,
   });
 
-  const [callImplDeploy] = useImplementationDeployMutation({
+  const [callLibraryDeploy] = useV1LibraryDeployMutation({
     errorPolicy: 'all',
-    onCompleted: () => callImplLog(),
+    onCompleted: () => callLibraryLog(),
     onError: handleError,
   });
 
-  const checkPollResult = (data: ImplementationPollQuery) => {
-    const updatedLogs = data.implementationPoll ?? 0;
+  const checkPollResult = (data: V1LibraryPollQuery) => {
+    const updatedLogs = data.v1LibraryPoll ?? 0;
     if (updatedLogs > 0) {
       // console.log(`Updating Logs ${updatedLogs}`);
       setLastPolled(new Date());
-      callImplLog();
+      callLibraryLog();
     } else {
       // console.log(`Not updating: ${updatedLogs}`);
     }
   };
 
-  const { data: pollData } = useImplementationPollQuery({
+  const { data: pollData } = useV1LibraryPollQuery({
     variables: {
       lastUpdated: lastPolled,
     },
@@ -84,26 +84,26 @@ const _ImplementationDeployPage = () => {
   }, [pollData]);
 
   useEffect(() => {
-    callImplLog();
+    callLibraryLog();
   }, []);
 
   const doDeploy = () => {
     setStatus(ImplementationDeployStatus.InProgress);
-    callImplDeploy().then();
+    callLibraryDeploy().then();
   };
 
   return (
-    <LayoutDashboard id="PageImplDeploy" menuOptionSelected={ROUTE_IMPL_DEPLOY.API_ID}>
-      <PageHeader id="__ImplDeployHeader">
+    <LayoutDashboard id="PageV1LibDeploy" menuOptionSelected={ROUTE_V1LIB_DEPLOY.API_ID}>
+      <PageHeader id="__V1LibDeployHeader">
         <Container>
           <Row>
             <Column lg="6" direction="row">
-              <PageTitle id="__Page_Title" title="Implementation Deploy" />
+              <PageTitle id="__Page_Title" title="V1 Library Deploy" />
             </Column>
           </Row>
         </Container>
       </PageHeader>
-      <PageBody id="__ImplDeployBody">
+      <PageBody id="__LibraryDeployBody">
         <Container>
           <GitChangeLog requestDateTime={requestDateTime} status={status} changes={changes} />
           <Row>
@@ -123,6 +123,6 @@ const _ImplementationDeployPage = () => {
   );
 };
 
-const ImplementationDeployPage = memo(_ImplementationDeployPage);
+const V1LibraryDeployPage = memo(_V1LibraryDeployPage);
 
-export { ImplementationDeployPage };
+export { V1LibraryDeployPage };
