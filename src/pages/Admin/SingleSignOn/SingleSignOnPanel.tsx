@@ -37,6 +37,7 @@ import { ButtonLink } from 'src/components/buttons';
 import { UIFormLabel } from 'src/components/labels/FormLabel';
 import { UIInputCode } from 'src/components/inputs/InputCode';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
+import { getEnumByValue } from 'src/utils/CDXUtils';
 import { ConnectionInformationPanel } from './ConnectionInformationPanel';
 
 type SingleSignOnPanelProps = {
@@ -81,6 +82,7 @@ const SingleSignOnPanel = ({
   const [authorizationURL, setAuthorizationURL] = useState('');
   const [tokenURL, setTokenURL] = useState('');
   const [userInfoURL, setUserInfoURL] = useState('');
+  const [jwkSetURL, setJwkSetURL] = useState('');
   const [samlMetaData, setSamlMetaData] = useState<string>();
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
@@ -134,25 +136,25 @@ const SingleSignOnPanel = ({
     if (!isLoadingForm && identityProviderFormData) {
       setUnsavedChanges(false);
       setIdentityProviderForm(identityProviderFormData?.identityProviderForm);
-      const idenProviderdata = identityProviderFormData?.identityProviderForm;
-      setOidcSettings(idenProviderdata.oidcSettings);
-      setIdpId(idenProviderdata.idpId.value ?? '');
-      setName(idenProviderdata.name.value ?? '');
-      setPriorMetaData(idenProviderdata.priorMetaData);
-      setSamlMetaData(idenProviderdata.samlMetaData.value ?? '');
-      setType(idenProviderdata.type.value?.value ?? '');
-      setIssuer(idenProviderdata.oidcSettings.issuer.value ?? '');
-      setClientId(idenProviderdata.oidcSettings.clientId.value ?? '');
-      setClientSecret(idenProviderdata.oidcSettings.clientSecret.value ?? '');
-      setAuthenticationMethod(idenProviderdata.oidcSettings.authenticationMethod.value ?? '');
-      setAutoDiscovery(idenProviderdata.oidcSettings.autoDiscovery.value ?? true);
-      setAuthorizationURL(idenProviderdata.oidcSettings.authorizationURL.value ?? '');
-      setTokenURL(idenProviderdata.oidcSettings.tokenURL.value ?? '');
-      setUserInfoURL(idenProviderdata.oidcSettings.userInfoURL.value ?? '');
-      setIsDefault(idenProviderdata.isDefault.value ?? false);
+      const identProviderData = identityProviderFormData?.identityProviderForm;
+      setOidcSettings(identProviderData.oidcSettings);
+      setIdpId(identProviderData.idpId.value ?? '');
+      setName(identProviderData.name.value ?? '');
+      setPriorMetaData(identProviderData.priorMetaData);
+      setSamlMetaData(identProviderData.samlMetaData.value ?? '');
+      setType(identProviderData.type.value?.value ?? '');
+      setIssuer(identProviderData.oidcSettings.issuer.value ?? '');
+      setClientId(identProviderData.oidcSettings.clientId.value ?? '');
+      setClientSecret(identProviderData.oidcSettings.clientSecret.value ?? '');
+      setAuthenticationMethod(identProviderData.oidcSettings.authenticationMethod.value?.value ?? '');
+      setAutoDiscovery(identProviderData.oidcSettings.autoDiscovery.value ?? true);
+      setAuthorizationURL(identProviderData.oidcSettings.authorizationURL.value ?? '');
+      setTokenURL(identProviderData.oidcSettings.tokenURL.value ?? '');
+      setUserInfoURL(identProviderData.oidcSettings.userInfoURL.value ?? '');
+      setIsDefault(identProviderData.isDefault.value ?? false);
 
-      if (idenProviderdata.commands) {
-        const pageCommands = idenProviderdata.commands;
+      if (identProviderData.commands) {
+        const pageCommands = identProviderData.commands;
         const _createCmd = pageCommands.find((cmd) => cmd.commandType === CdxWebCommandType.Create);
         setCreateCmd(_createCmd);
         const _updateCmd = pageCommands.find((cmd) => cmd.commandType === CdxWebCommandType.Update);
@@ -185,7 +187,7 @@ const SingleSignOnPanel = ({
       }
     }
     if (!isLoadingCreated && identityProviderError) {
-      Toast.error({ text: 'There was an error creating Indentity Provider' });
+      Toast.error({ text: 'There was an error creating Identity Provider' });
     }
   }, [identityProviderCreated, isLoadingCreated, identityProviderError]);
 
@@ -212,27 +214,13 @@ const SingleSignOnPanel = ({
       }
     }
     if (!isLoadingUpdated && identityProviderUpdatedError) {
-      Toast.error({ text: 'There was an error updating Indentity Provider' });
+      Toast.error({ text: 'There was an error updating Identity Provider' });
     }
   }, [identityProviderUpdated, isLoadingUpdated, identityProviderUpdatedError]);
 
   const saveIdentityProvider = () => {
-    let authMeth = '';
-    if (authenticationMethod === 'CLIENT_SECRET_POST') {
-      authMeth = 'ClientSecretPost';
-    } else if (authenticationMethod === 'CLIENT_SECRET_BASIC') {
-      authMeth = 'ClientSecretBasic';
-    } else if (authenticationMethod === 'CLIENT_SECRET_JWT') {
-      authMeth = 'ClientSecretJwt';
-    } else if (authenticationMethod === 'SIGNED_JWT') {
-      authMeth = 'SignedJwt';
-    }
-    let idpType = '';
-    if (type === 'SAML2') {
-      idpType = 'Saml2';
-    } else if (type === 'OIDC') {
-      idpType = 'Oidc';
-    }
+    const authMeth = getEnumByValue(OidcAuthenticationMethod, authenticationMethod);
+    const idpType = getEnumByValue(IdpType, type);
 
     if (sid) {
       updateIdentityProvider({
@@ -243,16 +231,17 @@ const SingleSignOnPanel = ({
             samlMetaData,
             idpId,
             isDefault,
-            type: IdpType[idpType],
+            type: idpType,
             oidcSettings: {
               issuer,
               clientId,
               clientSecret,
-              authenticationMethod: OidcAuthenticationMethod[authMeth],
+              authenticationMethod: authMeth,
               autoDiscovery,
               authorizationURL,
               tokenURL,
               userInfoURL,
+              jwkSetURL,
             },
           },
         },
@@ -267,16 +256,17 @@ const SingleSignOnPanel = ({
           name,
           samlMetaData,
           isDefault,
-          type: IdpType[idpType],
+          type: idpType,
           oidcSettings: {
             issuer,
             clientId,
             clientSecret,
-            authenticationMethod: OidcAuthenticationMethod[authMeth],
+            authenticationMethod: authMeth,
             autoDiscovery,
             authorizationURL,
             tokenURL,
             userInfoURL,
+            jwkSetURL,
           },
         },
       },
@@ -532,6 +522,17 @@ const SingleSignOnPanel = ({
                     onChange={(event, newValue) => {
                       setUnsavedChanges(true);
                       setUserInfoURL(newValue ?? '');
+                    }}
+                  />
+                </FormRow>
+                <FormRow>
+                  <UIInputText
+                    id="jwkSetURL"
+                    uiField={oidcSettings?.jwkSetURL}
+                    value={jwkSetURL}
+                    onChange={(event, newValue) => {
+                      setUnsavedChanges(true);
+                      setJwkSetURL(newValue ?? '');
                     }}
                   />
                 </FormRow>

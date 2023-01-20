@@ -1720,6 +1720,7 @@ export type OidcSettingsForm = {
   authorizationURL: UiStringField;
   tokenURL: UiStringField;
   userInfoURL: UiStringField;
+  jwkSetURL: UiStringField;
 };
 
 export type OidcSettingsInput = {
@@ -1731,6 +1732,7 @@ export type OidcSettingsInput = {
   authorizationURL?: Maybe<Scalars['String']>;
   tokenURL?: Maybe<Scalars['String']>;
   userInfoURL?: Maybe<Scalars['String']>;
+  jwkSetURL?: Maybe<Scalars['String']>;
 };
 
 export type OntologyClass = {
@@ -6755,6 +6757,9 @@ export type IdentityProviderFormQuery = (
       ), userInfoURL: (
         { __typename?: 'UIStringField' }
         & FragmentUiStringFieldFragment
+      ), jwkSetURL: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
       ) }
     ), options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
@@ -8625,6 +8630,9 @@ export type CreateIdentityProviderMutation = (
       ), userInfoURL: (
         { __typename?: 'UIStringField' }
         & FragmentUiStringFieldFragment
+      ), jwkSetURL: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
       ) }
     ), options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
@@ -8692,6 +8700,9 @@ export type UpdateIdentityProviderMutation = (
         { __typename?: 'UIStringField' }
         & FragmentUiStringFieldFragment
       ), userInfoURL: (
+        { __typename?: 'UIStringField' }
+        & FragmentUiStringFieldFragment
+      ), jwkSetURL: (
         { __typename?: 'UIStringField' }
         & FragmentUiStringFieldFragment
       ) }
@@ -15880,6 +15891,9 @@ export const IdentityProviderFormDocument = gql`
       userInfoURL {
         ...fragmentUIStringField
       }
+      jwkSetURL {
+        ...fragmentUIStringField
+      }
     }
     options {
       ...fragmentUIOptions
@@ -19379,6 +19393,9 @@ export const CreateIdentityProviderDocument = gql`
       userInfoURL {
         ...fragmentUIStringField
       }
+      jwkSetURL {
+        ...fragmentUIStringField
+      }
     }
     options {
       ...fragmentUIOptions
@@ -19473,6 +19490,9 @@ export const UpdateIdentityProviderDocument = gql`
         ...fragmentUIStringField
       }
       userInfoURL {
+        ...fragmentUIStringField
+      }
+      jwkSetURL {
         ...fragmentUIStringField
       }
     }
