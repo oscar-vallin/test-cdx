@@ -21,6 +21,7 @@ import { ROUTE_FULL_SPEC_LIBRARY } from 'src/data/constants/RouteConstants';
 import {
   CdxWebCommandType,
   useVendorSpecsLazyQuery,
+  useDeleteVendorSpecMutation,
   VendorSpecSummary,
   WebCommand,
 } from 'src/data/services/graphql';
@@ -33,23 +34,42 @@ import { Spacing } from 'src/components/spacings/Spacing';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { ButtonLink } from 'src/components/buttons';
 import { useActiveDomainUseCase } from 'src/use-cases/ActiveDomain';
+import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
+import { useQueryHandler } from 'src/hooks/useQueryHandler';
+import { useNotification } from 'src/hooks/useNotification';
 import { SpecPanel } from './SpecPanel';
 import { CardStyled, CircleStyled, ContainerInput } from '../Xchanges/XchangePage.styles';
+
+const defaultDialogProps: DialogYesNoProps = {
+  id: '__SpecLibrary_Dlg',
+  open: false,
+  title: '',
+  message: '',
+  labelYes: 'Yes',
+  labelNo: 'No',
+  highlightNo: true,
+  highlightYes: false,
+};
 
 const FullSpecLibraryPage = () => {
   const { orgSid } = useOrgSid();
   const ThemeStore = useThemeStore();
   const history = useHistory();
+  const Toast = useNotification();
   const ActiveDomain = useActiveDomainUseCase();
   const [vendors, setVendors] = useState<VendorSpecSummary[] | null>();
   const [searchFullSpec, setSearchFullSpec] = useState<string>('');
   const [filterFullSpec, setFilterFullSpec] = useState<VendorSpecSummary[]>([]);
+  const [name, setName] = useState('');
+  const [deleteDeactivate, setDeleteDeactivate] = useState<boolean>();
   const [sid, setSid] = useState('');
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
   const [deleteCmd, setDeleteCmd] = useState<WebCommand | null>();
   const [refreshPage, setRefreshPage] = useState(false);
   const [isOpenPanel, setIsOpenPanel] = useState(false);
   const [increaseDelay, setIncreasedelay] = useState(1500);
+  const [showDialog, setShowDialog] = useState(false);
+  const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
 
   const [fullVendorsSpecs,
     {
@@ -57,6 +77,12 @@ const FullSpecLibraryPage = () => {
       loading: isLoadingvendorsSpecs,
     },
   ] = useVendorSpecsLazyQuery();
+  const [deleteVendorSpec,
+    {
+      data: deleteVendorData,
+      loading: isLoadingDeleteVendor,
+    },
+  ] = useQueryHandler(useDeleteVendorSpecMutation);
 
   const fetchData = () => {
     fullVendorsSpecs({
@@ -75,9 +101,9 @@ const FullSpecLibraryPage = () => {
     setFilterFullSpec([]);
     const search = new RegExp(searchFullSpec, 'i');
     vendors?.forEach((vendor: VendorSpecSummary) => {
-      const name = vendor.name ?? '';
-      if (name) {
-        if (search.test(name)) {
+      const currentName = vendor.name ?? '';
+      if (currentName) {
+        if (search.test(currentName)) {
           setFilterFullSpec((currentVendors) => currentVendors.concat(vendor));
         }
       }
@@ -87,7 +113,7 @@ const FullSpecLibraryPage = () => {
   // eslint-disable-next-line consistent-return
   useEffect(() => {
     if (vendors && vendors?.length > 0) {
-      const timer = setTimeout(() => filterFullSpecData(), 500);
+      const timer = setTimeout(() => filterFullSpecData(), 300);
       return () => clearTimeout(timer);
     }
   }, [searchFullSpec]);
@@ -105,6 +131,49 @@ const FullSpecLibraryPage = () => {
       }
     }
   }, [vendorsSpecsData, isLoadingvendorsSpecs]);
+
+  useEffect(() => {
+    if (!isLoadingDeleteVendor && deleteVendorData) {
+      setRefreshPage(true);
+      Toast.success({ text: `${name} has been ${deleteDeactivate ? 'deleted' : 'deactivated'}` });
+    }
+  }, [deleteVendorData, isLoadingDeleteVendor]);
+
+  const hideDialog = () => {
+    setShowDialog(false);
+  };
+
+  const showDeeletDeactivateDialog = (
+    implementations: number,
+    currentSid: string,
+  ) => {
+    const updatedDialog = { ...defaultDialogProps };
+    let title = 'Delete Vendor Spec?';
+    let message = 'Are you sure want to delete this Vendor Spec?';
+    setDeleteDeactivate(true)
+    if (implementations > 0) {
+      setDeleteDeactivate(false);
+      title = 'Deactivate Vendor Spec?';
+      message = 'This Vendor Spec has usage and can only be deactivated. Are you sure to deactivate this Vendor Spec No future xchanges can be configured to use this spec'
+    }
+
+    updatedDialog.title = title;
+    updatedDialog.message = message;
+
+    updatedDialog.onYes = () => {
+      hideDialog();
+      deleteVendorSpec({
+        variables: {
+          sid: currentSid,
+        },
+      });
+    }
+    updatedDialog.onNo = () => {
+      hideDialog();
+    };
+    setDialogProps(updatedDialog);
+    setShowDialog(true);
+  }
 
   const updateDateFormat = (date: Date) => {
     const currentDate = new Date(date);
@@ -167,7 +236,15 @@ const FullSpecLibraryPage = () => {
   const onRenderItemColum = (item:VendorSpecSummary, itemIndex?: number, column?: IColumn) => {
     if (item && column?.key === 'name') {
       const value = item[column.key];
-      return <ButtonLink>{value}</ButtonLink>;
+      return (
+        <ButtonLink
+          onClick={() => {
+            setSid(item.sid ?? '');
+            setIsOpenPanel(true);
+          }}
+        >{value}
+        </ButtonLink>
+      );
     }
 
     const uatFilesProcessed = item?.uatActivity.filesProcessed;
@@ -248,18 +325,23 @@ const FullSpecLibraryPage = () => {
     )
   }
 
-  const onRenderAction = (item) => {
+  const onRenderAction = (item: VendorSpecSummary) => {
     const styles = {
       cursor: 'pointer',
       color: ThemeStore.userTheme.colors.themePrimary,
     }
     const active = item.active ? 'Deactivate' : 'Inactive';
     if (deleteCmd) {
+      const implementations = item.integratedClients && item.integratedClients.length;
       return (
         <TooltipHost content={active} directionalHint={DirectionalHint.rightCenter}>
           <FontIcon
             iconName="Trash"
             style={styles}
+            onClick={() => {
+              setName(item.name ?? '');
+              showDeeletDeactivateDialog(implementations, item.sid ?? '');
+            }}
           />
         </TooltipHost>
       )
@@ -438,6 +520,7 @@ const FullSpecLibraryPage = () => {
         isOpen={isOpenPanel}
         sid={sid}
       />
+      <DialogYesNo {...dialogProps} open={showDialog} />
     </LayoutDashboard>
   )
 };
