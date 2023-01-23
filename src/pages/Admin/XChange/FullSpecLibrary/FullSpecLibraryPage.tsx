@@ -338,10 +338,13 @@ const FullSpecLibraryPage = () => {
     const styles = {
       cursor: 'pointer',
       color: ThemeStore.userTheme.colors.themePrimary,
+    };
+    let active = 'Inactive';
+    const implementations = item.integratedClients && item.integratedClients.length;
+    if (item.active) {
+      active = implementations > 0 ? 'Deactivate' : 'Delete';
     }
-    const active = item.active ? 'Deactivate' : 'Inactive';
     if (deleteCmd) {
-      const implementations = item.integratedClients && item.integratedClients.length;
       return (
         <TooltipHost content={active} directionalHint={DirectionalHint.rightCenter}>
           <FontIcon
