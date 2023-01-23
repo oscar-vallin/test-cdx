@@ -5,6 +5,7 @@ import {
   DirectionalHint,
   FontIcon,
   IColumn,
+  IconButton,
   PrimaryButton,
   SearchBox,
   SelectionMode,
@@ -22,12 +23,14 @@ import {
   CdxWebCommandType,
   useVendorSpecsLazyQuery,
   useDeleteVendorSpecMutation,
+  useUpdateGeneralVendorSpecCommentsMutation,
   VendorSpecSummary,
   WebCommand,
 } from 'src/data/services/graphql';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useHistory } from 'react-router-dom';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
+import { Save20Filled } from '@fluentui/react-icons';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { PageBody } from 'src/components/layouts/Column';
 import { Spacing } from 'src/components/spacings/Spacing';
@@ -64,8 +67,11 @@ const FullSpecLibraryPage = () => {
   const [name, setName] = useState('');
   const [deleteDeactivate, setDeleteDeactivate] = useState<boolean>();
   const [sid, setSid] = useState('');
+  const [comments, setComments] = useState('');
+  const [editComments, setEditComments] = useState(false);
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
   const [deleteCmd, setDeleteCmd] = useState<WebCommand | null>();
+  const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
   const [refreshPage, setRefreshPage] = useState(false);
   const [isOpenPanel, setIsOpenPanel] = useState(false);
   const [isSorted, setIsSorted] = useState(0);
@@ -86,6 +92,12 @@ const FullSpecLibraryPage = () => {
       loading: isLoadingDeleteVendor,
     },
   ] = useQueryHandler(useDeleteVendorSpecMutation);
+  const [updateComments,
+    {
+      data: updateCommentsData,
+      loading: isLoadingUpdateComments,
+    },
+  ] = useQueryHandler(useUpdateGeneralVendorSpecCommentsMutation);
 
   const fetchData = () => {
     fullVendorsSpecs({
@@ -130,6 +142,7 @@ const FullSpecLibraryPage = () => {
     if (!isLoadingvendorsSpecs && vendorsSpecsData) {
       const { vendorSpecs } = vendorsSpecsData;
       setVendors(vendorSpecs?.nodes);
+      setComments(vendorSpecs?.comments ?? '');
       updateItems(vendorSpecs?.nodes);
       if (vendorSpecs?.listPageInfo?.pageCommands) {
         const pageCommands = vendorSpecs?.listPageInfo.pageCommands;
@@ -137,6 +150,8 @@ const FullSpecLibraryPage = () => {
         setCreateCmd(_createCmd);
         const _deleteCmd = pageCommands.find((cmd) => cmd.commandType === CdxWebCommandType.Delete);
         setDeleteCmd(_deleteCmd);
+        const _updateCmd = pageCommands.find((cmd) => cmd.commandType === CdxWebCommandType.Update);
+        setUpdateCmd(_updateCmd);
       }
     }
   }, [vendorsSpecsData, isLoadingvendorsSpecs]);
@@ -147,6 +162,14 @@ const FullSpecLibraryPage = () => {
       Toast.success({ text: `${name} has been ${deleteDeactivate ? 'deleted' : 'deactivated'}` });
     }
   }, [deleteVendorData, isLoadingDeleteVendor]);
+
+  useEffect(() => {
+    if (!isLoadingUpdateComments && updateCommentsData) {
+      setRefreshPage(true);
+      setEditComments(false);
+      Toast.success({ text: 'Comments saved' });
+    }
+  }, [updateCommentsData, isLoadingUpdateComments]);
 
   const hideDialog = () => {
     setShowDialog(false);
@@ -441,6 +464,13 @@ const FullSpecLibraryPage = () => {
     },
   ];
 
+  const readonlyComments = () => {
+    if (updateCmd && editComments) {
+      return false;
+    }
+    return true;
+  }
+
   const cardBox = () => (
     <Spacing margin={{ top: 'double' }}>
       <CardStyled>
@@ -451,12 +481,44 @@ const FullSpecLibraryPage = () => {
                 <Text variant="semiBold">Comments</Text>
               </Spacing>
             </Column>
+            {updateCmd && (
+            <Column lg="6" right>
+              {!editComments ? (
+                <IconButton
+                  iconProps={{ iconName: !editComments ? 'EditSolid12' : 'disk' }}
+                  style={{ marginTop: '10px' }}
+                  onClick={() => {
+                    setEditComments(true);
+                  }}
+                />
+              ) : (
+                <Save20Filled
+                  style={{
+                    color: ThemeStore.userTheme.colors.themePrimary,
+                    marginTop: '14px',
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => {
+                    updateComments({
+                      variables: {
+                        orgSid,
+                        comments,
+                      },
+                    });
+                  }}
+                />
+              )}
+            </Column>
+            )}
           </Row>
           <TextField
             multiline
             borderless={true}
+            value={comments}
             resizable={false}
+            readOnly={readonlyComments()}
             rows={7}
+            onChange={(event, _newValue) => setComments(_newValue ?? '')}
           />
         </ContainerInput>
       </CardStyled>
