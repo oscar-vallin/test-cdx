@@ -1,5 +1,6 @@
 import {
   DirectionalHint,
+  FontIcon,
   MessageBar,
   MessageBarType,
   PanelType,
@@ -16,6 +17,8 @@ import { Spacing } from 'src/components/spacings/Spacing';
 import {
   useVendorSpecFormLazyQuery,
   useCreateVendorSpecMutation,
+  useUpdateVendorSpecMutation,
+  useActivateVendorSpecMutation,
   VendorSpecForm,
   ExtractType,
   WebCommand,
@@ -68,6 +71,7 @@ const SpecPanel = ({
   const [supportsChangesOnly, setSupportsChangesOnly] = useState('');
   const [comments, setComments] = useState('');
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
+  const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
   const [openUpdateComments, setOpenUpdateComments] = useState(false);
   const [closeTooltipHost, setCloseTooltipHost] = useState(true);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
@@ -85,6 +89,18 @@ const SpecPanel = ({
     loading: isLoadingCreate,
     error: createVendorError,
   }] = useCreateVendorSpecMutation();
+  const [updateVendor, {
+    data: updateVendorData,
+    loading: isLoadingupdate,
+    error: updateVendorError,
+  }] = useUpdateVendorSpecMutation();
+  const [activateVendorSpec,
+    {
+      data: activateVendorData,
+      loading: isLoadingActivateVendor,
+      error: activateVendorError,
+    },
+  ] = useActivateVendorSpecMutation();
 
   useEffect(() => {
     handleError(errorForm);
@@ -92,6 +108,12 @@ const SpecPanel = ({
   useEffect(() => {
     handleError(createVendorError);
   }, [createVendorError]);
+  useEffect(() => {
+    handleError(updateVendorError);
+  }, [updateVendorError]);
+  useEffect(() => {
+    handleError(activateVendorError);
+  }, [activateVendorError]);
 
   const fetchData = () => {
     fetchVendorSpec({
@@ -116,6 +138,8 @@ const SpecPanel = ({
         const pageCommands = dataForm.vendorSpecForm.commands;
         const _createCmd = pageCommands.find((cmd) => cmd.commandType === CdxWebCommandType.Create);
         setCreateCmd(_createCmd);
+        const _updateCmd = pageCommands.find((cmd) => cmd.commandType === CdxWebCommandType.Update);
+        setUpdateCmd(_updateCmd);
       }
     }
   }, [dataForm, loadingForm]);
@@ -149,10 +173,40 @@ const SpecPanel = ({
         refreshPage(true);
         closePanel(false);
         setMessage(null);
-        Toast.success({ text: 'File transmission added' });
+        Toast.success({ text: 'Vendor Spec Saved' });
       }
     }
   }, [createVendorData, isLoadingCreate]);
+  useEffect(() => {
+    const response = updateVendorData?.updateVendorSpec;
+    if (updateVendorData) {
+      const responseCode = response?.response;
+      const { updateVendorSpec } = updateVendorData;
+      setVendorSpecForm(updateVendorSpec);
+      if (responseCode === GqOperationResponse.Fail) {
+        const errorMsg = updateVendorSpec?.errMsg
+        ?? 'Error occurred, please verify the information and try again.';
+        setMessageType(MessageBarType.error);
+        setMessage(errorMsg);
+      }
+
+      if (responseCode === GqOperationResponse.Success) {
+        refreshPage(true);
+        closePanel(false);
+        setMessage(null);
+        Toast.success({ text: 'Vendor Spec Saved' });
+      }
+    }
+  }, [updateVendorData, isLoadingupdate]);
+
+  useEffect(() => {
+    if (!isLoadingActivateVendor && activateVendorData) {
+      refreshPage(true);
+      closePanel(false);
+      setMessage(null);
+      Toast.success({ text: `${name} has been activated` });
+    }
+  }, [activateVendorData, isLoadingActivateVendor]);
 
   const hideDialog = () => {
     setShowDialog(false);
@@ -175,6 +229,26 @@ const SpecPanel = ({
     setDialogProps(updatedDialog);
     setShowDialog(true);
   };
+
+  const showActivateDialog = () => {
+    const updatedDialog = { ...defaultDialogProps };
+    updatedDialog.title = 'Activate Vendor Spec';
+    updatedDialog.message = 'Are you sure want to activate this Vendor Spec? This will make it available for new Xchanges to use it';
+
+    updatedDialog.onYes = () => {
+      hideDialog();
+      activateVendorSpec({
+        variables: {
+          sid: sid ?? '',
+        },
+      });
+    };
+    updatedDialog.onClose = () => {
+      hideDialog();
+    };
+    setDialogProps(updatedDialog);
+    setShowDialog(true);
+  }
 
   const onPanelClose = () => {
     if (unsavedChanges) {
@@ -205,6 +279,22 @@ const SpecPanel = ({
 
   const saveSpecVendor = () => {
     const fCs = getFileContent();
+    if (sid) {
+      updateVendor({
+        variables: {
+          specInput: {
+            sid,
+            comments,
+            fileContents: ExtractType[fCs],
+            supportsChangesOnly: supportsChangesOnly === 'true',
+            supportsFullFile: supportsFullFile === 'true',
+            legacyName,
+            version,
+            name,
+          },
+        },
+      })
+    }
     createVendor({
       variables: {
         specInput: {
@@ -326,7 +416,7 @@ const SpecPanel = ({
         </FormRow>
         <WizardButtonRow>
           <Spacing margin={{ top: 'double' }}>
-            {createCmd && (
+            {(createCmd || updateCmd) && (
             <PrimaryButton
               id="__saveSpecVendor"
               onClick={() => saveSpecVendor()}
@@ -436,12 +526,28 @@ const SpecPanel = ({
         <Column lg="3">
           <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
             <PanelTitle id="__SpecVendor_Panel_Title" variant="bold" size="large">
-              Create Spec
+              {!sid ? 'Create Spec' : vendorSpecForm?.name.value}
             </PanelTitle>
           </Stack>
         </Column>
         <Column lg="2">
-          <Spacing margin={{ top: 'normal' }}>{tooltipHostComments()}</Spacing>
+          <Spacing margin={{ top: 'normal' }}>
+            {tooltipHostComments()}
+            <TooltipHost content="This spec is inactiva">
+              <FontIcon
+                id="specInactive"
+                style={{
+                  fontSize: '18px',
+                  cursor: 'pointer',
+                  marginLeft: '10px',
+                }}
+                iconName="StatusCircleBlock"
+                onClick={() => {
+                  showActivateDialog();
+                }}
+              />
+            </TooltipHost>
+          </Spacing>
         </Column>
       </Row>
     </PanelHeader>
