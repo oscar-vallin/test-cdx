@@ -22,6 +22,7 @@ const SectionAuthentication = ({
   const [sendEmail, setSendEmail] = useState<boolean>(form.sendActivationEmail?.value ?? true);
   const [passwordBasedLoginData, setPasswordBasedLoginData] = useState<UiOption[] | null>();
   const [authenticationMethod, setAuthenticationMethod] = useState<UiOption>();
+  const [checkedSingleSignOn, setCheckedSingleSignOn] = useState(false);
 
   useEffect(() => {
     const checked = form.sendActivationEmail?.value ?? true;
@@ -71,13 +72,16 @@ const SectionAuthentication = ({
                   {render!(props)}
                   {method.label === 'Password based login' && (
                     <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                      {sendEmail ? (
+                      {!checkedSingleSignOn ? (
                         <Column lg="12">
                           <Spacing margin={{top: 'normal'}}>
                             <UIInputCheck
                               id="__userSendActivation"
                               uiField={form?.sendActivationEmail}
                               value={sendEmail}
+                              onChange={(event, checked: any) => {
+                                setSendEmail(checked);                        
+                              }}
                             />
                          </Spacing>
                        </Column>
@@ -107,9 +111,11 @@ const SectionAuthentication = ({
             const value = passwordBasedLoginData?.find((method) => method.value === newValue?.key);
             if (value?.category) {
               setAuthenticationMethod(value);
+              setCheckedSingleSignOn(true);
               setSendEmail(false);
               saveOptions(false, value);
             } else {
+              setCheckedSingleSignOn(false);
               onCheck();
             }
           }}
