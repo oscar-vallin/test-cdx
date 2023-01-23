@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -58,6 +58,7 @@ const FullSpecLibraryPage = () => {
   const Toast = useNotification();
   const ActiveDomain = useActiveDomainUseCase();
   const [vendors, setVendors] = useState<VendorSpecSummary[] | null>();
+  const refItems = useRef(vendors);
   const [searchFullSpec, setSearchFullSpec] = useState<string>('');
   const [filterFullSpec, setFilterFullSpec] = useState<VendorSpecSummary[]>([]);
   const [name, setName] = useState('');
@@ -67,6 +68,8 @@ const FullSpecLibraryPage = () => {
   const [deleteCmd, setDeleteCmd] = useState<WebCommand | null>();
   const [refreshPage, setRefreshPage] = useState(false);
   const [isOpenPanel, setIsOpenPanel] = useState(false);
+  const [isSorted, setIsSorted] = useState(0);
+  const [sortedDescending, setSortedDescending] = useState(false);
   const [increaseDelay, setIncreasedelay] = useState(1500);
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
@@ -91,6 +94,11 @@ const FullSpecLibraryPage = () => {
       },
     });
   };
+
+  const updateItems = (newItems) => {
+    refItems.current = newItems;
+    setVendors(newItems);
+  }
 
   useEffect(() => {
     setRefreshPage(false);
@@ -122,6 +130,7 @@ const FullSpecLibraryPage = () => {
     if (!isLoadingvendorsSpecs && vendorsSpecsData) {
       const { vendorSpecs } = vendorsSpecsData;
       setVendors(vendorSpecs?.nodes);
+      updateItems(vendorSpecs?.nodes);
       if (vendorSpecs?.listPageInfo?.pageCommands) {
         const pageCommands = vendorSpecs?.listPageInfo.pageCommands;
         const _createCmd = pageCommands.find((cmd) => cmd.commandType === CdxWebCommandType.Create);
@@ -347,7 +356,33 @@ const FullSpecLibraryPage = () => {
       )
     }
     return null;
+  };
+
+  function copyAndSort <T>(items:T[], columnKey?: string, isSortedDescending?: boolean): T[] {
+    const key = columnKey as keyof T;
+    const itemsSorted = items.slice(0)
+      .sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
+    return itemsSorted;
   }
+
+  const columnClick = (event, column: IColumn) => {
+    let { isSortedDescending } = column;
+    if (column.isSorted) {
+      isSortedDescending = !isSortedDescending;
+    }
+    const _vendors: VendorSpecSummary[] = copyAndSort(refItems.current ?? [], column.fieldName ?? '', isSortedDescending);
+    setVendors(_vendors);
+    setIsSorted((prevState) => prevState + 1);
+    setSortedDescending(true);
+  };
+
+  useEffect(() => {
+    if (isSorted === 2) {
+      setVendors(refItems.current);
+      setIsSorted(0);
+      setSortedDescending(false);
+    }
+  }, [isSorted]);
 
   const columns: IColumn[] = [
     {
@@ -355,10 +390,11 @@ const FullSpecLibraryPage = () => {
       key: 'name',
       fieldName: 'name',
       data: 'string',
-      isPadded: true,
       minWidth: 150,
       maxWidth: 400,
-      flexGrow: 1,
+      isSorted: true,
+      onColumnClick: columnClick,
+      isSortedDescending: sortedDescending,
     },
     {
       name: '# Implementations',
