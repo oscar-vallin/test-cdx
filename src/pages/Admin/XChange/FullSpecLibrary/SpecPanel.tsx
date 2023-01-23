@@ -436,7 +436,7 @@ const SpecPanel = ({
           {closeTooltipHost && (
             <TooltipHost
               directionalHint={DirectionalHint['rightBottomEdge']}
-              content={comments ? 'This File Transmission has comments. Click to see them.' : 'Click to add a comment'}
+              content={comments ? 'This Spec has comments. Click to see them.' : 'Click to add a comment'}
             >
               <Comment20Filled
                 style={comments ? {
@@ -531,23 +531,27 @@ const SpecPanel = ({
           </Stack>
         </Column>
         <Column lg="2">
-          <Spacing margin={{ top: 'normal' }}>
-            {tooltipHostComments()}
-            <TooltipHost content="This spec is inactiva">
-              <FontIcon
-                id="specInactive"
-                style={{
-                  fontSize: '18px',
-                  cursor: 'pointer',
-                  marginLeft: '10px',
-                }}
-                iconName="StatusCircleBlock"
-                onClick={() => {
-                  showActivateDialog();
-                }}
-              />
-            </TooltipHost>
-          </Spacing>
+          <Stack horizontal>
+            <Spacing margin={{ top: 'normal' }}>
+              {tooltipHostComments()}
+            </Spacing>
+            <Spacing margin={{ top: 'normal' }}>
+              <TooltipHost content="This spec is inactive">
+                <FontIcon
+                  id="specInactive"
+                  style={{
+                    fontSize: '18px',
+                    cursor: 'pointer',
+                    marginLeft: '10px',
+                  }}
+                  iconName="StatusCircleBlock"
+                  onClick={() => {
+                    showActivateDialog();
+                  }}
+                />
+              </TooltipHost>
+            </Spacing>
+          </Stack>
         </Column>
       </Row>
     </PanelHeader>
