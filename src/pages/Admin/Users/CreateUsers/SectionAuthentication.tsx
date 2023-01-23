@@ -27,6 +27,10 @@ const SectionAuthentication = ({
   useEffect(() => {
     const checked = form.sendActivationEmail?.value ?? true;
     setSendEmail(checked);
+    if (form.authenticationMethod?.value?.category) {
+      setCheckedSingleSignOn(true);
+      setSendEmail(false);
+    }
   }, [form]);
 
   useEffect(() => {
@@ -62,7 +66,7 @@ const SectionAuthentication = ({
     <>
       <WizardBody>
         <ChoiceGroup
-          defaultSelectedKey="-1"
+          defaultSelectedKey={form?.authenticationMethod?.value?.value}
           options={
             passwordBasedLoginData?.map((method, indexMethod) => ({
               key: `${method.value}`,
@@ -80,7 +84,7 @@ const SectionAuthentication = ({
                               uiField={form?.sendActivationEmail}
                               value={sendEmail}
                               onChange={(event, checked: any) => {
-                                setSendEmail(checked);                        
+                                setSendEmail(checked);
                               }}
                             />
                          </Spacing>
