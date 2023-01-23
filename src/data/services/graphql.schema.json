@@ -2054,6 +2054,12 @@
             "deprecationReason": null
           },
           {
+            "name": "V1LIB_DEPLOY",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "SECURITY_SETTINGS",
             "description": null,
             "isDeprecated": false,
@@ -10407,6 +10413,18 @@
           },
           {
             "name": "implementationDeploy",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "ImplementationDeployResponse",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "v1LibraryDeploy",
             "description": null,
             "args": [],
             "type": {
@@ -19348,6 +19366,43 @@
           },
           {
             "name": "implementationPoll",
+            "description": null,
+            "args": [
+              {
+                "name": "lastUpdated",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "DateTime",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "v1LibraryLog",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "ImplementationDeployResponse",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "v1LibraryPoll",
             "description": null,
             "args": [
               {

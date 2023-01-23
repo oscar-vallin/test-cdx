@@ -249,6 +249,7 @@ export enum CdxWebPage {
   AmSpecialization = 'AM_SPECIALIZATION',
   FtpTest = 'FTP_TEST',
   ImplDeploy = 'IMPL_DEPLOY',
+  V1LibDeploy = 'V1LIB_DEPLOY',
   SecuritySettings = 'SECURITY_SETTINGS',
   PasswordRules = 'PASSWORD_RULES',
   SsoConfig = 'SSO_CONFIG',
@@ -1067,6 +1068,7 @@ export type Mutation = {
   setOwnDashThemeFontSize?: Maybe<DashTheme>;
   updatePasswordRules?: Maybe<PasswordRulesForm>;
   implementationDeploy?: Maybe<ImplementationDeployResponse>;
+  v1LibraryDeploy?: Maybe<ImplementationDeployResponse>;
   ftpTestM?: Maybe<SftpConfigSubscriptionResponse>;
   workPacketRerunStep?: Maybe<GenericResponse>;
   workPacketDelete?: Maybe<GenericResponse>;
@@ -2267,6 +2269,8 @@ export type Query = {
   xpsftpTest?: Maybe<XpsftpTestPage>;
   implementationLog?: Maybe<ImplementationDeployResponse>;
   implementationPoll?: Maybe<Scalars['Int']>;
+  v1LibraryLog?: Maybe<ImplementationDeployResponse>;
+  v1LibraryPoll?: Maybe<Scalars['Int']>;
   reprocessDialog?: Maybe<ReprocessDialog>;
   vendorSpecs?: Maybe<VendorSpecSummaryConnection>;
   vendorSpecForm?: Maybe<VendorSpecForm>;
@@ -2690,6 +2694,11 @@ export type QueryXpsftpTestArgs = {
 
 
 export type QueryImplementationPollArgs = {
+  lastUpdated?: Maybe<Scalars['DateTime']>;
+};
+
+
+export type QueryV1LibraryPollArgs = {
   lastUpdated?: Maybe<Scalars['DateTime']>;
 };
 
@@ -7237,6 +7246,27 @@ export type ImplementationPollQuery = (
   & Pick<Query, 'implementationPoll'>
 );
 
+export type V1LibraryLogQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type V1LibraryLogQuery = (
+  { __typename?: 'Query' }
+  & { v1LibraryLog?: Maybe<(
+    { __typename?: 'ImplementationDeployResponse' }
+    & Pick<ImplementationDeployResponse, 'response' | 'status' | 'timestamp' | 'references' | 'changes'>
+  )> }
+);
+
+export type V1LibraryPollQueryVariables = Exact<{
+  lastUpdated?: Maybe<Scalars['DateTime']>;
+}>;
+
+
+export type V1LibraryPollQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'v1LibraryPoll'>
+);
+
 export type ReprocessDialogQueryVariables = Exact<{
   workOrderId: Scalars['String'];
 }>;
@@ -9828,6 +9858,17 @@ export type ImplementationDeployMutationVariables = Exact<{ [key: string]: never
 export type ImplementationDeployMutation = (
   { __typename?: 'Mutation' }
   & { implementationDeploy?: Maybe<(
+    { __typename?: 'ImplementationDeployResponse' }
+    & Pick<ImplementationDeployResponse, 'response' | 'status' | 'timestamp' | 'references' | 'changes'>
+  )> }
+);
+
+export type V1LibraryDeployMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type V1LibraryDeployMutation = (
+  { __typename?: 'Mutation' }
+  & { v1LibraryDeploy?: Maybe<(
     { __typename?: 'ImplementationDeployResponse' }
     & Pick<ImplementationDeployResponse, 'response' | 'status' | 'timestamp' | 'references' | 'changes'>
   )> }
@@ -16805,6 +16846,73 @@ export function useImplementationPollLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type ImplementationPollQueryHookResult = ReturnType<typeof useImplementationPollQuery>;
 export type ImplementationPollLazyQueryHookResult = ReturnType<typeof useImplementationPollLazyQuery>;
 export type ImplementationPollQueryResult = Apollo.QueryResult<ImplementationPollQuery, ImplementationPollQueryVariables>;
+export const V1LibraryLogDocument = gql`
+    query V1LibraryLog {
+  v1LibraryLog {
+    response
+    status
+    timestamp
+    references
+    changes
+  }
+}
+    `;
+
+/**
+ * __useV1LibraryLogQuery__
+ *
+ * To run a query within a React component, call `useV1LibraryLogQuery` and pass it any options that fit your needs.
+ * When your component renders, `useV1LibraryLogQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useV1LibraryLogQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useV1LibraryLogQuery(baseOptions?: Apollo.QueryHookOptions<V1LibraryLogQuery, V1LibraryLogQueryVariables>) {
+        return Apollo.useQuery<V1LibraryLogQuery, V1LibraryLogQueryVariables>(V1LibraryLogDocument, baseOptions);
+      }
+export function useV1LibraryLogLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<V1LibraryLogQuery, V1LibraryLogQueryVariables>) {
+          return Apollo.useLazyQuery<V1LibraryLogQuery, V1LibraryLogQueryVariables>(V1LibraryLogDocument, baseOptions);
+        }
+export type V1LibraryLogQueryHookResult = ReturnType<typeof useV1LibraryLogQuery>;
+export type V1LibraryLogLazyQueryHookResult = ReturnType<typeof useV1LibraryLogLazyQuery>;
+export type V1LibraryLogQueryResult = Apollo.QueryResult<V1LibraryLogQuery, V1LibraryLogQueryVariables>;
+export const V1LibraryPollDocument = gql`
+    query V1LibraryPoll($lastUpdated: DateTime) {
+  v1LibraryPoll(lastUpdated: $lastUpdated)
+}
+    `;
+
+/**
+ * __useV1LibraryPollQuery__
+ *
+ * To run a query within a React component, call `useV1LibraryPollQuery` and pass it any options that fit your needs.
+ * When your component renders, `useV1LibraryPollQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useV1LibraryPollQuery({
+ *   variables: {
+ *      lastUpdated: // value for 'lastUpdated'
+ *   },
+ * });
+ */
+export function useV1LibraryPollQuery(baseOptions?: Apollo.QueryHookOptions<V1LibraryPollQuery, V1LibraryPollQueryVariables>) {
+        return Apollo.useQuery<V1LibraryPollQuery, V1LibraryPollQueryVariables>(V1LibraryPollDocument, baseOptions);
+      }
+export function useV1LibraryPollLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<V1LibraryPollQuery, V1LibraryPollQueryVariables>) {
+          return Apollo.useLazyQuery<V1LibraryPollQuery, V1LibraryPollQueryVariables>(V1LibraryPollDocument, baseOptions);
+        }
+export type V1LibraryPollQueryHookResult = ReturnType<typeof useV1LibraryPollQuery>;
+export type V1LibraryPollLazyQueryHookResult = ReturnType<typeof useV1LibraryPollLazyQuery>;
+export type V1LibraryPollQueryResult = Apollo.QueryResult<V1LibraryPollQuery, V1LibraryPollQueryVariables>;
 export const ReprocessDialogDocument = gql`
     query ReprocessDialog($workOrderId: String!) {
   reprocessDialog(workOrderId: $workOrderId) {
@@ -21608,6 +21716,41 @@ export function useImplementationDeployMutation(baseOptions?: Apollo.MutationHoo
 export type ImplementationDeployMutationHookResult = ReturnType<typeof useImplementationDeployMutation>;
 export type ImplementationDeployMutationResult = Apollo.MutationResult<ImplementationDeployMutation>;
 export type ImplementationDeployMutationOptions = Apollo.BaseMutationOptions<ImplementationDeployMutation, ImplementationDeployMutationVariables>;
+export const V1LibraryDeployDocument = gql`
+    mutation V1LibraryDeploy {
+  v1LibraryDeploy {
+    response
+    status
+    timestamp
+    references
+    changes
+  }
+}
+    `;
+export type V1LibraryDeployMutationFn = Apollo.MutationFunction<V1LibraryDeployMutation, V1LibraryDeployMutationVariables>;
+
+/**
+ * __useV1LibraryDeployMutation__
+ *
+ * To run a mutation, you first call `useV1LibraryDeployMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useV1LibraryDeployMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [v1LibraryDeployMutation, { data, loading, error }] = useV1LibraryDeployMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useV1LibraryDeployMutation(baseOptions?: Apollo.MutationHookOptions<V1LibraryDeployMutation, V1LibraryDeployMutationVariables>) {
+        return Apollo.useMutation<V1LibraryDeployMutation, V1LibraryDeployMutationVariables>(V1LibraryDeployDocument, baseOptions);
+      }
+export type V1LibraryDeployMutationHookResult = ReturnType<typeof useV1LibraryDeployMutation>;
+export type V1LibraryDeployMutationResult = Apollo.MutationResult<V1LibraryDeployMutation>;
+export type V1LibraryDeployMutationOptions = Apollo.BaseMutationOptions<V1LibraryDeployMutation, V1LibraryDeployMutationVariables>;
 export const FtpTestMDocument = gql`
     mutation FtpTestM($xpsftp: XSFTPInput!, $sendTestFile: SFTPTestSendTestFile, $testFile: Upload) {
   ftpTestM(xpsftp: $xpsftp, sendTestFile: $sendTestFile, testFile: $testFile) {
