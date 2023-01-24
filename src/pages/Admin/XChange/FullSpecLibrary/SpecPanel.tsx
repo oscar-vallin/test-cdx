@@ -72,6 +72,7 @@ const SpecPanel = ({
   const [comments, setComments] = useState('');
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
   const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
+  const [activateCmd, setActivateCmd] = useState<WebCommand | null>();
   const [openUpdateComments, setOpenUpdateComments] = useState(false);
   const [closeTooltipHost, setCloseTooltipHost] = useState(true);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
@@ -140,6 +141,9 @@ const SpecPanel = ({
         setCreateCmd(_createCmd);
         const _updateCmd = pageCommands.find((cmd) => cmd.commandType === CdxWebCommandType.Update);
         setUpdateCmd(_updateCmd);
+        const _activateCmd = pageCommands
+          .find((cmd) => cmd.commandType === CdxWebCommandType.Activate);
+        setActivateCmd(_activateCmd);
       }
     }
   }, [dataForm, loadingForm]);
@@ -535,6 +539,7 @@ const SpecPanel = ({
             <Spacing margin={{ top: 'normal' }}>
               {tooltipHostComments()}
             </Spacing>
+            {activateCmd && (
             <Spacing margin={{ top: 'normal' }}>
               <TooltipHost content="This spec is inactive">
                 <FontIcon
@@ -551,6 +556,7 @@ const SpecPanel = ({
                 />
               </TooltipHost>
             </Spacing>
+            )}
           </Stack>
         </Column>
       </Row>
