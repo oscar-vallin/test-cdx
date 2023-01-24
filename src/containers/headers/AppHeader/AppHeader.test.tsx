@@ -78,8 +78,7 @@ describe('App Header Top Navigation', () => {
 
     expect(wrapper.find('div[id="__ProfileMenu"]')).toHaveLength(1);
     wrapper.find('button[id="__ButtonContext"]').simulate('click');
-    wrapper.find('button[id="__ProfileMenu_UserSettingsId"]').simulate('click');
-    expect(mockPush).toHaveBeenCalledTimes(2);
+    expect(mockPush).toHaveBeenCalledTimes(1);
 
     // Change the font size
     wrapper.find('button[id="__ProfileMenu_Font_Buttons"]').simulate('click');

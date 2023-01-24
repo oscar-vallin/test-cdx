@@ -6,7 +6,6 @@ import { ApolloProvider, ApolloClient } from '@apollo/client';
 
 const defaultProps = {
   id: '__ButtonContext',
-  onUserSettings: () => {},
 };
 
 export const mockLogouts = () => {
