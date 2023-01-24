@@ -105,7 +105,7 @@ const SectionAuthentication = ({
                   )}
                   {passwordBasedLoginData && passwordBasedLoginData?.length > 1
                      && indexMethod === 0 && (
-                       <Text variant="semiBold">Single Sing On</Text>
+                       <Text variant="semiBold">Single Sign On</Text>
                   )}
                 </Stack>
               ),
