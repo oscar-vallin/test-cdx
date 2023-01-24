@@ -373,7 +373,7 @@ export const SingleSignOnPage = () => {
         <>
           &nbsp;
           <ButtonLink
-            id={`__identityProviderName${columnVal}`}
+            id={`__identityProviderName${item?.idpId}`}
             onClick={() => {
               setIdentityProviderSid(item?.sid ?? '');
               setIsOpenPanel(true);
