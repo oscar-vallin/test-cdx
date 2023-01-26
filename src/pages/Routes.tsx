@@ -5,7 +5,6 @@ import { PasswordResetPage } from 'src/pages/PasswordReset';
 import { ExternalUsersPage } from 'src/pages/Admin/Users/ExternalUsers';
 import { HomePage } from 'src/pages/HomePage';
 import { LoginPage, SSOLoginPage } from './Login';
-import { UserSettingsPage } from './UserSettings';
 import { DashboardPage } from './Dashboard';
 import {
   FileStatusPage,
@@ -62,9 +61,6 @@ export const Routes = () => (
 
     <AuthRoute exact path="/">
       <HomePage />
-    </AuthRoute>
-    <AuthRoute path={ROUTES.ROUTE_USER_SETTINGS.URL}>
-      <UserSettingsPage />
     </AuthRoute>
     <AuthRoute path={ROUTES.ROUTE_DASHBOARD.URL}>
       <DashboardPage />

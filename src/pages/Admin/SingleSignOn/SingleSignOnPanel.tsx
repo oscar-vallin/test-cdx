@@ -577,10 +577,14 @@ const SingleSignOnPanel = ({
   return (
     <>
       <ThemedPanel
+        id="__IdentityProviderPanel"
         closeButtonAriaLabel="Close"
         type={PanelType.medium}
         headerText={identityProviderForm?.idpId.value ? `Idp - ${identityProviderForm?.idpId.value}` : 'Setup Identity Provider'}
         isOpen={isPanelOpen}
+        headerTextProps={{
+          id: "__IdentityProviderPanel_Title"
+        }}
         onDismiss={() => {
           onPanelClose();
         }}

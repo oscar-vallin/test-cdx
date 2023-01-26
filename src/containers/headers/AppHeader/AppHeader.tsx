@@ -4,10 +4,9 @@ import { Icon, IContextualMenuItem } from '@fluentui/react';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
 import { useActiveDomainUseCase } from 'src/use-cases/ActiveDomain';
 import { ProfileMenu } from 'src/containers/menus/ProfileMenu';
-import { getRouteByApiId, ROUTE_USER_SETTINGS } from 'src/data/constants/RouteConstants';
+import { getRouteByApiId } from 'src/data/constants/RouteConstants';
 import { useCurrentUserTheme } from 'src/hooks/useCurrentUserTheme';
 import { useThemeStore } from 'src/store/ThemeStore';
-import { useSessionStore } from 'src/store/SessionStore';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 
 import { ThemeFontSize } from 'src/data/services/graphql';
@@ -34,7 +33,6 @@ const AppHeader = ({ onMenuButtonClick, hasLeftMenu = true }: AppHeaderProps): R
   const location = useLocation();
   const { orgSid, startDate, endDate } = useOrgSid();
   const ThemeStore = useThemeStore();
-  const { user } = useSessionStore();
   const ActiveDomain = useActiveDomainUseCase();
   const ActiveDomainStore = useActiveDomainStore();
 
@@ -133,10 +131,6 @@ const AppHeader = ({ onMenuButtonClick, hasLeftMenu = true }: AppHeaderProps): R
     );
   };
 
-  const openUserSettings = () => {
-    history.push(`${ROUTE_USER_SETTINGS.URL}?orgSid=${user.orgSid}`);
-  };
-
   const renderMenuItem = (props) => (
     <StyledMenuItem selected={ThemeStore.userTheme.themeFontSize === props.item.key}>
       {props.item.text}
@@ -182,7 +176,7 @@ const AppHeader = ({ onMenuButtonClick, hasLeftMenu = true }: AppHeaderProps): R
               contextualMenuItemAs: renderMenuItem,
             }}
           />
-          <ProfileMenu id="__ProfileMenu" onUserSettings={openUserSettings} />
+          <ProfileMenu id="__ProfileMenu" />
         </StyledDiv>
       </StyledHeader>
       <WalkThrough id="__TopNav_Tour" show={isShowHelp} tour={topNavTour} onDismiss={() => setIsShowHelp(false)} />

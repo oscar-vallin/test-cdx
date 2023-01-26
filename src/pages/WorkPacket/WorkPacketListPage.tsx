@@ -93,16 +93,15 @@ export const WorkPacketListPage = ({
       <PageHeader id={`__${id}Header`}>
         <Container>
           <Row>
-            <Column sm="6" direction="row">
+            <Column sm="9" direction="row">
               <PageTitle
                 id={`__${id}_Title`}
                 title={pageTitle}
-                subTitle="Advanced search"
                 icon="FilterSolid"
                 loading={loading}
               />
             </Column>
-            <Column sm="6" right>
+            <Column sm="3" right>
               <Text size="large" right>
                 {renderUpperRight()}
               </Text>

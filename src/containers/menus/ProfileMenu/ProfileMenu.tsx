@@ -17,10 +17,9 @@ const defaultProps = {
 
 type ProfileMenuProps = {
   id?: string;
-  onUserSettings?: () => void | null;
 } & typeof defaultProps;
 
-const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement => {
+const _ProfileMenu = ({ id }: ProfileMenuProps): ReactElement => {
   const SessionStore = useSessionStore();
   const { performUserLogout } = useLogoutUseCase();
   const ApplicationStore = useApplicationStore();
@@ -31,12 +30,6 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
 
   const handleLogout = () => {
     performUserLogout();
-  };
-
-  const handleSettings = () => {
-    if (onUserSettings) {
-      onUserSettings();
-    }
   };
 
   const openPanel = () => setIsOpenPanel(true);
@@ -80,12 +73,6 @@ const _ProfileMenu = ({ id, onUserSettings }: ProfileMenuProps): ReactElement =>
       iconProps: {
         iconName: 'Color',
       },
-    },
-    {
-      id: '__ProfileMenu_UserSettingsId',
-      key: 'ProfileMenu_UserSettings',
-      text: 'Settings',
-      onClick: handleSettings,
     },
     {
       id: '__Logout_button',
