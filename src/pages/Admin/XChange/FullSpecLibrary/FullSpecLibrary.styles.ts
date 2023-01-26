@@ -27,4 +27,8 @@ export const FullSpecList = styled(DetailsList)`
       font-weight: ${({ theme }) => theme.fontWeights.bold};
     }
   }
+
+  .ms-TooltipHost {
+    margin: auto;
+  }
 `;

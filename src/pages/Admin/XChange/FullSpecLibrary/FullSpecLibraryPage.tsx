@@ -77,7 +77,7 @@ const FullSpecLibraryPage = () => {
       key: 'name',
       fieldName: 'name',
       minWidth: 150,
-      maxWidth: 400,
+      maxWidth: 200,
       isPadded: true,
       dataType: 'string',
       isSorted: true,
@@ -89,8 +89,8 @@ const FullSpecLibraryPage = () => {
       name: '# Implementation',
       key: 'integratedClients',
       fieldName: 'integratedClients',
-      minWidth: 150,
-      maxWidth: 400,
+      minWidth: 100,
+      maxWidth: 100,
       isPadded: true,
       dataType: 'string',
       filterable: false,
@@ -149,7 +149,7 @@ const FullSpecLibraryPage = () => {
 
     if (column?.key === 'integratedClients') {
       return (
-        <Stack tokens={{ childrenGap: 5.5, padding: '0px 0px 0px 50px' }}>
+        <Stack tokens={{ childrenGap: 5.5, padding: '0px 100px 0px 0px' }}>
           {item.specs?.map((spec, specIndex) => (
             <TooltipHost
               key={specIndex}
@@ -224,7 +224,7 @@ const FullSpecLibraryPage = () => {
               </Stack>
             </Row>
             <Row>
-              <Column lg="6">{renderBody()}</Column>
+              <Column lg="5">{renderBody()}</Column>
             </Row>
           </Container>
         </Spacing>
