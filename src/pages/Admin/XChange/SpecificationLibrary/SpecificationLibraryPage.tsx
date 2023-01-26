@@ -621,6 +621,7 @@ const SpecificationLibraryPage = () => {
         refreshPage={setRefreshPage}
         isOpen={isOpenPanel}
         sid={sid}
+        orgSid={orgSid}
       />
       <DialogYesNo {...dialogProps} open={showDialog} />
     </LayoutDashboard>

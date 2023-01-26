@@ -25,7 +25,6 @@ import {
   CdxWebCommandType,
   GqOperationResponse,
 } from 'src/data/services/graphql';
-import { useOrgSid } from 'src/hooks/useOrgSid';
 import { UIInputSelectOne } from 'src/components/inputs/InputDropdown';
 import {
   PanelBody, PanelHeader, PanelTitle, ThemedPanel, WizardButtonRow,
@@ -54,12 +53,12 @@ type SpecPanelProps = {
     closePanel: (data: boolean) => void;
     refreshPage: (data: boolean) => void;
     sid?: string;
+    orgSid: string;
 };
 
 const SpecPanel = ({
-  closePanel, isOpen, sid, refreshPage,
+  closePanel, isOpen, sid, orgSid, refreshPage,
 }: SpecPanelProps) => {
-  const { orgSid } = useOrgSid();
   const Toast = useNotification();
   const handleError = ErrorHandler();
   const [vendorSpecForm, setVendorSpecForm] = useState<VendorSpecForm | null>();
