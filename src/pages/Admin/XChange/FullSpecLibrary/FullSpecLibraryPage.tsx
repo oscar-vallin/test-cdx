@@ -107,7 +107,7 @@ const FullSpecLibraryPage = () => {
         pageableInput: tableFilters.pagingParams,
       },
     })
-  }, [searchTextFullSpecVendor, refreshPage]);
+  }, [searchTextFullSpecVendor, refreshPage, tableFilters.pagingParams]);
 
   const tooltipHostVendors = (clients: string[]) => {
     if (clients?.length === 0) {
@@ -119,11 +119,13 @@ const FullSpecLibraryPage = () => {
     }
 
     return (
-      <Text size="small">
-        This is the number of <Text variant="bold">distinct</Text> vendors  <br />
-        &nbsp;across organizations shown here
-      </Text>
-    );
+      <Stack>
+        {clients
+          && clients.map((client, clientIndex) => (
+            <span key={clientIndex}>{client}</span>
+          ))}
+      </Stack>
+    )
   }
 
   const onRenderItemColum = (item: VendorLink, itemIndex?: number, column?: IColumn) => {
@@ -132,6 +134,7 @@ const FullSpecLibraryPage = () => {
         <Stack tokens={{ childrenGap: 5.5 }}>
           {item.specs?.map((spec, specIndex) => (
             <ButtonLink
+              id={`vendorname_${specIndex}`}
               underline
               key={specIndex}
               style={{ fontSize: '12px' }}
@@ -152,6 +155,7 @@ const FullSpecLibraryPage = () => {
         <Stack tokens={{ childrenGap: 5.5, padding: '0px 100px 0px 0px' }}>
           {item.specs?.map((spec, specIndex) => (
             <TooltipHost
+              id={`totalVendors_${specIndex}`}
               key={specIndex}
               content={tooltipHostVendors(spec.integratedClients)}
               directionalHint={DirectionalHint.rightCenter}
