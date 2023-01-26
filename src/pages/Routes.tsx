@@ -24,6 +24,7 @@ import { ActiveUsersPage } from './Admin/Users/ActiveUsers';
 import { DeletedUsersPage } from './Admin/Users/DeletedUsers';
 import {
   FullSpecLibraryPage,
+  SpecificationLibraryPage,
   OntologyPage,
   XChangePage,
   XchangeAlertsPage,
@@ -133,6 +134,9 @@ export const Routes = () => (
     </AuthRoute>
     <AuthRoute path={ROUTES.ROUTE_FULL_SPEC_LIBRARY.URL}>
       <FullSpecLibraryPage />
+    </AuthRoute>
+    <AuthRoute path={ROUTES.ROUTE_VENDOR_SPEC_LIBRARY.URL}>
+      <SpecificationLibraryPage />
     </AuthRoute>
     <AuthRoute path={ROUTES.ROUTE_ONTOLOGY_BROWSER.URL}>
       <OntologyPage />
