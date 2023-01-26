@@ -34,6 +34,7 @@ const FullSpecLibraryPage = () => {
   const [refreshPage, setRefreshPage] = useState(false);
   const [isOpenPanel, setIsOpenPanel] = useState(false);
   const [sid, setSid] = useState('');
+  const [orgSid, setOrgSid] = useState('');
 
   const [vendorSpec,
     {
@@ -95,13 +96,14 @@ const FullSpecLibraryPage = () => {
   const { columns } = useSortableColumns(tableFilters, columnOptions);
 
   useEffect(() => {
+    setRefreshPage(false);
     vendorSpec({
       variables: {
         searchText: searchTextFullSpecVendor,
         pageableInput: tableFilters.pagingParams,
       },
     })
-  }, [searchTextFullSpecVendor]);
+  }, [searchTextFullSpecVendor, refreshPage]);
 
   const onRenderItemColum = (item: VendorLink, itemIndex?: number, column?: IColumn) => {
     if (column?.key === 'name') {
@@ -113,6 +115,7 @@ const FullSpecLibraryPage = () => {
               key={specIndex}
               style={{ fontSize: '12px' }}
               onClick={() => {
+                setOrgSid(item.orgSid ?? '');
                 setSid(spec.sid ?? '');
                 setIsOpenPanel(true);
               }}
@@ -203,6 +206,7 @@ const FullSpecLibraryPage = () => {
         isOpen={isOpenPanel}
         closePanel={setIsOpenPanel}
         sid={sid}
+        orgSid={orgSid}
         refreshPage={setRefreshPage}
       />
     </LayoutDashboard>
