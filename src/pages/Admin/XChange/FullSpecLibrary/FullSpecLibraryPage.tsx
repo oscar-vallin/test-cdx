@@ -55,7 +55,7 @@ const FullSpecLibraryPage = () => {
             key: node.orgSid ?? '',
             name: node.name ?? '',
             startIndex: nodeIndex,
-            count: 1,
+            count: node.specs?.length ?? 0,
           }
           setGroups((prevState) => prevState.concat(group));
         }

@@ -5,11 +5,11 @@ export const FullSpecList = styled(DetailsList)`
   overflow: hidden;
   .ms-GroupHeader-title {
     span {
-        color: ${({ theme }) => theme.colors.themePrimary};
-        text-decoration: underline;
-    }
-    .headerCount-228 {
         color: white;
+        &:first-child {
+          color: ${({ theme }) => theme.colors.themePrimary};
+          text-decoration: underline;
+        }
     }
   }
   .ms-DetailsHeader-cell {
@@ -19,13 +19,13 @@ export const FullSpecList = styled(DetailsList)`
           }
     }
   }
-  .groupHeaderContainer-227 {
-      [data-icon-name*='Chevron'] {
-        font-size: 0.75em;
-        cursor: pointer;
-        transform: translateY(2px);
-        color: ${({ theme }) => theme.colors.black};
-        font-weight: ${({ theme }) => theme.fontWeights.semiBold};
-      }
+  .ms-GroupHeader-expand {
+    [data-icon-name*='Chevron'] {
+      font-size: 0.80em;
+      cursor: pointer;
+      transform: translateY(2px);
+      color: ${({ theme }) => theme.colors.black};
+      font-weight: ${({ theme }) => theme.fontWeights.bold};
+    }
   }
 `;
