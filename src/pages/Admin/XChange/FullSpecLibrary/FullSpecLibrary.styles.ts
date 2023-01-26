@@ -23,7 +23,6 @@ export const FullSpecList = styled(DetailsList)`
     [data-icon-name*='Chevron'] {
       font-size: 0.80em;
       cursor: pointer;
-      transform: translateY(2px);
       color: ${({ theme }) => theme.colors.black};
       font-weight: ${({ theme }) => theme.fontWeights.bold};
     }
