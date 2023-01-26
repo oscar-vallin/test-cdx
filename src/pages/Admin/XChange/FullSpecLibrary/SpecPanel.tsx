@@ -297,7 +297,8 @@ const SpecPanel = ({
             name,
           },
         },
-      })
+      });
+      return;
     }
     createVendor({
       variables: {
