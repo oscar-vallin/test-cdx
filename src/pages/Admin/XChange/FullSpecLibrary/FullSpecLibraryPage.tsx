@@ -129,7 +129,7 @@ const FullSpecLibraryPage = () => {
   const onRenderItemColum = (item: VendorLink, itemIndex?: number, column?: IColumn) => {
     if (column?.key === 'name') {
       return (
-        <Stack>
+        <Stack tokens={{ childrenGap: 5.5 }}>
           {item.specs?.map((spec, specIndex) => (
             <ButtonLink
               underline

@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { DetailsList } from '@fluentui/react';
 
 export const FullSpecList = styled(DetailsList)`
+  overflow: hidden;
   .ms-GroupHeader-title {
     span {
         color: ${({ theme }) => theme.colors.themePrimary};
