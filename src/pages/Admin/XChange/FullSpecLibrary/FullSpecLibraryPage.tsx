@@ -8,6 +8,8 @@ import {
   DetailsListLayoutMode,
   IColumn,
   IGroup,
+  TooltipHost,
+  DirectionalHint,
 } from '@fluentui/react';
 import { Column, Container, Row } from 'src/components/layouts';
 import { PageBody } from 'src/components/layouts/Column';
@@ -74,7 +76,8 @@ const FullSpecLibraryPage = () => {
       name: 'Vendor/Spec',
       key: 'name',
       fieldName: 'name',
-      minWidth: 50,
+      minWidth: 150,
+      maxWidth: 400,
       isPadded: true,
       dataType: 'string',
       isSorted: true,
@@ -86,7 +89,8 @@ const FullSpecLibraryPage = () => {
       name: '# Implementation',
       key: 'integratedClients',
       fieldName: 'integratedClients',
-      minWidth: 170,
+      minWidth: 150,
+      maxWidth: 400,
       isPadded: true,
       dataType: 'string',
       filterable: false,
@@ -104,6 +108,23 @@ const FullSpecLibraryPage = () => {
       },
     })
   }, [searchTextFullSpecVendor, refreshPage]);
+
+  const tooltipHostVendors = (clients: string[]) => {
+    if (clients?.length === 0) {
+      return (
+        <Text size="small">
+          No vendors are currently associated with this organization
+        </Text>
+      )
+    }
+
+    return (
+      <Text size="small">
+        This is the number of <Text variant="bold">distinct</Text> vendors  <br />
+        &nbsp;across organizations shown here
+      </Text>
+    );
+  }
 
   const onRenderItemColum = (item: VendorLink, itemIndex?: number, column?: IColumn) => {
     if (column?.key === 'name') {
@@ -128,9 +149,15 @@ const FullSpecLibraryPage = () => {
 
     if (column?.key === 'integratedClients') {
       return (
-        <Stack>
+        <Stack tokens={{ childrenGap: 5.5, padding: '0px 0px 0px 50px' }}>
           {item.specs?.map((spec, specIndex) => (
-            <ButtonLink key={specIndex}>{spec.integratedClients.length}</ButtonLink>
+            <TooltipHost
+            style={{position: 'relative'}}
+              content={tooltipHostVendors(spec.integratedClients)}
+              directionalHint={DirectionalHint.rightCenter}
+            >
+              <ButtonLink key={specIndex}>{spec.integratedClients.length}</ButtonLink>
+            </TooltipHost>
           ))}
         </Stack>
       )
