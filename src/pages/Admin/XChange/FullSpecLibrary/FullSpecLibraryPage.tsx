@@ -152,11 +152,11 @@ const FullSpecLibraryPage = () => {
         <Stack tokens={{ childrenGap: 5.5, padding: '0px 0px 0px 50px' }}>
           {item.specs?.map((spec, specIndex) => (
             <TooltipHost
-            style={{position: 'relative'}}
+              key={specIndex}
               content={tooltipHostVendors(spec.integratedClients)}
               directionalHint={DirectionalHint.rightCenter}
             >
-              <ButtonLink key={specIndex}>{spec.integratedClients.length}</ButtonLink>
+              <ButtonLink>{spec.integratedClients.length}</ButtonLink>
             </TooltipHost>
           ))}
         </Stack>
