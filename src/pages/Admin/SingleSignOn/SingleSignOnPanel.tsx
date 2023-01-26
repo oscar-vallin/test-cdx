@@ -68,6 +68,7 @@ const SingleSignOnPanel = ({
   const Toast = useNotification();
   const [identityProviderForm, setIdentityProviderForm] = useState<IdentityProviderForm>();
   const [priorMetaData, setPriorMetaData] = useState<IdentityProviderMetaDataLink[] | null>();
+  const [removePriorMetaDataSids, setRemovePriorMetaDataSids] = useState<string[]>();
   const [oidcSettings, setOidcSettings] = useState<OidcSettingsForm>();
   const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
@@ -232,6 +233,7 @@ const SingleSignOnPanel = ({
             idpId,
             isDefault,
             type: idpType,
+            removePriorMetaDataSids,
             oidcSettings: {
               issuer,
               clientId,
@@ -334,6 +336,13 @@ const SingleSignOnPanel = ({
                 <Text>Created on {updateDate(metaData.creationDateTime)}</Text>
                 <IconButton
                   iconProps={{ iconName: 'Trash' }}
+                  onClick={() => {
+                    const metaDataValues = priorMetaData
+                      .filter((meta) => meta.sid !== metaData.sid);
+                    setPriorMetaData(metaDataValues);
+                    setRemovePriorMetaDataSids([metaData.sid]);
+                    setUnsavedChanges(true);
+                  }}
                 />
               </Stack.Item>
             </Stack>
