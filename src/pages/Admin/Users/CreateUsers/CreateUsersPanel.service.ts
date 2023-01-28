@@ -130,6 +130,7 @@ export const useCreateUsersPanel = (orgSid: string) => {
           email: userAccountForm.email?.value ?? '',
           orgSid,
           sendActivationEmail: userAccountForm.sendActivationEmail?.value ?? true,
+          authenticationMethod: userAccountForm.authenticationMethod?.value?.value ?? '',
           accessPolicyGroupSids,
         },
         personInfo: {
