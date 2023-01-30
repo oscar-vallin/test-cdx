@@ -200,7 +200,7 @@ export const SingleSignOnPage = () => {
     }
 
     return (
-      <Spacing>
+      <Spacing id="__Password_Login_Confirm_Msg">
         <Text>Are you sure want to {disable ? 'disable' : 'enable'} Password based login for {org}?</Text>
         <Spacing margin={{ top: 'normal' }} />
         <Text>{message}</Text>
@@ -418,8 +418,8 @@ export const SingleSignOnPage = () => {
   }
 
   return (
-    <LayoutDashboard id="SingleSignOne" menuOptionSelected={ROUTE_SSO_CONFIG.API_ID}>
-      <PageHeader>
+    <LayoutDashboard id="SingleSignOn" menuOptionSelected={ROUTE_SSO_CONFIG.API_ID}>
+      <PageHeader id="__SingleSignOn_Header">
         <Container>
           <Row>
             <Column lg="6" direction="row">
@@ -431,20 +431,26 @@ export const SingleSignOnPage = () => {
           </Row>
         </Container>
       </PageHeader>
-      <PageBody>
+      <PageBody id="__SingleSignOn_Body">
         <Container>
           <Row>
             <Spacing margin={{ bottom: 'double' }}>{renderBody()}</Spacing>
           </Row>
         </Container>
-        <Container>
+        <Container id="__Password_Login_Mgmt">
           <Row>
             <Spacing margin={{ top: 'double' }}>
               {updateCmd && (
                 <Stack>
-                  <Text variant="semiBold">Password based login enabled</Text>
+                  <Text
+                    id="__Password_Login_Status"
+                    variant="semiBold"
+                  >
+                    Password based login {disable ? 'enabled' : 'disabled'}
+                  </Text>
                   <Spacing padding={{ top: 'normal' }}>
                     <ButtonLink
+                      id="__Password_Login_enable_disable"
                       underline
                       onClick={() => setShowDisableDialog(true)}
                     >
@@ -469,12 +475,21 @@ export const SingleSignOnPage = () => {
         indetityProviderSid={identityProviderSid ?? ''}
       />
       <DialogYesNo {...dialogProps} open={showDialog} />
-      <Dialog hidden={!showDisableDialog} dialogContentProps={{ title: `${disable ? 'Disable' : 'Enable'} Password based login` }} minWidth="500px">
+      <Dialog
+        hidden={!showDisableDialog}
+        dialogContentProps={{
+          title: `${disable ? 'Disable' : 'Enable'} Password based login`,
+          titleProps: {
+            id: '__Password_Login_Confirm_Title'
+          }
+        }}
+        minWidth="500px"
+      >
         <>
           {renderDialogBody()}
           <DialogFooter>
             <PrimaryButton
-              id="__ForgotPassword_confirm_ok"
+              id="__Password_Login_Confirm_Yes"
               text="Yes"
               onClick={() => {
                 setShowDisableDialog(false)
@@ -494,6 +509,7 @@ export const SingleSignOnPage = () => {
               }}
             />
             <DefaultButton
+              id="__Password_Login_Confirm_No"
               text="No"
               onClick={() => setShowDisableDialog(false)}
             />
