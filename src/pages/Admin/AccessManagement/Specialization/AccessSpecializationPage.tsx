@@ -40,7 +40,7 @@ import {
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { ROUTE_ACCESS_MANAGEMENT_SPECIALIZATION } from 'src/data/constants/RouteConstants';
+import { ROUTE_AM_SPECIALIZATION } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { PageBody } from 'src/components/layouts/Column';
@@ -327,7 +327,7 @@ const AccessManagementSpecializationPage = () => {
   };
 
   return (
-    <LayoutDashboard id="PageAdmin" menuOptionSelected={ROUTE_ACCESS_MANAGEMENT_SPECIALIZATION.API_ID}>
+    <LayoutDashboard id="PageAdmin" menuOptionSelected={ROUTE_AM_SPECIALIZATION.API_ID}>
       {(specializations?.length ?? 0) > 0 && (
         <PageHeader id="__AccessSpecHeader">
           <Container>

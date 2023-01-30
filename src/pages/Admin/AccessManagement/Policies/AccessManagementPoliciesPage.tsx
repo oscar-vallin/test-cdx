@@ -41,7 +41,7 @@ import {
 
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
-import { ROUTE_ACCESS_MANAGEMENT_POLICIES } from 'src/data/constants/RouteConstants';
+import { ROUTE_AM_POLICIES } from 'src/data/constants/RouteConstants';
 import { HideForMobile } from 'src/styles/GlobalStyles';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
@@ -357,7 +357,7 @@ const _AccessManagementPoliciesPage = () => {
   };
 
   return (
-    <LayoutDashboard id="PageAdmin" menuOptionSelected={ROUTE_ACCESS_MANAGEMENT_POLICIES.API_ID}>
+    <LayoutDashboard id="PageAdmin" menuOptionSelected={ROUTE_AM_POLICIES.API_ID}>
       <>
         {(policies?.length ?? 0) > 0 && (
           <PageHeader id="__AccessPoliciesHeader">

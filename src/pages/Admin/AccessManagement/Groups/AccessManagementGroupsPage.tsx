@@ -39,7 +39,7 @@ import { ThemeStore } from 'src/store/ThemeStore';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
-import { ROUTE_ACCESS_MANAGEMENT_GROUPS } from 'src/data/constants/RouteConstants';
+import { ROUTE_AM_GROUPS } from 'src/data/constants/RouteConstants';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { PageBody } from 'src/components/layouts/Column';
 import { useAccessManagementGroupsPageService } from './AccessManagementGroupsPage.service';
@@ -358,7 +358,7 @@ const AccessManagementGroupsContainer = () => {
   // !Render Page
   //
   return (
-    <LayoutDashboard id="PageAdmin" menuOptionSelected={ROUTE_ACCESS_MANAGEMENT_GROUPS.API_ID}>
+    <LayoutDashboard id="PageAdmin" menuOptionSelected={ROUTE_AM_GROUPS.API_ID}>
       {groups.length > 0 && (
         <PageHeader id="__AccessGroupsHeader">
           <Container>
