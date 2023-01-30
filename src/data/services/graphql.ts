@@ -443,6 +443,8 @@ export type CreateIdentityProviderInput = {
 export type CreateIncomingFormatInput = {
   name?: Maybe<Scalars['String']>;
   notes?: Maybe<Scalars['String']>;
+  semanticMap?: Maybe<Scalars['String']>;
+  includedStepXML?: Maybe<Scalars['String']>;
 };
 
 export type CreateOrgInput = {
@@ -469,6 +471,8 @@ export type CreateSupportedPlatformInput = {
   name?: Maybe<Scalars['String']>;
   notes?: Maybe<Scalars['String']>;
   supportedIncomingFormats?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  semanticMap?: Maybe<Scalars['String']>;
+  includedStepXML?: Maybe<Scalars['String']>;
 };
 
 export type CreateUserDashThemeInput = {
@@ -497,6 +501,7 @@ export type CreateVendorSpecInput = {
   fileContents?: Maybe<ExtractType>;
   supportsFullFile?: Maybe<Scalars['Boolean']>;
   supportsChangesOnly?: Maybe<Scalars['Boolean']>;
+  parentSpec?: Maybe<Scalars['ID']>;
   comments?: Maybe<Scalars['String']>;
 };
 
@@ -900,7 +905,10 @@ export type IncomingFormatForm = {
   sid?: Maybe<Scalars['ID']>;
   name: UiStringField;
   notes: UiStringField;
+  semanticMap: UiSelectOneField;
+  includedStepXML: UiStringField;
   active: UiReadOnlyField;
+  options?: Maybe<Array<UiOptions>>;
   commands?: Maybe<Array<WebCommand>>;
   response: GqOperationResponse;
   errCode?: Maybe<Scalars['String']>;
@@ -2275,6 +2283,7 @@ export type Query = {
   vendorSpecs?: Maybe<VendorSpecSummaryConnection>;
   vendorSpecForm?: Maybe<VendorSpecForm>;
   fullVendorSpecLibrary?: Maybe<VendorLinkConnection>;
+  vendorSpecQuickSearch?: Maybe<Array<VendorSpecLink>>;
   xchangeProfile?: Maybe<XchangeProfile>;
   xchangeConfig?: Maybe<XchangeConfigForm>;
   xchangeFileProcessForm?: Maybe<XchangeFileProcessForm>;
@@ -2722,6 +2731,11 @@ export type QueryVendorSpecFormArgs = {
 export type QueryFullVendorSpecLibraryArgs = {
   searchText: Scalars['String'];
   pageableInput?: Maybe<PageableInput>;
+};
+
+
+export type QueryVendorSpecQuickSearchArgs = {
+  searchText?: Maybe<Scalars['String']>;
 };
 
 
@@ -3181,6 +3195,8 @@ export type SupportedPlatformForm = {
   name: UiStringField;
   notes: UiStringField;
   supportedIncomingFormats: UiSelectManyField;
+  semanticMap: UiSelectOneField;
+  includedStepXML: UiStringField;
   options?: Maybe<Array<UiOptions>>;
   commands?: Maybe<Array<WebCommand>>;
   response: GqOperationResponse;
@@ -3466,6 +3482,8 @@ export type UpdateIncomingFormatInput = {
   sid: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
   notes?: Maybe<Scalars['String']>;
+  semanticMap?: Maybe<Scalars['String']>;
+  includedStepXML?: Maybe<Scalars['String']>;
 };
 
 export type UpdateMyProfileInput = {
@@ -3513,6 +3531,8 @@ export type UpdateSupportedPlatformInput = {
   sid: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
   notes?: Maybe<Scalars['String']>;
+  semanticMap?: Maybe<Scalars['String']>;
+  includedStepXML?: Maybe<Scalars['String']>;
   supportedIncomingFormats?: Maybe<Array<Maybe<Scalars['ID']>>>;
 };
 
@@ -3550,6 +3570,7 @@ export type UpdateVendorSpecInput = {
   fileContents?: Maybe<ExtractType>;
   supportsFullFile?: Maybe<Scalars['Boolean']>;
   supportsChangesOnly?: Maybe<Scalars['Boolean']>;
+  parentSpec?: Maybe<Scalars['ID']>;
   comments?: Maybe<Scalars['String']>;
 };
 
@@ -3770,6 +3791,7 @@ export type VendorSpecForm = {
   fileContents: UiSelectOneField;
   supportsFullFile: UiSelectOneField;
   supportsChangesOnly: UiSelectOneField;
+  parentSpec: UiSelectOneField;
   comments: UiStringField;
   active: UiReadOnlyField;
   options?: Maybe<Array<UiOptions>>;
@@ -3778,6 +3800,13 @@ export type VendorSpecForm = {
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
   errSeverity?: Maybe<ErrorSeverity>;
+};
+
+export type VendorSpecLink = {
+  __typename?: 'VendorSpecLink';
+  sid?: Maybe<Scalars['ID']>;
+  vendor?: Maybe<Organization>;
+  name?: Maybe<Scalars['String']>;
 };
 
 export type VendorSpecSummary = {
@@ -7342,6 +7371,9 @@ export type VendorSpecFormQuery = (
     ), supportsChangesOnly: (
       { __typename?: 'UISelectOneField' }
       & FragmentUiSelectOneFieldFragment
+    ), parentSpec: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
     ), comments: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
@@ -7393,6 +7425,23 @@ export type FullVendorSpecLibraryQuery = (
       & FragmentPaginationInfoFragment
     ) }
   )> }
+);
+
+export type VendorSpecQuickSearchQueryVariables = Exact<{
+  searchText?: Maybe<Scalars['String']>;
+}>;
+
+
+export type VendorSpecQuickSearchQuery = (
+  { __typename?: 'Query' }
+  & { vendorSpecQuickSearch?: Maybe<Array<(
+    { __typename?: 'VendorSpecLink' }
+    & Pick<VendorSpecLink, 'sid' | 'name'>
+    & { vendor?: Maybe<(
+      { __typename?: 'Organization' }
+      & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
+    )> }
+  )>> }
 );
 
 export type XchangeProfileQueryVariables = Exact<{
@@ -8092,6 +8141,12 @@ export type SupportedPlatformFormQuery = (
     ), supportedIncomingFormats: (
       { __typename?: 'UISelectManyField' }
       & FragmentUiSelectManyFieldFragment
+    ), semanticMap: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), includedStepXML: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
     ), options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & FragmentUiOptionsFragment
@@ -8135,10 +8190,19 @@ export type IncomingFormatFormQuery = (
     ), notes: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
+    ), semanticMap: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), includedStepXML: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
     ), active: (
       { __typename?: 'UIReadOnlyField' }
       & FragmentUiReadOnlyFieldFragment
-    ), commands?: Maybe<Array<(
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
     )>> }
@@ -10160,6 +10224,9 @@ export type CreateVendorSpecMutation = (
     ), supportsChangesOnly: (
       { __typename?: 'UISelectOneField' }
       & FragmentUiSelectOneFieldFragment
+    ), parentSpec: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
     ), comments: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
@@ -10202,6 +10269,9 @@ export type UpdateVendorSpecMutation = (
       { __typename?: 'UISelectOneField' }
       & FragmentUiSelectOneFieldFragment
     ), supportsChangesOnly: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), parentSpec: (
       { __typename?: 'UISelectOneField' }
       & FragmentUiSelectOneFieldFragment
     ), comments: (
@@ -11604,6 +11674,12 @@ export type CreateSupportedPlatformMutation = (
     ), supportedIncomingFormats: (
       { __typename?: 'UISelectManyField' }
       & FragmentUiSelectManyFieldFragment
+    ), semanticMap: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), includedStepXML: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
     ), options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & FragmentUiOptionsFragment
@@ -11633,6 +11709,12 @@ export type UpdateSupportedPlatformMutation = (
     ), supportedIncomingFormats: (
       { __typename?: 'UISelectManyField' }
       & FragmentUiSelectManyFieldFragment
+    ), semanticMap: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), includedStepXML: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
     ), options?: Maybe<Array<(
       { __typename?: 'UIOptions' }
       & FragmentUiOptionsFragment
@@ -11683,10 +11765,19 @@ export type CreateIncomingFormatMutation = (
     ), notes: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
+    ), semanticMap: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), includedStepXML: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
     ), active: (
       { __typename?: 'UIReadOnlyField' }
       & FragmentUiReadOnlyFieldFragment
-    ), commands?: Maybe<Array<(
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
     )>> }
@@ -11709,10 +11800,19 @@ export type UpdateIncomingFormatMutation = (
     ), notes: (
       { __typename?: 'UIStringField' }
       & FragmentUiStringFieldFragment
+    ), semanticMap: (
+      { __typename?: 'UISelectOneField' }
+      & FragmentUiSelectOneFieldFragment
+    ), includedStepXML: (
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
     ), active: (
       { __typename?: 'UIReadOnlyField' }
       & FragmentUiReadOnlyFieldFragment
-    ), commands?: Maybe<Array<(
+    ), options?: Maybe<Array<(
+      { __typename?: 'UIOptions' }
+      & FragmentUiOptionsFragment
+    )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
     )>> }
@@ -17025,6 +17125,9 @@ export const VendorSpecFormDocument = gql`
     supportsChangesOnly {
       ...fragmentUISelectOneField
     }
+    parentSpec {
+      ...fragmentUISelectOneField
+    }
     comments {
       ...fragmentUIStringField
     }
@@ -17135,6 +17238,47 @@ export function useFullVendorSpecLibraryLazyQuery(baseOptions?: Apollo.LazyQuery
 export type FullVendorSpecLibraryQueryHookResult = ReturnType<typeof useFullVendorSpecLibraryQuery>;
 export type FullVendorSpecLibraryLazyQueryHookResult = ReturnType<typeof useFullVendorSpecLibraryLazyQuery>;
 export type FullVendorSpecLibraryQueryResult = Apollo.QueryResult<FullVendorSpecLibraryQuery, FullVendorSpecLibraryQueryVariables>;
+export const VendorSpecQuickSearchDocument = gql`
+    query VendorSpecQuickSearch($searchText: String) {
+  vendorSpecQuickSearch(searchText: $searchText) {
+    sid
+    vendor {
+      sid
+      name
+      orgId
+      orgType
+      orgTypeLabel
+    }
+    name
+  }
+}
+    `;
+
+/**
+ * __useVendorSpecQuickSearchQuery__
+ *
+ * To run a query within a React component, call `useVendorSpecQuickSearchQuery` and pass it any options that fit your needs.
+ * When your component renders, `useVendorSpecQuickSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useVendorSpecQuickSearchQuery({
+ *   variables: {
+ *      searchText: // value for 'searchText'
+ *   },
+ * });
+ */
+export function useVendorSpecQuickSearchQuery(baseOptions?: Apollo.QueryHookOptions<VendorSpecQuickSearchQuery, VendorSpecQuickSearchQueryVariables>) {
+        return Apollo.useQuery<VendorSpecQuickSearchQuery, VendorSpecQuickSearchQueryVariables>(VendorSpecQuickSearchDocument, baseOptions);
+      }
+export function useVendorSpecQuickSearchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<VendorSpecQuickSearchQuery, VendorSpecQuickSearchQueryVariables>) {
+          return Apollo.useLazyQuery<VendorSpecQuickSearchQuery, VendorSpecQuickSearchQueryVariables>(VendorSpecQuickSearchDocument, baseOptions);
+        }
+export type VendorSpecQuickSearchQueryHookResult = ReturnType<typeof useVendorSpecQuickSearchQuery>;
+export type VendorSpecQuickSearchLazyQueryHookResult = ReturnType<typeof useVendorSpecQuickSearchLazyQuery>;
+export type VendorSpecQuickSearchQueryResult = Apollo.QueryResult<VendorSpecQuickSearchQuery, VendorSpecQuickSearchQueryVariables>;
 export const XchangeProfileDocument = gql`
     query XchangeProfile($orgSid: ID!) {
   xchangeProfile(orgSid: $orgSid) {
@@ -18394,6 +18538,12 @@ export const SupportedPlatformFormDocument = gql`
     supportedIncomingFormats {
       ...fragmentUISelectManyField
     }
+    semanticMap {
+      ...fragmentUISelectOneField
+    }
+    includedStepXML {
+      ...fragmentUIStringField
+    }
     options {
       ...fragmentUIOptions
     }
@@ -18408,6 +18558,7 @@ export const SupportedPlatformFormDocument = gql`
 }
     ${FragmentUiStringFieldFragmentDoc}
 ${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
 
@@ -18486,8 +18637,17 @@ export const IncomingFormatFormDocument = gql`
     notes {
       ...fragmentUIStringField
     }
+    semanticMap {
+      ...fragmentUISelectOneField
+    }
+    includedStepXML {
+      ...fragmentUIStringField
+    }
     active {
       ...fragmentUIReadOnlyField
+    }
+    options {
+      ...fragmentUIOptions
     }
     commands {
       ...fragmentWebCommand
@@ -18499,7 +18659,9 @@ export const IncomingFormatFormDocument = gql`
   }
 }
     ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
 
 /**
@@ -22235,6 +22397,9 @@ export const CreateVendorSpecDocument = gql`
     supportsChangesOnly {
       ...fragmentUISelectOneField
     }
+    parentSpec {
+      ...fragmentUISelectOneField
+    }
     comments {
       ...fragmentUIStringField
     }
@@ -22303,6 +22468,9 @@ export const UpdateVendorSpecDocument = gql`
       ...fragmentUISelectOneField
     }
     supportsChangesOnly {
+      ...fragmentUISelectOneField
+    }
+    parentSpec {
       ...fragmentUISelectOneField
     }
     comments {
@@ -24615,6 +24783,12 @@ export const CreateSupportedPlatformDocument = gql`
     supportedIncomingFormats {
       ...fragmentUISelectManyField
     }
+    semanticMap {
+      ...fragmentUISelectOneField
+    }
+    includedStepXML {
+      ...fragmentUIStringField
+    }
     options {
       ...fragmentUIOptions
     }
@@ -24629,6 +24803,7 @@ export const CreateSupportedPlatformDocument = gql`
 }
     ${FragmentUiStringFieldFragmentDoc}
 ${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
 export type CreateSupportedPlatformMutationFn = Apollo.MutationFunction<CreateSupportedPlatformMutation, CreateSupportedPlatformMutationVariables>;
@@ -24669,6 +24844,12 @@ export const UpdateSupportedPlatformDocument = gql`
     supportedIncomingFormats {
       ...fragmentUISelectManyField
     }
+    semanticMap {
+      ...fragmentUISelectOneField
+    }
+    includedStepXML {
+      ...fragmentUIStringField
+    }
     options {
       ...fragmentUIOptions
     }
@@ -24683,6 +24864,7 @@ export const UpdateSupportedPlatformDocument = gql`
 }
     ${FragmentUiStringFieldFragmentDoc}
 ${FragmentUiSelectManyFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
 export type UpdateSupportedPlatformMutationFn = Apollo.MutationFunction<UpdateSupportedPlatformMutation, UpdateSupportedPlatformMutationVariables>;
@@ -24764,8 +24946,17 @@ export const CreateIncomingFormatDocument = gql`
     notes {
       ...fragmentUIStringField
     }
+    semanticMap {
+      ...fragmentUISelectOneField
+    }
+    includedStepXML {
+      ...fragmentUIStringField
+    }
     active {
       ...fragmentUIReadOnlyField
+    }
+    options {
+      ...fragmentUIOptions
     }
     commands {
       ...fragmentWebCommand
@@ -24777,7 +24968,9 @@ export const CreateIncomingFormatDocument = gql`
   }
 }
     ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
 export type CreateIncomingFormatMutationFn = Apollo.MutationFunction<CreateIncomingFormatMutation, CreateIncomingFormatMutationVariables>;
 
@@ -24814,8 +25007,17 @@ export const UpdateIncomingFormatDocument = gql`
     notes {
       ...fragmentUIStringField
     }
+    semanticMap {
+      ...fragmentUISelectOneField
+    }
+    includedStepXML {
+      ...fragmentUIStringField
+    }
     active {
       ...fragmentUIReadOnlyField
+    }
+    options {
+      ...fragmentUIOptions
     }
     commands {
       ...fragmentWebCommand
@@ -24827,7 +25029,9 @@ export const UpdateIncomingFormatDocument = gql`
   }
 }
     ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiSelectOneFieldFragmentDoc}
 ${FragmentUiReadOnlyFieldFragmentDoc}
+${FragmentUiOptionsFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
 export type UpdateIncomingFormatMutationFn = Apollo.MutationFunction<UpdateIncomingFormatMutation, UpdateIncomingFormatMutationVariables>;
 
