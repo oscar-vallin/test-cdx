@@ -4186,6 +4186,7 @@ export type XchangeConfigForm = {
   requiresConversion: Scalars['Boolean'];
   hasUnpublishedChanges: Scalars['Boolean'];
   incompleteSetup: Scalars['Boolean'];
+  implementationPending: Scalars['Boolean'];
   schedule: XchangeSchedule;
   coreFilename: UiStringField;
   coreFilenamePattern: UiStringField;
@@ -7496,7 +7497,7 @@ export type XchangeConfigQuery = (
   { __typename?: 'Query' }
   & { xchangeConfig?: Maybe<(
     { __typename?: 'XchangeConfigForm' }
-    & Pick<XchangeConfigForm, 'sid' | 'requiresConversion' | 'hasUnpublishedChanges' | 'incompleteSetup' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & Pick<XchangeConfigForm, 'sid' | 'requiresConversion' | 'hasUnpublishedChanges' | 'incompleteSetup' | 'implementationPending' | 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
     & { schedule: (
       { __typename?: 'XchangeSchedule' }
       & Pick<XchangeSchedule, 'scheduleType' | 'frequency' | 'xchangeJobGroupSid' | 'xchangeJobGroupName' | 'months' | 'days' | 'endDayOfMonth' | 'endDayOrdinal' | 'endRelativeDay' | 'endHour' | 'endMinute' | 'timezone' | 'hasSilencePeriod' | 'silenceStartMonth' | 'silenceStartDay' | 'silenceEndMonth' | 'silenceEndDay' | 'expectedRunSchedule' | 'expectedCompletionTime'>
@@ -17368,6 +17369,7 @@ export const XchangeConfigDocument = gql`
     requiresConversion
     hasUnpublishedChanges
     incompleteSetup
+    implementationPending
     schedule {
       scheduleType
       frequency
