@@ -28,6 +28,7 @@ import { Spacing } from 'src/components/spacings/Spacing';
 import { DataColumn } from 'src/containers/tables';
 import { ButtonLink } from 'src/components/buttons';
 import { useThemeStore } from 'src/store/ThemeStore';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { CardSupportedStyled } from './SupportedPlatforms.styes';
 import { SupportedPlataformsPanel } from './SupportedPlatformsPanel';
 import { IncomingFormatPanel } from './IncomingFormatPanel';
@@ -46,11 +47,25 @@ const SupportedPlatformsPage = () => {
   const [refreshPage, setRefreshPage] = useState(false);
   const [sortedDescending, setSortedDescending] = useState(false);
   const [supportedPlatform,
-    { data: supportedPlatformsData, loading: isLoadingSupportedPlataforms },
+    {
+      data: supportedPlatformsData,
+      loading: isLoadingSupportedPlatforms,
+      error: errorSupportedPlatforms,
+    },
   ] = useSupportedPlatformsLazyQuery();
   const [incomingFormat,
-    { data: incomingFormatData, loading: isLoadingIncomingFormat },
+    { data: incomingFormatData, loading: isLoadingIncomingFormat, error: errorIncomingFormat },
   ] = useIncomingFormatsLazyQuery();
+
+  const handleError = ErrorHandler();
+
+  useEffect(() => {
+    handleError(errorSupportedPlatforms);
+  }, [errorSupportedPlatforms]);
+
+  useEffect(() => {
+    handleError(errorIncomingFormat);
+  }, [errorIncomingFormat]);
 
   const fetchData = () => {
     supportedPlatform({
@@ -69,7 +84,7 @@ const SupportedPlatformsPage = () => {
     setSupportedPlatforms(newItems);
   }
   useEffect(() => {
-    if (!isLoadingSupportedPlataforms && supportedPlatformsData) {
+    if (!isLoadingSupportedPlatforms && supportedPlatformsData) {
       setSupportedPlatforms(supportedPlatformsData.supportedPlatforms?.nodes);
       updateItems(supportedPlatformsData.supportedPlatforms?.nodes)
 
@@ -79,10 +94,10 @@ const SupportedPlatformsPage = () => {
         setCreateCmd(_createCmd);
       }
     }
-  }, [supportedPlatformsData, isLoadingSupportedPlataforms]);
+  }, [supportedPlatformsData, isLoadingSupportedPlatforms]);
 
   useEffect(() => {
-    if (!isLoadingSupportedPlataforms && incomingFormatData) {
+    if (!isLoadingSupportedPlatforms && incomingFormatData) {
       setIncomingFormats(incomingFormatData.incomingFormats?.nodes);
 
       if (incomingFormatData.incomingFormats?.listPageInfo?.pageCommands) {
@@ -91,7 +106,7 @@ const SupportedPlatformsPage = () => {
         setCreateIncomingCmd(_createCmd);
       }
     }
-  }, [incomingFormatData, isLoadingSupportedPlataforms]);
+  }, [incomingFormatData, isLoadingSupportedPlatforms]);
 
   function copyAndSort <T>(items:T[], columnKey?: string, isSortedDescending?: boolean): T[] {
     const key = columnKey as keyof T;
@@ -158,7 +173,14 @@ const SupportedPlatformsPage = () => {
       return (
         <Stack>
           {item.supportedIncomingFormats?.map((incoming, incomingIndex: number) => (
-            <ButtonLink underline key={incomingIndex}>
+            <ButtonLink
+              underline
+              key={incomingIndex}
+              onClick={() => {
+                setSid(item.sid ?? '');
+                setIsOpenPanel(true);
+              }}
+            >
               {incoming}
             </ButtonLink>
           ))}
@@ -184,7 +206,7 @@ const SupportedPlatformsPage = () => {
   }
 
   const renderBody = () => {
-    if (isLoadingSupportedPlataforms) {
+    if (isLoadingSupportedPlatforms) {
       return (
         <Spacing margin={{ top: 'double' }}>
           <Spinner size={SpinnerSize.large} label="Loading Supported Source Platforms" />
@@ -204,7 +226,7 @@ const SupportedPlatformsPage = () => {
   };
 
   const cardBox = () => {
-    if (isLoadingIncomingFormat || isLoadingSupportedPlataforms) return null;
+    if (isLoadingIncomingFormat || isLoadingSupportedPlatforms) return null;
 
     return (
       <CardSupportedStyled>
@@ -222,6 +244,8 @@ const SupportedPlatformsPage = () => {
                     cursor: 'pointer',
                   }}
                   iconName="add"
+                  title="Create Incoming Format"
+                  aria-label="Create Incoming Format"
                   onClick={() => {
                     setSid('');
                     setIsOpenIncomingPanel(true);
