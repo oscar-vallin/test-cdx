@@ -578,7 +578,7 @@ const SpecificationLibraryPage = () => {
                     setIsOpenPanel(true);
                   }}
                 >
-                  Create new spec
+                  Create Spec
                 </PrimaryButton>
               )}
             </Column>
