@@ -47,6 +47,13 @@ export const SummaryWizardBody = ({ form }: SummaryWizardBodyType) => (
       </Column>
     </FormRow>
 
+    <FormRow>
+      <Column lg="12">
+        <FormLabel label={form.authenticationMethod?.label} />
+        <FieldValue id="__authentication_summary">{form.authenticationMethod?.value?.label}</FieldValue>
+      </Column>
+    </FormRow>
+
     {!form.person?.sid && form.sendActivationEmail?.value === true && (
     <FormRow>
       <Column lg="12">
