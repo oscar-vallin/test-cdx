@@ -19,9 +19,16 @@ type SectionAuthProps = {
 const SectionAuthentication = ({
   form, onPrev, onNext, saveOptions,
 }: SectionAuthProps) => {
+  const passwordOption: UiOption = {
+    value: '-1',
+    label: 'Password login',
+  };
   const [sendEmail, setSendEmail] = useState<boolean>(form.sendActivationEmail?.value ?? true);
   const [passwordBasedLoginData, setPasswordBasedLoginData] = useState<UiOption[] | null>();
-  const [authenticationMethod, setAuthenticationMethod] = useState<UiOption>();
+  const [
+    authenticationMethod,
+    setAuthenticationMethod,
+  ] = useState<UiOption>(form.authenticationMethod?.value ?? passwordOption);
   const [checkedSingleSignOn, setCheckedSingleSignOn] = useState(false);
 
   useEffect(() => {
@@ -78,7 +85,7 @@ const SectionAuthentication = ({
                     <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
                       {!checkedSingleSignOn ? (
                         <Column lg="12">
-                          <Spacing margin={{top: 'normal'}}>
+                          <Spacing margin={{ top: 'normal' }}>
                             <UIInputCheck
                               id="__userSendActivation"
                               uiField={form?.sendActivationEmail}
@@ -87,19 +94,19 @@ const SectionAuthentication = ({
                                 setSendEmail(checked);
                               }}
                             />
-                         </Spacing>
-                       </Column>
+                          </Spacing>
+                        </Column>
                       ) : (
-                       <Column lg="12">
-                        <Spacing margin={{top: 'normal'}}>
-                           <Checkbox
-                             id="__userSendActivation"
-                             disabled
-                             checked={sendEmail}
-                             label={form?.sendActivationEmail?.label}
-                           />
-                        </Spacing>
-                       </Column>
+                        <Column lg="12">
+                          <Spacing margin={{ top: 'normal' }}>
+                            <Checkbox
+                              id="__userSendActivation"
+                              disabled
+                              checked={sendEmail}
+                              label={form?.sendActivationEmail?.label}
+                            />
+                          </Spacing>
+                        </Column>
                       )}
                     </Spacing>
                   )}
