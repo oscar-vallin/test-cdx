@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -12,6 +12,7 @@ import {
   FontIcon,
   Spinner,
   SpinnerSize,
+  IDetailsColumnProps,
 } from '@fluentui/react';
 import { Text } from 'src/components/typography';
 import { ButtonLink } from 'src/components/buttons';
@@ -21,14 +22,11 @@ import { Organization, OrganizationActivity, UiBooleanField } from 'src/data/ser
 import { TableFiltersType } from 'src/hooks/useTableFilters';
 import { useActiveDomainUseCase } from 'src/use-cases/ActiveDomain';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
-import { yyyyMMdd } from 'src/utils/CDXUtils';
 import { useThemeStore } from 'src/store/ThemeStore';
-import { useHistory } from 'react-router-dom';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { IDetailsColumnProps } from '@fluentui/react/lib/components/DetailsList/DetailsColumn.types';
 import { ThemedSearchBox } from 'src/components/inputs/SearchBox/ThemedSearchBox.styles';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
-import { CircleStyled } from '../XChange/Xchanges/XchangePage.styles';
+import { ActivityBubbles } from 'src/components/badges/Activity';
 
 type OrgsTableType = {
     orgs?: OrganizationActivity[];
@@ -54,65 +52,6 @@ export const OrgsTable = ({
   const ActiveDomain = useActiveDomainUseCase();
   const ActiveDomainStore = useActiveDomainStore();
   const ThemeStore = useThemeStore();
-  const history = useHistory();
-  const [increaseDelay, setIncreasedelay] = useState(1500);
-  const updateDateFormat = (date: Date) => {
-    const currentDate = new Date(date);
-    const formattedDate = currentDate.toDateString();
-    let hour = currentDate.getHours();
-    let minutes: string = currentDate.getMinutes().toString();
-    const format = hour >= 12 ? 'PM' : 'AM';
-    hour %= 12;
-    hour = hour || 12;
-    minutes = minutes.length < 2 ? `0${minutes}` : minutes;
-    return `${formattedDate} ${hour}:${minutes}${format}`;
-  };
-
-  const tooltipHostContent = (
-    lastActivity: Date,
-    activityType?: string,
-    sid?: string,
-    filesProcessed?: number,
-  ) => {
-    const error = activityType?.trim() !== '';
-    const fromDate = new Date(lastActivity);
-    let currentColor: string;
-    if (activityType === 'UAT') {
-      currentColor = 'purple';
-    } else if (activityType === 'PROD') {
-      currentColor = 'blue';
-    } else {
-      currentColor = 'orange';
-    }
-
-    const currentDate = updateDateFormat(lastActivity);
-    const endDate = yyyyMMdd(fromDate);
-    const endFormatted = new Date(endDate);
-    endFormatted.setDate(endFormatted.getDate() - 29);
-    const startDate = yyyyMMdd(endFormatted);
-    return (
-      // eslint-disable-next-line react/jsx-no-useless-fragment
-      <>
-        {error && (
-          <>
-            <span style={{ color: currentColor, fontWeight: 'bold' }}> {filesProcessed} </span>
-            {activityType} files processed in the last 30 days <br />
-            <span style={{ marginLeft: '20px' }}>Last Run: {currentDate}</span> <br /> <br />
-            <ButtonLink
-              style={{ marginLeft: '70px' }}
-              onClick={() => {
-                ActiveDomain.setCurrentOrg(sid);
-                history.push(`/file-status?endDate=${endDate}&orgSid=6&startDate=${startDate}`);
-              }}
-            >
-              {' '}
-              Click for details
-            </ButtonLink>
-          </>
-        )}
-      </>
-    );
-  };
 
   const tooltipHostVendors = (title?: boolean, vendors?: string[]) => {
     if (vendors?.length === 0) {
@@ -148,7 +87,7 @@ export const OrgsTable = ({
       </Stack>
     )
   };
-  const onRenderItemColumn = (item?: OrganizationActivity, index?: number, column?: IColumn) => {
+  const onRenderItemColumn = (item: OrganizationActivity, index?: number, column?: IColumn) => {
     let columnVal: number | undefined;
     let paddingLeft: number | undefined;
     if (column?.key === 'vendorNames' && item?.sid) {
@@ -158,9 +97,6 @@ export const OrgsTable = ({
       columnVal = item?.vendorNames.length;
       paddingLeft = 40;
     }
-    const uatFilesProcessed = item?.uatActivity.filesProcessed;
-    const testFilesProcessed = item?.testActivity.filesProcessed;
-    const prodFilesProcessed = item?.prodActivity.filesProcessed;
 
     if (item && column && column.key !== 'active' && column.key !== 'vendorNames') {
       const value = item[column.key];
@@ -203,62 +139,13 @@ export const OrgsTable = ({
           </Stack>
         )}
         {column?.key === 'active' && (
-        <>
-          {uatFilesProcessed && uatFilesProcessed > 0 ? (
-            <TooltipHost
-              content={item.sid ? tooltipHostContent(
-                item?.uatActivity?.lastActivity,
-                'UAT',
-                item?.sid ?? '',
-                uatFilesProcessed,
-              ) : undefined}
-              directionalHint={DirectionalHint.topRightEdge}
-              closeDelay={increaseDelay}
-              onMouseOver={() => setIncreasedelay(2000)}
-              onMouseLeave={() => setIncreasedelay(0)}
-            >
-              <CircleStyled total={!item.sid} color="purple">{uatFilesProcessed}</CircleStyled>
-            </TooltipHost>
-          ) : (
-            <CircleStyled total={!item?.sid} color="gray">0</CircleStyled>
-          )}
-          {testFilesProcessed && testFilesProcessed > 0 ? (
-            <TooltipHost
-              content={item.sid ? tooltipHostContent(
-                item?.testActivity?.lastActivity,
-                'TEST',
-                item?.sid ?? '',
-                testFilesProcessed,
-              ) : undefined}
-              directionalHint={DirectionalHint.topRightEdge}
-              closeDelay={increaseDelay}
-              onMouseOver={() => setIncreasedelay(2000)}
-              onMouseLeave={() => setIncreasedelay(0)}
-            >
-              <CircleStyled total={!item.sid} color="orange">{testFilesProcessed}</CircleStyled>
-            </TooltipHost>
-          ) : (
-            <CircleStyled total={!item?.sid} color="gray">0</CircleStyled>
-          )}
-          {prodFilesProcessed && prodFilesProcessed > 0 ? (
-            <TooltipHost
-              content={item.sid ? tooltipHostContent(
-                item?.prodActivity?.lastActivity,
-                'PROD',
-                item?.sid ?? '',
-                prodFilesProcessed,
-              ) : undefined}
-              directionalHint={DirectionalHint.topRightEdge}
-              closeDelay={increaseDelay}
-              onMouseOver={() => setIncreasedelay(2000)}
-              onMouseLeave={() => setIncreasedelay(0)}
-            >
-              <CircleStyled total={!item.sid} color="blue">{prodFilesProcessed}</CircleStyled>
-            </TooltipHost>
-          ) : (
-            <CircleStyled total={!item?.sid} color="gray">0</CircleStyled>
-          )}
-        </>
+          <ActivityBubbles
+            orgSid={item.sid}
+            uat={item.uatActivity}
+            test={item.testActivity}
+            prod={item.prodActivity}
+            total={!item.sid}
+          />
         )}
       </Stack>
     )

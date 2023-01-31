@@ -37,6 +37,7 @@ import {
 import { yyyyMMdd } from 'src/utils/CDXUtils';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { PageBody } from 'src/components/layouts/Column';
+import { ActivityBubble } from 'src/components/badges/Activity';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { DialogYesNoProps, DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { useNotification } from 'src/hooks/useNotification';
@@ -44,7 +45,6 @@ import { PreviewConvertXchangePanel } from './PreviewConvertXchangePanel';
 import {
   CardStyled,
   ContainerInput,
-  CircleStyled,
   StyledButtonAction,
   StyledIconsComments,
 } from './XchangePage.styles';
@@ -375,10 +375,10 @@ const XChangePage = () => {
                     uatFilesProcessed,
                   )}
                 >
-                  <CircleStyled color="purple">{uatFilesProcessed}</CircleStyled>
+                  <ActivityBubble color="purple">{uatFilesProcessed}</ActivityBubble>
                 </TooltipHost>
               ) : (
-                <CircleStyled color="gray">0</CircleStyled>
+                <ActivityBubble color="gray">0</ActivityBubble>
               )}
               {testFilesProcessed > 0 ? (
                 <TooltipHost
@@ -389,10 +389,10 @@ const XChangePage = () => {
                     testFilesProcessed,
                   )}
                 >
-                  <CircleStyled color="orange">{testFilesProcessed}</CircleStyled>
+                  <ActivityBubble color="orange">{testFilesProcessed}</ActivityBubble>
                 </TooltipHost>
               ) : (
-                <CircleStyled color="gray">0</CircleStyled>
+                <ActivityBubble color="gray">0</ActivityBubble>
               )}
               {prodFilesProcessed > 0 ? (
                 <TooltipHost
@@ -403,10 +403,10 @@ const XChangePage = () => {
                     prodFilesProcessed,
                   )}
                 >
-                  <CircleStyled color="blue">{prodFilesProcessed}</CircleStyled>
+                  <ActivityBubble color="blue">{prodFilesProcessed}</ActivityBubble>
                 </TooltipHost>
               ) : (
-                <CircleStyled color="gray">0</CircleStyled>
+                <ActivityBubble color="gray">0</ActivityBubble>
               )}
               {node?.errorActivity && node?.errorActivity.filesProcessed > 0 && (
                 <TooltipHost content={tooltipHostContent(node?.errorActivity?.lastActivity, '', node?.vendorIds)}>

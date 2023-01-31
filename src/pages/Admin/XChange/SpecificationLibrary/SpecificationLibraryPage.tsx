@@ -17,7 +17,6 @@ import {
 } from '@fluentui/react';
 import { Column, Container, Row } from 'src/components/layouts';
 import { PageTitle, Text } from 'src/components/typography';
-import { yyyyMMdd } from 'src/utils/CDXUtils';
 import { ROUTE_VENDOR_SPEC_LIBRARY } from 'src/data/constants/RouteConstants';
 import {
   CdxWebCommandType,
@@ -28,7 +27,6 @@ import {
   WebCommand,
 } from 'src/data/services/graphql';
 import { useOrgSid } from 'src/hooks/useOrgSid';
-import { useHistory } from 'react-router-dom';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Save20Filled } from '@fluentui/react-icons';
 import { PageHeader } from 'src/containers/headers/PageHeader';
@@ -36,12 +34,12 @@ import { PageBody } from 'src/components/layouts/Column';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { ButtonLink } from 'src/components/buttons';
-import { useActiveDomainUseCase } from 'src/use-cases/ActiveDomain';
+import { ActivityBubbles } from 'src/components/badges/Activity';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useNotification } from 'src/hooks/useNotification';
 import { SpecPanel } from '../FullSpecLibrary/SpecPanel';
-import { CardStyled, CircleStyled, ContainerInput } from '../Xchanges/XchangePage.styles';
+import { CardStyled, ContainerInput } from '../Xchanges/XchangePage.styles';
 
 const defaultDialogProps: DialogYesNoProps = {
   id: '__SpecLibrary_Dlg',
@@ -57,9 +55,7 @@ const defaultDialogProps: DialogYesNoProps = {
 const SpecificationLibraryPage = () => {
   const { orgSid } = useOrgSid();
   const ThemeStore = useThemeStore();
-  const history = useHistory();
   const Toast = useNotification();
-  const ActiveDomain = useActiveDomainUseCase();
   const [vendors, setVendors] = useState<VendorSpecSummary[] | null>();
   const refItems = useRef(vendors);
   const [searchFullSpec, setSearchFullSpec] = useState<string>('');
@@ -76,7 +72,6 @@ const SpecificationLibraryPage = () => {
   const [isOpenPanel, setIsOpenPanel] = useState(false);
   const [isSorted, setIsSorted] = useState(0);
   const [sortedDescending, setSortedDescending] = useState(false);
-  const [increaseDelay, setIncreasedelay] = useState(1500);
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
 
@@ -205,64 +200,6 @@ const SpecificationLibraryPage = () => {
     };
     setDialogProps(updatedDialog);
     setShowDialog(true);
-  }
-
-  const updateDateFormat = (date: Date) => {
-    const currentDate = new Date(date);
-    const formattedDate = currentDate.toDateString();
-    let hour = currentDate.getHours();
-    let minutes: string = currentDate.getMinutes().toString();
-    const format = hour >= 12 ? 'PM' : 'AM';
-    hour %= 12;
-    hour = hour || 12;
-    minutes = minutes.length < 2 ? `0${minutes}` : minutes;
-    return `${formattedDate} ${hour}:${minutes}${format}`;
-  };
-
-  const tooltipHostContent = (
-    lastActivity: Date,
-    activityType?: string,
-    currentSid?: string,
-    filesProcessed?: number,
-  ) => {
-    const error = activityType?.trim() !== '';
-    const fromDate = new Date(lastActivity);
-    let currentColor: string;
-    if (activityType === 'UAT') {
-      currentColor = 'purple';
-    } else if (activityType === 'PROD') {
-      currentColor = 'blue';
-    } else {
-      currentColor = 'orange';
-    }
-
-    const currentDate = updateDateFormat(lastActivity);
-    const endDate = yyyyMMdd(fromDate);
-    const endFormatted = new Date(endDate);
-    endFormatted.setDate(endFormatted.getDate() - 29);
-    const startDate = yyyyMMdd(endFormatted);
-    return (
-      // eslint-disable-next-line react/jsx-no-useless-fragment
-      <>
-        {error && (
-          <>
-            <span style={{ color: currentColor, fontWeight: 'bold' }}> {filesProcessed} </span>
-            {activityType} files have been processed in the last 30 days <br />
-            <span style={{ marginLeft: '20px' }}>Last Run: {currentDate}</span> <br /> <br />
-            <ButtonLink
-              style={{ marginLeft: '70px' }}
-              onClick={() => {
-                ActiveDomain.setCurrentOrg(currentSid);
-                history.push(`/file-status?endDate=${endDate}&orgSid=6&startDate=${startDate}`);
-              }}
-            >
-              {' '}
-              Click for details
-            </ButtonLink>
-          </>
-        )}
-      </>
-    );
   };
 
   const onRenderItemColum = (item:VendorSpecSummary, itemIndex?: number, column?: IColumn) => {
@@ -279,10 +216,6 @@ const SpecificationLibraryPage = () => {
       );
     }
 
-    const uatFilesProcessed = item?.uatActivity.filesProcessed;
-    const testFilesProcessed = item?.testActivity.filesProcessed;
-    const prodFilesProcessed = item?.prodActivity.filesProcessed;
-
     return (
       <Stack
         horizontal
@@ -293,69 +226,20 @@ const SpecificationLibraryPage = () => {
         }}
       >
         {column?.key === 'integratedClients' && (
-        <ButtonLink>{item.integratedClients.length}</ButtonLink>
+          <ButtonLink>{item.integratedClients.length}</ButtonLink>
         )}
         {column?.key === 'active' && (
-          <>
-            {uatFilesProcessed && uatFilesProcessed > 0 ? (
-              <TooltipHost
-                content={item.sid ? tooltipHostContent(
-                  item?.uatActivity?.lastActivity,
-                  'UAT',
-                  item?.sid ?? '',
-                  uatFilesProcessed,
-                ) : undefined}
-                directionalHint={DirectionalHint.topRightEdge}
-                closeDelay={increaseDelay}
-                onMouseOver={() => setIncreasedelay(2000)}
-                onMouseLeave={() => setIncreasedelay(0)}
-              >
-                <CircleStyled total={!item.sid} color="purple">{uatFilesProcessed}</CircleStyled>
-              </TooltipHost>
-            ) : (
-              <CircleStyled total={!item?.sid} color="gray">0</CircleStyled>
-            )}
-            {testFilesProcessed && testFilesProcessed > 0 ? (
-              <TooltipHost
-                content={item.sid ? tooltipHostContent(
-                  item?.testActivity?.lastActivity,
-                  'TEST',
-                  item?.sid ?? '',
-                  testFilesProcessed,
-                ) : undefined}
-                directionalHint={DirectionalHint.topRightEdge}
-                closeDelay={increaseDelay}
-                onMouseOver={() => setIncreasedelay(2000)}
-                onMouseLeave={() => setIncreasedelay(0)}
-              >
-                <CircleStyled total={!item.sid} color="orange">{testFilesProcessed}</CircleStyled>
-              </TooltipHost>
-            ) : (
-              <CircleStyled total={!item?.sid} color="gray">0</CircleStyled>
-            )}
-            {prodFilesProcessed && prodFilesProcessed > 0 ? (
-              <TooltipHost
-                content={item.sid ? tooltipHostContent(
-                  item?.prodActivity?.lastActivity,
-                  'PROD',
-                  item?.sid ?? '',
-                  prodFilesProcessed,
-                ) : undefined}
-                directionalHint={DirectionalHint.topRightEdge}
-                closeDelay={increaseDelay}
-                onMouseOver={() => setIncreasedelay(2000)}
-                onMouseLeave={() => setIncreasedelay(0)}
-              >
-                <CircleStyled total={!item.sid} color="blue">{prodFilesProcessed}</CircleStyled>
-              </TooltipHost>
-            ) : (
-              <CircleStyled total={!item?.sid} color="gray">0</CircleStyled>
-            )}
-          </>
+          <ActivityBubbles
+            orgSid={orgSid}
+            uat={item.uatActivity}
+            test={item.testActivity}
+            prod={item.prodActivity}
+            total={!item.sid}
+          />
         )}
       </Stack>
     )
-  }
+  };
 
   const onRenderAction = (item: VendorSpecSummary) => {
     const styles = {
@@ -466,10 +350,7 @@ const SpecificationLibraryPage = () => {
   ];
 
   const readonlyComments = () => {
-    if (updateCmd && editComments) {
-      return false;
-    }
-    return true;
+    return !(updateCmd && editComments);
   }
 
   const cardBox = () => (
