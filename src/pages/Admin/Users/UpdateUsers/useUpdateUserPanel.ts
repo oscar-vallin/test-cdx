@@ -268,7 +268,7 @@ export const useUpdateUserPanel = (): UseUpdateUserPanel => {
       errorPolicy: 'all',
     });
 
-    if (data?.migrateUser === GqOperationResponse.Success) {
+    if (data?.migrateUser?.response === GqOperationResponse.Success) {
       // Update the form
       callFindUserAccount({
         variables: {
