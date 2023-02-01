@@ -201,7 +201,7 @@ export const SingleSignOnPage = () => {
 
     return (
       <Spacing id="__Password_Login_Confirm_Msg">
-        <Text>Are you sure want to {disable ? 'disable' : 'enable'} Password based login for {org}?</Text>
+        <Text>Are you sure you want to {disable ? 'disable' : 'enable'} Password based login for {org}?</Text>
         <Spacing margin={{ top: 'normal' }} />
         <Text>{message}</Text>
       </Spacing>

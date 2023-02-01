@@ -54,6 +54,7 @@ const XchangeSetupWizardPanel = ({
   const [setupNewXchangeForm, setSetupNewXchangeForm] = useState<XchangeSetupForm | null>();
   const [refreshForm, setRefreshForm] = useState(false);
   const [vendorSid, setVendorSid] = useState('');
+  const [vendorErrorMsg, setVendorErrorMesg] = useState('')
   const [vendorName, setVendorName] = useState('');
   const [currentVendor, setCurrentVendor] = useState('');
   const [vendorSpec, setVendorSpec] = useState('');
@@ -182,6 +183,8 @@ const XchangeSetupWizardPanel = ({
       const responseCode = response?.response;
       const { createNewXchange } = setupNewXchangeFormCreatedData;
       setSetupNewXchangeForm(createNewXchange);
+      const vendorError = createNewXchange?.vendor?.errMsg;
+      setVendorErrorMesg(vendorError);
       if (responseCode === GqOperationResponse.Fail) {
         const errorMsg = createNewXchange.errMsg
         ?? 'Error occurred, please verify the information and try again.';
@@ -259,7 +262,7 @@ const XchangeSetupWizardPanel = ({
       variables: {
         setup: {
           orgSid,
-          vendorSid: '',
+          vendorSid,
           vendorSpec,
           sourcePlatform,
           incomingFormat,
@@ -300,6 +303,7 @@ const XchangeSetupWizardPanel = ({
             required={setupNewXchangeForm?.vendor?.required ?? true}
             info={setupNewXchangeForm?.vendor?.info ?? ''}
             label={setupNewXchangeForm?.vendor?.label ?? ''}
+            errorMessage={vendorErrorMsg}
           />
           <SearchBox
             styles={{ root: { width: '100%', borderColor: 'gray' } }}
