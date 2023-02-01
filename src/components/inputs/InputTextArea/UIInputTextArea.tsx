@@ -76,7 +76,7 @@ const UIInputTextArea = ({
       return (
         <>
           {onRenderLabel()}
-          <EmptyValue id={id}>&lt;empty&gt;</EmptyValue>;
+          <EmptyValue id={id}>&lt;empty&gt;</EmptyValue>
         </>
       );
     }
