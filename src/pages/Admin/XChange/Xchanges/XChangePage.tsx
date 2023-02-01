@@ -836,15 +836,8 @@ const XChangePage = () => {
           <Container>
             <Row>
               <Column lg="7">
-                <Text style={!createCmd ? { fontWeight: 'bold', marginBottom: '10px' } : { fontWeight: 'bold' }}>Xchanges</Text>
+                <Text style={{ fontWeight: 'bold', marginBottom: '10px' }}>Xchanges</Text>
               </Column>
-              {createCmd && (
-                <Column lg="2" right>
-                  <StyledButtonAction id="__SetupNewXchange">
-                    + <Text style={{ paddingTop: '5px' }}>{createCmd.label}</Text>
-                  </StyledButtonAction>
-                </Column>
-              )}
             </Row>
             <Row>
               <Stack horizontal={true} wrap={true} style={{ width: '100%' }} verticalAlign="end">
