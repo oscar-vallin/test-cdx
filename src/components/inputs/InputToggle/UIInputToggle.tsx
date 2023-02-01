@@ -5,7 +5,7 @@ import { ThemedToggle } from './UIInputToggle.styles';
 
 type UIInputTextAreaType = {
   id: string;
-  uiField?: UiBooleanField;
+  uiField?: UiBooleanField | null;
   onChange?: (e?: React.MouseEvent<HTMLElement>, newValue?: boolean) => void | null;
   value?: boolean;
   renderLabel?: boolean;
