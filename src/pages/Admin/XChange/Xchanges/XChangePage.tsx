@@ -48,6 +48,7 @@ import {
   StyledButtonAction,
   StyledIconsComments,
 } from './XchangePage.styles';
+import { XchangeSetupWizardPanel } from './XchangeSetupWizardPanel';
 
 type TooltipsProps = {
   hasAlerts: string;
@@ -113,6 +114,7 @@ const XChangePage = () => {
   const [comment, setComment] = useState<string | null>();
   const [refreshDataXchange, setRefreshDataXchange] = useState(false);
   const [isPreviewPanelOpen, setIsPreviewPanelOpen] = useState(false);
+  const [isSetupNewXchangePanelOpen, setIsSetupNewXchangePanelOpen] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
 
@@ -569,13 +571,27 @@ const XChangePage = () => {
   const renderCreateButton = () => {
     if (dataXchange && activeCmd && !requiresConversion) {
       return (
-        <PrimaryButton
-          id="__Publish"
-          iconProps={{ iconName: 'FileHTML' }}
-          onClick={() => showUnsavedChangesDialog()}
-        >
-          Publish
-        </PrimaryButton>
+        <Stack horizontal>
+          {createCmd && (
+          <PrimaryButton
+            id="__CreateNewXchange"
+            style={{ marginRight: '10px' }}
+            iconProps={{ iconName: 'Add' }}
+            onClick={() => {
+              setIsSetupNewXchangePanelOpen(true);
+            }}
+          >
+            {createCmd?.label}
+          </PrimaryButton>
+          )}
+          <PrimaryButton
+            id="__Publish"
+            iconProps={{ iconName: 'FileHTML' }}
+            onClick={() => showUnsavedChangesDialog()}
+          >
+            Publish
+          </PrimaryButton>
+        </Stack>
       );
     }
     if (dataXchange && requiresConversion && updateCmd) {
@@ -856,6 +872,13 @@ const XChangePage = () => {
           isPanelOpen={isPreviewPanelOpen}
           closePanel={setIsPreviewPanelOpen}
           refreshXchangePage={setRefreshDataXchange}
+        />
+      )}
+      {isSetupNewXchangePanelOpen && (
+        <XchangeSetupWizardPanel
+          isPanelOpen={isSetupNewXchangePanelOpen}
+          closePanel={setIsSetupNewXchangePanelOpen}
+          refreshPage={setRefreshDataXchange}
         />
       )}
       <DialogYesNo {...dialogProps} open={showDialog} />

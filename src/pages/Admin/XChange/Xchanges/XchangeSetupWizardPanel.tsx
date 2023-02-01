@@ -1,0 +1,572 @@
+import React, { useEffect, useState } from 'react';
+import {
+  useSetupNewXchangeMutation,
+  useCreateNewXchangeMutation,
+  XchangeSetupForm,
+  useVendorQuickSearchLazyQuery,
+  ExtractType,
+  TransmissionProtocol,
+  GqOperationResponse,
+} from 'src/data/services/graphql';
+import { useQueryHandler } from 'src/hooks/useQueryHandler';
+import { useOrgSid } from 'src/hooks/useOrgSid';
+import { PanelBody, ThemedPanel, WizardButtonRow } from 'src/layouts/Panels/Panels.styles';
+import {
+  PanelType,
+  PrimaryButton,
+  SearchBox,
+  Text,
+  MessageBar,
+  MessageBarType,
+} from '@fluentui/react';
+import { FormRow } from 'src/components/layouts/Row/Row.styles';
+import { UIInputSelectOne } from 'src/components/inputs/InputDropdown';
+import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
+import { Column } from 'src/components/layouts';
+import { UIInputText } from 'src/components/inputs/InputText';
+import { UIInputToggle } from 'src/components/inputs/InputToggle';
+import FormLabel from 'src/components/labels/FormLabel';
+import { Spacing } from 'src/components/spacings/Spacing';
+import { ButtonLink } from 'src/components/buttons';
+import { StyledVendorOptions } from './XchangePage.styles';
+
+type XchangeSetupWizardPanelProps = {
+  isPanelOpen: boolean;
+  closePanel: (data: boolean) => void;
+  refreshPage: (data: boolean) => void;
+};
+
+const defaultDialogProps: DialogYesNoProps = {
+  id: '__XchangeSetupWizard_Panel_Dlg',
+  open: false,
+  title: '',
+  message: '',
+  labelYes: 'Yes',
+  labelNo: 'No',
+  highlightNo: true,
+  highlightYes: false,
+};
+
+const XchangeSetupWizardPanel = ({
+  closePanel, isPanelOpen, refreshPage,
+}: XchangeSetupWizardPanelProps) => {
+  const { orgSid } = useOrgSid();
+  const [setupNewXchangeForm, setSetupNewXchangeForm] = useState<XchangeSetupForm | null>();
+  const [refreshForm, setRefreshForm] = useState(false);
+  const [vendorSid, setVendorSid] = useState('');
+  const [vendorName, setVendorName] = useState('');
+  const [currentVendor, setCurrentVendor] = useState('');
+  const [vendorSpec, setVendorSpec] = useState('');
+  const [sourcePlatform, setSourcePlatform] = useState('');
+  const [incomingFormat, setIncomingFormat] = useState('');
+  const [deliveryProtocol, setDeliveryProtocol] = useState('');
+  const [fileContents, setFileContents] = useState('');
+  const [supportsFullFile, setSupportsFullFile] = useState<boolean>();
+  const [supportsChangesOnly, setSupportsChangesOnly] = useState<boolean>();
+  const [host, setHost] = useState('');
+  const [port, setPort] = useState('22');
+  const [userName, setUserName] = useState('');
+  const [password, setPassword] = useState('');
+  const [showKeyBasedAuth, setShowKeyBasedAuth] = useState(false);
+  const [authKeyName, setAuthKeyName] = useState('');
+  const [authKeyPassphrase, setAuthKeyPassphrase] = useState('');
+  const [folder, setFolder] = useState('');
+  const [message, setMessage] = useState<string | null>();
+  const [messageType, setMessageType] = useState<MessageBarType>(MessageBarType.info);
+  const [unsavedChanges, setUnsavedChanges] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
+  const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
+
+  const [
+    newXchangeForm,
+    {
+      data: setupNewXchangeFormData,
+      loading: isLoadingForm,
+    },
+  ] = useQueryHandler(useSetupNewXchangeMutation);
+  const [
+    createNewXchangeForm,
+    {
+      data: setupNewXchangeFormCreatedData,
+      loading: isLoadingCreateNewXchange,
+    },
+  ] = useQueryHandler(useCreateNewXchangeMutation);
+  const [vendorQuickSearch,
+    { data: quickSearchData, loading: quickSearchLoading }] = useVendorQuickSearchLazyQuery();
+
+  const transProtocolType = () => {
+    let transProtocol = '';
+    if (deliveryProtocol === TransmissionProtocol.Archive) {
+      transProtocol = 'Archive';
+    } else if (deliveryProtocol === TransmissionProtocol.Sftp) {
+      transProtocol = 'Sftp';
+    } else if (deliveryProtocol === TransmissionProtocol.Ftps) {
+      transProtocol = 'Ftps';
+    } else if (deliveryProtocol === TransmissionProtocol.Ftp) {
+      transProtocol = 'Ftp';
+    }
+    return transProtocol;
+  };
+
+  const extractType = () => {
+    let extract = '';
+    if (fileContents === ExtractType.Enrollment) {
+      extract = 'Enrollment';
+    } else if (fileContents === ExtractType.Census) {
+      extract = 'Census';
+    } else if (fileContents === ExtractType.CensusWithEnrollment) {
+      extract = 'CensusWithEnrollment';
+    } else if (fileContents === ExtractType.Payroll) {
+      extract = 'Payroll';
+    } else if (fileContents === ExtractType.CobraQe) {
+      extract = 'CobraQe';
+    } else if (fileContents === ExtractType.CobraIr) {
+      extract = 'CobraIr';
+    }
+
+    return extract;
+  };
+
+  const getFormData = () => {
+    newXchangeForm({
+      variables: {
+        setup: {
+          orgSid,
+          vendorSid,
+          vendorSpec,
+          sourcePlatform,
+          incomingFormat,
+          fileContents: ExtractType[extractType()],
+          supportsFullFile,
+          supportsChangesOnly,
+          deliveryProtocol: TransmissionProtocol[transProtocolType()],
+          host,
+          port,
+          userName,
+          password,
+          authKeyName,
+          authKeyPassphrase,
+          folder,
+        },
+      },
+    });
+  };
+
+  useEffect(() => {
+    getFormData();
+  }, []);
+
+  useEffect(() => {
+    if (!isLoadingForm && setupNewXchangeFormData) {
+      setSetupNewXchangeForm(setupNewXchangeFormData.setupNewXchange);
+    }
+  }, [setupNewXchangeFormData, isLoadingForm]);
+
+  useEffect(() => {
+    setRefreshForm(false);
+    if (refreshForm) {
+      getFormData()
+    }
+  }, [refreshForm]);
+
+  useEffect(() => {
+    if (currentVendor.trim() === '') {
+      setVendorName('');
+    }
+  }, [currentVendor]);
+
+  useEffect(() => {
+    const response = setupNewXchangeFormCreatedData?.createNewXchange;
+
+    if (setupNewXchangeFormCreatedData) {
+      const responseCode = response?.response;
+      const { createNewXchange } = setupNewXchangeFormCreatedData;
+      setSetupNewXchangeForm(createNewXchange);
+      if (responseCode === GqOperationResponse.Fail) {
+        const errorMsg = createNewXchange.errMsg
+        ?? 'Error occurred, please verify the information and try again.';
+        setMessageType(MessageBarType.error);
+        setMessage(errorMsg);
+      }
+
+      if (responseCode === GqOperationResponse.Success) {
+        refreshPage(true);
+        setMessage(null);
+        closePanel(false);
+      }
+    }
+  }, [setupNewXchangeFormCreatedData, isLoadingCreateNewXchange]);
+
+  const doSearch = () => {
+    if (quickSearchData?.vendorQuickSearch?.length
+      && quickSearchData.vendorQuickSearch.length > 0) {
+      const vendors = quickSearchData.vendorQuickSearch;
+      return vendors.map((vendor, index) => (
+        <Spacing margin={{ left: 'normal', top: 'normal', bottom: 'normal' }} key={index}>
+          <Text
+            id="__QuickSearch__Users"
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              setVendorSid(vendor.sid ?? '');
+              setVendorName(vendor.name ?? '');
+              setCurrentVendor(vendor.name ?? '');
+              setRefreshForm(true);
+            }}
+          >
+            {vendor.name}
+          </Text>
+        </Spacing>
+      ));
+    }
+
+    return null;
+  };
+
+  const hideDialog = () => {
+    setShowDialog(false);
+  };
+
+  const showUnsavedChangesDialog = () => {
+    const updatedDialog = { ...defaultDialogProps };
+    updatedDialog.title = 'You have unsaved changes';
+    updatedDialog.message = 'Changes made to this Xchange will be discarded?  Are you sure you wish to continue and lose your changes';
+
+    updatedDialog.onYes = () => {
+      hideDialog();
+      closePanel(false);
+      setMessage(null);
+      setUnsavedChanges(false);
+    };
+    updatedDialog.onClose = () => {
+      hideDialog();
+    };
+    setDialogProps(updatedDialog);
+    setShowDialog(true);
+  };
+
+  const onPanelClose = () => {
+    if (unsavedChanges) {
+      showUnsavedChangesDialog();
+    } else {
+      closePanel(false);
+      setMessage(null);
+      setUnsavedChanges(false);
+    }
+  };
+
+  const createNewXchange = () => {
+    createNewXchangeForm({
+      variables: {
+        setup: {
+          orgSid,
+          vendorSid: '',
+          vendorSpec,
+          sourcePlatform,
+          incomingFormat,
+          fileContents: ExtractType[extractType()],
+          supportsFullFile,
+          supportsChangesOnly,
+          deliveryProtocol: TransmissionProtocol[transProtocolType()],
+          host,
+          port,
+          userName,
+          password,
+          authKeyName,
+          authKeyPassphrase,
+          folder,
+        },
+      },
+    })
+  }
+
+  const renderBody = () => (
+    <PanelBody>
+      {message && (
+        <Spacing margin={{ bottom: 'normal' }}>
+          <MessageBar
+            id="__SetupNewXchange_Msg"
+            messageBarType={messageType}
+            isMultiline
+            onDismiss={() => setMessage(undefined)}
+          >
+            {message}
+          </MessageBar>
+        </Spacing>
+      )}
+      <FormRow>
+        <Column lg="12">
+          <FormLabel
+            id="__searchVendor"
+            required={setupNewXchangeForm?.vendor?.required ?? true}
+            info={setupNewXchangeForm?.vendor?.info ?? ''}
+            label={setupNewXchangeForm?.vendor?.label ?? ''}
+          />
+          <SearchBox
+            styles={{ root: { width: '100%', borderColor: 'gray' } }}
+            id="__newXghangeSpec"
+            value={currentVendor}
+            onChange={(event, searchText) => {
+              vendorQuickSearch({
+                variables: {
+                  orgOwnerSid: orgSid,
+                  searchText: searchText ?? '',
+                },
+              });
+              setCurrentVendor(searchText ?? '');
+              if (vendorName.trim() === '') {
+                setVendorName('');
+              }
+            }}
+          />
+          {currentVendor.trim() !== '' && !vendorName && (
+            <StyledVendorOptions>{doSearch()}</StyledVendorOptions>
+          )}
+        </Column>
+      </FormRow>
+      <FormRow>
+        <Column lg="12">
+          <UIInputSelectOne
+            id="__newXghangeSpec"
+            uiField={setupNewXchangeForm?.vendorSpec}
+            options={setupNewXchangeForm?.options}
+            onChange={(newValue) => {
+              setUnsavedChanges(true);
+              setVendorSpec(newValue ?? '');
+              setRefreshForm(true);
+            }}
+          />
+        </Column>
+      </FormRow>
+      <FormRow>
+        <Column lg="12">
+          <UIInputSelectOne
+            id="__newXghangeSourcePlatform"
+            uiField={setupNewXchangeForm?.sourcePlatform}
+            options={setupNewXchangeForm?.options}
+            onChange={(newValue) => {
+              setUnsavedChanges(true);
+              setSourcePlatform(newValue ?? '');
+              setRefreshForm(true);
+            }}
+          />
+        </Column>
+      </FormRow>
+      <FormRow>
+        <Column lg="12">
+          <UIInputSelectOne
+            id="__newXghangeSourcePlatform"
+            uiField={setupNewXchangeForm?.incomingFormat}
+            options={setupNewXchangeForm?.options}
+            onChange={(newValue) => {
+              setUnsavedChanges(true);
+              setIncomingFormat(newValue ?? '');
+              setRefreshForm(true);
+            }}
+          />
+        </Column>
+      </FormRow>
+      {vendorSpec && (
+        <>
+          <FormRow>
+            <Column lg="12">
+              <UIInputSelectOne
+                id="__newXghangefileContents"
+                uiField={setupNewXchangeForm?.fileContents}
+                options={setupNewXchangeForm?.options}
+                onChange={(newValue) => {
+                  setUnsavedChanges(true);
+                  setFileContents(newValue ?? '');
+                  setRefreshForm(true);
+                }}
+              />
+            </Column>
+          </FormRow>
+          <FormRow>
+            <Column lg="12">
+              <UIInputToggle
+                id="__newXghangeSupportsFullFile"
+                uiField={setupNewXchangeForm?.supportsFullFile}
+                onChange={(event, checked) => {
+                  setUnsavedChanges(true);
+                  setSupportsFullFile(checked);
+                  setRefreshForm(true);
+                }}
+              />
+            </Column>
+          </FormRow>
+          <FormRow>
+            <Column lg="12">
+              <UIInputToggle
+                id="__newXghangeSupportsChangesOnly"
+                uiField={setupNewXchangeForm?.supportsChangesOnly}
+                onChange={(event, checked) => {
+                  setUnsavedChanges(true);
+                  setSupportsChangesOnly(checked);
+                  setRefreshForm(true);
+                }}
+              />
+            </Column>
+          </FormRow>
+        </>
+      )}
+      <FormRow>
+        <Column lg="12">
+          <UIInputSelectOne
+            id="__newXghangeSourcePlatform"
+            uiField={setupNewXchangeForm?.deliveryProtocol}
+            options={setupNewXchangeForm?.options}
+            onChange={(newValue) => {
+              setUnsavedChanges(true);
+              setDeliveryProtocol(newValue ?? '');
+              setRefreshForm(true);
+            }}
+          />
+        </Column>
+      </FormRow>
+      <FormRow>
+        <Column lg="8">
+          <UIInputText
+            id="__newXghangeHost"
+            uiField={setupNewXchangeForm?.host}
+            placeholder="host"
+            autocomplete="off"
+            onChange={(event, _newValue) => {
+              setUnsavedChanges(true);
+              setHost(_newValue ?? '');
+              setRefreshForm(true);
+            }}
+          />
+        </Column>
+        <Column lg="4">
+          <UIInputText
+            id="__newXghangePort"
+            uiField={setupNewXchangeForm?.port}
+            placeholder="port"
+            autocomplete="off"
+            onChange={(event, _newValue) => {
+              setUnsavedChanges(true);
+              setPort(_newValue ?? '');
+              setRefreshForm(true);
+            }}
+          />
+        </Column>
+      </FormRow>
+      <FormRow>
+        <Column>
+          <UIInputText
+            id="__newXghangeUsername"
+            uiField={setupNewXchangeForm?.userName}
+            onChange={(event, _newValue) => {
+              setUnsavedChanges(true);
+              setUserName(_newValue ?? '');
+              setRefreshForm(true);
+            }}
+          />
+        </Column>
+      </FormRow>
+      <FormRow>
+        <Column lg="12">
+          <UIInputText
+            id="__newXghangePassword"
+            uiField={setupNewXchangeForm?.password}
+            autocomplete="new-password"
+            placeholder="password"
+            onChange={(event, _newValue) => {
+              setUnsavedChanges(true);
+              setPassword(_newValue ?? '');
+              setRefreshForm(true);
+            }}
+          />
+        </Column>
+        {!showKeyBasedAuth && setupNewXchangeForm?.password.visible && (
+        <Spacing>
+          <Column>
+            <ButtonLink
+              onClick={() => setShowKeyBasedAuth(true)}
+            >use key-based authentication
+            </ButtonLink>
+          </Column>
+        </Spacing>
+        )}
+      </FormRow>
+      {showKeyBasedAuth && (
+        <>
+          <FormRow>
+            <Column lg="12">
+              <UIInputSelectOne
+                id="__newXghangeAuthKeyName"
+                uiField={setupNewXchangeForm?.authKeyName}
+                options={setupNewXchangeForm?.options}
+                onChange={(newValue) => {
+                  setUnsavedChanges(true);
+                  setAuthKeyName(newValue ?? '');
+                  setRefreshForm(true);
+                }}
+              />
+            </Column>
+          </FormRow>
+          <FormRow>
+            <Column lg="12">
+              <UIInputText
+                id="__newXghangeAuthKeyPassphrase"
+                uiField={setupNewXchangeForm?.authKeyPassphrase}
+                autocomplete="off"
+                placeholder="Passphrase"
+                onChange={(event, _newValue) => {
+                  setUnsavedChanges(true);
+                  setAuthKeyPassphrase(_newValue ?? '');
+                  setRefreshForm(true);
+                }}
+              />
+            </Column>
+          </FormRow>
+        </>
+      )}
+      <FormRow>
+        <Column lg="12">
+          <UIInputText
+            id="__newXghangeFolder"
+            uiField={setupNewXchangeForm?.folder}
+            autocomplete="off"
+            placeholder="Passphrase"
+            onChange={(event, _newValue) => {
+              setUnsavedChanges(true);
+              setFolder(_newValue ?? '');
+              setRefreshForm(true);
+            }}
+          />
+        </Column>
+      </FormRow>
+      <WizardButtonRow>
+        <Spacing margin={{ top: 'double' }}>
+          <PrimaryButton
+            id="__CreateNewXchange_Button"
+            onClick={() => createNewXchange()}
+          >
+            Create Xchange
+          </PrimaryButton>
+        </Spacing>
+      </WizardButtonRow>
+    </PanelBody>
+  )
+  return (
+    <ThemedPanel
+      id="__SetupNewXchangePanel"
+      closeButtonAriaLabel="Close"
+      type={PanelType.medium}
+      headerText="Setup new Xchange"
+      isOpen={isPanelOpen}
+      headerTextProps={{
+        id: '__SetupNewXchangePanel_Title',
+      }}
+      onDismiss={() => {
+        onPanelClose();
+      }}
+    >
+      {renderBody()}
+      <DialogYesNo {...dialogProps} open={showDialog} />
+    </ThemedPanel>
+  )
+};
+
+export { XchangeSetupWizardPanel };
