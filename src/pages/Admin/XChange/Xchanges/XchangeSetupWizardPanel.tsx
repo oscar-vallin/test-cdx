@@ -303,7 +303,7 @@ const XchangeSetupWizardPanel = ({
             required={setupNewXchangeForm?.vendor?.required ?? true}
             info={setupNewXchangeForm?.vendor?.info ?? ''}
             label={setupNewXchangeForm?.vendor?.label ?? ''}
-            errorMessage={vendorErrorMsg && vendorErrorMsg}
+            errorMessage={vendorErrorMsg}
           />
           <SearchBox
             styles={{ root: { width: '100%', borderColor: 'gray' } }}
