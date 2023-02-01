@@ -66,7 +66,7 @@ const SectionAuthentication = ({
   const onCheck = () => {
     const toggle = !sendEmail;
     setSendEmail(toggle);
-    saveOptions(toggle);
+    saveOptions(toggle, passwordOption);
   };
 
   return (
@@ -126,6 +126,7 @@ const SectionAuthentication = ({
               setSendEmail(false);
               saveOptions(false, value);
             } else {
+              setAuthenticationMethod(value ?? passwordOption)
               setCheckedSingleSignOn(false);
               onCheck();
             }
