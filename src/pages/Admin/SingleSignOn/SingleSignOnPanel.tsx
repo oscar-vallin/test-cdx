@@ -68,7 +68,7 @@ const SingleSignOnPanel = ({
   const Toast = useNotification();
   const [identityProviderForm, setIdentityProviderForm] = useState<IdentityProviderForm>();
   const [priorMetaData, setPriorMetaData] = useState<IdentityProviderMetaDataLink[] | null>();
-  const [removePriorMetaDataSids, setRemovePriorMetaDataSids] = useState<string[]>();
+  const [removePriorMetaDataSids, setRemovePriorMetaDataSids] = useState<string[]>([]);
   const [oidcSettings, setOidcSettings] = useState<OidcSettingsForm>();
   const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
@@ -311,6 +311,10 @@ const SingleSignOnPanel = ({
     }
   };
 
+  useEffect(() => {
+    console.log(removePriorMetaDataSids)
+  }, [removePriorMetaDataSids])
+
   const renderMetaData = () => {
     if (!identityProviderForm?.historicalMetaData.visible) {
       return null;
@@ -340,7 +344,7 @@ const SingleSignOnPanel = ({
                     const metaDataValues = priorMetaData
                       .filter((meta) => meta.sid !== metaData.sid);
                     setPriorMetaData(metaDataValues);
-                    setRemovePriorMetaDataSids([metaData.sid]);
+                    setRemovePriorMetaDataSids((prevState) => prevState.concat(metaData.sid));
                     setUnsavedChanges(true);
                   }}
                 />
