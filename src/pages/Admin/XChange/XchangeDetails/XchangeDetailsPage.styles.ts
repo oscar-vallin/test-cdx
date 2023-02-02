@@ -162,4 +162,15 @@ max-width: 140px;
 width: 100%;
 overflow: hidden;
 text-overflow: ellipsis;
-`
+`;
+
+export const CardFinishSetup = styled(DocumentCard)`
+  background: ${({ theme }) => theme.colors.neutralLighter};
+  border: none;
+  border-radius: ${({ theme }) => theme.radius.large};
+  padding-right: 5px;
+  min-width: 320px;
+  max-width: 750px;
+  min-height: 250px;
+  width: 100%;
+`;

@@ -4,6 +4,8 @@ import {
   useCreateNewXchangeMutation,
   XchangeSetupForm,
   useVendorQuickSearchLazyQuery,
+  useResumeXchangeSetupMutation,
+  useUpdateXchangeSetupMutation,
   ExtractType,
   TransmissionProtocol,
   GqOperationResponse,
@@ -34,6 +36,7 @@ type XchangeSetupWizardPanelProps = {
   isPanelOpen: boolean;
   closePanel: (data: boolean) => void;
   refreshPage: (data: boolean) => void;
+  configSid?: string;
 };
 
 const defaultDialogProps: DialogYesNoProps = {
@@ -48,7 +51,7 @@ const defaultDialogProps: DialogYesNoProps = {
 };
 
 const XchangeSetupWizardPanel = ({
-  closePanel, isPanelOpen, refreshPage,
+  closePanel, isPanelOpen, refreshPage, configSid,
 }: XchangeSetupWizardPanelProps) => {
   const { orgSid } = useOrgSid();
   const [setupNewXchangeForm, setSetupNewXchangeForm] = useState<XchangeSetupForm | null>();
@@ -77,7 +80,6 @@ const XchangeSetupWizardPanel = ({
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
-
   const [
     newXchangeForm,
     {
@@ -86,12 +88,26 @@ const XchangeSetupWizardPanel = ({
     },
   ] = useQueryHandler(useSetupNewXchangeMutation);
   const [
+    resumeXchangeForm,
+    {
+      data: setupResumeXchangeFormData,
+      loading: isLoadingResumeForm,
+    },
+  ] = useQueryHandler(useResumeXchangeSetupMutation);
+  const [
     createNewXchangeForm,
     {
       data: setupNewXchangeFormCreatedData,
       loading: isLoadingCreateNewXchange,
     },
   ] = useQueryHandler(useCreateNewXchangeMutation);
+  const [
+    updateNewXchangeForm,
+    {
+      data: setupNewXchangeFormUpdateData,
+      loading: isLoadingUpdateNewXchange,
+    },
+  ] = useQueryHandler(useUpdateXchangeSetupMutation);
   const [vendorQuickSearch,
     { data: quickSearchData, loading: quickSearchLoading }] = useVendorQuickSearchLazyQuery();
 
@@ -128,6 +144,14 @@ const XchangeSetupWizardPanel = ({
     return extract;
   };
 
+  const getFormResumeData = () => {
+    resumeXchangeForm({
+      variables: {
+        xchangeConfigSid: configSid,
+      },
+    });
+  };
+
   const getFormData = () => {
     newXchangeForm({
       variables: {
@@ -154,6 +178,10 @@ const XchangeSetupWizardPanel = ({
   };
 
   useEffect(() => {
+    if (configSid) {
+      getFormResumeData();
+      return;
+    }
     getFormData();
   }, []);
 
@@ -162,6 +190,28 @@ const XchangeSetupWizardPanel = ({
       setSetupNewXchangeForm(setupNewXchangeFormData.setupNewXchange);
     }
   }, [setupNewXchangeFormData, isLoadingForm]);
+
+  useEffect(() => {
+    if (!isLoadingResumeForm && setupResumeXchangeFormData) {
+      setSetupNewXchangeForm(setupResumeXchangeFormData.resumeXchangeSetup);
+      const resumeForm:XchangeSetupForm = setupResumeXchangeFormData?.resumeXchangeSetup;
+      setCurrentVendor(resumeForm?.vendor?.value?.label ?? '');
+      setVendorSid(resumeForm.vendor?.value?.value ?? '');
+      setVendorSpec(resumeForm.vendorSpec?.value?.value ?? '');
+      setSourcePlatform(resumeForm.sourcePlatform?.value?.value ?? '');
+      setIncomingFormat(resumeForm.incomingFormat?.value?.value ?? '');
+      setDeliveryProtocol(resumeForm.deliveryProtocol.value?.value ?? '');
+      setFileContents(resumeForm.fileContents?.value?.value ?? '');
+      setSupportsFullFile(resumeForm.supportsFullFile?.value ?? false);
+      setSupportsChangesOnly(resumeForm.supportsChangesOnly?.value ?? false);
+      setHost(resumeForm.host.value ?? '');
+      setUserName(resumeForm.userName.value ?? '');
+      setPassword(resumeForm.password.value ?? '');
+      setAuthKeyName(resumeForm.authKeyName.value?.value ?? '');
+      setAuthKeyPassphrase(resumeForm.authKeyPassphrase.value ?? '');
+      setFolder(resumeForm.folder.value ?? '');
+    }
+  }, [setupResumeXchangeFormData, isLoadingResumeForm]);
 
   useEffect(() => {
     setRefreshForm(false);
@@ -199,6 +249,30 @@ const XchangeSetupWizardPanel = ({
       }
     }
   }, [setupNewXchangeFormCreatedData, isLoadingCreateNewXchange]);
+
+  useEffect(() => {
+    const response = setupNewXchangeFormUpdateData?.updateXchangeSetup;
+
+    if (setupNewXchangeFormUpdateData) {
+      const responseCode = response?.response;
+      const { updateXchangeSetup } = setupNewXchangeFormUpdateData;
+      setSetupNewXchangeForm(updateXchangeSetup);
+      const vendorError = updateXchangeSetup?.vendor?.errMsg;
+      setVendorErrorMesg(vendorError);
+      if (responseCode === GqOperationResponse.Fail) {
+        const errorMsg = updateXchangeSetup.errMsg
+        ?? 'Error occurred, please verify the information and try again.';
+        setMessageType(MessageBarType.error);
+        setMessage(errorMsg);
+      }
+
+      if (responseCode === GqOperationResponse.Success) {
+        refreshPage(true);
+        setMessage(null);
+        closePanel(false);
+      }
+    }
+  }, [setupNewXchangeFormUpdateData, isLoadingUpdateNewXchange]);
 
   const doSearch = () => {
     if (quickSearchData?.vendorQuickSearch?.length
@@ -258,6 +332,32 @@ const XchangeSetupWizardPanel = ({
   };
 
   const createNewXchange = () => {
+    if (configSid) {
+      updateNewXchangeForm({
+        variables: {
+          setup: {
+            xchangeConfigSid: configSid,
+            orgSid,
+            vendorSid,
+            vendorSpec,
+            sourcePlatform,
+            incomingFormat,
+            fileContents: ExtractType[extractType()],
+            supportsFullFile,
+            supportsChangesOnly,
+            deliveryProtocol: TransmissionProtocol[transProtocolType()],
+            host,
+            port,
+            userName,
+            password,
+            authKeyName,
+            authKeyPassphrase,
+            folder,
+          },
+        },
+      });
+      return;
+    }
     createNewXchangeForm({
       variables: {
         setup: {
@@ -333,6 +433,7 @@ const XchangeSetupWizardPanel = ({
             id="__newXghangeSpec"
             uiField={setupNewXchangeForm?.vendorSpec}
             options={setupNewXchangeForm?.options}
+            value={setupResumeXchangeFormData ? vendorSpec : undefined}
             onChange={(newValue) => {
               setUnsavedChanges(true);
               setVendorSpec(newValue ?? '');
@@ -347,6 +448,7 @@ const XchangeSetupWizardPanel = ({
             id="__newXghangeSourcePlatform"
             uiField={setupNewXchangeForm?.sourcePlatform}
             options={setupNewXchangeForm?.options}
+            value={setupResumeXchangeFormData ? sourcePlatform : undefined}
             onChange={(newValue) => {
               setUnsavedChanges(true);
               setSourcePlatform(newValue ?? '');
@@ -358,13 +460,13 @@ const XchangeSetupWizardPanel = ({
       <FormRow>
         <Column lg="12">
           <UIInputSelectOne
-            id="__newXghangeSourcePlatform"
+            id="__newXghangeIncomingFormat"
             uiField={setupNewXchangeForm?.incomingFormat}
             options={setupNewXchangeForm?.options}
+            value={setupResumeXchangeFormData ? incomingFormat : undefined}
             onChange={(newValue) => {
               setUnsavedChanges(true);
               setIncomingFormat(newValue ?? '');
-              setRefreshForm(true);
             }}
           />
         </Column>
@@ -377,6 +479,7 @@ const XchangeSetupWizardPanel = ({
                 id="__newXghangefileContents"
                 uiField={setupNewXchangeForm?.fileContents}
                 options={setupNewXchangeForm?.options}
+                value={setupResumeXchangeFormData ? fileContents : undefined}
                 onChange={(newValue) => {
                   setUnsavedChanges(true);
                   setFileContents(newValue ?? '');
@@ -390,6 +493,7 @@ const XchangeSetupWizardPanel = ({
               <UIInputToggle
                 id="__newXghangeSupportsFullFile"
                 uiField={setupNewXchangeForm?.supportsFullFile}
+                value={setupResumeXchangeFormData ? supportsFullFile : undefined}
                 onChange={(event, checked) => {
                   setUnsavedChanges(true);
                   setSupportsFullFile(checked);
@@ -403,6 +507,7 @@ const XchangeSetupWizardPanel = ({
               <UIInputToggle
                 id="__newXghangeSupportsChangesOnly"
                 uiField={setupNewXchangeForm?.supportsChangesOnly}
+                value={setupResumeXchangeFormData ? supportsChangesOnly : undefined}
                 onChange={(event, checked) => {
                   setUnsavedChanges(true);
                   setSupportsChangesOnly(checked);
@@ -419,6 +524,7 @@ const XchangeSetupWizardPanel = ({
             id="__newXghangeSourcePlatform"
             uiField={setupNewXchangeForm?.deliveryProtocol}
             options={setupNewXchangeForm?.options}
+            value={setupResumeXchangeFormData ? deliveryProtocol : undefined}
             onChange={(newValue) => {
               setUnsavedChanges(true);
               setDeliveryProtocol(newValue ?? '');
@@ -432,6 +538,7 @@ const XchangeSetupWizardPanel = ({
           <UIInputText
             id="__newXghangeHost"
             uiField={setupNewXchangeForm?.host}
+            value={setupResumeXchangeFormData ? host : undefined}
             placeholder="host"
             autocomplete="off"
             onChange={(event, _newValue) => {
@@ -445,6 +552,7 @@ const XchangeSetupWizardPanel = ({
           <UIInputText
             id="__newXghangePort"
             uiField={setupNewXchangeForm?.port}
+            value={setupResumeXchangeFormData ? port : undefined}
             placeholder="port"
             autocomplete="off"
             onChange={(event, _newValue) => {
@@ -460,6 +568,7 @@ const XchangeSetupWizardPanel = ({
           <UIInputText
             id="__newXghangeUsername"
             uiField={setupNewXchangeForm?.userName}
+            value={setupResumeXchangeFormData ? userName : undefined}
             onChange={(event, _newValue) => {
               setUnsavedChanges(true);
               setUserName(_newValue ?? '');
@@ -475,6 +584,7 @@ const XchangeSetupWizardPanel = ({
             uiField={setupNewXchangeForm?.password}
             autocomplete="new-password"
             placeholder="password"
+            value={setupResumeXchangeFormData ? password : undefined}
             onChange={(event, _newValue) => {
               setUnsavedChanges(true);
               setPassword(_newValue ?? '');
@@ -501,6 +611,7 @@ const XchangeSetupWizardPanel = ({
                 id="__newXghangeAuthKeyName"
                 uiField={setupNewXchangeForm?.authKeyName}
                 options={setupNewXchangeForm?.options}
+                value={setupResumeXchangeFormData ? authKeyName : undefined}
                 onChange={(newValue) => {
                   setUnsavedChanges(true);
                   setAuthKeyName(newValue ?? '');
@@ -516,6 +627,7 @@ const XchangeSetupWizardPanel = ({
                 uiField={setupNewXchangeForm?.authKeyPassphrase}
                 autocomplete="off"
                 placeholder="Passphrase"
+                value={setupResumeXchangeFormData ? authKeyPassphrase : undefined}
                 onChange={(event, _newValue) => {
                   setUnsavedChanges(true);
                   setAuthKeyPassphrase(_newValue ?? '');
@@ -533,6 +645,7 @@ const XchangeSetupWizardPanel = ({
             uiField={setupNewXchangeForm?.folder}
             autocomplete="off"
             placeholder="Passphrase"
+            value={setupResumeXchangeFormData ? folder : undefined}
             onChange={(event, _newValue) => {
               setUnsavedChanges(true);
               setFolder(_newValue ?? '');

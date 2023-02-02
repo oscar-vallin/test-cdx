@@ -55,7 +55,9 @@ import {
   StyledProcessValueText,
   StyledQualifier,
   EllipsisedStyled,
+  CardFinishSetup,
 } from './XchangeDetailsPage.styles';
+import { XchangeSetupWizardPanel } from '../Xchanges/XchangeSetupWizardPanel';
 
 const defaultDialogProps: DialogYesNoProps = {
   id: '__XchangeDetails_Dlg',
@@ -93,11 +95,13 @@ const XchangeDetailsPage = () => {
   const [openUpdateComments, setOpenUpdateComments] = useState(false);
   const [closeTooltipHost, setCloseTooltipHost] = useState(true);
   const [sid, setSid] = useState('');
+  const [configSid, setConfigSid] = useState('');
   const [typeSchedule, setTypeSchedule] = useState<boolean>();
   const [schedule, setSchedule] = useState<XchangeSchedule>();
   const [openAlertsPanel, setOpenAlertsPanel] = useState(false);
   const [openJobGroup, setOpenJobGroup] = useState(false);
   const [openSchedulePanel, setOpenSchedulePanel] = useState(false);
+  const [isSetupNewXchangePanelOpen, setIsSetupNewXchangePanelOpen] = useState(false);
   const [isExpandedAlertBox, setIsExpandedAlertBox] = useState(false)
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
@@ -604,6 +608,51 @@ const XchangeDetailsPage = () => {
   };
 
   const renderDiagram = () => {
+    if (xchangeDataDetails?.incompleteSetup) {
+      return (
+        <CardFinishSetup>
+          <Spacing margin={{ top: 'double', bottom: 'normal' }}>
+            <Stack>
+              <Stack.Item align="center">
+                <Text style={{ fontSize: '1.100rem', fontWeight: 500 }}>Please Complete the setup</Text>
+              </Stack.Item>
+            </Stack>
+          </Spacing>
+          <Stack>
+            <Stack.Item align="center">
+              <Text
+                style={{ fontWeight: 500 }}
+              >
+                The xchange setup wizard has only been partially completed.
+              </Text>
+            </Stack.Item>
+          </Stack>
+          <Stack>
+            <Stack.Item align="center">
+              <Text style={{ fontWeight: 500 }}>
+                All Questions in the setup wizard must be answered before the Xchange
+                steps can be configured
+              </Text>
+            </Stack.Item>
+          </Stack>
+          <Spacing margin={{ top: 'double' }}>
+            <Stack>
+              <Stack.Item align="center">
+                <PrimaryButton
+                  id="finishSetupWizard"
+                  onClick={() => {
+                    setConfigSid(xchangeDataDetails.sid ?? '');
+                    setIsSetupNewXchangePanelOpen(true);
+                  }}
+                >
+                  Finish setup wizard
+                </PrimaryButton>
+              </Stack.Item>
+            </Stack>
+          </Spacing>
+        </CardFinishSetup>
+      )
+    }
     if (!detailsLoading && dataDiagram) {
       const xchangeFileProcessSid = xchangeDataDetails?.processes ? xchangeDataDetails?.processes[0].sid : '';
       return (
@@ -782,6 +831,14 @@ const XchangeDetailsPage = () => {
         refreshPage={setRefreshXchangeDetails}
         typeSchedule={typeSchedule}
       />
+      {isSetupNewXchangePanelOpen && (
+        <XchangeSetupWizardPanel
+          isPanelOpen={isSetupNewXchangePanelOpen}
+          closePanel={setIsSetupNewXchangePanelOpen}
+          refreshPage={setRefreshXchangeDetails}
+          configSid={configSid}
+        />
+      )}
       <DialogYesNo {...dialogProps} open={showDialog} />
     </LayoutDashboard>
   );
