@@ -20,6 +20,7 @@ import {
 import { UIInputText } from 'src/components/inputs/InputText';
 import { Spacing } from 'src/components/spacings/Spacing';
 import {
+  DefaultButton,
   DirectionalHint,
   FontIcon,
   IconButton,
@@ -161,6 +162,22 @@ const XchangeDetailsPage = () => {
     setDialogProps(updatedDialog);
     setShowDialog(true);
   };
+
+  const showGeneratedialog = () => {
+    const updatedDialog = { ...defaultDialogProps };
+    updatedDialog.title = 'Generate the Xchange Steps';
+    updatedDialog.message = 'Are you sure you want to generate the Xchange steps for this Xchange? The steps can be edited once generated';
+
+    updatedDialog.onYes = () => {
+      hideDialog();
+    };
+    updatedDialog.onNo = () => {
+      hideDialog();
+    };
+
+    setDialogProps(updatedDialog);
+    setShowDialog(true);
+  }
 
   const adaptWidth = (alertT: string) => {
     const width = alertT.length * 8;
@@ -608,6 +625,66 @@ const XchangeDetailsPage = () => {
   };
 
   const renderDiagram = () => {
+    if (xchangeDataDetails?.implementationPending) {
+      return (
+        <CardFinishSetup>
+          <Spacing margin={{ top: 'double', bottom: 'normal' }}>
+            <Stack>
+              <Stack.Item align="center">
+                <Text 
+                  style={{ fontSize: '1.100rem', fontWeight: 500 }}
+                >
+                  Please Complete the implementation
+                </Text>
+              </Stack.Item>
+            </Stack>
+          </Spacing>
+          <Spacing margin={{ bottom: 'normal' }}>
+            <Stack>
+              <Stack.Item align="center">
+                <Text
+                  style={{ fontWeight: 500 }}
+                >
+                  The implementation of the 
+                  <span style={{ fontWeight: 'bold' }}> Enrollment </span> 
+                  spec of the name must be <br/>
+                  &nbsp; &nbsp; complete before the Xchange steps can be configured
+                </Text>
+              </Stack.Item>
+            </Stack>
+          </Spacing>
+          <Stack>
+            <Stack.Item align="center">
+              <Text style={{ fontWeight: 500 }}>
+                Once the implemenation has been completed, click the Generate button below <br/>
+                &nbsp; &nbsp; to generate templated Xchange steps wich can be further configured
+              </Text>
+            </Stack.Item>
+          </Stack>
+          <Spacing margin={{ top: 'double' }}>
+            <Stack>
+              <Stack.Item align="center">
+                <PrimaryButton
+                  id="finishSetupWizard"
+                  onClick={() => {
+                    setConfigSid(xchangeDataDetails?.sid ?? '');
+                    setIsSetupNewXchangePanelOpen(true);
+                  }}
+                >
+                  Update setup wizard
+                </PrimaryButton>
+                <DefaultButton 
+                  style={{ marginLeft: '10px' }}
+                  id="generateXchange"
+                  text="Generate"
+                  onClick={() => showGeneratedialog()}
+                />
+              </Stack.Item>
+            </Stack>
+          </Spacing>
+        </CardFinishSetup>
+      )
+    }
     if (xchangeDataDetails?.incompleteSetup) {
       return (
         <CardFinishSetup>
