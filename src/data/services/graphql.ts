@@ -724,6 +724,15 @@ export type DiagramCoordinates = {
   y: Scalars['Int'];
 };
 
+export enum DocType {
+  MsWord = 'MS_WORD',
+  MsExcel = 'MS_EXCEL',
+  Pdf = 'PDF',
+  Csv = 'CSV',
+  Text = 'TEXT',
+  Other = 'OTHER'
+}
+
 export type DomainNavInput = {
   orgSid: Scalars['ID'];
   ownerId?: Maybe<Scalars['ID']>;
@@ -1119,6 +1128,8 @@ export type Mutation = {
   deleteXchangeConfigAlert?: Maybe<GenericResponse>;
   deactivateXchangeConfig?: Maybe<GenericResponse>;
   activateXchangeConfig?: Maybe<GenericResponse>;
+  uploadXchangeConfigDocument?: Maybe<GenericResponse>;
+  deleteXchangeConfigDocument?: Maybe<GenericResponse>;
   updateXchangeSchedule?: Maybe<XchangeScheduleForm>;
   createXchangeJobGroup?: Maybe<XchangeJobGroupForm>;
   updateXchangeJobGroup?: Maybe<XchangeJobGroupForm>;
@@ -1602,6 +1613,17 @@ export type MutationDeactivateXchangeConfigArgs = {
 
 
 export type MutationActivateXchangeConfigArgs = {
+  sid: Scalars['ID'];
+};
+
+
+export type MutationUploadXchangeConfigDocumentArgs = {
+  xchangeConfigSid: Scalars['ID'];
+  file?: Maybe<Scalars['Upload']>;
+};
+
+
+export type MutationDeleteXchangeConfigDocumentArgs = {
   sid: Scalars['ID'];
 };
 
@@ -2286,6 +2308,7 @@ export type Query = {
   vendorSpecQuickSearch?: Maybe<Array<VendorSpecLink>>;
   xchangeProfile?: Maybe<XchangeProfile>;
   xchangeConfig?: Maybe<XchangeConfigForm>;
+  xchangeConfigDocuments?: Maybe<XchangeConfigDocumentConnection>;
   xchangeFileProcessForm?: Maybe<XchangeFileProcessForm>;
   previewConvertXchangeProfile?: Maybe<XchangeProfileConvertPreview>;
   xchangeStepForm?: Maybe<XchangeStepForm>;
@@ -2747,6 +2770,12 @@ export type QueryXchangeProfileArgs = {
 export type QueryXchangeConfigArgs = {
   orgSid: Scalars['ID'];
   coreFilename: Scalars['String'];
+};
+
+
+export type QueryXchangeConfigDocumentsArgs = {
+  xchangeConfigSid: Scalars['ID'];
+  pageableInput?: Maybe<PageableInput>;
 };
 
 
@@ -3635,7 +3664,6 @@ export type UserAccount = {
   sid: Scalars['ID'];
   email: Scalars['String'];
   person?: Maybe<Person>;
-  accessPolicyGroups?: Maybe<Array<AccessPolicyGroup>>;
 };
 
 export enum UserAccountAuditEvent {
@@ -4178,6 +4206,23 @@ export type XchangeConfigAlertForm = {
   errCode?: Maybe<Scalars['String']>;
   errMsg?: Maybe<Scalars['String']>;
   errSeverity?: Maybe<ErrorSeverity>;
+};
+
+export type XchangeConfigDocument = {
+  __typename?: 'XchangeConfigDocument';
+  sid?: Maybe<Scalars['ID']>;
+  name?: Maybe<Scalars['String']>;
+  docType?: Maybe<DocType>;
+  size?: Maybe<Scalars['Int']>;
+  lastUpdated?: Maybe<Scalars['DateTime']>;
+  owner?: Maybe<UserAccount>;
+};
+
+export type XchangeConfigDocumentConnection = {
+  __typename?: 'XchangeConfigDocumentConnection';
+  listPageInfo?: Maybe<ListPageInfo>;
+  paginationInfo: PaginationInfo;
+  nodes?: Maybe<Array<XchangeConfigDocument>>;
 };
 
 export type XchangeConfigForm = {
@@ -5502,14 +5547,7 @@ export type UsersForOrgQuery = (
         & { person?: Maybe<(
           { __typename?: 'Person' }
           & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
-        )>, accessPolicyGroups?: Maybe<Array<(
-          { __typename?: 'AccessPolicyGroup' }
-          & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes'>
-          & { policies?: Maybe<Array<(
-            { __typename?: 'AccessPolicy' }
-            & FragmentAccessPolicyFragment
-          )>> }
-        )>> }
+        )> }
       ), listItemCommands?: Maybe<Array<(
         { __typename?: 'WebCommand' }
         & FragmentWebCommandFragment
@@ -5574,14 +5612,7 @@ export type FindUserByEmailQuery = (
     & { person?: Maybe<(
       { __typename?: 'Person' }
       & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
-    )>, accessPolicyGroups?: Maybe<Array<(
-      { __typename?: 'AccessPolicyGroup' }
-      & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes' | 'members'>
-      & { policies?: Maybe<Array<(
-        { __typename?: 'AccessPolicy' }
-        & FragmentAccessPolicyFragment
-      )>> }
-    )>> }
+    )> }
   )> }
 );
 
@@ -5793,14 +5824,7 @@ export type UserQuickSearchQuery = (
     & { person?: Maybe<(
       { __typename?: 'Person' }
       & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
-    )>, accessPolicyGroups?: Maybe<Array<(
-      { __typename?: 'AccessPolicyGroup' }
-      & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes' | 'members'>
-      & { policies?: Maybe<Array<(
-        { __typename?: 'AccessPolicy' }
-        & FragmentAccessPolicyFragment
-      )>> }
-    )>> }
+    )> }
   )>> }
 );
 
@@ -5817,14 +5841,7 @@ export type FindExternalUsersQuery = (
     & { person?: Maybe<(
       { __typename?: 'Person' }
       & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
-    )>, accessPolicyGroups?: Maybe<Array<(
-      { __typename?: 'AccessPolicyGroup' }
-      & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes' | 'members'>
-      & { policies?: Maybe<Array<(
-        { __typename?: 'AccessPolicy' }
-        & FragmentAccessPolicyFragment
-      )>> }
-    )>> }
+    )> }
   )>> }
 );
 
@@ -5875,14 +5892,7 @@ export type ExternalUsersForOrgQuery = (
         & { person?: Maybe<(
           { __typename?: 'Person' }
           & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
-        )>, accessPolicyGroups?: Maybe<Array<(
-          { __typename?: 'AccessPolicyGroup' }
-          & Pick<AccessPolicyGroup, 'sid' | 'name' | 'description' | 'tmpl' | 'tmplUseAsIs' | 'applicableOrgTypes' | 'members'>
-          & { policies?: Maybe<Array<(
-            { __typename?: 'AccessPolicy' }
-            & FragmentAccessPolicyFragment
-          )>> }
-        )>> }
+        )> }
       ), listItemCommands?: Maybe<Array<(
         { __typename?: 'WebCommand' }
         & FragmentWebCommandFragment
@@ -7536,6 +7546,37 @@ export type XchangeConfigQuery = (
     )>>, commands?: Maybe<Array<(
       { __typename?: 'WebCommand' }
       & FragmentWebCommandFragment
+    )>> }
+  )> }
+);
+
+export type XchangeConfigDocumentsQueryVariables = Exact<{
+  xchangeConfigSid: Scalars['ID'];
+  pageableInput?: Maybe<PageableInput>;
+}>;
+
+
+export type XchangeConfigDocumentsQuery = (
+  { __typename?: 'Query' }
+  & { xchangeConfigDocuments?: Maybe<(
+    { __typename?: 'XchangeConfigDocumentConnection' }
+    & { listPageInfo?: Maybe<(
+      { __typename?: 'ListPageInfo' }
+      & FragmentListPageInfoFragment
+    )>, paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), nodes?: Maybe<Array<(
+      { __typename?: 'XchangeConfigDocument' }
+      & Pick<XchangeConfigDocument, 'sid' | 'name' | 'docType' | 'size' | 'lastUpdated'>
+      & { owner?: Maybe<(
+        { __typename?: 'UserAccount' }
+        & Pick<UserAccount, 'sid' | 'email'>
+        & { person?: Maybe<(
+          { __typename?: 'Person' }
+          & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
+        )> }
+      )> }
     )>> }
   )> }
 );
@@ -11419,6 +11460,55 @@ export type ActivateXchangeConfigMutation = (
   )> }
 );
 
+export type UploadXchangeConfigDocumentMutationVariables = Exact<{
+  xchangeConfigSid: Scalars['ID'];
+  file?: Maybe<Scalars['Upload']>;
+}>;
+
+
+export type UploadXchangeConfigDocumentMutation = (
+  { __typename?: 'Mutation' }
+  & { uploadXchangeConfigDocument?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
+  )> }
+);
+
+export type DeleteXchangeConfigDocumentMutationVariables = Exact<{
+  sid: Scalars['ID'];
+}>;
+
+
+export type DeleteXchangeConfigDocumentMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteXchangeConfigDocument?: Maybe<(
+    { __typename?: 'GenericResponse' }
+    & Pick<GenericResponse, 'response' | 'errCode' | 'errMsg' | 'errSeverity'>
+    & { allMessages?: Maybe<Array<(
+      { __typename?: 'LogMessage' }
+      & Pick<LogMessage, 'timeStamp' | 'severity' | 'name' | 'body'>
+      & { attributes?: Maybe<Array<(
+        { __typename?: 'NVPStr' }
+        & UnionNvp_NvpStr_Fragment
+      ) | (
+        { __typename?: 'NVPId' }
+        & UnionNvp_NvpId_Fragment
+      )>> }
+    )>> }
+  )> }
+);
+
 export type UpdateXchangeScheduleMutationVariables = Exact<{
   scheduleInput: UpdateXchangeScheduleInput;
 }>;
@@ -13629,17 +13719,6 @@ export const UsersForOrgDocument = gql`
           firstNm
           lastNm
         }
-        accessPolicyGroups {
-          sid
-          name
-          description
-          tmpl
-          tmplUseAsIs
-          applicableOrgTypes
-          policies {
-            ...fragmentAccessPolicy
-          }
-        }
       }
       accountLocked
       pendingActivation
@@ -13657,7 +13736,6 @@ export const UsersForOrgDocument = gql`
 ${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentPaginationInfoFragmentDoc}
 ${FragmentListPageInfoFragmentDoc}
-${FragmentAccessPolicyFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
 
 /**
@@ -13787,21 +13865,9 @@ export const FindUserByEmailDocument = gql`
       firstNm
       lastNm
     }
-    accessPolicyGroups {
-      sid
-      name
-      description
-      tmpl
-      tmplUseAsIs
-      applicableOrgTypes
-      policies {
-        ...fragmentAccessPolicy
-      }
-      members
-    }
   }
 }
-    ${FragmentAccessPolicyFragmentDoc}`;
+    `;
 
 /**
  * __useFindUserByEmailQuery__
@@ -14165,21 +14231,9 @@ export const UserQuickSearchDocument = gql`
       firstNm
       lastNm
     }
-    accessPolicyGroups {
-      sid
-      name
-      description
-      tmpl
-      tmplUseAsIs
-      applicableOrgTypes
-      policies {
-        ...fragmentAccessPolicy
-      }
-      members
-    }
   }
 }
-    ${FragmentAccessPolicyFragmentDoc}`;
+    `;
 
 /**
  * __useUserQuickSearchQuery__
@@ -14217,21 +14271,9 @@ export const FindExternalUsersDocument = gql`
       firstNm
       lastNm
     }
-    accessPolicyGroups {
-      sid
-      name
-      description
-      tmpl
-      tmplUseAsIs
-      applicableOrgTypes
-      policies {
-        ...fragmentAccessPolicy
-      }
-      members
-    }
   }
 }
-    ${FragmentAccessPolicyFragmentDoc}`;
+    `;
 
 /**
  * __useFindExternalUsersQuery__
@@ -14303,18 +14345,6 @@ export const ExternalUsersForOrgDocument = gql`
           firstNm
           lastNm
         }
-        accessPolicyGroups {
-          sid
-          name
-          description
-          tmpl
-          tmplUseAsIs
-          applicableOrgTypes
-          policies {
-            ...fragmentAccessPolicy
-          }
-          members
-        }
       }
       accountLocked
       pendingActivation
@@ -14332,7 +14362,6 @@ export const ExternalUsersForOrgDocument = gql`
 ${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentPaginationInfoFragmentDoc}
 ${FragmentListPageInfoFragmentDoc}
-${FragmentAccessPolicyFragmentDoc}
 ${FragmentWebCommandFragmentDoc}`;
 
 /**
@@ -17471,6 +17500,65 @@ export function useXchangeConfigLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type XchangeConfigQueryHookResult = ReturnType<typeof useXchangeConfigQuery>;
 export type XchangeConfigLazyQueryHookResult = ReturnType<typeof useXchangeConfigLazyQuery>;
 export type XchangeConfigQueryResult = Apollo.QueryResult<XchangeConfigQuery, XchangeConfigQueryVariables>;
+export const XchangeConfigDocumentsDocument = gql`
+    query XchangeConfigDocuments($xchangeConfigSid: ID!, $pageableInput: PageableInput) {
+  xchangeConfigDocuments(
+    xchangeConfigSid: $xchangeConfigSid
+    pageableInput: $pageableInput
+  ) {
+    listPageInfo {
+      ...fragmentListPageInfo
+    }
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    nodes {
+      sid
+      name
+      docType
+      size
+      lastUpdated
+      owner {
+        sid
+        email
+        person {
+          sid
+          firstNm
+          lastNm
+        }
+      }
+    }
+  }
+}
+    ${FragmentListPageInfoFragmentDoc}
+${FragmentPaginationInfoFragmentDoc}`;
+
+/**
+ * __useXchangeConfigDocumentsQuery__
+ *
+ * To run a query within a React component, call `useXchangeConfigDocumentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useXchangeConfigDocumentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useXchangeConfigDocumentsQuery({
+ *   variables: {
+ *      xchangeConfigSid: // value for 'xchangeConfigSid'
+ *      pageableInput: // value for 'pageableInput'
+ *   },
+ * });
+ */
+export function useXchangeConfigDocumentsQuery(baseOptions: Apollo.QueryHookOptions<XchangeConfigDocumentsQuery, XchangeConfigDocumentsQueryVariables>) {
+        return Apollo.useQuery<XchangeConfigDocumentsQuery, XchangeConfigDocumentsQueryVariables>(XchangeConfigDocumentsDocument, baseOptions);
+      }
+export function useXchangeConfigDocumentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<XchangeConfigDocumentsQuery, XchangeConfigDocumentsQueryVariables>) {
+          return Apollo.useLazyQuery<XchangeConfigDocumentsQuery, XchangeConfigDocumentsQueryVariables>(XchangeConfigDocumentsDocument, baseOptions);
+        }
+export type XchangeConfigDocumentsQueryHookResult = ReturnType<typeof useXchangeConfigDocumentsQuery>;
+export type XchangeConfigDocumentsLazyQueryHookResult = ReturnType<typeof useXchangeConfigDocumentsLazyQuery>;
+export type XchangeConfigDocumentsQueryResult = Apollo.QueryResult<XchangeConfigDocumentsQuery, XchangeConfigDocumentsQueryVariables>;
 export const XchangeFileProcessFormDocument = gql`
     query XchangeFileProcessForm($xchangeFileProcessSid: ID!) {
   xchangeFileProcessForm(xchangeFileProcessSid: $xchangeFileProcessSid) {
@@ -24433,6 +24521,95 @@ export function useActivateXchangeConfigMutation(baseOptions?: Apollo.MutationHo
 export type ActivateXchangeConfigMutationHookResult = ReturnType<typeof useActivateXchangeConfigMutation>;
 export type ActivateXchangeConfigMutationResult = Apollo.MutationResult<ActivateXchangeConfigMutation>;
 export type ActivateXchangeConfigMutationOptions = Apollo.BaseMutationOptions<ActivateXchangeConfigMutation, ActivateXchangeConfigMutationVariables>;
+export const UploadXchangeConfigDocumentDocument = gql`
+    mutation UploadXchangeConfigDocument($xchangeConfigSid: ID!, $file: Upload) {
+  uploadXchangeConfigDocument(xchangeConfigSid: $xchangeConfigSid, file: $file) {
+    response
+    errCode
+    errMsg
+    errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export type UploadXchangeConfigDocumentMutationFn = Apollo.MutationFunction<UploadXchangeConfigDocumentMutation, UploadXchangeConfigDocumentMutationVariables>;
+
+/**
+ * __useUploadXchangeConfigDocumentMutation__
+ *
+ * To run a mutation, you first call `useUploadXchangeConfigDocumentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUploadXchangeConfigDocumentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [uploadXchangeConfigDocumentMutation, { data, loading, error }] = useUploadXchangeConfigDocumentMutation({
+ *   variables: {
+ *      xchangeConfigSid: // value for 'xchangeConfigSid'
+ *      file: // value for 'file'
+ *   },
+ * });
+ */
+export function useUploadXchangeConfigDocumentMutation(baseOptions?: Apollo.MutationHookOptions<UploadXchangeConfigDocumentMutation, UploadXchangeConfigDocumentMutationVariables>) {
+        return Apollo.useMutation<UploadXchangeConfigDocumentMutation, UploadXchangeConfigDocumentMutationVariables>(UploadXchangeConfigDocumentDocument, baseOptions);
+      }
+export type UploadXchangeConfigDocumentMutationHookResult = ReturnType<typeof useUploadXchangeConfigDocumentMutation>;
+export type UploadXchangeConfigDocumentMutationResult = Apollo.MutationResult<UploadXchangeConfigDocumentMutation>;
+export type UploadXchangeConfigDocumentMutationOptions = Apollo.BaseMutationOptions<UploadXchangeConfigDocumentMutation, UploadXchangeConfigDocumentMutationVariables>;
+export const DeleteXchangeConfigDocumentDocument = gql`
+    mutation DeleteXchangeConfigDocument($sid: ID!) {
+  deleteXchangeConfigDocument(sid: $sid) {
+    response
+    errCode
+    errMsg
+    errSeverity
+    allMessages {
+      timeStamp
+      severity
+      name
+      body
+      attributes {
+        ...unionNVP
+      }
+    }
+  }
+}
+    ${UnionNvpFragmentDoc}`;
+export type DeleteXchangeConfigDocumentMutationFn = Apollo.MutationFunction<DeleteXchangeConfigDocumentMutation, DeleteXchangeConfigDocumentMutationVariables>;
+
+/**
+ * __useDeleteXchangeConfigDocumentMutation__
+ *
+ * To run a mutation, you first call `useDeleteXchangeConfigDocumentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteXchangeConfigDocumentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteXchangeConfigDocumentMutation, { data, loading, error }] = useDeleteXchangeConfigDocumentMutation({
+ *   variables: {
+ *      sid: // value for 'sid'
+ *   },
+ * });
+ */
+export function useDeleteXchangeConfigDocumentMutation(baseOptions?: Apollo.MutationHookOptions<DeleteXchangeConfigDocumentMutation, DeleteXchangeConfigDocumentMutationVariables>) {
+        return Apollo.useMutation<DeleteXchangeConfigDocumentMutation, DeleteXchangeConfigDocumentMutationVariables>(DeleteXchangeConfigDocumentDocument, baseOptions);
+      }
+export type DeleteXchangeConfigDocumentMutationHookResult = ReturnType<typeof useDeleteXchangeConfigDocumentMutation>;
+export type DeleteXchangeConfigDocumentMutationResult = Apollo.MutationResult<DeleteXchangeConfigDocumentMutation>;
+export type DeleteXchangeConfigDocumentMutationOptions = Apollo.BaseMutationOptions<DeleteXchangeConfigDocumentMutation, DeleteXchangeConfigDocumentMutationVariables>;
 export const UpdateXchangeScheduleDocument = gql`
     mutation UpdateXchangeSchedule($scheduleInput: UpdateXchangeScheduleInput!) {
   updateXchangeSchedule(scheduleInput: $scheduleInput) {
