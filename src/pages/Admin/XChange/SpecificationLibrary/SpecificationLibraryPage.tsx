@@ -202,6 +202,25 @@ const SpecificationLibraryPage = () => {
     setShowDialog(true);
   };
 
+  const tooltipHostVendors = (integratedClients: string[]) => {
+    if (integratedClients.length === 0) {
+      return (
+        <Text size="small">
+          No clients are currently associated with this vendor
+        </Text>
+      )
+    }
+
+    return (
+      <Stack>
+        {integratedClients
+          && integratedClients.map((vendor, vendorIndex) => (
+            <span key={vendorIndex}>{vendor}</span>
+          ))}
+      </Stack>
+    );
+  };
+
   const onRenderItemColum = (item:VendorSpecSummary, itemIndex?: number, column?: IColumn) => {
     if (item && column?.key === 'name') {
       const value = item[column.key];
@@ -226,7 +245,12 @@ const SpecificationLibraryPage = () => {
         }}
       >
         {column?.key === 'integratedClients' && (
-          <ButtonLink>{item.integratedClients.length}</ButtonLink>
+          <TooltipHost
+          content={tooltipHostVendors(item?.integratedClients)}
+          directionalHint={DirectionalHint.rightCenter}
+          >
+            <ButtonLink>{item.integratedClients.length}</ButtonLink>
+          </TooltipHost>  
         )}
         {column?.key === 'active' && (
           <ActivityBubbles
