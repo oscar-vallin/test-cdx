@@ -197,6 +197,7 @@ const SingleSignOnPanel = ({
     if (identityProviderUpdated) {
       const responseCode = response?.response;
       setIdentityProviderForm(identityProviderUpdated?.updateIdentityProvider);
+      setOidcSettings(identityProviderUpdated?.updateIdentityProvider.oidcSettings);
       if (responseCode === GqOperationResponse.Fail) {
         const errorMsg = identityProviderUpdated?.updateIdentityProvider?.errMsg
           ?? 'Error occurred, please verify the information and try again.';
@@ -310,10 +311,6 @@ const SingleSignOnPanel = ({
       setName('');
     }
   };
-
-  useEffect(() => {
-    console.log(removePriorMetaDataSids)
-  }, [removePriorMetaDataSids])
 
   const renderMetaData = () => {
     if (!identityProviderForm?.historicalMetaData.visible) {
