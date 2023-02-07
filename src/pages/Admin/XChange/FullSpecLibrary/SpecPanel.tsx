@@ -445,8 +445,12 @@ const SpecPanel = ({
               <Comment20Filled
                 style={comments ? {
                   color: ThemeStore.userTheme.colors.yellow, cursor: 'pointer',
+                  marginLeft: '15px',
+    
                 } : {
                   color: ThemeStore.userTheme.colors.neutralTertiaryAlt, cursor: 'pointer',
+                  marginLeft: '15px',
+   
                 }}
                 onClick={() => {
                   setOpenUpdateComments(true);
@@ -458,9 +462,11 @@ const SpecPanel = ({
             <Comment20Filled
               style={comments ? {
                 color: ThemeStore.userTheme.colors.yellow, cursor: 'pointer',
-              } : {
+                marginLeft: '15px',
+               } : {
                 color: ThemeStore.userTheme.colors.neutralTertiaryAlt, cursor: 'pointer',
-              }}
+                marginLeft: '15px',
+               }}
               onClick={() => {
                 setOpenUpdateComments(true);
               }}
@@ -514,8 +520,10 @@ const SpecPanel = ({
           <Comment20Filled
             style={comments ? {
               color: ThemeStore.userTheme.colors.yellow, cursor: 'pointer',
+              marginLeft: '15px',
             } : {
               color: ThemeStore.userTheme.colors.neutralTertiaryAlt, cursor: 'pointer',
+              marginLeft: '15px',
             }}
           />
         </TooltipHost>
@@ -527,36 +535,28 @@ const SpecPanel = ({
   const renderPanelHeader = () => (
     <PanelHeader id="__SpecVendor_PanelHeader">
       <Row>
-        <Column lg="3">
-          <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
+        <Column lg="12">
+          <Stack>
             <PanelTitle id="__SpecVendor_Panel_Title" variant="bold" size="large">
               {!sid ? 'Create Spec' : vendorSpecForm?.name.value}
-            </PanelTitle>
-          </Stack>
-        </Column>
-        <Column lg="2">
-          <Stack horizontal>
-            <Spacing margin={{ top: 'normal' }}>
               {tooltipHostComments()}
-            </Spacing>
-            {activateCmd && (
-            <Spacing margin={{ top: 'normal' }}>
-              <TooltipHost content="This spec is inactive">
-                <FontIcon
-                  id="specInactive"
-                  style={{
-                    fontSize: '18px',
-                    cursor: 'pointer',
-                    marginLeft: '10px',
-                  }}
-                  iconName="StatusCircleBlock"
-                  onClick={() => {
-                    showActivateDialog();
-                  }}
-                />
-              </TooltipHost>
-            </Spacing>
-            )}
+              {activateCmd && (
+                  <TooltipHost content="This spec is inactive">
+                    <FontIcon
+                      id="specInactive"
+                      style={{
+                        fontSize: '18px',
+                        cursor: 'pointer',
+                        marginLeft: '15px',
+                      }}
+                      iconName="StatusCircleBlock"
+                      onClick={() => {
+                        showActivateDialog();
+                      }}
+                    />
+                  </TooltipHost>
+                )}
+            </PanelTitle>
           </Stack>
         </Column>
       </Row>
