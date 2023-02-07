@@ -218,7 +218,7 @@ export const WorkPacketTable = ({
         <Box id={`${id}_TableWrap`}>
           <div
             id="Table_Detailed"
-            style={{ width: '100%', height: `calc(100vh - ${hasMorePages ? '325px' : '250px'})` }}
+            style={{ width: '100%', height: `calc(100vh - ${hasMorePages ? '325px' : '270px'})` }}
           >
             <ScrollableTable
               id={`${id}_Table`}
