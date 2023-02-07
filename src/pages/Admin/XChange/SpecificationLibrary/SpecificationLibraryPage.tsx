@@ -226,6 +226,7 @@ const SpecificationLibraryPage = () => {
       const value = item[column.key];
       return (
         <ButtonLink
+          style={!item.active  ? {color: ThemeStore.userTheme.colors.neutralQuaternary } : { color: ''}}
           onClick={() => {
             setSid(item.sid ?? '');
             setIsOpenPanel(true);
@@ -249,7 +250,11 @@ const SpecificationLibraryPage = () => {
           content={tooltipHostVendors(item?.integratedClients)}
           directionalHint={DirectionalHint.rightCenter}
           >
-            <ButtonLink>{item.integratedClients.length}</ButtonLink>
+            <ButtonLink
+              style={!item.active  ? {color: ThemeStore.userTheme.colors.neutralQuaternary } : { color: ''}}
+            >
+              {item.integratedClients.length}
+            </ButtonLink>
           </TooltipHost>  
         )}
         {column?.key === 'active' && (
@@ -275,20 +280,30 @@ const SpecificationLibraryPage = () => {
     if (item.active) {
       active = implementations > 0 ? 'Deactivate' : 'Delete';
     }
-    if (deleteCmd) {
+    if (deleteCmd && item.active) {
       return (
         <TooltipHost content={active} directionalHint={DirectionalHint.rightCenter}>
           <FontIcon
             id="__specLibrary_Delete_Deactivate"
             iconName="Trash"
             style={styles}
-            onClick={() => {
-              setName(item.name ?? '');
-              showDeeletDeactivateDialog(implementations, item.sid ?? '');
-            }}
           />
         </TooltipHost>
       )
+    }
+    if (!item.active) {
+      return (
+        <TooltipHost content={active} directionalHint={DirectionalHint.rightCenter}>
+          <FontIcon
+            style={{ 
+              fontSize: '18px', 
+              cursor: 'pointer', 
+              color: ThemeStore.userTheme.colors.neutralQuaternary,
+            }}
+            iconName="StatusCircleBlock"
+          />
+        </TooltipHost>
+      );
     }
     return null;
   };
