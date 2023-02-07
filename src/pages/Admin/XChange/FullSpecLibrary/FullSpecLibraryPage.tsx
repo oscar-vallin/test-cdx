@@ -24,12 +24,14 @@ import {
   VendorLink,
 } from 'src/data/services/graphql';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
+import { useThemeStore } from 'src/store/ThemeStore';
 import { DataColumn, useSortableColumns } from 'src/containers/tables';
 import { ButtonLink } from 'src/components/buttons';
 import { FullSpecList } from './FullSpecLibrary.styles';
 import { SpecPanel } from './SpecPanel';
 
 const FullSpecLibraryPage = () => {
+  const ThemeStore = useThemeStore();
   const [fullVendorNodes, setFullVendorNodes] = useState<VendorLink[] | null>();
   const [groups, setGroups] = useState<IGroup[]>([]);
   const [searchTextFullSpecVendor, setSearchTextFullSpecVendor] = useState('');
@@ -129,6 +131,10 @@ const FullSpecLibraryPage = () => {
   }
 
   const onRenderItemColum = (item: VendorLink, itemIndex?: number, column?: IColumn) => {
+    let styles = {
+      fontSize: '12px',
+      color: item.active ? '' : ThemeStore.userTheme.colors.neutralQuaternary,
+    }
     if (column?.key === 'name') {
       return (
         <Stack tokens={{ childrenGap: 5.5 }}>
@@ -137,7 +143,7 @@ const FullSpecLibraryPage = () => {
               id={`vendorname_${specIndex}`}
               underline
               key={specIndex}
-              style={{ fontSize: '12px' }}
+              style={styles}
               onClick={() => {
                 setOrgSid(item.orgSid ?? '');
                 setSid(spec.sid ?? '');
@@ -160,7 +166,7 @@ const FullSpecLibraryPage = () => {
               content={tooltipHostVendors(spec.integratedClients)}
               directionalHint={DirectionalHint.rightCenter}
             >
-              <ButtonLink>{spec.integratedClients.length}</ButtonLink>
+              <ButtonLink style={styles}>{spec.integratedClients.length}</ButtonLink>
             </TooltipHost>
           ))}
         </Stack>

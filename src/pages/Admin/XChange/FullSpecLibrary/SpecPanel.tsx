@@ -1,4 +1,5 @@
 import {
+  DefaultButton,
   DirectionalHint,
   FontIcon,
   MessageBar,
@@ -62,6 +63,7 @@ const SpecPanel = ({
   const Toast = useNotification();
   const handleError = ErrorHandler();
   const [vendorSpecForm, setVendorSpecForm] = useState<VendorSpecForm | null>();
+  const [active, setActive] = useState<boolean>()
   const [name, setName] = useState('');
   const [legacyName, setLegacyName] = useState('');
   const [version, setVersion] = useState('');
@@ -71,7 +73,6 @@ const SpecPanel = ({
   const [comments, setComments] = useState('');
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
   const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
-  const [activateCmd, setActivateCmd] = useState<WebCommand | null>();
   const [openUpdateComments, setOpenUpdateComments] = useState(false);
   const [closeTooltipHost, setCloseTooltipHost] = useState(true);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
@@ -140,9 +141,6 @@ const SpecPanel = ({
         setCreateCmd(_createCmd);
         const _updateCmd = pageCommands.find((cmd) => cmd.commandType === CdxWebCommandType.Update);
         setUpdateCmd(_updateCmd);
-        const _activateCmd = pageCommands
-          .find((cmd) => cmd.commandType === CdxWebCommandType.Activate);
-        setActivateCmd(_activateCmd);
       }
     }
   }, [dataForm, loadingForm]);
@@ -421,12 +419,28 @@ const SpecPanel = ({
         <WizardButtonRow>
           <Spacing margin={{ top: 'double' }}>
             {(createCmd || updateCmd) && (
-            <PrimaryButton
-              id="__saveSpecVendor"
-              onClick={() => saveSpecVendor()}
-            >
-              Save
-            </PrimaryButton>
+              <Stack horizontal>
+                <PrimaryButton
+                  id="__saveSpecVendor"
+                  onClick={() => saveSpecVendor()}
+                >
+                  Save
+                </PrimaryButton>
+                {updateCmd && vendorSpecForm?.active.value === 'false' && (
+                  <DefaultButton 
+                    style={{
+                      marginLeft: '10px',
+                    }}
+                    iconProps={{
+                      iconName: 'CompletedSolid',
+                    }}
+                    text="Activate"
+                    onClick={() => {
+                      showActivateDialog();
+                    }}
+                  />
+                )}
+              </Stack>
             )}
           </Spacing>
         </WizardButtonRow>
@@ -540,7 +554,7 @@ const SpecPanel = ({
             <PanelTitle id="__SpecVendor_Panel_Title" variant="bold" size="large">
               {!sid ? 'Create Spec' : vendorSpecForm?.name.value}
               {tooltipHostComments()}
-              {activateCmd && (
+              {updateCmd && vendorSpecForm?.active.value === 'false' && (
                   <TooltipHost content="This spec is inactive">
                     <FontIcon
                       id="specInactive"
@@ -550,9 +564,6 @@ const SpecPanel = ({
                         marginLeft: '15px',
                       }}
                       iconName="StatusCircleBlock"
-                      onClick={() => {
-                        showActivateDialog();
-                      }}
                     />
                   </TooltipHost>
                 )}
