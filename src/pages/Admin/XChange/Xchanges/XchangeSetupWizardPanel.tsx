@@ -579,6 +579,7 @@ const XchangeSetupWizardPanel = ({
           <UIInputText
             id="__newXghangePassword"
             uiField={setupNewXchangeForm?.password}
+            type="password"
             autocomplete="new-password"
             placeholder="password"
             value={password}
