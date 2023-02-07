@@ -524,7 +524,7 @@ const XchangeSetupWizardPanel = ({
             id="__newXghangeSourcePlatform"
             uiField={setupNewXchangeForm?.deliveryProtocol}
             options={setupNewXchangeForm?.options}
-            value={setupResumeXchangeFormData ? deliveryProtocol : undefined}
+            value={deliveryProtocol}
             onChange={(newValue) => {
               setUnsavedChanges(true);
               setDeliveryProtocol(newValue ?? '');
@@ -538,13 +538,12 @@ const XchangeSetupWizardPanel = ({
           <UIInputText
             id="__newXghangeHost"
             uiField={setupNewXchangeForm?.host}
-            value={setupResumeXchangeFormData ? host : undefined}
+            value={host}
             placeholder="host"
             autocomplete="off"
             onChange={(event, _newValue) => {
               setUnsavedChanges(true);
               setHost(_newValue ?? '');
-              setRefreshForm(true);
             }}
           />
         </Column>
@@ -552,13 +551,12 @@ const XchangeSetupWizardPanel = ({
           <UIInputText
             id="__newXghangePort"
             uiField={setupNewXchangeForm?.port}
-            value={setupResumeXchangeFormData ? port : undefined}
+            value={port}
             placeholder="port"
             autocomplete="off"
             onChange={(event, _newValue) => {
               setUnsavedChanges(true);
               setPort(_newValue ?? '');
-              setRefreshForm(true);
             }}
           />
         </Column>
@@ -568,11 +566,10 @@ const XchangeSetupWizardPanel = ({
           <UIInputText
             id="__newXghangeUsername"
             uiField={setupNewXchangeForm?.userName}
-            value={setupResumeXchangeFormData ? userName : undefined}
+            value={userName}
             onChange={(event, _newValue) => {
               setUnsavedChanges(true);
               setUserName(_newValue ?? '');
-              setRefreshForm(true);
             }}
           />
         </Column>
@@ -584,11 +581,10 @@ const XchangeSetupWizardPanel = ({
             uiField={setupNewXchangeForm?.password}
             autocomplete="new-password"
             placeholder="password"
-            value={setupResumeXchangeFormData ? password : undefined}
+            value={password}
             onChange={(event, _newValue) => {
               setUnsavedChanges(true);
               setPassword(_newValue ?? '');
-              setRefreshForm(true);
             }}
           />
         </Column>
@@ -611,11 +607,10 @@ const XchangeSetupWizardPanel = ({
                 id="__newXghangeAuthKeyName"
                 uiField={setupNewXchangeForm?.authKeyName}
                 options={setupNewXchangeForm?.options}
-                value={setupResumeXchangeFormData ? authKeyName : undefined}
+                value={authKeyName}
                 onChange={(newValue) => {
                   setUnsavedChanges(true);
                   setAuthKeyName(newValue ?? '');
-                  setRefreshForm(true);
                 }}
               />
             </Column>
@@ -627,11 +622,10 @@ const XchangeSetupWizardPanel = ({
                 uiField={setupNewXchangeForm?.authKeyPassphrase}
                 autocomplete="off"
                 placeholder="Passphrase"
-                value={setupResumeXchangeFormData ? authKeyPassphrase : undefined}
+                value={authKeyPassphrase}
                 onChange={(event, _newValue) => {
                   setUnsavedChanges(true);
                   setAuthKeyPassphrase(_newValue ?? '');
-                  setRefreshForm(true);
                 }}
               />
             </Column>
@@ -645,11 +639,10 @@ const XchangeSetupWizardPanel = ({
             uiField={setupNewXchangeForm?.folder}
             autocomplete="off"
             placeholder="Passphrase"
-            value={setupResumeXchangeFormData ? folder : undefined}
+            value={folder}
             onChange={(event, _newValue) => {
               setUnsavedChanges(true);
               setFolder(_newValue ?? '');
-              setRefreshForm(true);
             }}
           />
         </Column>
