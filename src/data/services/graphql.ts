@@ -4550,6 +4550,7 @@ export type XchangeSetupForm = {
   xchangeConfigSid?: Maybe<Scalars['ID']>;
   coreFilename?: Maybe<Scalars['String']>;
   vendor?: Maybe<UiSelectOneField>;
+  qualifier?: Maybe<UiStringField>;
   vendorSpec?: Maybe<UiSelectOneField>;
   sourcePlatform?: Maybe<UiSelectOneField>;
   incomingFormat?: Maybe<UiSelectOneField>;
@@ -4575,6 +4576,7 @@ export type XchangeSetupInput = {
   xchangeConfigSid?: Maybe<Scalars['ID']>;
   orgSid: Scalars['ID'];
   vendorSid?: Maybe<Scalars['ID']>;
+  qualifier?: Maybe<Scalars['String']>;
   vendorSpec?: Maybe<Scalars['ID']>;
   sourcePlatform?: Maybe<Scalars['ID']>;
   incomingFormat?: Maybe<Scalars['ID']>;
@@ -10509,6 +10511,9 @@ export type SetupNewXchangeMutation = (
     & { vendor?: Maybe<(
       { __typename?: 'UISelectOneField' }
       & FragmentUiSelectOneFieldFragment
+    )>, qualifier?: Maybe<(
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
     )>, vendorSpec?: Maybe<(
       { __typename?: 'UISelectOneField' }
       & FragmentUiSelectOneFieldFragment
@@ -10571,6 +10576,9 @@ export type CreateNewXchangeMutation = (
     & { vendor?: Maybe<(
       { __typename?: 'UISelectOneField' }
       & FragmentUiSelectOneFieldFragment
+    )>, qualifier?: Maybe<(
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
     )>, vendorSpec?: Maybe<(
       { __typename?: 'UISelectOneField' }
       & FragmentUiSelectOneFieldFragment
@@ -10633,6 +10641,9 @@ export type ResumeXchangeSetupMutation = (
     & { vendor?: Maybe<(
       { __typename?: 'UISelectOneField' }
       & FragmentUiSelectOneFieldFragment
+    )>, qualifier?: Maybe<(
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
     )>, vendorSpec?: Maybe<(
       { __typename?: 'UISelectOneField' }
       & FragmentUiSelectOneFieldFragment
@@ -10695,6 +10706,9 @@ export type UpdateXchangeSetupMutation = (
     & { vendor?: Maybe<(
       { __typename?: 'UISelectOneField' }
       & FragmentUiSelectOneFieldFragment
+    )>, qualifier?: Maybe<(
+      { __typename?: 'UIStringField' }
+      & FragmentUiStringFieldFragment
     )>, vendorSpec?: Maybe<(
       { __typename?: 'UISelectOneField' }
       & FragmentUiSelectOneFieldFragment
@@ -22922,6 +22936,9 @@ export const SetupNewXchangeDocument = gql`
     vendor {
       ...fragmentUISelectOneField
     }
+    qualifier {
+      ...fragmentUIStringField
+    }
     vendorSpec {
       ...fragmentUISelectOneField
     }
@@ -22974,8 +22991,8 @@ export const SetupNewXchangeDocument = gql`
   }
 }
     ${FragmentUiSelectOneFieldFragmentDoc}
-${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentUiIntFieldFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}`;
 export type SetupNewXchangeMutationFn = Apollo.MutationFunction<SetupNewXchangeMutation, SetupNewXchangeMutationVariables>;
@@ -23011,6 +23028,9 @@ export const CreateNewXchangeDocument = gql`
     vendor {
       ...fragmentUISelectOneField
     }
+    qualifier {
+      ...fragmentUIStringField
+    }
     vendorSpec {
       ...fragmentUISelectOneField
     }
@@ -23063,8 +23083,8 @@ export const CreateNewXchangeDocument = gql`
   }
 }
     ${FragmentUiSelectOneFieldFragmentDoc}
-${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentUiIntFieldFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}`;
 export type CreateNewXchangeMutationFn = Apollo.MutationFunction<CreateNewXchangeMutation, CreateNewXchangeMutationVariables>;
@@ -23100,6 +23120,9 @@ export const ResumeXchangeSetupDocument = gql`
     vendor {
       ...fragmentUISelectOneField
     }
+    qualifier {
+      ...fragmentUIStringField
+    }
     vendorSpec {
       ...fragmentUISelectOneField
     }
@@ -23152,8 +23175,8 @@ export const ResumeXchangeSetupDocument = gql`
   }
 }
     ${FragmentUiSelectOneFieldFragmentDoc}
-${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentUiIntFieldFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}`;
 export type ResumeXchangeSetupMutationFn = Apollo.MutationFunction<ResumeXchangeSetupMutation, ResumeXchangeSetupMutationVariables>;
@@ -23189,6 +23212,9 @@ export const UpdateXchangeSetupDocument = gql`
     vendor {
       ...fragmentUISelectOneField
     }
+    qualifier {
+      ...fragmentUIStringField
+    }
     vendorSpec {
       ...fragmentUISelectOneField
     }
@@ -23241,8 +23267,8 @@ export const UpdateXchangeSetupDocument = gql`
   }
 }
     ${FragmentUiSelectOneFieldFragmentDoc}
-${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentUiStringFieldFragmentDoc}
+${FragmentUiBooleanFieldFragmentDoc}
 ${FragmentUiIntFieldFragmentDoc}
 ${FragmentUiOptionsFragmentDoc}`;
 export type UpdateXchangeSetupMutationFn = Apollo.MutationFunction<UpdateXchangeSetupMutation, UpdateXchangeSetupMutationVariables>;
