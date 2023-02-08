@@ -170,7 +170,7 @@ const SpecificationLibraryPage = () => {
     setShowDialog(false);
   };
 
-  const showDeeletDeactivateDialog = (
+  const showDeletDeactivateDialog = (
     implementations: number,
     currentSid: string,
   ) => {
@@ -287,6 +287,9 @@ const SpecificationLibraryPage = () => {
             id="__specLibrary_Delete_Deactivate"
             iconName="Trash"
             style={styles}
+            onClick={() => {
+              showDeletDeactivateDialog(implementations, item.sid ?? '');
+            }}
           />
         </TooltipHost>
       )
