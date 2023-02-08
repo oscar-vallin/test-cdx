@@ -480,7 +480,7 @@ export const SingleSignOnPage = () => {
         dialogContentProps={{
           title: `${disable ? 'Disable' : 'Enable'} Password based login`,
           titleProps: {
-            id: '__Password_Login_Confirm_Title',
+            id: '__Password_Login_Confirm_title',
           },
         }}
         minWidth="500px"
