@@ -45,10 +45,10 @@ import { PreviewConvertXchangePanel } from './PreviewConvertXchangePanel';
 import {
   CardStyled,
   ContainerInput,
-  StyledButtonAction,
   StyledIconsComments,
 } from './XchangePage.styles';
 import { XchangeSetupWizardPanel } from './XchangeSetupWizardPanel';
+import { EmptyState } from 'src/containers/states';
 
 type TooltipsProps = {
   hasAlerts: string;
@@ -618,7 +618,7 @@ const XChangePage = () => {
     }
 
     if (!xchanges.length) {
-      return <Text>Empty</Text>;
+      return  <EmptyState title="No configured Xchanges" description="There are no configured Xchanges in this organization" />
     }
 
     if (filterXchange.length || searchXchanges.trim() !== '') {
