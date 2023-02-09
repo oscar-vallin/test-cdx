@@ -35,7 +35,6 @@ import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { UIInputSelectOne } from 'src/components/inputs/InputDropdown';
 import { UIInputCode } from 'src/components/inputs/InputCode';
 import { Comment20Filled } from '@fluentui/react-icons';
-import { UIInputTextArea } from 'src/components/inputs/InputTextArea';
 
 const defaultDialogProps: DialogYesNoProps = {
   id: '__IncomingFormat_Dlg',
@@ -336,7 +335,7 @@ const IncomingFormatPanel = ({
           {closeTooltipHost && (
             <TooltipHost
               directionalHint={DirectionalHint['rightBottomEdge']}
-              content={incomingNotes ? 'This Spec has comments. Click to see them.' : 'Click to add a comment'}
+              content={incomingNotes ? 'This incoming format has comments. Click to see them.' : 'Click to add a comment'}
             >
               <Comment20Filled
                 style={incomingNotes ? {
@@ -384,7 +383,7 @@ const IncomingFormatPanel = ({
 
     const updateComment = () => (
       <TextField
-        id="SpecVendorComment"
+        id="IncomingFormatComment"
         label='Comments'
         readOnly={readOnly()}
         value={incomingNotes}
@@ -493,7 +492,7 @@ const IncomingFormatPanel = ({
           </Column>
         </FormRow>
         <FormRow>
-          {incomingFormat?.notes.visible && (
+          {incomingFormat?.includedStepXML.visible && (
             <Column lg="12">
               <UIInputCode
                 id="__incomingFormatIncludedStepXML"
@@ -552,7 +551,7 @@ const IncomingFormatPanel = ({
           <Stack>
             <PanelTitle id="__IncomingFormat_Panel_Title" variant="bold" size="large">
               {!updateCmd ? 'Create Incoming Format' : incomingFormatsData?.incomingFormatForm?.name.value}
-              {tooltipHostComments()}
+              <>{tooltipHostComments()}</>
             </PanelTitle>
           </Stack>
         </Column>
@@ -562,6 +561,15 @@ const IncomingFormatPanel = ({
 
   return (
     <ThemedPanel
+      onClick={() => {
+        if (openUpdateComments) {
+          setOpenUpdateComments(false);
+          setCloseTooltipHost(false);
+          setTimeout(() => {
+            setCloseTooltipHost(true);
+          }, 0.001);
+        }
+      }}
       closeButtonAriaLabel="Close"
       onRenderHeader={renderPanelHeader}
       type={PanelType.medium}
