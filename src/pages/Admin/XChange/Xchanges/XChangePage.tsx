@@ -359,12 +359,12 @@ const XChangePage = () => {
     const coreFN = node?.coreFilename;
     return (
       <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
-        {node.active ? (
-          <ButtonLink to={`/xchange-details?orgSid=${orgSid}&coreFilename=${coreFN}`}>{columnVal}</ButtonLink>
-
-        ) : (
-          <ButtonLink style={{ color: 'rgb(161, 159, 157)', cursor: 'auto' }}>{columnVal}</ButtonLink>
-        )}
+          <ButtonLink 
+            to={`/xchange-details?orgSid=${orgSid}&coreFilename=${coreFN}`}
+            style={!node.active ? { color: 'rgb(161, 159, 157)' } : {color: ''}}
+          >
+          {columnVal}
+          </ButtonLink>
         <>
           {column?.key === 'active' && (
             <>
