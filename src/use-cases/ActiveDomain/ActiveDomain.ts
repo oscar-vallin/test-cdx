@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { CdxWebAppDomain, useNavigateToNewDomainLazyQuery } from 'src/data/services/graphql';
 import { ROUTES } from 'src/data/constants/RouteConstants';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
@@ -7,7 +7,7 @@ import { ErrorHandler } from 'src/utils/ErrorHandler';
 
 export const useActiveDomainUseCase = (onFetchComplete?: () => void) => {
   const ActiveDomainStore = useActiveDomainStore();
-
+  const [navigateOnChange, setNavigateOnChange] = useState(true);
   const handleError = ErrorHandler();
 
   const [fetchDomain, {
@@ -67,7 +67,7 @@ export const useActiveDomainUseCase = (onFetchComplete?: () => void) => {
         label: orgTrail?.label,
         orgId: orgTrail?.orgId,
         orgSid: orgTrail?.orgSid,
-        destination: domainData.navigateToNewDomain?.selectedPage,
+        destination: navigateOnChange ? domainData.navigateToNewDomain?.selectedPage : null,
       });
 
       if (onFetchComplete) {
@@ -82,5 +82,16 @@ export const useActiveDomainUseCase = (onFetchComplete?: () => void) => {
     }
   };
 
-  return { performNavUpdate, setCurrentOrg };
+  /**
+   * Update the left and top menus without navigating to the user's home page
+   * @param orgSid
+   */
+  const updateCurrentOrgNav = (orgSid?: string | null) => {
+    if (orgSid) {
+      setNavigateOnChange(false);
+      performNavUpdate({ orgSid })
+    }
+  };
+
+  return { performNavUpdate, setCurrentOrg, updateCurrentOrgNav };
 };

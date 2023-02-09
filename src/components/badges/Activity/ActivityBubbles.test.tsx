@@ -1,16 +1,6 @@
 import { ActivityBubbles } from './ActivityBubbles'
-import { mockUseActiveDomainStore } from 'src/utils/mockActiveDomainStore';
 import { XchangeActivity } from 'src/data/services/graphql';
 import { mountWithTheme } from 'src/utils/testUtils';
-
-jest.mock('src/store/ActiveDomainStore', () => ({
-  useActiveDomainStore: mockUseActiveDomainStore,
-}));
-jest.mock('src/use-cases/ActiveDomain',() => ({
-  useActiveDomainUseCase: () => ({
-    setCurrentOrg: jest.fn(),
-  }),
-}));
 
 describe("Activity Bubbles Unit Testing", () => {
   const zero: XchangeActivity = {

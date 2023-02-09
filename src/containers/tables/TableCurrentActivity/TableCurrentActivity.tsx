@@ -11,7 +11,6 @@ import {
 } from 'src/data/services/graphql';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useHistory } from 'react-router-dom';
-import { useActiveDomainUseCase } from 'src/use-cases/ActiveDomain';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { TableFilters } from '../TableFilters';
 import { Container, TableContainer } from './TableActivity.styles';
@@ -20,17 +19,28 @@ import { TableActivity } from './TableActivity';
 const TablesCurrentActivity = ({ id = 'TableCurrentActivity' }) => {
   const { orgSid } = useOrgSid();
   const history = useHistory();
-  const ActiveDomain = useActiveDomainUseCase();
   const handleError = ErrorHandler();
 
   const { searchText, startDate, endDate } = useTableFilters('Name, Id, Last Activity');
-  const [apiCompleted, { data: dataCompleted, loading: loadingCompleted, error: errorCompleted }] = useQueryHandler(
+  const [apiCompleted, {
+    data: dataCompleted,
+    loading: loadingCompleted,
+    error: errorCompleted,
+  }] = useQueryHandler(
     useExchangeActivityTransmittedLazyQuery,
   );
-  const [apiErrored, { data: dataErrored, loading: loadingErrored, error: errorErrored }] = useQueryHandler(
+  const [apiErrored, {
+    data: dataErrored,
+    loading: loadingErrored,
+    error: errorErrored,
+  }] = useQueryHandler(
     useExchangeActivityErroredLazyQuery,
   );
-  const [apiInProcess, { data: dataInProcess, loading: loadingInProcess, error: errorInProcess }] = useQueryHandler(
+  const [apiInProcess, {
+    data: dataInProcess,
+    loading: loadingInProcess,
+    error: errorInProcess,
+  }] = useQueryHandler(
     useExchangeActivityInProcessLazyQuery,
   );
 
@@ -106,7 +116,6 @@ const TablesCurrentActivity = ({ id = 'TableCurrentActivity' }) => {
     const _urlParams = new URLSearchParams(window.location.search);
     const _startDate = _urlParams.get('startDate');
     const _endDate = _urlParams.get('endDate');
-    ActiveDomain.setCurrentOrg(_orgSid);
     history.push(`/file-status?orgSid=${_orgSid}&startDate=${_startDate}&endDate=${_endDate}`);
   };
 

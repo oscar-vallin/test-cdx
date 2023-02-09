@@ -5,7 +5,6 @@ import { format } from 'date-fns';
 import { XchangeActivity } from 'src/data/services/graphql';
 import { yyyyMMdd } from 'src/utils/CDXUtils';
 import { ButtonLink } from 'src/components/buttons';
-import { useActiveDomainUseCase } from 'src/use-cases/ActiveDomain';
 import { ActivityBubble } from './ActivityBubbles.styles';
 
 type ActivityBubblesType = {
@@ -23,7 +22,6 @@ export const ActivityBubbles = ({
   test,
   prod,
 }: ActivityBubblesType) => {
-  const ActiveDomain = useActiveDomainUseCase();
   const history = useHistory();
 
   const tooltipHostContent = (
@@ -55,7 +53,6 @@ export const ActivityBubbles = ({
           style={{ marginLeft: '70px' }}
           onClick={() => {
             if (orgSid) {
-              ActiveDomain.setCurrentOrg(orgSid);
               history.push(`/file-status?endDate=${endDate}&orgSid=${orgSid}&startDate=${startDate}`);
             }
           }}
