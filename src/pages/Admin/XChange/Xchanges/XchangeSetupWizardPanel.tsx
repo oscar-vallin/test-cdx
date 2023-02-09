@@ -10,6 +10,7 @@ import {
   TransmissionProtocol,
   GqOperationResponse,
 } from 'src/data/services/graphql';
+import { useHistory } from 'react-router-dom';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useOrgSid } from 'src/hooks/useOrgSid';
 import { PanelBody, ThemedPanel, WizardButtonRow } from 'src/layouts/Panels/Panels.styles';
@@ -55,6 +56,7 @@ const XchangeSetupWizardPanel = ({
   closePanel, isPanelOpen, refreshPage, configSid,
 }: XchangeSetupWizardPanelProps) => {
   const { orgSid } = useOrgSid();
+  const history = useHistory();
   const [setupNewXchangeForm, setSetupNewXchangeForm] = useState<XchangeSetupForm | null>();
   const [refreshForm, setRefreshForm] = useState(false);
   const [vendorSid, setVendorSid] = useState('');
@@ -244,7 +246,7 @@ const XchangeSetupWizardPanel = ({
       }
 
       if (responseCode === GqOperationResponse.Success) {
-        refreshPage(true);
+        history.push (`/xchange-details?orgSid=${orgSid}&coreFilename=${createNewXchange?.coreFilename}`)
         setMessage(null);
         closePanel(false);
       }
