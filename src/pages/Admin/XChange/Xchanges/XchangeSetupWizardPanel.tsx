@@ -20,6 +20,7 @@ import {
   Text,
   MessageBar,
   MessageBarType,
+  ComboBox,
 } from '@fluentui/react';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { UIInputSelectOne } from 'src/components/inputs/InputDropdown';
@@ -27,7 +28,7 @@ import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo
 import { Column } from 'src/components/layouts';
 import { UIInputText } from 'src/components/inputs/InputText';
 import { UIInputToggle } from 'src/components/inputs/InputToggle';
-import FormLabel from 'src/components/labels/FormLabel';
+import FormLabel, { UIFormLabel } from 'src/components/labels/FormLabel';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { ButtonLink } from 'src/components/buttons';
 import { StyledVendorOptions } from './XchangePage.styles';
@@ -380,7 +381,9 @@ const XchangeSetupWizardPanel = ({
         },
       },
     })
-  }
+  };
+
+  const onRenderLabel = () => <UIFormLabel id="__newXghangeSpecLabel" uiField={setupNewXchangeForm?.vendorSpec} />;
 
   const renderBody = () => (
     <PanelBody>
@@ -429,17 +432,28 @@ const XchangeSetupWizardPanel = ({
       </FormRow>
       <FormRow>
         <Column lg="12">
-          <UIInputSelectOne
-            id="__newXghangeSpec"
-            uiField={setupNewXchangeForm?.vendorSpec}
-            options={setupNewXchangeForm?.options}
-            value={setupResumeXchangeFormData ? vendorSpec : undefined}
-            onChange={(newValue) => {
-              setUnsavedChanges(true);
-              setVendorSpec(newValue ?? '');
-              setRefreshForm(true);
-            }}
-          />
+          {setupNewXchangeForm?.vendorSpec?.readOnly ? (
+            <ComboBox 
+              disabled={true}
+              options={[]}
+              onRenderLabel={onRenderLabel}
+              style={{
+                width: '100%',
+              }}
+            />
+          ) : (
+            <UIInputSelectOne
+              id="__newXghangeSpec"
+              uiField={setupNewXchangeForm?.vendorSpec}
+              options={setupNewXchangeForm?.options}
+              value={setupResumeXchangeFormData ? vendorSpec : undefined}
+              onChange={(newValue) => {
+                setUnsavedChanges(true);
+                setVendorSpec(newValue ?? '');
+                setRefreshForm(true);
+              }}
+            />
+          )}
         </Column>
       </FormRow>
       <FormRow>
