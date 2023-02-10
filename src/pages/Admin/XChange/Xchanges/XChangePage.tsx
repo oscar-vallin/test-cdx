@@ -41,6 +41,7 @@ import { ActivityBubble } from 'src/components/badges/Activity';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { DialogYesNoProps, DialogYesNo } from 'src/containers/modals/DialogYesNo';
 import { useNotification } from 'src/hooks/useNotification';
+import { EmptyState } from 'src/containers/states';
 import { PreviewConvertXchangePanel } from './PreviewConvertXchangePanel';
 import {
   CardStyled,
@@ -48,7 +49,6 @@ import {
   StyledIconsComments,
 } from './XchangePage.styles';
 import { XchangeSetupWizardPanel } from './XchangeSetupWizardPanel';
-import { EmptyState } from 'src/containers/states';
 
 type TooltipsProps = {
   hasAlerts: string;
@@ -105,9 +105,10 @@ const XChangePage = () => {
   const [individualXchangeAlerts, setIndividualXchangeAlerts] = useState<XchangeAlertsProps[]>();
   const [requiresConversion, setRequiresConversion] = useState<boolean>();
   const [coreFilename, setCoreFilename] = useState('');
-  const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
+  const [updateCommentCmd, setUpdateCommentCmd] = useState<WebCommand | null>();
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
-  const [activeCmd, setActiveCmd] = useState<WebCommand | null>();
+  const [publishCmd, setPublishCmd] = useState<WebCommand | null>();
+  const [convertCmd, setConvertCmd] = useState<WebCommand | null>();
   const [deactivateCmd, setDeactivateCmd] = useState<WebCommand | null>();
   const [alertsCmd, setAlertsCmd] = useState<WebCommand | null>();
   const [editComment, setEditComment] = useState(false);
@@ -291,18 +292,20 @@ const XChangePage = () => {
 
     if (dataXchange?.xchangeProfile?.commands) {
       const pageCommands = dataXchange?.xchangeProfile?.commands;
-      const _updateCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
-      setUpdateCmd(_updateCmd);
-      const _createCmd = pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create);
-      setCreateCmd(_createCmd);
-      const _activeCmd = pageCommands
-        ?.find((cmd) => cmd?.commandType === CdxWebCommandType.Activate);
-      setActiveCmd(_activeCmd);
-      const _deactivateCmd = pageCommands
-        ?.find((cmd) => cmd?.commandType === CdxWebCommandType.Deactivate);
-      setDeactivateCmd(_deactivateCmd);
-      const _alertsCmd = pageCommands?.find((cmd) => cmd?.endPoint === 'xchangeProfileAlerts');
-      setAlertsCmd(_alertsCmd);
+      setCreateCmd(
+        pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Create),
+      );
+      setPublishCmd(
+        pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Activate),
+      );
+      setDeactivateCmd(
+        pageCommands?.find((cmd) => cmd?.commandType === CdxWebCommandType.Deactivate),
+      );
+      setUpdateCommentCmd(
+        pageCommands?.find((cmd) => cmd?.endPoint === 'updateXchangeProfileComment'),
+      );
+      setAlertsCmd(pageCommands?.find((cmd) => cmd?.endPoint === 'xchangeProfileAlerts'));
+      setConvertCmd(pageCommands?.find((cmd) => cmd?.endPoint === 'convertXchangeProfile'));
     }
   }, [dataXchange, loadingXchange]);
 
@@ -359,12 +362,12 @@ const XChangePage = () => {
     const coreFN = node?.coreFilename;
     return (
       <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
-          <ButtonLink 
-            to={`/xchange-details?orgSid=${orgSid}&coreFilename=${coreFN}`}
-            style={!node.active ? { color: 'rgb(161, 159, 157)' } : {color: ''}}
-          >
+        <ButtonLink
+          to={`/xchange-details?orgSid=${orgSid}&coreFilename=${coreFN}`}
+          style={!node.active ? { color: 'rgb(161, 159, 157)' } : { color: '' }}
+        >
           {columnVal}
-          </ButtonLink>
+        </ButtonLink>
         <>
           {column?.key === 'active' && (
             <>
@@ -568,34 +571,30 @@ const XChangePage = () => {
     },
   ];
 
-  const renderCreateButton = () => {
-    if (dataXchange && activeCmd && !requiresConversion) {
-      return (
-        <Stack horizontal>
-          {createCmd && (
-          <PrimaryButton
-            id="__CreateNewXchange"
-            style={{ marginRight: '10px' }}
-            iconProps={{ iconName: 'Add' }}
-            onClick={() => {
-              setIsSetupNewXchangePanelOpen(true);
-            }}
-          >
-            {createCmd?.label}
-          </PrimaryButton>
-          )}
-          <PrimaryButton
-            id="__Publish"
-            iconProps={{ iconName: 'FileHTML' }}
-            onClick={() => showUnsavedChangesDialog()}
-          >
-            Publish
-          </PrimaryButton>
-        </Stack>
-      );
-    }
-    if (dataXchange && requiresConversion && updateCmd) {
-      return (
+  const renderCreateButton = () => (
+    <Stack horizontal>
+      {createCmd && (
+      <PrimaryButton
+        id="__CreateNewXchange"
+        style={{ marginRight: '10px' }}
+        iconProps={{ iconName: 'Add' }}
+        onClick={() => {
+          setIsSetupNewXchangePanelOpen(true);
+        }}
+      >
+        {createCmd?.label}
+      </PrimaryButton>
+      )}
+      {publishCmd && (
+        <PrimaryButton
+          id="__Publish"
+          iconProps={{ iconName: 'FileHTML' }}
+          onClick={() => showUnsavedChangesDialog()}
+        >
+          Publish
+        </PrimaryButton>
+      )}
+      {convertCmd && (
         <PrimaryButton
           id="__Convert-NewFormat"
           iconProps={{ iconName: 'Play' }}
@@ -603,10 +602,9 @@ const XChangePage = () => {
         >
           Convert to new Format
         </PrimaryButton>
-      );
-    }
-    return null;
-  };
+      )}
+    </Stack>
+  );
 
   const renderBody = () => {
     if (loadingXchange) {
@@ -618,7 +616,9 @@ const XChangePage = () => {
     }
 
     if (!xchanges.length) {
-      return  <EmptyState title="No configured Xchanges" description="There are no configured Xchanges in this organization" />
+      return (
+        <EmptyState title="No configured Xchanges" description="There are no configured Xchanges in this organization" />
+      );
     }
 
     if (filterXchange.length || searchXchanges.trim() !== '') {
@@ -647,7 +647,7 @@ const XChangePage = () => {
   };
 
   const readonlyComments = () => {
-    if (updateCmd?.endPoint !== 'updateXchangeProfileComment') {
+    if (!updateCommentCmd) {
       return true;
     }
 
@@ -701,28 +701,30 @@ const XChangePage = () => {
               </Column>
             </Row>
             <Spacing margin="normal" />
-            {individualXchangeAlerts?.map((individualXchange: XchangeAlertsProps, index: number) => (
-              <Spacing margin={{ bottom: 'normal' }} key={index}>
-                <Row>
-                  <Column lg="9">
-                    { alertsLink(` ${individualXchange.coreFilename} `) }
-                  </Column>
-                  <Column lg="3">
-                    { alertsLink(
-                      <TooltipHost
-                        style={{ whiteSpace: 'pre-wrap' }}
-                        // eslint-disable-next-line @typescript-eslint/no-empty-function
-                        onMouseLeave={() => {}}
-                        content={`${individualXchange.numSubscribers} user(s) are configured to be notified`}
-                        calloutProps={{ gapSpace: 0 }}
-                      >
-                        {` (${individualXchange.numSubscribers})`}
-                      </TooltipHost>,
-                    ) }
-                  </Column>
-                </Row>
-              </Spacing>
-            ))}
+            {individualXchangeAlerts?.map(
+              (individualXchange: XchangeAlertsProps, index: number) => (
+                <Spacing margin={{ bottom: 'normal' }} key={index}>
+                  <Row>
+                    <Column lg="9">
+                      { alertsLink(` ${individualXchange.coreFilename} `) }
+                    </Column>
+                    <Column lg="3">
+                      { alertsLink(
+                        <TooltipHost
+                          style={{ whiteSpace: 'pre-wrap' }}
+                          // eslint-disable-next-line @typescript-eslint/no-empty-function
+                          onMouseLeave={() => {}}
+                          content={`${individualXchange.numSubscribers} user(s) are configured to be notified`}
+                          calloutProps={{ gapSpace: 0 }}
+                        >
+                          {` (${individualXchange.numSubscribers})`}
+                        </TooltipHost>,
+                      ) }
+                    </Column>
+                  </Row>
+                </Spacing>
+              ),
+            )}
           </Spacing>
         </CardStyled>
         <Spacing margin={{ top: 'normal' }}>
@@ -763,10 +765,10 @@ const XChangePage = () => {
                   </>
                 ) : (
                   <Column lg="6" right>
-                    {!requiresConversion && updateCmd && (
+                    {!requiresConversion && updateCommentCmd && (
                       <IconButton
                         iconProps={{ iconName: 'EditSolid12' }}
-                        onClick={() => setEditComment(updateCmd !== undefined && true)}
+                        onClick={() => setEditComment(updateCommentCmd !== undefined)}
                       />
                     )}
                   </Column>
