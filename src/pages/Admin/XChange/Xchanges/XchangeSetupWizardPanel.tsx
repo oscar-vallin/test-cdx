@@ -448,7 +448,7 @@ const XchangeSetupWizardPanel = ({
               id="__newXghangeSpec"
               uiField={setupNewXchangeForm?.vendorSpec}
               options={setupNewXchangeForm?.options}
-              value={setupResumeXchangeFormData ? vendorSpec : undefined}
+              value={vendorSpec}
               onChange={(newValue) => {
                 setUnsavedChanges(true);
                 setVendorSpec(newValue ?? '');
@@ -537,7 +537,7 @@ const XchangeSetupWizardPanel = ({
       <FormRow>
         <Column lg="12">
           <UIInputSelectOne
-            id="__newXghangeSourcePlatform"
+            id="__newXghangeDeliveryProtocol"
             uiField={setupNewXchangeForm?.deliveryProtocol}
             options={setupNewXchangeForm?.options}
             value={deliveryProtocol}
