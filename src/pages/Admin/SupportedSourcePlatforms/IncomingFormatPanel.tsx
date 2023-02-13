@@ -311,6 +311,8 @@ const IncomingFormatPanel = ({
             sid,
             name: incomingName,
             notes: incomingNotes,
+            includedStepXML,
+            semanticMap,
           },
         },
       });
