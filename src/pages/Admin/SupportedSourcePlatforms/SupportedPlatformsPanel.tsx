@@ -140,6 +140,8 @@ const SupportedPlataformsPanel = ({
       const supportedPlatformdata = supportedPlatformFormData.supportedPlatformForm;
       setSupportedName(supportedPlatformdata?.name.value ?? '');
       setSupportedNotes(supportedPlatformdata?.notes.value ?? '');
+      setIncludedStepXML(supportedPlatformdata?.includedStepXML.value ?? '');
+      setSemanticMap(supportedPlatformdata?.semanticMap.value?.value ?? '');
       if (supportedPlatformdata?.supportedIncomingFormats.value
           && supportedPlatformdata.supportedIncomingFormats.value.length > 0) {
         setSupportedIncomingFormats(supportedPlatformdata.supportedIncomingFormats
@@ -363,6 +365,7 @@ const SupportedPlataformsPanel = ({
                 id="__supportedSemanticMap"
                 uiField={supportedPlatform.semanticMap}
                 options={supportedPlatform.options}
+                value={semanticMap}
                 onChange={(_newString) => {
                   setSemanticMap(_newString ?? '');
                   setUnsavedChanges(true);

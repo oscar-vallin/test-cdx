@@ -152,6 +152,8 @@ const IncomingFormatPanel = ({
       const incomingData = incomingFormatsData.incomingFormatForm;
       setIncomingName(incomingData?.name.value ?? '');
       setIncomingNotes(incomingData?.notes.value ?? '');
+      setSemanticMap(incomingData?.semanticMap.value?.value ?? '');
+      setIncludedStepXML(incomingData?.includedStepXML.value ?? '')
       if (incomingFormatsData.incomingFormatForm?.commands) {
         const pageCommands = incomingFormatsData.incomingFormatForm.commands;
         const _createCmd = pageCommands.find((cmd) => cmd.commandType === CdxWebCommandType.Create);
@@ -490,6 +492,7 @@ const IncomingFormatPanel = ({
               <UIInputSelectOne 
                 id="__incomingFormatSemanticMap"
                 uiField={incomingFormat.semanticMap}
+                value={semanticMap}
                 options={incomingFormat.options}
                 onChange={(_newString) => {
                   setSemanticMap(_newString ?? '');
