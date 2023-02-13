@@ -68,9 +68,9 @@ const ConnectionInformationPanel = (
     }
   }, [connectionInfoData, connectionInfoError, isLoadingConnectionInfo]);
 
-  const copyToClipboard = (text: string) => {
+  const copyToClipboard = (text: string, title?: string) => {
     navigator.clipboard.writeText(text).then(() => {
-      Toast.info({ text: 'Entity id Copied', duration: 2000 });
+      Toast.info({ text: `${title} copied`, duration: 2000 });
     });
   };
 
@@ -113,7 +113,7 @@ const ConnectionInformationPanel = (
                 iconProps={{ iconName: 'Copy' }}
                 text={saml2ConnectionInfo.entityId ?? ''}
                 onClick={() => {
-                  copyToClipboard(saml2ConnectionInfo.entityId ?? '');
+                  copyToClipboard(saml2ConnectionInfo.entityId ?? '', 'Entity Id');
                 }}
               />
               <Text>{saml2ConnectionInfo.entityId}</Text>
@@ -130,7 +130,7 @@ const ConnectionInformationPanel = (
                   iconProps={{ iconName: 'Copy' }}
                   text={saml2ConnectionInfo.assertionConsumerURL ?? ''}
                   onClick={() => {
-                    copyToClipboard(saml2ConnectionInfo.assertionConsumerURL ?? '');
+                    copyToClipboard(saml2ConnectionInfo.assertionConsumerURL ?? '', 'Assertion Consumer Service POST Binding URl');
                   }}
                 />
                 <Text>{saml2ConnectionInfo.assertionConsumerURL}</Text>
@@ -167,7 +167,7 @@ const ConnectionInformationPanel = (
                   iconProps={{ iconName: 'Copy' }}
                   text={saml2ConnectionInfo.logoURL ?? ''}
                   onClick={() => {
-                    copyToClipboard(saml2ConnectionInfo.logoURL ?? '');
+                    copyToClipboard(saml2ConnectionInfo.logoURL ?? '', 'Logo URL');
                   }}
                 />
                 <Text>{saml2ConnectionInfo.logoURL}</Text>
@@ -181,7 +181,7 @@ const ConnectionInformationPanel = (
                   iconProps={{ iconName: 'Copy' }}
                   text={saml2ConnectionInfo.singleLogoutURL ?? ''}
                   onClick={() => {
-                    copyToClipboard(saml2ConnectionInfo.singleLogoutURL ?? '');
+                    copyToClipboard(saml2ConnectionInfo.singleLogoutURL ?? '', 'Single Logout service POST Binding URL');
                   }}
                 />
                 <Text>{saml2ConnectionInfo.singleLogoutURL}</Text>
