@@ -222,6 +222,8 @@ const SupportedPlataformsPanel = ({
       hideDialog();
       closePanel(false);
       setSupportedName('');
+      setIncludedStepXML('');
+      setSemanticMap('');
       setUnsavedChanges(false);
       setMessage(null);
       setSupportedNotes('');
@@ -260,6 +262,8 @@ const SupportedPlataformsPanel = ({
     } else {
       closePanel(false);
       setSupportedName('');
+      setIncludedStepXML('');
+      setSemanticMap('');
       setUnsavedChanges(false);
       setMessage(null);
       setSupportedNotes('');
