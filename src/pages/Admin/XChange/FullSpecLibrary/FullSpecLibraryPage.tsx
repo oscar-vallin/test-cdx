@@ -131,10 +131,6 @@ const FullSpecLibraryPage = () => {
   }
 
   const onRenderItemColum = (item: VendorLink, itemIndex?: number, column?: IColumn) => {
-    let styles = {
-      fontSize: '12px',
-      color: item.active ? '' : ThemeStore.userTheme.colors.neutralQuaternary,
-    }
     if (column?.key === 'name') {
       return (
         <Stack tokens={{ childrenGap: 5.5 }}>
@@ -143,7 +139,10 @@ const FullSpecLibraryPage = () => {
               id={`vendorname_${specIndex}`}
               underline
               key={specIndex}
-              style={styles}
+              style={{
+                fontSize: '12px',
+                color: spec.active ? '' : ThemeStore.userTheme.colors.neutralQuaternary,
+              }}
               onClick={() => {
                 setOrgSid(item.orgSid ?? '');
                 setSid(spec.sid ?? '');
@@ -166,7 +165,14 @@ const FullSpecLibraryPage = () => {
               content={tooltipHostVendors(spec.integratedClients)}
               directionalHint={DirectionalHint.rightCenter}
             >
-              <ButtonLink style={styles}>{spec.integratedClients.length}</ButtonLink>
+              <ButtonLink 
+                style={{
+                  fontSize: '12px',
+                  color: spec.active ? '' : ThemeStore.userTheme.colors.neutralQuaternary,
+                }}
+              >
+                {spec.integratedClients.length}
+              </ButtonLink>
             </TooltipHost>
           ))}
         </Stack>
