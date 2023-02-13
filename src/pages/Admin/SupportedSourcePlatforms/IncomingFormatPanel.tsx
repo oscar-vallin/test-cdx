@@ -240,6 +240,8 @@ const IncomingFormatPanel = ({
       hideDialog();
       closePanel(false);
       setIncomingName('');
+      setIncludedStepXML('');
+      setSemanticMap('');
       setUnsavedChanges(false);
       setMessage(null);
       setIncomingNotes('');
@@ -297,6 +299,8 @@ const IncomingFormatPanel = ({
     } else {
       closePanel(false);
       setIncomingName('');
+      setIncludedStepXML('');
+      setSemanticMap('');
       setUnsavedChanges(false);
       setMessage(null);
       setIncomingNotes('');
@@ -546,20 +550,24 @@ const IncomingFormatPanel = ({
     )
   };
 
-  const renderPanelHeader = () => (
-    <PanelHeader id="__IncomingFormat_PanelHeader">
-      <Row>
-        <Column lg="12">
-          <Stack>
-            <PanelTitle id="__IncomingFormat_Panel_Title" variant="bold" size="large">
-              {!updateCmd ? 'Create Incoming Format' : incomingFormatsData?.incomingFormatForm?.name.value}
-              <>{tooltipHostComments()}</>
-            </PanelTitle>
-          </Stack>
-        </Column>
-      </Row>
-    </PanelHeader>
-  );
+  const renderPanelHeader = () => {
+    if (isLoadingIncomingFormats) return null;
+
+    return (
+      <PanelHeader id="__IncomingFormat_PanelHeader">
+        <Row>
+          <Column lg="12">
+            <Stack>
+              <PanelTitle id="__IncomingFormat_Panel_Title" variant="bold" size="large">
+                {!updateCmd ? 'Create Incoming Format' : incomingFormatsData?.incomingFormatForm?.name.value}
+                <>{tooltipHostComments()}</>
+              </PanelTitle>
+            </Stack>
+          </Column>
+        </Row>
+      </PanelHeader>
+    )
+  }
 
   return (
     <ThemedPanel
