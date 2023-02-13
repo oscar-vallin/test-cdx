@@ -184,6 +184,7 @@ const IncomingFormatPanel = ({
       if (responseCode === GqOperationResponse.Success) {
         closePanel(false);
         refreshPage(true);
+        setMessage(null);
         Toast.success({ text: 'Incoming Format Saved' });
       }
     }
@@ -205,6 +206,7 @@ const IncomingFormatPanel = ({
 
       if (responseCode === GqOperationResponse.Success) {
         closePanel(false);
+        setMessage(null);
         refreshPage(true);
         Toast.success({ text: 'Incoming Format Saved' });
       }
