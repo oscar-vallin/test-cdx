@@ -86,14 +86,14 @@ const ConnectionInformationPanel = (
     if (saml2ConnectionInfo) {
       return (
         <Spacing margin={{ top: 'normal' }}>
-          <Text>
+          <Text id="__SamlServiceProvider">
             The CDX Dashboard supports SAML v2.0 SSO as a Service Provider (Sp) Using
             HTTP POST binding.
           </Text>
           <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-            <Text>Download the service provider metadata here: </Text>
+            <Text id="__serviceMetadata">Download the service provider metadata here: </Text>
           </Spacing>
-          <Link href={saml2ConnectionInfo.metaDataURL ?? "#"} target="_new">
+          <Link id="__metadata" href={saml2ConnectionInfo.metaDataURL ?? "#"} target="_new">
             {saml2ConnectionInfo.metaDataURL}
           </Link>
           <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
@@ -105,28 +105,28 @@ const ConnectionInformationPanel = (
             The following configuration properties are
             <span style={{ fontWeight: 'bold' }}> required</span> to be configured in your idP:
           </Text>
-          <Spacing margin={{ top: 'normal' }}>
+          <Spacing id="_SamlEntityId" margin={{ top: 'normal' }}>
             <Text variant="semiBold">Entity Id</Text>
             <Stack horizontal>
               <IconButton
-                id="__samlentityId"
+                id="__EntityId"
                 iconProps={{ iconName: 'Copy' }}
                 text={saml2ConnectionInfo.entityId ?? ''}
                 onClick={() => {
                   copyToClipboard(saml2ConnectionInfo.entityId ?? '', 'Entity Id');
                 }}
               />
-              <Text>{saml2ConnectionInfo.entityId}</Text>
+              <Text id="entityId">{saml2ConnectionInfo.entityId}</Text>
             </Stack>
           </Spacing>
-          <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+          <Spacing id="__SamlassertionConsumerURL" margin={{ top: 'normal', bottom: 'normal' }}>
             <Text variant="semiBold">
               Assertion Consumer Service POST Binding URl
             </Text>
             <Stack horizontal>
               <Stack.Item align="center">
                 <IconButton
-                  id="__samlassertionConsumerURL"
+                  id="__ConsumerURL"
                   iconProps={{ iconName: 'Copy' }}
                   text={saml2ConnectionInfo.assertionConsumerURL ?? ''}
                   onClick={() => {
@@ -138,18 +138,19 @@ const ConnectionInformationPanel = (
             </Stack>
           </Spacing>
           <Stack>
-            <Text variant="semiBold">x509 Certificate</Text>
+            <Text id="__DownloadURL" variant="semiBold">x509 Certificate</Text>
             <ButtonLink
+              id="__CertificateDownloadURL"
               underline
               href={saml2ConnectionInfo.certificateDownloadURL ?? ''}
             >
               Download here
             </ButtonLink>
           </Stack>
-          <Spacing margin={{ top: 'normal', bottom: 'double' }}>
+          <Spacing id="__NameIdFormat" margin={{ top: 'normal', bottom: 'double' }}>
             <Stack>
-              <Text variant="semiBold">Name id Format</Text>
-              <Text>email</Text>
+              <Text id="__IdFormat" variant="semiBold">Name id Format</Text>
+              <Text id="__SamlEmail">email</Text>
               <Text>-- or --</Text>
               <Text>urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddr</Text>
             </Stack>
@@ -158,33 +159,33 @@ const ConnectionInformationPanel = (
             The Following configuration properties are
             <span style={{ fontWeight: 'bold' }}> optionally </span>configured in your idP
           </Text>
-          <Spacing margin={{ top: 'double', bottom: 'normal' }}>
+          <Spacing id="OptionallyConfiguredIdP" margin={{ top: 'double', bottom: 'normal' }}>
             <Text variant="semiBold">Logo URL</Text>
             <Stack horizontal>
               <Stack.Item align="center">
                 <IconButton
-                  id="__samlLogoURL"
+                  id="__SamlLogoURL"
                   iconProps={{ iconName: 'Copy' }}
                   text={saml2ConnectionInfo.logoURL ?? ''}
                   onClick={() => {
                     copyToClipboard(saml2ConnectionInfo.logoURL ?? '', 'Logo URL');
                   }}
                 />
-                <Text>{saml2ConnectionInfo.logoURL}</Text>
+                <Text id="__LogoUrl">{saml2ConnectionInfo.logoURL}</Text>
               </Stack.Item>
             </Stack>
             <Text variant="semiBold">Single Logout service POST Binding URL</Text>
             <Stack horizontal>
               <Stack.Item align="center">
                 <IconButton
-                  id="__samlSingleLogoutURL"
+                  id="__SamlSingleLogoutURL"
                   iconProps={{ iconName: 'Copy' }}
                   text={saml2ConnectionInfo.singleLogoutURL ?? ''}
                   onClick={() => {
                     copyToClipboard(saml2ConnectionInfo.singleLogoutURL ?? '', 'Single Logout service POST Binding URL');
                   }}
                 />
-                <Text>{saml2ConnectionInfo.singleLogoutURL}</Text>
+                <Text id="__SingleLogOutSerPOSTBindingURL">{saml2ConnectionInfo.singleLogoutURL}</Text>
               </Stack.Item>
             </Stack>
           </Spacing>
