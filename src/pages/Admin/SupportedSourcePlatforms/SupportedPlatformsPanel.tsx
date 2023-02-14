@@ -209,7 +209,7 @@ const SupportedPlataformsPanel = ({
     if (!isLoadingDeleteSupportedPlatform && deleteSupportedPlatformData) {
       closePanel(false);
       refreshPage(true);
-      Toast.error({ text: `${supportedName} has been deleted` });
+      Toast.success({ text: `${supportedName} has been deleted` });
     }
   }, [deleteSupportedPlatformData, isLoadingDeleteSupportedPlatform])
 
