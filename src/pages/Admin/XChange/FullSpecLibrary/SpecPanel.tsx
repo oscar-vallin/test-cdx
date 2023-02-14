@@ -234,7 +234,7 @@ const SpecPanel = ({
   const showActivateDialog = () => {
     const updatedDialog = { ...defaultDialogProps };
     updatedDialog.title = 'Activate Vendor Spec';
-    updatedDialog.message = 'Are you sure want to activate this Vendor Spec? This will make it available for new Xchanges to use it';
+    updatedDialog.message = 'Are you sure you want to activate this Vendor Spec? This will make it available for new Xchanges to use it';
 
     updatedDialog.onYes = () => {
       hideDialog();
