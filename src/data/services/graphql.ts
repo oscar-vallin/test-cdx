@@ -4272,6 +4272,7 @@ export type XchangeConfigSummary = {
   prodActivity: XchangeActivity;
   /** Errored file activity in the last 30 days */
   errorActivity?: Maybe<XchangeActivity>;
+  schedule?: Maybe<XchangeSchedule>;
   active: Scalars['Boolean'];
   hasUnpublishedChanges: Scalars['Boolean'];
   hasAlerts: Scalars['Boolean'];
@@ -7482,6 +7483,13 @@ export type XchangeProfileQuery = (
       ), errorActivity?: Maybe<(
         { __typename?: 'XchangeActivity' }
         & FragmentXchangeActivityFragment
+      )>, schedule?: Maybe<(
+        { __typename?: 'XchangeSchedule' }
+        & Pick<XchangeSchedule, 'scheduleType' | 'frequency' | 'xchangeJobGroupSid' | 'xchangeJobGroupName' | 'months' | 'days' | 'endDayOfMonth' | 'endDayOrdinal' | 'endRelativeDay' | 'endHour' | 'endMinute' | 'timezone' | 'hasSilencePeriod' | 'silenceStartMonth' | 'silenceStartDay' | 'silenceEndMonth' | 'silenceEndDay' | 'expectedRunSchedule' | 'expectedCompletionTime'>
+        & { subscribers?: Maybe<Array<(
+          { __typename?: 'XchangeAlertSubscriber' }
+          & Pick<XchangeAlertSubscriber, 'sid' | 'email' | 'firstNm' | 'lastNm'>
+        )>> }
       )> }
     )>>, globalXchangeAlerts?: Maybe<(
       { __typename?: 'XchangeAlertSummary' }
@@ -10432,6 +10440,13 @@ export type ConvertXchangeProfileMutation = (
       ), errorActivity?: Maybe<(
         { __typename?: 'XchangeActivity' }
         & FragmentXchangeActivityFragment
+      )>, schedule?: Maybe<(
+        { __typename?: 'XchangeSchedule' }
+        & Pick<XchangeSchedule, 'scheduleType' | 'frequency' | 'xchangeJobGroupSid' | 'xchangeJobGroupName' | 'months' | 'days' | 'endDayOfMonth' | 'endDayOrdinal' | 'endRelativeDay' | 'endHour' | 'endMinute' | 'timezone' | 'hasSilencePeriod' | 'silenceStartMonth' | 'silenceStartDay' | 'silenceEndMonth' | 'silenceEndDay' | 'expectedRunSchedule' | 'expectedCompletionTime'>
+        & { subscribers?: Maybe<Array<(
+          { __typename?: 'XchangeAlertSubscriber' }
+          & Pick<XchangeAlertSubscriber, 'sid' | 'email' | 'firstNm' | 'lastNm'>
+        )>> }
       )> }
     )>>, globalXchangeAlerts?: Maybe<(
       { __typename?: 'XchangeAlertSummary' }
@@ -17343,6 +17358,33 @@ export const XchangeProfileDocument = gql`
       errorActivity {
         ...fragmentXchangeActivity
       }
+      schedule {
+        scheduleType
+        frequency
+        xchangeJobGroupSid
+        xchangeJobGroupName
+        months
+        days
+        endDayOfMonth
+        endDayOrdinal
+        endRelativeDay
+        endHour
+        endMinute
+        timezone
+        subscribers {
+          sid
+          email
+          firstNm
+          lastNm
+        }
+        hasSilencePeriod
+        silenceStartMonth
+        silenceStartDay
+        silenceEndMonth
+        silenceEndDay
+        expectedRunSchedule
+        expectedCompletionTime
+      }
       active
       hasUnpublishedChanges
       hasAlerts
@@ -22777,6 +22819,33 @@ export const ConvertXchangeProfileDocument = gql`
       }
       errorActivity {
         ...fragmentXchangeActivity
+      }
+      schedule {
+        scheduleType
+        frequency
+        xchangeJobGroupSid
+        xchangeJobGroupName
+        months
+        days
+        endDayOfMonth
+        endDayOrdinal
+        endRelativeDay
+        endHour
+        endMinute
+        timezone
+        subscribers {
+          sid
+          email
+          firstNm
+          lastNm
+        }
+        hasSilencePeriod
+        silenceStartMonth
+        silenceStartDay
+        silenceEndMonth
+        silenceEndDay
+        expectedRunSchedule
+        expectedCompletionTime
       }
       active
       hasUnpublishedChanges
