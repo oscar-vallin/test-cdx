@@ -33,6 +33,8 @@ import FormLabel, { UIFormLabel } from 'src/components/labels/FormLabel';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { ButtonLink } from 'src/components/buttons';
 import { StyledVendorOptions } from './XchangePage.styles';
+import { Toast } from 'src/components/toast';
+import { useNotification } from 'src/hooks/useNotification';
 
 type XchangeSetupWizardPanelProps = {
   isPanelOpen: boolean;
@@ -56,6 +58,7 @@ const XchangeSetupWizardPanel = ({
   closePanel, isPanelOpen, refreshPage, configSid,
 }: XchangeSetupWizardPanelProps) => {
   const { orgSid } = useOrgSid();
+  const Toast = useNotification();
   const history = useHistory();
   const [setupNewXchangeForm, setSetupNewXchangeForm] = useState<XchangeSetupForm | null>();
   const [refreshForm, setRefreshForm] = useState(false);
@@ -215,7 +218,13 @@ const XchangeSetupWizardPanel = ({
   }, [setupNewXchangeForm]);
 
   useEffect(() => {
-    if (!isLoadingResumeForm && setupResumeXchangeFormData) {
+    const response = setupResumeXchangeFormData?.resumeXchangeSetup;
+    if (setupResumeXchangeFormData) {
+      const responseCode = response?.response;
+      if (responseCode === GqOperationResponse.Fail) {
+        closePanel(false);
+        Toast.error({ text: 'An internal server error has occurred. Please contact your administrator.' });
+      }
       setSetupNewXchangeForm(setupResumeXchangeFormData.resumeXchangeSetup);
       const resumeForm:XchangeSetupForm = setupResumeXchangeFormData?.resumeXchangeSetup;
       setCurrentVendor(resumeForm?.vendor?.value?.label ?? '');
@@ -519,7 +528,6 @@ const XchangeSetupWizardPanel = ({
                 onChange={(newValue) => {
                   setUnsavedChanges(true);
                   setFileContents(newValue ?? '');
-                  setRefreshForm(true);
                 }}
               />
             </Column>
