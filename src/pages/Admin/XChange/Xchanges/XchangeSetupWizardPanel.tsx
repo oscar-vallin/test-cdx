@@ -195,6 +195,26 @@ const XchangeSetupWizardPanel = ({
   }, [setupNewXchangeFormData, isLoadingForm]);
 
   useEffect(() => {
+    if (setupNewXchangeForm) {
+      setCurrentVendor(setupNewXchangeForm?.vendor?.value?.label ?? '');
+      setVendorSid(setupNewXchangeForm.vendor?.value?.value ?? '');
+      setVendorSpec(setupNewXchangeForm.vendorSpec?.value?.value ?? '');
+      setSourcePlatform(setupNewXchangeForm.sourcePlatform?.value?.value ?? '');
+      setIncomingFormat(setupNewXchangeForm.incomingFormat?.value?.value ?? '');
+      setDeliveryProtocol(setupNewXchangeForm.deliveryProtocol.value?.value ?? '');
+      setFileContents(setupNewXchangeForm.fileContents?.value?.value ?? '');
+      setSupportsFullFile(setupNewXchangeForm.supportsFullFile?.value ?? false);
+      setSupportsChangesOnly(setupNewXchangeForm.supportsChangesOnly?.value ?? false);
+      setHost(setupNewXchangeForm.host.value ?? '');
+      setUserName(setupNewXchangeForm.userName.value ?? '');
+      setPassword(setupNewXchangeForm.password.value ?? '');
+      setAuthKeyName(setupNewXchangeForm.authKeyName.value?.value ?? '');
+      setAuthKeyPassphrase(setupNewXchangeForm.authKeyPassphrase.value ?? '');
+      setFolder(setupNewXchangeForm.folder.value ?? '');
+    }
+  }, [setupNewXchangeForm]);
+
+  useEffect(() => {
     if (!isLoadingResumeForm && setupResumeXchangeFormData) {
       setSetupNewXchangeForm(setupResumeXchangeFormData.resumeXchangeSetup);
       const resumeForm:XchangeSetupForm = setupResumeXchangeFormData?.resumeXchangeSetup;
