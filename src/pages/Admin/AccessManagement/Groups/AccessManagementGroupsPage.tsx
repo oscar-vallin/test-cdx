@@ -53,8 +53,7 @@ const generateColumns = () => {
     fieldName: key,
     data: 'string',
     isPadded: true,
-    maxWidth: 400,
-    minWidth: 300,
+    minWidth: key === 'name'  ? 250 : 100,
   });
 
   return [
