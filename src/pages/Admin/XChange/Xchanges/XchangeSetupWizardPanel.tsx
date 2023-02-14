@@ -464,7 +464,7 @@ const XchangeSetupWizardPanel = ({
             id="__newXghangeSourcePlatform"
             uiField={setupNewXchangeForm?.sourcePlatform}
             options={setupNewXchangeForm?.options}
-            value={setupResumeXchangeFormData ? sourcePlatform : undefined}
+            value={sourcePlatform}
             onChange={(newValue) => {
               setUnsavedChanges(true);
               setSourcePlatform(newValue ?? '');
@@ -479,7 +479,7 @@ const XchangeSetupWizardPanel = ({
             id="__newXghangeIncomingFormat"
             uiField={setupNewXchangeForm?.incomingFormat}
             options={setupNewXchangeForm?.options}
-            value={setupResumeXchangeFormData ? incomingFormat : undefined}
+            value={incomingFormat}
             onChange={(newValue) => {
               setUnsavedChanges(true);
               setIncomingFormat(newValue ?? '');
