@@ -34012,6 +34012,18 @@
             "deprecationReason": null
           },
           {
+            "name": "schedule",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "XchangeSchedule",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "active",
             "description": null,
             "args": [],
@@ -38816,7 +38828,7 @@
       {
         "name": "fragment",
         "description": null,
-        "isRepeatable": false,
+        "isRepeatable": true,
         "locations": [
           "OBJECT",
           "UNION"
