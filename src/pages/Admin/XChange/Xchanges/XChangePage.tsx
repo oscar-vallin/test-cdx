@@ -18,6 +18,7 @@ import {
   DirectionalHint,
 } from '@fluentui/react';
 import { ButtonLink } from 'src/components/buttons';
+import { CalendarLtr16Filled } from '@fluentui/react-icons';
 import { Column, Container, Row } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { PageTitle } from 'src/components/typography';
@@ -33,6 +34,7 @@ import {
   useActivateXchangeConfigMutation,
   CdxWebCommandType,
   WebCommand,
+  XchangeSchedule,
 } from 'src/data/services/graphql';
 import { yyyyMMdd } from 'src/utils/CDXUtils';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
@@ -49,6 +51,8 @@ import {
   StyledIconsComments,
 } from './XchangePage.styles';
 import { XchangeSetupWizardPanel } from './XchangeSetupWizardPanel';
+import { StyledText } from '../SchedulePanel/SchedulePanel.styles';
+import { SchedulePanel } from '../SchedulePanel';
 
 type TooltipsProps = {
   hasAlerts: string;
@@ -111,6 +115,10 @@ const XChangePage = () => {
   const [convertCmd, setConvertCmd] = useState<WebCommand | null>();
   const [deactivateCmd, setDeactivateCmd] = useState<WebCommand | null>();
   const [alertsCmd, setAlertsCmd] = useState<WebCommand | null>();
+  const [scheduleCmd, setScheduleCmd] = useState<WebCommand | null>();
+  const [xchangeJobGroupSid, setXchangeJobGroupSid] = useState('');
+  const [xchangeConfigSid, setXchangeConfigSid] = useState('');
+  const [openSchedulePanel, setOpenSchedulePanel] = useState(false);
   const [editComment, setEditComment] = useState(false);
   const [comment, setComment] = useState<string | null>();
   const [refreshDataXchange, setRefreshDataXchange] = useState(false);
@@ -304,6 +312,9 @@ const XChangePage = () => {
       setUpdateCommentCmd(
         pageCommands?.find((cmd) => cmd?.endPoint === 'updateXchangeProfileComment'),
       );
+      setScheduleCmd(
+        pageCommands?.find((cmd) => cmd?.endPoint === 'updateXchangeSchedule')
+      )
       setAlertsCmd(pageCommands?.find((cmd) => cmd?.endPoint === 'xchangeProfileAlerts'));
       setConvertCmd(pageCommands?.find((cmd) => cmd?.endPoint === 'convertXchangeProfile'));
     }
@@ -355,13 +366,56 @@ const XChangePage = () => {
       columnVal = node?.coreFilename ?? '';
     }
 
+    const scheduleTooltiphost = (currentSchedule?: XchangeSchedule) => (
+      <>
+        <Stack horizontal>
+          <FontIcon
+            iconName="CalendarMirrored"
+            style={{
+              fontSize: '10px',
+              fontWeight: 600,
+              marginTop: '1px',
+              paddingRight: '8px',
+            }}
+          />
+          <StyledText>{currentSchedule?.scheduleType}</StyledText>
+        </Stack>
+        <Stack>
+          <StyledText>{currentSchedule?.expectedRunSchedule}</StyledText>
+          <StyledText>{currentSchedule?.expectedCompletionTime}</StyledText>
+        </Stack>
+        {scheduleCmd && (
+          <ButtonLink
+            style={{marginLeft: '70px'}}
+            onClick={() => {
+              setXchangeConfigSid(node?.sid ?? '');
+              setXchangeJobGroupSid(currentSchedule?.xchangeJobGroupSid ?? '');
+              setOpenSchedulePanel(true);
+            }}
+          >
+            edit
+          </ButtonLink>
+        )}
+      </>
+    );
+
     const uatFilesProcessed = node?.uatActivity.filesProcessed;
     const testFilesProcessed = node?.testActivity.filesProcessed;
     const prodFilesProcessed = node?.prodActivity.filesProcessed;
+    const schedule = node?.schedule;
+
+    let paddingRigth = '0px';
+    if (!schedule && column?.key === 'active') {
+      paddingRigth = '23px';
+    }
 
     const coreFN = node?.coreFilename;
     return (
-      <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 10 }}>
+      <Stack 
+        horizontal 
+        horizontalAlign="start" 
+        tokens={{ childrenGap: 10, padding: `0px 0px 0px ${paddingRigth} `}}
+      >
         <ButtonLink
           to={`/xchange-details?orgSid=${orgSid}&coreFilename=${coreFN}`}
           style={!node.active ? { color: 'rgb(161, 159, 157)' } : { color: '' }}
@@ -371,6 +425,19 @@ const XChangePage = () => {
         <>
           {column?.key === 'active' && (
             <>
+              {schedule && (
+                <TooltipHost
+                  directionalHint={DirectionalHint.topCenter}
+                  content={scheduleTooltiphost(schedule)}
+                >
+                  <CalendarLtr16Filled 
+                    style={{
+                      color: ThemeStore.userTheme.colors.themePrimary,
+                    }}
+                  />
+                </TooltipHost>
+              )
+              }
               {uatFilesProcessed > 0 ? (
                 <TooltipHost
                   content={tooltipHostContent(
@@ -556,6 +623,11 @@ const XChangePage = () => {
       data: 'string',
       isPadded: true,
       minWidth: 150,
+      styles: {
+        cellTitle: {
+          paddingLeft: '51px',
+        },
+      },
       maxWidth: 400,
       flexGrow: 1,
     },
@@ -876,6 +948,14 @@ const XChangePage = () => {
           refreshPage={setRefreshDataXchange}
         />
       )}
+      <SchedulePanel
+        isPanelOpen={openSchedulePanel}
+        closePanel={setOpenSchedulePanel}
+        xchangeConfigSid={xchangeConfigSid}
+        xchangeJobGroupSid={xchangeJobGroupSid}
+        refreshPage={setRefreshDataXchange}
+        typeSchedule={true}
+      />
       <DialogYesNo {...dialogProps} open={showDialog} />
     </LayoutDashboard>
   );
