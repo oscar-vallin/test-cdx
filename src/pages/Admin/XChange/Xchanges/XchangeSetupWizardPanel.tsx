@@ -67,6 +67,7 @@ const XchangeSetupWizardPanel = ({
   const [vendorName, setVendorName] = useState('');
   const [currentVendor, setCurrentVendor] = useState('');
   const [vendorSpec, setVendorSpec] = useState('');
+  const [qualifier, setQualifier] = useState('');
   const [sourcePlatform, setSourcePlatform] = useState('');
   const [incomingFormat, setIncomingFormat] = useState('');
   const [deliveryProtocol, setDeliveryProtocol] = useState('');
@@ -165,6 +166,7 @@ const XchangeSetupWizardPanel = ({
           orgSid,
           vendorSid,
           vendorSpec,
+
           sourcePlatform,
           incomingFormat,
           fileContents: ExtractType[extractType()],
@@ -200,6 +202,7 @@ const XchangeSetupWizardPanel = ({
   useEffect(() => {
     if (setupNewXchangeForm) {
       setCurrentVendor(setupNewXchangeForm?.vendor?.value?.label ?? '');
+      setQualifier(setupNewXchangeForm.qualifier?.value ?? '');
       setVendorSid(setupNewXchangeForm.vendor?.value?.value ?? '');
       setVendorSpec(setupNewXchangeForm.vendorSpec?.value?.value ?? '');
       setSourcePlatform(setupNewXchangeForm.sourcePlatform?.value?.value ?? '');
@@ -370,6 +373,7 @@ const XchangeSetupWizardPanel = ({
           setup: {
             xchangeConfigSid: configSid,
             orgSid,
+            qualifier,
             vendorSid,
             vendorSpec,
             sourcePlatform,
@@ -394,6 +398,7 @@ const XchangeSetupWizardPanel = ({
       variables: {
         setup: {
           orgSid,
+          qualifier,
           vendorSid,
           vendorSpec,
           sourcePlatform,
@@ -459,6 +464,19 @@ const XchangeSetupWizardPanel = ({
           {currentVendor.trim() !== '' && !vendorName && (
             <StyledVendorOptions>{doSearch()}</StyledVendorOptions>
           )}
+        </Column>
+      </FormRow>
+      <FormRow>
+        <Column>
+          <UIInputText
+            id="__newXghangeQualifier"
+            uiField={setupNewXchangeForm?.qualifier}
+            value={qualifier}
+            onChange={(event, _newValue) => {
+              setUnsavedChanges(true);
+              setQualifier(_newValue ?? '');
+            }}
+          />
         </Column>
       </FormRow>
       <FormRow>

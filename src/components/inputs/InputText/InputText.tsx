@@ -124,7 +124,7 @@ const UIInputTextReadOnly = ({
 
 type UIInputTextType = {
   id: string;
-  uiField?: UiStringField | UiIntField | UiLongField;
+  uiField?: UiStringField | UiIntField | UiLongField | null;
   onChange?: (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => void | null;
   value?: string;
   placeholder?: string;
