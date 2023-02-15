@@ -101,14 +101,28 @@ const FullSpecLibraryPage = () => {
 
   const { columns } = useSortableColumns(tableFilters, columnOptions);
 
-  useEffect(() => {
+  const filterVendors = (search: string) => {
     setRefreshPage(false);
     vendorSpec({
       variables: {
-        searchText: searchTextFullSpecVendor,
+        searchText: search,
         pageableInput: tableFilters.pagingParams,
       },
-    })
+    });
+  };
+
+  useEffect(() => {
+    if (searchTextFullSpecVendor.trim() !== '') {
+      const timer = setTimeout(() =>  filterVendors(searchTextFullSpecVendor), 300);
+      return () => clearTimeout(timer);
+    } else {
+      vendorSpec({
+        variables: {
+          searchText: searchTextFullSpecVendor,
+          pageableInput: tableFilters.pagingParams,
+        },
+      });
+    }
   }, [searchTextFullSpecVendor, refreshPage, tableFilters.pagingParams]);
 
   const tooltipHostVendors = (clients: string[]) => {
