@@ -402,7 +402,7 @@ export const OrgPanel = ({
         {orgForm?.orgType?.value?.value === OrgType.IntegrationSponsor && (
         <Column lg="12">
           <UIInputMultiSelect
-            id="__OrgName"
+            id="__SupportedPlatforms"
             uiField={orgForm?.supportedPlatforms}
             options={orgForm.options}
             value={orgState.supportedPlatforms ?? []}
