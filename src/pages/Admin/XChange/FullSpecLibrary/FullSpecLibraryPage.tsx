@@ -92,8 +92,8 @@ const FullSpecLibraryPage = () => {
       name: 'Vendor/Spec',
       key: 'name',
       fieldName: 'name',
-      minWidth: 150,
-      maxWidth: 200,
+      minWidth: 350,
+      maxWidth: 300,
       isPadded: true,
       dataType: 'string',
       isSorted: true,
@@ -179,6 +179,7 @@ const FullSpecLibraryPage = () => {
               style={{
                 fontSize: '12px',
                 color: spec.active ? '' : ThemeStore.userTheme.colors.neutralQuaternary,
+                overflow: 'hidden',
               }}
               onClick={() => {
                 setOrgSid(item.orgSid ?? '');
@@ -280,7 +281,7 @@ const FullSpecLibraryPage = () => {
               </Stack>
             </Row>
             <Row>
-              <Column lg="5">{renderBody()}</Column>
+              <Column lg="7">{renderBody()}</Column>
             </Row>
           </Container>
         </Spacing>
