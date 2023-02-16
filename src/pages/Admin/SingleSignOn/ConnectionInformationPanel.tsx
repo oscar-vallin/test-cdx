@@ -85,7 +85,7 @@ const ConnectionInformationPanel = (
 
     if (saml2ConnectionInfo) {
       return (
-        <Spacing margin={{ top: 'normal' }}>
+        <Spacing id="saml2ConnectionInfo" margin={{ top: 'normal' }}>
           <Text id="__SamlServiceProvider">
             The CDX Dashboard supports SAML v2.0 SSO as a Service Provider (Sp) Using
             HTTP POST binding.
@@ -287,6 +287,9 @@ const ConnectionInformationPanel = (
     <ThemedPanel
       closeButtonAriaLabel="Close"
       headerText={`Connecting to the CDX ${saml2ConnectionInfo ? 'Service Provider (SP)' : 'OIDC Client'}`}
+      headerTextProps={{
+        id: "__ConnectionInformation_title"
+      }}
       type={PanelType.medium}
       isLightDismiss={false}
       isOpen={isOpen}
