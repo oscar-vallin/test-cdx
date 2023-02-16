@@ -226,7 +226,7 @@ const SpecificationLibraryPage = () => {
       const value = item[column.key];
       return (
         <ButtonLink
-          style={!item.active  ? {color: ThemeStore.userTheme.colors.neutralQuaternary } : { color: ''}}
+          style={!item.active ? { color: ThemeStore.userTheme.colors.neutralQuaternary } : { color: '' }}
           onClick={() => {
             setSid(item.sid ?? '');
             setIsOpenPanel(true);
@@ -247,15 +247,15 @@ const SpecificationLibraryPage = () => {
       >
         {column?.key === 'integratedClients' && (
           <TooltipHost
-          content={tooltipHostVendors(item?.integratedClients)}
-          directionalHint={DirectionalHint.rightCenter}
+            content={tooltipHostVendors(item?.integratedClients)}
+            directionalHint={DirectionalHint.rightCenter}
           >
             <ButtonLink
-              style={!item.active  ? {color: ThemeStore.userTheme.colors.neutralQuaternary } : { color: ''}}
+              style={!item.active ? { color: ThemeStore.userTheme.colors.neutralQuaternary } : { color: '' }}
             >
               {item.integratedClients.length}
             </ButtonLink>
-          </TooltipHost>  
+          </TooltipHost>
         )}
         {column?.key === 'active' && (
           <ActivityBubbles
@@ -298,9 +298,9 @@ const SpecificationLibraryPage = () => {
       return (
         <TooltipHost content={active} directionalHint={DirectionalHint.rightCenter}>
           <FontIcon
-            style={{ 
-              fontSize: '18px', 
-              cursor: 'pointer', 
+            style={{
+              fontSize: '18px',
+              cursor: 'pointer',
               color: ThemeStore.userTheme.colors.neutralQuaternary,
             }}
             iconName="StatusCircleBlock"
@@ -391,9 +391,7 @@ const SpecificationLibraryPage = () => {
     },
   ];
 
-  const readonlyComments = () => {
-    return !(updateCmd && editComments);
-  }
+  const readonlyComments = () => !(updateCmd && editComments)
 
   const cardBox = () => (
     <Spacing margin={{ top: 'double' }}>

@@ -28,9 +28,9 @@ import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { DataColumn, useSortableColumns } from 'src/containers/tables';
 import { ButtonLink } from 'src/components/buttons';
+import { Paginator } from 'src/components/tables/Paginator';
 import { FullSpecList } from './FullSpecLibrary.styles';
 import { SpecPanel } from './SpecPanel';
-import { Paginator } from 'src/components/tables/Paginator';
 
 const FullSpecLibraryPage = () => {
   const ThemeStore = useThemeStore();
@@ -80,7 +80,6 @@ const FullSpecLibraryPage = () => {
     if (newPaginInfo) {
       setPagingInfo(newPaginInfo);
     }
-
   }, [vendorSpecData, isLoadingvendoSpec]);
 
   const tableFilters = useTableFilters('Search', [
@@ -127,16 +126,15 @@ const FullSpecLibraryPage = () => {
 
   useEffect(() => {
     if (searchTextFullSpecVendor.trim() !== '') {
-      const timer = setTimeout(() =>  filterVendors(searchTextFullSpecVendor), 300);
+      const timer = setTimeout(() => filterVendors(searchTextFullSpecVendor), 300);
       return () => clearTimeout(timer);
-    } else {
-      vendorSpec({
-        variables: {
-          searchText: searchTextFullSpecVendor,
-          pageableInput: tableFilters.pagingParams,
-        },
-      });
     }
+    vendorSpec({
+      variables: {
+        searchText: searchTextFullSpecVendor,
+        pageableInput: tableFilters.pagingParams,
+      },
+    });
   }, [searchTextFullSpecVendor, refreshPage, tableFilters.pagingParams]);
 
   const onPageChange = (pageNumber: number) => {
@@ -203,7 +201,7 @@ const FullSpecLibraryPage = () => {
               content={tooltipHostVendors(spec.integratedClients)}
               directionalHint={DirectionalHint.rightCenter}
             >
-              <ButtonLink 
+              <ButtonLink
                 style={{
                   fontSize: '12px',
                   color: spec.active ? '' : ThemeStore.userTheme.colors.neutralQuaternary,

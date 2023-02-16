@@ -468,34 +468,32 @@ export const OrgPanel = ({
         setMessage('Please fill out all required* fields');
         setOrgForm(form);
       }
+    } else if (!selectedOrgSid) {
+      createOrg({
+        variables: {
+          orgInfo: {
+            orgId: orgState.orgId ?? '',
+            name: orgState.name ?? '',
+            orgType,
+            mv1Id: orgState.mv1Id ? +orgState.mv1Id : undefined,
+            mv1Folder: orgState.mv1Folder,
+            orgOwnerSid,
+          },
+        },
+      }).then();
     } else {
-      if (!selectedOrgSid) {
-        createOrg({
-          variables: {
-            orgInfo: {
-              orgId: orgState.orgId ?? '',
-              name: orgState.name ?? '',
-              orgType,
-              mv1Id: orgState.mv1Id ? +orgState.mv1Id : undefined,
-              mv1Folder: orgState.mv1Folder,
-              orgOwnerSid,
-            },
+      updateOrg({
+        variables: {
+          orgInfo: {
+            orgSid: selectedOrgSid,
+            name: orgState.name ?? '',
+            orgType,
+            mv1Id: orgState.mv1Id ? +orgState.mv1Id : undefined,
+            mv1Folder: orgState.mv1Folder,
+            supportedPlatforms: orgState.supportedPlatforms,
           },
-        }).then();
-      } else {
-        updateOrg({
-          variables: {
-            orgInfo: {
-              orgSid: selectedOrgSid,
-              name: orgState.name ?? '',
-              orgType,
-              mv1Id: orgState.mv1Id ? +orgState.mv1Id : undefined,
-              mv1Folder: orgState.mv1Folder,
-              supportedPlatforms: orgState.supportedPlatforms,
-            },
-          },
-        }).then();
-      }
+        },
+      }).then();
     }
 
     return null;

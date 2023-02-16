@@ -52,47 +52,45 @@ import {
 } from './AccessSpecializationPanel';
 import { StyledCommandButton } from '../AccessManagement.styles';
 
-const generateColumns = (): IColumn[] => {
-  return [
-    {
-      name: 'Name',
-      fieldName: 'name',
-      key: 'name',
-      data: 'string',
-      minWidth: 100,
-      maxWidth: 500,
-      isPadded: true,
-      flexGrow: 1,
-    },
-    {
-      name: '',
-      fieldName: 'members',
-      key: 'members',
-      data: 'string',
-      minWidth: 90,
-      maxWidth: 90,
-      isPadded: false,
-    },
-    {
-      name: '',
-      fieldName: 'groupUsages',
-      key: 'groupUsages',
-      data: 'string',
-      minWidth: 90,
-      maxWidth: 90,
-      isPadded: false,
-    },
-    {
-      name: '',
-      fieldName: 'actions',
-      key: 'actions',
-      data: 'string',
-      minWidth: 50,
-      isPadded: false,
-      flexGrow: 2,
-    },
-  ];
-};
+const generateColumns = (): IColumn[] => [
+  {
+    name: 'Name',
+    fieldName: 'name',
+    key: 'name',
+    data: 'string',
+    minWidth: 100,
+    maxWidth: 500,
+    isPadded: true,
+    flexGrow: 1,
+  },
+  {
+    name: '',
+    fieldName: 'members',
+    key: 'members',
+    data: 'string',
+    minWidth: 90,
+    maxWidth: 90,
+    isPadded: false,
+  },
+  {
+    name: '',
+    fieldName: 'groupUsages',
+    key: 'groupUsages',
+    data: 'string',
+    minWidth: 90,
+    maxWidth: 90,
+    isPadded: false,
+  },
+  {
+    name: '',
+    fieldName: 'actions',
+    key: 'actions',
+    data: 'string',
+    minWidth: 50,
+    isPadded: false,
+    flexGrow: 2,
+  },
+];
 
 const AccessManagementSpecializationPage = () => {
   const { orgSid } = useOrgSid();

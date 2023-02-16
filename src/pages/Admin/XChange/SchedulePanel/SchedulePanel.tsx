@@ -885,7 +885,7 @@ const SchedulePanel = ({
       return (
         <Spacing margin={{ top: 'double' }}>
           <ChoiceGroup
-          defaultSelectedKey={formData?.xchangeScheduleForm?.xchangeJobGroup.value?.label}
+            defaultSelectedKey={formData?.xchangeScheduleForm?.xchangeJobGroup.value?.label}
             options={
               xchangeJobGroups.nodes.map((jobG, indexJobGroup) => ({
                 key: `${jobG.name}`,
@@ -894,8 +894,8 @@ const SchedulePanel = ({
                   <Spacing margin={{ left: 'double' }} key={`${jobG.name}-label-${indexJobGroup}`}>
                     <Text style={{ marginRight: '10px' }}>{jobG.name}</Text>
                     <TooltipHost
-                        directionalHint={DirectionalHint.rightCenter}
-                        content={scheduleTooltiphost(jobG.schedule)}
+                      directionalHint={DirectionalHint.rightCenter}
+                      content={scheduleTooltiphost(jobG.schedule)}
                     >
                       <FontIcon
                         iconName="Info"
@@ -963,7 +963,7 @@ const SchedulePanel = ({
                         text: '',
                         onRenderLabel: (props) => (
                           <Spacing margin={{ left: 'double' }}>
-                            <Stack horizontal horizontalAlign='space-around'>
+                            <Stack horizontal horizontalAlign="space-around">
                               <UIFlatSelectOneField
                                 id="scheduleSelectTime"
                                 uiField={renderUiField('endDayOfMonth')}
@@ -995,7 +995,7 @@ const SchedulePanel = ({
                                 value={endDayOrdinal ?? ''}
                                 options={options}
                                 disabled={!props?.checked}
-                                onChange={(_newValue) =>{
+                                onChange={(_newValue) => {
                                   setEndDayOrdinal(_newValue ?? '');
                                   setUnsavedChanges(true);
                                   setEndDayOfMonth(null);

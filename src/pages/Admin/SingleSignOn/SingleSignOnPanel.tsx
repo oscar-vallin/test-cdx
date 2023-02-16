@@ -593,7 +593,7 @@ const SingleSignOnPanel = ({
         headerText={identityProviderForm?.idpId.value ? `Idp - ${identityProviderForm?.idpId.value}` : 'Setup Identity Provider'}
         isOpen={isPanelOpen}
         headerTextProps={{
-          id: "__IdentityProviderPanel_Title"
+          id: '__IdentityProviderPanel_Title',
         }}
         onDismiss={() => {
           onPanelClose();

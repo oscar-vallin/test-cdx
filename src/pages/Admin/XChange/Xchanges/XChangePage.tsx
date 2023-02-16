@@ -313,7 +313,7 @@ const XChangePage = () => {
         pageCommands?.find((cmd) => cmd?.endPoint === 'updateXchangeProfileComment'),
       );
       setScheduleCmd(
-        pageCommands?.find((cmd) => cmd?.endPoint === 'updateXchangeSchedule')
+        pageCommands?.find((cmd) => cmd?.endPoint === 'updateXchangeSchedule'),
       )
       setAlertsCmd(pageCommands?.find((cmd) => cmd?.endPoint === 'xchangeProfileAlerts'));
       setConvertCmd(pageCommands?.find((cmd) => cmd?.endPoint === 'convertXchangeProfile'));
@@ -386,7 +386,7 @@ const XChangePage = () => {
         </Stack>
         {scheduleCmd && (
           <ButtonLink
-            style={{marginLeft: '70px'}}
+            style={{ marginLeft: '70px' }}
             onClick={() => {
               setXchangeConfigSid(node?.sid ?? '');
               setXchangeJobGroupSid(currentSchedule?.xchangeJobGroupSid ?? '');
@@ -411,10 +411,10 @@ const XChangePage = () => {
 
     const coreFN = node?.coreFilename;
     return (
-      <Stack 
-        horizontal 
-        horizontalAlign="start" 
-        tokens={{ childrenGap: 10, padding: `0px 0px 0px ${paddingRigth} `}}
+      <Stack
+        horizontal
+        horizontalAlign="start"
+        tokens={{ childrenGap: 10, padding: `0px 0px 0px ${paddingRigth} ` }}
       >
         <ButtonLink
           to={`/xchange-details?orgSid=${orgSid}&coreFilename=${coreFN}`}
@@ -430,14 +430,13 @@ const XChangePage = () => {
                   directionalHint={DirectionalHint.topCenter}
                   content={scheduleTooltiphost(schedule)}
                 >
-                  <CalendarLtr16Filled 
+                  <CalendarLtr16Filled
                     style={{
                       color: ThemeStore.userTheme.colors.themePrimary,
                     }}
                   />
                 </TooltipHost>
-              )
-              }
+              )}
               {uatFilesProcessed > 0 ? (
                 <TooltipHost
                   content={tooltipHostContent(

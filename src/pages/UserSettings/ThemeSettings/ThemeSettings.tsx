@@ -82,7 +82,7 @@ const ThemeSettings = () => {
     }
   }, [themeResponse]);
 
-  const [selectedPaletteId, setSelectedPaletteId] = useState<string>("");
+  const [selectedPaletteId, setSelectedPaletteId] = useState<string>('');
 
   useEffect(() => {
     const paletteId = dataUserTheme?.userTheme?.dashThemeColor?.id

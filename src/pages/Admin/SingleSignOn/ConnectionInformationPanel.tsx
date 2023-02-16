@@ -93,7 +93,7 @@ const ConnectionInformationPanel = (
           <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
             <Text id="__serviceMetadata">Download the service provider metadata here: </Text>
           </Spacing>
-          <Link id="__metadata" href={saml2ConnectionInfo.metaDataURL ?? "#"} target="_new">
+          <Link id="__metadata" href={saml2ConnectionInfo.metaDataURL ?? '#'} target="_new">
             {saml2ConnectionInfo.metaDataURL}
           </Link>
           <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
@@ -288,7 +288,7 @@ const ConnectionInformationPanel = (
       closeButtonAriaLabel="Close"
       headerText={`Connecting to the CDX ${saml2ConnectionInfo ? 'Service Provider (SP)' : 'OIDC Client'}`}
       headerTextProps={{
-        id: "__ConnectionInformation_title"
+        id: '__ConnectionInformation_title',
       }}
       type={PanelType.medium}
       isLightDismiss={false}

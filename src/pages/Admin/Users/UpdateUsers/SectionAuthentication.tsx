@@ -3,8 +3,8 @@ import { CdxWebCommandType, UiOption, UserAccountForm } from 'src/data/services/
 import { WizardBody } from 'src/layouts/Panels/Panels.styles';
 import { ChoiceGroup, Stack } from '@fluentui/react';
 import { Text } from 'src/components/typography';
-import UpdateUserFooter from './UpdateUserFooter';
 import { Spacing } from 'src/components/spacings/Spacing';
+import UpdateUserFooter from './UpdateUserFooter';
 
 type SectionAuthProps = {
     form?: UserAccountForm;
@@ -39,12 +39,12 @@ const SectionAuthentication = ({ form, onSave }: SectionAuthProps) => {
                 <Stack>
                   {render!(props)}
                   {indexMethod === 0 && (
-                    <Spacing margin={{  bottom: 'normal' }} />
+                    <Spacing margin={{ bottom: 'normal' }} />
                   )}
                   {authenticationMethods && authenticationMethods.length > 1
                     && indexMethod === 0 && (
                       <Text variant="semiBold">Single Sign On</Text>
-                      )}
+                  )}
                 </Stack>
               ),
             }))
