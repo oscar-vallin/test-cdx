@@ -19,6 +19,7 @@ import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ROUTE_FULL_SPEC_LIBRARY } from 'src/data/constants/RouteConstants';
 import { useTableFilters } from 'src/hooks/useTableFilters';
 import {
+  PaginationInfo,
   SortDirection,
   useFullVendorSpecLibraryLazyQuery,
   VendorLink,
@@ -29,6 +30,7 @@ import { DataColumn, useSortableColumns } from 'src/containers/tables';
 import { ButtonLink } from 'src/components/buttons';
 import { FullSpecList } from './FullSpecLibrary.styles';
 import { SpecPanel } from './SpecPanel';
+import { Paginator } from 'src/components/tables/Paginator';
 
 const FullSpecLibraryPage = () => {
   const ThemeStore = useThemeStore();
@@ -39,6 +41,12 @@ const FullSpecLibraryPage = () => {
   const [isOpenPanel, setIsOpenPanel] = useState(false);
   const [sid, setSid] = useState('');
   const [orgSid, setOrgSid] = useState('');
+  const [pagingInfo, setPagingInfo] = useState<PaginationInfo>({
+    pageNumber: 0,
+    pageSize: 100,
+    totalElements: 0,
+    totalPages: 0,
+  });
 
   const [vendorSpec,
     {
@@ -67,6 +75,12 @@ const FullSpecLibraryPage = () => {
       setGroups([]);
       setFullVendorNodes([]);
     }
+
+    const newPaginInfo = vendorSpecData?.fullVendorSpecLibrary?.paginationInfo;
+    if (newPaginInfo) {
+      setPagingInfo(newPaginInfo);
+    }
+
   }, [vendorSpecData, isLoadingvendoSpec]);
 
   const tableFilters = useTableFilters('Search', [
@@ -124,6 +138,15 @@ const FullSpecLibraryPage = () => {
       });
     }
   }, [searchTextFullSpecVendor, refreshPage, tableFilters.pagingParams]);
+
+  const onPageChange = (pageNumber: number) => {
+    tableFilters.pagingParams.pageNumber = pageNumber;
+    tableFilters.setPagingParams({
+      pageNumber,
+      pageSize: 100,
+      sort: tableFilters.pagingParams.sort,
+    });
+  };
 
   const tooltipHostVendors = (clients: string[]) => {
     if (clients?.length === 0) {
@@ -205,15 +228,18 @@ const FullSpecLibraryPage = () => {
     }
 
     return (
-      <FullSpecList
-        items={fullVendorNodes ?? []}
-        columns={columns}
-        groups={groups}
-        onRenderItemColumn={onRenderItemColum}
-        selectionMode={SelectionMode.none}
-        layoutMode={DetailsListLayoutMode.justified}
-        isHeaderVisible
-      />
+      <>
+        <FullSpecList
+          items={fullVendorNodes ?? []}
+          columns={columns}
+          groups={groups}
+          onRenderItemColumn={onRenderItemColum}
+          selectionMode={SelectionMode.none}
+          layoutMode={DetailsListLayoutMode.justified}
+          isHeaderVisible
+        />
+        <Paginator id="__Paginator" pagingInfo={pagingInfo} onPageChange={onPageChange} />
+      </>
     )
   }
 
