@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { CalendarLtr16Filled } from '@fluentui/react-icons';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import {
   IColumn,
@@ -18,10 +20,10 @@ import {
   DirectionalHint,
 } from '@fluentui/react';
 import { ButtonLink } from 'src/components/buttons';
-import { CalendarLtr16Filled } from '@fluentui/react-icons';
 import { Column, Container, Row } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { PageTitle } from 'src/components/typography';
+import { TaskCard } from 'src/components/cards';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ROUTE_XCHANGE_LIST } from 'src/data/constants/RouteConstants';
 import { useOrgSid } from 'src/hooks/useOrgSid';
@@ -45,11 +47,7 @@ import { DialogYesNoProps, DialogYesNo } from 'src/containers/modals/DialogYesNo
 import { useNotification } from 'src/hooks/useNotification';
 import { EmptyState } from 'src/containers/states';
 import { PreviewConvertXchangePanel } from './PreviewConvertXchangePanel';
-import {
-  CardStyled,
-  ContainerInput,
-  StyledIconsComments,
-} from './XchangePage.styles';
+import { CardColumn, StyledIconsComments } from './XchangePage.styles';
 import { XchangeSetupWizardPanel } from './XchangeSetupWizardPanel';
 import { StyledText } from '../SchedulePanel/SchedulePanel.styles';
 import { SchedulePanel } from '../SchedulePanel';
@@ -86,6 +84,7 @@ const XChangePage = () => {
   const [xchangeProfile, { data: dataXchange, loading: loadingXchange }] = useQueryHandler(
     useXchangeProfileLazyQuery,
   );
+  const history = useHistory();
 
   const [xchangeProfileComment,
     { data: dataComment, loading: loadingComment }] = useQueryHandler(
@@ -732,19 +731,62 @@ const XChangePage = () => {
     return <Text>{body}</Text>;
   };
 
+  const renderCommentsCommands = () => {
+    if (editComment) {
+      return (
+        <Stack horizontal tokens={{ childrenGap: 5 }}>
+          <Stack.Item>
+            <StyledIconsComments>
+              <IconButton iconProps={{ iconName: 'Save' }} onClick={sendComment} />
+              <Text style={{ cursor: 'pointer' }} variant="small" onClick={sendComment}>Save</Text>
+            </StyledIconsComments>
+          </Stack.Item>
+          <Stack.Item>
+            <StyledIconsComments>
+              <IconButton
+                iconProps={{ iconName: 'Cancel' }}
+                onClick={() => {
+                  setEditComment(false);
+                  setComment(dataXchange.xchangeProfile.comments);
+                }}
+              />
+              <Text
+                style={{ cursor: 'pointer' }}
+                variant="small"
+                onClick={() => {
+                  setEditComment(false);
+                  setComment(dataXchange.xchangeProfile.comments);
+                }}
+              >
+                Cancel
+              </Text>
+            </StyledIconsComments>
+          </Stack.Item>
+        </Stack>
+      );
+    }
+    if (updateCommentCmd) {
+      return (
+        <IconButton
+          iconProps={{ iconName: 'EditSolid12' }}
+          onClick={() => setEditComment(updateCommentCmd !== undefined)}
+        />
+      );
+    }
+    return null;
+  };
+
   const cardBox = () => {
     if (loadingXchange) return null;
 
     return (
-
-      <>
-        <CardStyled>
-          {alertsLink(
-            <>
-              <FontIcon iconName="Ringer" style={{ margin: '10px 6px 0 6px' }} />
-              Alerts
-            </>,
-          )}
+      <CardColumn>
+        <TaskCard
+          id="__AlertsCard"
+          title="Alerts"
+          onClickTitle={alertsCmd ? () => history.push(`/xchange-alerts?orgSid=${orgSid}`) : undefined}
+          icon={<FontIcon iconName="Ringer" />}
+        >
           <Spacing margin="normal">
             <Row>
               <Column lg="9">
@@ -797,67 +839,24 @@ const XChangePage = () => {
               ),
             )}
           </Spacing>
-        </CardStyled>
-        <Spacing margin={{ top: 'normal' }}>
-          <CardStyled>
-            <ContainerInput>
-              <Row>
-                <Column lg="6">
-                  <Text style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>Comments</Text>
-                </Column>
-                {!requiresConversion && editComment ? (
-                  <>
-                    <Column lg="3" md={12}>
-                      <StyledIconsComments>
-                        <IconButton iconProps={{ iconName: 'Save' }} onClick={sendComment} />
-                        <Text style={{ cursor: 'pointer' }} variant="small" onClick={sendComment}>Save</Text>
-                      </StyledIconsComments>
-                    </Column>
-                    <Column lg="3">
-                      <StyledIconsComments>
-                        <IconButton
-                          iconProps={{ iconName: 'Cancel' }}
-                          onClick={() => {
-                            setEditComment(false);
-                            setComment(dataXchange.xchangeProfile.comments);
-                          }}
-                        />
-                        <Text
-                          style={{ cursor: 'pointer' }}
-                          variant="small"
-                          onClick={() => {
-                            setEditComment(false);
-                            setComment(dataXchange.xchangeProfile.comments);
-                          }}
-                        >Cancel
-                        </Text>
-                      </StyledIconsComments>
-                    </Column>
-                  </>
-                ) : (
-                  <Column lg="6" right>
-                    {!requiresConversion && updateCommentCmd && (
-                      <IconButton
-                        iconProps={{ iconName: 'EditSolid12' }}
-                        onClick={() => setEditComment(updateCommentCmd !== undefined)}
-                      />
-                    )}
-                  </Column>
-                )}
-              </Row>
-              <TextField
-                multiline
-                borderless={true}
-                readOnly={readonlyComments()}
-                resizable={false}
-                value={comment ?? ''}
-                rows={7}
-                onChange={(event, newValue) => setComment(newValue ?? '')}
-              />
-            </ContainerInput>
-          </CardStyled>
-        </Spacing>
-      </>
+        </TaskCard>
+
+        <TaskCard
+          id="__CommentsCard"
+          title="Comments"
+          commands={renderCommentsCommands()}
+        >
+          <TextField
+            multiline
+            borderless={true}
+            readOnly={readonlyComments()}
+            resizable={false}
+            value={comment ?? ''}
+            rows={7}
+            onChange={(event, newValue) => setComment(newValue ?? '')}
+          />
+        </TaskCard>
+      </CardColumn>
     )
   };
 

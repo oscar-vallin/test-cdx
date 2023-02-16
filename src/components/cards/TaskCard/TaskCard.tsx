@@ -48,8 +48,8 @@ export const TaskCard = ({
   const renderTitleText = () => {
     if (onClickTitle) {
       return (
-        <ButtonLink id={`${id}_Title`} onClick={onClickTitle} title={title}>
-          <Text variant="bold">{title}</Text>
+        <ButtonLink id={`${id}_Title`} onClick={onClickTitle} title={title} style={{ fontWeight: 'bold' }}>
+          {title}
         </ButtonLink>
       );
     }
