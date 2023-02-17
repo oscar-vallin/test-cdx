@@ -57,7 +57,8 @@ const DashboardPage = () => {
   const fromDate = useDateValue('', startDate ? new Date(`${startDate}T00:00:00.000`) : new Date());
   const toDate = useEndDateValue('', endDate ? new Date(`${endDate}T23:59:59.999`) : new Date());
 
-  const [dashboardPeriodCounts, setDashboardPeriodCounts] = useState<DashboardPeriodCounts | null>();
+  const [dashboardPeriodCounts, setDashboardPeriodCounts] = useState
+    <DashboardPeriodCounts | null>();
 
   const handleError = ErrorHandler();
 
@@ -68,7 +69,11 @@ const DashboardPage = () => {
 
   const [
     callCustomDashboardPeriod,
-    { data: dataCustomDashboardPeriod, loading: loadingCustomDashboardPeriod, error: errorCustomDashboardPeriod },
+    {
+      data: dataCustomDashboardPeriod,
+      loading: loadingCustomDashboardPeriod,
+      error: errorCustomDashboardPeriod,
+    },
   ] = useDashboardPeriodCountsLazyQuery();
 
   useEffect(() => {
