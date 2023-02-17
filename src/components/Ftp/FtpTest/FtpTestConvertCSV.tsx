@@ -3,7 +3,10 @@ import { FontIcon, Stack } from '@fluentui/react';
 import { ButtonLink } from 'src/components/buttons';
 import { yyyyMMdda } from 'src/utils/CDXUtils';
 
-function ConvertToCSVBinding(needsQuote: (str: string) => boolean, quoteField: (field: string) => string) {
+function ConvertToCSVBinding(
+  needsQuote: (str: string) => boolean,
+  quoteField: (field: string) => string,
+) {
   return (objArray) => {
     const array = typeof objArray !== 'object' ? JSON.parse(objArray) : objArray;
     const baseColumns = ['Timestamp', 'Severity', 'Name', 'Body'];
@@ -12,8 +15,8 @@ function ConvertToCSVBinding(needsQuote: (str: string) => boolean, quoteField: (
     for (let i = 0; i < array.length; i++) {
       let line = '';
       for (const index in array[i]) {
-        if (index != '__typename') {
-          if (line != '') line += ',';
+        if (index !== '__typename') {
+          if (line !== '') line += ',';
           if (typeof array[i][index] !== 'object') {
             if (index === 'timeStamp') {
               line += yyyyMMdda(new Date(array[i][index])).toString();
@@ -24,10 +27,11 @@ function ConvertToCSVBinding(needsQuote: (str: string) => boolean, quoteField: (
             const attributes = array[i][index];
             maxAttributes = Math.max(maxAttributes, attributes.length);
             for (let j = 0; j < attributes.length; j++) {
-              for (const index in attributes[j]) {
-                if (index != '__typename') {
+              for (const indexAttribute in attributes[j]) {
+                if (indexAttribute !== '__typename') {
                   line += `${
-                    needsQuote(attributes[j][index]) ? quoteField(attributes[j][index]) : attributes[j][index]
+                    needsQuote(attributes[j][indexAttribute])
+                      ? quoteField(attributes[j][indexAttribute]) : attributes[j][indexAttribute]
                   },`;
                 }
               }
