@@ -17,3 +17,8 @@ export const GrayRoundDiv = styled.div`
     font-weight:${({ theme }) => theme.fontWeights.bold};
   }
 `;
+
+export const CardColumn = styled.div`
+  display: block;
+  margin-top: -60px;
+`;

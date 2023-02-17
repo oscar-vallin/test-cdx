@@ -1,4 +1,5 @@
 import { Card } from './Card';
-import { TaskCard } from './TaskCard';
+import { TaskCard, CardColumn } from './TaskCard';
+import { CommentCard } from './Comment';
 
-export { Card, TaskCard };
+export { Card, TaskCard, CommentCard, CardColumn };
