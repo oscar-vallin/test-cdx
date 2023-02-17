@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   Stack,
   SearchBox,
@@ -6,10 +7,11 @@ import {
   SpinnerSize,
   SelectionMode,
   DetailsListLayoutMode,
-  IColumn,
   IGroup,
   TooltipHost,
   DirectionalHint,
+  IDetailsGroupDividerProps,
+  IColumn,
 } from '@fluentui/react';
 import { Column, Container, Row } from 'src/components/layouts';
 import { PageBody } from 'src/components/layouts/Column';
@@ -29,11 +31,14 @@ import { useThemeStore } from 'src/store/ThemeStore';
 import { DataColumn, useSortableColumns } from 'src/containers/tables';
 import { ButtonLink } from 'src/components/buttons';
 import { Paginator } from 'src/components/tables/Paginator';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { FullSpecList } from './FullSpecLibrary.styles';
 import { SpecPanel } from './SpecPanel';
 
 const FullSpecLibraryPage = () => {
   const ThemeStore = useThemeStore();
+  const history = useHistory();
+  const handleError = ErrorHandler();
   const [fullVendorNodes, setFullVendorNodes] = useState<VendorLink[] | null>();
   const [groups, setGroups] = useState<IGroup[]>([]);
   const [searchTextFullSpecVendor, setSearchTextFullSpecVendor] = useState('');
@@ -51,12 +56,17 @@ const FullSpecLibraryPage = () => {
   const [vendorSpec,
     {
       data: vendorSpecData,
-      loading: isLoadingvendoSpec,
+      loading: loadingVendorSpec,
+      error: errorVendorSpec,
     },
   ] = useFullVendorSpecLibraryLazyQuery();
 
   useEffect(() => {
-    if (!isLoadingvendoSpec && vendorSpecData) {
+    handleError(errorVendorSpec);
+  }, [errorVendorSpec]);
+
+  useEffect(() => {
+    if (!loadingVendorSpec && vendorSpecData) {
       setFullVendorNodes(vendorSpecData.fullVendorSpecLibrary?.nodes);
       vendorSpecData.fullVendorSpecLibrary?.nodes?.forEach((node, nodeIndex) => {
         const foundGroup = groups.find((g) => g.key === node.orgSid);
@@ -76,11 +86,11 @@ const FullSpecLibraryPage = () => {
       setFullVendorNodes([]);
     }
 
-    const newPaginInfo = vendorSpecData?.fullVendorSpecLibrary?.paginationInfo;
-    if (newPaginInfo) {
-      setPagingInfo(newPaginInfo);
+    const newPagingInfo = vendorSpecData?.fullVendorSpecLibrary?.paginationInfo;
+    if (newPagingInfo) {
+      setPagingInfo(newPagingInfo);
     }
-  }, [vendorSpecData, isLoadingvendoSpec]);
+  }, [vendorSpecData, loadingVendorSpec]);
 
   const tableFilters = useTableFilters('Search', [
     { property: 'name', direction: SortDirection.Asc },
@@ -135,6 +145,7 @@ const FullSpecLibraryPage = () => {
         pageableInput: tableFilters.pagingParams,
       },
     });
+    return undefined;
   }, [searchTextFullSpecVendor, refreshPage, tableFilters.pagingParams]);
 
   const onPageChange = (pageNumber: number) => {
@@ -165,17 +176,32 @@ const FullSpecLibraryPage = () => {
     )
   }
 
+  const onRenderGroupHeader = (
+    props?: IDetailsGroupDividerProps,
+    defaultRender?: (
+      _props?: IDetailsGroupDividerProps,
+    ) => JSX.Element | null,
+  ): JSX.Element | null => {
+    if (props && defaultRender) {
+      props.onGroupHeaderClick = (group: IGroup) => {
+        history.push(`/vendor_spec_library?orgSid=${group.key}`);
+      };
+      return defaultRender(props);
+    }
+    return null;
+  };
+
   const onRenderItemColum = (item: VendorLink, itemIndex?: number, column?: IColumn) => {
     if (column?.key === 'name') {
       return (
         <Stack tokens={{ childrenGap: 5.5 }}>
           {item.specs?.map((spec, specIndex) => (
             <ButtonLink
-              id={`vendorname_${specIndex}`}
+              id={`vendorSpec_${specIndex}`}
               underline
               key={specIndex}
               style={{
-                fontSize: '12px',
+                fontSize: ThemeStore.userTheme.fontSizes.small,
                 color: spec.active ? '' : ThemeStore.userTheme.colors.neutralQuaternary,
                 overflow: 'hidden',
               }}
@@ -218,7 +244,7 @@ const FullSpecLibraryPage = () => {
   };
 
   const renderBody = () => {
-    if (isLoadingvendoSpec) {
+    if (loadingVendorSpec) {
       return (
         <Spacing margin={{ top: 'double' }}>
           <Spinner size={SpinnerSize.large} label="Loading Full Spec" />
@@ -232,6 +258,9 @@ const FullSpecLibraryPage = () => {
           items={fullVendorNodes ?? []}
           columns={columns}
           groups={groups}
+          groupProps={{
+            onRenderHeader: onRenderGroupHeader,
+          }}
           onRenderItemColumn={onRenderItemColum}
           selectionMode={SelectionMode.none}
           layoutMode={DetailsListLayoutMode.justified}
