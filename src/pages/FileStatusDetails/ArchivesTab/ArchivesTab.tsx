@@ -13,9 +13,14 @@ type ArchivesTabType = {
 };
 
 export const ArchivesTab = ({ packet }: ArchivesTabType) => {
-  const downloadCommand = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.DownloadFile);
+  const downloadCommand = packet?.commands
+    ?.find((cmd) => cmd?.commandType === WorkPacketCommandType.DownloadFile);
 
-  const renderDownloadLink = (workOrderId: string, s3key: string | null, filename?: string): ReactElement => {
+  const renderDownloadLink = (
+    workOrderId: string,
+    s3key: string | null,
+    filename?: string,
+  ): ReactElement => {
     const graphQLUrl = process.env.REACT_APP_API_SERVER;
     const serverUrl = graphQLUrl?.replace('/graphql', '') ?? '';
 
@@ -40,7 +45,12 @@ export const ArchivesTab = ({ packet }: ArchivesTabType) => {
     return <Text>{fileOnly}</Text>;
   };
 
-  const renderRow = (fileLabel: string, fileVariant: string, fullPath?: string | null, key?: string) => {
+  const renderRow = (
+    fileLabel: string,
+    fileVariant: string,
+    fullPath?: string | null,
+    key?: string,
+  ) => {
     if (packet?.workOrderId && fullPath) {
       return (
         <Column key={key} lg="12" xl="6">
@@ -58,12 +68,13 @@ export const ArchivesTab = ({ packet }: ArchivesTabType) => {
     <Spacing padding="normal">
       {renderRow('Client file', 'primary', packet?.clientFileArchivePath)}
       {packet?.supplementalFilesArchivePaths?.map((itm, index) => renderRow('Supplemental', 'primary', itm, `supp_${index}`))}
-      {packet?.workStepStatus?.map((workStep, wsIndex) => workStep?.stepFile?.map((stepFile, stepFileIndex) => renderRow(
-        stepFile?.label ?? workStep?.stepName ?? workStep?.stepType ?? 'Work Step',
-        'info',
-        stepFile?.value,
-        `step_${wsIndex}_${stepFileIndex}`,
-      )))}
+      {packet?.workStepStatus
+        ?.map((workStep, wsIndex) => workStep?.stepFile?.map((stepFile, stepFileIndex) => renderRow(
+          stepFile?.label ?? workStep?.stepName ?? workStep?.stepType ?? 'Work Step',
+          'info',
+          stepFile?.value,
+          `step_${wsIndex}_${stepFileIndex}`,
+        )))}
       {renderRow('Sent to Vendor', 'success', packet?.vendorFileArchivePath)}
     </Spacing>
   );
