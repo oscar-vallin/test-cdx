@@ -34,7 +34,14 @@ const Button = ({
   block = false,
   ...props
 }: ButtonProps): ReactElement => (
-  <StyledButton id={id} variant={variant} disabled={disabled} onClick={onClick} block={block} {...props}>
+  <StyledButton
+    id={id}
+    variant={variant}
+    disabled={disabled}
+    onClick={onClick}
+    block={block}
+    {...props}
+  >
     {text || children}
   </StyledButton>
 );
