@@ -30,7 +30,10 @@ const getValidationMessage = (passwords: PasswordState, isValid: boolean) => {
   return null;
 };
 
-const isFormInvalid = (passwords: PasswordState) => !passwords.current || !passwords.new || !passwords.confirmation || passwords.new !== passwords.confirmation;
+const isFormInvalid = (password: PasswordState) => !password.current
+  || !password.new
+    || !password.confirmation
+      || password.new !== password.confirmation;
 
 type PasswordChangeParam = {
   state: any;
