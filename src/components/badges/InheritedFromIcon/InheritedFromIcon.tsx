@@ -9,6 +9,7 @@ type InheritIconType = {
 export const InheritedFromIcon = ({ id, tooltip }: InheritIconType) => {
   if (tooltip) {
     return (
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       <TooltipHost onMouseLeave={() => {}} content={`Inherited from ${tooltip}`} id={id}>
         <CopySelect20Filled aria-label="Inherit" style={{ cursor: 'pointer', marginLeft: '5px' }} />
       </TooltipHost>
