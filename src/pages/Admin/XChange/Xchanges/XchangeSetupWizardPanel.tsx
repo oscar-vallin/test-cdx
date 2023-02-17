@@ -115,7 +115,7 @@ const XchangeSetupWizardPanel = ({
     },
   ] = useQueryHandler(useUpdateXchangeSetupMutation);
   const [vendorQuickSearch,
-    { data: quickSearchData, loading: quickSearchLoading }] = useVendorQuickSearchLazyQuery();
+    { data: quickSearchData }] = useVendorQuickSearchLazyQuery();
 
   const transProtocolType = () => {
     let transProtocol = '';
