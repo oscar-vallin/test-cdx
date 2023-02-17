@@ -10,7 +10,9 @@ type AuthenticatedRouteProps = {
   path?: string;
 } & typeof defaultProps;
 
-export const AuthenticatedRoute = ({ children, ...rest }: AuthenticatedRouteProps): ReactElement => {
+export const AuthenticatedRoute = (
+  { children, ...rest }: AuthenticatedRouteProps,
+): ReactElement => {
   const { status } = useSessionStore();
 
   return <Route {...rest}>{status.isAuthenticated && children}</Route>;
