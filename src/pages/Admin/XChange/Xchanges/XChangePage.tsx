@@ -14,7 +14,6 @@ import {
   TooltipHost,
   Stack,
   PrimaryButton,
-  TextField,
   SearchBox,
   FontIcon,
   DirectionalHint,
@@ -23,7 +22,7 @@ import { ButtonLink } from 'src/components/buttons';
 import { Column, Container, Row } from 'src/components/layouts';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { PageTitle } from 'src/components/typography';
-import { TaskCard } from 'src/components/cards';
+import { CommentCard, TaskCard, CardColumn } from 'src/components/cards';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ROUTE_XCHANGE_LIST } from 'src/data/constants/RouteConstants';
 import { useOrgSid } from 'src/hooks/useOrgSid';
@@ -47,7 +46,6 @@ import { DialogYesNoProps, DialogYesNo } from 'src/containers/modals/DialogYesNo
 import { useNotification } from 'src/hooks/useNotification';
 import { EmptyState } from 'src/containers/states';
 import { PreviewConvertXchangePanel } from './PreviewConvertXchangePanel';
-import { CardColumn, StyledIconsComments } from './XchangePage.styles';
 import { XchangeSetupWizardPanel } from './XchangeSetupWizardPanel';
 import { StyledText } from '../SchedulePanel/SchedulePanel.styles';
 import { SchedulePanel } from '../SchedulePanel';
@@ -118,8 +116,6 @@ const XChangePage = () => {
   const [xchangeJobGroupSid, setXchangeJobGroupSid] = useState('');
   const [xchangeConfigSid, setXchangeConfigSid] = useState('');
   const [openSchedulePanel, setOpenSchedulePanel] = useState(false);
-  const [editComment, setEditComment] = useState(false);
-  const [comment, setComment] = useState<string | null>();
   const [refreshDataXchange, setRefreshDataXchange] = useState(false);
   const [isPreviewPanelOpen, setIsPreviewPanelOpen] = useState(false);
   const [isSetupNewXchangePanelOpen, setIsSetupNewXchangePanelOpen] = useState(false);
@@ -134,14 +130,13 @@ const XChangePage = () => {
     });
   };
 
-  const sendComment = () => {
+  const sendComment = (comment: string) => {
     xchangeProfileComment({
       variables: {
         orgSid,
         comment,
       },
     });
-    setEditComment(false);
   };
 
   const filterData = () => {
@@ -294,7 +289,6 @@ const XChangePage = () => {
       setGlobalXchangeAlerts(dataXchange.xchangeProfile.globalXchangeAlerts);
       setIndividualXchangeAlerts(dataXchange.xchangeProfile.individualXchangeAlerts);
       setRequiresConversion(dataXchange.xchangeProfile.requiresConversion);
-      setComment(dataXchange.xchangeProfile.comments);
     }
 
     if (dataXchange?.xchangeProfile?.commands) {
@@ -716,64 +710,11 @@ const XChangePage = () => {
     );
   };
 
-  const readonlyComments = () => {
-    if (!updateCommentCmd) {
-      return true;
-    }
-
-    return !editComment;
-  };
-
   const alertsLink = (body: string | React.ReactElement) => {
     if (alertsCmd) {
       return <ButtonLink to={`/xchange-alerts?orgSid=${orgSid}`}>{body}</ButtonLink>;
     }
     return <Text>{body}</Text>;
-  };
-
-  const renderCommentsCommands = () => {
-    if (editComment) {
-      return (
-        <Stack horizontal tokens={{ childrenGap: 5 }}>
-          <Stack.Item>
-            <StyledIconsComments>
-              <IconButton iconProps={{ iconName: 'Save' }} onClick={sendComment} />
-              <Text style={{ cursor: 'pointer' }} variant="small" onClick={sendComment}>Save</Text>
-            </StyledIconsComments>
-          </Stack.Item>
-          <Stack.Item>
-            <StyledIconsComments>
-              <IconButton
-                iconProps={{ iconName: 'Cancel' }}
-                onClick={() => {
-                  setEditComment(false);
-                  setComment(dataXchange.xchangeProfile.comments);
-                }}
-              />
-              <Text
-                style={{ cursor: 'pointer' }}
-                variant="small"
-                onClick={() => {
-                  setEditComment(false);
-                  setComment(dataXchange.xchangeProfile.comments);
-                }}
-              >
-                Cancel
-              </Text>
-            </StyledIconsComments>
-          </Stack.Item>
-        </Stack>
-      );
-    }
-    if (updateCommentCmd) {
-      return (
-        <IconButton
-          iconProps={{ iconName: 'EditSolid12' }}
-          onClick={() => setEditComment(updateCommentCmd !== undefined)}
-        />
-      );
-    }
-    return null;
   };
 
   const cardBox = () => {
@@ -841,21 +782,12 @@ const XChangePage = () => {
           </Spacing>
         </TaskCard>
 
-        <TaskCard
+        <CommentCard
           id="__CommentsCard"
-          title="Comments"
-          commands={renderCommentsCommands()}
-        >
-          <TextField
-            multiline
-            borderless={true}
-            readOnly={readonlyComments()}
-            resizable={false}
-            value={comment ?? ''}
-            rows={7}
-            onChange={(event, newValue) => setComment(newValue ?? '')}
-          />
-        </TaskCard>
+          value={dataXchange?.xchangeProfile?.comments}
+          readOnly={!updateCommentCmd}
+          onSave={sendComment}
+        />
       </CardColumn>
     )
   };

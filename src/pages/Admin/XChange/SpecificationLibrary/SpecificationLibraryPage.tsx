@@ -1,18 +1,16 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   DetailsList,
   DetailsListLayoutMode,
   DirectionalHint,
   FontIcon,
   IColumn,
-  IconButton,
   PrimaryButton,
   SearchBox,
   SelectionMode,
   Spinner,
   SpinnerSize,
   Stack,
-  TextField,
   TooltipHost,
 } from '@fluentui/react';
 import { Column, Container, Row } from 'src/components/layouts';
@@ -20,26 +18,25 @@ import { PageTitle, Text } from 'src/components/typography';
 import { ROUTE_VENDOR_SPEC_LIBRARY } from 'src/data/constants/RouteConstants';
 import {
   CdxWebCommandType,
-  useVendorSpecsLazyQuery,
   useDeleteVendorSpecMutation,
   useUpdateGeneralVendorSpecCommentsMutation,
+  useVendorSpecsLazyQuery,
   VendorSpecSummary,
   WebCommand,
 } from 'src/data/services/graphql';
 import { useOrgSid } from 'src/hooks/useOrgSid';
+import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
-import { Save20Filled } from '@fluentui/react-icons';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { PageBody } from 'src/components/layouts/Column';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { ButtonLink } from 'src/components/buttons';
 import { ActivityBubbles } from 'src/components/badges/Activity';
+import { CardColumn, CommentCard } from 'src/components/cards';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
-import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useNotification } from 'src/hooks/useNotification';
 import { SpecPanel } from '../FullSpecLibrary/SpecPanel';
-import { CardStyled, ContainerInput } from '../Xchanges/XchangePage.styles';
 
 const defaultDialogProps: DialogYesNoProps = {
   id: '__SpecLibrary_Dlg',
@@ -56,15 +53,14 @@ const SpecificationLibraryPage = () => {
   const { orgSid } = useOrgSid();
   const ThemeStore = useThemeStore();
   const Toast = useNotification();
+  const handleError = ErrorHandler();
   const [vendors, setVendors] = useState<VendorSpecSummary[] | null>();
   const refItems = useRef(vendors);
   const [searchFullSpec, setSearchFullSpec] = useState<string>('');
   const [filterFullSpec, setFilterFullSpec] = useState<VendorSpecSummary[]>([]);
-  const [name, setName] = useState('');
+  const [specName, setSpecName] = useState('');
   const [deleteDeactivate, setDeleteDeactivate] = useState<boolean>();
   const [sid, setSid] = useState('');
-  const [comments, setComments] = useState('');
-  const [editComments, setEditComments] = useState(false);
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
   const [deleteCmd, setDeleteCmd] = useState<WebCommand | null>();
   const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
@@ -78,21 +74,34 @@ const SpecificationLibraryPage = () => {
   const [fullVendorsSpecs,
     {
       data: vendorsSpecsData,
-      loading: isLoadingvendorsSpecs,
+      loading: isLoadingVendorsSpecs,
+      error: errorVendorSpecs,
     },
   ] = useVendorSpecsLazyQuery();
   const [deleteVendorSpec,
     {
       data: deleteVendorData,
       loading: isLoadingDeleteVendor,
+      error: errorDeleteSpecs,
     },
-  ] = useQueryHandler(useDeleteVendorSpecMutation);
+  ] = useDeleteVendorSpecMutation();
   const [updateComments,
     {
       data: updateCommentsData,
       loading: isLoadingUpdateComments,
+      error: errorUpdateComments,
     },
-  ] = useQueryHandler(useUpdateGeneralVendorSpecCommentsMutation);
+  ] = useUpdateGeneralVendorSpecCommentsMutation();
+
+  useEffect(() => {
+    handleError(errorVendorSpecs);
+  }, [errorVendorSpecs]);
+  useEffect(() => {
+    handleError(errorDeleteSpecs);
+  }, [errorDeleteSpecs]);
+  useEffect(() => {
+    handleError(errorUpdateComments);
+  }, [errorUpdateComments]);
 
   const fetchData = () => {
     fullVendorsSpecs({
@@ -134,10 +143,9 @@ const SpecificationLibraryPage = () => {
   }, [searchFullSpec]);
 
   useEffect(() => {
-    if (!isLoadingvendorsSpecs && vendorsSpecsData) {
+    if (!isLoadingVendorsSpecs && vendorsSpecsData) {
       const { vendorSpecs } = vendorsSpecsData;
       setVendors(vendorSpecs?.nodes);
-      setComments(vendorSpecs?.comments ?? '');
       updateItems(vendorSpecs?.nodes);
       if (vendorSpecs?.listPageInfo?.pageCommands) {
         const pageCommands = vendorSpecs?.listPageInfo.pageCommands;
@@ -149,19 +157,18 @@ const SpecificationLibraryPage = () => {
         setUpdateCmd(_updateCmd);
       }
     }
-  }, [vendorsSpecsData, isLoadingvendorsSpecs]);
+  }, [vendorsSpecsData, isLoadingVendorsSpecs]);
 
   useEffect(() => {
     if (!isLoadingDeleteVendor && deleteVendorData) {
       setRefreshPage(true);
-      Toast.success({ text: `${name} has been ${deleteDeactivate ? 'deleted' : 'deactivated'}` });
+      Toast.success({ text: `${specName} has been ${deleteDeactivate ? 'deleted' : 'deactivated'}` });
     }
   }, [deleteVendorData, isLoadingDeleteVendor]);
 
   useEffect(() => {
     if (!isLoadingUpdateComments && updateCommentsData) {
       setRefreshPage(true);
-      setEditComments(false);
       Toast.success({ text: 'Comments saved' });
     }
   }, [updateCommentsData, isLoadingUpdateComments]);
@@ -170,7 +177,7 @@ const SpecificationLibraryPage = () => {
     setShowDialog(false);
   };
 
-  const showDeletDeactivateDialog = (
+  const showDeleteDeactivateDialog = (
     implementations: number,
     currentSid: string,
   ) => {
@@ -193,7 +200,7 @@ const SpecificationLibraryPage = () => {
         variables: {
           sid: currentSid,
         },
-      });
+      }).then();
     }
     updatedDialog.onNo = () => {
       hideDialog();
@@ -270,7 +277,7 @@ const SpecificationLibraryPage = () => {
     )
   };
 
-  const onRenderAction = (item: VendorSpecSummary) => {
+  const onRenderDeleteAction = (item: VendorSpecSummary) => {
     const styles = {
       cursor: 'pointer',
       color: ThemeStore.userTheme.colors.themePrimary,
@@ -288,7 +295,8 @@ const SpecificationLibraryPage = () => {
             iconName="Trash"
             style={styles}
             onClick={() => {
-              showDeletDeactivateDialog(implementations, item.sid ?? '');
+              setSpecName(item.name ?? '');
+              showDeleteDeactivateDialog(implementations, item.sid ?? '');
             }}
           />
         </TooltipHost>
@@ -313,9 +321,8 @@ const SpecificationLibraryPage = () => {
 
   function copyAndSort <T>(items:T[], columnKey?: string, isSortedDescending?: boolean): T[] {
     const key = columnKey as keyof T;
-    const itemsSorted = items.slice(0)
+    return items.slice(0)
       .sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
-    return itemsSorted;
   }
 
   const columnClick = (event, column: IColumn) => {
@@ -387,68 +394,21 @@ const SpecificationLibraryPage = () => {
       isPadded: true,
       minWidth: 50,
       maxWidth: 50,
-      onRender: onRenderAction,
+      onRender: onRenderDeleteAction,
     },
   ];
 
-  const readonlyComments = () => !(updateCmd && editComments)
-
-  const cardBox = () => (
-    <Spacing margin={{ top: 'double' }}>
-      <CardStyled>
-        <ContainerInput>
-          <Row>
-            <Column lg="6">
-              <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                <Text variant="semiBold">Comments</Text>
-              </Spacing>
-            </Column>
-            {updateCmd && (
-            <Column lg="6" right>
-              {!editComments ? (
-                <IconButton
-                  iconProps={{ iconName: !editComments ? 'EditSolid12' : 'disk' }}
-                  style={{ marginTop: '10px' }}
-                  onClick={() => {
-                    setEditComments(true);
-                  }}
-                />
-              ) : (
-                <Save20Filled
-                  style={{
-                    color: ThemeStore.userTheme.colors.themePrimary,
-                    marginTop: '14px',
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => {
-                    updateComments({
-                      variables: {
-                        orgSid,
-                        comments,
-                      },
-                    });
-                  }}
-                />
-              )}
-            </Column>
-            )}
-          </Row>
-          <TextField
-            multiline
-            borderless={true}
-            value={comments}
-            resizable={false}
-            readOnly={readonlyComments()}
-            rows={7}
-            onChange={(event, _newValue) => setComments(_newValue ?? '')}
-          />
-        </ContainerInput>
-      </CardStyled>
-    </Spacing>
-  );
+  const saveComment = (comment?: string | null) => {
+    updateComments({
+      variables: {
+        orgSid,
+        comments: comment,
+      },
+    }).then();
+  };
 
   const renderBody = () => {
-    if (isLoadingvendorsSpecs) {
+    if (isLoadingVendorsSpecs) {
       return (
         <Spacing margin={{ top: 'double' }}>
           <Spinner size={SpinnerSize.large} label="Loading Specification Page" />
@@ -532,7 +492,16 @@ const SpecificationLibraryPage = () => {
             </Row>
             <Row>
               <Column lg="9">{renderBody()}</Column>
-              <Column lg="3">{cardBox()}</Column>
+              <Column lg="3">
+                <CardColumn>
+                  <CommentCard
+                    id="__Comments"
+                    readOnly={!updateCmd}
+                    value={vendorsSpecsData?.vendorSpecs?.comments}
+                    onSave={saveComment}
+                  />
+                </CardColumn>
+              </Column>
             </Row>
           </Container>
         </Spacing>
