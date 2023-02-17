@@ -228,54 +228,41 @@ const SpecificationLibraryPage = () => {
     );
   };
 
-  const onRenderItemColum = (item:VendorSpecSummary, itemIndex?: number, column?: IColumn) => {
-    if (item && column?.key === 'name') {
-      const value = item[column.key];
-      return (
+  const renderNameColumn = (item:VendorSpecSummary) => {
+    const value = item.name;
+    return (
+      <ButtonLink
+        style={!item.active ? { color: ThemeStore.userTheme.colors.neutralQuaternary } : { color: '' }}
+        onClick={() => {
+          setSid(item.sid ?? '');
+          setIsOpenPanel(true);
+        }}
+      >{value}
+      </ButtonLink>
+    );
+  };
+
+  const renderImplementations = (item:VendorSpecSummary) => (
+    <Stack horizontal horizontalAlign="center">
+      <TooltipHost content={tooltipHostVendors(item?.integratedClients)}>
         <ButtonLink
           style={!item.active ? { color: ThemeStore.userTheme.colors.neutralQuaternary } : { color: '' }}
-          onClick={() => {
-            setSid(item.sid ?? '');
-            setIsOpenPanel(true);
-          }}
-        >{value}
+        >
+          {item.integratedClients.length}
         </ButtonLink>
-      );
-    }
+      </TooltipHost>
+    </Stack>
+  );
 
-    return (
-      <Stack
-        horizontal
-        horizontalAlign="start"
-        tokens={{
-          childrenGap: 5.5,
-          padding: '0px 0px 0px 10px',
-        }}
-      >
-        {column?.key === 'integratedClients' && (
-          <TooltipHost
-            content={tooltipHostVendors(item?.integratedClients)}
-            directionalHint={DirectionalHint.rightCenter}
-          >
-            <ButtonLink
-              style={!item.active ? { color: ThemeStore.userTheme.colors.neutralQuaternary } : { color: '' }}
-            >
-              {item.integratedClients.length}
-            </ButtonLink>
-          </TooltipHost>
-        )}
-        {column?.key === 'active' && (
-          <ActivityBubbles
-            orgSid={orgSid}
-            uat={item.uatActivity}
-            test={item.testActivity}
-            prod={item.prodActivity}
-            total={!item.sid}
-          />
-        )}
-      </Stack>
-    )
-  };
+  const renderActivity = (item: VendorSpecSummary) => (
+    <ActivityBubbles
+      orgSid={orgSid}
+      uat={item.uatActivity}
+      test={item.testActivity}
+      prod={item.prodActivity}
+      total={!item.sid}
+    />
+  );
 
   const onRenderDeleteAction = (item: VendorSpecSummary) => {
     const styles = {
@@ -353,6 +340,7 @@ const SpecificationLibraryPage = () => {
       minWidth: 150,
       maxWidth: 400,
       isSorted: true,
+      onRender: renderNameColumn,
       onColumnClick: columnClick,
       isSortedDescending: sortedDescending,
     },
@@ -364,27 +352,33 @@ const SpecificationLibraryPage = () => {
       isPadded: true,
       styles: {
         cellTitle: {
-          paddingRight: '100px',
+          textAlign: 'center',
+          alignItems: 'center',
+          justifyContent: 'center',
         },
       },
       minWidth: 250,
       maxWidth: 400,
       flexGrow: 1,
+      onRender: renderImplementations,
     },
     {
       name: 'Activity',
       key: 'active',
       fieldName: 'active',
       data: 'string',
-      isPadded: true,
+      isPadded: false,
       styles: {
         cellTitle: {
-          paddingLeft: '30px',
+          textAlign: 'center',
+          alignItems: 'center',
+          justifyContent: 'center',
         },
       },
       minWidth: 150,
       maxWidth: 400,
       flexGrow: 1,
+      onRender: renderActivity,
     },
     {
       name: '',
@@ -422,7 +416,6 @@ const SpecificationLibraryPage = () => {
           items={filterFullSpec ?? []}
           columns={columns}
           selectionMode={SelectionMode.none}
-          onRenderItemColumn={onRenderItemColum}
           layoutMode={DetailsListLayoutMode.justified}
           isHeaderVisible
         />
@@ -434,7 +427,6 @@ const SpecificationLibraryPage = () => {
         items={vendors ?? []}
         columns={columns}
         selectionMode={SelectionMode.none}
-        onRenderItemColumn={onRenderItemColum}
         layoutMode={DetailsListLayoutMode.justified}
         isHeaderVisible
       />
