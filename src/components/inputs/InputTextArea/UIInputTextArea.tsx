@@ -9,7 +9,9 @@ import { QuillWrapper, ReadOnlyTextArea } from './UIInputTextArea.styles';
 type UIInputTextAreaType = {
   id: string;
   uiField?: UiStringField;
-  onChange?: (e?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => void | null;
+  onChange?: (
+    e?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string,
+  ) => void | null;
   value?: string;
   placeholder?: string;
   renderLabel?: boolean;
