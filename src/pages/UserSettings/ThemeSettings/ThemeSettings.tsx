@@ -74,7 +74,9 @@ const ThemeSettings = () => {
     };
   }, [dataThemesForOrg, loadingThemesForOrg]);
 
-  const [createOrUpdateOwnDashTheme, { data: themeResponse, loading: isHandlingTheme }] = useCreateOrUpdateOwnDashThemeMutation();
+  const [createOrUpdateOwnDashTheme,
+    { data: themeResponse, loading: isHandlingTheme },
+  ] = useCreateOrUpdateOwnDashThemeMutation();
 
   useEffect(() => {
     if (themeResponse) {
