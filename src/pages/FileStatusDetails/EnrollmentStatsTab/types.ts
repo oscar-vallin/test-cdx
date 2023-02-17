@@ -63,7 +63,9 @@ const mapExcludedStats = (enrollmentStat?: EnrollmentStat | null): EnrollmentSta
   return [];
 };
 
-const mapPlanInsuredStats = (planInsuredStats?: Maybe<PlanInsuredStat>[] | null): EnrollmentStatType[] => {
+const mapPlanInsuredStats = (
+  planInsuredStats?: Maybe<PlanInsuredStat>[] | null,
+): EnrollmentStatType[] => {
   if (planInsuredStats) {
     const stats: EnrollmentStatType[] = [];
     planInsuredStats.forEach((planInsuredStat) => {
