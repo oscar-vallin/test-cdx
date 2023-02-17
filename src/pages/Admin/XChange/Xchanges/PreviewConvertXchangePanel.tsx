@@ -23,15 +23,26 @@ type PreviewConvertXchangePanel = {
   refreshXchangePage: (data: boolean) => void;
 };
 
-const PreviewConvertXchangePanel = ({ isPanelOpen, closePanel, refreshXchangePage }: PreviewConvertXchangePanel) => {
+const PreviewConvertXchangePanel = ({
+  isPanelOpen,
+  closePanel,
+  refreshXchangePage,
+}: PreviewConvertXchangePanel) => {
   const { orgSid } = useOrgSid();
   const Toast = useNotification();
 
-  const [xchangePreviewConvert, { data: dataPreviewConvert, loading: loadingPreviewConvert }] = useQueryHandler(
+  const [xchangePreviewConvert, {
+    data: dataPreviewConvert,
+    loading: loadingPreviewConvert,
+  }] = useQueryHandler(
     usePreviewConvertXchangeProfileLazyQuery,
   );
 
-  const [xchangeConvert, { data: dataConvert, loading: loadingConvert, error: errorConvert }] = useQueryHandler(
+  const [xchangeConvert, {
+    data: dataConvert,
+    loading: loadingConvert,
+    error: errorConvert,
+  }] = useQueryHandler(
     useConvertXchangeProfileMutation,
   );
 
@@ -140,7 +151,10 @@ const PreviewConvertXchangePanel = ({ isPanelOpen, closePanel, refreshXchangePag
             <Spacing margin={{ top: 'double', bottom: 'normal' }}>
               <Text style={{ fontWeight: 'bold' }}>Vendors</Text>
               <br />
-              <Text>The following Vendor organization will be created in order to support this conversion.</Text>
+              <Text>
+                The following Vendor organization will be
+                created in order to support this conversion.
+              </Text>
             </Spacing>
             <StyledList>
               {newVendors.map((vendor: Organization) => (
@@ -154,7 +168,10 @@ const PreviewConvertXchangePanel = ({ isPanelOpen, closePanel, refreshXchangePag
             <Spacing margin={{ top: 'double', bottom: 'normal' }}>
               <Text style={{ fontWeight: 'bold' }}>User Accounts</Text>
               <br />
-              <Text>The following User Accounts will be created in order to support this conversion.</Text>
+              <Text>
+                The following User Accounts will be
+                created in order to support this conversion.
+              </Text>
             </Spacing>
             <StyledList>
               {newUsersAccounts.map((user: string, index: number) => (
