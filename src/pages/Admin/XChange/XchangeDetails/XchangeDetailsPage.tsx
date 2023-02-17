@@ -43,6 +43,7 @@ import { ROUTE_XCHANGE_DETAILS } from 'src/data/constants/RouteConstants';
 import { UIInputTextArea } from 'src/components/inputs/InputTextArea';
 import { ButtonLink } from 'src/components/buttons';
 import { TaskCard } from 'src/components/cards';
+import { QualifierBadge } from 'src/components/badges/Qualifier';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { EmptyMessage } from 'src/containers/tables/TableCurrentActivity/TableActivity.styles';
 import { ThemeStore, useThemeStore } from 'src/store/ThemeStore';
@@ -54,7 +55,6 @@ import { StyledAlertTypes } from '../XchangeAlerts/XchangeAlertsPage.style';
 import {
   StyledButtonAction,
   StyledProcessValueText,
-  StyledQualifier,
   EllipsisedStyled,
   CardFinishSetup,
   AlertRow,
@@ -209,30 +209,6 @@ const XchangeDetailsPage = () => {
     return null;
   };
 
-  const filenameQualifier = (qualifierType: string, coreFilename: string) => {
-    const qualifier = qualifierType.replace(`${coreFilename}-`, '');
-    if (qualifier) {
-      let width: number | string = qualifier.length * 9;
-      width = `${width}px`;
-      let color = ThemeStore.userTheme.colors.themePrimary;
-      if (qualifier === 'TEST' || qualifier === 'TEST-OE') {
-        color = 'orange';
-        width = '50px';
-      }
-      if (qualifier === 'PROD') {
-        width = '50px';
-      }
-
-      return (
-        <StyledQualifier width={width} color={color} paddingTop={true}>
-          {qualifier}
-        </StyledQualifier>
-      );
-    }
-
-    return null;
-  };
-
   const iconButtonStyles: IButtonStyles = {
     root: {
       color: userTheme.colors.themePrimary,
@@ -340,7 +316,10 @@ const XchangeDetailsPage = () => {
             <AlertRow key={index}>
               <Stack horizontal tokens={{ childrenGap: 5 }} styles={stackItemStyles}>
                 <Stack.Item>
-                  {filenameQualifier(alert.filenameQualifier ?? 'All', alert?.coreFilename ?? '')}
+                  <QualifierBadge
+                    filenameQualifier={alert?.filenameQualifier}
+                    coreFilename={alert?.coreFilename}
+                  />
                 </Stack.Item>
                 <Stack.Item grow>
                   {typesAlertsRender(alert?.alertTypes ?? [])}

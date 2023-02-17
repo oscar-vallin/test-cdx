@@ -39,10 +39,3 @@ export const StyledButtonAction = styled(ButtonAction)`
     font-weight: 600;
   }
 `;
-
-export const StyledSeparator = styled.hr`
-  width: 100%;
-  height: 1px;
-  border: none;
-  margin-bottom: 10px;
-`;

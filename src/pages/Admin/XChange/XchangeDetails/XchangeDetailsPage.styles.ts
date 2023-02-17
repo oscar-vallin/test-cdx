@@ -53,34 +53,6 @@ export const StyledText = styled(Text)`
   height: 190px;
 `;
 
-export const StyledQualifier = styled.div<StyledQualifierProps>`
-  background: ${({ theme }) => theme.colors.white};
-  width: ${({ width }) => width};
-  height: 22px;
-  border-top-left-radius: 5em 5em;
-  border-top-right-radius: 5em 5em;
-  border-bottom-right-radius: 5em 5em;
-  border-bottom-left-radius: 5em 5em;
-  padding-top: ${({ paddingTop }) => (paddingTop ? '4px' : '2px')};
-  border: solid 1px ${({ color }) => color};
-  position: ${({ position }) => (position ? 'absolute' : null)};
-  top: ${({ top }) => (top ? '43px' : null)};
-  left: ${({ left }) => (left ? '180px' : null)};
-  text-align: center;
-  color: ${({ color }) => color};
-  font-size: 11px;
-  font-weight: 500;
-`;
-
-type StyledQualifierProps = {
-  width?: string;
-  color?: string;
-  position?: boolean;
-  top?: boolean;
-  left?: boolean;
-  paddingTop?: boolean;
-};
-
 export const StyledButtonAction = styled(ButtonAction)<StyledButtonActionProps>`
   font-size: ${({ fontSize }) => fontSize};
 

@@ -27,13 +27,13 @@ import {
   Stack,
 } from '@fluentui/react';
 import { ButtonLink } from 'src/components/buttons';
+import { QualifierBadge } from 'src/components/badges/Qualifier';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import {
   StyledEnvironment,
   StyledAlertTypes,
   StyledButtonAction,
 } from './XchangeAlertsPage.style';
-import { StyledQualifier } from '../XchangeDetails/XchangeDetailsPage.styles';
 import { XchangeAlertsPanel } from './XchangeAlertsPanel/XchangeAlertsPanel';
 
 const defaultDialogProps: DialogYesNoProps = {
@@ -141,38 +141,15 @@ const XchangeAlertsPage = () => {
     return null;
   };
 
-  const filenameQualifier = (qualifierType: string, coreFilename: string) => {
-    const qualifier = qualifierType.replace(`${coreFilename}-`, '');
-    if (qualifier === '${Env}') {
-      return null;
-    }
-    if (qualifier) {
-      let width: number | string = qualifier.length * 8;
-      width = `${width}px`;
-      let color = 'blue';
-      if (qualifier === 'TEST' || qualifier === 'TEST-OE') {
-        color = 'orange';
-        width = '50px';
-      }
-      if (qualifier === 'PROD') {
-        width = '50px';
-      }
-
-      return (
-        <Row>
-          <Spacing margin={{ bottom: 'normal' }}>
-            <Column lg="2">
-              <StyledQualifier width={width} color={color}>
-                {qualifier}
-              </StyledQualifier>
-            </Column>
-          </Spacing>
-        </Row>
-      );
-    }
-
-    return null;
-  };
+  const filenameQualifier = (qualifierType: string, coreFilename: string) => (
+    <Row>
+      <Spacing margin={{ bottom: 'normal' }}>
+        <Column lg="2">
+          <QualifierBadge filenameQualifier={qualifierType} coreFilename={coreFilename} />
+        </Column>
+      </Spacing>
+    </Row>
+  );
 
   const hideDialog = () => {
     setShowDialog(false);

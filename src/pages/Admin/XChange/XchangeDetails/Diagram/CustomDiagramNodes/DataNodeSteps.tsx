@@ -27,9 +27,10 @@ import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { ButtonLink } from 'src/components/buttons';
 import { theme } from 'src/styles/themes/theme';
 import { Spacing } from 'src/components/spacings/Spacing';
-import Node from './Node';
-import { StyledQualifier, StyledSubTitleText } from '../../XchangeDetailsPage.styles';
+import { QualifierBadge } from 'src/components/badges/Qualifier';
+import { StyledSubTitleText } from '../../XchangeDetailsPage.styles';
 import { XchangeStepPanel } from '../../XchangeStepPanel/XchangeStepPanel';
+import Node from './Node';
 import {
   StyledCopyIcon,
   StyledTrashIcon,
@@ -134,18 +135,7 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
     styles['height'] = '100%';
   }
 
-  let width = '48px';
-  let color = theme.colors.themePrimary;
-
-  if (qualifier === 'StructErrors') {
-    width = '75px';
-  } else if (qualifier === 'TEST') {
-    color = 'orange';
-  } else if (qualifier === 'PROD-OE') {
-    width = '60px';
-  }
-
-  const hanldeSourcePosition = () => {
+  const handleSourcePosition = () => {
     if (
       trans
       || stepIndex === 0
@@ -369,11 +359,9 @@ const DataNodeSteps = ({ data, id }: DataNodeProps) => {
           </Stack>
         </Row>
       </Container>
-      {hanldeSourcePosition()}
+      {handleSourcePosition()}
       {qualifier && (
-      <StyledQualifier position={true} left={true} top={true} width={width} color={color}>
-        {qualifier}
-      </StyledQualifier>
+        <QualifierBadge filenameQualifier={qualifier} absolute />
       )}
       {info && (
       <TooltipHost content={info}>
