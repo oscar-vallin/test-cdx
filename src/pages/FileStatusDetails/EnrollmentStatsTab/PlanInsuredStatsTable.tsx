@@ -47,7 +47,9 @@ type PlanInsuredStatsTableType = {
   planInsuredStats: EnrollmentStatType[];
 };
 
-export const PlanInsuredStatsTable = ({ header, caption, planInsuredStats }: PlanInsuredStatsTableType) => (
+export const PlanInsuredStatsTable = ({
+  header, caption, planInsuredStats,
+}: PlanInsuredStatsTableType) => (
   <Card>
     <Text variant="muted">{caption}</Text>
     <Stack horizontal tokens={{ childrenGap: 10, padding: 10 }}>
