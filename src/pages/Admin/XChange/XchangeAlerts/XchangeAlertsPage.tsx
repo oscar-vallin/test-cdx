@@ -16,11 +16,12 @@ import {
 } from 'src/data/services/graphql';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useNotification } from 'src/hooks/useNotification';
+import { prettyEnumValue } from 'src/utils/CDXUtils';
 import { PageBody } from 'src/components/layouts/Column';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { LightSeparator } from 'src/components/separators/Separator';
 import {
-  IconButton,
+  IconButton, IStackItemStyles,
   Spinner,
   SpinnerSize,
   Stack,
@@ -105,44 +106,36 @@ const XchangeAlertsPage = () => {
     }
   }, [deleteConfigData, deleteConfigLoading]);
 
-  const adaptWidth = (alertT: string) => {
-    const width = alertT.length * 8;
-    return `${width}px`;
+  const stackItemStyles: IStackItemStyles = {
+    root: {
+      alignItems: 'center',
+      display: 'flex',
+      height: 30,
+      overflow: 'hidden',
+    },
   };
 
   const typesAlertsRender = (alertTypes: string[]) => {
     const alerts = alertTypes ?? [];
     const typesAlert: string[] = [];
-    let typeAlert = '';
     for (let alert = 0; alert < alerts?.length; alert++) {
-      const splitAlerts = alerts[alert].split('_');
-      if (splitAlerts.length > 1) {
-        for (let j = 0; j < splitAlerts.length; j++) {
-          let type = splitAlerts[j].toLocaleLowerCase()[0].toUpperCase();
-          type += splitAlerts[j].substring(1).toLocaleLowerCase();
-          typeAlert += j === splitAlerts.length - 1 ? `${type}` : `${type} `;
-        }
-        typesAlert.push(typeAlert);
-        typeAlert = '';
-      } else {
-        let type = splitAlerts[0].toLocaleLowerCase()[0].toUpperCase();
-        type += splitAlerts[0].substring(1).toLocaleLowerCase();
-        typesAlert.push(type);
-      }
+      typesAlert.push(prettyEnumValue(alerts[alert]));
     }
 
     if (typesAlert) {
       return (
-        <Row>
-          <Column lg="2">
+        <Stack horizontal tokens={{ childrenGap: 5 }} styles={stackItemStyles}>
+          <Stack.Item>
             <Text variant="bold">Alert on: </Text>
-          </Column>
-          {typesAlert.map((type, typeAlertsIndex: number) => (
-            <StyledAlertTypes width={adaptWidth(type)} key={typeAlertsIndex}>
-              {type}
-            </StyledAlertTypes>
-          ))}
-        </Row>
+          </Stack.Item>
+          <Stack.Item>
+            {typesAlert.map((type, typeAlertsIndex: number) => (
+              <StyledAlertTypes key={typeAlertsIndex}>
+                {type}
+              </StyledAlertTypes>
+            ))}
+          </Stack.Item>
+        </Stack>
       );
     }
     return null;
@@ -355,6 +348,7 @@ const XchangeAlertsPage = () => {
               {xchangeAlerts?.individualXchangeAlerts?.map(
                 (individualAlerts, individualAlertsIndex: number) => (
                   <Spacing margin={{ bottom: 'normal' }} key={individualAlertsIndex}>
+
                     <Row>
                       <Column lg="12">
                         <Stack horizontal={true} horizontalAlign="space-between">
