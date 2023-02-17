@@ -22,7 +22,9 @@ export const useWorkPacketCommands = (workOrderId: string) => {
       workOrderId,
     },
   });
-  const [apiCallContinue, { data: continueData, error: continueError }] = useWorkPacketContinueMutation({
+  const [apiCallContinue, {
+    data: continueData, error: continueError,
+  }] = useWorkPacketContinueMutation({
     variables: {
       workOrderId,
     },
@@ -32,7 +34,9 @@ export const useWorkPacketCommands = (workOrderId: string) => {
       workOrderId,
     },
   });
-  const [apiCallReprocess, { data: reprocessData, error: reprocessError }] = useWorkPacketReprocessMutation({
+  const [apiCallReprocess, {
+    data: reprocessData, error: reprocessError,
+  }] = useWorkPacketReprocessMutation({
     variables: {
       workOrderId,
     },
@@ -41,14 +45,16 @@ export const useWorkPacketCommands = (workOrderId: string) => {
 
   const [
     apiCallReprocessDialog,
-    { data: reprocesDialogData, loading: reprocesDialogLoading, error: reprocesDialogError },
+    { error: reprocesDialogError },
   ] = useReprocessDialogLazyQuery({
     variables: {
       workOrderId,
     },
   });
 
-  const [apiCallRenameReprocess, { data: renameReprocessData, error: renameReprocessError }] = useWorkPacketRenameAndReprocessMutation();
+  const [apiCallRenameReprocess, {
+    data: renameReprocessData, error: renameReprocessError,
+  }] = useWorkPacketRenameAndReprocessMutation();
 
   const [apiCallResend, { data: resendData, error: resendError }] = useWorkPacketResendMutation({
     variables: {

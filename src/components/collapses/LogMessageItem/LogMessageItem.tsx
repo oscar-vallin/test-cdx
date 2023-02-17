@@ -5,7 +5,6 @@ import { Spacing } from 'src/components/spacings/Spacing';
 import { Badge } from 'src/components/badges/Badge';
 import { LabelValue } from 'src/components/labels/LabelValue';
 import { Text } from 'src/components/typography';
-import { LogLevel } from 'src/data/services/graphql';
 import { yyyyMMdda } from 'src/utils/CDXUtils';
 import { StyledLogMessageDiv } from './LogMessageItem.styles';
 
@@ -21,22 +20,22 @@ export const LogMessageItem = ({ logMessage }: LogMessageItemProps): ReactNode |
       return 'info';
     }
 
-    if (severity == 'DEBUG') {
+    if (severity === 'DEBUG') {
       return 'info';
     }
-    if (severity == 'ERROR') {
+    if (severity === 'ERROR') {
       return 'error';
     }
-    if (severity == 'FATAL') {
+    if (severity === 'FATAL') {
       return 'error';
     }
-    if (severity == 'INFO') {
+    if (severity === 'INFO') {
       return 'info';
     }
-    if (severity == 'TRACE') {
+    if (severity === 'TRACE') {
       return 'info';
     }
-    if (severity == 'WARN') {
+    if (severity === 'WARN') {
       return 'warning';
     }
     return 'info';

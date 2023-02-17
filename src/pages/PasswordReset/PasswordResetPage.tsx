@@ -24,6 +24,7 @@ import { useDelayedInputValue, useInputValue } from 'src/hooks/useInputValue';
 import { MessageBar, MessageBarType } from '@fluentui/react';
 
 export const PasswordResetPage = () => {
+  // eslint-disable-next-line no-shadow
   enum PageState {
     LOADING,
     BAD_TOKEN,
@@ -54,9 +55,13 @@ export const PasswordResetPage = () => {
 
   const token = getToken();
 
-  const [callVerifyToken, { data: dataVerifyToken, loading: loadingVerifyToken }] = useVerifyPasswordResetTokenLazyQuery();
+  const [callVerifyToken, {
+    data: dataVerifyToken, loading: loadingVerifyToken,
+  }] = useVerifyPasswordResetTokenLazyQuery();
 
-  const [callUpdatePassword, { data: dataUpdatePassword, loading: dataUpdatePasswordLoading }] = useUpdatePasswordMutation();
+  const [callUpdatePassword, {
+    data: dataUpdatePassword, loading: dataUpdatePasswordLoading,
+  }] = useUpdatePasswordMutation();
 
   useEffect(() => {
     callVerifyToken({
@@ -156,7 +161,10 @@ export const PasswordResetPage = () => {
     <FormRow>
       <MessageBar id="__Invalid_Token_Msg" messageBarType={MessageBarType.error} isMultiline>
         <Text>The given token is invalid or has expired.</Text>
-        <Text>Please contact your administrator to Reset your Password and have another token sent to you.</Text>
+        <Text>
+          Please contact your administrator to Reset your
+          Password and have another token sent to you.
+        </Text>
       </MessageBar>
     </FormRow>
   );
@@ -180,7 +188,11 @@ export const PasswordResetPage = () => {
           </FormRow>
           <FormRow>
             <Column>
-              <PasswordRules user={user} password={newPassword.delayedValue} onChange={passwordValidationStateChange} />
+              <PasswordRules
+                user={user}
+                password={newPassword.delayedValue}
+                onChange={passwordValidationStateChange}
+              />
             </Column>
           </FormRow>
           <FormRow>
@@ -206,8 +218,9 @@ export const PasswordResetPage = () => {
         return renderForm();
       case PageState.COMPLETE:
         return renderComplete();
+      default:
+        return ''
     }
-    return '';
   };
 
   return (

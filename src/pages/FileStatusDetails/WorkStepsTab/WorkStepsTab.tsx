@@ -58,7 +58,12 @@ const WorkStepsTab = ({ packet }: WorkStepsTabProps): ReactElement => {
     <TabBody>
       <Row>
         <Column xl={3}>
-          <Timeline packet={packet} activeIndex={activeIndex} onClick={setActiveIndex} onRedo={onRedo} />
+          <Timeline
+            packet={packet}
+            activeIndex={activeIndex}
+            onClick={setActiveIndex}
+            onRedo={onRedo}
+          />
         </Column>
       </Row>
     </TabBody>

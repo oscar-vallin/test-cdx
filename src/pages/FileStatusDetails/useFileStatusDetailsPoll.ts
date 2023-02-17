@@ -4,7 +4,11 @@ import { ErrorHandler } from 'src/utils/ErrorHandler';
 
 const POLL_INTERVAL = 20000;
 
-const POLLING_STATUSES: WorkStatus[] = [WorkStatus.Submitted, WorkStatus.Queued, WorkStatus.Processing];
+const POLLING_STATUSES: WorkStatus[] = [
+  WorkStatus.Submitted,
+  WorkStatus.Queued,
+  WorkStatus.Processing,
+];
 
 type PollResult = {
   dataUpdated: boolean;

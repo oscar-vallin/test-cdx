@@ -23,15 +23,10 @@ import { InfoIcon } from 'src/components/badges/InfoIcon';
 import { useNotification } from 'src/hooks/useNotification';
 import { ChevronIcon } from './AddAlerts.style';
 
-const defaultProps = {
-  isOpen: (data: boolean) => {},
-  refreshPage: (data: boolean) => {},
-};
-
 type ALertsModalProps = {
   isOpen: (data: boolean) => void;
   refreshPage: (data: boolean) => void;
-} & typeof defaultProps;
+};
 
 export const AddAlertsModal = ({ isOpen, refreshPage }: ALertsModalProps) => {
   const Toast = useNotification();

@@ -9,7 +9,9 @@ export type InputTextProps = {
   id?: string;
   type?: string;
   disabled?: boolean;
-  onChange?: (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => void | null;
+  onChange?: (
+    e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string,
+  ) => void | null;
   autofocus?: boolean;
   errorMessage?: string;
   onKeyDown?: any | null;
@@ -125,7 +127,9 @@ const UIInputTextReadOnly = ({
 type UIInputTextType = {
   id: string;
   uiField?: UiStringField | UiIntField | UiLongField | null;
-  onChange?: (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => void | null;
+  onChange?: (
+    e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string,
+  ) => void | null;
   value?: string;
   placeholder?: string;
   renderLabel?: boolean;

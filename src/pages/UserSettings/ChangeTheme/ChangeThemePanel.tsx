@@ -43,7 +43,7 @@ const ChangeThemePanel = ({ closePanel, isOpen }: ChangeThemePanelProps) => {
     },
   });
   const [createOrUpdateOwnDashTheme,
-    { data: themeResponse, loading: isHandlingTheme },
+    { data: themeResponse },
   ] = useCreateOrUpdateOwnDashThemeMutation();
 
   useEffect(() => {

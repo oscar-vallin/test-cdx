@@ -55,7 +55,10 @@ const PasswordChangePanel = ({ closePanel, isOpen }: PasswordChangePanelProps) =
     return null;
   };
 
-  const isFormInvalid = (password: PasswordState) => !password.current || !password.new || !password.confirmation || password.new !== password.confirmation;
+  const isFormInvalid = (password: PasswordState) => !password.current
+    || !password.new
+      || !password.confirmation
+        || password.new !== password.confirmation;
 
   useEffect(() => {
     const timeOutId = setTimeout(() => {

@@ -23,7 +23,9 @@ type UnauthenticatedRouteProps = {
   path?: string;
 };
 
-export const UnauthenticatedRoute = ({ children, ...rest }: UnauthenticatedRouteProps): ReactElement => {
+export const UnauthenticatedRoute = (
+  { children, ...rest }: UnauthenticatedRouteProps,
+): ReactElement => {
   const { status } = useSessionStore();
   const redirect = querystring('redirect');
 
