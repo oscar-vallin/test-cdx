@@ -16,7 +16,8 @@ export const useApplicationStore = (): ApplicationStoreType => {
   const typedHooks = createTypedHooks<StoreModel>();
 
   const { status, version } = typedHooks.useStoreState((state) => state.ApplicationStore);
-  const { setIsOffline, updateVersion, reset } = typedHooks.useStoreActions((state) => state.ApplicationStore);
+  const { setIsOffline, updateVersion, reset } = typedHooks
+    .useStoreActions((state) => state.ApplicationStore);
 
   const SessionStore = useSessionStore();
   const [callGetVersion, { data, loading, error }] = useVersionLazyQuery();
