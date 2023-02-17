@@ -18,7 +18,9 @@ type SpinnerProps = {
 
 const Spinner = ({
   id, size, label, ...props
-}: SpinnerProps): ReactElement => <StyledSpinner id={id} size={getSpinnerSize(size)} label={label} {...props} />;
+}: SpinnerProps): ReactElement => (
+  <StyledSpinner id={id} size={getSpinnerSize(size)} label={label} {...props} />
+)
 
 Spinner.defaultProps = defaultProps;
 
