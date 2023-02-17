@@ -3,7 +3,7 @@ import { BlueInfo } from 'src/components/badges/InfoIcon/InfoIcon.styles';
 
 type InfoIconType = {
   id: string;
-  tooltip?: string | null;
+  tooltip?: string | JSX.Element | null;
 };
 
 export const InfoIcon = ({ id, tooltip }: InfoIconType) => {

@@ -27,21 +27,25 @@ describe("Activity Bubbles Unit Testing", () => {
         orgSid="9"
         uat={five}
         test={ten}
-        prod={twenty}/>);
+        prod={twenty}/>
+    );
 
-    const bubbles = wrapper.find("ActivityBubbles");
-    expect(bubbles).toBeDefined();
+    console.log(wrapper.debug());
 
-    expect(bubbles.children()).toHaveLength(3);
-    expect(bubbles.childAt(0).prop('large')).toBeTruthy();
-    expect(bubbles.childAt(1).prop('large')).toBeTruthy();
-    expect(bubbles.childAt(2).prop('large')).toBeTruthy();
-    expect(bubbles.childAt(0).prop('color')).toEqual('purple');
-    expect(bubbles.childAt(1).prop('color')).toEqual('orange');
-    expect(bubbles.childAt(2).prop('color')).toEqual('blue');
-    expect(bubbles.childAt(0).text()).toEqual('5');
-    expect(bubbles.childAt(1).text()).toEqual('10');
-    expect(bubbles.childAt(2).text()).toEqual('20');
+    const component = wrapper.find('ActivityBubbles');
+    expect(component).toBeDefined();
+    const bubbles = component.find('div.ms-StackItem')
+
+    expect(bubbles).toHaveLength(3);
+    expect(bubbles.at(0).childAt(0).prop('large')).toBeTruthy();
+    expect(bubbles.at(1).childAt(0).prop('large')).toBeTruthy();
+    expect(bubbles.at(2).childAt(0).prop('large')).toBeTruthy();
+    expect(bubbles.at(0).childAt(0).prop('color')).toEqual('purple');
+    expect(bubbles.at(1).childAt(0).prop('color')).toEqual('orange');
+    expect(bubbles.at(2).childAt(0).prop('color')).toEqual('blue');
+    expect(bubbles.at(0).childAt(0).text()).toEqual('5');
+    expect(bubbles.at(1).childAt(0).text()).toEqual('10');
+    expect(bubbles.at(2).childAt(0).text()).toEqual('20');
   });
 
   it("Empty Totals", () => {
@@ -53,19 +57,20 @@ describe("Activity Bubbles Unit Testing", () => {
         test={zero}
         prod={zero}/>);
 
-    const bubbles = wrapper.find("ActivityBubbles");
-    expect(bubbles).toBeDefined();
+    const component = wrapper.find('ActivityBubbles');
+    expect(component).toBeDefined();
+    const bubbles = component.find('div.ms-StackItem')
 
-    expect(bubbles.children()).toHaveLength(3);
-    expect(bubbles.childAt(0).prop('large')).toBeTruthy();
-    expect(bubbles.childAt(1).prop('large')).toBeTruthy();
-    expect(bubbles.childAt(2).prop('large')).toBeTruthy();
-    expect(bubbles.childAt(0).prop('color')).toEqual('gray');
-    expect(bubbles.childAt(1).prop('color')).toEqual('gray');
-    expect(bubbles.childAt(2).prop('color')).toEqual('gray');
-    expect(bubbles.childAt(0).text()).toEqual('0');
-    expect(bubbles.childAt(1).text()).toEqual('0');
-    expect(bubbles.childAt(2).text()).toEqual('0');
+    expect(bubbles).toHaveLength(3);
+    expect(bubbles.at(0).childAt(0).prop('large')).toBeTruthy();
+    expect(bubbles.at(1).childAt(0).prop('large')).toBeTruthy();
+    expect(bubbles.at(2).childAt(0).prop('large')).toBeTruthy();
+    expect(bubbles.at(0).childAt(0).prop('color')).toEqual('gray');
+    expect(bubbles.at(1).childAt(0).prop('color')).toEqual('gray');
+    expect(bubbles.at(2).childAt(0).prop('color')).toEqual('gray');
+    expect(bubbles.at(0).childAt(0).text()).toEqual('0');
+    expect(bubbles.at(1).childAt(0).text()).toEqual('0');
+    expect(bubbles.at(2).childAt(0).text()).toEqual('0');
   });
 
   it("Item with values", () => {
@@ -77,10 +82,11 @@ describe("Activity Bubbles Unit Testing", () => {
         test={ten}
         prod={twenty}/>);
 
-    const bubbles = wrapper.find("ActivityBubbles");
-    expect(bubbles).toBeDefined();
+    const component = wrapper.find('ActivityBubbles');
+    expect(component).toBeDefined();
+    const bubbles = component.find('div.ms-StackItem')
 
-    expect(bubbles.children()).toHaveLength(3);
+    expect(bubbles).toHaveLength(3);
     expect(wrapper.find('div.uat')).toHaveLength(1);
     expect(wrapper.find('div.uat').prop('color')).toEqual('purple');
     expect(wrapper.find('div.uat').text()).toEqual('5');
@@ -104,10 +110,11 @@ describe("Activity Bubbles Unit Testing", () => {
         test={zero}
         prod={zero}/>);
 
-    const bubbles = wrapper.find("ActivityBubbles");
-    expect(bubbles).toBeDefined();
+    const component = wrapper.find('ActivityBubbles');
+    expect(component).toBeDefined();
+    const bubbles = component.find('div.ms-StackItem')
 
-    expect(bubbles.children()).toHaveLength(3);
+    expect(bubbles).toHaveLength(3);
     expect(wrapper.find('div.uat')).toHaveLength(1);
     expect(wrapper.find('div.uat').prop('color')).toEqual('gray');
     expect(wrapper.find('div.uat').text()).toEqual('0');

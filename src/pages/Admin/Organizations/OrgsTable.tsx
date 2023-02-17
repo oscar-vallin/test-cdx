@@ -9,7 +9,6 @@ import {
   SelectionMode,
   Stack,
   DirectionalHint,
-  FontIcon,
   Spinner,
   SpinnerSize,
   IDetailsColumnProps,
@@ -22,11 +21,11 @@ import { Organization, OrganizationActivity, UiBooleanField } from 'src/data/ser
 import { TableFiltersType } from 'src/hooks/useTableFilters';
 import { useActiveDomainUseCase } from 'src/use-cases/ActiveDomain';
 import { useActiveDomainStore } from 'src/store/ActiveDomainStore';
-import { useThemeStore } from 'src/store/ThemeStore';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { ThemedSearchBox } from 'src/components/inputs/SearchBox/ThemedSearchBox.styles';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
 import { ActivityBubbles } from 'src/components/badges/Activity';
+import { InfoIcon } from 'src/components/badges/InfoIcon';
 
 type OrgsTableType = {
     orgs?: OrganizationActivity[];
@@ -51,7 +50,6 @@ export const OrgsTable = ({
 }: OrgsTableType) => {
   const ActiveDomain = useActiveDomainUseCase();
   const ActiveDomainStore = useActiveDomainStore();
-  const ThemeStore = useThemeStore();
 
   const tooltipHostVendors = (title?: boolean, vendors?: string[]) => {
     if (vendors?.length === 0) {
@@ -65,15 +63,13 @@ export const OrgsTable = ({
       if (title) {
         return (
           <Text size="small">
-            Number of vendors this organizations <br />
-            &nbsp; &nbsp;  has an integration with
+            Number of vendors this organizations has an integration with
           </Text>
         );
       }
       return (
         <Text size="small">
-          This is the number of <Text variant="bold">distinct</Text> vendors  <br />
-          &nbsp;across organizations shown here
+          This is the number of <Text size="small" variant="bold">distinct</Text> vendors across organizations shown here
         </Text>
       );
     }
@@ -88,68 +84,52 @@ export const OrgsTable = ({
     )
   };
   const onRenderItemColumn = (item: OrganizationActivity, index?: number, column?: IColumn) => {
-    let columnVal: number | undefined;
-    let paddingLeft: number | undefined;
-    if (column?.key === 'vendorNames' && item?.sid) {
-      columnVal = item?.vendorNames.length;
-      paddingLeft = 50;
-    } else if (column?.key === 'vendorNames' && !item?.sid) {
-      columnVal = item?.vendorNames.length;
-      paddingLeft = 40;
-    }
-
     if (item && column && column.key !== 'active' && column.key !== 'vendorNames') {
       const value = item[column.key];
       return <span title={value}>{value}</span>;
     }
+    return null;
+  };
 
-    return (
-      <Stack
-        horizontal
-        horizontalAlign="start"
-        tokens={{
-          childrenGap: 5.5,
-          padding: `0px 0px 0px ${paddingLeft}px`,
-        }}
-      >
-        {item?.sid && column?.key === 'vendorNames' && (
-          <TooltipHost
-            content={tooltipHostVendors(false, item?.vendorNames)}
-            directionalHint={DirectionalHint.rightCenter}
-          >
-            <ButtonLink underline>{columnVal}</ButtonLink>
-          </TooltipHost>
-        )}
-        {!item?.sid && column?.key === 'vendorNames' && (
-          <Stack horizontal>
-            <Text variant="bold" size="large">{columnVal}</Text>
-            <Spacing margin={{ right: 'normal' }} />
+  const renderActivityBubbles = (item: OrganizationActivity) => (
+    <ActivityBubbles
+      orgSid={item.sid}
+      uat={item.uatActivity}
+      test={item.testActivity}
+      prod={item.prodActivity}
+      total={!item.sid}
+    />
+  );
+
+  const renderVendorCount = (item: OrganizationActivity) => {
+    if (item.sid) {
+      return (
+        <Stack horizontal horizontalAlign="center">
+          <Stack.Item>
             <TooltipHost
-              content={tooltipHostVendors(false)}
+              content={tooltipHostVendors(false, item?.vendorNames)}
+              directionalHint={DirectionalHint.rightCenter}
             >
-              <FontIcon
-                iconName="Info"
-                style={{
-                  fontSize: '11px',
-                  color: ThemeStore.userTheme.colors.black,
-                  fontWeight: ThemeStore.userTheme.fontWeights.bold,
-                }}
-              />
+              <ButtonLink underline>{item?.vendorNames?.length ?? 0}</ButtonLink>
             </TooltipHost>
-          </Stack>
-        )}
-        {column?.key === 'active' && (
-          <ActivityBubbles
-            orgSid={item.sid}
-            uat={item.uatActivity}
-            test={item.testActivity}
-            prod={item.prodActivity}
-            total={!item.sid}
+          </Stack.Item>
+        </Stack>
+      );
+    }
+    return (
+      <Stack horizontal horizontalAlign="center" tokens={{ childrenGap: 5 }}>
+        <Stack.Item>
+          <Text variant="bold" size="large">{item?.vendorNames?.length ?? 0}</Text>
+        </Stack.Item>
+        <Stack.Item>
+          <InfoIcon
+            id="__TotalVendors"
+            tooltip={tooltipHostVendors(false)}
           />
-        )}
+        </Stack.Item>
       </Stack>
     )
-  };
+  }
 
   const changeActiveOrg = (org?: Organization) => {
     ActiveDomain.setCurrentOrg(org?.sid);
@@ -171,23 +151,16 @@ export const OrgsTable = ({
     return <span>{item?.name}</span>;
   };
 
-  const renderColumnHeader = (props?: IDetailsColumnProps) => {
+  const renderVendorColumnHeader = (props?: IDetailsColumnProps) => {
     const title = props?.column.name;
     return (
-      <TooltipHost
-        content={tooltipHostVendors(true)}
-      >
+      <>
         <Text variant="semiBold">{title}</Text>
-        <FontIcon
-          iconName="Info"
-          style={{
-            fontSize: '11px',
-            color: ThemeStore.userTheme.colors.black,
-            marginLeft: '10px',
-            fontWeight: ThemeStore.userTheme.fontWeights.bold,
-          }}
+        <InfoIcon
+          id="__VendorHeaderInfo"
+          tooltip={tooltipHostVendors(true)}
         />
-      </TooltipHost>
+      </>
     );
   };
 
@@ -219,7 +192,7 @@ export const OrgsTable = ({
       isPadded: true,
       minWidth: 150,
       maxWidth: 400,
-      flexGrow: 1,
+      flexGrow: 2,
       onRender: onRenderOrgName,
     },
     {
@@ -246,7 +219,7 @@ export const OrgsTable = ({
       isPadded: true,
       minWidth: 150,
       maxWidth: 400,
-      flexGrow: 1,
+      flexGrow: 2,
       onRender: onRenderItemColumn,
     },
     {
@@ -255,16 +228,18 @@ export const OrgsTable = ({
       fieldName: 'active',
       data: 'string',
       dataType: 'string',
-      isPadded: true,
+      isPadded: false,
       minWidth: 150,
       styles: {
         cellTitle: {
-          paddingLeft: '22px',
+          textAlign: 'center',
+          alignItems: 'center',
+          justifyContent: 'center',
         },
       },
       maxWidth: 400,
-      flexGrow: 1,
-      onRender: onRenderItemColumn,
+      flexGrow: 0,
+      onRender: renderActivityBubbles,
     },
     {
       name: 'Vendors',
@@ -272,12 +247,19 @@ export const OrgsTable = ({
       fieldName: 'vendorNames',
       data: 'string',
       dataType: 'string',
-      isPadded: true,
+      isPadded: false,
+      styles: {
+        cellTitle: {
+          textAlign: 'center',
+          alignItems: 'center',
+          justifyContent: 'center',
+        },
+      },
       minWidth: 150,
-      maxWidth: 400,
-      flexGrow: 1,
-      onRenderHeader: renderColumnHeader,
-      onRender: onRenderItemColumn,
+      maxWidth: 150,
+      flexGrow: 0,
+      onRenderHeader: renderVendorColumnHeader,
+      onRender: renderVendorCount,
     },
     {
       name: '',
@@ -288,6 +270,7 @@ export const OrgsTable = ({
       isPadded: true,
       minWidth: 50,
       maxWidth: 50,
+      flexGrow: 0,
       onRender: onRenderAction,
     },
   ];

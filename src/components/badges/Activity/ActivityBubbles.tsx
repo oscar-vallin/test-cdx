@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { DirectionalHint, TooltipHost } from '@fluentui/react';
+import { DirectionalHint, Stack, TooltipHost } from '@fluentui/react';
 import { format } from 'date-fns';
 import { XchangeActivity } from 'src/data/services/graphql';
 import { yyyyMMdd } from 'src/utils/CDXUtils';
@@ -66,79 +66,105 @@ export const ActivityBubbles = ({
 
   if (total) {
     return (
-      <>
-        { uat.filesProcessed > 0 ? (
-          <ActivityBubble large={true} color="purple" className="uat">{uat.filesProcessed}</ActivityBubble>
-        ) : (
-          <ActivityBubble large={true} color="gray" className="uat">0</ActivityBubble>
-        )}
-        { test.filesProcessed > 0 ? (
-          <ActivityBubble large={true} color="orange" className="test">{test.filesProcessed}</ActivityBubble>
-        ) : (
-          <ActivityBubble large={true} color="gray" className="test">0</ActivityBubble>
-        )}
-        { prod.filesProcessed > 0 ? (
-          <ActivityBubble large={true} color="blue" className="prod">{prod.filesProcessed}</ActivityBubble>
-        ) : (
-          <ActivityBubble large={true} color="gray" className="prod">0</ActivityBubble>
-        )}
-      </>
+      <Stack
+        horizontal
+        horizontalAlign="center"
+        tokens={{
+          childrenGap: 5,
+          padding: 0,
+        }}
+      >
+        <Stack.Item>
+          { uat.filesProcessed > 0 ? (
+            <ActivityBubble large={true} color="purple" className="uat">{uat.filesProcessed}</ActivityBubble>
+          ) : (
+            <ActivityBubble large={true} color="gray" className="uat">0</ActivityBubble>
+          )}
+        </Stack.Item>
+        <Stack.Item>
+          { test.filesProcessed > 0 ? (
+            <ActivityBubble large={true} color="orange" className="test">{test.filesProcessed}</ActivityBubble>
+          ) : (
+            <ActivityBubble large={true} color="gray" className="test">0</ActivityBubble>
+          )}
+        </Stack.Item>
+        <Stack.Item>
+          { prod.filesProcessed > 0 ? (
+            <ActivityBubble large={true} color="blue" className="prod">{prod.filesProcessed}</ActivityBubble>
+          ) : (
+            <ActivityBubble large={true} color="gray" className="prod">0</ActivityBubble>
+          )}
+        </Stack.Item>
+      </Stack>
     );
   }
 
   return (
-    <>
-      {uat.filesProcessed > 0 ? (
-        <TooltipHost
-          content={
-            tooltipHostContent(
-              uat.lastActivity,
-              'UAT',
-              uat.filesProcessed,
-            )
-          }
-          directionalHint={DirectionalHint.topRightEdge}
-          closeDelay={2000}
-        >
-          <ActivityBubble large={false} color="purple" className="uat">{uat.filesProcessed}</ActivityBubble>
-        </TooltipHost>
-      ) : (
-        <ActivityBubble large={false} color="gray" className="uat">0</ActivityBubble>
-      )}
-      {test.filesProcessed > 0 ? (
-        <TooltipHost
-          content={
-            tooltipHostContent(
-              test.lastActivity,
-              'TEST',
-              test.filesProcessed,
-            )
-          }
-          directionalHint={DirectionalHint.topRightEdge}
-          closeDelay={2000}
-        >
-          <ActivityBubble large={false} color="orange" className="test">{test.filesProcessed}</ActivityBubble>
-        </TooltipHost>
-      ) : (
-        <ActivityBubble large={false} color="gray" className="test">0</ActivityBubble>
-      )}
-      {prod.filesProcessed > 0 ? (
-        <TooltipHost
-          content={
-            tooltipHostContent(
-              prod.lastActivity,
-              'PROD',
-              prod.filesProcessed,
-            )
-          }
-          directionalHint={DirectionalHint.topRightEdge}
-          closeDelay={2000}
-        >
-          <ActivityBubble large={false} color="blue" className="prod">{prod.filesProcessed}</ActivityBubble>
-        </TooltipHost>
-      ) : (
-        <ActivityBubble large={false} color="gray" className="prod">0</ActivityBubble>
-      )}
-    </>
+    <Stack
+      horizontal
+      horizontalAlign="center"
+      tokens={{
+        childrenGap: 5.5,
+        padding: 0,
+      }}
+    >
+      <Stack.Item>
+        {uat.filesProcessed > 0 ? (
+          <TooltipHost
+            content={
+              tooltipHostContent(
+                uat.lastActivity,
+                'UAT',
+                uat.filesProcessed,
+              )
+            }
+            directionalHint={DirectionalHint.topRightEdge}
+            closeDelay={2000}
+          >
+            <ActivityBubble large={false} color="purple" className="uat">{uat.filesProcessed}</ActivityBubble>
+          </TooltipHost>
+        ) : (
+          <ActivityBubble large={false} color="gray" className="uat">0</ActivityBubble>
+        )}
+      </Stack.Item>
+      <Stack.Item>
+        {test.filesProcessed > 0 ? (
+          <TooltipHost
+            content={
+              tooltipHostContent(
+                test.lastActivity,
+                'TEST',
+                test.filesProcessed,
+              )
+            }
+            directionalHint={DirectionalHint.topRightEdge}
+            closeDelay={2000}
+          >
+            <ActivityBubble large={false} color="orange" className="test">{test.filesProcessed}</ActivityBubble>
+          </TooltipHost>
+        ) : (
+          <ActivityBubble large={false} color="gray" className="test">0</ActivityBubble>
+        )}
+      </Stack.Item>
+      <Stack.Item>
+        {prod.filesProcessed > 0 ? (
+          <TooltipHost
+            content={
+              tooltipHostContent(
+                prod.lastActivity,
+                'PROD',
+                prod.filesProcessed,
+              )
+            }
+            directionalHint={DirectionalHint.topRightEdge}
+            closeDelay={2000}
+          >
+            <ActivityBubble large={false} color="blue" className="prod">{prod.filesProcessed}</ActivityBubble>
+          </TooltipHost>
+        ) : (
+          <ActivityBubble large={false} color="gray" className="prod">0</ActivityBubble>
+        )}
+      </Stack.Item>
+    </Stack>
   );
 }
