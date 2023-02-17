@@ -27,7 +27,10 @@ export const TransmissionsPage = () => {
 
   const renderTotal = (totalRecords: number) => <span>{totalRecords > 0 ? `${totalRecords} results found` : 'No results found'}</span>;
 
-  const renderDownloadLink = (totalRecords: number, tableFilters: TableFiltersType): ReactElement => {
+  const renderDownloadLink = (
+    totalRecords: number,
+    tableFilters: TableFiltersType,
+  ): ReactElement => {
     const graphQLUrl = process.env.REACT_APP_API_SERVER;
     const serverUrl = graphQLUrl?.replace('/graphql', '') ?? '';
 
