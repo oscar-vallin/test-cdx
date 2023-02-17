@@ -30,11 +30,12 @@ import {
   CdxWebCommandType,
   WebCommand,
 } from 'src/data/services/graphql';
-import { UIInputText } from 'src/components/inputs/InputText';
-import { Spacing } from 'src/components/spacings/Spacing';
+import { useOrgSid } from 'src/hooks/useOrgSid';
 import { useNotification } from 'src/hooks/useNotification';
 import { PageBody } from 'src/components/layouts/Column';
-import { useOrgSid } from 'src/hooks/useOrgSid';
+import { UIInputText } from 'src/components/inputs/InputText';
+import { Spacing } from 'src/components/spacings/Spacing';
+import { prettyEnumValue } from 'src/utils/CDXUtils';
 import { FileUploadDialog } from 'src/pages/Admin/XChange/XchangeDetails/FileUpload/FileUploadDialog';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
@@ -42,6 +43,7 @@ import { ROUTE_XCHANGE_DETAILS } from 'src/data/constants/RouteConstants';
 import { UIInputTextArea } from 'src/components/inputs/InputTextArea';
 import { ButtonLink } from 'src/components/buttons';
 import { TaskCard } from 'src/components/cards';
+import { QualifierBadge } from 'src/components/badges/Qualifier';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { EmptyMessage } from 'src/containers/tables/TableCurrentActivity/TableActivity.styles';
 import { ThemeStore, useThemeStore } from 'src/store/ThemeStore';
@@ -53,7 +55,6 @@ import { StyledAlertTypes } from '../XchangeAlerts/XchangeAlertsPage.style';
 import {
   StyledButtonAction,
   StyledProcessValueText,
-  StyledQualifier,
   EllipsisedStyled,
   CardFinishSetup,
   AlertRow,
@@ -180,30 +181,11 @@ const XchangeDetailsPage = () => {
     setShowDialog(true);
   }
 
-  const adaptWidth = (alertT: string) => {
-    const width = alertT.length * 8;
-    return `${width}px`;
-  };
-
   const typesAlertsRender = (alertTypes: string[]) => {
     const alerts = alertTypes ?? [];
     const typesAlert: string[] = [];
-    let typeAlert = '';
     for (let alert = 0; alert < alerts?.length; alert++) {
-      const splitAlerts = alerts[alert].split('_');
-      if (splitAlerts.length > 1) {
-        for (let j = 0; j < splitAlerts.length; j++) {
-          let type = splitAlerts[j].toLocaleLowerCase()[0].toUpperCase();
-          type += splitAlerts[j].substring(1).toLocaleLowerCase();
-          typeAlert += j === splitAlerts.length - 1 ? `${type}` : `${type} `;
-        }
-        typesAlert.push(typeAlert);
-        typeAlert = '';
-      } else {
-        let type = splitAlerts[0].toLocaleLowerCase()[0].toUpperCase();
-        type += splitAlerts[0].substring(1).toLocaleLowerCase();
-        typesAlert.push(type);
-      }
+      typesAlert.push(prettyEnumValue(alerts[alert]));
     }
 
     if (typesAlert) {
@@ -212,11 +194,11 @@ const XchangeDetailsPage = () => {
           <Stack horizontal>
             <Text variant="bold"> Alert on: &nbsp;</Text>
             {typesAlert.length > 1 ? (
-              <StyledAlertTypes width="55px">
+              <StyledAlertTypes>
                 ({typesAlert.length}) types
               </StyledAlertTypes>
             ) : (
-              <StyledAlertTypes width={adaptWidth(typesAlert[0])}>
+              <StyledAlertTypes>
                 {typesAlert[0]}
               </StyledAlertTypes>
             )}
@@ -224,30 +206,6 @@ const XchangeDetailsPage = () => {
         </Spacing>
       );
     }
-    return null;
-  };
-
-  const filenameQualifier = (qualifierType: string, coreFilename: string) => {
-    const qualifier = qualifierType.replace(`${coreFilename}-`, '');
-    if (qualifier) {
-      let width: number | string = qualifier.length * 9;
-      width = `${width}px`;
-      let color = ThemeStore.userTheme.colors.themePrimary;
-      if (qualifier === 'TEST' || qualifier === 'TEST-OE') {
-        color = 'orange';
-        width = '50px';
-      }
-      if (qualifier === 'PROD') {
-        width = '50px';
-      }
-
-      return (
-        <StyledQualifier width={width} color={color} paddingTop={true}>
-          {qualifier}
-        </StyledQualifier>
-      );
-    }
-
     return null;
   };
 
@@ -358,7 +316,10 @@ const XchangeDetailsPage = () => {
             <AlertRow key={index}>
               <Stack horizontal tokens={{ childrenGap: 5 }} styles={stackItemStyles}>
                 <Stack.Item>
-                  {filenameQualifier(alert.filenameQualifier ?? '', alert?.coreFilename ?? '')}
+                  <QualifierBadge
+                    filenameQualifier={alert?.filenameQualifier}
+                    coreFilename={alert?.coreFilename}
+                  />
                 </Stack.Item>
                 <Stack.Item grow>
                   {typesAlertsRender(alert?.alertTypes ?? [])}

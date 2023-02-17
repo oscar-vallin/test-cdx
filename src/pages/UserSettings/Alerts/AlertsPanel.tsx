@@ -26,6 +26,7 @@ import { AddAlertsModal } from 'src/containers/modals/AddAlertsModal';
 import { StyledAlertTypes } from 'src/pages/Admin/XChange/XchangeAlerts/XchangeAlertsPage.style';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { useNotification } from 'src/hooks/useNotification';
+import { prettyEnumValue } from 'src/utils/CDXUtils';
 
 type AlertsPanelProps = {
     isOpen: boolean;
@@ -111,7 +112,7 @@ const AlertsPanel = ({ isOpen, closePanel }: AlertsPanelProps) => {
             subscriptionType: item.subscriptionType,
           },
         },
-      });
+      }).then();
     };
     updatedDialog.onNo = () => {
       hideDialog();
@@ -121,37 +122,18 @@ const AlertsPanel = ({ isOpen, closePanel }: AlertsPanelProps) => {
     setShowDialog(true);
   };
 
-  const adaptWidth = (alertT: string) => {
-    const width = alertT.length * 7;
-    return `${width}px`;
-  };
-
   const typesAlertsRender = (alertTypes: string[]) => {
     const types = alertTypes ?? [];
     const typesAlert: string[] = [];
-    let typeAlert = '';
     for (let alert = 0; alert < types?.length; alert++) {
-      const splitAlerts = types[alert].split('_');
-      if (splitAlerts.length > 1) {
-        for (let j = 0; j < splitAlerts.length; j++) {
-          let type = splitAlerts[j].toLocaleLowerCase()[0].toUpperCase();
-          type += splitAlerts[j].substring(1).toLocaleLowerCase();
-          typeAlert += j === splitAlerts.length - 1 ? `${type}` : `${type} `;
-        }
-        typesAlert.push(typeAlert);
-        typeAlert = '';
-      } else {
-        let type = splitAlerts[0].toLocaleLowerCase()[0].toUpperCase();
-        type += splitAlerts[0].substring(1).toLocaleLowerCase();
-        typesAlert.push(type);
-      }
+      typesAlert.push(prettyEnumValue(alertTypes[alert]));
     }
 
     if (typesAlert) {
       return (
         <>
           {typesAlert.map((type, typeAlertsIndex: number) => (
-            <StyledAlertTypes width={adaptWidth(type)} key={typeAlertsIndex}>
+            <StyledAlertTypes key={typeAlertsIndex}>
               {type}
             </StyledAlertTypes>
           ))}

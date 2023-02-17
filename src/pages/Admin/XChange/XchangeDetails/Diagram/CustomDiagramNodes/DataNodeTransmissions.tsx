@@ -13,13 +13,13 @@ import {
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { Handle, Position } from 'react-flow-renderer';
 import { Container, Row } from 'src/components/layouts';
+import { QualifierBadge } from 'src/components/badges/Qualifier';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { useNotification } from 'src/hooks/useNotification';
 import { ButtonLink } from 'src/components/buttons';
-import { ThemeStore } from 'src/store/ThemeStore';
 import { Spacing } from 'src/components/spacings/Spacing';
 import Node from './Node';
-import { StyledQualifier, StyledSFTP } from '../../XchangeDetailsPage.styles';
+import { StyledSFTP } from '../../XchangeDetailsPage.styles';
 import { XchangeTransmissionPanel } from '../../XchangeTransmissionPanel/XchangeTransmissionPanel';
 import { StyledCopyIcon, StyledTrashIcon } from './Node.styles';
 
@@ -65,19 +65,6 @@ const DataNodeTransmissions = ({ data, id }) => {
     useDeleteXchangeFileTransmissionMutation,
   );
 
-  let width = `${qualifier && qualifier.length * 9}px`;
-  let color = ThemeStore.userTheme.colors.themePrimary;
-
-  if (qualifier === 'TEST' || qualifier === 'TEST-OE') {
-    color = 'orange';
-    width = '50px';
-  }
-  if (qualifier === 'PROD-OE' || qualifier === 'TEST-OE') {
-    width = '60px';
-  }
-  if (qualifier === 'PROD') {
-    width = '50px';
-  }
   const hideDialog = () => {
     setShowDialog(false);
   };
@@ -196,9 +183,7 @@ const DataNodeTransmissions = ({ data, id }) => {
             />
           </Container>
           {qualifier && (
-          <StyledQualifier position={true} left={true} top={true} color={color} width={width}>
-            {qualifier}
-          </StyledQualifier>
+            <QualifierBadge filenameQualifier={qualifier} absolute />
           )}
         </>
       );
@@ -222,9 +207,7 @@ const DataNodeTransmissions = ({ data, id }) => {
           </Row>
         </Container>
         {qualifier && (
-          <StyledQualifier position={true} left={true} top={true} color={color} width={width}>
-            {qualifier}
-          </StyledQualifier>
+          <QualifierBadge filenameQualifier={qualifier} absolute />
         )}
         {openPanel && (
           <XchangeTransmissionPanel
