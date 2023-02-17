@@ -32,9 +32,8 @@ import { UIInputToggle } from 'src/components/inputs/InputToggle';
 import FormLabel, { UIFormLabel } from 'src/components/labels/FormLabel';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { ButtonLink } from 'src/components/buttons';
-import { StyledVendorOptions } from './XchangePage.styles';
-import { Toast } from 'src/components/toast';
 import { useNotification } from 'src/hooks/useNotification';
+import { StyledVendorOptions } from './XchangePage.styles';
 
 type XchangeSetupWizardPanelProps = {
   isPanelOpen: boolean;
@@ -278,7 +277,7 @@ const XchangeSetupWizardPanel = ({
       }
 
       if (responseCode === GqOperationResponse.Success) {
-        history.push (`/xchange-details?orgSid=${orgSid}&coreFilename=${createNewXchange?.coreFilename}`)
+        history.push(`/xchange-details?orgSid=${orgSid}&coreFilename=${createNewXchange?.coreFilename}`)
         setMessage(null);
         closePanel(false);
       }
@@ -482,7 +481,7 @@ const XchangeSetupWizardPanel = ({
       <FormRow>
         <Column lg="12">
           {setupNewXchangeForm?.vendorSpec?.readOnly ? (
-            <ComboBox 
+            <ComboBox
               disabled={true}
               options={[]}
               onRenderLabel={onRenderLabel}

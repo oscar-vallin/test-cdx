@@ -1,3 +1,4 @@
 import { Card } from './Card';
+import { TaskCard } from './TaskCard';
 
-export { Card };
+export { Card, TaskCard };

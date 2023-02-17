@@ -176,13 +176,11 @@ const XchangeStepPanel = ({
     }
   };
 
-  const addFormatToXml = (xmlValue: string) => {
-    return format(xmlValue, {
-      indentation: '  ',
-      collapseContent: true,
-      lineSeparator: '\n',
-    });
-  };
+  const addFormatToXml = (xmlValue: string) => format(xmlValue, {
+    indentation: '  ',
+    collapseContent: true,
+    lineSeparator: '\n',
+  });
 
   const comparePreviousXml = (editXml: string, preXml: string) => {
     if (editXml !== preXml) {

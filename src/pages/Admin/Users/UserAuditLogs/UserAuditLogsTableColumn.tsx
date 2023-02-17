@@ -132,7 +132,7 @@ export const useUserAuditLogsColumns = (selectedColumns: UserAuditLogsColumn[]) 
       key: 'details',
       name: '',
       targetWidthProportion: 2,
-      flexGrow:  2,
+      flexGrow: 2,
       minWidth: 80,
       maxWidth: 700,
       fieldName: 'newValue',
@@ -141,7 +141,7 @@ export const useUserAuditLogsColumns = (selectedColumns: UserAuditLogsColumn[]) 
       dataType: 'string',
       sortable: false,
       filterable: false,
-      onRender: (item: UserAccountAuditLog) => <span title={item.newValue ?? undefined}>{item.newValue}</span>
+      onRender: (item: UserAccountAuditLog) => <span title={item.newValue ?? undefined}>{item.newValue}</span>,
     },
     {
       key: 'initiatedBy',

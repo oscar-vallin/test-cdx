@@ -41,7 +41,7 @@ export const uiOptions: UiOptions[] = [
         value: '7',
         label: 'Seven',
       },
-    ]
+    ],
   },
 ];
 

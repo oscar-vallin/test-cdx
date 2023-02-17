@@ -1,7 +1,11 @@
 import styled from 'styled-components';
 import { DocumentCard } from '@fluentui/react';
-import { ButtonAction } from 'src/components/buttons';
 import { device } from 'src/styles/GlobalStyles';
+
+export const CardColumn = styled.div`
+  display: block;
+  margin-top: -60px;
+`;
 
 export const CardStyled = styled(DocumentCard)`
   background: ${({ theme }) => theme.colors.neutralLighter};
@@ -28,11 +32,6 @@ export const CardStyled = styled(DocumentCard)`
   }
 `;
 
-export const SetupStyled = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
 export const ContainerInput = styled.div`
   width: 270px;
   margin: 0 auto;
@@ -51,10 +50,6 @@ export const StyledIconsComments = styled.div`
     color: #0078d4;
     padding-left: 10px;
   }
-`;
-
-export const StyledButtonAction = styled(ButtonAction)`
-  font-size: 24px;
 `;
 
 export const StyledVendorOptions = styled.div`

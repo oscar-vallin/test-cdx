@@ -68,7 +68,6 @@ const SpecPanel = ({
   const Toast = useNotification();
   const handleError = ErrorHandler();
   const [vendorSpecForm, setVendorSpecForm] = useState<VendorSpecForm | null>();
-  const [active, setActive] = useState<boolean>()
   const [name, setName] = useState('');
   const [legacyName, setLegacyName] = useState('');
   const [version, setVersion] = useState('');
@@ -233,7 +232,7 @@ const SpecPanel = ({
     if (parentSpecSearch.trim() !== '') {
       const timer = setTimeout(() => getVendorSpecs(parentSpecSearch), 300);
       return () => clearTimeout(timer);
-    } 
+    }
   }, [parentSpecSearch]);
 
   const hideDialog = () => {
@@ -504,7 +503,7 @@ const SpecPanel = ({
                   Save
                 </PrimaryButton>
                 {updateCmd && vendorSpecForm?.active.value === 'false' && (
-                  <DefaultButton 
+                  <DefaultButton
                     style={{
                       marginLeft: '10px',
                     }}
@@ -535,13 +534,15 @@ const SpecPanel = ({
             >
               <Comment20Filled
                 style={comments ? {
-                  color: ThemeStore.userTheme.colors.yellow, cursor: 'pointer',
+                  color: ThemeStore.userTheme.colors.yellow,
+                  cursor: 'pointer',
                   marginLeft: '15px',
-    
+
                 } : {
-                  color: ThemeStore.userTheme.colors.neutralTertiaryAlt, cursor: 'pointer',
+                  color: ThemeStore.userTheme.colors.neutralTertiaryAlt,
+                  cursor: 'pointer',
                   marginLeft: '15px',
-   
+
                 }}
                 onClick={() => {
                   setOpenUpdateComments(true);
@@ -552,12 +553,14 @@ const SpecPanel = ({
           {!closeTooltipHost && (
             <Comment20Filled
               style={comments ? {
-                color: ThemeStore.userTheme.colors.yellow, cursor: 'pointer',
+                color: ThemeStore.userTheme.colors.yellow,
+                cursor: 'pointer',
                 marginLeft: '15px',
-               } : {
-                color: ThemeStore.userTheme.colors.neutralTertiaryAlt, cursor: 'pointer',
+              } : {
+                color: ThemeStore.userTheme.colors.neutralTertiaryAlt,
+                cursor: 'pointer',
                 marginLeft: '15px',
-               }}
+              }}
               onClick={() => {
                 setOpenUpdateComments(true);
               }}
@@ -610,10 +613,12 @@ const SpecPanel = ({
         >
           <Comment20Filled
             style={comments ? {
-              color: ThemeStore.userTheme.colors.yellow, cursor: 'pointer',
+              color: ThemeStore.userTheme.colors.yellow,
+              cursor: 'pointer',
               marginLeft: '15px',
             } : {
-              color: ThemeStore.userTheme.colors.neutralTertiaryAlt, cursor: 'pointer',
+              color: ThemeStore.userTheme.colors.neutralTertiaryAlt,
+              cursor: 'pointer',
               marginLeft: '15px',
             }}
           />
@@ -632,18 +637,18 @@ const SpecPanel = ({
               {!sid ? 'Create Spec' : vendorSpecForm?.name.value}
               {tooltipHostComments()}
               {updateCmd && vendorSpecForm?.active.value === 'false' && (
-                  <TooltipHost content="This spec is inactive">
-                    <FontIcon
-                      id="specInactive"
-                      style={{
-                        fontSize: '18px',
-                        cursor: 'pointer',
-                        marginLeft: '15px',
-                      }}
-                      iconName="StatusCircleBlock"
-                    />
-                  </TooltipHost>
-                )}
+              <TooltipHost content="This spec is inactive">
+                <FontIcon
+                  id="specInactive"
+                  style={{
+                    fontSize: '18px',
+                    cursor: 'pointer',
+                    marginLeft: '15px',
+                  }}
+                  iconName="StatusCircleBlock"
+                />
+              </TooltipHost>
+              )}
             </PanelTitle>
           </Stack>
         </Column>

@@ -38,7 +38,7 @@ const CDXCollapse = ({
         onClick={handleClick}
         {...props}
       >
-        {label} &nbsp; <FontIcon iconName={!isExpanded ? 'ChevronRight' : 'ChevronDown'} />
+        {label} &nbsp; <FontIcon iconName={!isExpanded ? 'ChevronUp' : 'ChevronDown'} />
       </StyledButton>
 
       {isExpanded && (

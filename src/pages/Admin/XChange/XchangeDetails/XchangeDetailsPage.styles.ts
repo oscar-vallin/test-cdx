@@ -3,52 +3,10 @@ import { DocumentCard, Text } from '@fluentui/react';
 import { Column } from 'src/components/layouts';
 import { ButtonAction } from 'src/components/buttons';
 
-export const CardStyled = styled(DocumentCard)`
-  background: ${({ theme }) => theme.colors.neutralLighter};
-  border: none;
-  padding-right: 5px;
+export const CardColumn = styled.div`
+  display: block;
+  margin-top: -120px;
   z-index: 10;
-  border-radius: ${({ theme }) => theme.radius.normal};
-  font: ${({ theme }) => theme.fontStyles.normal};
-  min-width: 320px;
-  max-width: 350px;
-  min-height: 50px;
-  width: 100%;
-  bottom: 100px;
-
-  .ms-DocumentCard {
-    &:hover {
-      &::after {
-        border: none;
-      }
-    }
-  }
-  [data-icon-name*='Chevron'] {
-    font-size: 0.75em;
-    cursor: pointer;
-    font-weight:${({ theme }) => theme.fontWeights.bold};
-  }
-
-  [data-icon-name*='Ringer'] {
-    padding-right: 10px;
-  }
-
-  [data-icon-name*='add'] {
-    font-size: 0.75em;
-    padding-right: 15px;
-    cursor: pointer;
-    color: ${({ theme }) => theme.colors.themePrimary};
-    font-weight:${({ theme }) => theme.fontWeights.bold};
-  }
-
-  [data-icon-name*='Trash'] {
-    padding-right: 5px;
-  }
-`;
-
-export const StyledColumTabs = styled(Column)`
-  display: inline-block;
-  margin-left: 30px;
 `;
 
 export const StyledContainer = styled.div<DemoCanvasWidgetProps>`
@@ -173,4 +131,8 @@ export const CardFinishSetup = styled(DocumentCard)`
   max-width: 750px;
   min-height: 250px;
   width: 100%;
+`;
+
+export const AlertRow = styled.div`
+  padding-top: 5px;
 `;

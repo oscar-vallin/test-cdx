@@ -1,8 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import {
+  DefaultButton,
+  DirectionalHint,
+  FontIcon, IButtonStyles,
+  IconButton, ILinkStyles, IStackItemStyles,
+  PrimaryButton,
+  Spinner,
+  SpinnerSize,
+  Stack,
+  TextField,
+  TooltipHost,
+} from '@fluentui/react';
+import { Comment20Filled } from '@fluentui/react-icons';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Column, Container, Row } from 'src/components/layouts';
-import { PageTitle } from 'src/components/typography';
+import { PageTitle, Text } from 'src/components/typography';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import {
   useXchangeConfigLazyQuery,
@@ -19,19 +32,6 @@ import {
 } from 'src/data/services/graphql';
 import { UIInputText } from 'src/components/inputs/InputText';
 import { Spacing } from 'src/components/spacings/Spacing';
-import {
-  DefaultButton,
-  DirectionalHint,
-  FontIcon,
-  IconButton,
-  PrimaryButton,
-  Spinner,
-  SpinnerSize,
-  Stack,
-  Text,
-  TextField,
-  TooltipHost,
-} from '@fluentui/react';
 import { useNotification } from 'src/hooks/useNotification';
 import { PageBody } from 'src/components/layouts/Column';
 import { useOrgSid } from 'src/hooks/useOrgSid';
@@ -39,24 +39,25 @@ import { FileUploadDialog } from 'src/pages/Admin/XChange/XchangeDetails/FileUpl
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { ROUTE_XCHANGE_DETAILS } from 'src/data/constants/RouteConstants';
-import { Comment20Filled } from '@fluentui/react-icons';
 import { UIInputTextArea } from 'src/components/inputs/InputTextArea';
 import { ButtonLink } from 'src/components/buttons';
+import { TaskCard } from 'src/components/cards';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { EmptyMessage } from 'src/containers/tables/TableCurrentActivity/TableActivity.styles';
-import { ThemeStore } from 'src/store/ThemeStore';
+import { ThemeStore, useThemeStore } from 'src/store/ThemeStore';
 import { Diagram } from './Diagram/Diagram';
 import { XchangeAlertsPanel } from '../XchangeAlerts/XchangeAlertsPanel/XchangeAlertsPanel';
 import { JobGroupPanel } from './JobGroupPanel/JobGroupPanel';
 import { SchedulePanel } from '../SchedulePanel';
 import { StyledAlertTypes } from '../XchangeAlerts/XchangeAlertsPage.style';
 import {
-  CardStyled,
   StyledButtonAction,
   StyledProcessValueText,
   StyledQualifier,
   EllipsisedStyled,
   CardFinishSetup,
+  AlertRow,
+  CardColumn,
 } from './XchangeDetailsPage.styles';
 import { XchangeSetupWizardPanel } from '../Xchanges/XchangeSetupWizardPanel';
 
@@ -74,6 +75,7 @@ const defaultDialogProps: DialogYesNoProps = {
 const XchangeDetailsPage = () => {
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
+  const { userTheme } = useThemeStore();
   const { orgSid } = useOrgSid();
   const Toast = useNotification();
 
@@ -103,7 +105,6 @@ const XchangeDetailsPage = () => {
   const [openJobGroup, setOpenJobGroup] = useState(false);
   const [openSchedulePanel, setOpenSchedulePanel] = useState(false);
   const [isSetupNewXchangePanelOpen, setIsSetupNewXchangePanelOpen] = useState(false);
-  const [isExpandedAlertBox, setIsExpandedAlertBox] = useState(false)
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
 
@@ -153,7 +154,7 @@ const XchangeDetailsPage = () => {
         variables: {
           sid: currentSid,
         },
-      });
+      }).then();
     };
     updatedDialog.onNo = () => {
       hideDialog();
@@ -163,7 +164,7 @@ const XchangeDetailsPage = () => {
     setShowDialog(true);
   };
 
-  const showGeneratedialog = () => {
+  const showGenerateDialog = () => {
     const updatedDialog = { ...defaultDialogProps };
     updatedDialog.title = 'Generate the Xchange Steps';
     updatedDialog.message = 'Are you sure you want to generate the Xchange steps for this Xchange? The steps can be edited once generated';
@@ -209,7 +210,7 @@ const XchangeDetailsPage = () => {
       return (
         <Spacing margin={{ left: 'double' }}>
           <Stack horizontal>
-            <Text style={{ fontWeight: 'bold' }}> Alert on: &nbsp;</Text>
+            <Text variant="bold"> Alert on: &nbsp;</Text>
             {typesAlert.length > 1 ? (
               <StyledAlertTypes width="55px">
                 ({typesAlert.length}) types
@@ -250,6 +251,15 @@ const XchangeDetailsPage = () => {
     return null;
   };
 
+  const iconButtonStyles: IButtonStyles = {
+    root: {
+      color: userTheme.colors.themePrimary,
+    },
+    icon: {
+      fontSize: userTheme.fontSizes.small,
+    },
+  };
+
   const userPermissionsIcons = (cmds: WebCommand[], currentSid: string) => {
     const _updateCmd = cmds?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update);
     const _deleteCmd = cmds?.find((cmd) => cmd?.commandType === CdxWebCommandType.Delete);
@@ -259,7 +269,8 @@ const XchangeDetailsPage = () => {
         {_updateCmd && (
           <IconButton
             iconProps={{ iconName: 'EditSolid12' }}
-            style={{ paddingBottom: '10px' }}
+            styles={iconButtonStyles}
+            title="Edit"
             onClick={() => {
               setSid(currentSid);
               setOpenAlertsPanel(true);
@@ -269,7 +280,8 @@ const XchangeDetailsPage = () => {
         {_deleteCmd && (
           <IconButton
             iconProps={{ iconName: 'Trash' }}
-            style={{ paddingBottom: '10px' }}
+            styles={iconButtonStyles}
+            title="Delete"
             onClick={() => showUnsavedChangesDialog(currentSid)}
           />
         )}
@@ -277,191 +289,188 @@ const XchangeDetailsPage = () => {
     );
   };
 
+  const renderAddAlertIcon = () => {
+    if (!createAlertCmd) {
+      return null;
+    }
+    return (
+      <TooltipHost content="Add Alert" directionalHint={DirectionalHint.topCenter}>
+        <IconButton
+          id="__Add_Alert"
+          iconProps={{ iconName: 'Add' }}
+          styles={iconButtonStyles}
+          onClick={() => {
+            setSid('');
+            setOpenAlertsPanel(true)
+          }}
+        />
+      </TooltipHost>
+    );
+  };
+
+  const renderUpdateScheduleIcon = () => {
+    if (!updateScheduleCmd) {
+      return null;
+    }
+    return (
+      <IconButton
+        iconProps={{ iconName: 'EditSolid12' }}
+        styles={iconButtonStyles}
+        onClick={() => {
+          setTypeSchedule(true);
+          setOpenSchedulePanel(true);
+        }}
+      />
+    );
+  };
+
+  const linkStyles: ILinkStyles = {
+    root: {
+      fontSize: userTheme.fontSizes.small,
+      maxWidth: '130px',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+    },
+  };
+
+  const stackItemStyles: IStackItemStyles = {
+    root: {
+      alignItems: 'center',
+      display: 'flex',
+      height: 30,
+      overflow: 'hidden',
+    },
+  };
+
   const cardBox = () => {
-    if (!detailsLoading) {
-      return (
-        <>
-          <CardStyled>
-            <Row>
-              <Column lg="10">
-                <Stack horizontal>
-                  <Spacing margin={{ top: 'normal', left: 'normal' }}>
-                    <FontIcon iconName="Ringer" />
-                    <Text style={{ fontWeight: 'bold' }}>
-                      Alerts (for this Xchange)
-                    </Text>
-                  </Spacing>
-                </Stack>
-              </Column>
-              <Column lg="2" right>
-                <Stack horizontal>
-                  <Spacing margin={{ top: 'normal' }}>
-                    {createAlertCmd && (
-                    <TooltipHost content="Add Alert" directionalHint={DirectionalHint.topCenter}>
-                      <FontIcon
-                        id="__Add_Alert"
-                        iconName="add"
-                        onClick={() => {
-                          setSid('');
-                          setOpenAlertsPanel(true)
-                        }}
-                      />
-                    </TooltipHost>
-                    )}
-                    <FontIcon
-                      iconName={isExpandedAlertBox ? 'ChevronUp' : 'ChevronDown'}
-                      onClick={() => setIsExpandedAlertBox((prevState) => !prevState)}
-                    />
-                  </Spacing>
-                </Stack>
-              </Column>
-            </Row>
-            {!isExpandedAlertBox && (
-              <>
-                {xchangesAlerts?.map((alert, index) => (
-                  <Spacing margin="normal" key={index}>
+    if (detailsLoading) {
+      return null;
+    }
+    return (
+      <CardColumn>
+        <TaskCard
+          id="__AlertsCard"
+          title="Alerts (for this Xchange)"
+          icon={<FontIcon iconName="Ringer" style={{ verticalAlign: 'middle' }} />}
+          commands={renderAddAlertIcon()}
+        >
+          {xchangesAlerts?.map((alert, index) => (
+            <AlertRow key={index}>
+              <Stack horizontal tokens={{ childrenGap: 5 }} styles={stackItemStyles}>
+                <Stack.Item>
+                  {filenameQualifier(alert.filenameQualifier ?? '', alert?.coreFilename ?? '')}
+                </Stack.Item>
+                <Stack.Item grow>
+                  {typesAlertsRender(alert?.alertTypes ?? [])}
+                </Stack.Item>
+                <Stack.Item align="end">
+                  {userPermissionsIcons(alert?.commands ?? [], alert?.sid ?? '')}
+                </Stack.Item>
+              </Stack>
+              {alert?.subscribers
+                && alert?.subscribers.map((subs, subsIndex: number) => (
+                  <Spacing key={subsIndex}>
                     <Row>
-                      <Column lg="1">
-                        {filenameQualifier(alert.filenameQualifier ?? '', alert?.coreFilename ?? '')}
-                      </Column>
-                      <Column lg="9">
-                        {typesAlertsRender(alert?.alertTypes ?? [])}
-                      </Column>
-                      <Column lg="2" right>
-                        {userPermissionsIcons(alert?.commands ?? [], alert?.sid ?? '')}
-                      </Column>
-                    </Row>
-                    {alert?.subscribers
-                      && alert?.subscribers.map((subs, subsIndex: number) => (
-                        <Spacing key={subsIndex}>
-                          <Row>
-                            {subsIndex < 2 && (
-                              <>
-                                <EllipsisedStyled lg="6">
-                                  <ButtonLink
-                                    underline
-                                    title={subs.firstNm ?? ''}
-                                    style={{
-                                      fontSize: '12px',
-                                      maxWidth: '130px',
-                                      overflow: 'hidden',
-                                    }}
-                                  >
-                                    {subs.firstNm}
-                                  </ButtonLink>
-                                </EllipsisedStyled>
-                                <EllipsisedStyled lg="6">
-                                  <ButtonLink
-                                    underline
-                                    title={subs.email ?? ''}
-                                    style={{
-                                      fontSize: '12px',
-                                      maxWidth: '130px',
-                                      overflow: 'hidden',
-                                    }}
-                                  >
-                                    {subs.email}
-                                  </ButtonLink>
-                                </EllipsisedStyled>
-                              </>
-                            )}
-                          </Row>
-                        </Spacing>
-                      ))}
-                    <Row>
-                      {alert.subscribers && alert?.subscribers?.length > 2 && (
-                      <Column lg="6">
-                        <ButtonLink underline style={{ fontSize: '12px', maxWidth: '130px', wordWrap: 'break-word' }}>
-                          ({alert.subscribers.length - 2}) more . . .
-                        </ButtonLink>
-                      </Column>
+                      {subsIndex < 2 && (
+                        <>
+                          <EllipsisedStyled lg="6">
+                            <ButtonLink
+                              underline
+                              title={subs.firstNm ?? ''}
+                              styles={linkStyles}
+                            >
+                              {subs.firstNm}
+                            </ButtonLink>
+                          </EllipsisedStyled>
+                          <EllipsisedStyled lg="6">
+                            <ButtonLink
+                              underline
+                              title={subs.email ?? ''}
+                              styles={linkStyles}
+                            >
+                              {subs.email}
+                            </ButtonLink>
+                          </EllipsisedStyled>
+                        </>
                       )}
-                      <Spacing margin={{ bottom: 'normal' }} />
                     </Row>
                   </Spacing>
                 ))}
-                {xchangesAlerts?.length === 0 && (
-                  <Row>
-                    <Column>
-                      <EmptyMessage size="normal">
-                        {'<none>'}
-                      </EmptyMessage>
-                    </Column>
-                  </Row>
+              <Row>
+                {alert.subscribers && alert?.subscribers?.length > 2 && (
+                  <Column lg="6">
+                    <ButtonLink underline styles={linkStyles}>
+                      ({alert.subscribers.length - 2}) more . . .
+                    </ButtonLink>
+                  </Column>
                 )}
-              </>
-            )}
-          </CardStyled>
-          <Spacing margin={{ top: 'normal' }}>
-            <CardStyled>
-              <Container>
-                <Row>
-                  <Stack horizontal={true} horizontalAlign="space-between">
-                    <Text style={{ fontWeight: 'bold', marginTop: '8px' }}>
-                      <FontIcon iconName="CalendarAgenda" style={{ fontSize: '10px', fontWeight: 500, paddingRight: '8px' }} />
-                      Schedule
-                    </Text>
-                    {updateScheduleCmd && (
-                      <IconButton
-                        iconProps={{ iconName: 'EditSolid12' }}
-                        style={{ fontSize: '0.675rem' }}
-                        onClick={() => {
-                          setTypeSchedule(true);
-                          setOpenSchedulePanel(true);
-                        }}
-                      />
-                    )}
-                  </Stack>
-                </Row>
-                {schedule?.scheduleType === 'NOT_SCHEDULED' ? (
-                  <Row>
-                    <EmptyMessage size="normal">
-                      {'<none>'}
-                    </EmptyMessage>
-                  </Row>
-                ) : (
-                  <>
-                    <Row>
-                      {!updateScheduleCmd && <Spacing margin={{ top: 'normal' }} />}
-                      <Stack horizontal={true} horizontalAlign="space-between">
-                        <FontIcon
-                          iconName="ReminderTime"
-                          style={{
-                            fontSize: '10px',
-                            fontWeight: 600,
-                            paddingRight: '8px',
-                          }}
-                        />
-                        <Text style={{ fontSize: '12px' }}>Expected to run</Text>
-                      </Stack>
-                    </Row>
-                    <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
-                      <Text style={{ fontSize: '12px' }}>{schedule?.expectedRunSchedule}</Text>
-                    </Spacing>
-                    <Spacing margin={{ bottom: 'normal' }}>
-                      <Text style={{ fontSize: '12px' }}>{schedule?.expectedCompletionTime}</Text>
-                    </Spacing>
-                    <Row>
-                      <Column>
-                        <ButtonLink
-                          onClick={() => {
-                            setTypeSchedule(false);
-                            setOpenSchedulePanel(true);
-                          }}
-                        >
-                          {schedule?.xchangeJobGroupName}
-                        </ButtonLink>
-                      </Column>
-                    </Row>
-                  </>
-                )}
-              </Container>
-            </CardStyled>
-          </Spacing>
-        </>
-      );
-    }
-    return null;
+                <Spacing margin={{ bottom: 'normal' }} />
+              </Row>
+            </AlertRow>
+          ))}
+          {xchangesAlerts?.length === 0 && (
+            <Row>
+              <Column>
+                <EmptyMessage size="normal">
+                  {'<none>'}
+                </EmptyMessage>
+              </Column>
+            </Row>
+          )}
+        </TaskCard>
+        <TaskCard
+          id="__ScheduleCard"
+          title="Schedule"
+          icon={<FontIcon iconName="CalendarAgenda" />}
+          commands={renderUpdateScheduleIcon()}
+        >
+          {schedule?.scheduleType === 'NOT_SCHEDULED' ? (
+            <Row>
+              <Column>
+                <EmptyMessage size="normal">
+                  {'<none>'}
+                </EmptyMessage>
+              </Column>
+            </Row>
+          ) : (
+            <>
+              {!updateScheduleCmd && <Spacing margin={{ top: 'normal' }} />}
+              <Stack horizontal horizontalAlign="space-between" styles={stackItemStyles}>
+                <Stack.Item>
+                  <FontIcon
+                    iconName="ReminderTime"
+                    style={{
+                      fontSize: userTheme.fontSizes.small,
+                      fontWeight: 600,
+                      paddingRight: '8px',
+                    }}
+                  />
+                </Stack.Item>
+                <Stack.Item grow>
+                  <Text size="small">Expected to run</Text>
+                </Stack.Item>
+              </Stack>
+              <Text size="small">{schedule?.expectedRunSchedule}</Text>
+              <Spacing margin={{ bottom: 'normal' }}>
+                <Text size="small">{schedule?.expectedCompletionTime}</Text>
+              </Spacing>
+              <Row>
+                <Column>
+                  <ButtonLink
+                    onClick={() => {
+                      setTypeSchedule(false);
+                      setOpenSchedulePanel(true);
+                    }}
+                  >
+                    {schedule?.xchangeJobGroupName}
+                  </ButtonLink>
+                </Column>
+              </Row>
+            </>
+          )}
+        </TaskCard>
+      </CardColumn>
+    );
   };
 
   const renderBody = () => {
@@ -631,9 +640,7 @@ const XchangeDetailsPage = () => {
           <Spacing margin={{ top: 'double', bottom: 'normal' }}>
             <Stack>
               <Stack.Item align="center">
-                <Text 
-                  style={{ fontSize: '1.100rem', fontWeight: 500 }}
-                >
+                <Text size="large" variant="bold">
                   Please Complete the implementation
                 </Text>
               </Stack.Item>
@@ -642,12 +649,10 @@ const XchangeDetailsPage = () => {
           <Spacing margin={{ bottom: 'normal' }}>
             <Stack>
               <Stack.Item align="center">
-                <Text
-                  style={{ fontWeight: 500 }}
-                >
-                  The implementation of the 
-                  <span style={{ fontWeight: 'bold' }}> Enrollment </span> 
-                  spec of the name must be <br/>
+                <Text>
+                  The implementation of the
+                  <span style={{ fontWeight: 'bold' }}> Enrollment </span>
+                  spec of the name must be <br />
                   &nbsp; &nbsp; complete before the Xchange steps can be configured
                 </Text>
               </Stack.Item>
@@ -655,8 +660,8 @@ const XchangeDetailsPage = () => {
           </Spacing>
           <Stack>
             <Stack.Item align="center">
-              <Text style={{ fontWeight: 500 }}>
-                Once the implemenation has been completed, click the Generate button below <br/>
+              <Text>
+                Once the implementation has been completed, click the Generate button below <br />
                 &nbsp; &nbsp; to generate templated Xchange steps wich can be further configured
               </Text>
             </Stack.Item>
@@ -673,11 +678,11 @@ const XchangeDetailsPage = () => {
                 >
                   Update setup wizard
                 </PrimaryButton>
-                <DefaultButton 
+                <DefaultButton
                   style={{ marginLeft: '10px' }}
                   id="generateXchange"
                   text="Generate"
-                  onClick={() => showGeneratedialog()}
+                  onClick={() => showGenerateDialog()}
                 />
               </Stack.Item>
             </Stack>
@@ -691,22 +696,20 @@ const XchangeDetailsPage = () => {
           <Spacing margin={{ top: 'double', bottom: 'normal' }}>
             <Stack>
               <Stack.Item align="center">
-                <Text style={{ fontSize: '1.100rem', fontWeight: 500 }}>Please Complete the setup</Text>
+                <Text variant="bold" size="large">Please Complete the setup</Text>
               </Stack.Item>
             </Stack>
           </Spacing>
           <Stack>
             <Stack.Item align="center">
-              <Text
-                style={{ fontWeight: 500 }}
-              >
+              <Text>
                 The xchange setup wizard has only been partially completed.
               </Text>
             </Stack.Item>
           </Stack>
           <Stack>
             <Stack.Item align="center">
-              <Text style={{ fontWeight: 500 }}>
+              <Text>
                 All Questions in the setup wizard must be answered before the Xchange
                 steps can be configured
               </Text>

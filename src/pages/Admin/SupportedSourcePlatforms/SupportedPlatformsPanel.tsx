@@ -23,7 +23,9 @@ import {
   CdxWebCommandType,
   GqOperationResponse,
 } from 'src/data/services/graphql';
-import { PanelBody, PanelHeader, PanelTitle, ThemedPanel, WizardButtonRow } from 'src/layouts/Panels/Panels.styles';
+import {
+  PanelBody, PanelHeader, PanelTitle, ThemedPanel, WizardButtonRow,
+} from 'src/layouts/Panels/Panels.styles';
 import { UIInputText } from 'src/components/inputs/InputText';
 import { useNotification } from 'src/hooks/useNotification';
 import { ThemeStore } from 'src/store/ThemeStore';
@@ -361,7 +363,7 @@ const SupportedPlataformsPanel = ({
         <FormRow>
           <Column lg="12">
             {supportedPlatform?.semanticMap.visible && (
-              <UIInputSelectOne 
+              <UIInputSelectOne
                 id="__supportedSemanticMap"
                 uiField={supportedPlatform.semanticMap}
                 options={supportedPlatform.options}
@@ -428,13 +430,15 @@ const SupportedPlataformsPanel = ({
             >
               <Comment20Filled
                 style={supportedNotes ? {
-                  color: ThemeStore.userTheme.colors.yellow, cursor: 'pointer',
+                  color: ThemeStore.userTheme.colors.yellow,
+                  cursor: 'pointer',
                   marginLeft: '15px',
-    
+
                 } : {
-                  color: ThemeStore.userTheme.colors.neutralTertiaryAlt, cursor: 'pointer',
+                  color: ThemeStore.userTheme.colors.neutralTertiaryAlt,
+                  cursor: 'pointer',
                   marginLeft: '15px',
-   
+
                 }}
                 onClick={() => {
                   setOpenUpdateComments((prevState) => !prevState);
@@ -445,12 +449,14 @@ const SupportedPlataformsPanel = ({
           {!closeTooltipHost && (
             <Comment20Filled
               style={supportedNotes ? {
-                color: ThemeStore.userTheme.colors.yellow, cursor: 'pointer',
+                color: ThemeStore.userTheme.colors.yellow,
+                cursor: 'pointer',
                 marginLeft: '15px',
-               } : {
-                color: ThemeStore.userTheme.colors.neutralTertiaryAlt, cursor: 'pointer',
+              } : {
+                color: ThemeStore.userTheme.colors.neutralTertiaryAlt,
+                cursor: 'pointer',
                 marginLeft: '15px',
-               }}
+              }}
               onClick={() => {
                 setOpenUpdateComments(true);
               }}
@@ -473,7 +479,7 @@ const SupportedPlataformsPanel = ({
     const updateComment = () => (
       <TextField
         id="SupportedPlatformsComment"
-        label='Comments'
+        label="Comments"
         readOnly={readOnly()}
         value={supportedNotes}
         onChange={(event, newValue: any) => {
@@ -515,10 +521,12 @@ const SupportedPlataformsPanel = ({
         >
           <Comment20Filled
             style={supportedNotes ? {
-              color: ThemeStore.userTheme.colors.yellow, cursor: 'pointer',
+              color: ThemeStore.userTheme.colors.yellow,
+              cursor: 'pointer',
               marginLeft: '15px',
             } : {
-              color: ThemeStore.userTheme.colors.neutralTertiaryAlt, cursor: 'pointer',
+              color: ThemeStore.userTheme.colors.neutralTertiaryAlt,
+              cursor: 'pointer',
               marginLeft: '15px',
             }}
           />

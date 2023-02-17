@@ -23,7 +23,9 @@ import {
   CdxWebCommandType,
   GqOperationResponse,
 } from 'src/data/services/graphql';
-import { PanelBody, PanelHeader, PanelTitle, ThemedPanel, WizardButtonRow } from 'src/layouts/Panels/Panels.styles';
+import {
+  PanelBody, PanelHeader, PanelTitle, ThemedPanel, WizardButtonRow,
+} from 'src/layouts/Panels/Panels.styles';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { UIInputText } from 'src/components/inputs/InputText';
 import { useNotification } from 'src/hooks/useNotification';
@@ -349,13 +351,15 @@ const IncomingFormatPanel = ({
             >
               <Comment20Filled
                 style={incomingNotes ? {
-                  color: ThemeStore.userTheme.colors.yellow, cursor: 'pointer',
+                  color: ThemeStore.userTheme.colors.yellow,
+                  cursor: 'pointer',
                   marginLeft: '15px',
-    
+
                 } : {
-                  color: ThemeStore.userTheme.colors.neutralTertiaryAlt, cursor: 'pointer',
+                  color: ThemeStore.userTheme.colors.neutralTertiaryAlt,
+                  cursor: 'pointer',
                   marginLeft: '15px',
-   
+
                 }}
                 onClick={() => {
                   setOpenUpdateComments(true);
@@ -366,12 +370,14 @@ const IncomingFormatPanel = ({
           {!closeTooltipHost && (
             <Comment20Filled
               style={incomingNotes ? {
-                color: ThemeStore.userTheme.colors.yellow, cursor: 'pointer',
+                color: ThemeStore.userTheme.colors.yellow,
+                cursor: 'pointer',
                 marginLeft: '15px',
-               } : {
-                color: ThemeStore.userTheme.colors.neutralTertiaryAlt, cursor: 'pointer',
+              } : {
+                color: ThemeStore.userTheme.colors.neutralTertiaryAlt,
+                cursor: 'pointer',
                 marginLeft: '15px',
-               }}
+              }}
               onClick={() => {
                 setOpenUpdateComments(true);
               }}
@@ -394,7 +400,7 @@ const IncomingFormatPanel = ({
     const updateComment = () => (
       <TextField
         id="IncomingFormatComment"
-        label='Comments'
+        label="Comments"
         readOnly={readOnly()}
         value={incomingNotes}
         onChange={(event, newValue: any) => {
@@ -436,10 +442,12 @@ const IncomingFormatPanel = ({
         >
           <Comment20Filled
             style={incomingNotes ? {
-              color: ThemeStore.userTheme.colors.yellow, cursor: 'pointer',
+              color: ThemeStore.userTheme.colors.yellow,
+              cursor: 'pointer',
               marginLeft: '15px',
             } : {
-              color: ThemeStore.userTheme.colors.neutralTertiaryAlt, cursor: 'pointer',
+              color: ThemeStore.userTheme.colors.neutralTertiaryAlt,
+              cursor: 'pointer',
               marginLeft: '15px',
             }}
           />
@@ -489,7 +497,7 @@ const IncomingFormatPanel = ({
         <FormRow>
           <Column lg="12">
             {incomingFormat?.semanticMap.visible && (
-              <UIInputSelectOne 
+              <UIInputSelectOne
                 id="__incomingFormatSemanticMap"
                 uiField={incomingFormat.semanticMap}
                 value={semanticMap}

@@ -12,7 +12,7 @@ import {
   StatsFooter,
   StatsRow,
   StyledVendorHeaderRow,
-  TabBody
+  TabBody,
 } from '../FileStatusDetails.styles';
 
 const COLUMNS: IColumn[] = [
