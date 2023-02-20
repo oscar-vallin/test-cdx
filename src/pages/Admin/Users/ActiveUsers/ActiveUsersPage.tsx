@@ -85,7 +85,7 @@ const ActiveUsersPage = () => {
         pendingActivationFilter,
         expiredActivationFilter,
         searchAllOrgsFilter,
-        +tableFilters.searchText.delayedValue,
+        tableFilters.searchText.delayedValue,
       )
       .then();
   }, [tableFilters.pagingParams]);
@@ -268,7 +268,7 @@ const ActiveUsersPage = () => {
               pendingActivationFilter,
               expiredActivationFilter,
               searchAllOrgsFilter,
-              +tableFilters.searchText.delayedValue,
+              tableFilters.searchText.delayedValue,
             )
             .then();
         }}
@@ -289,7 +289,7 @@ const ActiveUsersPage = () => {
               pendingActivationFilter,
               expiredActivationFilter,
               searchAllOrgsFilter,
-              +tableFilters.searchText.delayedValue,
+              tableFilters.searchText.delayedValue,
             )
             .then();
         }}
