@@ -79,13 +79,13 @@ const ActiveUsersPage = () => {
   useEffect(() => {
     userService
       .fetchUsers(
-        0,
         tableFilters.pagingParams.sort,
         lockedFilter,
         pendingActivationFilter,
         expiredActivationFilter,
         searchAllOrgsFilter,
         tableFilters.searchText.delayedValue,
+        0,
       )
       .then();
   }, [tableFilters.pagingParams]);
@@ -262,13 +262,13 @@ const ActiveUsersPage = () => {
           setSelectedItems([]);
           userService
             .fetchUsers(
-              0,
               tableFilters.pagingParams.sort,
               lockedFilter,
               pendingActivationFilter,
               expiredActivationFilter,
               searchAllOrgsFilter,
               tableFilters.searchText.delayedValue,
+              0,
             )
             .then();
         }}
@@ -283,13 +283,13 @@ const ActiveUsersPage = () => {
           setSelectedItems([]);
           userService
             .fetchUsers(
-              0,
               tableFilters.pagingParams.sort,
               lockedFilter,
               pendingActivationFilter,
               expiredActivationFilter,
               searchAllOrgsFilter,
               tableFilters.searchText.delayedValue,
+              0,
             )
             .then();
         }}
