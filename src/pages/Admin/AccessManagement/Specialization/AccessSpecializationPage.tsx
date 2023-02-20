@@ -15,7 +15,6 @@ import {
   DialogFooter,
   Spinner,
   SpinnerSize,
-  Link,
   DetailsList,
   TooltipHost,
   IColumn,
@@ -45,6 +44,7 @@ import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { PageBody } from 'src/components/layouts/Column';
 import { HideForMobile } from 'src/styles/GlobalStyles';
+import { ButtonLink } from 'src/components/buttons';
 import {
   AccessSpecializationPanel,
   AccessSpecializationMembersPanel,
@@ -133,15 +133,16 @@ const AccessManagementSpecializationPage = () => {
     switch (column.key) {
       case 'name':
         return (
-          <Link
+          <ButtonLink
             id={`__${item?.name?.split(' ').join('_')}_Link`}
             onClick={() => {
               setSelectedAccessId(item.sid);
               setIsPanelOpen(true);
             }}
+            style={{ overflow: 'hidden' }}
           >
             {item.name}
-          </Link>
+          </ButtonLink>
         );
       case 'members':
         if (memberCount === 0) {
