@@ -19,6 +19,7 @@ import {
   CellItemRow, StyledCell, StyledColumn, Text,
 } from './WorkPacketTable.styles';
 
+// eslint-disable-next-line no-shadow
 export enum WorkPacketColumn {
   TIMESTAMP,
   DATETIME,
@@ -100,7 +101,11 @@ export const useWorkPacketColumns = (
         ) {
           return (
             <CellItemRow>
-              <ButtonLink onClick={() => openDetails(item.orgSid, item.workOrderId)}>{timestamp}</ButtonLink>
+              <ButtonLink
+                onClick={() => openDetails(item.orgSid, item.workOrderId)}
+              >
+                {timestamp}
+              </ButtonLink>
               {item.recordHighlightCount && (
                 <HighlightCounter
                   id={`__FileStatus_Highlight_Counter_${item.workOrderId}`}
@@ -149,7 +154,13 @@ export const useWorkPacketColumns = (
       onRender: (item: WpTransmission) => {
         const timestamp = format(new Date(item.deliveredOn), 'MM/dd/yyyy hh:mm a');
         if (item.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewDetails)) {
-          return <ButtonLink onClick={() => openDetails(item.orgSid, item.workOrderId)}>{timestamp}</ButtonLink>;
+          return (
+            <ButtonLink
+              onClick={() => openDetails(item.orgSid, item.workOrderId)}
+            >
+              {timestamp}
+            </ButtonLink>
+          )
         }
         return <span>{timestamp}</span>;
       },
@@ -173,7 +184,13 @@ export const useWorkPacketColumns = (
       onRender: (item: WpProcessError) => {
         const timestamp = format(new Date(item.startTime), 'MM/dd/yyyy hh:mm a');
         if (item.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewDetails)) {
-          return <ButtonLink onClick={() => openDetails(item.orgSid, item.workOrderId)}>{timestamp}</ButtonLink>;
+          return (
+            <ButtonLink
+              onClick={() => openDetails(item.orgSid, item.workOrderId)}
+            >
+              {timestamp}
+            </ButtonLink>
+          )
         }
         return <span>{timestamp}</span>;
       },
@@ -426,7 +443,11 @@ export const useWorkPacketColumns = (
       dataType: 'string',
       sortable: true,
       filterable: true,
-      onRender: (item: WorkPacketStatus) => renderDownloadLink(item.workOrderId, item.commands, item.inboundFilename),
+      onRender: (item: WorkPacketStatus) => renderDownloadLink(
+        item.workOrderId,
+        item.commands,
+        item.inboundFilename,
+      ),
     },
     {
       key: 'vendorFilename',
@@ -444,7 +465,11 @@ export const useWorkPacketColumns = (
       dataType: 'string',
       sortable: true,
       filterable: true,
-      onRender: (item: WorkPacketStatus) => renderDownloadLink(item.workOrderId, item.commands, item.vendorFilename),
+      onRender: (item: WorkPacketStatus) => renderDownloadLink(
+        item.workOrderId,
+        item.commands,
+        item.vendorFilename,
+      ),
     },
     {
       key: 'totalRecords',
