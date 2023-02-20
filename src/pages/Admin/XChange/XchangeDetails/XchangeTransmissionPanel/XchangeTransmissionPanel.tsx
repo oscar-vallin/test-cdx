@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
   DefaultButton,
-  DirectionalHint,
   MessageBar,
   MessageBarType,
   PanelType,
@@ -10,11 +9,12 @@ import {
   SpinnerSize,
   Stack,
   Text,
-  TooltipHost,
 } from '@fluentui/react';
-import { Comment20Filled } from '@fluentui/react-icons';
 import {
-  PanelBody, PanelHeader, PanelTitle, ThemedPanel,
+  PanelBody,
+  PanelHeader,
+  PanelTitle,
+  ThemedPanel,
 } from 'src/layouts/Panels/Panels.styles';
 import {
   useCopyXchangeFileTransmissionLazyQuery,
@@ -34,15 +34,15 @@ import { useNotification } from 'src/hooks/useNotification';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { UIInputMultiSelect } from 'src/components/inputs/InputDropdown/UIInputMultiSelect';
 import { Spacing } from 'src/components/spacings/Spacing';
-import { Column, Container, Row } from 'src/components/layouts';
+import { Column } from 'src/components/layouts';
 import { UIInputSelectOne } from 'src/components/inputs/InputDropdown';
 import { InputText, UIInputText } from 'src/components/inputs/InputText';
 import { UIInputCheck } from 'src/components/inputs/InputCheck';
 import { ButtonLink } from 'src/components/buttons';
 import { TestFileTransmissionModal } from 'src/containers/modals/TestFileTransmissionModal';
-import { UIInputTextArea } from 'src/components/inputs/InputTextArea';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { ThemeStore } from 'src/store/ThemeStore';
+import { CommentBubble } from 'src/components/inputs/Comment';
 
 type XchangeTransmissionPanelProps = {
   isPanelOpen: boolean;
@@ -113,7 +113,7 @@ const XchangeTransmissionPanel = ({
   const [createFileTransmission, setCreateFileTransmission] = useState(false);
   const [authKeyPassphrase, setAuthKeyPassphrase] = useState('');
   const [filenameQualifiers, setFilenameQualifiers] = useState<string[]>();
-  const [filenameQualifieruiField, setFilenameQualifieruiField] = useState<UiSelectManyField>()
+  const [filenameQualifierUIField, setFilenameQualifierUIField] = useState<UiSelectManyField>()
   const [customFileQualifier, setCustomFileQualifier] = useState('');
   const [customQualifier, setCustomQualifier] = useState<boolean>();
   const [protocol, setProtocol] = useState('');
@@ -129,8 +129,6 @@ const XchangeTransmissionPanel = ({
   const [stepWise, setStepWise] = useState(true);
   const [encryptionKeyName, setEncryptionKeyName] = useState('');
   const [comments, setComments] = useState('');
-  const [openUpdateComments, setOpenUpdateComments] = useState(false);
-  const [closeTooltipHost, setCloseTooltipHost] = useState(true);
   const [copyCmd, setCopyCmd] = useState<WebCommand | null>();
   const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
@@ -428,113 +426,40 @@ const XchangeTransmissionPanel = ({
     }
   };
 
-  const tooltipHostComments = () => {
-    if (!openUpdateComments && xchangeFileTransmission) {
-      return (
-        <>
-          {closeTooltipHost && (
-            <TooltipHost
-              directionalHint={DirectionalHint['rightBottomEdge']}
-              content={comments ? 'This File Transmission has comments. Click to see them.' : 'Click to add a comment'}
-            >
-              <Comment20Filled
-                style={comments ? {
-                  color: ThemeStore.userTheme.colors.yellow, cursor: 'pointer',
-                } : {
-                  color: ThemeStore.userTheme.colors.neutralTertiaryAlt, cursor: 'pointer',
-                }}
-                onClick={() => {
-                  setOpenUpdateComments(true);
-                }}
-              />
-            </TooltipHost>
-          )}
-          {!closeTooltipHost && (
-            <Comment20Filled
-              style={comments ? {
-                color: ThemeStore.userTheme.colors.yellow, cursor: 'pointer',
-              } : {
-                color: ThemeStore.userTheme.colors.neutralTertiaryAlt, cursor: 'pointer',
-              }}
-              onClick={() => {
-                setOpenUpdateComments(true);
-              }}
-            />
-          )}
-        </>
-      );
+  const updateComments = (comment?: string) => {
+    setComments(comment ?? '');
+    if (!xchangeFileTransmission?.comments.value) {
+      if (comment?.trim() !== '') {
+        setUnsavedChanges(true);
+      } else {
+        setUnsavedChanges(false);
+      }
+    } else if (xchangeFileTransmission.comments.value?.trim() !== comment?.trim()) {
+      setUnsavedChanges(true);
+    } else {
+      setUnsavedChanges(false);
     }
-
-    const updateComment = () => (
-      <UIInputTextArea
-        id="FileTransmissionComment"
-        uiField={xchangeFileTransmission?.comments}
-        value={comments}
-        onChange={(event, newValue: any) => {
-          setComments(newValue ?? '');
-          if (!xchangeFileTransmission?.comments.value) {
-            if (newValue.trim() !== '') {
-              setUnsavedChanges(true);
-            } else {
-              setUnsavedChanges(false);
-            }
-          } else if (xchangeFileTransmission.comments.value?.trim() !== newValue?.trim()) {
-            setUnsavedChanges(true);
-          } else {
-            setUnsavedChanges(false);
-          }
-        }}
-        resizable={false}
-        rows={12}
-      />
-    );
-
-    if (openUpdateComments) {
-      return (
-        <TooltipHost
-          directionalHintForRTL={DirectionalHint['bottomAutoEdge']}
-          closeDelay={5000000}
-          style={{ background: ThemeStore.userTheme.colors.yellow, width: '400px', padding: '0 10px 10px 10px' }}
-          tooltipProps={{
-            calloutProps: {
-              styles: {
-                beak: { background: ThemeStore.userTheme.colors.yellow },
-                beakCurtain: { background: ThemeStore.userTheme.colors.yellow },
-                calloutMain: { background: ThemeStore.userTheme.colors.yellow },
-              },
-            },
-          }}
-          content={updateComment()}
-        >
-          <Comment20Filled
-            style={comments ? {
-              color: ThemeStore.userTheme.colors.yellow, cursor: 'pointer',
-            } : {
-              color: ThemeStore.userTheme.colors.neutralTertiaryAlt, cursor: 'pointer',
-            }}
-          />
-        </TooltipHost>
-      );
-    }
-    return null;
   };
 
   const renderPanelHeader = () => (
     <PanelHeader id="__FileTransmission_PanelHeader">
-      <Container>
-        <Row>
-          <Column lg="4">
-            <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
-              <PanelTitle id="__FileTransmission_Panel_Title" variant="bold" size="large">
-                File transmission
-              </PanelTitle>
-            </Stack>
-          </Column>
-          <Column lg="8">
-            <Spacing margin={{ top: 'normal' }}>{tooltipHostComments()}</Spacing>
-          </Column>
-        </Row>
-      </Container>
+      <Column lg="12">
+        <Stack horizontal styles={{ root: { height: 44 } }}>
+          <PanelTitle id="__FileTransmission_Panel_Title" variant="bold" size="large">
+            File transmission
+            <CommentBubble
+              id="__FileTransmissionComment"
+              value={comments}
+              uiField={xchangeFileTransmission?.comments}
+              onChange={updateComments}
+              title={
+                comments ? 'This File Transmission has comments. Click to see them.'
+                  : 'Click to add a comment'
+              }
+            />
+          </PanelTitle>
+        </Stack>
+      </Column>
     </PanelHeader>
   );
 
@@ -790,7 +715,7 @@ const XchangeTransmissionPanel = ({
                 <UIInputMultiSelect
                   id="__filenameQualifier"
                   value={filenameQualifiers ?? []}
-                  uiField={filenameQualifieruiField}
+                  uiField={filenameQualifierUIField}
                   options={xchangeFileTransmission?.options ?? []}
                   onChange={(newValue) => {
                     setFilenameQualifiers(newValue ?? []);
@@ -982,7 +907,7 @@ const XchangeTransmissionPanel = ({
       const filename = { ...copyXchangeFileTransmission?.filenameQualifiers };
       filename.label = 'Environment';
       filename.info = null;
-      setFilenameQualifieruiField(filename);
+      setFilenameQualifierUIField(filename);
       if (
         copyXchangeFileTransmission?.filenameQualifiers.value
         && copyXchangeFileTransmission?.filenameQualifiers.value.length > 0
@@ -1018,7 +943,7 @@ const XchangeTransmissionPanel = ({
       };
       filename.label = 'Environment';
       filename.info = null;
-      setFilenameQualifieruiField(filename);
+      setFilenameQualifierUIField(filename);
       if (
         dataFileTransmissionForm.xchangeFileTransmissionForm?.filenameQualifiers.value
         && dataFileTransmissionForm.xchangeFileTransmissionForm?.filenameQualifiers.value.length > 0
@@ -1123,15 +1048,6 @@ const XchangeTransmissionPanel = ({
 
   return (
     <ThemedPanel
-      onClick={() => {
-        if (openUpdateComments) {
-          setOpenUpdateComments(false);
-          setCloseTooltipHost(false);
-          setTimeout(() => {
-            setCloseTooltipHost(true);
-          }, 0.001);
-        }
-      }}
       closeButtonAriaLabel="Close"
       onRenderHeader={renderPanelHeader}
       onRenderFooterContent={renderPanelFooter}
