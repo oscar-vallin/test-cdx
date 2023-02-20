@@ -32,13 +32,3 @@ export const FullSpecList = styled(DetailsList)`
     margin: auto;
   }
 `;
-
-export const StyledParenSpecOptions = styled.div`
-  width: 242px;
-  border: 0px solid black;
-  position: absolute;
-  z-index: 1;
-  top: 544px;
-  background-color: #fff;
-
-`

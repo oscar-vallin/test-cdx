@@ -5,8 +5,6 @@ import {
   MessageBarType,
   PanelType,
   PrimaryButton,
-  Text,
-  SearchBox,
   Spinner,
   SpinnerSize,
   Stack,
@@ -27,9 +25,9 @@ import {
   ExtractType,
   WebCommand,
   CdxWebCommandType,
-  GqOperationResponse,
+  GqOperationResponse, UiOption,
 } from 'src/data/services/graphql';
-import { UIInputSelectOne } from 'src/components/inputs/InputDropdown';
+import { UIInputSearchOne, UIInputSelectOne } from 'src/components/inputs/InputDropdown';
 import {
   PanelBody, PanelHeader, ThemedPanel, WizardButtonRow,
 } from 'src/layouts/Panels/Panels.styles';
@@ -37,9 +35,7 @@ import { Column } from 'src/components/layouts';
 import { useNotification } from 'src/hooks/useNotification';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
-import FormLabel from 'src/components/labels/FormLabel';
 import { CommentBubble } from 'src/components/inputs/Comment';
-import { StyledParenSpecOptions } from './FullSpecLibrary.styles';
 
 const defaultDialogProps: DialogYesNoProps = {
   id: '__SpecVendor_Dlg',
@@ -66,6 +62,7 @@ const SpecPanel = ({
   const Toast = useNotification();
   const handleError = ErrorHandler();
   const [vendorSpecForm, setVendorSpecForm] = useState<VendorSpecForm | null>();
+  const [specOptions, setSpecOptions] = useState<UiOption[]>([]);
   const [name, setName] = useState('');
   const [legacyName, setLegacyName] = useState('');
   const [version, setVersion] = useState('');
@@ -75,9 +72,7 @@ const SpecPanel = ({
   const [comments, setComments] = useState('');
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
   const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
-  const [parentSpecSearch, setParentSpecSearch] = useState('');
-  const [parentSpecName, setParentSpecName] = useState('');
-  const [currentSpecVendor, setCurrentSpecVendor] = useState('');
+  const [currentSpecVendor, setCurrentSpecVendor] = useState<UiOption>();
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
@@ -93,9 +88,9 @@ const SpecPanel = ({
     loading: isLoadingCreate,
     error: createVendorError,
   }] = useCreateVendorSpecMutation();
-  const [updateVendor, {
+  const [updateVendorSpec, {
     data: updateVendorData,
-    loading: isLoadingupdate,
+    loading: isLoadingUpdate,
     error: updateVendorError,
   }] = useUpdateVendorSpecMutation();
   const [activateVendorSpec,
@@ -107,7 +102,11 @@ const SpecPanel = ({
   ] = useActivateVendorSpecMutation();
 
   const [vendorSpecQuickSearch,
-    { data: quickSearchData }] = useVendorSpecQuickSearchLazyQuery();
+    {
+      data: vendorSpecSearchData,
+      loading: isLoadingVendorSpecQuickSearch,
+      error: vendorSpecSearchError
+    }] = useVendorSpecQuickSearchLazyQuery();
 
   useEffect(() => {
     handleError(errorForm);
@@ -121,6 +120,9 @@ const SpecPanel = ({
   useEffect(() => {
     handleError(activateVendorError);
   }, [activateVendorError]);
+  useEffect(() => {
+    handleError(vendorSpecSearchError);
+  }, [vendorSpecSearchError]);
 
   const fetchData = () => {
     fetchVendorSpec({
@@ -155,7 +157,7 @@ const SpecPanel = ({
     if (vendorSpecForm) {
       setName(vendorSpecForm.name.value ?? '');
       setLegacyName(vendorSpecForm.legacyName.value ?? '');
-      setCurrentSpecVendor(vendorSpecForm.parentSpec.value?.value ?? '');
+      setCurrentSpecVendor(vendorSpecForm.parentSpec.value ?? undefined);
       setVersion(vendorSpecForm.version.value ?? '');
       setFileContents(vendorSpecForm.fileContents.value?.value ?? '');
       setSupportsChangesOnly(vendorSpecForm.supportsChangesOnly.value?.value ?? '');
@@ -205,7 +207,7 @@ const SpecPanel = ({
         Toast.success({ text: 'Vendor Spec Saved' });
       }
     }
-  }, [updateVendorData, isLoadingupdate]);
+  }, [updateVendorData, isLoadingUpdate]);
 
   useEffect(() => {
     if (!isLoadingActivateVendor && activateVendorData) {
@@ -216,21 +218,13 @@ const SpecPanel = ({
     }
   }, [activateVendorData, isLoadingActivateVendor]);
 
-  const getVendorSpecs = (searchText: string) => {
+  const searchVendorSpecs = (searchText?: string) => {
     vendorSpecQuickSearch({
       variables: {
         searchText: searchText ?? '',
       },
     });
   };
-
-  useEffect(() => {
-    if (parentSpecSearch.trim() !== '') {
-      const timer = setTimeout(() => getVendorSpecs(parentSpecSearch), 300);
-      return () => clearTimeout(timer);
-    }
-    return undefined;
-  }, [parentSpecSearch]);
 
   const hideDialog = () => {
     setShowDialog(false);
@@ -304,7 +298,7 @@ const SpecPanel = ({
   const saveSpecVendor = () => {
     const fCs = getFileContent();
     if (sid) {
-      updateVendor({
+      updateVendorSpec({
         variables: {
           specInput: {
             sid,
@@ -315,6 +309,7 @@ const SpecPanel = ({
             legacyName,
             version,
             name,
+            parentSpec: currentSpecVendor?.value,
           },
         },
       }).then();
@@ -331,36 +326,24 @@ const SpecPanel = ({
           supportsFullFile: supportsFullFile === 'true',
           comments,
           vendorSid: orgSid,
+          parentSpec: currentSpecVendor?.value,
         },
       },
     }).then();
   };
 
-  const doSearch = () => {
-    if (quickSearchData && !quickSearchData?.vendorSpecQuickSearch?.length) {
-      return <Text>No matching vendor specs found</Text>
+  useEffect(() => {
+    if (!isLoadingVendorSpecQuickSearch && vendorSpecSearchData) {
+      const specs = vendorSpecSearchData.vendorSpecQuickSearch?.map((spec) => {
+        const opt: UiOption = {
+          label: `${spec.vendor?.name}: ${spec.name}`,
+          value: spec.sid ?? '',
+        };
+        return opt;
+      });
+      setSpecOptions(specs ?? []);
     }
-    if (quickSearchData?.vendorSpecQuickSearch?.length
-      && quickSearchData?.vendorSpecQuickSearch.length > 0) {
-      const vendors = quickSearchData?.vendorSpecQuickSearch;
-      return vendors.map((vendor, index) => (
-        <Spacing margin={{ left: 'normal', top: 'normal', bottom: 'normal' }} key={index}>
-          <Text
-            id={`__QuickSearch__VendorSpec_${index}`}
-            style={{ cursor: 'pointer' }}
-            onClick={() => {
-              setParentSpecName(vendor.name ?? '');
-              setCurrentSpecVendor(vendor.name ?? '');
-            }}
-          >
-            {vendor.name}
-          </Text>
-        </Spacing>
-      ));
-    }
-
-    return null;
-  };
+  }, [vendorSpecSearchData, isLoadingVendorSpecQuickSearch]);
 
   const renderBody = () => {
     if (loadingForm) {
@@ -465,28 +448,19 @@ const SpecPanel = ({
           )}
         </FormRow>
         <FormRow>
-          <FormLabel
+          <UIInputSearchOne
             id="__ParentSpec"
-            required={vendorSpecForm?.parentSpec?.required ?? false}
-            info={vendorSpecForm?.parentSpec?.info ?? ''}
-            label={vendorSpecForm?.parentSpec?.label ?? ''}
-          />
-          <SearchBox
-            styles={{ root: { width: '100%', borderColor: 'gray' } }}
-            id="__ParentSpecSearch"
-            readOnly={!updateCmd}
+            uiField={vendorSpecForm?.parentSpec}
             value={currentSpecVendor}
-            onChange={(event, searchText) => {
-              setParentSpecSearch(searchText ?? '');
-              setCurrentSpecVendor(searchText ?? '');
-              if (parentSpecName.trim() === '') {
-                setParentSpecName('');
-              }
+            onType={searchVendorSpecs}
+            onSelectValue={(newValue) => {
+              setUnsavedChanges(true);
+              setCurrentSpecVendor(newValue);
             }}
+            options={specOptions}
+            placeholder="Type to search for a parent vendor spec"
+            emptyText="No vendor specs were found"
           />
-          {currentSpecVendor.trim() !== '' && !parentSpecName && (
-            <StyledParenSpecOptions>{doSearch()}</StyledParenSpecOptions>
-          )}
         </FormRow>
         <WizardButtonRow>
           <Spacing margin={{ top: 'double' }}>
