@@ -44,13 +44,22 @@ export const useCreateGroupPanel = (isOpen, orgSid, selectedGroupId, templateId)
   const [policies, setPolicies] = useState<UiOption[]>([]);
   const [specializations, setSpecializations] = useState<UiOption[]>([]);
   // Hooks to Fetches.
-  const [apiUseAccessPolicyGroupForm, { data: accessPolicyGroupFormData, loading: loadingForm }] = useQueryHandler(
+  const [apiUseAccessPolicyGroupForm, {
+    data: accessPolicyGroupFormData,
+    loading: loadingForm,
+  }] = useQueryHandler(
     useAccessPolicyGroupFormLazyQuery,
   );
-  const [apiCreateAccessPolicyGroup, { data: createAccessPolicyGroupData, loading: creatingGroup }] = useQueryHandler(
+  const [apiCreateAccessPolicyGroup, {
+    data: createAccessPolicyGroupData,
+    loading: creatingGroup,
+  }] = useQueryHandler(
     useCreateAccessPolicyGroupMutation,
   );
-  const [apiFindAccessPolicyGroup, { data: findAccessPolicyGroupData, loading: loadingGroup }] = useQueryHandler(
+  const [apiFindAccessPolicyGroup, {
+    data: findAccessPolicyGroupData,
+    loading: loadingGroup,
+  }] = useQueryHandler(
     useFindAccessPolicyGroupLazyQuery,
   );
   const [apiUpdateAccessPolicyGroup, { data: updateAccessPolicyGroupData }] = useQueryHandler(
@@ -58,7 +67,10 @@ export const useCreateGroupPanel = (isOpen, orgSid, selectedGroupId, templateId)
   );
 
   // State for Form Definition.
-  const [accessPolicyData, setAccessPolicyData] = useState<AccessGroupState>({ ...formInitialState });
+  const [
+    accessPolicyData,
+    setAccessPolicyData,
+  ] = useState<AccessGroupState>({ ...formInitialState });
   const [accessPolicyForm, setAccessPolicyForm] = useState<AccessPolicyGroupForm | null>();
   // Constants
   //   const orgSidVariables = {variables: {orgSid}};
@@ -119,7 +131,8 @@ export const useCreateGroupPanel = (isOpen, orgSid, selectedGroupId, templateId)
         setPolicies(removeEmptyOptions(policyOptions));
       }
       const specializationField = form.specializations;
-      const specializationOptions = options?.find((value) => value?.key === specializationField?.options)?.values;
+      const specializationOptions = options
+        ?.find((value) => value?.key === specializationField?.options)?.values;
       if (specializationOptions) {
         setSpecializations(removeEmptyOptions(specializationOptions));
       }

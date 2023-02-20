@@ -8,7 +8,10 @@ export type DelayedInput = {
   value: string;
   setValue: React.Dispatch<any>;
   delayedValue: string;
-  onChange: (e?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => void;
+  onChange: (
+    e?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
+    newValue?: string,
+    ) => void;
 };
 
 const useFormInputValue = (initialValue: string) => {
@@ -42,7 +45,10 @@ const useDelayedInputValue = (label, placeholder, initialValue, type): DelayedIn
     return () => clearTimeout(timeOutId);
   }, [value]);
 
-  const onChange = (e?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
+  const onChange = (
+    e?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
+    newValue?: string,
+  ) => {
     setValue(newValue ?? '');
   };
 
