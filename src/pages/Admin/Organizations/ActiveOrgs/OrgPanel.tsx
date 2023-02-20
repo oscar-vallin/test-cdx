@@ -228,7 +228,8 @@ export const OrgPanel = ({
         orgType: getEnumByValue(OrgType, orgForm?.orgType?.value?.value),
         mv1Id: orgForm?.mv1Id?.value?.toString(),
         mv1Folder: orgForm?.mv1Folder?.value,
-        supportedPlatforms: orgForm.supportedPlatforms?.value?.map((supportedPlatform) => supportedPlatform.value),
+        supportedPlatforms: orgForm.supportedPlatforms
+          ?.value?.map((supportedPlatform) => supportedPlatform.value),
       };
 
       setOrgState(_orgState);
