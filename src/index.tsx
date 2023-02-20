@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { initializeIcons } from '@fluentui/react';
-import '@fluentui/react/dist/css/fabric.css';
+import '@fluentui/react/dist/sass/Fabric.scss';
 import { StoreProvider } from 'easy-peasy';
 
 import MetaTags from 'react-meta-tags';

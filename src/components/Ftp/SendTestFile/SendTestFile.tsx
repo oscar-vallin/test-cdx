@@ -1,4 +1,4 @@
-import { ChoiceGroup, IChoiceGroupOptionProps } from '@fluentui/react';
+import { ChoiceGroup, IChoiceGroupOption, IChoiceGroupOptionProps } from '@fluentui/react';
 import { UIInputText } from 'src/components/inputs/InputText';
 import { Spacing } from 'src/components/spacings/Spacing';
 
@@ -50,7 +50,7 @@ const SendTestFile = ({
                 </Spacing>
               ),
               // eslint-disable-next-line react/no-unstable-nested-components
-              onRenderField: (props: IChoiceGroupOptionProps | undefined, render) => (
+              onRenderField: (props: IChoiceGroupOption & IChoiceGroupOptionProps | undefined, render) => (
                 <>
                   {render?.(props)}
                   <input style={{ display: 'none' }} type="file" ref={inputFileRef} onChange={handleChooseFile} />
@@ -72,7 +72,7 @@ const SendTestFile = ({
               text: 'Generate a File',
               styles: { choiceFieldWrapper: { marginTop: '10px', width: '100%' } },
               // eslint-disable-next-line react/no-unstable-nested-components
-              onRenderField: (props: IChoiceGroupOptionProps | undefined, render) => (
+              onRenderField: (props: IChoiceGroupOption & IChoiceGroupOptionProps | undefined, render) => (
                 <>
                   {render?.(props)}
                   {props?.checked && (

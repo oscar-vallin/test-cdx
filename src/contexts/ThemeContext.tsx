@@ -2,7 +2,7 @@
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { createTheme, ThemeProvider as FluentThemeProvider } from '@fluentui/react';
 
-import '@fluentui/react/dist/css/fabric.css';
+import '@fluentui/react/dist/sass/Fabric.scss';
 import { useThemeStore } from 'src/store/ThemeStore';
 import { ThemeFontSize } from 'src/data/services/graphql';
 import { device } from 'src/styles/GlobalStyles';
