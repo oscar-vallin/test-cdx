@@ -15,7 +15,8 @@ export const useCSRFToken = () => {
   const getAuthToken = () => window.sessionStorage.getItem('_initSession');
 
   const setAuthToken = (token: string) => {
-    // Save the auth token in session storage which needs to be in a separate location than the CSRF token
+    // Save the auth token in session storage
+    // which needs to be in a separate location than the CSRF token
     window.sessionStorage.setItem('_initSession', token);
   };
 

@@ -63,7 +63,11 @@ export const useSortableColumns = (
     }
   };
 
-  const renderColumnHeader = (col: DataColumn, _additionalFilters: any, props?: IDetailsColumnProps) => {
+  const renderColumnHeader = (
+    col: DataColumn,
+    _additionalFilters: any,
+    props?: IDetailsColumnProps,
+  ) => {
     const fieldName = props?.column?.fieldName ?? 'orgId';
     return (
       <span id={`__Col_${fieldName}`} className="ms-DetailsHeader-cellName">
@@ -83,7 +87,11 @@ export const useSortableColumns = (
     if (col.sortable) {
       col.onSortAsc = () => sortAsc(col);
       col.onSortDesc = () => sortDesc(col);
-      col.onRenderHeader = (props) => renderColumnHeader(col, tableFilters.additionalFilters, props);
+      col.onRenderHeader = (props) => renderColumnHeader(
+        col,
+        tableFilters.additionalFilters,
+        props,
+      );
     }
   });
 

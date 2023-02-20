@@ -27,11 +27,15 @@ type ApolloContextProviderProps = {
   children?: ReactElement | ReactNode | string;
 } & typeof defaultProps;
 
-export const ApolloContextProvider = ({ bypassLoading, children }: ApolloContextProviderProps): ReactElement => {
+export const ApolloContextProvider = ({
+  bypassLoading,
+  children,
+}: ApolloContextProviderProps): ReactElement => {
   // LocalState
   const [isApolloLoading] = useState(true);
   // const [sessionID, setSessionID] = useState('');
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const httpLink = new HttpLink({
     uri: SERVER_URL,
     // credentials: 'same-origin',
@@ -52,7 +56,9 @@ export const ApolloContextProvider = ({ bypassLoading, children }: ApolloContext
     },
   }));
 
-  const afterwareLink = new ApolloLink((operation, forward) => forward(operation).map((response) => response));
+  const afterwareLink = new ApolloLink((operation, forward) => forward(
+    operation,
+  ).map((response) => response));
 
   const uploadLink = createUploadLink({ uri: SERVER_URL });
 

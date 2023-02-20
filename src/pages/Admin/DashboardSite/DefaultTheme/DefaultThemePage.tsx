@@ -32,7 +32,10 @@ const _DefaultThemePage = () => {
   const Toast = useNotification();
   const ownedInput = { orgSid, ownerId: SessionStore.user.id };
 
-  const [apiDefaultDashThemeQuery, { data: defaultTheme, loading: isLoadingDefaultTheme }] = useDefaultDashThemeForSiteLazyQuery();
+  const [apiDefaultDashThemeQuery, {
+    data: defaultTheme,
+    loading: isLoadingDefaultTheme,
+  }] = useDefaultDashThemeForSiteLazyQuery();
 
   const { colorPalettes, isLoadingPalettes, fetchColorPalettes } = useColorPalettes();
 
@@ -58,9 +61,15 @@ const _DefaultThemePage = () => {
   const [selectedPaletteId, setSelectedPaletteId]: any = useState(null);
   const [themeColorMode, setThemeColorMode]: any = useState(null);
 
-  const [createDefaultDashThemeMutation, { data: themeCreated, loading: isCreatingTheme }]: any = useCreateDefaultDashThemeMutation();
+  const [createDefaultDashThemeMutation, {
+    data: themeCreated,
+    loading: isCreatingTheme,
+  }]: any = useCreateDefaultDashThemeMutation();
 
-  const [updateDefaultDashThemeMutation, { data: themeUpdated, loading: isUpdatingTheme }]: any = useUpdateDefaultDashThemeMutation();
+  const [updateDefaultDashThemeMutation, {
+    data: themeUpdated,
+    loading: isUpdatingTheme,
+  }]: any = useUpdateDefaultDashThemeMutation();
 
   useEffect(() => {
     if (themeCreated || themeUpdated) {
@@ -83,7 +92,8 @@ const _DefaultThemePage = () => {
   }, [colorPalettes, defaultTheme]);
 
   useEffect(() => {
-    const selectedPalette: any = palettes.find(({ palleteId }) => palleteId === selectedPaletteId) || {};
+    const selectedPalette: any = palettes
+      .find(({ palleteId }) => palleteId === selectedPaletteId) || {};
     const { themePrimary } = selectedPalette;
 
     const variant = themeColorMode

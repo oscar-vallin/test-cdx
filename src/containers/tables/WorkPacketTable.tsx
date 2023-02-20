@@ -90,7 +90,10 @@ export const WorkPacketTable = ({
       variables: {
         orgSid,
         searchText: tableFilters.searchText.delayedValue,
-        dateRange: { rangeStart: tableFilters.startDate.value, rangeEnd: tableFilters.endDate.value },
+        dateRange: {
+          rangeStart: tableFilters.startDate.value,
+          rangeEnd: tableFilters.endDate.value,
+        },
         lastUpdated,
       },
       pollInterval: POLL_INTERVAL,
@@ -124,7 +127,8 @@ export const WorkPacketTable = ({
       const startDateMillis = tableFilters.startDate?.value
         ? tableFilters.startDate?.value?.getTime()
         : Number.POSITIVE_INFINITY;
-      const endDateMillis = tableFilters.endDate?.value ? tableFilters.endDate?.value?.getTime() : 0;
+      const endDateMillis = tableFilters.endDate?.value
+        ? tableFilters.endDate?.value?.getTime() : 0;
       if (startDateMillis <= todayMillis && endDateMillis >= todayMillis) {
         apiPolling?.startPolling(POLL_INTERVAL);
       } else {
@@ -132,7 +136,11 @@ export const WorkPacketTable = ({
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orgSid, tableFilters.searchText.delayedValue, tableFilters.startDate.value, tableFilters.endDate.value]);
+  }, [orgSid,
+    tableFilters.searchText.delayedValue,
+    tableFilters.startDate.value,
+    tableFilters.endDate.value,
+  ]);
 
   useEffect(() => {
     if (tableFilters.startDate.value && tableFilters.endDate.value) {
@@ -193,7 +201,9 @@ export const WorkPacketTable = ({
   }, [data, loading]);
 
   useEffect(() => {
-    if (apiPolling.data && apiPolling.data.workPacketStatusesPoll && apiPolling.data.workPacketStatusesPoll > 0) {
+    if (apiPolling.data
+      && apiPolling.data.workPacketStatusesPoll
+        && apiPolling.data.workPacketStatusesPoll > 0) {
       setLastUpdated(new Date());
     }
   }, [apiPolling.data]);

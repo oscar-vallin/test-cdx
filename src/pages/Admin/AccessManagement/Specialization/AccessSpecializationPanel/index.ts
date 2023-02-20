@@ -2,4 +2,8 @@ import AccessSpecializationPanel from 'src/pages/Admin/AccessManagement/Speciali
 import AccessSpecializationMembersPanel from 'src/pages/Admin/AccessManagement/Specialization/AccessSpecializationPanel/AccessSpecializationMembersPanel';
 import AccessSpecializationUsagePanel from 'src/pages/Admin/AccessManagement/Specialization/AccessSpecializationPanel/AccessSpecializationUsagePanel';
 
-export { AccessSpecializationPanel, AccessSpecializationMembersPanel, AccessSpecializationUsagePanel };
+export {
+  AccessSpecializationPanel,
+  AccessSpecializationMembersPanel,
+  AccessSpecializationUsagePanel,
+};

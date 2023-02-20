@@ -33,8 +33,14 @@ import { DEFAULT_FORM, extractFormValues } from './OrganizationSecuritySettingsP
 const _OrganizationSecuritySettingsPage = () => {
   const { orgSid } = useOrgSid();
   const Toast = useNotification();
-  const [fetchPageForm, { data, loading: isLoadingForm, error: formError }] = useOrgSecurityFormLazyQuery();
-  const [callUpdateOrgSecurity, { data: dataUpdateOrgSecurity, loading: isUpdating, error: updateError }] = useUpdateOrgSecurityMutation();
+  const [fetchPageForm, {
+    data, loading: isLoadingForm,
+    error: formError,
+  }] = useOrgSecurityFormLazyQuery();
+  const [callUpdateOrgSecurity, {
+    data: dataUpdateOrgSecurity,
+    loading: isUpdating, error: updateError,
+  }] = useUpdateOrgSecurityMutation();
 
   const [state, setState] = useState<UpdateOrgSecurityInput>({ ...DEFAULT_FORM });
   const [form, setForm] = useState<OrgSecurityForm | null>();
@@ -61,7 +67,8 @@ const _OrganizationSecuritySettingsPage = () => {
         ...extractFormValues(DEFAULT_FORM, orgSecurityForm),
         whitelist: whitelistValues,
       });
-      setUpdateCmd(orgSecurityForm.commands?.find((cmd) => cmd.commandType === CdxWebCommandType.Update));
+      setUpdateCmd(orgSecurityForm.commands
+        ?.find((cmd) => cmd.commandType === CdxWebCommandType.Update));
     } else {
       setWhiteListFields([]);
       setState({ ...DEFAULT_FORM });
@@ -161,7 +168,10 @@ const _OrganizationSecuritySettingsPage = () => {
                     uiField={form.forgotPasswordMsg}
                     value={state.forgotPasswordMsg ?? ''}
                     multiline={true}
-                    onChange={(ev?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
+                    onChange={(
+                      ev?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
+                      newValue?: string,
+                    ) => {
                       setState({ ...state, forgotPasswordMsg: newValue });
                     }}
                     resizable={false}
@@ -175,7 +185,10 @@ const _OrganizationSecuritySettingsPage = () => {
                     uiField={form.allowedEmailDomains}
                     value={state.allowedEmailDomains ?? ''}
                     multiline={true}
-                    onChange={(ev?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
+                    onChange={(
+                      ev?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
+                      newValue?: string,
+                    ) => {
                       setState({ ...state, allowedEmailDomains: newValue ?? '' });
                     }}
                     resizable={false}
@@ -184,7 +197,8 @@ const _OrganizationSecuritySettingsPage = () => {
                 </FormRow>
                 <FormRow>
                   <Text variant="extraBold">Dashboard IP Whitelist</Text>
-                  {/* Need to use FormLabel as opposed to UIFormLabel to force the required flag not to show */}
+                  {/* Need to use FormLabel as opposed to UIFormLabel
+                   to force the required flag not to show */}
                   <FormLabel
                     id="__WhiteList_lbl"
                     label={whitelistFields[0]?.label ?? ''}

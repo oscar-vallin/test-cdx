@@ -20,7 +20,11 @@ type ForgotPasswordModalProps = {
   currentUserId: string;
 } & typeof defaultProps;
 
-const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModalProps): ReactElement => {
+const ForgotPasswordModal = ({
+  isOpen,
+  open,
+  currentUserId,
+}: ForgotPasswordModalProps): ReactElement => {
   const [forgotPassword, setForgotPassword] = useState(open);
   const [userId, setUserId] = useState('');
   const [successfulText, setSuccessfulText] = useState<string>('');
@@ -31,7 +35,10 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
 
   const [forgotPasswordMutation, { data: dataForgotPassword }] = useForgotPasswordMutation();
 
-  const [verifyUserId, { data: verifiedUserId, loading: isVerifyingUserId }] = useBeginLoginMutation();
+  const [verifyUserId, {
+    data: verifiedUserId,
+    loading: isVerifyingUserId,
+  }] = useBeginLoginMutation();
 
   const sendIdUser = (user: string) => {
     if (user !== currentUserId && user.trim() !== '') {
@@ -67,6 +74,7 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
         <DialogMessageWrapper id="__ForgotPasswordDisabled_Msg" dangerouslySetInnerHTML={{ __html: successfulText }} />
       );
     }
+    return null;
   };
 
   const renderForgotPasswordDialog = () => {
@@ -114,6 +122,7 @@ const ForgotPasswordModal = ({ isOpen, open, currentUserId }: ForgotPasswordModa
         </Dialog>
       );
     }
+    return null;
   };
 
   useEffect(() => {
