@@ -13,28 +13,21 @@ import { ButtonLink } from 'src/components/buttons';
 import { Spacing } from 'src/components/spacings/Spacing';
 import { useUserQuickSearchLazyQuery, useCreateUserMutation } from 'src/data/services/graphql';
 import { InputText } from 'src/components/inputs/InputText';
-import { MessageBar as MessageBarComponent } from 'src/components/notifications/MessageBar';
 import { SubscriberOptionProps } from 'src/pages/Admin/XChange/XchangeAlerts/XchangeAlertsPanel/XchangeAlertsPanel';
 import { StyledDialog, StyledSubsOptions } from './AddSubscriberModal.styles';
-
-const defaultProps = {
-  isOpen: (data: boolean) => {},
-  orgSid: '',
-  addSubscribers: (data: SubscriberOptionProps[]) => {},
-};
 
 type AddSubscriberModalProps = {
   isOpen: (data: boolean) => void;
   orgSid: string;
   currentSubscribers: SubscriberOptionProps[];
   addSubscribers: (data: SubscriberOptionProps[]) => void;
-} & typeof defaultProps;
+};
 
 const AddSubscriberModal = ({
   isOpen, orgSid, addSubscribers, currentSubscribers,
 }: AddSubscriberModalProps) => {
   const [userQuickSearch,
-    { data: quickSearchData, loading: quickSearchLoading }] = useUserQuickSearchLazyQuery();
+    { data: quickSearchData }] = useUserQuickSearchLazyQuery();
   const [createUser,
     { data: createUserData, loading: createUserLoading, error }] = useCreateUserMutation();
   const [currentSubscriber, setCurrentSubscriber] = useState('');

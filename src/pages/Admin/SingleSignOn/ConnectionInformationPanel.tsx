@@ -194,26 +194,31 @@ const ConnectionInformationPanel = (
     }
 
     return (
-      <Spacing>
+      <Spacing id="CdxOidcConnectionInfo">
         <Spacing margin={{ top: 'normal', bottom: 'double' }}>
-          <Text>
+          <Text id="__CdxOidcClient">
             The CDX Dashboard supports Open ID Connect 1.0 SSO as a Client or Relying <br />
             PArty (RP) using Authorization Code Flow (sometimes referred to as &quot;Standard<br />
             Flow&quot;).
           </Text>
         </Spacing>
-        <Text variant="bold">Configuring your Identity Provider (IdP) to connect to the CDX Dashboard</Text>
-        <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+        <Text
+          variant="bold"
+          id="__CdxOidcIdentityProvider"
+        >
+          Configuring your Identity Provider (IdP) to connect to the CDX Dashboard
+        </Text>
+        <Spacing id="__CdxOidcConfiguredIdp" margin={{ top: 'normal', bottom: 'normal' }}>
           <Text>
             The following configuration properties are
             <span style={{ fontWeight: 'bold' }}> required</span> to be configured in your IdP
           </Text>
         </Spacing>
-        <Stack>
+        <Stack id="__CdxOidcAuthenticationFlow">
           <Text variant="semiBold">Authentication Flow</Text>
           <Text>Authorization Code Flow (or Standard Flow)</Text>
         </Stack>
-        <Spacing margin={{ top: 'normal', bottom: 'normal' }}>
+        <Spacing id="__CdxOidcClientId" margin={{ top: 'normal', bottom: 'normal' }}>
           <Text variant="semiBold">Client id</Text>
           <Stack horizontal>
             <Stack.Item align="center">
@@ -221,51 +226,52 @@ const ConnectionInformationPanel = (
                 id="__oidcClientId"
                 iconProps={{ iconName: 'Copy' }}
                 onClick={() => {
-                  copyToClipboard(oidcConnectionInfo?.clientId ?? '');
+                  copyToClipboard(oidcConnectionInfo?.clientId ?? '', 'Client ID');
                 }}
               />
               <Text>{oidcConnectionInfo?.clientId}</Text>
             </Stack.Item>
           </Stack>
         </Spacing>
-        <Text variant="semiBold">Client Secret</Text>
+        <Text id="__CdxOidcClientSecret" variant="semiBold">Client Secret</Text>
         <Stack horizontal>
           <Stack.Item align="center">
             <IconButton
-              id="__oidcClientSecret"
+              id="__oidcClientSecretDiabled"
               disabled={!oidcConnectionInfo?.clientSecret}
               iconProps={{ iconName: 'Copy' }}
               onClick={() => {
-                copyToClipboard(oidcConnectionInfo?.clientSecret ?? '');
+                copyToClipboard(oidcConnectionInfo?.clientSecret ?? '', 'Client Secret copied');
               }}
             />
             {oidcConnectionInfo?.clientSecret ? (
               <ButtonLink
+                id="__oidcClientSecret"
                 onClick={() => {
-                  copyToClipboard(oidcConnectionInfo?.clientSecret ?? '');
+                  copyToClipboard(oidcConnectionInfo?.clientSecret ?? '', 'Client Secret copied');
                 }}
               >
                 Click to copy to clipboard
               </ButtonLink>
             ) : (
-              <EmptyMessage size="normal">
+              <EmptyMessage id="__CdxOidcEmptyMessage" size="normal">
                 {'<none>'}
               </EmptyMessage>
             )}
           </Stack.Item>
         </Stack>
-        <Spacing margin={{ top: 'normal', bottom: 'double' }}>
+        <Spacing id="__CdxOidcClientScopes" margin={{ top: 'normal', bottom: 'double' }}>
           <Stack>
-            <Text variant="semiBold">Client Scopes</Text>
-            <Text>Must include: email</Text>
+            <Text id="__OidcClientScopes" variant="semiBold">Client Scopes</Text>
+            <Text id="__OidcIncludeEmail">Must include: email</Text>
           </Stack>
         </Spacing>
-        <Text>
+        <Text id="__OidcOptionallyConfiguredIdp">
           The following configuration properties are
           <span style={{ fontWeight: 'bold' }}> optionally </span>
           configured in your idP
         </Text>
-        <Spacing margin={{ top: 'normal' }}>
+        <Spacing id="CdxOidcLogoUrl" margin={{ top: 'normal' }}>
           <Text variant="semiBold">Logo URL</Text>
           <Stack horizontal>
             <Stack.Item align="center">
@@ -273,7 +279,7 @@ const ConnectionInformationPanel = (
                 id="__oidcLogoURL"
                 iconProps={{ iconName: 'Copy' }}
                 onClick={() => {
-                  copyToClipboard(oidcConnectionInfo?.logoURL ?? '');
+                  copyToClipboard(oidcConnectionInfo?.logoURL ?? '', 'Logo URL');
                 }}
               />
               <Text>{oidcConnectionInfo?.logoURL}</Text>

@@ -63,7 +63,8 @@ const CDXTimeline = ({
   packet, activeIndex = 0, onClick, onRedo,
 }: CDXTimelineProps): ReactElement => {
   const [showCallout, setShowCallout] = useState(false);
-  const downloadCommand = packet?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.DownloadFile);
+  const downloadCommand = packet?.commands
+    ?.find((cmd) => cmd?.commandType === WorkPacketCommandType.DownloadFile);
 
   function isComplete(workStepStatus?: WorkStepStatus | null): boolean {
     const stepStatus = workStepStatus?.stepStatus?.toUpperCase();
@@ -107,7 +108,8 @@ const CDXTimeline = ({
   };
 
   const renderRedo = (item?: WorkStepStatus | null) => {
-    const redoCommand = item?.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.RerunStep);
+    const redoCommand = item?.commands
+      ?.find((cmd) => cmd?.commandType === WorkPacketCommandType.RerunStep);
     if ((isComplete(item) || isError(item)) && redoCommand) {
       return (
         <Spacing margin={{ top: 'normal' }}>
