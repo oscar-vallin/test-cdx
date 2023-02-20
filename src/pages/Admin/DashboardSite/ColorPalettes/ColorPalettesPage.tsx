@@ -82,7 +82,9 @@ const _ColorPalettesPage = () => {
       ...(selectedPaletteId
         ? {
           themePrimary: currentVariant.themePrimary,
-          neutralPrimary: isExtendingPalette ? defaultVariant.neutralPrimary : currentVariant.neutralPrimary,
+          neutralPrimary: isExtendingPalette
+            ? defaultVariant.neutralPrimary
+            : currentVariant.neutralPrimary,
           white: isExtendingPalette ? defaultVariant.white : currentVariant.white,
         }
         : {
@@ -171,7 +173,10 @@ const _ColorPalettesPage = () => {
                       selectedKey={selectedPaletteId}
                       disabled={false}
                       onChange={(evt, { key }: any) => setSelectedPaletteId(key)}
-                      options={colorPalettes?.map((item) => ({ key: item.id, text: item.paletteNm })) || []}
+                      options={colorPalettes?.map((item) => ({
+                        key: item.id,
+                        text: item.paletteNm,
+                      })) || []}
                     />
                   ) : (
                     <MessageBar type="warning" content="No color palettes found" />
