@@ -221,7 +221,7 @@ const ConnectionInformationPanel = (
                 id="__oidcClientId"
                 iconProps={{ iconName: 'Copy' }}
                 onClick={() => {
-                  copyToClipboard(oidcConnectionInfo?.clientId ?? '');
+                  copyToClipboard(oidcConnectionInfo?.clientId ?? '', 'Client ID');
                 }}
               />
               <Text>{oidcConnectionInfo?.clientId}</Text>
@@ -236,13 +236,13 @@ const ConnectionInformationPanel = (
               disabled={!oidcConnectionInfo?.clientSecret}
               iconProps={{ iconName: 'Copy' }}
               onClick={() => {
-                copyToClipboard(oidcConnectionInfo?.clientSecret ?? '');
+                copyToClipboard(oidcConnectionInfo?.clientSecret ?? '', 'Client Secret copied');
               }}
             />
             {oidcConnectionInfo?.clientSecret ? (
               <ButtonLink
                 onClick={() => {
-                  copyToClipboard(oidcConnectionInfo?.clientSecret ?? '');
+                  copyToClipboard(oidcConnectionInfo?.clientSecret ?? '', 'Client Secret copied');
                 }}
               >
                 Click to copy to clipboard
@@ -273,7 +273,7 @@ const ConnectionInformationPanel = (
                 id="__oidcLogoURL"
                 iconProps={{ iconName: 'Copy' }}
                 onClick={() => {
-                  copyToClipboard(oidcConnectionInfo?.logoURL ?? '');
+                  copyToClipboard(oidcConnectionInfo?.logoURL ?? '', 'Logo URL');
                 }}
               />
               <Text>{oidcConnectionInfo?.logoURL}</Text>
