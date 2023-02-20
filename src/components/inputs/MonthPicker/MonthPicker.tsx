@@ -98,7 +98,11 @@ export const MonthPicker = ({
 
   const goPrevious = () => {
     const goPreviousSelectedDate = selectedDate || new Date();
-    const dateRangeArray = getDateRangeArray(goPreviousSelectedDate, dateRangeType, DayOfWeek.Sunday);
+    const dateRangeArray = getDateRangeArray(
+      goPreviousSelectedDate,
+      dateRangeType,
+      DayOfWeek.Sunday,
+    );
     let subtractFrom = dateRangeArray[0];
     let daysToSubtract = dateRangeArray.length;
     if (dateRangeType === DateRangeType.Month) {
