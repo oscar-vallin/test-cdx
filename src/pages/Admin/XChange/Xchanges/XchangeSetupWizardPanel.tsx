@@ -301,6 +301,7 @@ const XchangeSetupWizardPanel = ({
       }
 
       if (responseCode === GqOperationResponse.Success) {
+        history.push(`/xchange-details?orgSid=${orgSid}&coreFilename=${updateXchangeSetup?.coreFilename}`);
         refreshPage(true);
         setMessage(null);
         closePanel(false);
