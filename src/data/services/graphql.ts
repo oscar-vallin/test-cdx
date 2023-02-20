@@ -733,6 +733,12 @@ export enum DocType {
   Other = 'OTHER'
 }
 
+export type DocumentSearchFilter = {
+  searchText?: Maybe<Scalars['String']>;
+  vendor?: Maybe<Scalars['String']>;
+  spec?: Maybe<Scalars['String']>;
+};
+
 export type DomainNavInput = {
   orgSid: Scalars['ID'];
   ownerId?: Maybe<Scalars['ID']>;
@@ -2309,6 +2315,7 @@ export type Query = {
   xchangeProfile?: Maybe<XchangeProfile>;
   xchangeConfig?: Maybe<XchangeConfigForm>;
   xchangeConfigDocuments?: Maybe<XchangeConfigDocumentConnection>;
+  xchangeConfigDocumentSearch?: Maybe<XchangeConfigDocumentConnection>;
   xchangeFileProcessForm?: Maybe<XchangeFileProcessForm>;
   previewConvertXchangeProfile?: Maybe<XchangeProfileConvertPreview>;
   xchangeStepForm?: Maybe<XchangeStepForm>;
@@ -2775,6 +2782,13 @@ export type QueryXchangeConfigArgs = {
 
 export type QueryXchangeConfigDocumentsArgs = {
   xchangeConfigSid: Scalars['ID'];
+  pageableInput?: Maybe<PageableInput>;
+};
+
+
+export type QueryXchangeConfigDocumentSearchArgs = {
+  orgSid: Scalars['ID'];
+  filter?: Maybe<DocumentSearchFilter>;
   pageableInput?: Maybe<PageableInput>;
 };
 
@@ -4216,6 +4230,9 @@ export type XchangeConfigDocument = {
   size?: Maybe<Scalars['Int']>;
   lastUpdated?: Maybe<Scalars['DateTime']>;
   owner?: Maybe<UserAccount>;
+  vendor?: Maybe<Organization>;
+  spec?: Maybe<Scalars['String']>;
+  coreFilename?: Maybe<Scalars['String']>;
 };
 
 export type XchangeConfigDocumentConnection = {
@@ -7578,7 +7595,7 @@ export type XchangeConfigDocumentsQuery = (
       & FragmentPaginationInfoFragment
     ), nodes?: Maybe<Array<(
       { __typename?: 'XchangeConfigDocument' }
-      & Pick<XchangeConfigDocument, 'sid' | 'name' | 'docType' | 'size' | 'lastUpdated'>
+      & Pick<XchangeConfigDocument, 'sid' | 'name' | 'docType' | 'size' | 'lastUpdated' | 'spec' | 'coreFilename'>
       & { owner?: Maybe<(
         { __typename?: 'UserAccount' }
         & Pick<UserAccount, 'sid' | 'email'>
@@ -7586,6 +7603,44 @@ export type XchangeConfigDocumentsQuery = (
           { __typename?: 'Person' }
           & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
         )> }
+      )>, vendor?: Maybe<(
+        { __typename?: 'Organization' }
+        & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
+      )> }
+    )>> }
+  )> }
+);
+
+export type XchangeConfigDocumentSearchQueryVariables = Exact<{
+  orgSid: Scalars['ID'];
+  filter?: Maybe<DocumentSearchFilter>;
+  pageableInput?: Maybe<PageableInput>;
+}>;
+
+
+export type XchangeConfigDocumentSearchQuery = (
+  { __typename?: 'Query' }
+  & { xchangeConfigDocumentSearch?: Maybe<(
+    { __typename?: 'XchangeConfigDocumentConnection' }
+    & { listPageInfo?: Maybe<(
+      { __typename?: 'ListPageInfo' }
+      & FragmentListPageInfoFragment
+    )>, paginationInfo: (
+      { __typename?: 'PaginationInfo' }
+      & FragmentPaginationInfoFragment
+    ), nodes?: Maybe<Array<(
+      { __typename?: 'XchangeConfigDocument' }
+      & Pick<XchangeConfigDocument, 'sid' | 'name' | 'docType' | 'size' | 'lastUpdated' | 'spec' | 'coreFilename'>
+      & { owner?: Maybe<(
+        { __typename?: 'UserAccount' }
+        & Pick<UserAccount, 'sid' | 'email'>
+        & { person?: Maybe<(
+          { __typename?: 'Person' }
+          & Pick<Person, 'sid' | 'firstNm' | 'lastNm'>
+        )> }
+      )>, vendor?: Maybe<(
+        { __typename?: 'Organization' }
+        & Pick<Organization, 'sid' | 'name' | 'orgId' | 'orgType' | 'orgTypeLabel'>
       )> }
     )>> }
   )> }
@@ -17583,6 +17638,15 @@ export const XchangeConfigDocumentsDocument = gql`
           lastNm
         }
       }
+      vendor {
+        sid
+        name
+        orgId
+        orgType
+        orgTypeLabel
+      }
+      spec
+      coreFilename
     }
   }
 }
@@ -17615,6 +17679,76 @@ export function useXchangeConfigDocumentsLazyQuery(baseOptions?: Apollo.LazyQuer
 export type XchangeConfigDocumentsQueryHookResult = ReturnType<typeof useXchangeConfigDocumentsQuery>;
 export type XchangeConfigDocumentsLazyQueryHookResult = ReturnType<typeof useXchangeConfigDocumentsLazyQuery>;
 export type XchangeConfigDocumentsQueryResult = Apollo.QueryResult<XchangeConfigDocumentsQuery, XchangeConfigDocumentsQueryVariables>;
+export const XchangeConfigDocumentSearchDocument = gql`
+    query XchangeConfigDocumentSearch($orgSid: ID!, $filter: DocumentSearchFilter, $pageableInput: PageableInput) {
+  xchangeConfigDocumentSearch(
+    orgSid: $orgSid
+    filter: $filter
+    pageableInput: $pageableInput
+  ) {
+    listPageInfo {
+      ...fragmentListPageInfo
+    }
+    paginationInfo {
+      ...fragmentPaginationInfo
+    }
+    nodes {
+      sid
+      name
+      docType
+      size
+      lastUpdated
+      owner {
+        sid
+        email
+        person {
+          sid
+          firstNm
+          lastNm
+        }
+      }
+      vendor {
+        sid
+        name
+        orgId
+        orgType
+        orgTypeLabel
+      }
+      spec
+      coreFilename
+    }
+  }
+}
+    ${FragmentListPageInfoFragmentDoc}
+${FragmentPaginationInfoFragmentDoc}`;
+
+/**
+ * __useXchangeConfigDocumentSearchQuery__
+ *
+ * To run a query within a React component, call `useXchangeConfigDocumentSearchQuery` and pass it any options that fit your needs.
+ * When your component renders, `useXchangeConfigDocumentSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useXchangeConfigDocumentSearchQuery({
+ *   variables: {
+ *      orgSid: // value for 'orgSid'
+ *      filter: // value for 'filter'
+ *      pageableInput: // value for 'pageableInput'
+ *   },
+ * });
+ */
+export function useXchangeConfigDocumentSearchQuery(baseOptions: Apollo.QueryHookOptions<XchangeConfigDocumentSearchQuery, XchangeConfigDocumentSearchQueryVariables>) {
+        return Apollo.useQuery<XchangeConfigDocumentSearchQuery, XchangeConfigDocumentSearchQueryVariables>(XchangeConfigDocumentSearchDocument, baseOptions);
+      }
+export function useXchangeConfigDocumentSearchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<XchangeConfigDocumentSearchQuery, XchangeConfigDocumentSearchQueryVariables>) {
+          return Apollo.useLazyQuery<XchangeConfigDocumentSearchQuery, XchangeConfigDocumentSearchQueryVariables>(XchangeConfigDocumentSearchDocument, baseOptions);
+        }
+export type XchangeConfigDocumentSearchQueryHookResult = ReturnType<typeof useXchangeConfigDocumentSearchQuery>;
+export type XchangeConfigDocumentSearchLazyQueryHookResult = ReturnType<typeof useXchangeConfigDocumentSearchLazyQuery>;
+export type XchangeConfigDocumentSearchQueryResult = Apollo.QueryResult<XchangeConfigDocumentSearchQuery, XchangeConfigDocumentSearchQueryVariables>;
 export const XchangeFileProcessFormDocument = gql`
     query XchangeFileProcessForm($xchangeFileProcessSid: ID!) {
   xchangeFileProcessForm(xchangeFileProcessSid: $xchangeFileProcessSid) {
