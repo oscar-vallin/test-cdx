@@ -15,7 +15,6 @@ import {
   DialogType,
   DialogFooter,
   FontIcon,
-  Link,
   IColumn,
   IContextualMenuItem,
   DetailsList,
@@ -46,6 +45,7 @@ import { HideForMobile } from 'src/styles/GlobalStyles';
 import { PageHeader } from 'src/containers/headers/PageHeader';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { PageBody } from 'src/components/layouts/Column';
+import { ButtonLink } from 'src/components/buttons';
 import { StyledCommandButton } from '../AccessManagement.styles';
 import { AccessPolicyPanel } from './AccessPolicyPanel';
 import { AccessPolicyMembersPanel } from './AccessPolicyMembersPanel';
@@ -138,15 +138,16 @@ const _AccessManagementPoliciesPage = () => {
     switch (key) {
       case 'name':
         return (
-          <Link
+          <ButtonLink
             id={`__${item?.name?.split(' ').join('_')}_Link`}
             onClick={() => {
               setSelectedPolicyId(item?.sid);
               setIsPanelOpen(true);
             }}
+            style={{ overflow: 'hidden' }}
           >
             {item?.name}
-          </Link>
+          </ButtonLink>
         );
       case 'members':
         if (item?.members === 0) {
