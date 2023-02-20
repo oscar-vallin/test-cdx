@@ -54,7 +54,8 @@ export const ScheduleDay = ({
           orgSid: item.orgSid,
           status: run.status,
           statusLabel: run.statusLabel,
-          canViewDetails: !!run.commands?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewDetails),
+          canViewDetails: !!run.commands
+            ?.find((cmd) => cmd?.commandType === WorkPacketCommandType.ViewDetails),
         });
       });
     } else {
