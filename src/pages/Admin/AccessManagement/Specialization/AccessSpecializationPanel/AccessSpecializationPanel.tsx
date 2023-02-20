@@ -100,10 +100,16 @@ const AccessSpecializationPanel = ({
   const [fetchAccessForm, { data: form, loading: isLoadingForm }] = useQueryHandler(
     useAccessSpecializationFormLazyQuery,
   );
-  const [fetchSpecialization, { data: specialization, loading: isLoadingSpecialization }] = useQueryHandler(
+  const [fetchSpecialization, {
+    data: specialization,
+    loading: isLoadingSpecialization,
+  }] = useQueryHandler(
     useFindAccessSpecializationLazyQuery,
   );
-  const [createSpecialization, { data: createdSpecialization, loading: isCreatingSpecialization }] = useQueryHandler(
+  const [createSpecialization, {
+    data: createdSpecialization,
+    loading: isCreatingSpecialization,
+  }] = useQueryHandler(
     useCreateAccessSpecializationMutation,
   );
   const [updateSpecialization, { data: updatedSpecialization }] = useQueryHandler(
@@ -204,20 +210,21 @@ const AccessSpecializationPanel = ({
 
   useEffect(() => {
     if (specialization) {
-      const { name, filters, ...form } = specialization.findAccessSpecialization;
+      const { name, filters, ...formData } = specialization.findAccessSpecialization;
 
       const opts = filters.reduce(
         (obj, item) => ({
           ...obj,
           [item.permission]:
-            item.orgSids.value?.map(({ label: itemName, value }) => ({ name: itemName, key: value })) || [],
+            item.orgSids.value
+              ?.map(({ label: itemName, value }) => ({ name: itemName, key: value })) || [],
         }),
         {},
       );
 
       setState({ name: name.value });
       setAccessFilters(groupSpecializations(filters));
-      setAccessForm({ name, filters, ...form });
+      setAccessForm({ name, filters, ...formData });
       setSpecializations(opts);
     }
   }, [specialization]);
@@ -334,7 +341,8 @@ const AccessSpecializationPanel = ({
   const renderPanelFooter = () => {
     const commands = accessForm?.commands;
     const command = commands?.find(
-      (cmd) => cmd?.commandType === CdxWebCommandType.Create || cmd?.commandType === CdxWebCommandType.Update,
+      (cmd) => cmd?.commandType === CdxWebCommandType.Create
+        || cmd?.commandType === CdxWebCommandType.Update,
     );
     if (command) {
       return (
