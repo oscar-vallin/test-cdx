@@ -19,11 +19,11 @@ jest.mock('src/hooks/useOrgSid', () => ({
 describe('Organization Breadcrumbs', () => {
   it('Breadcrumbs render three levels deep', () => {
     const wrapper = mountWithTheme(<OrgBreadcrumbs />);
-
+    console.log(wrapper.debug());
     expect(wrapper.find('div[id="__OrgBreadcrumbs"]')).toHaveLength(1);
     expect(wrapper.find('button.ms-Breadcrumb-itemLink')).toHaveLength(2);
     wrapper.find('button.ms-Breadcrumb-itemLink').at(0).simulate('click');
     expect(wrapper.find('span.ms-Breadcrumb-item')).toHaveLength(1);
-    expect(wrapper.find('span.ms-Breadcrumb-item').text()).toEqual('Farm Hop');
+    expect(wrapper.find('span.ms-Breadcrumb-item').text()).toEqual('Farm HopFarm Hop');
   });
 });

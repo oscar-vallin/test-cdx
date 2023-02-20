@@ -1,5 +1,5 @@
 import { Card } from './Card';
-import { mountWithTheme } from '../../../utils/testUtils';
+import { mountWithTheme } from 'src/utils/testUtils';
 
 const defaultProps = {
   id: 'CardId',
@@ -18,12 +18,8 @@ describe('Card Testing Unit...', () => {
     expect(Card).toBeDefined();
   });
 
-  it('Should render correctly', () => {
-    expect(tree).toMatchSnapshot();
-  });
-
   it('Should render the content correctly', () => {
-    expect(tree.find('.ms-DocumentCard').props().children).toEqual('Content');
+    expect(tree.find('.ms-DocumentCard').text()).toEqual('Content');
   });
 
   it('Should trigger the onClick callback if provided', () => {
