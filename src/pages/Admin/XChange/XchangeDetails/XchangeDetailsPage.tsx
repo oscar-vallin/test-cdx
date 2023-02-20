@@ -1,18 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import {
   DefaultButton,
   DirectionalHint,
-  FontIcon, IButtonStyles,
-  IconButton, ILinkStyles, IStackItemStyles,
+  FontIcon,
+  IButtonStyles,
+  IconButton,
+  ILinkStyles,
+  IStackItemStyles,
   PrimaryButton,
   Spinner,
   SpinnerSize,
   Stack,
-  TextField,
   TooltipHost,
 } from '@fluentui/react';
-import { Comment20Filled } from '@fluentui/react-icons';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
 import { Column, Container, Row } from 'src/components/layouts';
 import { PageTitle, Text } from 'src/components/typography';
@@ -40,17 +41,18 @@ import { FileUploadDialog } from 'src/pages/Admin/XChange/XchangeDetails/FileUpl
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { useQueryHandler } from 'src/hooks/useQueryHandler';
 import { ROUTE_XCHANGE_DETAILS } from 'src/data/constants/RouteConstants';
-import { UIInputTextArea } from 'src/components/inputs/InputTextArea';
 import { ButtonLink } from 'src/components/buttons';
 import { TaskCard } from 'src/components/cards';
+import { CommentBubble } from 'src/components/inputs/Comment';
 import { QualifierBadge } from 'src/components/badges/Qualifier';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { EmptyMessage } from 'src/containers/tables/TableCurrentActivity/TableActivity.styles';
-import { ThemeStore, useThemeStore } from 'src/store/ThemeStore';
+import { useThemeStore } from 'src/store/ThemeStore';
 import { Diagram } from './Diagram/Diagram';
 import { XchangeAlertsPanel } from '../XchangeAlerts/XchangeAlertsPanel/XchangeAlertsPanel';
 import { JobGroupPanel } from './JobGroupPanel/JobGroupPanel';
 import { SchedulePanel } from '../SchedulePanel';
+import { XchangeSetupWizardPanel } from '../Xchanges/XchangeSetupWizardPanel';
 import { StyledAlertTypes } from '../XchangeAlerts/XchangeAlertsPage.style';
 import {
   StyledButtonAction,
@@ -60,7 +62,6 @@ import {
   AlertRow,
   CardColumn,
 } from './XchangeDetailsPage.styles';
-import { XchangeSetupWizardPanel } from '../Xchanges/XchangeSetupWizardPanel';
 
 const defaultDialogProps: DialogYesNoProps = {
   id: '__XchangeDetails_Dlg',
@@ -92,12 +93,9 @@ const XchangeDetailsPage = () => {
   const [refreshXchangeDetails, setRefreshXchangeDetails] = useState(false);
   const [comments, setComments] = useState('');
   const [commands, setCommands] = useState<WebCommand[] | null>([]);
-  const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
   const [createAlertCmd, setCreateAlertCmd] = useState<WebCommand | null>();
   const [updateScheduleCmd, setUpdateScheduleCmd] = useState<WebCommand | null>();
   const [createFileCmd, setCreateFileCmd] = useState<WebCommand | null>();
-  const [openUpdateComments, setOpenUpdateComments] = useState(false);
-  const [closeTooltipHost, setCloseTooltipHost] = useState(true);
   const [sid, setSid] = useState('');
   const [configSid, setConfigSid] = useState('');
   const [typeSchedule, setTypeSchedule] = useState<boolean>();
@@ -114,8 +112,7 @@ const XchangeDetailsPage = () => {
   const [deleteXchangeConfigAlerts, { data: deleteConfigData, loading: deleteConfigLoading },
   ] = useDeleteXchangeConfigAlertMutation();
 
-  const [updateXchangeComment, { data: commentData, loading: isLoadingComment },
-  ] = useQueryHandler(useUpdateXchangeConfigCommentMutation);
+  const [updateXchangeComment] = useQueryHandler(useUpdateXchangeConfigCommentMutation);
   const [showFileUpload, setShowFileUpload] = useState(false);
   const handleError = ErrorHandler();
 
@@ -503,10 +500,6 @@ const XchangeDetailsPage = () => {
 
       if (xchangeConfig.comments) {
         setComments(xchangeConfig.comments.value ?? '');
-        const pageCommands = xchangeConfig?.commands;
-        const _updateCmd = pageCommands
-          ?.find((cmd) => cmd?.commandType === CdxWebCommandType.Update && cmd.endPoint === 'updateXchangeConfigComment');
-        setUpdateCmd(_updateCmd);
       }
 
       if (xchangeConfig.commands) {
@@ -530,39 +523,16 @@ const XchangeDetailsPage = () => {
     }
   }, [detailsData, detailsLoading]);
 
-  function useOutsideAlerter(ref, comment: string, currentSid: string, currentComment: string) {
-    useEffect(() => {
-      function handleClickOutside(event) {
-        if (ref.current && !ref.current.contains(event.target)) {
-          if (openUpdateComments && comment !== currentComment) {
-            updateXchangeComment({
-              variables: {
-                sid: currentSid,
-                comment,
-              },
-            });
-          }
-          setOpenUpdateComments(false);
-          setCloseTooltipHost(false);
-          setCloseTooltipHost(true);
-        }
-      }
-      // Bind the event listener
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => {
-        // Unbind the event listener on clean up
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }, [ref, openUpdateComments, comments]);
-  }
-  const wrapperRef = useRef(null);
-  useOutsideAlerter(wrapperRef, comments, xchangeDataDetails?.sid ?? '', xchangeDataDetails?.comments.value ?? '');
-
-  useEffect(() => {
-    if (!isLoadingComment && commentData) {
-      setOpenUpdateComments(false);
+  const updateCommentOnDismiss = () => {
+    if (comments !== xchangeDataDetails?.comments.value) {
+      updateXchangeComment({
+        variables: {
+          sid: xchangeDataDetails?.sid,
+          comment: comments,
+        },
+      });
     }
-  }, [isLoadingComment, commentData]);
+  };
 
   const renderFileUploadDialog = () => {
     const xchangeConfigSid = xchangeDataDetails?.sid;
@@ -708,107 +678,29 @@ const XchangeDetailsPage = () => {
     return null;
   };
 
-  const tooltipHostComments = () => {
-    const styles = {
-      cursor: 'pointer',
-      marginLeft: '10px',
-      color: '',
-    };
-    if (comments) {
-      styles.color = ThemeStore.userTheme.colors.yellow;
-    } else {
-      styles.color = ThemeStore.userTheme.colors.neutralTertiaryAlt;
-    }
-    if (!openUpdateComments && detailsData) {
-      return (
-        <>
-          {closeTooltipHost && (
-            <TooltipHost
-              directionalHint={DirectionalHint['topCenter']}
-              content={comments ? 'This File Transmission has comments. Click to see them.' : 'Click to add a comment'}
-            >
-              <Comment20Filled
-                style={styles}
-                onClick={() => {
-                  setOpenUpdateComments(true);
-                }}
-              />
-            </TooltipHost>
-          )}
-          {!closeTooltipHost && (
-            <Comment20Filled
-              style={styles}
-              onClick={() => {
-                setOpenUpdateComments(true);
-              }}
-            />
-          )}
-        </>
-      );
-    }
-
-    const updatingComments = () => {
-      if (!updateCmd) {
-        return (
-          <TextField
-            id="FileTransmissionComment"
-            readOnly
-            value={comments}
-            label="Comments"
-            resizable={false}
-            multiline
-            rows={12}
-          />
-        )
-      }
-
-      return (
-        <UIInputTextArea
-          id="FileTransmissionComment"
-          uiField={detailsData?.xchangeConfig?.comments}
-          value={comments}
-          onChange={(event, newValue: any) => {
-            setComments(newValue ?? '');
-          }}
-          resizable={false}
-          rows={12}
-        />
-      )
-    };
-
-    if (openUpdateComments) {
-      return (
-        <TooltipHost
-          directionalHintForRTL={DirectionalHint['bottomCenter']}
-          closeDelay={5000000}
-          style={{ background: ThemeStore.userTheme.colors.yellow, width: '400px', padding: '0 10px 10px 10px' }}
-          tooltipProps={{
-            calloutProps: {
-              styles: {
-                beak: { background: ThemeStore.userTheme.colors.yellow },
-                beakCurtain: { background: ThemeStore.userTheme.colors.yellow },
-                calloutMain: { background: ThemeStore.userTheme.colors.yellow },
-              },
-            },
-          }}
-          content={updatingComments()}
-        >
-          <Comment20Filled style={styles} />
-        </TooltipHost>
-      );
-    }
-    return null;
-  };
-
   return (
     <LayoutDashboard id="XchangeDetailsPage" menuOptionSelected={ROUTE_XCHANGE_DETAILS.API_ID}>
       <PageHeader id="__XchangeDetailsPage">
         <Container>
           <Row>
             <Column lg="6">
-              <Stack horizontal={true} horizontalAlign="space-between">
-                <PageTitle id="__Page__Title__Details" title="Xchange Details" />
-                <div ref={wrapperRef}>{!detailsLoading && tooltipHostComments()}</div>
+              <Stack horizontal={true} horizontalAlign="space-between" tokens={{ childrenGap: 5 }}>
+                <Stack.Item>
+                  <PageTitle id="__Page__Title__Details" title="Xchange Details" />
+                </Stack.Item>
+                <Stack.Item>
+                  <CommentBubble
+                    id="__XchangeComments"
+                    title={
+                      comments ? 'This File Transmission has comments. Click to see them.'
+                        : 'Click to add a comment'
+                    }
+                    value={comments}
+                    uiField={xchangeDataDetails?.comments}
+                    onChange={(_comments) => { setComments(_comments) }}
+                    onDismiss={updateCommentOnDismiss}
+                  />
+                </Stack.Item>
               </Stack>
             </Column>
             <Column lg="6" right>

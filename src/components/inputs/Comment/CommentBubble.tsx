@@ -11,6 +11,7 @@ type CommentBubbleType = {
   title?: string;
   uiField?: UiStringField;
   onChange: (comments: string) => void;
+  onDismiss?: () => void;
 };
 
 const yellow = '#fada82';
@@ -21,11 +22,19 @@ export const CommentBubble = ({
   title,
   uiField,
   onChange,
+  onDismiss,
 }: CommentBubbleType) => {
   const { userTheme } = useThemeStore();
   const [showBubble, setShowBubble] = useState(false);
 
   const iconColor = value ? userTheme.colors.yellow : userTheme.colors.neutralTertiaryAlt
+
+  const dismiss = () => {
+    setShowBubble(false);
+    if (onDismiss) {
+      onDismiss();
+    }
+  };
 
   const renderCallout = () => {
     if (showBubble) {
@@ -34,7 +43,7 @@ export const CommentBubble = ({
           id={`${id}_Callout`}
           role="dialog"
           gapSpace={10}
-          onDismiss={() => setShowBubble(false)}
+          onDismiss={dismiss}
           directionalHint={DirectionalHint.topCenter}
           target={`#${id}_Icon`}
           styles={{
@@ -81,7 +90,11 @@ export const CommentBubble = ({
           color: iconColor,
         }}
         onClick={() => {
-          setShowBubble(!showBubble);
+          if (showBubble) {
+            dismiss();
+          } else {
+            setShowBubble(true);
+          }
         }}
         title={title}
       />

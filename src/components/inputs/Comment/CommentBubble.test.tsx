@@ -30,12 +30,14 @@ describe('Comment Bubble', () => {
       visible: true,
     };
     const onChange = jest.fn();
+    const onDismiss = jest.fn();
     const wrapper = mountWithTheme(
       <CommentBubble
         id="__Comments"
         title="Click here to add a comment"
         uiField={field}
         onChange={onChange}
+        onDismiss={onDismiss}
       />
     );
 
@@ -50,8 +52,15 @@ describe('Comment Bubble', () => {
     expect(wrapper.find('Callout[id="__Comments_Callout"]')).toHaveLength(1);
     expect(wrapper.find('textarea[id="__Comments_TextField"]')).toHaveLength(1);
     wrapper.find('textarea[id="__Comments_TextField"]').simulate('change', { target: { value: 'I added comments' } });
+    wrapper.update();
 
-    expect(onChange).toHaveBeenCalled();
+    expect(onChange).toHaveBeenCalledTimes(1);
+
+    wrapper.find('Comment20Filled[id="__Comments_Icon"]').simulate('click');
+    wrapper.update();
+    expect(wrapper.find('Callout[id="__Comments_Callout"]')).toHaveLength(0);
+    expect(wrapper.find('textarea[id="__Comments_TextField"]')).toHaveLength(0);
+    expect(onDismiss).toHaveBeenCalledTimes(1);
   });
 
   it('Not Visible', () => {
