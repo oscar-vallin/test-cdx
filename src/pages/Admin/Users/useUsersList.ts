@@ -28,13 +28,13 @@ export const useUsersLists = (activeFilter: ActiveEnum) => {
   const handleError = ErrorHandler();
 
   const fetchUsers = async (
-    pageNumber = 0,
     sortParam?,
     lockedFilter?,
     pendingActivationFilter?,
     expiredActivationFilter?,
     searchAllOrgs?,
     searchText?,
+    pageNumber = 0,
   ) => {
     const sort = sortParam || [
       { property: 'person.lastNm', direction: SortDirection.Asc },

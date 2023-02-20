@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton, SearchBox, Stack,
+  DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton, Stack,
 } from '@fluentui/react';
 import { EmptyState } from 'src/containers/states';
 import { LayoutDashboard } from 'src/layouts/LayoutDashboard';
@@ -51,7 +51,8 @@ const ActiveUsersPage = () => {
 
   const userService = useUsersLists(ActiveEnum.Active);
 
-  const createCmd = userService.commands?.find((cmd) => cmd.commandType === CdxWebCommandType.Create);
+  const createCmd = userService.commands
+    ?.find((cmd) => cmd.commandType === CdxWebCommandType.Create);
 
   useEffect(() => {
     // Reset the page number when any filtering occurs
@@ -84,7 +85,7 @@ const ActiveUsersPage = () => {
         pendingActivationFilter,
         expiredActivationFilter,
         searchAllOrgsFilter,
-        tableFilters.searchText.delayedValue,
+        +tableFilters.searchText.delayedValue,
       )
       .then();
   }, [tableFilters.pagingParams]);
@@ -267,7 +268,7 @@ const ActiveUsersPage = () => {
               pendingActivationFilter,
               expiredActivationFilter,
               searchAllOrgsFilter,
-              tableFilters.searchText.delayedValue,
+              +tableFilters.searchText.delayedValue,
             )
             .then();
         }}
@@ -288,7 +289,7 @@ const ActiveUsersPage = () => {
               pendingActivationFilter,
               expiredActivationFilter,
               searchAllOrgsFilter,
-              tableFilters.searchText.delayedValue,
+              +tableFilters.searchText.delayedValue,
             )
             .then();
         }}

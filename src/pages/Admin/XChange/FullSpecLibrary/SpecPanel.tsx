@@ -111,7 +111,7 @@ const SpecPanel = ({
   ] = useActivateVendorSpecMutation();
 
   const [vendorSpecQuickSearch,
-    { data: quickSearchData, loading: quickSearchLoading }] = useVendorSpecQuickSearchLazyQuery();
+    { data: quickSearchData }] = useVendorSpecQuickSearchLazyQuery();
 
   useEffect(() => {
     handleError(errorForm);
@@ -233,6 +233,7 @@ const SpecPanel = ({
       const timer = setTimeout(() => getVendorSpecs(parentSpecSearch), 300);
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [parentSpecSearch]);
 
   const hideDialog = () => {
@@ -340,7 +341,6 @@ const SpecPanel = ({
   };
 
   const doSearch = () => {
-    console.log(quickSearchData)
     if (quickSearchData && !quickSearchData?.vendorSpecQuickSearch?.length) {
       return <Text>No matching vendor specs found</Text>
     }
