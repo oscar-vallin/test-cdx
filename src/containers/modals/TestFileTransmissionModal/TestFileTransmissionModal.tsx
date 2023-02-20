@@ -29,11 +29,6 @@ import { Badge } from 'src/components/badges/Badge';
 import { FtpTestAllMessages, FtpTestClientProfileSnippet, FtpTestConvertCSV } from 'src/components/Ftp/FtpTest';
 import { SendTestFile } from 'src/components/Ftp/SendTestFile/SendTestFile';
 
-const defaultProps = {
-  open: false,
-  isOpen: (data: boolean) => {},
-};
-
 type ftpTestCurrentDataProps = {
   host: string;
   user: string;
@@ -48,15 +43,25 @@ type TestFileTransmissionModalProps = {
   open: boolean;
   isOpen: (data: boolean) => void;
   ftpTestCurrentData: ftpTestCurrentDataProps;
-} & typeof defaultProps;
+};
 
-const TestFileTransmissionModal = ({ isOpen, open, ftpTestCurrentData }: TestFileTransmissionModalProps) => {
+const TestFileTransmissionModal = ({
+  isOpen,
+  ftpTestCurrentData,
+}: TestFileTransmissionModalProps) => {
   const { orgSid } = useOrgSid();
   const Toast = useNotification();
   const handleError = ErrorHandler();
   const inputFileRef = useRef() as React.MutableRefObject<HTMLInputElement>;
-  const [fetchFtpTestForm, { data: dataForm, loading: loadingForm, error: errorForm }] = useXpsftpTestLazyQuery();
-  const [callFtpTest, { data: ftpTestData, loading: ftpTestLoading, error: ftpTestError }] = useFtpTestMMutation();
+  const [fetchFtpTestForm, {
+    data: dataForm,
+    loading: loadingForm,
+    error: errorForm,
+  }] = useXpsftpTestLazyQuery();
+  const [callFtpTest, {
+    data: ftpTestData,
+    error: ftpTestError,
+  }] = useFtpTestMMutation();
   const [genTestFileForm, setGenTestFileForm] = useState<SftpTestSendTestFileForm | null>();
   const [sendFileTest, setSendFileTest] = useState(false);
   const [vendorFileName, setVendorFileName] = useState('');
@@ -144,38 +149,39 @@ const TestFileTransmissionModal = ({ isOpen, open, ftpTestCurrentData }: TestFil
     if (!ftpTestStatus) {
       return 'info';
     }
-    // purposely use a switch statement so if we add a WorkStatus, it will generate a compiler error.
-    if (ftpTestStatus == 'QUEUED') {
+    // purposely use a switch statement so
+    // if we add a WorkStatus, it will generate a compiler error.
+    if (ftpTestStatus === 'QUEUED') {
       return 'info';
     }
-    if (ftpTestStatus == 'PROCESSING') {
+    if (ftpTestStatus === 'PROCESSING') {
       return 'info';
     }
-    if (ftpTestStatus == 'COMPLETE') {
+    if (ftpTestStatus === 'COMPLETE') {
       return 'success';
     }
-    if (ftpTestStatus == 'ERROR') {
+    if (ftpTestStatus === 'ERROR') {
       return 'error';
     }
-    if (ftpTestStatus == 'SUBMITTED') {
+    if (ftpTestStatus === 'SUBMITTED') {
       return 'info';
     }
-    if (ftpTestStatus == 'WARNING') {
+    if (ftpTestStatus === 'WARNING') {
       return 'warning';
     }
-    if (ftpTestStatus == 'HOLD') {
+    if (ftpTestStatus === 'HOLD') {
       return 'warning';
     }
-    if (ftpTestStatus == 'CANCELED') {
+    if (ftpTestStatus === 'CANCELED') {
       return 'error';
     }
-    if (ftpTestStatus == 'QUALITY_CHECK_FAILED') {
+    if (ftpTestStatus === 'QUALITY_CHECK_FAILED') {
       return 'error';
     }
-    if (ftpTestStatus == 'NO_RECORDS') {
+    if (ftpTestStatus === 'NO_RECORDS') {
       return 'warning';
     }
-    if (ftpTestStatus == 'TECH_MIGRATION_CHECK_FAILED') {
+    if (ftpTestStatus === 'TECH_MIGRATION_CHECK_FAILED') {
       return 'error';
     }
     return 'info';
@@ -257,9 +263,12 @@ const TestFileTransmissionModal = ({ isOpen, open, ftpTestCurrentData }: TestFil
                   )}
                 </Stack>
               </Spacing>
-              {ftpTestData.ftpTestM && <FtpTestAllMessages allMessages={ftpTestData?.ftpTestM?.allMessages} />}
+              {ftpTestData.ftpTestM
+                && <FtpTestAllMessages allMessages={ftpTestData?.ftpTestM?.allMessages} />}
               {ftpTestData?.ftpTestM?.clientProfileSnippet && (
-                <FtpTestClientProfileSnippet clientProfileSnippet={ftpTestData?.ftpTestM?.clientProfileSnippet} />
+                <FtpTestClientProfileSnippet
+                  clientProfileSnippet={ftpTestData?.ftpTestM?.clientProfileSnippet}
+                />
               )}
             </>
           )}
@@ -292,6 +301,8 @@ const TestFileTransmissionModal = ({ isOpen, open, ftpTestCurrentData }: TestFil
     if (ftpTestData?.ftpTestM) {
       return <PrimaryButton id="__FtpTest_ok" text="ok" onClick={() => isOpen(false)} />;
     }
+
+    return null;
   };
 
   return (
