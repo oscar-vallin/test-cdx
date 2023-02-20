@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
   DefaultButton,
-  DirectionalHint,
   MessageBar,
   MessageBarType,
   PanelType,
@@ -9,8 +8,6 @@ import {
   Spinner,
   SpinnerSize,
   Stack,
-  TextField,
-  TooltipHost,
 } from '@fluentui/react';
 import {
   useIncomingFormatFormLazyQuery,
@@ -29,14 +26,13 @@ import {
 import { Spacing } from 'src/components/spacings/Spacing';
 import { UIInputText } from 'src/components/inputs/InputText';
 import { useNotification } from 'src/hooks/useNotification';
-import { ThemeStore } from 'src/store/ThemeStore';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
-import { Column, Row } from 'src/components/layouts';
+import { Column } from 'src/components/layouts';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { UIInputSelectOne } from 'src/components/inputs/InputDropdown';
 import { UIInputCode } from 'src/components/inputs/InputCode';
-import { Comment20Filled } from '@fluentui/react-icons';
+import { CommentBubble } from 'src/components/inputs/Comment';
 
 const defaultDialogProps: DialogYesNoProps = {
   id: '__IncomingFormat_Dlg',
@@ -71,8 +67,6 @@ const IncomingFormatPanel = ({
   const [includedStepXML, setIncludedStepXML] = useState('');
   const [semanticMap, setSemanticMap] = useState('');
   const [message, setMessage] = useState<string | null>();
-  const [openUpdateComments, setOpenUpdateComments] = useState(false);
-  const [closeTooltipHost, setCloseTooltipHost] = useState(true);
   const [messageType, setMessageType] = useState<MessageBarType>(MessageBarType.info);
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
@@ -270,7 +264,7 @@ const IncomingFormatPanel = ({
         variables: {
           sid: sid ?? '',
         },
-      });
+      }).then();
     };
     updatedDialog.onClose = () => {
       hideDialog();
@@ -290,7 +284,7 @@ const IncomingFormatPanel = ({
         variables: {
           sid: sid ?? '',
         },
-      });
+      }).then();
     };
     updatedDialog.onClose = () => {
       hideDialog();
@@ -325,7 +319,7 @@ const IncomingFormatPanel = ({
             semanticMap,
           },
         },
-      });
+      }).then();
       return;
     }
     createIncoming({
@@ -337,125 +331,9 @@ const IncomingFormatPanel = ({
           semanticMap,
         },
       },
-    });
+    }).then();
   };
 
-  const tooltipHostComments = () => {
-    if (!openUpdateComments && incomingFormat) {
-      return (
-        <>
-          {closeTooltipHost && (
-            <TooltipHost
-              directionalHint={DirectionalHint['rightBottomEdge']}
-              content={incomingNotes ? 'This incoming format has comments. Click to see them.' : 'Click to add a comment'}
-            >
-              <Comment20Filled
-                style={incomingNotes ? {
-                  color: ThemeStore.userTheme.colors.yellow,
-                  cursor: 'pointer',
-                  marginLeft: '15px',
-
-                } : {
-                  color: ThemeStore.userTheme.colors.neutralTertiaryAlt,
-                  cursor: 'pointer',
-                  marginLeft: '15px',
-
-                }}
-                onClick={() => {
-                  setOpenUpdateComments(true);
-                }}
-              />
-            </TooltipHost>
-          )}
-          {!closeTooltipHost && (
-            <Comment20Filled
-              style={incomingNotes ? {
-                color: ThemeStore.userTheme.colors.yellow,
-                cursor: 'pointer',
-                marginLeft: '15px',
-              } : {
-                color: ThemeStore.userTheme.colors.neutralTertiaryAlt,
-                cursor: 'pointer',
-                marginLeft: '15px',
-              }}
-              onClick={() => {
-                setOpenUpdateComments(true);
-              }}
-            />
-          )}
-        </>
-      );
-    }
-
-    const readOnly = () => {
-      if (updateCmd || createCmd) {
-        if (!incomingFormat?.notes.readOnly) {
-          return false
-        }
-        return true;
-      }
-      return true;
-    }
-
-    const updateComment = () => (
-      <TextField
-        id="IncomingFormatComment"
-        label="Comments"
-        readOnly={readOnly()}
-        value={incomingNotes}
-        onChange={(event, newValue: any) => {
-          setIncomingNotes(newValue ?? '');
-          if (!incomingFormat?.notes.value) {
-            if (newValue.trim() !== '') {
-              setUnsavedChanges(true);
-            } else {
-              setUnsavedChanges(false);
-            }
-          } else if (incomingFormat?.notes.value?.trim() !== newValue?.trim()) {
-            setUnsavedChanges(true);
-          } else {
-            setUnsavedChanges(false);
-          }
-        }}
-        multiline={true}
-        resizable={false}
-        rows={12}
-      />
-    );
-
-    if (openUpdateComments) {
-      return (
-        <TooltipHost
-          directionalHintForRTL={DirectionalHint['bottomAutoEdge']}
-          closeDelay={5000000}
-          style={{ background: ThemeStore.userTheme.colors.yellow, width: '400px', padding: '0 10px 10px 10px' }}
-          tooltipProps={{
-            calloutProps: {
-              styles: {
-                beak: { background: ThemeStore.userTheme.colors.yellow },
-                beakCurtain: { background: ThemeStore.userTheme.colors.yellow },
-                calloutMain: { background: ThemeStore.userTheme.colors.yellow },
-              },
-            },
-          }}
-          content={updateComment()}
-        >
-          <Comment20Filled
-            style={incomingNotes ? {
-              color: ThemeStore.userTheme.colors.yellow,
-              cursor: 'pointer',
-              marginLeft: '15px',
-            } : {
-              color: ThemeStore.userTheme.colors.neutralTertiaryAlt,
-              cursor: 'pointer',
-              marginLeft: '15px',
-            }}
-          />
-        </TooltipHost>
-      );
-    }
-    return null;
-  };
   const renderBody = () => {
     if (isLoadingIncomingFormats) {
       return (
@@ -563,36 +441,49 @@ const IncomingFormatPanel = ({
     )
   };
 
+  const onChangeComments = (_comments: string) => {
+    setIncomingNotes(_comments);
+    if (!incomingFormat?.notes.value) {
+      if (_comments.trim() !== '') {
+        setUnsavedChanges(true);
+      } else {
+        setUnsavedChanges(false);
+      }
+    } else if (incomingFormat?.notes.value?.trim() !== _comments.trim()) {
+      setUnsavedChanges(true);
+    } else {
+      setUnsavedChanges(false);
+    }
+  };
+
   const renderPanelHeader = () => {
     if (isLoadingIncomingFormats) return null;
 
     return (
       <PanelHeader id="__IncomingFormat_PanelHeader">
-        <Row>
-          <Column lg="12">
-            <Stack>
-              <PanelTitle id="__IncomingFormat_Panel_Title" variant="bold" size="large">
-                {!updateCmd ? 'Create Incoming Format' : incomingFormatsData?.incomingFormatForm?.name.value}
-                <>{tooltipHostComments()}</>
-              </PanelTitle>
-            </Stack>
-          </Column>
-        </Row>
+        <Column lg="12">
+          <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
+            <PanelTitle id="__IncomingFormat_Panel_Title" variant="bold" size="large">
+              {!updateCmd ? 'Create Incoming Format' : incomingFormatsData?.incomingFormatForm?.name.value}
+              <CommentBubble
+                id="__IncomingFormatComments"
+                title={
+                  incomingNotes ? 'This incoming format has comments. Click to see them.'
+                    : 'Click to add a comment'
+                }
+                value={incomingNotes}
+                uiField={incomingFormat?.notes}
+                onChange={onChangeComments}
+              />
+            </PanelTitle>
+          </Stack>
+        </Column>
       </PanelHeader>
     )
   }
 
   return (
     <ThemedPanel
-      onClick={() => {
-        if (openUpdateComments) {
-          setOpenUpdateComments(false);
-          setCloseTooltipHost(false);
-          setTimeout(() => {
-            setCloseTooltipHost(true);
-          }, 0.001);
-        }
-      }}
       closeButtonAriaLabel="Close"
       onRenderHeader={renderPanelHeader}
       type={PanelType.medium}

@@ -1,6 +1,5 @@
 import {
   DefaultButton,
-  DirectionalHint,
   FontIcon,
   MessageBar,
   MessageBarType,
@@ -17,6 +16,7 @@ import React, { useEffect, useState } from 'react';
 import { UIInputText } from 'src/components/inputs/InputText';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
 import { Spacing } from 'src/components/spacings/Spacing';
+import { Text as PanelTitle } from 'src/components/typography';
 import {
   useVendorSpecFormLazyQuery,
   useCreateVendorSpecMutation,
@@ -31,16 +31,14 @@ import {
 } from 'src/data/services/graphql';
 import { UIInputSelectOne } from 'src/components/inputs/InputDropdown';
 import {
-  PanelBody, PanelHeader, PanelTitle, ThemedPanel, WizardButtonRow,
+  PanelBody, PanelHeader, ThemedPanel, WizardButtonRow,
 } from 'src/layouts/Panels/Panels.styles';
-import { Column, Row } from 'src/components/layouts';
-import { UIInputTextArea } from 'src/components/inputs/InputTextArea';
-import { Comment20Filled } from '@fluentui/react-icons';
-import { ThemeStore } from 'src/store/ThemeStore';
+import { Column } from 'src/components/layouts';
 import { useNotification } from 'src/hooks/useNotification';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import FormLabel from 'src/components/labels/FormLabel';
+import { CommentBubble } from 'src/components/inputs/Comment';
 import { StyledParenSpecOptions } from './FullSpecLibrary.styles';
 
 const defaultDialogProps: DialogYesNoProps = {
@@ -77,11 +75,9 @@ const SpecPanel = ({
   const [comments, setComments] = useState('');
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
   const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
-  const [openUpdateComments, setOpenUpdateComments] = useState(false);
   const [parentSpecSearch, setParentSpecSearch] = useState('');
   const [parentSpecName, setParentSpecName] = useState('');
   const [currentSpecVendor, setCurrentSpecVendor] = useState('');
-  const [closeTooltipHost, setCloseTooltipHost] = useState(true);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogYesNoProps>(defaultDialogProps);
@@ -269,7 +265,7 @@ const SpecPanel = ({
         variables: {
           sid: sid ?? '',
         },
-      });
+      }).then();
     };
     updatedDialog.onClose = () => {
       hideDialog();
@@ -321,7 +317,7 @@ const SpecPanel = ({
             name,
           },
         },
-      });
+      }).then();
       return;
     }
     createVendor({
@@ -337,7 +333,7 @@ const SpecPanel = ({
           vendorSid: orgSid,
         },
       },
-    })
+    }).then();
   };
 
   const doSearch = () => {
@@ -350,7 +346,7 @@ const SpecPanel = ({
       return vendors.map((vendor, index) => (
         <Spacing margin={{ left: 'normal', top: 'normal', bottom: 'normal' }} key={index}>
           <Text
-            id="__QuickSearch__VendorSpec"
+            id={`__QuickSearch__VendorSpec_${index}`}
             style={{ cursor: 'pointer' }}
             onClick={() => {
               setParentSpecName(vendor.name ?? '');
@@ -523,120 +519,48 @@ const SpecPanel = ({
       </PanelBody>
     )
   };
-  const tooltipHostComments = () => {
-    if (!openUpdateComments && vendorSpecForm) {
-      return (
-        <>
-          {closeTooltipHost && (
-            <TooltipHost
-              directionalHint={DirectionalHint['rightBottomEdge']}
-              content={comments ? 'This Spec has comments. Click to see them.' : 'Click to add a comment'}
-            >
-              <Comment20Filled
-                style={comments ? {
-                  color: ThemeStore.userTheme.colors.yellow,
-                  cursor: 'pointer',
-                  marginLeft: '15px',
 
-                } : {
-                  color: ThemeStore.userTheme.colors.neutralTertiaryAlt,
-                  cursor: 'pointer',
-                  marginLeft: '15px',
-
-                }}
-                onClick={() => {
-                  setOpenUpdateComments(true);
-                }}
-              />
-            </TooltipHost>
-          )}
-          {!closeTooltipHost && (
-            <Comment20Filled
-              style={comments ? {
-                color: ThemeStore.userTheme.colors.yellow,
-                cursor: 'pointer',
-                marginLeft: '15px',
-              } : {
-                color: ThemeStore.userTheme.colors.neutralTertiaryAlt,
-                cursor: 'pointer',
-                marginLeft: '15px',
-              }}
-              onClick={() => {
-                setOpenUpdateComments(true);
-              }}
-            />
-          )}
-        </>
-      );
+  const onChangeComments = (_comments: string) => {
+    setComments(_comments);
+    if (!vendorSpecForm?.comments.value) {
+      if (_comments.trim() !== '') {
+        setUnsavedChanges(true);
+      } else {
+        setUnsavedChanges(false);
+      }
+    } else if (vendorSpecForm.comments.value?.trim() !== _comments?.trim()) {
+      setUnsavedChanges(true);
+    } else {
+      setUnsavedChanges(false);
     }
-
-    const updateComment = () => (
-      <UIInputTextArea
-        id="SpecVendorComment"
-        uiField={vendorSpecForm?.comments}
-        value={comments}
-        onChange={(event, newValue: any) => {
-          setComments(newValue ?? '');
-          if (!vendorSpecForm?.comments.value) {
-            if (newValue.trim() !== '') {
-              setUnsavedChanges(true);
-            } else {
-              setUnsavedChanges(false);
-            }
-          } else if (vendorSpecForm.comments.value?.trim() !== newValue?.trim()) {
-            setUnsavedChanges(true);
-          } else {
-            setUnsavedChanges(false);
-          }
-        }}
-        resizable={false}
-        rows={12}
-      />
-    );
-
-    if (openUpdateComments) {
-      return (
-        <TooltipHost
-          directionalHintForRTL={DirectionalHint['bottomAutoEdge']}
-          closeDelay={5000000}
-          style={{ background: ThemeStore.userTheme.colors.yellow, width: '400px', padding: '0 10px 10px 10px' }}
-          tooltipProps={{
-            calloutProps: {
-              styles: {
-                beak: { background: ThemeStore.userTheme.colors.yellow },
-                beakCurtain: { background: ThemeStore.userTheme.colors.yellow },
-                calloutMain: { background: ThemeStore.userTheme.colors.yellow },
-              },
-            },
-          }}
-          content={updateComment()}
-        >
-          <Comment20Filled
-            style={comments ? {
-              color: ThemeStore.userTheme.colors.yellow,
-              cursor: 'pointer',
-              marginLeft: '15px',
-            } : {
-              color: ThemeStore.userTheme.colors.neutralTertiaryAlt,
-              cursor: 'pointer',
-              marginLeft: '15px',
-            }}
-          />
-        </TooltipHost>
-      );
-    }
-    return null;
   };
 
   const renderPanelHeader = () => (
     <PanelHeader id="__SpecVendor_PanelHeader">
-      <Row>
-        <Column lg="12">
-          <Stack>
+      <Column lg="12">
+        <Stack
+          horizontal
+          horizontalAlign="center"
+          styles={{ root: { height: 44, marginTop: '5px' } }}
+        >
+          <Stack.Item grow>
             <PanelTitle id="__SpecVendor_Panel_Title" variant="bold" size="large">
               {!sid ? 'Create Spec' : vendorSpecForm?.name.value}
-              {tooltipHostComments()}
-              {updateCmd && vendorSpecForm?.active.value === 'false' && (
+            </PanelTitle>
+          </Stack.Item>
+          <Stack.Item align="end">
+            <CommentBubble
+              id="__SpecComments"
+              title={
+                comments ? 'This Spec has comments. Click to see them.' : 'Click to add a comment'
+              }
+              value={comments}
+              uiField={vendorSpecForm?.comments}
+              onChange={onChangeComments}
+            />
+          </Stack.Item>
+          {updateCmd && vendorSpecForm?.active.value === 'false' && (
+            <Stack.Item>
               <TooltipHost content="This spec is inactive">
                 <FontIcon
                   id="specInactive"
@@ -648,25 +572,16 @@ const SpecPanel = ({
                   iconName="StatusCircleBlock"
                 />
               </TooltipHost>
-              )}
-            </PanelTitle>
-          </Stack>
-        </Column>
-      </Row>
+
+            </Stack.Item>
+          )}
+        </Stack>
+      </Column>
     </PanelHeader>
   );
 
   return (
     <ThemedPanel
-      onClick={() => {
-        if (openUpdateComments) {
-          setOpenUpdateComments(false);
-          setCloseTooltipHost(false);
-          setTimeout(() => {
-            setCloseTooltipHost(true);
-          }, 0.001);
-        }
-      }}
       closeButtonAriaLabel="Close"
       onRenderHeader={renderPanelHeader}
       type={PanelType.medium}

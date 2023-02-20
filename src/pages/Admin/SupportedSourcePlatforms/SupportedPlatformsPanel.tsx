@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
   DefaultButton,
-  DirectionalHint,
   MessageBar,
   MessageBarType,
   PanelType,
@@ -9,8 +8,6 @@ import {
   Spinner,
   SpinnerSize,
   Stack,
-  TextField,
-  TooltipHost,
 } from '@fluentui/react';
 import { Spacing } from 'src/components/spacings/Spacing';
 import {
@@ -28,14 +25,13 @@ import {
 } from 'src/layouts/Panels/Panels.styles';
 import { UIInputText } from 'src/components/inputs/InputText';
 import { useNotification } from 'src/hooks/useNotification';
-import { ThemeStore } from 'src/store/ThemeStore';
 import { UIInputMultiSelect, UIInputSelectOne } from 'src/components/inputs/InputDropdown';
 import { FormRow } from 'src/components/layouts/Row/Row.styles';
-import { Column, Row } from 'src/components/layouts';
+import { Column } from 'src/components/layouts';
 import { DialogYesNo, DialogYesNoProps } from 'src/containers/modals/DialogYesNo';
 import { ErrorHandler } from 'src/utils/ErrorHandler';
 import { UIInputCode } from 'src/components/inputs/InputCode';
-import { Comment20Filled } from '@fluentui/react-icons';
+import { CommentBubble } from 'src/components/inputs/Comment';
 
 const defaultDialogProps: DialogYesNoProps = {
   id: '__SupportedPlatform_Dlg',
@@ -48,7 +44,7 @@ const defaultDialogProps: DialogYesNoProps = {
   highlightYes: false,
 };
 
-type SupportedPlataformsPanelProps = {
+type SupportedPlatformsPanelProps = {
     isOpen: boolean;
     closePanel: (data: boolean) => void;
     refreshPage: (data: boolean) => void;
@@ -57,7 +53,7 @@ type SupportedPlataformsPanelProps = {
 
 const SupportedPlataformsPanel = ({
   closePanel, isOpen, sid, refreshPage,
-}: SupportedPlataformsPanelProps) => {
+}: SupportedPlatformsPanelProps) => {
   const Toast = useNotification();
   const handleError = ErrorHandler();
   const [supportedPlatform, setSupportedPlatform] = useState<SupportedPlatformForm | null>();
@@ -66,8 +62,6 @@ const SupportedPlataformsPanel = ({
   const [includedStepXML, setIncludedStepXML] = useState('');
   const [semanticMap, setSemanticMap] = useState('');
   const [supportedIncomingFormats, setSupportedIncomingFormats] = useState<string[]>([]);
-  const [openUpdateComments, setOpenUpdateComments] = useState(false);
-  const [closeTooltipHost, setCloseTooltipHost] = useState(true);
   const [createCmd, setCreateCmd] = useState<WebCommand | null>();
   const [updateCmd, setUpdateCmd] = useState<WebCommand | null>();
   const [deleteCmd, setDeleteCmd] = useState<WebCommand | null>();
@@ -253,7 +247,7 @@ const SupportedPlataformsPanel = ({
         variables: {
           sid: sid ?? '',
         },
-      });
+      }).then();
     };
     updatedDialog.onClose = () => {
       hideDialog();
@@ -290,7 +284,7 @@ const SupportedPlataformsPanel = ({
             supportedIncomingFormats,
           },
         },
-      });
+      }).then();
       return;
     }
     createSupported({
@@ -303,7 +297,7 @@ const SupportedPlataformsPanel = ({
           supportedIncomingFormats,
         },
       },
-    });
+    }).then();
   };
 
   const renderBody = () => {
@@ -419,149 +413,43 @@ const SupportedPlataformsPanel = ({
     )
   };
 
-  const tooltipHostComments = () => {
-    if (!openUpdateComments) {
-      return (
-        <>
-          {closeTooltipHost && (
-            <TooltipHost
-              directionalHint={DirectionalHint['rightBottomEdge']}
-              content={supportedNotes ? 'This supported platform has comments. Click to see them.' : 'Click to add a comment'}
-            >
-              <Comment20Filled
-                style={supportedNotes ? {
-                  color: ThemeStore.userTheme.colors.yellow,
-                  cursor: 'pointer',
-                  marginLeft: '15px',
-
-                } : {
-                  color: ThemeStore.userTheme.colors.neutralTertiaryAlt,
-                  cursor: 'pointer',
-                  marginLeft: '15px',
-
-                }}
-                onClick={() => {
-                  setOpenUpdateComments((prevState) => !prevState);
-                }}
-              />
-            </TooltipHost>
-          )}
-          {!closeTooltipHost && (
-            <Comment20Filled
-              style={supportedNotes ? {
-                color: ThemeStore.userTheme.colors.yellow,
-                cursor: 'pointer',
-                marginLeft: '15px',
-              } : {
-                color: ThemeStore.userTheme.colors.neutralTertiaryAlt,
-                cursor: 'pointer',
-                marginLeft: '15px',
-              }}
-              onClick={() => {
-                setOpenUpdateComments(true);
-              }}
-            />
-          )}
-        </>
-      );
-    }
-
-    const readOnly = () => {
-      if (updateCmd || createCmd) {
-        if (!supportedPlatform?.notes.readOnly) {
-          return false
-        }
-        return true;
+  const onChangeComments = (_comments: string) => {
+    setSupportedNotes(_comments);
+    if (!supportedPlatform?.notes.value) {
+      if (_comments.trim() !== '') {
+        setUnsavedChanges(true);
+      } else {
+        setUnsavedChanges(false);
       }
-      return true;
+    } else if (supportedPlatform?.notes.value?.trim() !== _comments.trim()) {
+      setUnsavedChanges(true);
+    } else {
+      setUnsavedChanges(false);
     }
-
-    const updateComment = () => (
-      <TextField
-        id="SupportedPlatformsComment"
-        label="Comments"
-        readOnly={readOnly()}
-        value={supportedNotes}
-        onChange={(event, newValue: any) => {
-          setSupportedNotes(newValue ?? '');
-          if (!supportedPlatform?.notes.value) {
-            if (newValue.trim() !== '') {
-              setUnsavedChanges(true);
-            } else {
-              setUnsavedChanges(false);
-            }
-          } else if (supportedPlatform?.notes.value?.trim() !== newValue?.trim()) {
-            setUnsavedChanges(true);
-          } else {
-            setUnsavedChanges(false);
-          }
-        }}
-        multiline={true}
-        resizable={false}
-        rows={12}
-      />
-    );
-
-    if (openUpdateComments) {
-      return (
-        <TooltipHost
-          directionalHintForRTL={DirectionalHint['bottomAutoEdge']}
-          closeDelay={5000000}
-          style={{ background: ThemeStore.userTheme.colors.yellow, width: '400px', padding: '0 10px 10px 10px' }}
-          tooltipProps={{
-            calloutProps: {
-              styles: {
-                beak: { background: ThemeStore.userTheme.colors.yellow },
-                beakCurtain: { background: ThemeStore.userTheme.colors.yellow },
-                calloutMain: { background: ThemeStore.userTheme.colors.yellow },
-              },
-            },
-          }}
-          content={updateComment()}
-        >
-          <Comment20Filled
-            style={supportedNotes ? {
-              color: ThemeStore.userTheme.colors.yellow,
-              cursor: 'pointer',
-              marginLeft: '15px',
-            } : {
-              color: ThemeStore.userTheme.colors.neutralTertiaryAlt,
-              cursor: 'pointer',
-              marginLeft: '15px',
-            }}
-          />
-        </TooltipHost>
-      );
-    }
-    return null;
   };
 
   const renderPanelHeader = () => (
     <PanelHeader id="___SupportedPlatformsPanelHeader">
-      <Row>
-        <Column lg="12">
-          <Stack horizontal>
-            <PanelTitle id="__SupportedPlatforms_Panel_Title" variant="bold" size="large">
-              {!updateCmd ? 'Create Supported Source Platform' : supportedPlatform?.name.value}
-              <>{tooltipHostComments()}</>
-            </PanelTitle>
-          </Stack>
-        </Column>
-      </Row>
+      <Column lg="12">
+        <Stack horizontal styles={{ root: { height: 44, marginTop: '5px' } }}>
+          <PanelTitle id="__SupportedPlatforms_Panel_Title" variant="bold" size="large">
+            {!updateCmd ? 'Create Supported Source Platform' : supportedPlatform?.name.value}
+            <CommentBubble
+              id="__SupportedPlatformsComments"
+              title={supportedNotes ? 'This supported platform has comments. Click to see them.'
+                : 'Click to add a comment'}
+              value={supportedNotes}
+              uiField={supportedPlatform?.notes}
+              onChange={onChangeComments}
+            />
+          </PanelTitle>
+        </Stack>
+      </Column>
     </PanelHeader>
   );
 
   return (
     <ThemedPanel
-      onClick={() => {
-        if (openUpdateComments) {
-          setOpenUpdateComments(false);
-          setCloseTooltipHost(false);
-          setTimeout(() => {
-            setCloseTooltipHost(true);
-          }, 0.001);
-        }
-      }}
       closeButtonAriaLabel="Close"
       onRenderHeader={renderPanelHeader}
       type={PanelType.medium}
