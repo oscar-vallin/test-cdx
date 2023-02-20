@@ -315,11 +315,16 @@ export const getStepStatusLabel = (status: WorkStatus) => {
       return 'No Records';
     case WorkStatus.TechMigrationCheckFailed:
       return 'Tech Migration Check Failed';
+    default:
+      return '';
   }
-  return '';
 };
 
-export const getStepStatus = (stepId: WorkStep, stepStatusId: WorkStatus, isArchiveOnly: boolean) => (
+export const getStepStatus = (
+  stepId: WorkStep,
+  stepStatusId: WorkStatus,
+  isArchiveOnly: boolean,
+) => (
   STEP_STATUS.find(
     ({ step, stepStatus, archiveOnly }) => step === stepId
         && stepStatus === stepStatusId

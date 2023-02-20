@@ -16,7 +16,13 @@ import {
 } from 'date-fns';
 
 //
-export const formatField = (value: any, columnId: string, text: any, sublabel: string, child: any) => ({
+export const formatField = (
+  value: any,
+  columnId: string,
+  text: any,
+  sublabel: string,
+  child: any,
+) => ({
   id: columnId,
   value,
   columnId,
