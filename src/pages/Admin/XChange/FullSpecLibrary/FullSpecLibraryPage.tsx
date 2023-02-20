@@ -101,8 +101,8 @@ const FullSpecLibraryPage = () => {
       name: 'Vendor/Spec',
       key: 'name',
       fieldName: 'name',
-      minWidth: 350,
-      maxWidth: 300,
+      minWidth: 400,
+      maxWidth: 450,
       isPadded: true,
       dataType: 'string',
       isSorted: true,
@@ -114,8 +114,8 @@ const FullSpecLibraryPage = () => {
       name: '# Implementation',
       key: 'integratedClients',
       fieldName: 'integratedClients',
-      minWidth: 100,
-      maxWidth: 100,
+      minWidth: 150,
+      maxWidth: 50,
       isPadded: true,
       dataType: 'string',
       filterable: false,
@@ -308,7 +308,7 @@ const FullSpecLibraryPage = () => {
               </Stack>
             </Row>
             <Row>
-              <Column lg="7">{renderBody()}</Column>
+              <Column lg="8">{renderBody()}</Column>
             </Row>
           </Container>
         </Spacing>
